@@ -1,0 +1,56 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+
+<meta http-equiv="refresh" content="60">
+
+<h3>Tareas @*(@Model.Workflows.Count())*@</h3>
+
+<ul class="collection">
+    @foreach (var item in Model.Workflows.OrderByDescending(q => q.WorkflowId))
+    {
+        <p></p>
+        <li class="collection-item avatar">
+
+            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+            {
+                <i class="material-icons circle red large">access_time</i>
+            }
+            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+            {
+                <i class="material-icons circle amber accent-4">access_time</i>
+            }
+            @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+            {
+                <i class="material-icons circle green">access_time</i>
+            }
+            <p class="title">
+                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
+            </p>
+            <p class="right">
+                @item.Mensaje
+            </p>
+
+            <p class="title">
+                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
+            </p>
+            <p>
+                Ejecutor:
+                @if (!string.IsNullOrWhiteSpace(item.Email))
+                {
+                    @Html.DisplayFor(modelItem => item.Email)<text>,</text>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                {
+                    @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                }
+                @if (item.Grupo != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                }
+            </p>
+        </li>
+    }
+</ul>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create", "Proceso")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>

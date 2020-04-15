@@ -1,0 +1,32 @@
+﻿@model App.Model.Core.Configuracion
+
+<h3>Editar Configuracion</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => q.ConfiguracionId)
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s12 m10 l10">
+                    @Html.LabelFor(m => Model.Nombre)
+                    @Html.TextBoxFor(m => Model.Nombre)
+                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m10 l10">
+                    @Html.LabelFor(m => Model.Valor)
+                    @Html.TextAreaFor(m => Model.Valor, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.ValidationMessageFor(m => Model.Valor, "", new { @class = "red-text" })
+
+                </div>
+            </div>
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>

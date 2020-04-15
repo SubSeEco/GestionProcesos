@@ -1,0 +1,18 @@
+﻿@model App.Model.DTO.DTOSelect
+
+@*@Html.HiddenFor(q => q.Id)
+    @Html.HiddenFor(q => q.Descripcion)
+
+    <p>
+        @Html.CheckBoxFor(m => m.Selected, new { @class = "filled-in"})
+        @Html.LabelFor(m => m.Selected, Model.Descripcion)
+    </p>*@
+
+@Html.HiddenFor(q => q.Id)
+@Html.HiddenFor(q => q.Descripcion)
+
+<label>
+    @Html.CheckBoxFor(m => m.Selected) 
+    <span>@Model.Descripcion</span>
+    <br />
+</label>

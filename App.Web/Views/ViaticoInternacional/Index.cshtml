@@ -1,0 +1,107 @@
+﻿@model IEnumerable<App.Model.Comisiones.ViaticoInternacional>
+
+<h3>Viatico Honorario Internacional</h3>
+<div class="card">
+    <div class="card-content">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaisNombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CiudadNombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Año)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CostoVida)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Factor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango4)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango5)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcentajeRango6)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activo)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaisNombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CiudadNombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Año)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CostoVida)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Factor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango3)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango4)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango5)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PorcentajeRango6)
+                </td>
+                <td>
+                    @if (item.Activo)
+                    {
+                        <p>True</p>
+                    }
+                    else
+                    {
+                        <p>False</p>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Detalles", "Details", new { id = item.ViaticoInternacionalId })
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+@*<br />
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>*@

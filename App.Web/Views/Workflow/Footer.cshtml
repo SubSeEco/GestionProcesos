@@ -1,0 +1,55 @@
+﻿@model App.Model.Core.Workflow
+@{
+    Layout = null;
+}
+
+    <div class="fixed-action-btn">
+
+        @if (Model.DefinicionWorkflow.PermitirGenerarDocumentos)
+        {
+            if (!Request.Url.ToString().Contains("Create"))
+            {
+                <a href='@Url.Action("Pdf", Model.Entity, new { id = Model.EntityId })' target="_blank" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Generar documento"><i class="large material-icons">picture_as_pdf</i></a>
+            }
+        }
+        @if (Model.DefinicionWorkflow.PermitirAdjuntarDocumentos)
+        {
+            <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+        }
+
+        @if (Model.DefinicionWorkflow.PermitirReenvioUnidad || Model.DefinicionWorkflow.PermitirReenvioGrupoEspecial)
+        {
+            <a href='@Url.Action("Forward","Workflow", new { id = Model.WorkflowId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Reenviar tarea a otra persona"><i class="large material-icons">reply</i></a>
+        }
+
+        @if (Model.DefinicionWorkflow.PermitirArchivarTarea)
+        {
+            if (!Request.Url.ToString().Contains("Create"))
+            {
+                <a href='@Url.Action("Archive", "Workflow", new { id = Model.WorkflowId })' class="btn-floating modal-trigger btn-large red tooltipped" data-position="left" data-tooltip="Archivar tarea"><i class="large material-icons">archive</i></a>                
+            }
+        }
+
+        @*@if (Model.DefinicionWorkflow.PermitirAnularProceso)
+        {
+            if (!Request.Url.ToString().Contains("Create"))
+            {
+                <a href='@Url.Action("Anular", "Workflow", new { id = Model.WorkflowId })' class="btn-floating modal-trigger btn-large red tooltipped" data-position="left" data-tooltip="Archivar tarea"><i class="large material-icons">cancel</i></a>
+            }
+        }*@
+
+        @if (Model.DefinicionWorkflow.PermitirTerminar)
+        {
+            if (!Request.Url.ToString().Contains("Create"))
+            {
+                <a href='@Url.Action("Send", "Workflow", new { id = Model.WorkflowId })' class="btn-floating modal-trigger btn-large green tooltipped" data-position="left" data-tooltip="Terminar tarea"><i class="large material-icons">play_arrow</i></a>
+            }
+        }
+    </div>
+
+<script>
+    $(document).ready(function () {
+        $('.fixed-action-btn').floatingActionButton();
+        $('.tooltipped').tooltip();
+    });
+</script>

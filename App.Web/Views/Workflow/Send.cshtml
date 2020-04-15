@@ -1,0 +1,91 @@
+﻿@model App.Model.Core.Workflow
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.WorkflowId)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Enviar tarea</span>
+            <div class="section"></div>
+            <div class="row">
+                @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+                {
+                    <div class="input-field col s12 m8 l10">
+                        @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "TipoAprobacionId" })
+                        @Html.LabelFor(m => Model.TipoAprobacionId)
+                        @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
+                    </div>
+                }
+                @if (Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
+                {
+                    <div class="input-field col s12 m8 l10">
+                        @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.Pl_UndCod)
+                        @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m8 l10">
+                        @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.To)
+                        @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                    </div>
+                }
+                @if (Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
+                {
+                    <div class="input-field col s12 m8 l10">
+                        @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.GrupoId)
+                        @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                    </div>
+                }
+
+                <div class="input-field col s12 m8 l10">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+
+        $("#Pl_UndCod").change(function () {
+            var Pl_UndCod = $(this).val();
+            $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+                function (classesData) {
+                    var select = $("#To");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: "",
+                        text: "Seleccione..."
+                    }));
+                    $.each(classesData, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Email,
+                            text: itemData.Nombre
+                        }));
+                    });
+                    $('#To').formSelect();
+                });
+        });
+    });
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

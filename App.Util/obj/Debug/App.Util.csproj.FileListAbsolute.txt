@@ -1,0 +1,5 @@
+C:\Users\admin\source\repos\GestionProcesoV2\App.Util\bin\Debug\App.Util.dll
+C:\Users\admin\source\repos\GestionProcesoV2\App.Util\bin\Debug\App.Util.pdb
+C:\Users\admin\source\repos\GestionProcesoV2\App.Util\obj\Debug\App.Util.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\GestionProcesoV2\App.Util\obj\Debug\App.Util.dll
+C:\Users\admin\source\repos\GestionProcesoV2\App.Util\obj\Debug\App.Util.pdb

@@ -1,0 +1,18 @@
+﻿@model App.Web.Controllers.HomeController.DTOUser
+
+@*<h3>Home</h3>*@
+
+<div class="row">
+    <div class="col s12 m4 l4">
+        <div class="card hoverable" style="height:380px">
+            <div class="card-content">
+                <span class="card-title">Cometido-Comisión</span>
+            </div>
+            <div class="card-action">
+                <a href='@Url.Action("Menu", "Cometido")' class="waves-effect waves-light blue-text">Tablas Cometidos</a><br />
+                <a href='@Url.Action("Menu", "Comision")' class="waves-effect waves-light blue-text">Tablas Comisiones</a><br />
+                <a href='@Url.Action("Menu", "Pasaje")' class="waves-effect waves-light blue-text">Tablas Pasajes</a><br />
+            </div>
+        </div>
+    </div>
+</div>

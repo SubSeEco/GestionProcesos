@@ -1,0 +1,112 @@
+﻿@model App.Web.Controllers.HomeController.DTOUser
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="slide-out" class="sidenav sidenav-fixed container" style="background-color:#1c263f"> <!--width:250px-->
+
+        <div class="align center">
+            <div class="section"></div>
+            <a class="navbar-brand" rel="home" href="~/">
+                <img src="~/Content/logo-gestionprocesos-2.png">
+            </a>
+            <p class="flow-text white-text">@User.Identity.Name</p>
+        </div>
+
+        <ul class="collapsible collapsible-accordion">
+            <li>
+                <a href="/" class="collapsible-header waves-effect waves-blue white-text"><i class="material-icons white-text small">home</i>Home</a>
+                <div class="collapsible-body" style="">
+                </div>
+            </li>
+
+            @if (Model.IsAdmin)
+            {
+                <li>
+                    <a class="collapsible-header  waves-effect waves-blue white-text" tabindex="0"><i class="material-icons white-text">settings</i>Administración</a>
+                    <div class="collapsible-body" style="background-color:#1c263f">
+                        <ul>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index", "Programa")'>Programas</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index", "Subsecretaria")'>Subsecretarías</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index", "Configuracion")'>Configuración de sistema</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                @*<li>
+                    <a class="collapsible-header  waves-effect waves-blue white-text" tabindex="0"><i class="material-icons white-text">device_hub</i>Procesos</a>
+                    <div class="collapsible-body" style="background-color:#1c263f">
+                        <ul>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index", "Rubrica")'>Rúbricas</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index","DefinicionProceso")'>Definiciones de procesos</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index","Proceso")'>Administrar procesos</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>*@
+            }
+            <li class="bold">
+                <a class="collapsible-header  waves-effect waves-blue white-text" tabindex="0"><i class="material-icons  white-text">done</i>Operaciones</a>
+                <div class="collapsible-body" style="background-color:#1c263f">
+                    <ul>
+                        <li>
+                            <a class="white-text" href='@Url.Action("Index","Workflow")'>Tareas pendientes</a>
+                        </li>
+                        <li>
+                            <a class="white-text" href='@Url.Action("Create","Proceso")'>Iniciar nuevo proceso</a>
+                        </li>
+                        <li>
+                            <a class="white-text" href='@Url.Action("Me","Proceso")'>Ver mis procesos</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            @if (Model.IsAdmin)
+            {
+                <li class="bold">
+                    <a class="collapsible-header  waves-effect waves-blue white-text" tabindex="0"><i class="material-icons  white-text">search</i>Consultas</a>
+                    <div class="collapsible-body" style="background-color:#1c263f">
+                        <ul>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Search", "Proceso")'>Procesos</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Index", "Documento")'>Documentos</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Dashboard", "Proceso")'>Dashboard de procesos</a>
+                            </li>
+                            <li>
+                                <a class="white-text" href='@Url.Action("Download", "Proceso")'>Exportar procesos a Excel</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+            }
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <li>
+                        <a href="javascript:document.getElementById('logoutForm').submit()" class="collapsible-header waves-effect waves-blue white-text"><i class="material-icons white-text">exit_to_app</i>Salir</a>
+                        <div class="collapsible-body" style="">
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}

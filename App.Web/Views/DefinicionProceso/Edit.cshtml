@@ -1,0 +1,270 @@
+﻿@model App.Model.Core.DefinicionProceso
+
+<h3>Editar definición</h3>
+
+<div class="card">
+    <div class="card-content">
+        @*<span class="card-title">Proceso</span>*@
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => Model.DefinicionProcesoId)
+
+        <div class="row">
+            <div class="input-field col s12 m10 l10">
+                @Html.TextBoxFor(m => Model.Nombre)
+                @Html.LabelFor(m => Model.Nombre)
+                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+            </div>
+            <div class="input-field col s12 m10 l10">
+                @Html.TextAreaFor(m => Model.Descripcion, new { @type = "textarea ", @class = "materialize-textarea" })
+                @Html.LabelFor(m => Model.Descripcion)
+                @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+            </div>
+            <div class="input-field col s12 m10 l10">
+                @Html.TextBoxFor(m => Model.DuracionHoras, new { @type = "number" })
+                @Html.LabelFor(m => Model.DuracionHoras)
+                @Html.ValidationMessageFor(m => Model.DuracionHoras, "", new { @class = "red-text" })
+            </div>
+            <div class="input-field col s12 m10 l10">
+                @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
+                @Html.LabelFor(m => Model.EntidadId)
+                @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
+            </div>
+
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.Habilitado)
+                    <span>@Html.LabelFor(m => Model.Habilitado)</span>
+                </label>
+            </div>
+
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.EjecutarInmediatamente)
+                    <span>@Html.LabelFor(m => Model.EjecutarInmediatamente)</span>
+                </label>
+            </div>
+
+        </div>
+
+            <div class="section"></div>
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        }
+    </div>
+</div>
+
+
+@if (!Model.DefinicionWorkflows.Any(q => q.Habilitado))
+{
+    <p>No existen tareas para este proceso. Agregue tareas presionando el boton agregar.</p>
+}
+else
+{
+    @*<ul class="collapsible" id="sortable">*@
+    foreach (var item in Model.DefinicionWorkflows.Where(q => q.Habilitado).OrderBy(q => q.Secuencia))
+    {
+        <div class="card sortable">
+            <div class="card-content">
+                <span class="card-title">@item.Nombre</span>
+
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => item.TipoEjecucionId)</strong><br />
+                    @Html.DisplayFor(m => item.TipoEjecucion.Nombre)
+                </div>
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => item.AccionId)</strong><br />
+                    @Html.DisplayFor(m => item.Accion.Nombre), @Html.DisplayFor(m => item.Entidad.Nombre)
+                </div>
+                @*<div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => item.EntidadId)</strong><br />
+                    @Html.DisplayFor(m => item.Entidad.Nombre)
+                </div>*@
+
+                <a href='@Url.Action("Edit", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn blue">Editar</a>
+                <a href='@Url.Action("Delete", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn red">Eliminar</a>
+
+            </div>
+        </div>
+
+
+        @*<li>
+                <div class="collapsible-header">
+                    <i class="material-icons blue-text">details</i><b> @item.Nombre</b>
+                </div>
+                <div class="collapsible-body">
+
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Tarea</span>
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.Nombre)</strong><br />
+                                @Html.DisplayFor(m => item.Nombre)
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.Secuencia)</strong><br />
+                                @Html.DisplayFor(m => item.Secuencia)
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Quien ejecuta la tarea</span>
+
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.TipoEjecucionId)</strong><br />
+                                @Html.DisplayFor(m => item.TipoEjecucion.Nombre)
+                            </div>
+
+                            @if (item.Pl_UndCod.HasValue)
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.Pl_UndDes)</strong><br />
+                                    @Html.DisplayFor(m => item.Pl_UndDes)
+                                </div>
+                            }
+
+                            @if (item.Grupo != null)
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.Grupo.Nombre)</strong><br />
+                                    @Html.DisplayFor(m => item.Grupo.Nombre)
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.Email))
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.Email)</strong><br />
+                                    @Html.DisplayFor(m => item.Email)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Comportamiento</span>
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.AccionId)</strong><br />
+                                @Html.DisplayFor(m => item.Accion.Nombre)
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.EntidadId)</strong><br />
+                                @Html.DisplayFor(m => item.Entidad.Nombre)
+                            </div>
+                            @if (item.DefinicionWorkflowRechazo != null)
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowRechazoId)</strong><br />
+                                    @Html.DisplayFor(m => item.DefinicionWorkflowRechazo.Nombre)
+                                </div>
+                            }
+                            @if (item.DefinicionWorkflowDependeDeId.HasValue)
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowDependeDeId)</strong><br />
+                                    @Html.DisplayFor(m => item.DefinicionWorkflowDependeDeId)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Opciones</span>
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.NotificarCorreo)</strong><br />
+                                @string.Format("{0}", @item.NotificarCorreo ? "SI" : "NO")
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.Habilitado)</strong><br />
+                                @string.Format("{0}", @item.Habilitado ? "SI" : "NO")
+                            </div>
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirVerDetalles)</strong><br />
+                                @string.Format("{0}", @item.PermitirVerDetalles ? "SI" : "NO")
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirVerDocumentos)</strong><br />
+                                @string.Format("{0}", @item.PermitirVerDocumentos ? "SI" : "NO")
+                            </div>
+
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.RequiereAprobacionAlEnviar)</strong><br />
+                                @string.Format("{0}", @item.RequiereAprobacionAlEnviar ? "SI" : "NO")
+                            </div>
+
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirAdjuntarDocumentos)</strong><br />
+                                @string.Format("{0}", @item.PermitirAdjuntarDocumentos ? "SI" : "NO")
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirGenerarDocumentos)</strong><br />
+                                @string.Format("{0}", @item.PermitirGenerarDocumentos ? "SI" : "NO")
+                            </div>
+
+
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirReenvio)</strong><br />
+                                @string.Format("{0}", @item.PermitirReenvio ? "SI" : "NO")
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirMultipleEvaluacion)</strong><br />
+                                @string.Format("{0}", @item.PermitirMultipleEvaluacion ? "SI" : "NO")
+                            </div>
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.PermitirArchivarTarea)</strong><br />
+                                @string.Format("{0}", @item.PermitirArchivarTarea ? "SI" : "NO")
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href='@Url.Action("Edit", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn blue">Editar</a>
+                    <a href='@Url.Action("Delete", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn red">Eliminar</a>
+
+                </div>
+            </li>*@
+    }
+    @*</ul>*@
+}
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create", "DefinicionWorkflow", new { Model.DefinicionProcesoId })' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<link rel="stylesheet" href="~/Content/materialize-stepper.min.css">
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+<script src="~/Scripts/materialize-stepper.min.js"></script>
+<script>
+    $(function () {
+        $("#sortable").sortable({
+            stop: function (event, ui) {
+                var map = Function.prototype.call.bind([].map)
+                var list = document.querySelectorAll("li");
+                $("#ids").val(map(list, function (x) { return x.id; }));
+            }
+        });
+        $("#sortable").disableSelection();
+    });
+    $(document).ready(function () {
+        //$('.tabs').tabs();
+        $('.tooltipped').tooltip({ delay: 50 });
+        //$('.stepper').activateStepper();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+        $('select').formSelect();
+
+    });
+</script>

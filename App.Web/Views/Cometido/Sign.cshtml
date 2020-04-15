@@ -1,0 +1,73 @@
+﻿@model App.Model.Cometido.Cometido
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+
+<div class="row">
+    <div class="col s12 m6 l3">
+        @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Solicitud Cometidos</span>
+                <div class="row">
+                    <div class="input-field col s12 m10 l10">
+                        <b>@Html.DisplayNameFor(m => Model.UnidadDescripcion)</b>
+                        @Html.DisplayFor(m => Model.UnidadDescripcion)
+                    </div>
+                    <div class="input-field col s12 m10 l8">
+                        <b>@Html.DisplayNameFor(m => Model.Nombre)</b>
+                        @Html.DisplayFor(m => Model.Nombre)
+                    </div>
+                    <div class="input-field col s12 m6 l8">
+                        <b>@Html.DisplayNameFor(m => Model.Rut)</b>
+                        @Html.DisplayFor(m => Model.Rut)
+                    </div>
+                    <div class="input-field col s12 m6 l4">
+                        <b>@Html.DisplayNameFor(m => Model.DV)</b>
+                        @Html.DisplayFor(m => Model.DV)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.CargoDescripcion)</b>
+                        @Html.DisplayFor(m => Model.CargoDescripcion)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.CalidadDescripcion)</b>
+                        @Html.DisplayFor(m => Model.CalidadDescripcion)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.GradoDescripcion)</b>
+                        @Html.DisplayFor(m => Model.GradoDescripcion)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.EstamentoDescripcion)</b>
+                        @Html.DisplayFor(m => Model.EstamentoDescripcion)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.ProgramaDescripcion)</b>
+                        @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                    </div>
+                    <div class="input-field col s12 m6 l6">
+                        <b>@Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)</b>
+                        @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        //$('select').formSelect();
+    });
+</script>

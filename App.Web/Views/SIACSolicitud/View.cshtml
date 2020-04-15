@@ -1,0 +1,75 @@
+﻿@model App.Model.SIAC.SIACSolicitud
+
+<h3>Detalles</h3>
+
+<div class="row">
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Detalles</span>
+                <div class="row">
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.SIACTipoSolicitudId)</strong>
+                        <p>@Html.DisplayFor(m => Model.SIACSolicitudId)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.RUT)</strong>
+                        <p>@Html.DisplayFor(m => Model.RUT)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Nombres)</strong>
+                        <p>@Html.DisplayFor(m => Model.Nombres)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.FechaNacimiento)</strong>
+                        <p>@Html.DisplayFor(m => Model.FechaNacimiento)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Telefono)</strong>
+                        <p>@Html.DisplayFor(m => Model.Telefono)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Direccion)</strong>
+                        <p>@Html.DisplayFor(m => Model.Direccion)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Email)</strong>
+                        <p>@Html.DisplayFor(m => Model.Email)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.RegionId)</strong>
+                        <p>@Html.DisplayFor(m => Model.Region.Nombre)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.GeneroId)</strong>
+                        <p>@Html.DisplayFor(m => Model.Genero.Nombre)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.SIACOcupacionId)</strong>
+                        <p>@Html.DisplayFor(m => Model.SIACOcupacion.Nombre)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.SIACTemaId)</strong>
+                        <p>@Html.DisplayFor(m => Model.SIACTema.Nombre)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Consulta)</strong>
+                        <p>@Html.DisplayFor(m => Model.Consulta)</p>
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Respuesta)</strong>
+                        <p>@Html.DisplayFor(m => Model.Respuesta)</p>
+                    </div>
+                </div>
+                @*<br />
+            <a href='@Url.Action("Edit", new { id = Model.WorkflowId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.WorkflowId })' class="btn red">Eliminar</a>*@
+
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+    </div>
+</div>

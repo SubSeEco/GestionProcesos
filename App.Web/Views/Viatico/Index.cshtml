@@ -1,0 +1,64 @@
+﻿@model IEnumerable<App.Model.Cometido.Viatico>
+
+<h3>Viatico</h3>
+<div class="card">
+    <div class="card-content">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Año)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rango1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rango2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rango3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rango4)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rango5)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Año)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rango1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rango2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rango3)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rango4)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rango5)
+                </td>
+                <td>
+                    @Html.ActionLink("Detalles", "Details", new { id = item.ViaticoId })
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+@*<br />
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>*@

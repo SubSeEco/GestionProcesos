@@ -1,0 +1,39 @@
+﻿
+<div class="nav-wrapper search-wrapper" style="">
+    <form>
+        <div class="input-field">
+            <input id="search" type="search" required>
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script type="text/javascript">
+    $("#search").autocomplete({
+        appendTo: "#slide-out",
+        source: function (request, response) {
+            $.ajax({
+                url: "/Indice/Get/",
+                data: { term: request.term },
+                type: "POST",
+                success: function (data) {
+                    response($.map(data,
+                        function (item) {
+                            return { value: item.id, id: item.value };
+                        }));
+                }
+            });
+        },
+        select: function (event, ui) {
+            window.location.href = ui.item.id;
+            return false;
+        }
+    });
+</script>
+

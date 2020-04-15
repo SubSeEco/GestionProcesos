@@ -1,0 +1,52 @@
+﻿@model IEnumerable<App.Model.Pasajes.DestinosPasajes>
+
+
+<h3>Destinos Comision</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrigenCiudadDescripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaOrigen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaisDescripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CiudadDescripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaVuelta)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.OrigenRegionDescripcion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OrigenCiudadDescripcion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaOrigen)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PaisDescripcion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CiudadDescripcion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaVuelta)
+    </td>
+</tr>
+    }
+</table>

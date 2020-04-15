@@ -1,0 +1,194 @@
+﻿@model App.Model.Pasajes.DestinosPasajes
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+
+
+
+@*@using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
+@using (Html.BeginForm())
+{
+    @*@Html.HiddenFor(q => Model.WorkflowId)
+        @Html.HiddenFor(q => Model.PasajeId)*@
+
+    @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+
+    <div class="card-content">
+        <div class="row">
+            <div id="divNacional">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegionDescripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        
+                            <td>
+                                @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...")
+                            </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                            @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.IdRegion, null, "Seleccione...")
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                            @Html.ValidationMessageFor(m => m.FechaVuelta, "", new { @class = "red-text" })
+                        </td>
+                        
+                    </tr>
+                </table>
+
+                <div class="input-field col s12 m10 l6">
+                    @Html.TextBoxFor(m => m.ObservacionesOrigen)
+                    @Html.LabelFor(m => m.ObservacionesOrigen)
+                </div>
+                <div class="input-field col s12 m10 l6">
+                    @Html.TextBoxFor(m => m.ObservacionesDestinos)
+                    @Html.LabelFor(m => m.ObservacionesDestinos)
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            timepicker: false,
+            startDate: '+1971/05/01',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y',
+            //minDate: 0
+        });
+        //jQuery('#HoraIda,#HoraVuelta').timepicker({ datetimepicker: false, formatTime: 'H:i', defaultTime: '08:00' });
+        $('select').formSelect();
+
+        //$('#divNacional').hide(100);
+        //$('#mydiv').hide(100);
+    });
+
+    ///*Carga dropdown de comunas*/
+    //$('#IdRegion').on('change', function () {
+    //    var Region = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetComunas", { IdRegion: Region },
+    //        function (classesData) {
+    //            var select = $("#IdComuna");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+    ///*Carga dropdown de comunasOrigen*/
+    //$('#IdRegionOrigen').on('change', function () {
+    //    var Region = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetComunas", { IdRegion: Region },
+    //        function (classesData) {
+    //            var select = $("#IdComunaOrigen");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+    /*Carga dropdown de ciudades*/
+    //$('#IdPais').on('change', function () {
+    //    var Pais = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetCiudad", { IdPais: Pais },
+    //        function (classesData) {
+    //            var select = $("#IdCiudad");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+    ///*Carga dropdown de ciudades Origen*/
+    //$('#IdPaisOrigen').on('change', function () {
+    //    var Pais = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetCiudad", { IdPais: Pais },
+    //        function (classesData) {
+    //            var select = $("#IdCiudadOrigen");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

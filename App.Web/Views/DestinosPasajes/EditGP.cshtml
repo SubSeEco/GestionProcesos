@@ -1,0 +1,231 @@
+﻿@model App.Model.Pasajes.DestinosPasajes
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+
+<div class="row">
+    <div class="col s12 m6 l12">
+        @using (Html.BeginForm("EditGP", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @*@Html.HiddenFor(q => Model.WorkflowId)*@
+            @Html.HiddenFor(q => Model.DestinosPasajesId)
+            @Html.HiddenFor(q => Model.PasajeId)
+
+            @Html.ValidationSummary(true, "", new { @class = "red-text" })
+            <div class="card">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PaisDescripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CiudadDescripcion)
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
+                            @*@Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => Model.IdCiudad, null, "Seleccione...")
+                            @*@Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                        </td>
+                    </tr>
+                </table>
+                <div class="section"></div>
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.Raw("<span>%</span>")
+                        </th>
+                        @*<th style="width:20px">
+                            @Html.DisplayNameFor(m => Model.Dias100)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => Model.Dias60)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => Model.Dias40)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => Model.Dias50)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => Model.Dias00)
+                        </th>*@
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.Raw("Días solicitados")
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(m => Model.Dias100)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => Model.Dias60)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => Model.Dias40)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => Model.Dias50)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => Model.Dias00)
+                        </td>*@
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.Raw("Días aprobados")
+                        </td>
+                        @*<td>
+                            @Html.EditorFor(m => Model.Dias100Aprobados)
+                            @Html.ValidationMessageFor(m => Model.Dias100Aprobados, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias60Aprobados)
+                            @Html.ValidationMessageFor(m => Model.Dias60Aprobados, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias40Aprobados)
+                            @Html.ValidationMessageFor(m => Model.Dias40Aprobados, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias50Aprobados)
+                            @Html.ValidationMessageFor(m => Model.Dias50Aprobados, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias00Aprobados)
+                            @Html.ValidationMessageFor(m => Model.Dias00Aprobados, "", new { @class = "red-text" })
+                        </td>*@
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.Raw("Monto aprobado")
+                        </td>
+                        @*<td>
+                            @Html.EditorFor(m => Model.Dias100Monto)
+                            @Html.ValidationMessageFor(m => Model.Dias100Monto, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias60Monto)
+                            @Html.ValidationMessageFor(m => Model.Dias60Monto, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias40Monto)
+                            @Html.ValidationMessageFor(m => Model.Dias40Monto, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias50Monto)
+                            @Html.ValidationMessageFor(m => Model.Dias50Monto, "", new { @class = "red-text" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.Dias00Monto)
+                            @Html.ValidationMessageFor(m => Model.Dias00Monto, "", new { @class = "red-text" })
+                        </td>*@
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.Raw("<span>TOTAL</span>")
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            @*@Html.EditorFor(m => Model.Total)
+                            @Html.ValidationMessageFor(m => Model.Total, "", new { @class = "red-text" })*@
+                        </td>
+                    </tr>
+                </table>
+                <div class="section"></div>
+                <p>
+                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                </p>
+            </div>
+        }
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {        
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaInicio,#FechaHasta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            formatDate: 'd-m-Y H:i',
+            //minDate: 0,
+        });
+
+        $("#IdComuna").attr('disabled', true);
+        $("#IdRegion").attr('disabled', true);        
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+
+        
+    });
+
+    /*Carga dropdown de comunas*/
+    $('#IdRegion').on('change', function () {
+        var Region = $(this).val();
+        $.getJSON("/Destinos/GetComunas", { IdRegion: Region },
+            function (classesData) {
+                var select = $("#IdComuna");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            })
+    });
+
+    /*Carga dropdown de ciudades*/
+    $('#IdPais').on('change', function () {
+        var Pais = $(this).val();
+        $.getJSON("/DestinosComision/GetCiudad", { IdPais: Pais },
+            function (classesData) {
+                var select = $("#IdCiudad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            })
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

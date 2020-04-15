@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de procesos</title>
+
+    <script type="text/javascript" src="~/Scripts/jquery-3.4.1.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="~/Scripts/materialize.js"></script>
+    <link rel="stylesheet" href="~/Content/materialize.css">
+    <link rel="stylesheet" href="~/Content/custom.css">
+
+</head>
+<body>
+    <div id="container">
+        <div id="menu">
+            @{Html.RenderAction("Menu", "Home");}
+        </div>
+        <div id="content">
+            <div class="row">
+                <a href="#" data-target="slide-out" class="sidenav-trigger right hide-on-large-only"><i class="material-icons small">menu</i></a>
+            </div>
+            @Html.Partial("_Message")
+            @RenderBody()
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+            $('.collapsible').collapsible();
+        });
+    </script>
+</body>
+</html>

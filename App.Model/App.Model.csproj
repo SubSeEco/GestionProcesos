@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F007FEE7-EE3C-4A51-A77A-2260956B7477}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>App.Model</RootNamespace>
+    <AssemblyName>App.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExpressiveAnnotations, Version=2.7.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cometido\CentroCosto.cs" />
+    <Compile Include="Cometido\Cometido.cs" />
+    <Compile Include="Cometido\Destinos.cs" />
+    <Compile Include="Cometido\GeneracionCDP.cs" />
+    <Compile Include="Cometido\Mantenedor.cs" />
+    <Compile Include="Cometido\Parrafos.cs" />
+    <Compile Include="Cometido\TipoAsignacion.cs" />
+    <Compile Include="Cometido\TipoCapitulo.cs" />
+    <Compile Include="Cometido\TipoItem.cs" />
+    <Compile Include="Cometido\TipoPartida.cs" />
+    <Compile Include="Cometido\TipoSubAsignacion.cs" />
+    <Compile Include="Cometido\TipoSubTitulo.cs" />
+    <Compile Include="Cometido\Viatico.cs" />
+    <Compile Include="Cometido\ViaticoHonorario.cs" />
+    <Compile Include="Comisiones\Comision.cs" />
+    <Compile Include="Comisiones\DestinosComision.cs" />
+    <Compile Include="Comisiones\GeneracionCDPComision.cs" />
+    <Compile Include="Comisiones\ParametrosComisiones.cs" />
+    <Compile Include="Comisiones\ParrafoComisiones.cs" />
+    <Compile Include="Comisiones\ViaticoInternacional.cs" />
+    <Compile Include="Core\Accion.cs" />
+    <Compile Include="Core\BaseEntity.cs" />
+    <Compile Include="Core\Configuracion.cs" />
+    <Compile Include="Core\DefinicionProceso.cs" />
+    <Compile Include="Core\DefinicionWorkflow.cs" />
+    <Compile Include="Core\Documento.cs" />
+    <Compile Include="Core\Entidad.cs" />
+    <Compile Include="Core\Estado.cs" />
+    <Compile Include="Core\Grupo.cs" />
+    <Compile Include="Core\Log.cs" />
+    <Compile Include="Core\Proceso.cs" />
+    <Compile Include="Core\ResponseMessage.cs" />
+    <Compile Include="Core\Rubrica.cs" />
+    <Compile Include="Core\TipoAprobacion.cs" />
+    <Compile Include="Core\TipoDocumento.cs" />
+    <Compile Include="Core\TipoEjecucion.cs" />
+    <Compile Include="Core\TipoPrivacidad.cs" />
+    <Compile Include="Core\Usuario.cs" />
+    <Compile Include="Core\Workflow.cs" />
+    <Compile Include="DTO\DTODolar.cs" />
+    <Compile Include="DTO\DTODomainUser.cs" />
+    <Compile Include="DTO\DTOFolio.cs" />
+    <Compile Include="DTO\DTOMetadata.cs" />
+    <Compile Include="DTO\DTOSelect.cs" />
+    <Compile Include="FirmaDocumento\DTOSolicitud.cs" />
+    <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
+    <Compile Include="FirmaDocumento\FirmaDocumento.cs" />
+    <Compile Include="Pasajes\Cotizacion.cs" />
+    <Compile Include="Pasajes\CotizacionDocumento.cs" />
+    <Compile Include="Pasajes\DestinosPasajes.cs" />
+    <Compile Include="Pasajes\EmpresaAerolinea.cs" />
+    <Compile Include="Pasajes\Pasaje.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\Cargo.cs" />
+    <Compile Include="Shared\Categoria.cs" />
+    <Compile Include="Shared\Ciudad.cs" />
+    <Compile Include="Shared\Departamento.cs" />
+    <Compile Include="Shared\Genero.cs" />
+    <Compile Include="Shared\Institucion.cs" />
+    <Compile Include="Shared\Pais.cs" />
+    <Compile Include="Shared\Programa.cs" />
+    <Compile Include="Shared\Region.cs" />
+    <Compile Include="Shared\Subsecretaria.cs" />
+    <Compile Include="Shared\TipoPagoSIGFE.cs" />
+    <Compile Include="SIGPER\DGCOMUNAS.cs" />
+    <Compile Include="SIGPER\DGCONTRATOS.cs" />
+    <Compile Include="SIGPER\DGESCALAFONES.cs" />
+    <Compile Include="SIGPER\DGESTAMENTOS.cs" />
+    <Compile Include="SIGPER\DGREGIONES.cs" />
+    <Compile Include="SIGPER\PECARGOS.cs" />
+    <Compile Include="SIGPER\PeDatLab.cs" />
+    <Compile Include="SIGPER\PEDATPER.cs" />
+    <Compile Include="SIGPER\PEFERJEF.cs" />
+    <Compile Include="SIGPER\PEFERJEFAF.cs" />
+    <Compile Include="SIGPER\PEFERJEFAJ.cs" />
+    <Compile Include="SIGPER\PLUNILAB.cs" />
+    <Compile Include="SIGPER\ReContra.cs" />
+    <Compile Include="SIGPER\REPYT.cs" />
+    <Compile Include="SIGPER\SIGPER.cs" />
+    <Compile Include="Comisiones\SIGPERTipoVehiculo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Core\Model.cd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-3.4.1.min.map" />
+    <None Include="Scripts\jquery-3.4.1.slim.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\expressive.annotations.validate.js" />
+    <Content Include="Scripts\expressive.annotations.validate.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,80 @@
+﻿@model App.Web.Controllers.AccountController.ModelUser
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de procesos</title>
+
+    <script type="text/javascript" src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="~/Scripts/materialize.js"></script>
+        <link rel="stylesheet" href="~/Content/materialize.css">
+
+    <link rel="stylesheet" href="~/Content/custom.css">
+
+</head>
+<body>
+
+    <center>
+        <div class="section"></div>
+        <div class="section"></div>
+
+        <div class="container">
+
+            <div class="z-depth-1 lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+                <div class="align center">
+                    <i class="material-icons large center">person_pin</i>
+                    <p class="flow-text center">Login <br />Gestión de procesos</p>
+
+                    <p class="flow-text center">
+                    </p>
+                </div>
+
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <p>
+                        Use las credenciales de acceso institucionales
+                        <br />
+                    </p>
+
+                    <p>
+                        @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                    </p>
+
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            @Html.TextBoxFor(m => Model.UserName)
+                            @Html.LabelFor(m => Model.UserName)
+                            @Html.ValidationMessageFor(m => Model.UserName, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            @Html.TextBoxFor(m => Model.Password, new { @type = "password" })
+                            @Html.LabelFor(m => Model.Password)
+                            @Html.ValidationMessageFor(m => Model.Password, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <center>
+                        <div class='row'>
+                            <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect blue'>Login</button>
+                        </div>
+                    </center>
+                }
+            </div>
+
+        </div>
+    </center>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

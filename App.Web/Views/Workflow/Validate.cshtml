@@ -1,0 +1,55 @@
+﻿@model App.Model.Core.Workflow
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("Validate", "Workflow", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.WorkflowId)
+    { Model.TipoAprobacionId = 1; }
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Validación</span>
+            <div class="section"></div>
+            <div class="row">
+                @if (Enumerable.Count(ViewBag.TipoAprobacionId) > 0)
+                {
+                    <div class="input-field col s12 m8 l8">
+                        @Html.DropDownListFor(model => model.TipoAprobacionId, null)
+                        @Html.LabelFor(m => Model.TipoAprobacionId)
+                        @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
+                    </div>
+                }
+                @if (Enumerable.Count(ViewBag.DefinicionWorkflowId) > 0)
+                {
+                    <div class="input-field col s12 m8 l8">
+                        @Html.DropDownListFor(m => Model.DefinicionWorkflowId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.DefinicionWorkflowId)
+                        @Html.ValidationMessageFor(m => Model.DefinicionWorkflowId, "", new { @class = "red-text" })
+                    </div>
+                }
+                <div class="input-field col s12 m8 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn blue" type="submit">Enviar tarea</button>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

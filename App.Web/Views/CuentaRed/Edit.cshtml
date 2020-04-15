@@ -1,0 +1,249 @@
+﻿@model App.Model.CuentaRed.CuentaRed
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+
+<div class="row">
+    <div class="col s12 m6 l3">
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(q => Model.CuentaRedId)
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.HiddenFor(q => Model.ProcesoId)
+            @Html.HiddenFor(q => Model.EmailSolicitante)
+            @Html.HiddenFor(q => Model.EmailSecretariaAsistente)
+            @Html.HiddenFor(q => Model.EmailSuperiorDirector)
+            @Html.AntiForgeryToken()
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Cuenta de red</span>
+
+                    <div class="row">
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.Solicitante, new { @placeholder = "Ingrese nombres o email" })
+                            @Html.LabelFor(m => Model.Solicitante)
+                            @Html.ValidationMessageFor(m => Model.Solicitante, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.ApellidoParterno)
+                            @Html.LabelFor(m => Model.ApellidoParterno)
+                            @Html.ValidationMessageFor(m => Model.ApellidoParterno, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.ApellidoMaterno)
+                            @Html.LabelFor(m => Model.ApellidoMaterno)
+                            @Html.ValidationMessageFor(m => Model.ApellidoMaterno, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.Nombres)
+                            @Html.LabelFor(m => Model.Nombres)
+                            @Html.ValidationMessageFor(m => Model.Nombres, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.RUT)
+                            @Html.LabelFor(m => Model.RUT)
+                            @Html.ValidationMessageFor(m => Model.RUT, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.EditorFor(m => Model.FechaNacimiento)
+                            @Html.LabelFor(m => Model.FechaNacimiento)
+                            @Html.ValidationMessageFor(m => Model.FechaNacimiento, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(model => model.GeneroId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.GeneroId)
+                            @Html.ValidationMessageFor(m => Model.GeneroId, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.Pl_CodCar, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_CodCar)
+                            @Html.ValidationMessageFor(m => Model.Pl_CodCar, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.EditorFor(m => Model.FechaIngreso)
+                            @Html.LabelFor(m => Model.FechaIngreso)
+                            @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <label>
+                                @Html.CheckBoxFor(m => m.RequierePC)
+                                <span>@Html.LabelFor(m => Model.RequierePC)</span>
+                            </label>
+                            <div class="section"></div>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.NumeroTelefono)
+                            @Html.LabelFor(m => Model.NumeroTelefono)
+                            @Html.ValidationMessageFor(m => Model.NumeroTelefono, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.NumeroAnexo)
+                            @Html.LabelFor(m => Model.NumeroAnexo)
+                            @Html.ValidationMessageFor(m => Model.NumeroAnexo, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.DependenciaAdministrativa)
+                            @Html.LabelFor(m => Model.DependenciaAdministrativa)
+                            @Html.ValidationMessageFor(m => Model.DependenciaAdministrativa, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.UbicacionFisica)
+                            @Html.LabelFor(m => Model.UbicacionFisica)
+                            @Html.ValidationMessageFor(m => Model.UbicacionFisica, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.RegionId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.RegionId)
+                            @Html.ValidationMessageFor(m => Model.RegionId, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.Email)
+                            @Html.LabelFor(m => Model.Email)
+                            @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.SecretariaAsistente, new { @placeholder = "Ingrese nombres o email" })
+                            @Html.LabelFor(m => Model.SecretariaAsistente)
+                            @Html.ValidationMessageFor(m => Model.SecretariaAsistente, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.SuperiorDirecto, new { @placeholder = "Ingrese nombres o email" })
+                            @Html.LabelFor(m => Model.SuperiorDirecto)
+                            @Html.ValidationMessageFor(m => Model.SuperiorDirecto, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.Autorizador, new { @placeholder = "Ingrese nombres o email" })
+                            @Html.LabelFor(m => Model.Autorizador)
+                            @Html.ValidationMessageFor(m => Model.Autorizador, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Observacion)
+                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col s12 m6 l3">
+        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('select').formSelect();
+
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+
+        $("#Solicitante").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/CuentaRed/GetUser/",
+                    data: { term: request.term },
+                    type: "POST",
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { id: item.id, value: item.value };
+                            }));
+                    }
+                });
+            },
+
+            select: function (event, ui) {
+                $("#EmailSolicitante").val(ui.item.id);
+                $("#Solicitante").val(ui.item.value);
+                return false;
+            }
+        });
+
+        $("#SecretariaAsistente").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/CuentaRed/GetUser/",
+                    data: { term: request.term },
+                    type: "POST",
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { id: item.id, value: item.value };
+                            }));
+                    }
+                });
+            },
+
+            select: function (event, ui) {
+                $("#EmailSecretariaAsistente").val(ui.item.id);
+                $("#SecretariaAsistente").val(ui.item.value);
+                return false;
+            }
+        });
+
+        $("#SuperiorDirecto").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/CuentaRed/GetUser/",
+                    data: { term: request.term },
+                    type: "POST",
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { id: item.id, value: item.value };
+                            }));
+                    }
+                });
+            },
+
+            select: function (event, ui) {
+                $("#EmailSuperiorDirector").val(ui.item.id);
+                $("#SuperiorDirecto").val(ui.item.value);
+                return false;
+            }
+        });
+
+        $("#Autorizador").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/CuentaRed/GetUser/",
+                    data: { term: request.term },
+                    type: "POST",
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { id: item.id, value: item.value };
+                            }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $("#EmailEmailAutorizador").val(ui.item.id);
+                $("#Autorizador").val(ui.item.value);
+                return false;
+            }
+        });
+
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

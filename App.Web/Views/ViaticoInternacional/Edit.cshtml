@@ -1,0 +1,78 @@
+﻿@model App.Model.Comisiones.ViaticoInternacional
+
+<h3>Editar Viatico Honorario </h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.ViaticoInternacionalId)
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Crear nuevo</span>
+            <div class="row">
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.CiudadId)
+                    @Html.LabelFor(m => Model.CiudadId)
+                    @Html.ValidationMessageFor(m => Model.CiudadId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.CiudadNombre)
+                    @Html.LabelFor(m => Model.CiudadNombre)
+                    @Html.ValidationMessageFor(m => Model.CiudadNombre, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Año)
+                    @Html.LabelFor(m => Model.Año)
+                    @Html.ValidationMessageFor(m => Model.Año, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.CostoVida)
+                    @Html.LabelFor(m => Model.CostoVida)
+                    @Html.ValidationMessageFor(m => Model.CostoVida, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango1)
+                    @Html.LabelFor(m => Model.PorcentajeRango1)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango1, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango2)
+                    @Html.LabelFor(m => Model.PorcentajeRango2)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango2, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango3)
+                    @Html.LabelFor(m => Model.PorcentajeRango3)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango3, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango4)
+                    @Html.LabelFor(m => Model.PorcentajeRango4)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango4, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango5)
+                    @Html.LabelFor(m => Model.PorcentajeRango5)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango5, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.PorcentajeRango6)
+                    @Html.LabelFor(m => Model.PorcentajeRango6)
+                    @Html.ValidationMessageFor(m => Model.PorcentajeRango6, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.Activo)
+                        <span>@Html.LabelFor(m => Model.Activo)</span>
+                    </label>
+                </div>
+            </div>
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

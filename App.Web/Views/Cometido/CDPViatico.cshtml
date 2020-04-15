@@ -1,0 +1,291 @@
+﻿@model App.Model.Cometido.Cometido
+@{
+    Layout = null;
+}
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body style="font-size: 8px">
+    <table>
+        <tr>
+            <td>
+                <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />                
+            </td>
+            <td></td>
+            <td colspan="4" align="center">
+                <strong>
+                    CERTIFICADO DE DISPONIBILIDAD PRESUPUESTARIA<br />
+                    SUBSECRETARÍA DE ECONOMÍA
+                </strong>
+            </td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+            </td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>Nro. Cometido</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.CometidoId)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>ID Compromiso</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>Analista Presupuestario:</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcNombre)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+    </table>
+    <table width="60%">
+        <tr>
+            <td colspan="2">
+                <strong>Detalle </strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td>
+                Nombre Funcionario
+            </td>
+            <td>
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.Nombre)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Ciudad
+            </td>
+            <td>
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().ComunaDescripcion)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Desde
+            </td>
+            <td>
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Hasta
+            </td>
+            <td>
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaHasta).ToHtmlString().Remove(10)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Descripción
+            </td>
+            <td>
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.CometidoDescripcion)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+    </table>
+    <table border="1" width="100%">
+        <tr>
+            <td>
+                Partida
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+            </td>
+            <td>
+                Subtítulo
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Capítulo
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+            </td>
+            <td>
+                Ítem
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Programa
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.IdPrograma)
+            </td>
+            <td>
+                Asignación
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td>
+                Subasignación
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Presupuesto Total
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Compromiso
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcCodCompromiso)
+            </td>
+        </tr>
+        <tr>
+            <td>
+               Obligación Actual
+            </td>
+            <td>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcObligacionActual)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Saldo
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3">
+                <strong>Encargado(a) de Presupuestos</strong>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3">
+                @*<img src="~/Content/images/FirmaGato.png" />*@
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3">
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().FechaFirma).ToHtmlString().Remove(10)
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

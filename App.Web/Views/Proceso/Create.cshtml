@@ -1,0 +1,43 @@
+﻿@model App.Model.Core.Proceso
+
+<h3>Iniciar proceso</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s12 m10 l8">
+                    @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.DefinicionProcesoId)
+                    @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+        $.validator.setDefaults({
+            ignore: []
+        });
+
+        $("select[required]").css({ position: "absolute", display: "inline", height: 0, padding: 0, width: 0 });
+        $("select[required]").css({ display: "block", height: 0, padding: 0, width: 0, position: 'absolute' });
+
+    });
+</script>
+

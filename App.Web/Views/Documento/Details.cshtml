@@ -1,0 +1,85 @@
+﻿@model App.Model.Core.Documento
+
+<h3>Detalle documento</h3>
+
+<div class="row">
+    <div class="col s12 m12 l10">
+        <div class="card">
+            <div class="card-image">
+                @if (Model.Type.Contains("pdf"))
+                {
+                    <embed src="@Url.Action("Show", "Documento", new { id = Model.DocumentoId })" type="application/pdf" width="100%" height="400px"></embed>
+                }
+            </div>
+            <div class="card-content">
+                <span class="card-title">Detalle</span>
+                <div class="row">
+                    <div class="input-field col s12 m10">
+                        <p>
+                            <strong>@Html.DisplayNameFor(m => Model.DocumentoId)</strong><br />
+                        </p>
+                        @Html.DisplayFor(m => Model.DocumentoId)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Fecha)</strong><br />
+                        @Html.DisplayFor(m => Model.Fecha)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Email)</strong><br />
+                        @Html.DisplayFor(m => Model.Email)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoId)</strong><br />
+                        @Html.DisplayFor(m => Model.TipoDocumento.Nombre)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.ProcesoId)</strong><br />
+                        @Html.DisplayFor(m => Model.Proceso.DefinicionProceso.Nombre)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.WorkflowId)</strong><br />
+                        @Html.DisplayFor(m => Model.Workflow.DefinicionWorkflow.Nombre)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Ubicacion)</strong><br />
+                        @Html.DisplayFor(m => Model.Ubicacion)
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-action">
+                @Html.ActionLink("Descargar", "download", new { id = Model.DocumentoId }, new { target = "_blank", @class = "waves-effect waves-light btn blue" })
+                @Html.ActionLink("Solicitar físico", "download", new { id = Model.DocumentoId }, new { target = "_blank", @class = "waves-effect waves-light btn blue" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m12 l10">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Metadata</span>
+                <div class="row">
+
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Texto)</strong><br />
+                        @Html.DisplayFor(m => Model.Texto)
+                    </div>
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Metadata)</strong><br />
+                        @Html.DisplayFor(m => Model.Metadata)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<link rel="stylesheet" href="~/Content/materialize-stepper.min.css">
+<script src="~/Scripts/materialize-stepper.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>

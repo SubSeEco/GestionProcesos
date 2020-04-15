@@ -1,0 +1,174 @@
+﻿@model App.Model.Pasajes.Pasaje
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<h3>Crear Pasajes</h3>
+
+<div class="row">
+    <div class="col s12 m10 l12">
+        @using (Html.BeginForm("Create", "Pasaje", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.HiddenFor(q => Model.ProcesoId)
+            @Html.HiddenFor(q => Model.IdCalidad)
+            @Html.HiddenFor(q => Model.PasajeId)
+            @Html.HiddenFor(q => Model.FechaSolicitud)
+            @Html.HiddenFor(q => Model.Nombre)
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Pasajes</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10 l3">
+                            @Html.DisplayFor(m => Model.FechaSolicitud)
+                            @Html.LabelFor(m => Model.FechaSolicitud)
+                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l3">
+                            @Html.DisplayFor(m => Model.PasajeId)
+                            @Html.LabelFor(m => Model.PasajeId)
+                        </div>
+                    </div>
+                    <div id="jQuery_accordion">
+                        <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreId)
+                                @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l8">
+                                @Html.EditorFor(m => Model.Rut)
+                                @Html.LabelFor(m => Model.Rut)
+                                @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                @Html.EditorFor(m => Model.DV)
+                                @Html.LabelFor(m => Model.DV)
+                                @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.CalidadDescripcion)
+                                @Html.LabelFor(m => Model.CalidadDescripcion)
+                                @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.PasajeDescripcion)
+                                @Html.EditorFor(m => Model.PasajeDescripcion)
+                                @Html.ValidationMessageFor(m => Model.PasajeDescripcion, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <h3><span style="font-weight: bold">III. Datos del Destino: </span></h3>
+                        <div class="row">
+                            <div class="row">
+                                <div class="input-field col s12 m6 l4">
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.TipoDestino)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDestino, true)
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDestino, false)
+                                            <span>NO</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+@*<div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@
+
+<script>
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaSolicitud,#FechaOrigen').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            timepicker: false,
+            //formatTime: 'H:i',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y',
+            //minDate: 0,
+        });
+        jQuery('#HoraOrigen').timepicker({ datetimepicker: false, formatTime: 'H:i', defaultTime: '08:00', });
+
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });        
+
+        //funcion modal popup
+        $(function () {
+            $('.Create').click(function () {
+                $('modal').appendTo('body').dialog({
+                    close: function (event, ui) {
+                        dialog.remove();
+                    },
+                    modal: true
+                }).load(this.href, {});
+
+                return false;
+            });
+        });
+
+        /*Carga usuario por seleccion de dropdown*/
+        $('#NombreId').on('change', function () {
+            var Rut = $(this).val(); /*alert(Rut);*/
+            $.getJSON("/Pasaje/GetUsuario", { Rut: Rut },
+                function (classesData) {
+                    document.getElementById('Rut').value = classesData["Rut"];
+                    document.getElementById('DV').value = classesData["DV"];
+                    //document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                    document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                    //document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+                    //document.getElementById('GradoDescripcion').value = classesData["Grado"];
+                    //document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
+                    //document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
+                    //document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
+                })
+        })
+    });
+
+    $(function () {
+    $("#jQuery_accordion").accordion({
+        collapsible: true, heightStyle: true
+    });
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

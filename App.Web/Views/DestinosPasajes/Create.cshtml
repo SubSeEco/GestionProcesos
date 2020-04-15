@@ -1,0 +1,248 @@
+﻿@model App.Model.Pasajes.DestinosPasajes
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="row">
+    <div class="col s12 m6 l12">
+        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.HiddenFor(q => Model.PasajeId)
+
+            @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Destinos Pasajes</span>
+                    <div class="row">
+                        @if (Model.Pasaje.TipoDestino == true)
+                        {
+                            <div id="divNacional">
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.RegionDescripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DropDownListFor(m => Model.IdRegionOrigen, null, "Seleccione...")
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                            @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                            @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="input-field col s12 m10 l6">
+                                    @Html.TextBoxFor(m => Model.ObservacionesOrigen)
+                                    @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                </div>
+                                <div class="input-field col s12 m10 l6">
+                                    @Html.TextBoxFor(m => Model.ObservacionesDestinos)
+                                    @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="mydiv">
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OrigenPaisDescripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PaisDescripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DropDownListFor(m => Model.IdPaisOrigen, null, "Seleccione...")
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...", new { style = "width:100px" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                            @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                            @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="input-field col s12 m10 l6">
+                                    @Html.TextBoxFor(m => Model.ObservacionesOrigen)
+                                    @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                </div>
+                                <div class="input-field col s12 m10 l6">
+                                    @Html.TextBoxFor(m => Model.ObservacionesDestinos)
+                                    @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit" onclick="valida">Guardar</button>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            timepicker: false,
+            startDate:'+1971/05/01',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y',
+            //minDate: 0
+        });
+        jQuery('#HoraIda,#HoraVuelta').timepicker({ datetimepicker: false, formatTime:'H:i',defaultTime: '08:00' });
+        $('select').formSelect();
+
+        //$('#divNacional').hide(100);
+        //$('#mydiv').hide(100);
+    });
+
+    /*Carga dropdown de comunas*/
+    $('#IdRegion').on('change', function () {
+        var Region = $(this).val();
+        $.getJSON("/DestinosPasajes/GetComunas", { IdRegion: Region },
+            function (classesData) {
+                var select = $("#IdComuna");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            })
+    });
+
+    ///*Carga dropdown de comunasOrigen*/
+    //$('#IdRegionOrigen').on('change', function () {
+    //    var Region = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetComunas", { IdRegion: Region },
+    //        function (classesData) {
+    //            var select = $("#IdComunaOrigen");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+    /*Carga dropdown de ciudades*/
+    $('#IdPais').on('change', function () {
+        var Pais = $(this).val();
+        $.getJSON("/DestinosPasajes/GetCiudad", { IdPais: Pais },
+            function (classesData) {
+                var select = $("#IdCiudad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            })
+    });
+
+    ///*Carga dropdown de ciudades Origen*/
+    //$('#IdPaisOrigen').on('change', function () {
+    //    var Pais = $(this).val();
+    //    $.getJSON("/DestinosPasajes/GetCiudad", { IdPais: Pais },
+    //        function (classesData) {
+    //            var select = $("#IdCiudadOrigen");
+    //            select.empty();
+    //            select.append($('<option/>', {
+    //                value: 0,
+    //                text: "Seleccione..."
+    //            }));
+    //            $.each(classesData, function (index, itemData) {
+    //                //alert(itemData.text);
+    //                select.append($('<option/>', {
+    //                    value: itemData.value,
+    //                    text: itemData.text
+    //                }));
+    //            });
+    //            $('select').formSelect();
+    //        })
+    //});
+
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

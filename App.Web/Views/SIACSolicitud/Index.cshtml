@@ -1,0 +1,45 @@
+﻿@model IEnumerable<App.Model.SIAC.SIACSolicitud>
+
+<h3>
+    Informes HSA
+</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RUT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SIACTipoSolicitud.Nombre)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RUT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaNacimiento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SIACTipoSolicitud.Nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Detalles", "View", new { id = item.SIACSolicitudId })
+        </td>
+    </tr>
+    }
+
+</table>

@@ -1,0 +1,137 @@
+﻿@model App.Model.RadioTaxi.RadioTaxi
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="row">
+    <div class="col s12 m6 l10">
+        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.HiddenFor(q => Model.ProcesoId)
+            @Html.AntiForgeryToken()
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Formulario RadioTaxi</span> 
+                    <div class="section"></div>
+                    <div class="row">
+                        <div class="input-field col s12 m10 l3">
+                            @Html.EditorFor(m => Model.Fecha)
+                            @Html.LabelFor(m => Model.Fecha)
+                            @Html.ValidationMessageFor(m => Model.Fecha, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>INFORMACIÓN DEL FUNCIONARIO:</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l5">
+                            @Html.TextBoxFor(m => Model.Nombre)
+                            @Html.LabelFor(m => Model.Nombre)
+                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l3">
+                            @Html.TextBoxFor(m => Model.Rut,"{0:#.#}")
+                            @Html.LabelFor(m => Model.Rut)
+                            @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l2">
+                            @Html.TextBoxFor(m => Model.DV)
+                            @Html.LabelFor(m => Model.DV)
+                            @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.TextBoxFor(m => Model.Unidad)
+                            @Html.LabelFor(m => Model.Unidad)
+                            @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l3">
+                            @Html.TextBoxFor(m => Model.Telefono)
+                            @Html.LabelFor(m => Model.Telefono)
+                            @Html.ValidationMessageFor(m => Model.Telefono, "", new { @class = "red-text" })
+                        </div>
+
+                        <div class="input-field col s12 m10 l3">
+                            @Html.TextBoxFor(m => Model.Email)
+                            @Html.LabelFor(m => Model.Email)
+                            @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            EL TRASLADO ESTÁ FUERA DEL PERÍMETRO ESTABLECIDO:
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <label>
+                                @Html.CheckBoxFor(m => m.Perimetro)
+                                <span>@Html.LabelFor(m => m.Perimetro)</span>
+                            </label>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            EL TRASLADO ESTÁ DENTRO DEL PERÍMETRO ESTABLECIDO (JUSTIFICAR):
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.TextAreaFor(m => Model.FueraPerimetro, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.FueraPerimetro)
+                            @Html.ValidationMessageFor(m => Model.FueraPerimetro, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.TextAreaFor(m => Model.Motivo, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Motivo)
+                            @Html.ValidationMessageFor(m => Model.Motivo, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.TextAreaFor(m => Model.Salida, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Salida)
+                            @Html.ValidationMessageFor(m => Model.Salida, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.TextAreaFor(m => Model.Llegada, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Llegada)
+                            @Html.ValidationMessageFor(m => Model.Llegada, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            En caso que el traslado se realice dentro del perímetro establecido, se considerará la entrega
+                            de tarjeta Bip, la cual podrá ser solicitada en SS.GG.
+                        </div>
+                        <div class="input-field col s12 m10 l12">
+                            (1) El perímetro establecido ha sido determinado en base a la red metro, considerando:
+                            Línea 1: desde metro San Pablo hasta Los Dominicos.
+                            Línea 2: desde metro Vespucio Norte hasta metro La Cisterna.
+                            Línea 4: desde metro Tobalaba hasta metro Vicente Valdés.
+                            Línea 5: desde metro Vicente Valdés hasta metro San Pablo.
+                            FORMULARIO SOLICITUD DE RADIO TAXI
+                            RESOLUCIÓN ADMINISTRATIVA EXENTA N° 3231 SOBRE EL USO DE RADIO TAXI Y SU REEMBOLSO DE FECHA 11 DE FEBRERO DE 2011.
+                            VALE N°:
+                            MOTIVO DEL TRASLADO:
+                            DIRECCIÓN DE SALIDA:
+                            DIRECCIÓN DE LLEGADA:
+                        </div>
+                    </div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+    @*<div class="col s12 m6 l3">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>*@
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

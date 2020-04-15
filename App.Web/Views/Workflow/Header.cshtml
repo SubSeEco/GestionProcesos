@@ -1,0 +1,14 @@
+﻿@model App.Model.Core.Workflow
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="left">
+        <h3 class="header">Proceso @Model.ProcesoId <text>-</text> @Model.DefinicionWorkflow.DefinicionProceso.Nombre</h3>
+        <h5 class="light">
+            Tarea @Model.WorkflowId <text>-</text> @Model.DefinicionWorkflow.Nombre
+            @*<a href='@Url.Action("Details","Proceso", new { id = Model.ProcesoId })' target="_blank">Ver detalles</a>*@
+        </h5>
+    </div>
+</div>

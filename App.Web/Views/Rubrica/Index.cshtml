@@ -1,0 +1,60 @@
+﻿@model IEnumerable<App.Model.Core.Rubrica>
+
+<h3>Rúbricas</h3>
+<div class="card">
+    <div class="card-content">
+        @*<span class="card-title">Tipos de workflow</span>*@
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdentificadorFirma)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdProceso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HabilitadoFirma)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentificadorFirma)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdProceso)
+                </td>
+                <td>
+                        @if (item.HabilitadoFirma)
+                        {
+                            <p>True</p>
+                        }
+                        else
+                        {
+                            <p>False</p>
+                        }
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.RubricaId })
+                </td>
+                <td>
+                    @Html.ActionLink("Detalles", "Details", new { id = item.RubricaId })
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>

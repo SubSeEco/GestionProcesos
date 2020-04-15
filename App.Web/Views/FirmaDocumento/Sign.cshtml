@@ -1,0 +1,99 @@
+﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUpload
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+
+@if (!Model.TieneFirma)
+{
+    <p class="red-text">Usted no posee una firma electrónica configurada.</p>
+}
+
+<div class="row">
+
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Firma de documento</span>
+
+                <div class="input-field col s12 m12 l12">
+                    <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoDescripcion)</strong><br />
+                    @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
+                </div>
+
+                <div class="section"></div>
+                <div class="input-field col s12 m12 l12">
+                    <strong>@Html.DisplayNameFor(m => Model.Autor)</strong><br />
+                    @Html.DisplayFor(m => Model.Autor)
+                </div>
+
+                <div class="section"></div>
+                <div class="input-field col s12 m12 l12">
+                    <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                    @Html.DisplayFor(m => Model.FechaCreacion)
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Folio))
+                {
+                    <div class="section"></div>
+                    <div class="input-field col s12 m12 l12">
+                        <strong>@Html.DisplayNameFor(m => Model.Folio)</strong><br />
+                        @Html.DisplayFor(m => Model.Folio)
+                    </div>
+                }
+
+                @if (Model.File != null)
+                {
+                    <div class="section"></div>
+                    <div class="input-field col s12 m12 l12">
+                        <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                    </div>
+                }
+
+                <div class="section"></div>
+                @if (!Model.TieneFirma)
+                {
+                    <a class="waves-effect waves-light btn modal-trigger btn blue disabled" href="#modalFirma">Firmar documento</a>
+                }
+
+                @if (Model.TieneFirma)
+                {
+                    <a class="waves-effect waves-light btn modal-trigger btn blue" href="#modalFirma">Firmar documento</a>
+                }
+
+                <div id="modalFirma" class="modal">
+                    <div class="modal-content">
+                        <h4>Confirmación</h4>
+                        <p>¿ Confirma la operación de firma electrónica del documento?</p>
+                    </div>
+                    <div class="modal-footer m1">
+                        @using (Html.BeginForm("Sign"))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => Model.FirmaDocumentoId)
+                            @Html.HiddenFor(model => Model.Autor)
+                            @Html.HiddenFor(model => Model.Firmante)
+                            @Html.HiddenFor(model => Model.TipoDocumentoCodigo)
+                            <button class="waves-effect waves-light btn blue" type="submit">Confirmar</button>
+                            <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+    });
+</script>
