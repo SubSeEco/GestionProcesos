@@ -118,10 +118,10 @@ namespace App.Web.Controllers
                 {
                     Email = model.Email.Trim(),
                     IdentificadorFirma = model.IdentificadorFirma,
-                    IdProceso = model.IdProceso,
+                    //IdProceso = model.IdProceso,
                     HabilitadoFirma = model.HabilitadoFirma,
-                    FileName = file.FileName,
-                    File = target.ToArray()
+                    //FileName = file.FileName,
+                    //File = target.ToArray()
                 };
 
                 var _useCaseInteractor = new UseCaseCore(_repository);

@@ -7,60 +7,34 @@
 
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.RubricaId)
     @Html.HiddenFor(q => Model.Email)
 
     <div class="card">
         <div class="card-content">
-            @*<span class="card-title">Crear nuevo</span>*@
             <div class="row">
-                @*<div class="input-field col s12 m10 l10">
-            @Html.TextBoxFor(m => Model.Funcionario, new { @placeholder = "Ingrese nombres o email" })
-            @Html.LabelFor(m => Model.Funcionario)
-            @Html.ValidationMessageFor(m => Model.Funcionario, "", new { @class = "red-text" })
-        </div>*@
                 <div class="input-field col s12 m10 l10">
-                    @*@Html.TextBoxFor(m => Model.Email, new { @placeholder = "Ingrese nombres o email" })*@
                     @Html.DropDownListFor(m => Model.Email, null, "Seleccione...")
                     @Html.LabelFor(m => Model.Email)
                     @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "red-text" })
                 </div>
-                <div class="row">
-                    <div class="input-field col s12 m10 l10">
-                        @Html.DropDownListFor(m => Model.IdentificadorFirma, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.IdentificadorFirma)
-                        @Html.ValidationMessageFor(m => Model.IdentificadorFirma, "", new { @class = "red-text" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 m10 l10">
-                        @Html.DropDownListFor(m => Model.IdProceso, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.IdProceso)
-                        @Html.ValidationMessageFor(m => Model.IdProceso, "", new { @class = "red-text" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 m4 l3">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.HabilitadoFirma)
-                            <span>@Html.LabelFor(m => Model.HabilitadoFirma)</span>
-                        </label>
-                        <div class="section"></div>
-                    </div>
-                </div>
+            </div>
+            <div class="row">
                 <div class="input-field col s12 m10 l10">
-            <div class="file-field input-field">
-                <div class="btn grey">
-                    <i class="material-icons">attach_file</i>
-                    @Html.TextBoxFor(m => Model.File, null, new { @type = "file" })
+                    @Html.DropDownListFor(m => Model.IdentificadorFirma, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.IdentificadorFirma)
+                    @Html.ValidationMessageFor(m => Model.IdentificadorFirma, "", new { @class = "red-text" })
                 </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m4 l3">
+                    <label>
+                        @Html.CheckBoxFor(m => Model.HabilitadoFirma)
+                        <span>@Html.LabelFor(m => Model.HabilitadoFirma)</span>
+                    </label>
+                    <div class="section"></div>
                 </div>
-                @Html.ValidationMessageFor(model => model.File, "", new { @class = "red-text" })
             </div>
-        </div>
-            </div>
-
             <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
         </div>
     </div>

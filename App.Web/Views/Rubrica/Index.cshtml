@@ -3,7 +3,6 @@
 <h3>Rúbricas</h3>
 <div class="card">
     <div class="card-content">
-        @*<span class="card-title">Tipos de workflow</span>*@
         <table class="table">
             <tr>
                 <th>
@@ -13,15 +12,12 @@
                     @Html.DisplayNameFor(model => model.IdentificadorFirma)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.IdProceso)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.HabilitadoFirma)
                 </th>
                 <th></th>
             </tr>
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.OrderBy(q=>q.IdentificadorFirma))
             {
             <tr>
                 <td>
@@ -31,24 +27,21 @@
                     @Html.DisplayFor(modelItem => item.IdentificadorFirma)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdProceso)
-                </td>
-                <td>
                         @if (item.HabilitadoFirma)
                         {
-                            <p>True</p>
+                            <p>Si</p>
                         }
                         else
                         {
-                            <p>False</p>
+                            <p>No</p>
                         }
                 </td>
                 <td>
                     @Html.ActionLink("Editar", "Edit", new { id = item.RubricaId })
                 </td>
-                <td>
+                @*<td>
                     @Html.ActionLink("Detalles", "Details", new { id = item.RubricaId })
-                </td>
+                </td>*@
             </tr>
             }
         </table>
