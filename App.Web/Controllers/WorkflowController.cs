@@ -218,7 +218,9 @@ namespace App.Web.Controllers
                     //    if(_repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId) != null)
                     //        proceso.NumeroProceso = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId).RadioTaxiId.ToString();
                     //}
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+
+
+                    if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
                     {
                         if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
                         {
@@ -237,7 +239,7 @@ namespace App.Web.Controllers
                         }
 
                     }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+                    if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
                     {
                         if (_repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId) != null)
                         {
@@ -254,7 +256,7 @@ namespace App.Web.Controllers
                         }
 
                     }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
+                    if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
                     {
                         if (_repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId) != null)
                         {
@@ -271,7 +273,7 @@ namespace App.Web.Controllers
                         }
 
                     }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CometidoPasaje.ToString())
+                    if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.CometidoPasaje.ToString())
                     {
                         if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
                         {
@@ -288,7 +290,7 @@ namespace App.Web.Controllers
                         }
 
                     }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+                    if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
                     {
                         if (_repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId) != null)
                         {
