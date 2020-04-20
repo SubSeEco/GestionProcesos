@@ -4,7 +4,6 @@
 
 <div class="card">
     <div class="card-content">
-        @*<span class="card-title">Proceso</span>*@
 
         @using (Html.BeginForm())
         {
@@ -62,7 +61,6 @@
 }
 else
 {
-    @*<ul class="collapsible" id="sortable">*@
     foreach (var item in Model.DefinicionWorkflows.Where(q => q.Habilitado).OrderBy(q => q.Secuencia))
     {
         <div class="card sortable">
@@ -73,167 +71,11 @@ else
                     <strong>@Html.DisplayNameFor(m => item.TipoEjecucionId)</strong><br />
                     @Html.DisplayFor(m => item.TipoEjecucion.Nombre)
                 </div>
-                <div class="input-field col s12 m10">
-                    <strong>@Html.DisplayNameFor(m => item.AccionId)</strong><br />
-                    @Html.DisplayFor(m => item.Accion.Nombre), @Html.DisplayFor(m => item.Entidad.Nombre)
-                </div>
-                @*<div class="input-field col s12 m10">
-                    <strong>@Html.DisplayNameFor(m => item.EntidadId)</strong><br />
-                    @Html.DisplayFor(m => item.Entidad.Nombre)
-                </div>*@
-
                 <a href='@Url.Action("Edit", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn blue">Editar</a>
                 <a href='@Url.Action("Delete", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn red">Eliminar</a>
-
             </div>
         </div>
-
-
-        @*<li>
-                <div class="collapsible-header">
-                    <i class="material-icons blue-text">details</i><b> @item.Nombre</b>
-                </div>
-                <div class="collapsible-body">
-
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-title">Tarea</span>
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.Nombre)</strong><br />
-                                @Html.DisplayFor(m => item.Nombre)
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.Secuencia)</strong><br />
-                                @Html.DisplayFor(m => item.Secuencia)
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-title">Quien ejecuta la tarea</span>
-
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.TipoEjecucionId)</strong><br />
-                                @Html.DisplayFor(m => item.TipoEjecucion.Nombre)
-                            </div>
-
-                            @if (item.Pl_UndCod.HasValue)
-                            {
-                                <div class="input-field col s12 m10">
-                                    <strong>@Html.DisplayNameFor(m => item.Pl_UndDes)</strong><br />
-                                    @Html.DisplayFor(m => item.Pl_UndDes)
-                                </div>
-                            }
-
-                            @if (item.Grupo != null)
-                            {
-                                <div class="input-field col s12 m10">
-                                    <strong>@Html.DisplayNameFor(m => item.Grupo.Nombre)</strong><br />
-                                    @Html.DisplayFor(m => item.Grupo.Nombre)
-                                </div>
-                            }
-
-                            @if (!string.IsNullOrWhiteSpace(item.Email))
-                            {
-                                <div class="input-field col s12 m10">
-                                    <strong>@Html.DisplayNameFor(m => item.Email)</strong><br />
-                                    @Html.DisplayFor(m => item.Email)
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-title">Comportamiento</span>
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.AccionId)</strong><br />
-                                @Html.DisplayFor(m => item.Accion.Nombre)
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.EntidadId)</strong><br />
-                                @Html.DisplayFor(m => item.Entidad.Nombre)
-                            </div>
-                            @if (item.DefinicionWorkflowRechazo != null)
-                            {
-                                <div class="input-field col s12 m10">
-                                    <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowRechazoId)</strong><br />
-                                    @Html.DisplayFor(m => item.DefinicionWorkflowRechazo.Nombre)
-                                </div>
-                            }
-                            @if (item.DefinicionWorkflowDependeDeId.HasValue)
-                            {
-                                <div class="input-field col s12 m10">
-                                    <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowDependeDeId)</strong><br />
-                                    @Html.DisplayFor(m => item.DefinicionWorkflowDependeDeId)
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-title">Opciones</span>
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.NotificarCorreo)</strong><br />
-                                @string.Format("{0}", @item.NotificarCorreo ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.Habilitado)</strong><br />
-                                @string.Format("{0}", @item.Habilitado ? "SI" : "NO")
-                            </div>
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirVerDetalles)</strong><br />
-                                @string.Format("{0}", @item.PermitirVerDetalles ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirVerDocumentos)</strong><br />
-                                @string.Format("{0}", @item.PermitirVerDocumentos ? "SI" : "NO")
-                            </div>
-
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.RequiereAprobacionAlEnviar)</strong><br />
-                                @string.Format("{0}", @item.RequiereAprobacionAlEnviar ? "SI" : "NO")
-                            </div>
-
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirAdjuntarDocumentos)</strong><br />
-                                @string.Format("{0}", @item.PermitirAdjuntarDocumentos ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirGenerarDocumentos)</strong><br />
-                                @string.Format("{0}", @item.PermitirGenerarDocumentos ? "SI" : "NO")
-                            </div>
-
-
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirReenvio)</strong><br />
-                                @string.Format("{0}", @item.PermitirReenvio ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirMultipleEvaluacion)</strong><br />
-                                @string.Format("{0}", @item.PermitirMultipleEvaluacion ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.PermitirArchivarTarea)</strong><br />
-                                @string.Format("{0}", @item.PermitirArchivarTarea ? "SI" : "NO")
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href='@Url.Action("Edit", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn blue">Editar</a>
-                    <a href='@Url.Action("Delete", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="waves-effect waves-light btn red">Eliminar</a>
-
-                </div>
-            </li>*@
     }
-    @*</ul>*@
 }
 
 <div class="fixed-action-btn">

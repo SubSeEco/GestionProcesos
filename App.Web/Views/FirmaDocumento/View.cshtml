@@ -3,7 +3,6 @@
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
 <div class="row">
-
     <div class="col s12 m6 l3">
         <div class="card">
             <div class="card-content">
@@ -54,6 +53,11 @@
     </div>
 </div>
 
+@if (!@Model.Proceso.Terminada && !@Model.Proceso.Anulada)
+{
+    <a href='@Url.Action("Delete","Proceso", new { id = Model.ProcesoId })' class="btn red">Anular proceso</a>
+    <div class="section"></div>
+}
 
 <script type="text/javascript">
     $(document).ready(function () {

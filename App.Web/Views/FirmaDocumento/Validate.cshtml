@@ -6,6 +6,12 @@
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
 
+@if (!@Model.Proceso.Terminada && !@Model.Proceso.Anulada)
+{
+    <div class="section"></div>
+    <a href='@Url.Action("Delete", new { id = Model.ProcesoId })' class="btn red">Anular proceso</a>
+}
+
 
 <div class="row">
     <div class="col s12 m6 l12">

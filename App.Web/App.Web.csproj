@@ -242,7 +242,6 @@
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Common.js" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -309,6 +308,7 @@
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
     <Compile Include="Controllers\PasajeController.cs" />
@@ -510,6 +510,13 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\CometidoComision\Index.cshtml" />
+    <Content Include="Views\InformeHSA\Create.cshtml" />
+    <Content Include="Views\InformeHSA\Details.cshtml" />
+    <Content Include="Views\InformeHSA\Edit.cshtml" />
+    <Content Include="Views\InformeHSA\Index.cshtml" />
+    <Content Include="Views\InformeHSA\Pdf.cshtml" />
+    <Content Include="Views\InformeHSA\Sign.cshtml" />
+    <Content Include="Views\InformeHSA\View.cshtml" />
     <None Include="Views\Shared\_Indice.cshtml" />
     <Content Include="Views\Workflow\Execute.cshtml" />
     <Content Include="Views\Region\Create.cshtml" />

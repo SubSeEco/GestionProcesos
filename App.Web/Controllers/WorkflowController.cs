@@ -213,101 +213,7 @@ namespace App.Web.Controllers
             if (workflow != null && workflow.Anulada)
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra anulada");
 
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CuentaRed.ToString())
-            //{
-            //    var obj = _repository.GetFirst<CuentaRed>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CuentaRedId;
-            //        workflow.Entity = App.Util.Enum.Entidad.CuentaRed.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Contrato.ToString())
-            //{
-            //    var obj = _repository.GetFirst<Contrato>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.ContratoId;
-            //        workflow.Entity = App.Util.Enum.Entidad.Contrato.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CDP.ToString())
-            //{
-            //    var obj = _repository.GetFirst<CDP>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CDPId;
-            //        workflow.Entity = App.Util.Enum.Entidad.CDP.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
-            //{
-            //    var obj = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.InformeHSAId;
-            //        workflow.Entity = App.Util.Enum.Entidad.InformeHSA.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDIngreso.ToString())
-            //{
-            //    var obj = _repository.GetFirst<GDIngreso>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.GDIngresoId;
-            //        workflow.Entity = App.Util.Enum.Entidad.GDIngreso.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.SIACSolicitud.ToString())
-            //{
-            //    var obj = _repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.SIACSolicitudId;
-            //        workflow.Entity = App.Util.Enum.Entidad.SIACSolicitud.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.RadioTaxi.ToString())
-            //{
-            //    var obj = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.RadioTaxiId;
-            //        workflow.Entity = App.Util.Enum.Entidad.RadioTaxi.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
             {
                 var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -321,7 +227,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
             {
                 var obj = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -335,7 +241,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
             {
                 var obj = _repository.GetFirst<Comisiones>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -349,7 +255,7 @@ namespace App.Web.Controllers
                 }
             }
               
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var obj = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -363,21 +269,6 @@ namespace App.Web.Controllers
                 }
             }
 
-            //if (workflow != null && workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            //{
-            //    var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CometidoId;
-            //        workflow.Entity = (int)App.Util.Enum.Entidad.Cometido.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
@@ -389,9 +280,9 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
                 if (workflow.DefinicionWorkflow.Accion.Codigo == "Create")
-                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
+                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo, new { workflow.WorkflowId });
                 else
-                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { id = workflow.EntityId });
+                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo, new { id = workflow.EntityId });
 
             return View(workflow);
         }
@@ -533,62 +424,6 @@ namespace App.Web.Controllers
             ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-            return View(model);
-        }
-
-        public ActionResult Archive(int id)
-        {
-            var model = _repository.GetById<Workflow>(id);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Archive(Workflow model)
-        {
-            model.Email = UserExtended.Email(User);
-
-            if (ModelState.IsValid)
-            {
-                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-                ResponseMessage _UseCaseResponseMessageDelete = new ResponseMessage();
-
-                var workflow = _repository.Get<Workflow>(c => c.WorkflowId == model.WorkflowId).FirstOrDefault();
-                var Entity = _repository.Get<DefinicionWorkflow>(d => d.DefinicionWorkflowId == workflow.DefinicionWorkflowId).FirstOrDefault().EntidadId;
-                if (Entity == 8)/*Se eliminan datos del destino, luego el cometido*/
-                {
-                    var cometido = _repository.Get<Cometido>(c => c.CometidoId == workflow.EntityId.Value).FirstOrDefault();                    
-                    var destinos = _repository.Get<Destinos>(c => c.CometidoId == cometido.CometidoId);
-                    var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-                    if (destinos != null)
-                    {
-                        foreach (var des in destinos)
-                        {
-                            //_UseCaseResponseMessageDelete = _useCaseInteractor.DestinosDelete(des.DestinoId);
-                        }
-                    }
-
-                    if(cdp != null)
-                    {
-                        foreach(var c in cdp)
-                        {
-                            //_UseCaseResponseMessageDelete = _useCaseInteractor.GeneracionCDPDelete(c.GeneracionCDPId);
-                        }
-                    }                    
-                    //_UseCaseResponseMessageDelete = _useCaseInteractor.CometidoDelete(cometido.CometidoId);
-                }
-
-                /*se elimina datos del proceso*/
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
-                if (_UseCaseResponseMessage.IsValid && _UseCaseResponseMessageDelete.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Index", "Workflow");
-                }
-                else
-                    TempData["Error"] = _UseCaseResponseMessage.Errors;
-            }
 
             return View(model);
         }

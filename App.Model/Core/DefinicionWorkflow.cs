@@ -31,10 +31,10 @@ namespace App.Model.Core
         public int AccionId { get; set; }
         public virtual Accion Accion { get; set; }
 
-        [Required(ErrorMessage = "Es necesario especificar este dato")]
-        [Display(Name = "Información asociada a la tarea")]
-        public int EntidadId { get; set; }
-        public virtual Entidad Entidad { get; set; }
+        //[Required(ErrorMessage = "Es necesario especificar este dato")]
+        //[Display(Name = "Información asociada a la tarea")]
+        //public int EntidadId { get; set; }
+        //public virtual Entidad Entidad { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Quien ejecuta la tarea")]

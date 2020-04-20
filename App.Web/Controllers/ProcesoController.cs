@@ -252,6 +252,65 @@ namespace App.Web.Controllers
             return RedirectToAction("Index");
         }
 
+
+        //public ActionResult Archive(int id)
+        //{
+        //    var model = _repository.GetById<Workflow>(id);
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Archive(Workflow model)
+        //{
+        //    model.Email = UserExtended.Email(User);
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+        //        ResponseMessage _UseCaseResponseMessageDelete = new ResponseMessage();
+
+        //        var workflow = _repository.Get<Workflow>(c => c.WorkflowId == model.WorkflowId).FirstOrDefault();
+        //        var Entity = _repository.Get<DefinicionWorkflow>(d => d.DefinicionWorkflowId == workflow.DefinicionWorkflowId).FirstOrDefault().DefinicionProceso.EntidadId;
+        //        if (Entity == 8)/*Se eliminan datos del destino, luego el cometido*/
+        //        {
+        //            var cometido = _repository.Get<Cometido>(c => c.CometidoId == workflow.EntityId.Value).FirstOrDefault();
+        //            var destinos = _repository.Get<Destinos>(c => c.CometidoId == cometido.CometidoId);
+        //            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
+        //            if (destinos != null)
+        //            {
+        //                foreach (var des in destinos)
+        //                {
+        //                    //_UseCaseResponseMessageDelete = _useCaseInteractor.DestinosDelete(des.DestinoId);
+        //                }
+        //            }
+
+        //            if (cdp != null)
+        //            {
+        //                foreach (var c in cdp)
+        //                {
+        //                    //_UseCaseResponseMessageDelete = _useCaseInteractor.GeneracionCDPDelete(c.GeneracionCDPId);
+        //                }
+        //            }
+        //            //_UseCaseResponseMessageDelete = _useCaseInteractor.CometidoDelete(cometido.CometidoId);
+        //        }
+
+        //        /*se elimina datos del proceso*/
+        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
+        //        if (_UseCaseResponseMessage.IsValid && _UseCaseResponseMessageDelete.IsValid)
+        //        {
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //            return RedirectToAction("Index", "Workflow");
+        //        }
+        //        else
+        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
+        //    }
+
+        //    return View(model);
+        //}
+
+
+
         public ActionResult Dashboard()
         {
             var result = _repository.GetAll<Proceso>();

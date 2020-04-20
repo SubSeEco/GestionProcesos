@@ -5,9 +5,8 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.InformeHSA;
 using App.Core.Interfaces;
-using OfficeOpenXml;
 using Rotativa.MVC;
-using App.Core.UseCases;
+using App.Infrastructure.HSM;
 
 namespace App.Web.Controllers
 {
@@ -49,10 +48,10 @@ namespace App.Web.Controllers
             var model = _repository.GetById<InformeHSA>(id);
             model.QR = _file.CreateQR(id.ToString());
 
-            var email = UserExtended.Email(User);
-            var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email);
-            if (rubrica != null)
-                model.Signature = rubrica.File;
+            //var email = UserExtended.Email(User);
+            //var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email);
+            //if (rubrica != null)
+            //    model.Signature = rubrica.File;
 
             return new ViewAsPdf("pdf", model);
         }
@@ -98,12 +97,10 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(InformeHSA model)
         {
-            model.FechaSolicitud = DateTime.Now;
-
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseInteractorCustom(_repository);
-                var _UseCaseResponseMessage = _useCaseInteractor.InformeHSAInsert(model);
+                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository);
+                var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
@@ -129,8 +126,8 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseInteractorCustom(_repository);
-                var _UseCaseResponseMessage = _useCaseInteractor.InformeHSAUpdate(model);
+                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository);
+                var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
@@ -143,38 +140,38 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public FileResult Download()
-        {
-            var result = _repository.GetAll<InformeHSA>();
+        //public FileResult Download()
+        //{
+        //    var result = _repository.GetAll<InformeHSA>();
 
-            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\InformeHsa.xlsx");
-            var fileInfo = new FileInfo(file);
-            var excelPackage = new ExcelPackage(fileInfo);
+        //    var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\InformeHsa.xlsx");
+        //    var fileInfo = new FileInfo(file);
+        //    var excelPackage = new ExcelPackage(fileInfo);
 
-            var fila = 1;
-            var worksheet = excelPackage.Workbook.Worksheets[1];
-            foreach (var item in result.ToList())
-            {
-                fila++;
-                worksheet.Cells[fila, 1].Value = item.InformeHSAId;
-                worksheet.Cells[fila, 2].Value = item.FechaSolicitud;
-                worksheet.Cells[fila, 3].Value = item.FechaDesde;
-                worksheet.Cells[fila, 4].Value = item.FechaHasta;
-                worksheet.Cells[fila, 5].Value = item.RUT;
-                worksheet.Cells[fila, 6].Value = item.Nombre;
-                worksheet.Cells[fila, 7].Value = item.Unidad;
-                worksheet.Cells[fila, 8].Value = item.NombreJefatura;
-                worksheet.Cells[fila, 9].Value = item.ConJornada ? "SI" : "NO";
-                worksheet.Cells[fila, 10].Value = item.Funciones;
-                worksheet.Cells[fila, 11].Value = item.Actividades;
-                worksheet.Cells[fila, 12].Value = item.Observaciones;
-                worksheet.Cells[fila, 13].Value = item.FechaBoleta;
-                worksheet.Cells[fila, 14].Value = item.NumeroBoleta;
-                worksheet.Cells[fila, 15].Value = item.Proceso.Terminada ? "SI" : "NO";
-                worksheet.Cells[fila, 16].Value = !item.Proceso.Terminada && item.Proceso.Workflows.Any() ? item.Proceso.Workflows.OrderByDescending(q => q.WorkflowId).FirstOrDefault().DefinicionWorkflow.Nombre : string.Empty;
-            }
+        //    var fila = 1;
+        //    var worksheet = excelPackage.Workbook.Worksheets[1];
+        //    foreach (var item in result.ToList())
+        //    {
+        //        fila++;
+        //        worksheet.Cells[fila, 1].Value = item.InformeHSAId;
+        //        worksheet.Cells[fila, 2].Value = item.FechaSolicitud;
+        //        worksheet.Cells[fila, 3].Value = item.FechaDesde;
+        //        worksheet.Cells[fila, 4].Value = item.FechaHasta;
+        //        worksheet.Cells[fila, 5].Value = item.RUT;
+        //        worksheet.Cells[fila, 6].Value = item.Nombre;
+        //        worksheet.Cells[fila, 7].Value = item.Unidad;
+        //        worksheet.Cells[fila, 8].Value = item.NombreJefatura;
+        //        worksheet.Cells[fila, 9].Value = item.ConJornada ? "SI" : "NO";
+        //        worksheet.Cells[fila, 10].Value = item.Funciones;
+        //        worksheet.Cells[fila, 11].Value = item.Actividades;
+        //        worksheet.Cells[fila, 12].Value = item.Observaciones;
+        //        worksheet.Cells[fila, 13].Value = item.FechaBoleta;
+        //        worksheet.Cells[fila, 14].Value = item.NumeroBoleta;
+        //        worksheet.Cells[fila, 15].Value = item.Proceso.Terminada ? "SI" : "NO";
+        //        worksheet.Cells[fila, 16].Value = !item.Proceso.Terminada && item.Proceso.Workflows.Any() ? item.Proceso.Workflows.OrderByDescending(q => q.WorkflowId).FirstOrDefault().DefinicionWorkflow.Nombre : string.Empty;
+        //    }
 
-            return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        }
+        //    return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        //}
     }
 }
