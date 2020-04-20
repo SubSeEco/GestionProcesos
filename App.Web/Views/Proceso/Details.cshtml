@@ -43,14 +43,12 @@
                         <strong>@Html.DisplayNameFor(m => Model.Span)</strong><br />
                         @String.Format("{0} días, {1} horas, {2} minutos, {3} segundos", Model.Span.Days, Model.Span.Hours, Model.Span.Minutes, Model.Span.Seconds)
                     </div>
+
                     <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Terminada)</strong><br />
-                        @string.Format("{0}", @Model.Terminada ? "SI" : "NO")
+                        <strong>@Html.DisplayNameFor(m => Model.EstadoProceso.Descripcion)</strong><br />
+                        @Html.DisplayFor(m => Model.EstadoProceso.Descripcion)
                     </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Anulada)</strong><br />
-                        @string.Format("{0}", @Model.Anulada ? "SI" : "NO")
-                    </div>
+
                     @if (!string.IsNullOrWhiteSpace(Model.Observacion))
                     {
                         <div class="input-field col s12 m10">

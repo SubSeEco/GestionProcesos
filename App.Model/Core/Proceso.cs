@@ -43,11 +43,6 @@ namespace App.Model.Core
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
 
-        [Display(Name = "Estado")]
-        public bool Terminada { get; set; } = false;
-
-        [Display(Name = "Anulada?")]
-        public bool Anulada { get; set; } = false;
 
         [Display(Name = "Autor")]
         public string Email { get; set; }
@@ -71,5 +66,24 @@ namespace App.Model.Core
 
         public virtual ICollection<Workflow> Workflows { get; set; }
         public virtual ICollection<Documento> Documentos { get; set; }
+
+
+        [Required(ErrorMessage = "Es necesario especificar este dato")]
+        [Display(Name = "Estado del proceso")]
+        public int EstadoProcesoId { get; set; }
+        public virtual EstadoProceso EstadoProceso { get; set; }
+
+
+
+
+        //deprecado
+
+        [Display(Name = "Estado")]
+        public bool Terminada { get; set; } = false;
+
+        [Display(Name = "Anulada?")]
+        public bool Anulada { get; set; } = false;
+
+
     }
 }

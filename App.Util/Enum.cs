@@ -151,5 +151,12 @@
         {
             DiasAnticipacionIngreso = 7,
         }
+
+        public enum EstadoProceso
+        {
+            EnProceso = 1,
+            Anulado = 2,
+            Terminado = 3,
+        }
     }
 }

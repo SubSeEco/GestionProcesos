@@ -74,6 +74,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<FirmaDocumento> FirmaDocumento { get; set; }
         public virtual DbSet<SIGPERTipoVehiculo> SIGPERTipoVehiculo { get; set; }
         public virtual DbSet<InformeHSA> InformeHSA { get; set; }
+        public virtual DbSet<EstadoProceso> EstadoProceso { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }

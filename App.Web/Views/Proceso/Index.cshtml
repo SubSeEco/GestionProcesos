@@ -58,7 +58,7 @@
                         @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Terminada)
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
                     </th>
                     <th></th>
                 </tr>
@@ -84,16 +84,8 @@
                             @Html.DisplayFor(modelItem => item.Observacion)
                         </td>
                         <td>
-                            @if (item.Terminada)
-                            {
-                                <p>Finalizado</p>
-                            }
-                            else
-                            {
-                                <p>En proceso</p>
-                            }
+                            @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
                         </td>
-
                         <td>
                             @Html.ActionLink("Detalles", "Details", new { id = item.ProcesoId })
                         </td>
