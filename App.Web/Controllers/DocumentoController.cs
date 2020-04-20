@@ -170,6 +170,10 @@ namespace App.Web.Controllers
                             {
                                 doc.TipoDocumentoId = 5;
                             }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 9)/*jefatura ppto*/
+                            {
+                                doc.TipoDocumentoId = 7;
+                            }
                         }
                     }                        
 

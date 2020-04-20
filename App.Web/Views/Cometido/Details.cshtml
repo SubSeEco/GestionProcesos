@@ -4,12 +4,13 @@
 
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
+@Html.HiddenFor(q => q.SolicitaViatico)
 
 <div class="row">
     <div class="col s12 m10 l8">
         <div class="card">
             <div class="card-content">
-                @*<span class="card-title">Solicitud Cometidos</span>*@
+                @*<span class="card-title">Aprobación de disponibilidad presupuestaria y refrendación</span>*@
                 <div class="row">
                     <div class="input-field col s12 m10 l3">
                         <strong>
@@ -176,7 +177,7 @@
                         <div class="input-field col s12 m10 l12">
                             @*@Html.DisplayFor(m => Model.CometidoDescripcion)*@
                             @Html.LabelFor(m => Model.CometidoDescripcion)
-                            @Html.TextAreaFor(m => Model.CometidoDescripcion, new { @disabled = "disabled", rows = 10 })                            
+                            @Html.TextAreaFor(m => Model.CometidoDescripcion, new { @disabled = "disabled", rows = 10 })
                             @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                         </div>
                         <div class="input-field col s12 m10 l10">
@@ -264,12 +265,12 @@
                     </div>
                     @if (Model.GeneracionCDP.Any())
                     {
-                        <h3><span style="font-weight: bold">V. Generacion CDP </span></h3>
+                        <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
                         <div class="row">
 
                             @if (Model.SolicitaViatico == true)
                             {
-                                <span class="card-title">Viaticos</span>
+                                <span class="card-title">Viáticos</span>
                                 <table class="table">
                                     <tr>
                                         <th>
@@ -279,10 +280,10 @@
                                             @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
                                         </th>
                                         <th>
-                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
                                         </th>
                                     </tr>
                                     <tr>
@@ -293,10 +294,10 @@
                                             @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCodCompromiso)
+                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
                                         </th>
                                         <th>
-                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCodCompromiso)
+                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
                                         </th>
                                     </tr>
                                     <tr>
@@ -335,20 +336,6 @@
                                             @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcObligacionActual)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcObligacionActual)
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                        </th>
-                                        <th>
                                             @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
                                         </th>
                                         <th>
@@ -357,10 +344,10 @@
                                     </tr>
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
                                         </th>
                                         <th>
-                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
@@ -477,11 +464,32 @@
                 </tr>
             </table>
         }*@
-                            @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
 
+                            @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
+                            {
+
+                                foreach (var item in Model.Proceso.Documentos)
+                                {
+                                    if (item.TipoDocumentoId == 7)
+                                    {
+                                        Model.DocumentoRefrendacion = true;
+                                    }
+                                }
+
+                                if (Model.DocumentoRefrendacion != true)
+                                {
+                                    <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                                    @Html.Raw("<span>Subir archivo refrendación</span>")
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+                                    </div>
+                                }
+                            }
                         </div>
-                    }
-
+                        }
                 </div>
                 @*<div class="section"></div>
                     <p>

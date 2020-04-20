@@ -81,7 +81,9 @@
                         @Html.ValidationMessageFor(m => Model.VtcTipoSubAsignacionId, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m6 l3">
-                        @Html.TextBoxFor(m => Model.VtcCodCompromiso, new { disabled = "disabled"})                        
+                        @Html.TextBoxFor(m => Model.VtcCompromisoAcumulado)
+                        @Html.LabelFor(m => Model.VtcCompromisoAcumulado)
+                        @Html.ValidationMessageFor(m => Model.VtcCompromisoAcumulado, "", new { @class = "red-text" })
                     </div>
                 </div>                        
                     }

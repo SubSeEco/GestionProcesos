@@ -23,7 +23,8 @@
                 <i class="material-icons circle green">access_time</i>
             }
             <p class="title">
-                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
+                @*Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)*@
+                @Html.ActionLink("Proceso: " + item.Proceso.DefinicionProceso.Nombre + " nro: " + item.NumeroProceso + ", vence el " + item.Proceso.FechaVencimiento, "Execute", new { id = item.WorkflowId })
             </p>
             <p class="right">
                 @item.Mensaje
@@ -31,6 +32,7 @@
 
             <p class="title">
                 @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
+                @*@Html.ActionLink("Tarea: " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })*@
             </p>
             <p>
                 Ejecutor:
@@ -47,6 +49,25 @@
                     @Html.DisplayFor(modelItem => item.Grupo.Nombre)
                 }
             </p>
+            @*<p>
+            Proceso iniciado por:
+            @if (!string.IsNullOrWhiteSpace(item.Email))
+            {
+                <strong>
+                    @Html.DisplayFor(modelItem => item.NombreFuncionario)
+                </strong>
+            }
+            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+            {
+                @Html.Raw("Unidad: ")
+                @Html.DisplayFor(modelItem => item.Pl_UndDes)
+            }
+            @if (item.Grupo != null)
+            {
+                @Html.Raw("Grupo: ")
+                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+            }
+        </p>*@
         </li>
     }
 </ul>

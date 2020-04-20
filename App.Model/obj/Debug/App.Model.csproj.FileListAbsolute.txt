@@ -25,3 +25,17 @@ C:\Users\admin\Source\Repos\GestionProcesos\App.Model\obj\Debug\App.Model.csproj
 C:\Users\admin\Source\Repos\GestionProcesos\App.Model\obj\Debug\App.Model.csproj.CopyComplete
 C:\Users\admin\Source\Repos\GestionProcesos\App.Model\obj\Debug\App.Model.dll
 C:\Users\admin\Source\Repos\GestionProcesos\App.Model\obj\Debug\App.Model.pdb
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\App.Model.dll.config
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\App.Model.dll
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\App.Model.pdb
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\ExpressiveAnnotations.dll
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\ExpressiveAnnotations.MvcUnobtrusive.dll
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\Newtonsoft.Json.dll
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\ExpressiveAnnotations.xml
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\ExpressiveAnnotations.MvcUnobtrusive.xml
+D:\GestionProcesos\SourceNew\App.Model\bin\Debug\Newtonsoft.Json.xml
+D:\GestionProcesos\SourceNew\App.Model\obj\Debug\App.Model.csprojAssemblyReference.cache
+D:\GestionProcesos\SourceNew\App.Model\obj\Debug\App.Model.csproj.CoreCompileInputs.cache
+D:\GestionProcesos\SourceNew\App.Model\obj\Debug\App.Model.csproj.CopyComplete
+D:\GestionProcesos\SourceNew\App.Model\obj\Debug\App.Model.dll
+D:\GestionProcesos\SourceNew\App.Model\obj\Debug\App.Model.pdb

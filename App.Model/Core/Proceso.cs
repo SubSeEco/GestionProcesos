@@ -65,6 +65,10 @@ namespace App.Model.Core
             }
         }
 
+        [NotMapped]
+        [Display(Name = "Numero Solicitud")]
+        public string NroSolicitud { get; set; }
+
         public virtual ICollection<Workflow> Workflows { get; set; }
         public virtual ICollection<Documento> Documentos { get; set; }
     }

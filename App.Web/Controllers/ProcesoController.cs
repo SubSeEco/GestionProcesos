@@ -7,6 +7,9 @@ using App.Model.Core;
 using App.Core.Interfaces;
 using App.Infrastructure.Extensions;
 using App.Core.UseCases;
+using App.Model.Comisiones;
+using App.Model.Cometido;
+using App.Model.Pasajes;
 
 namespace App.Web.Controllers
 {
@@ -325,6 +328,55 @@ namespace App.Web.Controllers
                 Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
+
+            foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
+            {
+                switch (res.DefinicionProcesoId)
+                {
+                    case 13:
+                        var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                        if (com.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
+                        }
+                        break;
+                    case 10:
+                        var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                        if (come.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
+                        }
+                        break;
+                    case 12:
+                        var comision = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId);
+                        if (comision.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().ComisionesId.ToString();
+                        }
+                        break;
+                    //case 11:
+                    //    var pasaje = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId);
+                    //    if (pasaje.Count() > 0)
+                    //    {
+                    //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().PasajeId.ToString();
+                    //    }
+                    //    break;
+                    //case 9:
+                    //    var taxi = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId);
+                    //    if (taxi.Count() > 0)
+                    //    {
+                    //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().RadioTaxiId.ToString();
+                    //    }
+                    //    break;
+                }
+
+                //var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                //if (com.Count() > 0)
+                //{
+                //    model.Result.Where(p =>p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
+                //}
+            }
+
             return View(model);
         }
 
@@ -355,6 +407,48 @@ namespace App.Web.Controllers
                     predicate = predicate.And(q => DefinicionProcesoId.Contains(q.DefinicionProcesoId));
 
                 model.Result = _repository.Get(predicate);
+            }
+
+            foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
+            {
+                switch (res.DefinicionProcesoId)
+                {
+                    case 13:
+                        var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                        if (com.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
+                        }
+                        break;
+                    case 10:
+                        var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                        if (come.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
+                        }
+                        break;
+                    case 12:
+                        var comision = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId);
+                        if (comision.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().ComisionesId.ToString();
+                        }
+                        break;
+                    case 11:
+                        var pasaje = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId);
+                        if (pasaje.Count() > 0)
+                        {
+                            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().PasajeId.ToString();
+                        }
+                        break;
+                    //case 9:
+                    //    var taxi = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId);
+                    //    if (taxi.Count() > 0)
+                    //    {
+                    //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().RadioTaxiId.ToString();
+                    //    }
+                    //    break;
+                }
             }
 
             return View(model);

@@ -8,3 +8,9 @@ C:\Users\admin\Source\Repos\GestionProcesos\App.Util\bin\Debug\App.Util.pdb
 C:\Users\admin\Source\Repos\GestionProcesos\App.Util\obj\Debug\App.Util.csproj.CoreCompileInputs.cache
 C:\Users\admin\Source\Repos\GestionProcesos\App.Util\obj\Debug\App.Util.dll
 C:\Users\admin\Source\Repos\GestionProcesos\App.Util\obj\Debug\App.Util.pdb
+D:\GestionProcesos\SourceNew\App.Util\bin\Debug\App.Util.dll
+D:\GestionProcesos\SourceNew\App.Util\bin\Debug\App.Util.pdb
+D:\GestionProcesos\SourceNew\App.Util\obj\Debug\App.Util.csprojAssemblyReference.cache
+D:\GestionProcesos\SourceNew\App.Util\obj\Debug\App.Util.csproj.CoreCompileInputs.cache
+D:\GestionProcesos\SourceNew\App.Util\obj\Debug\App.Util.dll
+D:\GestionProcesos\SourceNew\App.Util\obj\Debug\App.Util.pdb

@@ -1,6 +1,6 @@
-﻿@model App.Web.Controllers.ProcesoController.DTOFilter
+﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
 
-<h3>Búsqueda procesos</h3>
+<h3>Búsqueda Cometidos</h3>
 
 <div class="row">
     <div class="col s12 m12 l3">
@@ -27,10 +27,11 @@
                             @Html.LabelFor(m => Model.Hasta)
                             @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
                         </div>
-                        <div class="col s12 m12 l12">
-                            @Html.EditorFor(q => q.Select)
-                        </div>
-                    </div> <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                        @*<div class="col s12 m12 l12">
+                                @Html.EditorFor(q => q.Select)
+                            </div>*@
+                    </div>
+                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
                 }
             </div>
         </div>
@@ -39,23 +40,20 @@
     <div class="col s12 m12 l9">
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Procesos</span>
+                <span class="card-title">Cometidos</span>
                 <table class="table bordered">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().CometidoId)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
                         </th>
                         <th>
-                            @Html.Raw("<span>Nro Solicitud</span>")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
                         </th>
 
                         <th></th>
@@ -65,29 +63,19 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ProcesoId)
+                                @Html.DisplayFor(modelItem => item.CometidoId)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                @Html.DisplayFor(modelItem => item.FechaSolicitud)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                                @Html.DisplayFor(modelItem => item.Nombre)
                             </td>
                             <td>
-                                @if (item.DefinicionProcesoId == 13)
-                                {
-
-                                    @Html.DisplayFor(modelItem => item.NroSolicitud)
-                                }
-
-
-
+                                @Html.DisplayFor(modelItem => item.UnidadDescripcion)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Detalles", "Details", new { id = item.ProcesoId })
+                                @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId})
                             </td>
                         </tr>
                     }

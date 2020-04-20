@@ -115,8 +115,8 @@
                     <div id="Financia">
                         <label>Marque las opciones que SI financia el organismo invitante</label>
                         @*<label style="color:green">
-                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-            </label>*@
+                                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                            </label>*@
                         <div class="col-12">
                             <label>
                                 @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
@@ -147,8 +147,8 @@
                     <div class="col-12">
                         <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
                         @*<label style="color:green">
-                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-            </label>*@
+                                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                            </label>*@
                     </div>
                     <div class="col-12">
                         <label>
@@ -339,7 +339,6 @@
             $("#PlacaVehiculo").attr('disabled', false);
             $("#TipoVehiculoId").prop("disabled", false);
         }
-
     });
 
     /*Habilita tipo vehiculo*/
