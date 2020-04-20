@@ -75,28 +75,5 @@ namespace App.Core.UseCases
 
             return response;
         }
-        //public ResponseMessage Delete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<InformeHSA>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
     }
 }

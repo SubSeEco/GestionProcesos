@@ -26,18 +26,11 @@
     </div>
 }
 
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
 <script type="text/javascript">
     $(document).ready(function () {
         $('select').formSelect();
-        $.validator.setDefaults({
-            ignore: []
-        });
-
-        $("select[required]").css({ position: "absolute", display: "inline", height: 0, padding: 0, width: 0 });
-        $("select[required]").css({ display: "block", height: 0, padding: 0, width: 0, position: 'absolute' });
-
     });
 </script>
 

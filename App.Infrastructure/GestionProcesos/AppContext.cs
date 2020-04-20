@@ -6,6 +6,7 @@ using App.Model.Cometido;
 using App.Model.Pasajes;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
+using App.Model.InformeHSA;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -72,13 +73,13 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<ViaticoInternacional> ViaticoInternacional { get; set; }
         public virtual DbSet<FirmaDocumento> FirmaDocumento { get; set; }
         public virtual DbSet<SIGPERTipoVehiculo> SIGPERTipoVehiculo { get; set; }
+        public virtual DbSet<InformeHSA> InformeHSA { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }
         //public virtual DbSet<Contrato> Contrato { get; set; }
         //public virtual DbSet<CDP> CDP { get; set; }
         //public virtual DbSet<CDPBien> Bien { get; set; }
-        //public virtual DbSet<InformeHSA> InformeHSA { get; set; }
         //public virtual DbSet<GDIngreso> Ingreso { get; set; }
         //public virtual DbSet<GDTipoIngreso> TipoIngreso { get; set; }
         //public virtual DbSet<CDPTipoSolicitud> TipoSolicitud { get; set; }
@@ -88,13 +89,12 @@ namespace App.Infrastructure.GestionProcesos
         //public virtual DbSet<SIACTipoSolicitud> SIACTipoSolicitud { get; set; }
         //public virtual DbSet<RadioTaxi> RadioTaxi { get; set; }
 
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-        //    Database.SetInitializer<AppContext>(null);
-        //    base.OnModelCreating(modelBuilder);
-        //    modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-        //    modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-        //    var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
-        //}
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<AppContext>(null);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+        }
     }
 }

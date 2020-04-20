@@ -92,6 +92,9 @@ namespace App.Web.Controllers
         public ActionResult View(int id)
         {
             var model = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == id);
+            if (model == null)
+                return RedirectToAction("Details","Proceso", new { id });
+
             return View(model);
         }
 
@@ -257,30 +260,10 @@ namespace App.Web.Controllers
             return RedirectToAction("Sign", "FirmaDocumento", new { id = model.FirmaDocumentoId });
         }
 
-
-
         public FileResult ShowDocumentoSinFirma(int id)
         {
             var model = _repository.GetById<FirmaDocumento>(id);
             return File(model.DocumentoSinFirma, "application/pdf");
         }
-
-
-        //public FileResult DownloadDocumentoSinFirma(int id)
-        //{
-        //    var model = _repository.GetById<FirmaDocumento>(id);
-        //    return File(model.DocumentoSinFirma, System.Net.Mime.MediaTypeNames.Application.Octet, model.DocumentoSinFirmaFilename);
-        //}
-
-        //public FileResult DownloadConFirma(int id)
-        //{
-        //    var model = _repository.GetById<FirmaDocumento>(id);
-        //    return File(model.DocumentoConFirma, System.Net.Mime.MediaTypeNames.Application.Octet, model.DocumentoConFirmaFilename);
-        //}
-        //public FileResult ShowConFirma(int id)
-        //{
-        //    var model = _repository.GetById<FirmaDocumento>(id);
-        //    return File(model.DocumentoConFirma, "application/pdf");
-        //}
     }
 }

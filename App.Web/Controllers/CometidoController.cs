@@ -16,7 +16,6 @@ using Newtonsoft.Json;
 using App.Core.UseCases;
 using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
-using App.Model.DTO;
 using OfficeOpenXml;
 using System.IO;
 
@@ -198,6 +197,8 @@ namespace App.Web.Controllers
 
             //var model = _repository.GetById<Cometido>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+            if (model == null)
+                return RedirectToAction("Details", "Proceso", new { id });
 
             return View(model);
         }
