@@ -1,19 +1,23 @@
 ﻿@model App.Model.Pasajes.Pasaje
 
 @*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
-
-<h3>Seleccionar Cotizacion</h3>
-
-<div class="card blue-grey darken-1">
-    <div class="card-content white-text">
-        <span class="card-title">Notas:</span>
-        <p>
-            Se aprueba el cometido y la compra de pasajes simultameamente.<br />
-            Dadas las indicaciones de la Circular 02/19, represento que en el caso de solicitar un pasaje aéreo que no sea el más económico, justifico y soy responsable de la selección realizada.
-        </p>
+@if (Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+{
+    <h3>Seleccionar Cotizacion</h3>
+    <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+            <span class="card-title">Notas:</span>
+            <p>
+                Se aprueba el cometido y la compra de pasajes simultameamente.<br />
+                Dadas las indicaciones de la Circular 02/19, represento que en el caso de solicitar un pasaje aéreo que no sea el más económico, justifico y soy responsable de la selección realizada.
+            </p>
+        </div>
     </div>
-</div>
-
+}
+else
+{
+    <h3>Compra de pasajes</h3>
+}
 
 <div class="row">
     <div class="col s12 m10 l8">
@@ -104,23 +108,24 @@
                         <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
                         <div class="row">
                             @*<div class="input-field col s12 m10 l10">
-                                @Html.DisplayNameFor(m => Model.PasajeDescripcion)
-                                @Html.DisplayFor(m => Model.PasajeDescripcion)
-                            </div>*@
+                                    @Html.DisplayNameFor(m => Model.PasajeDescripcion)
+                                    @Html.DisplayFor(m => Model.PasajeDescripcion)
+                                </div>*@
 
                             <div class="input-field col s12 m10 l10">
                                 <label>Objetivo del cometido:</label><br /><br />
-                                    @ViewBag.Pasaje.PasajeDescripcion
+                                @ViewBag.Pasaje.PasajeDescripcion
                             </div>
                             <div class="input-field col s12 m10 l10">
-                                <label>Detalle y motivo del viaje:
+                                <label>
+                                    Detalle y motivo del viaje:
                                 </label><br /><br />
                                 @ViewBag.Cometido.CometidoDescripcion
                             </div>
                             @*<div class="input-field col s12 m10 l12">
-                                @Html.DisplayNameFor(m => Model.CometidoDescripcion)
-                                @Html.DisplayFor(m => Model.CometidoDescripcion)
-                            </div>*@
+                                    @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                    @Html.DisplayFor(m => Model.CometidoDescripcion)
+                                </div>*@
 
 
                         </div>
@@ -316,56 +321,56 @@
 
 
                                     @*@for (int i = 0; i < Model.Cotizacion.Count; i++)
-                                    {
-                                        <tr>
-                                            @if (Model.TipoDestino != true)
-                                            {
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Cotizacion[i].TipoCambio)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Cotizacion[i].FechaTipoCambio)
-                                                </td>
-                                            }
-                                            <td>
-                                                @Html.DisplayFor(model => Model.Cotizacion[i].ValorPasaje, new { DataFormatString = "{0:c}" })
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(model => Model.Cotizacion[i].NombreEmpresa)
-                                            <td>
-                                                @Html.DisplayFor(m => Model.Cotizacion[i].VencimientoCotizacion)
-                                            </td>
-                                            <td>
-                                                @for (int x = 0; x < Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray().Length; x++)
+                                        {
+                                            <tr>
+                                                @if (Model.TipoDestino != true)
                                                 {
-                                                    <table>
-                                                        <tr>
-                                                            <td>
-                                                                @if (Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Type.Contains("pdf"))
-                                                                {
-                                                                    <h6>
-                                                                        <i class="material-icons ">attach_file</i>
-                                                                        <a class="blue-text" href="@Url.Action("Download", "CotizacionDocumento", new { id = Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId  })">@Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].FileName</a>
-                                                                    </h6>
-                                                                    <embed src="@Url.Action("Show", "CotizacionDocumento", new { Id = Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                <label>
-                                                                    @Html.CheckBoxFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
-                                                                    @Html.HiddenFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId)
-                                                                    @Html.HiddenFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
-                                                                    <span></span>
-                                                                </label>
-                                                                <div class="section"></div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Cotizacion[i].TipoCambio)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Cotizacion[i].FechaTipoCambio)
+                                                    </td>
                                                 }
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Cotizacion[i].ValorPasaje, new { DataFormatString = "{0:c}" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Cotizacion[i].NombreEmpresa)
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Cotizacion[i].VencimientoCotizacion)
+                                                </td>
+                                                <td>
+                                                    @for (int x = 0; x < Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray().Length; x++)
+                                                    {
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    @if (Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Type.Contains("pdf"))
+                                                                    {
+                                                                        <h6>
+                                                                            <i class="material-icons ">attach_file</i>
+                                                                            <a class="blue-text" href="@Url.Action("Download", "CotizacionDocumento", new { id = Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId  })">@Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].FileName</a>
+                                                                        </h6>
+                                                                        <embed src="@Url.Action("Show", "CotizacionDocumento", new { Id = Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <label>
+                                                                        @Html.CheckBoxFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
+                                                                        @Html.HiddenFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].CotizacionDocumentoId)
+                                                                        @Html.HiddenFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
+                                                                        <span></span>
+                                                                    </label>
+                                                                    <div class="section"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }*@
                                 </table>
                             }
                         </div>

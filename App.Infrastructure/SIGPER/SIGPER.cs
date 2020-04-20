@@ -100,7 +100,7 @@ namespace App.Infrastructure.SIGPER
                                         join j in context.PEFERJEFAJ on f.PeFerJerCod equals j.PeFerJerCod
                                         join p in context.PEDATPER on j.FyPFunARut equals p.RH_NumInte
                                         where f.FyPFunRut == funcionario.RH_NumInte
-                                        where p.RH_EstLab.Equals("A")
+                                        where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                         where j.PeFerJerAutEst == 1
                                         select p).FirstOrDefault();
 
@@ -120,7 +120,7 @@ namespace App.Infrastructure.SIGPER
                                 sigper.Unidad = unidad;
 
                                 //secretaria del funcionario
-                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
                                 if (secretaria != null)
                                     sigper.Secretaria = secretaria;
                             }
@@ -129,6 +129,29 @@ namespace App.Infrastructure.SIGPER
                             //var FunDatosLaborales = dbEconomia.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
+                            if (FunDatosLaborales != null)
+                            {
+                                sigper.FunDatosLaborales = FunDatosLaborales;
+                            }
+                        }
+                        else
+                        {
+                            PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+
+                            //unidad del funcionario
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);
+                            if (unidad != null)
+                            {
+                                sigper.Unidad = unidad;
+
+                                //secretaria del funcionario
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                if (secretaria != null)
+                                    sigper.Secretaria = secretaria;
+                            }
+
+                            /*datos laborales funcionario*/
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             if (FunDatosLaborales != null)
                             {
                                 sigper.FunDatosLaborales = FunDatosLaborales;
@@ -175,6 +198,13 @@ namespace App.Infrastructure.SIGPER
                                 if (secretaria != null)
                                     sigper.Secretaria = secretaria;
                             }
+
+                            /*datos laborales funcionario*/
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            if (FunDatosLaborales != null)
+                            {
+                                sigper.FunDatosLaborales = FunDatosLaborales;
+                            }
                         }
 
                         return sigper;
@@ -213,7 +243,7 @@ namespace App.Infrastructure.SIGPER
                                         join j in context.PEFERJEFAJ on f.PeFerJerCod equals j.PeFerJerCod
                                         join p in context.PEDATPER on j.FyPFunARut equals p.RH_NumInte
                                         where f.FyPFunRut == funcionario.RH_NumInte
-                                        where p.RH_EstLab.Equals("A")
+                                        where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                         where j.PeFerJerAutEst == 1
                                         select p).FirstOrDefault();
 
@@ -232,7 +262,7 @@ namespace App.Infrastructure.SIGPER
                                 sigper.Unidad = unidad;
 
                                 //secretaria del funcionario
-                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
                                 if (secretaria != null)
                                     sigper.Secretaria = secretaria;
                             }
@@ -254,7 +284,7 @@ namespace App.Infrastructure.SIGPER
                                         join j in context.PEFERJEFAJ on f.PeFerJerCod equals j.PeFerJerCod
                                         join p in context.PEDATPER on j.FyPFunARut equals p.RH_NumInte
                                         where f.FyPFunRut == funcionario.RH_NumInte
-                                        where p.RH_EstLab.Equals("A")
+                                        where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                         where j.PeFerJerAutEst == 1
                                         select p).FirstOrDefault();
 
@@ -273,7 +303,7 @@ namespace App.Infrastructure.SIGPER
                                 sigper.Unidad = unidad;
 
                                 //secretaria del funcionario
-                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
                                 if (secretaria != null)
                                     sigper.Secretaria = secretaria;
                             }

@@ -292,5 +292,9 @@ namespace App.Model.Cometido
         //[Required(ErrorMessage = "Se deben agregar observaciones del pago en tesoreria")]
         [Display(Name = "Observaciones Pago SIGFE Tesorería")]
         public string ObservacionesPagoSigfeTesoreria { get; set; }
+
+        [NotMapped]
+        [Display(Name = "DocumnetoRefrendacion")]
+        public bool? DocumentoRefrendacion { get; set; } = false;
     }
 }

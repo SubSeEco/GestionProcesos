@@ -248,7 +248,7 @@ namespace App.Web.Controllers
             /*Viaticos*/
             ViewBag.VtcTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre",model.VtcTipoPartidaId);
             ViewBag.VtcTipoCapituloId = new SelectList(_repository.GetAll<TipoCapitulo>(), "TipoCapituloId", "TcaNombre",model.VtcTipoCapituloId);
-            ViewBag.VtcCentroCostoId = new SelectList(_repository.GetAll<CentroCosto>(), "CentroCostoId", "CCNombre",model.VtcCentroCostoId);
+            ViewBag.VtcCentroCostoId = new SelectList(_sigper.GetREPYTs(), "RePytCod", "RePytDes", model.VtcCentroCostoId.Value);
             ViewBag.VtcTipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre",model.VtcTipoSubTituloId);
             ViewBag.VtcTipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre",model.VtcTipoItemId);
             ViewBag.VtcTipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre",model.VtcTipoAsignacionId);
@@ -256,7 +256,7 @@ namespace App.Web.Controllers
             /*pasajes*/
             ViewBag.PsjTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre",model.PsjTipoPartidaId);
             ViewBag.PsjVtcTipoCapituloId = new SelectList(_repository.GetAll<TipoCapitulo>(), "TipoCapituloId", "TcaNombre",model.PsjVtcTipoCapituloId);
-            ViewBag.PsjCentroCostoId = new SelectList(_repository.GetAll<CentroCosto>(), "CentroCostoId", "CCNombre",model.PsjCentroCostoId);
+            ViewBag.PsjCentroCostoId = new SelectList(_sigper.GetREPYTs(), "RePytCod", "RePytDes", model.PsjCentroCostoId);
             ViewBag.PsjTipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre",model.PsjTipoSubTituloId);
             ViewBag.PsjTipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre",model.PsjTipoItemId);
             ViewBag.PsjTipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre",model.PsjTipoAsignacionId);

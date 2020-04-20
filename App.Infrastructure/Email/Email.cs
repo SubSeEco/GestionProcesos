@@ -144,5 +144,56 @@ namespace App.Infrastructure.Email
 
             Send();
         }
+
+        public void NotificacionesCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones)
+        {
+            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+                throw new Exception("No existe la plantilla de notificación de tareas");
+            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto)))
+                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[IdCometido]", IdCometido.ToString());
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Observaciones]", Observaciones);
+
+            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
+            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
+
+            SmtpClient smtpClient = new SmtpClient();
+            MailMessage emailMsg = new MailMessage();
+            emailMsg.IsBodyHtml = true;
+            emailMsg.Body = plantillaCorreo.Valor;
+            emailMsg.Subject = asunto;
+
+            switch (workflow.DefinicionWorkflow.TipoEjecucionId)
+            {
+                case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+
+                    emailMsg.To.Add(workflow.Email);
+                    break;
+
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+
+                    return;
+            }
+
+            foreach (var correo in Mails)
+            {
+                emailMsg.To.Add(correo);
+            }
+
+            try
+            {
+                smtpClient.Send(emailMsg);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

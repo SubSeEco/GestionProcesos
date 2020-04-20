@@ -41,7 +41,7 @@
 
             <div class="card">
                 <div class="card-content">
-                    @*<span class="card-title">Cometidos</span>*@  
+                    @*<span class="card-title">Cometidos</span>*@
                     <div class="row">
                         <div class="input-field col s12 m10 l4">
                             <strong>
@@ -339,7 +339,7 @@
                     <div class="section"></div>
                     <p>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                        @Html.ActionLink("Generar Resolución", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
+                        @Html.ActionLink("Generar Documento Acto Admistrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
                     </p>
                 </div>
             </div>
@@ -437,7 +437,7 @@
 
         //Habilita tipo vehiculo
         $('input:checkbox[name="Vehiculo"]').change(function () {
-            if (document.getElementById("Vehiculo").checked == true)  {
+            if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
             }
@@ -447,18 +447,18 @@
             }
         });
 
-        /*funcion que bloquea pasajes*/    
-        if (document.getElementById("ReqPasajeAereo").checked == true) {           
+        /*funcion que bloquea pasajes*/
+        if (document.getElementById("ReqPasajeAereo").checked == true) {
             $("#ReqPasajeTerrestre").attr('disabled', true);
             $("#Vehiculo").attr('disabled', true);
         }
         else {
-             $("#ReqPasajeTerrestre").attr('disabled', false);
+            $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
-        }    
+        }
     });
 
-/**************************************************************************************************/
+    /**************************************************************************************************/
 
     $(function () {
         $("#jQuery_accordion").accordion({
@@ -474,12 +474,12 @@
 
     /*funcion que bloquea pasajes*/
     $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
-        if (document.getElementById("ReqPasajeAereo").checked == true) {           
+        if (document.getElementById("ReqPasajeAereo").checked == true) {
             $("#ReqPasajeTerrestre").attr('disabled', true);
             $("#Vehiculo").attr('disabled', true);
         }
         else {
-             $("#ReqPasajeTerrestre").attr('disabled', false);
+            $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
         }
     });
