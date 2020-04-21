@@ -295,6 +295,19 @@ namespace App.Web.Controllers
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+
+            /*Validar si existe un documento asociado y si se encuentra firmado*/
+            var doc = _repository.GetAll<Documento>().Where(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+            if (doc != null)
+            {
+                if(doc.Signed != true)
+                    GeneraDocumento(model.CometidoId);
+                //else
+                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
+            }
+
+            
+
             return View(model);
         }
 
@@ -992,8 +1005,6 @@ namespace App.Web.Controllers
                         _repository.Update(docOld);
                         _repository.Save();
                     }
-                    else
-                        TempData["Error"] = "Documento ya se encuentra firmado electronicamente";
                 }
 
             }
@@ -1072,7 +1083,7 @@ namespace App.Web.Controllers
                                 
                 /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
                 var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 8 || (workflowActual.DefinicionWorkflow.Secuencia == 13 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+                if (workflowActual.DefinicionWorkflow.Secuencia == 13 || (workflowActual.DefinicionWorkflow.Secuencia == 13 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
                 {
                     if (model.Folio == null)
                     {
@@ -1228,7 +1239,7 @@ namespace App.Web.Controllers
 
             /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
             var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-            if (workflowActual.DefinicionWorkflow.Secuencia == 8)
+            if (workflowActual.DefinicionWorkflow.Secuencia == 13)
             {
                 if (model.Folio == null)
                 {

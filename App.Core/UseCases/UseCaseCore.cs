@@ -961,7 +961,7 @@ namespace App.Core.UseCases
                 if (obj.Signed == true)
                     response.Errors.Add("Documento ya se encuentra firmado");
 
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
+                 var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
                if (rubrica == null)
                     response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
 
