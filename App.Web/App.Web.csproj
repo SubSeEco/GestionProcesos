@@ -231,7 +231,6 @@
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Common.js" />
-    <Content Include="App_Browsers\qt.browser" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
@@ -514,7 +513,6 @@
     <Content Include="Views\InformeHSA\Pdf.cshtml" />
     <Content Include="Views\InformeHSA\Sign.cshtml" />
     <Content Include="Views\InformeHSA\View.cshtml" />
-    <None Include="Views\Shared\_Indice.cshtml" />
     <Content Include="Views\Workflow\Execute.cshtml" />
     <Content Include="Views\Region\Create.cshtml" />
     <Content Include="Views\Region\Delete.cshtml" />

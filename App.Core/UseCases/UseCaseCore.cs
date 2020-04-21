@@ -434,7 +434,7 @@ namespace App.Core.UseCases
                     obj.FechaTermino = DateTime.Now;
                     obj.Terminada = true;
                     obj.Anulada = true;
-                    obj.EstadoProceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                    obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
                     _repository.Save();
 
                     //notificar al dueño del proceso

@@ -27,7 +27,7 @@ namespace App.Web.Controllers
             ViewBag.DefinicionWorkflowRechazoId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = string.Format("{0} - {1}", q.DefinicionWorkflowId, q.Nombre)}), "Value", "Text");
             ViewBag.DefinicionWorkflowDependeDeId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = string.Format("{0} - {1}", q.DefinicionWorkflowId, q.Nombre) }), "Value", "Text");
             ViewBag.AccionId = new SelectList(_repository.GetAll<Accion>().OrderBy(q => q.Nombre), "AccionId", "Nombre");
-            //ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre");
+            ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre");
             ViewBag.TipoEjecucionId = new SelectList(_repository.Get<TipoEjecucion>(q=>q.Activo).OrderBy(q=>q.Order), "TipoEjecucionId", "Nombre");
 
             var definicionWorkflows = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == DefinicionProcesoId);
@@ -61,7 +61,7 @@ namespace App.Web.Controllers
             ViewBag.DefinicionWorkflowRechazoId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowRechazoId);
             ViewBag.DefinicionWorkflowDependeDeId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowDependeDeId);
             ViewBag.AccionId = new SelectList(_repository.GetAll<Accion>().OrderBy(q => q.Nombre), "AccionId", "Nombre", model.AccionId);
-            //ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
+            ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
             ViewBag.TipoEjecucionId = new SelectList(_repository.Get<TipoEjecucion>(q => q.Activo).OrderBy(q => q.Order), "TipoEjecucionId", "Nombre", model.TipoEjecucionId);
 
             return View(model);
@@ -77,7 +77,7 @@ namespace App.Web.Controllers
             ViewBag.DefinicionWorkflowRechazoId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowRechazoId);
             ViewBag.DefinicionWorkflowDependeDeId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowDependeDeId);
             ViewBag.AccionId = new SelectList(_repository.GetAll<Accion>().OrderBy(q => q.Nombre), "AccionId", "Nombre", model.AccionId);
-            //ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
+            ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
             ViewBag.TipoEjecucionId = new SelectList(_repository.Get<TipoEjecucion>(q => q.Activo).OrderBy(q => q.Order), "TipoEjecucionId", "Nombre", model.TipoEjecucionId);
 
             return View(model);
@@ -109,7 +109,7 @@ namespace App.Web.Controllers
             ViewBag.DefinicionWorkflowRechazoId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowRechazoId);
             ViewBag.DefinicionWorkflowDependeDeId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == model.DefinicionProcesoId).Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowDependeDeId);
             ViewBag.AccionId = new SelectList(_repository.GetAll<Accion>().OrderBy(q => q.Nombre), "AccionId", "Nombre", model.AccionId);
-            //ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
+            ViewBag.EntidadId = new SelectList(_repository.GetAll<Entidad>().OrderBy(q => q.Nombre), "EntidadId", "Nombre", model.EntidadId);
             ViewBag.TipoEjecucionId = new SelectList(_repository.Get<TipoEjecucion>(q => q.Activo).OrderBy(q => q.Order), "TipoEjecucionId", "Nombre", model.TipoEjecucionId);
 
             return View(model);

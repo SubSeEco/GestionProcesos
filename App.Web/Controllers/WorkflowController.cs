@@ -406,7 +406,7 @@ namespace App.Web.Controllers
             if (workflow != null && workflow.Anulada)
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra anulada");
 
-            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
             {
                 var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -420,7 +420,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
             {
                 var obj = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -434,7 +434,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
             {
                 var obj = _repository.GetFirst<Comisiones>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -448,7 +448,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var obj = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -462,7 +462,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
             {
                 var obj = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
@@ -487,9 +487,9 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
                 if (workflow.DefinicionWorkflow.Accion.Codigo == "Create")
-                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo, new { workflow.WorkflowId });
+                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
                 else
-                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo, new { id = workflow.EntityId });
+                    return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { id = workflow.EntityId });
 
             return View(workflow);
         }

@@ -2,7 +2,7 @@
 
 <meta http-equiv="refresh" content="60">
 
-<h3>Tareas @*(@Model.Workflows.Count())*@</h3>
+<h3>Tareas (@Model.Workflows.Count())</h3>
 
 <ul class="collection">
     @foreach (var item in Model.Workflows.OrderByDescending(q => q.WorkflowId))
