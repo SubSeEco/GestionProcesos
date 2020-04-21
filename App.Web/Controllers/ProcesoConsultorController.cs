@@ -43,10 +43,6 @@ namespace App.Web.Controllers
             _email = email;
         }
 
-       
-
-
-
         public ActionResult Details(int id)
         {
             var model = _repository.GetById<Proceso>(id);

@@ -1,6 +1,11 @@
 ﻿@model App.Web.Controllers.WorkflowController.DTOFilter
 
-<meta http-equiv="refresh" content="60">
+@{
+    ViewBag.Title = "Bandeja de tareas";
+    ViewBag.Subtitle = "";
+}
+
+<meta http-equiv="refresh" content="120">
 
 <h3>Tareas (@Model.Workflows.Count())</h3>
 

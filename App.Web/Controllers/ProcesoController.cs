@@ -10,6 +10,8 @@ using App.Core.UseCases;
 using App.Model.Comisiones;
 using App.Model.Cometido;
 using App.Model.Pasajes;
+using System.IO;
+using OfficeOpenXml;
 
 namespace App.Web.Controllers
 {
@@ -156,7 +158,7 @@ namespace App.Web.Controllers
         {
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
             return View(model);
@@ -255,65 +257,6 @@ namespace App.Web.Controllers
             return RedirectToAction("Index");
         }
 
-
-        //public ActionResult Archive(int id)
-        //{
-        //    var model = _repository.GetById<Workflow>(id);
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Archive(Workflow model)
-        //{
-        //    model.Email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-        //        ResponseMessage _UseCaseResponseMessageDelete = new ResponseMessage();
-
-        //        var workflow = _repository.Get<Workflow>(c => c.WorkflowId == model.WorkflowId).FirstOrDefault();
-        //        var Entity = _repository.Get<DefinicionWorkflow>(d => d.DefinicionWorkflowId == workflow.DefinicionWorkflowId).FirstOrDefault().DefinicionProceso.EntidadId;
-        //        if (Entity == 8)/*Se eliminan datos del destino, luego el cometido*/
-        //        {
-        //            var cometido = _repository.Get<Cometido>(c => c.CometidoId == workflow.EntityId.Value).FirstOrDefault();
-        //            var destinos = _repository.Get<Destinos>(c => c.CometidoId == cometido.CometidoId);
-        //            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-        //            if (destinos != null)
-        //            {
-        //                foreach (var des in destinos)
-        //                {
-        //                    //_UseCaseResponseMessageDelete = _useCaseInteractor.DestinosDelete(des.DestinoId);
-        //                }
-        //            }
-
-        //            if (cdp != null)
-        //            {
-        //                foreach (var c in cdp)
-        //                {
-        //                    //_UseCaseResponseMessageDelete = _useCaseInteractor.GeneracionCDPDelete(c.GeneracionCDPId);
-        //                }
-        //            }
-        //            //_UseCaseResponseMessageDelete = _useCaseInteractor.CometidoDelete(cometido.CometidoId);
-        //        }
-
-        //        /*se elimina datos del proceso*/
-        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
-        //        if (_UseCaseResponseMessage.IsValid && _UseCaseResponseMessageDelete.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return RedirectToAction("Index", "Workflow");
-        //        }
-        //        else
-        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    return View(model);
-        //}
-
-
-
         public ActionResult Dashboard()
         {
             var result = _repository.GetAll<Proceso>();
@@ -325,116 +268,69 @@ namespace App.Web.Controllers
             return View();
         }
 
-        //public FileResult Download()
-        //{
-        //    var result = _repository.GetAll<Proceso>();
+        public FileResult Download()
+        {
+            var result = _repository.GetAll<Proceso>();
 
-        //    var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
-        //    var fileInfo = new FileInfo(file);
-        //    var excelPackage = new ExcelPackage(fileInfo);
-
-        //    var fila = 1;
-        //    var worksheet = excelPackage.Workbook.Worksheets[1];
-        //    foreach (var proceso in result.ToList())
-        //    {
-        //        fila++;
-        //        worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
-        //        worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
-        //        worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
-        //        worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
-        //        worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
-        //        worksheet.Cells[fila, 6].Value = proceso.Email;
-        //        worksheet.Cells[fila, 7].Value = proceso.Terminada ? "SI" : "NO";
-        //        worksheet.Cells[fila, 8].Value = proceso.Observacion;
-        //    }
-
-        //    fila = 1;
-        //    worksheet = excelPackage.Workbook.Worksheets[2];
-        //    foreach (var proceso in result.ToList())
-        //    {
-        //        foreach (var workflow in proceso.Workflows)
-        //        {
-        //            fila++;
-        //            worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
-        //            worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
-        //            worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
-        //            worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
-        //            worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
-        //            worksheet.Cells[fila, 6].Value = proceso.Email;
-        //            worksheet.Cells[fila, 7].Value = proceso.Terminada ? "SI" : "NO";
-        //            worksheet.Cells[fila, 8].Value = proceso.Observacion;
-        //            worksheet.Cells[fila, 9].Value = workflow.WorkflowId;
-        //            worksheet.Cells[fila, 10].Value = workflow.DefinicionWorkflow.Nombre;
-        //            worksheet.Cells[fila, 11].Value = workflow.Pl_UndDes;
-        //            worksheet.Cells[fila, 12].Value = workflow.Email;
-        //            worksheet.Cells[fila, 13].Value = workflow.FechaCreacion;
-        //            worksheet.Cells[fila, 14].Value = workflow.FechaTermino;
-        //            worksheet.Cells[fila, 15].Value = workflow.TipoAprobacion != null ? workflow.TipoAprobacion.Nombre : string.Empty;
-        //            worksheet.Cells[fila, 16].Value = workflow.Observacion;
-        //            worksheet.Cells[fila, 17].Value = workflow.Terminada ? "SI" : "NO";
-        //        }
-        //    }
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackage = new ExcelPackage(fileInfo);
 
 
-        //    return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        //}
+            var fila = 1;
+            var worksheet = excelPackage.Workbook.Worksheets[0];
+            foreach (var proceso in result.ToList())
+            {
+                fila++;
+                worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
+                worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
+                worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
+                worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
+                worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
+                worksheet.Cells[fila, 6].Value = proceso.Email;
+                worksheet.Cells[fila, 7].Value = proceso.EstadoProceso.Descripcion;
+                worksheet.Cells[fila, 8].Value = proceso.Observacion;
+            }
 
+            fila = 1;
+            worksheet = excelPackage.Workbook.Worksheets[1];
+            foreach (var proceso in result.ToList())
+            {
+                foreach (var workflow in proceso.Workflows)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
+                    worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
+                    worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
+                    worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
+                    worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
+                    worksheet.Cells[fila, 6].Value = proceso.Email;
+                    worksheet.Cells[fila, 7].Value = proceso.Terminada ? "SI" : "NO";
+                    worksheet.Cells[fila, 8].Value = proceso.Observacion;
+                    worksheet.Cells[fila, 9].Value = workflow.WorkflowId;
+                    worksheet.Cells[fila, 10].Value = workflow.DefinicionWorkflow.Nombre;
+                    worksheet.Cells[fila, 11].Value = workflow.Pl_UndDes;
+                    worksheet.Cells[fila, 12].Value = workflow.Email;
+                    worksheet.Cells[fila, 13].Value = workflow.FechaCreacion;
+                    worksheet.Cells[fila, 14].Value = workflow.FechaTermino;
+                    worksheet.Cells[fila, 15].Value = workflow.TipoAprobacion != null ? workflow.TipoAprobacion.Nombre : string.Empty;
+                    worksheet.Cells[fila, 16].Value = workflow.Observacion;
+                    worksheet.Cells[fila, 17].Value = workflow.Terminada ? "SI" : "NO";
+                }
+            }
+
+
+            return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
 
         public ActionResult Search()
         {
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
-
-            //foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
-            //{
-            //    switch (res.DefinicionProcesoId)
-            //    {
-            //        case 13:
-            //            var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //            if (com.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
-            //            }
-            //            break;
-            //        case 10:
-            //            var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //            if (come.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
-            //            }
-            //            break;
-            //        case 12:
-            //            var comision = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId);
-            //            if (comision.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().ComisionesId.ToString();
-            //            }
-            //            break;
-            //        //case 11:
-            //        //    var pasaje = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId);
-            //        //    if (pasaje.Count() > 0)
-            //        //    {
-            //        //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().PasajeId.ToString();
-            //        //    }
-            //        //    break;
-            //        //case 9:
-            //        //    var taxi = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId);
-            //        //    if (taxi.Count() > 0)
-            //        //    {
-            //        //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().RadioTaxiId.ToString();
-            //        //    }
-            //        //    break;
-            //    }
-
-            //    //var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //    //if (com.Count() > 0)
-            //    //{
-            //    //    model.Result.Where(p =>p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
-            //    //}
-            //}
 
             return View(model);
         }
@@ -468,48 +364,6 @@ namespace App.Web.Controllers
                 model.Result = _repository.Get(predicate);
             }
 
-            //foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
-            //{
-            //    switch (res.DefinicionProcesoId)
-            //    {
-            //        case 13:
-            //            var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //            if (com.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
-            //            }
-            //            break;
-            //        case 10:
-            //            var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //            if (come.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId.ToString();
-            //            }
-            //            break;
-            //        case 12:
-            //            var comision = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId);
-            //            if (comision.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Comisiones>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().ComisionesId.ToString();
-            //            }
-            //            break;
-            //        case 11:
-            //            var pasaje = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId);
-            //            if (pasaje.Count() > 0)
-            //            {
-            //                model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<Pasaje>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().PasajeId.ToString();
-            //            }
-            //            break;
-            //        //case 9:
-            //        //    var taxi = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId);
-            //        //    if (taxi.Count() > 0)
-            //        //    {
-            //        //        model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().NroSolicitud = _repository.Get<RadioTaxi>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().RadioTaxiId.ToString();
-            //        //    }
-            //        //    break;
-            //    }
-            //}
-
             return View(model);
         }
 
@@ -519,7 +373,7 @@ namespace App.Web.Controllers
             var email = UserExtended.Email(User);
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>(q => q.Email == email).ToList()
             };
             return View(model);

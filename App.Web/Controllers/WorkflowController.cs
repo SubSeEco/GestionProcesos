@@ -615,18 +615,18 @@ namespace App.Web.Controllers
         {
             model.Email = UserExtended.Email(User);
 
-            //if (ModelState.IsValid)
-            //{
-            //    var _useCaseInteractor = new App.Core(_repository, _email, _sigper);
-            //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowForward(model);
-            //    if (_UseCaseResponseMessage.IsValid)
-            //    {
-            //        TempData["Success"] = "Operación terminada correctamente.";
-            //        return RedirectToAction("Index", "Workflow");
-            //    }
-            //    else
-            //        TempData["Error"] = _UseCaseResponseMessage.Errors;
-            //}
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowForward(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+                else
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
