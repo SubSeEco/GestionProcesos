@@ -1,12 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.InformeHSA;
 using App.Core.Interfaces;
 using Rotativa.MVC;
-using App.Infrastructure.HSM;
 
 namespace App.Web.Controllers
 {

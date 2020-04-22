@@ -58,5 +58,20 @@ namespace App.Infrastructure.HSM
                 throw new System.Exception("Error al firmar documento:" + ex.Message);
             }
         }
+
+        public string[] GetSigners()
+        {
+
+            SignFileImplClient ws = new SignFileImplClient();
+            signerInfo firmantes = new signerInfo();
+            signBase64EncodedResponse respBase64 = new signBase64EncodedResponse();
+
+            var obj = ws.getSignerNameList();
+
+            if (obj != null)
+                return ws.getSignerNameList().signer;
+
+            return null;
+        }
     }
 }

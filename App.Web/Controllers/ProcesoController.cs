@@ -7,9 +7,6 @@ using App.Model.Core;
 using App.Core.Interfaces;
 using App.Infrastructure.Extensions;
 using App.Core.UseCases;
-using App.Model.Comisiones;
-using App.Model.Cometido;
-using App.Model.Pasajes;
 using System.IO;
 using OfficeOpenXml;
 

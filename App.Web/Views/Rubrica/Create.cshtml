@@ -1,5 +1,4 @@
-﻿@*@model App.Web.Controllers.RubricaController.FileUpload*@
-@model App.Model.Core.Rubrica
+﻿@model App.Model.Core.Rubrica
 
 
 <h3>Crear rúbrica</h3>
@@ -7,34 +6,33 @@
 
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(q => Model.RubricaId)
-    @Html.HiddenFor(q => Model.Email)
 
     <div class="card">
         <div class="card-content">
             <div class="row">
                 <div class="input-field col s12 m10 l10">
-                    @Html.DropDownListFor(m => Model.Email, null, "Seleccione...")
+                    @Html.EditorFor(m => Model.Email)
                     @Html.LabelFor(m => Model.Email)
                     @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "red-text" })
                 </div>
-            </div>
-            <div class="row">
                 <div class="input-field col s12 m10 l10">
                     @Html.DropDownListFor(m => Model.IdentificadorFirma, null, "Seleccione...")
                     @Html.LabelFor(m => Model.IdentificadorFirma)
                     @Html.ValidationMessageFor(m => Model.IdentificadorFirma, "", new { @class = "red-text" })
                 </div>
-            </div>
-            <div class="row">
+                <div class="input-field col s12 m10 l10">
+                    @Html.EditorFor(m => Model.UnidadOrganizacional)
+                    @Html.LabelFor(m => Model.UnidadOrganizacional)
+                    @Html.ValidationMessageFor(m => Model.UnidadOrganizacional, "", new { @class = "red-text" })
+                </div>
                 <div class="input-field col s12 m4 l3">
                     <label>
                         @Html.CheckBoxFor(m => Model.HabilitadoFirma)
                         <span>@Html.LabelFor(m => Model.HabilitadoFirma)</span>
                     </label>
-                    <div class="section"></div>
                 </div>
             </div>
+            <div class="section"></div>
             <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
         </div>
     </div>
