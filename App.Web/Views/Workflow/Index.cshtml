@@ -28,15 +28,15 @@
                 <i class="material-icons circle green">access_time</i>
             }
             <p class="title">
-                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
+                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
             </p>
             <p class="right">
                 @item.Mensaje
             </p>
-
             <p class="title">
-                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
+                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
             </p>
+
             <p>
                 Ejecutor:
                 @if (!string.IsNullOrWhiteSpace(item.Email))

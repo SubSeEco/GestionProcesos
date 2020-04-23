@@ -1,9 +1,5 @@
-﻿@model HandleErrorInfo
-@{
-    Layout = "_Layout.cshtml";
-    ViewBag.Title = "Error";
-}
-<div class="text-danger">
-    <h2>Página no encontrada!</h2>
-    La página que busca no existe. Por favor contacte al administrador de sistema
-</div>
+﻿<h1 class="display-4 my-3 text-danger">Página no encontrada</h1>
+<p class="lead">No se encontró la página @ViewBag.RequestedUrl</p>
+<hr />
+<a href="javascript:void(0);" onclick="history.go(-1);">Volver a página anterior</a> | <a href='@Url.Action("Index", "Home")'>Ir al inicio</a>
+@(new string(' ', 512))

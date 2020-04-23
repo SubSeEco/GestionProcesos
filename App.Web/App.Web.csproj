@@ -60,6 +60,9 @@
     <Reference Include="EPPlus, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.5.1.0\lib\net45\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="ErrorHandlerMvc, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ErrorHandlerMvc.1.1.5\lib\net451\ErrorHandlerMvc.dll</HintPath>
+    </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
     </Reference>
@@ -399,6 +402,7 @@
     <Compile Include="Controllers\EmpresaAerolineaController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\ParrafosController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\TipoSubTituloController.cs" />
     <Compile Include="Controllers\TipoSubAsignacionController.cs" />
     <Compile Include="Controllers\TipoPartidaController.cs" />
@@ -663,6 +667,8 @@
     <Content Include="Views\ViaticoInternacional\Index.cshtml" />
     <Content Include="Views\Cometido\Anular.cshtml" />
     <Content Include="Views\ProcesoConsultor\Details.cshtml" />
+    <Content Include="Views\Shared\_Error.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
