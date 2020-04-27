@@ -19,6 +19,8 @@ using System.ComponentModel.DataAnnotations;
 using App.Model.DTO;
 using OfficeOpenXml;
 using System.IO;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 
 namespace App.Web.Controllers
 {
@@ -49,7 +51,7 @@ namespace App.Web.Controllers
             [Display(Name = "ID")]
             public int ID { get; set; }
 
-            [Display(Name = "Ejecutor")]
+            [Display(Name = "Funcionarios con tarea asignada")]
             public string Ejecutor { get; set; }
 
             [Display(Name = "Fecha Inicio")]
@@ -65,13 +67,19 @@ namespace App.Web.Controllers
             public System.DateTime? FechaSolicitud { get; set; }
 
             [Display(Name = "Funcionario")]
-            public int NombreId { get; set; }
+            public int? NombreId { get; set; }
 
             [Display(Name = "Rut")]
             public int Rut { get; set; }
 
             [Display(Name = "Unidad Funcionario")]
             public int? IdUnidad { get; set; }
+
+            [Display(Name = "Estado")]
+            public int? Estado { get; set; }
+
+            [Display(Name = "Destino")]
+            public int? Destino { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
@@ -1613,6 +1621,165 @@ namespace App.Web.Controllers
             return File(excelPackageCometidos.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("RPTSegGP_yyyyMMddhhmmss") + ".xlsx");
         }
 
+        public ActionResult SeguimientoGP()
+        {
+            var model = new DTOFilterCometido();
+
+            List<SelectListItem> Estado = new List<SelectListItem>
+            {
+            new SelectListItem {Text = "En Curso", Value = "1"},
+            new SelectListItem {Text = "Terminado", Value = "2"},
+            new SelectListItem {Text = "Anulado", Value = "3"},
+            };
+
+            ViewBag.Estado = new SelectList(Estado, "Value", "Text");
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+            ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult SeguimientoGP(DTOFilterCometido model)
+        {
+            var predicate = PredicateBuilder.True<Cometido>();
+
+            if (ModelState.IsValid)
+            {
+                if (model.Estado.HasValue)
+                {
+                    if (model.Estado == 1)
+                        predicate = predicate.And(q => q.Proceso.Terminada == false && q.Proceso.Anulada == false);
+                    if (model.Estado == 2)
+                        predicate = predicate.And(q => q.Proceso.Anulada == true);
+                    if (model.Estado == 3)
+                        predicate = predicate.And(q => q.Proceso.Terminada == true);
+                }
+
+                    if (model.NombreId.HasValue)
+                    predicate = predicate.And(q => q.NombreId == model.NombreId);
+
+                if (model.IdUnidad.HasValue)
+                    predicate = predicate.And(q => q.IdUnidad == model.IdUnidad);
+
+                if (model.Destino.HasValue)
+                    predicate = predicate.And(q => q.Destinos.FirstOrDefault().IdRegion == model.Destino.Value.ToString());
+
+                if (model.FechaInicio.HasValue)
+                    predicate = predicate.And(q =>
+                        q.Destinos.FirstOrDefault().FechaInicio.Year >= model.FechaInicio.Value.Year &&
+                        q.Destinos.FirstOrDefault().FechaInicio.Month >= model.FechaInicio.Value.Month &&
+                        q.Destinos.FirstOrDefault().FechaInicio.Day >= model.FechaInicio.Value.Day);
+
+                if (model.FechaTermino.HasValue)
+                    predicate = predicate.And(q =>
+                        q.Destinos.LastOrDefault().FechaInicio.Year <= model.FechaTermino.Value.Year &&
+                        q.Destinos.LastOrDefault().FechaInicio.Month <= model.FechaTermino.Value.Month &&
+                        q.Destinos.LastOrDefault().FechaInicio.Day <= model.FechaTermino.Value.Day);
+
+                var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+                if (CometidoId.Any())
+                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+
+                model.Result = _repository.Get(predicate);
+            }
+
+            foreach (var res in model.Result)
+            {
+                res.Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+                if (res.Proceso.Anulada == false && res.Proceso.Terminada == false)
+                    model.Estado = 1; // "En Proceso";
+                else if (res.Proceso.Terminada == true)
+                    model.Estado = 3; //Terminado
+                else if (res.Proceso.Anulada == true)
+                    model.Estado = 2; //Anulado
+
+                //model.Result.FirstOrDefault().Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+
+                //var workflow = _repository.Get<Workflow>(c => c.ProcesoId == res.ProcesoId);
+                //foreach(var w in workflow)
+                //{
+                //    res.Workflow.Email = w.Email;
+                //}
+
+                //switch (res.Proceso.DefinicionProcesoId)
+                //{
+                //    case 13:
+                //        var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                //        if (com.Count() > 0)
+                //        {
+                //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
+                //        }
+                //        break;
+                //    case 10:
+                //        var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                //        if (come.Count() > 0)
+                //        {
+                //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
+                //        }
+                //        break;
+                //    case 12:
+                //        var comision = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
+                //        if (comision.Count() > 0)
+                //        {
+                //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
+                //        }
+                //        break;
+                //}
+            }
+
+
+
+            List<SelectListItem> Estado = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "En Curso", Value = "1"},
+                new SelectListItem {Text = "Terminado", Value = "2"},
+                new SelectListItem {Text = "Anulado", Value = "3"},
+            };
+
+            ViewBag.Estado = new SelectList(Estado, "Value", "Text");
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+            ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            return View(model);
+
+        }
+
+        public FileResult DownloadGP()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoGP.xlsx");
+            var fileInfo = new FileInfo(file);
+            var excelPackageSeguimientoGP = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageSeguimientoGP.Workbook.Worksheets[1];
+            foreach (var cometido in result.ToList())
+            {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                if (destino.Count > 0)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = cometido.Proceso.Terminada == false && cometido.Proceso.Anulada == false ? "En Proceso" : cometido.Workflow.Terminada == true ? "Terminada" : "Anulada";
+                    worksheet.Cells[fila, 2].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                    worksheet.Cells[fila, 3].Value = cometido.CometidoId.ToString();
+                    worksheet.Cells[fila, 4].Value = cometido.NombreId;
+                    worksheet.Cells[fila, 5].Value = cometido.UnidadDescripcion;
+                    worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
+                    worksheet.Cells[fila, 7].Value = cometido.FechaSolicitud.ToString();
+                    worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                    worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                    worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
+                    worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
+                }
+            }
+
+            return File(excelPackageSeguimientoGP.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoGP_yyyyMMddhhmmss") + ".xlsx");
+        }
+
         public FileResult Caigg()
         {
             var result = _repository.GetAll<Cometido>();
@@ -1747,7 +1914,7 @@ namespace App.Web.Controllers
         {
             var model = new DTOFilterCometido();
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));            
             return View(model);
         }
 

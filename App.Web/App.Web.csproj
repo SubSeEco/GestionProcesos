@@ -348,6 +348,7 @@
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="App_Data\COMETIDOS.xlsx" />
     <Content Include="App_Data\CAIGG.xlsx" />
+    <Content Include="App_Data\SeguimientoGP.xlsx" />
     <None Include="packages.config" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
@@ -629,6 +630,7 @@
     <Content Include="Views\Cometido\Search.cshtml" />
     <Content Include="Views\Cometido\SeguimientoUnidades.cshtml" />
     <Content Include="Views\Cometido\SolicitudesTransparencia.cshtml" />
+    <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <None Include="Views\Shared\_Indice.cshtml" />
     <Content Include="Views\Workflow\Execute.cshtml" />
     <Content Include="Views\Region\Create.cshtml" />
