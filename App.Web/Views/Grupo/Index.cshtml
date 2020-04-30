@@ -1,48 +1,58 @@
 ﻿@model IEnumerable<App.Model.Core.Grupo>
 
-<h3>Grupos especiales</h3>
-
-@foreach (var item in Model.OrderBy(q => q.Nombre))
-{
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">@item.Nombre</span>
-
-            @if (!item.Usuarios.Any())
-            {
-                <p>No existen usuarios en este grupo</p>
-            }
-
-            <table class="table bordered">
-                <tr>
-                    <th>
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var usuario in item.Usuarios.Where(q => q.Habilitado))
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => usuario.Nombre)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Detalles", "Details", "Usuario", new { id = usuario.UsuarioId }, null) |
-                            @Html.ActionLink("Eliminar", "Delete", "Usuario", new { id = usuario.UsuarioId }, null)
-                        </td>
-                    </tr>
-                }
-            </table>
-            <p>
-                <br />
-                @Html.ActionLink("Agregar usuario", "Create", "Usuario", new { id = item.GrupoId }, null) |
-                @Html.ActionLink("Editar grupo", "Edit", null, new { id = item.GrupoId }, null) |
-                @Html.ActionLink("Eliminar grupo", "Delete", null, new { id = item.GrupoId }, null)
-            </p>
-        </div>
-    </div>
+@{
+    ViewBag.Title = "Grupos especiales";
+    ViewBag.SubTitle = "Grupos especiales";
 }
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<div class="container">
+    @foreach (var item in Model.OrderBy(q => q.Nombre))
+    {
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">@item.Nombre</span>
 
+                @if (!item.Usuarios.Any())
+                {
+                    <p>No existen usuarios en este grupo</p>
+                }
+
+                <table class="table bordered">
+                    <tr>
+                        <th>
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var usuario in item.Usuarios.Where(q => q.Habilitado))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => usuario.Nombre)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Detalles", "Details", "Usuario", new { id = usuario.UsuarioId }, null) |
+                                @Html.ActionLink("Eliminar", "Delete", "Usuario", new { id = usuario.UsuarioId }, null)
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <p>
+                    <br />
+                    @Html.ActionLink("Agregar usuario", "Create", "Usuario", new { id = item.GrupoId }, null) |
+                    @Html.ActionLink("Editar grupo", "Edit", null, new { id = item.GrupoId }, null) |
+                    @Html.ActionLink("Eliminar grupo", "Delete", null, new { id = item.GrupoId }, null)
+                </p>
+            </div>
+        </div>
+    }
+</div>
 <div class="fixed-action-btn">
     <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
 </div>

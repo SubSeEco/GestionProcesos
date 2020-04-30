@@ -1,212 +1,229 @@
 ﻿@model App.Model.Core.DefinicionWorkflow
 
-<h3>Editar tarea</h3>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(q => Model.DefinicionWorkflowId)
-    @Html.HiddenFor(q => Model.DefinicionProcesoId)
-    @Html.HiddenFor(q => Model.Email)
-
-    <div class="row">
-        <div class="col l8">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Tarea</span>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l10">
-                            @Html.TextAreaFor(m => Model.Nombre, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Nombre)
-                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.TextAreaFor(m => Model.Instrucciones, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Instrucciones)
-                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.TextBoxFor(m => Model.Secuencia, new { @type = "number" })
-                            @Html.LabelFor(m => Model.Secuencia)
-                            @Html.ValidationMessageFor(m => Model.Secuencia, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Quien ejecuta la tarea</span>
-                    <div class="row">
-                        <div class="section"></div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DropDownListFor(m => Model.TipoEjecucionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "ddlTipoEjecucionId" })
-                            @Html.LabelFor(m => Model.TipoEjecucionId)
-                            @Html.ValidationMessageFor(m => Model.TipoEjecucionId, "", new { @class = "red-text" })
-                        </div>
-                        <div id="GrupoId">
-                            <div class="input-field col s12 m10 l10">
-                                @Html.DropDownListFor(m => Model.Pl_UndCod, null, "Seleccione...", new { @id = "ddlGrupoId" })
-                                @Html.LabelFor(m => Model.Pl_UndCod)
-                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                @Html.DropDownListFor(m => Model.GrupoId, null, "Seleccione...", new { @id = "ddlGrupoId" })
-                                @Html.LabelFor(m => Model.GrupoId)
-                                @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
-                            </div>
-                        </div>
-                        <div id="UsuarioId">
-                            <div class="input-field col s12 m10 l10">
-                                @Html.TextBoxFor(m => Model.NombreUsuario)
-                                @Html.LabelFor(m => Model.NombreUsuario)
-                                @Html.ValidationMessageFor(m => Model.NombreUsuario, "", new { @class = "red-text" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Comportamiento</span>
-                    <div class="section"></div>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DropDownListFor(m => Model.AccionId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Accion)
-                            @Html.ValidationMessageFor(m => Model.Accion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.EntidadId)
-                            @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DropDownListFor(m => Model.DefinicionWorkflowRechazoId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.DefinicionWorkflowRechazoId)
-                            @Html.ValidationMessageFor(m => Model.DefinicionWorkflowRechazoId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.DefinicionWorkflowDependeDeId)
-                            @Html.ValidationMessageFor(m => Model.DefinicionWorkflowDependeDeId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            @Html.TextBoxFor(m => Model.DuracionDias, new { @type = "number" })
-                            @Html.LabelFor(m => Model.DuracionDias)
-                            @Html.ValidationMessageFor(m => Model.DuracionDias, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Opciones</span>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.Habilitado)
-                                <span>@Html.LabelFor(m => Model.Habilitado)</span>
-                            </label>
-                        </div>
-
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirVerDetalles)
-                                <span>@Html.LabelFor(m => Model.PermitirVerDetalles)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirVerDocumentos)
-                                <span>@Html.LabelFor(m => Model.PermitirVerDocumentos)</span>
-                            </label>
-                        </div>
-
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.NotificarAlAutor)
-                                <span>@Html.LabelFor(m => Model.NotificarAlAutor)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.NotificarAsignacion)
-                                <span>@Html.LabelFor(m => Model.NotificarAsignacion)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirAdjuntarDocumentos)
-                                <span>@Html.LabelFor(m => Model.PermitirAdjuntarDocumentos)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.RequireDocumentacion)
-                                <span>@Html.LabelFor(m => Model.RequireDocumentacion)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirGenerarDocumentos)
-                                <span>@Html.LabelFor(m => Model.PermitirGenerarDocumentos)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirReenvioUnidad)
-                                <span>@Html.LabelFor(m => Model.PermitirReenvioUnidad)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirReenvioGrupoEspecial)
-                                <span>@Html.LabelFor(m => Model.PermitirReenvioGrupoEspecial)</span>
-                            </label>
-                        </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirTerminar)
-                                <span>@Html.LabelFor(m => Model.PermitirTerminar)</span>
-                            </label>
-                        </div>
-
-                        <div class="input-field col s12 m10 l10">
-                            <div class="input-field col s12 m10 l10">
-                                <label>
-                                    @Html.CheckBoxFor(m => m.RequiereAprobacionAlEnviar)
-                                    <span>@Html.LabelFor(m => Model.RequiereAprobacionAlEnviar)</span>
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <label>
-                                    @Html.CheckBoxFor(m => m.PermitirSeleccionarUnidadDestino)
-                                    <span>@Html.LabelFor(m => Model.PermitirSeleccionarUnidadDestino)</span>
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <label>
-                                    @Html.CheckBoxFor(m => m.PermitirSeleccionarGrupoEspecialDestino)
-                                    <span>@Html.LabelFor(m => Model.PermitirSeleccionarGrupoEspecialDestino)</span>
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <label>
-                                    @Html.CheckBoxFor(m => m.PermitirMultipleEvaluacion)
-                                    <span>@Html.LabelFor(m => Model.PermitirMultipleEvaluacion)</span>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-        </div>
-    </div>
+@{
+    ViewBag.Title = "Editar nueva tarea";
+    ViewBag.SubTitle = "Editar nueva tarea";
 }
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<div class="container">
+    @Html.Partial("_Message")
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(q => Model.DefinicionWorkflowId)
+        @Html.HiddenFor(q => Model.DefinicionProcesoId)
+        @Html.HiddenFor(q => Model.Email)
 
+        <div class="row">
+            <div class="col l8">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Tarea</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.Nombre, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Nombre)
+                                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.Instrucciones, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Instrucciones)
+                                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.Secuencia, new { @type = "number" })
+                                @Html.LabelFor(m => Model.Secuencia)
+                                @Html.ValidationMessageFor(m => Model.Secuencia, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Quien ejecuta la tarea</span>
+                        <div class="row">
+                            <div class="section"></div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.TipoEjecucionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "ddlTipoEjecucionId" })
+                                @Html.LabelFor(m => Model.TipoEjecucionId)
+                                @Html.ValidationMessageFor(m => Model.TipoEjecucionId, "", new { @class = "red-text" })
+                            </div>
+                            <div id="GrupoId">
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DropDownListFor(m => Model.Pl_UndCod, null, "Seleccione...", new { @id = "ddlGrupoId" })
+                                    @Html.LabelFor(m => Model.Pl_UndCod)
+                                    @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DropDownListFor(m => Model.GrupoId, null, "Seleccione...", new { @id = "ddlGrupoId" })
+                                    @Html.LabelFor(m => Model.GrupoId)
+                                    @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                            <div id="UsuarioId">
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.TextBoxFor(m => Model.NombreUsuario)
+                                    @Html.LabelFor(m => Model.NombreUsuario)
+                                    @Html.ValidationMessageFor(m => Model.NombreUsuario, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Comportamiento</span>
+                        <div class="section"></div>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.AccionId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Accion)
+                                @Html.ValidationMessageFor(m => Model.Accion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.EntidadId)
+                                @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.DefinicionWorkflowRechazoId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.DefinicionWorkflowRechazoId)
+                                @Html.ValidationMessageFor(m => Model.DefinicionWorkflowRechazoId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.DefinicionWorkflowDependeDeId)
+                                @Html.ValidationMessageFor(m => Model.DefinicionWorkflowDependeDeId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.DuracionDias, new { @type = "number" })
+                                @Html.LabelFor(m => Model.DuracionDias)
+                                @Html.ValidationMessageFor(m => Model.DuracionDias, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Opciones</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.Habilitado)
+                                    <span>@Html.LabelFor(m => Model.Habilitado)</span>
+                                </label>
+                            </div>
+
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirVerDetalles)
+                                    <span>@Html.LabelFor(m => Model.PermitirVerDetalles)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirVerDocumentos)
+                                    <span>@Html.LabelFor(m => Model.PermitirVerDocumentos)</span>
+                                </label>
+                            </div>
+
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.NotificarAlAutor)
+                                    <span>@Html.LabelFor(m => Model.NotificarAlAutor)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.NotificarAsignacion)
+                                    <span>@Html.LabelFor(m => Model.NotificarAsignacion)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirAdjuntarDocumentos)
+                                    <span>@Html.LabelFor(m => Model.PermitirAdjuntarDocumentos)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.RequireDocumentacion)
+                                    <span>@Html.LabelFor(m => Model.RequireDocumentacion)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirGenerarDocumentos)
+                                    <span>@Html.LabelFor(m => Model.PermitirGenerarDocumentos)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirReenvioUnidad)
+                                    <span>@Html.LabelFor(m => Model.PermitirReenvioUnidad)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirReenvioGrupoEspecial)
+                                    <span>@Html.LabelFor(m => Model.PermitirReenvioGrupoEspecial)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirTerminar)
+                                    <span>@Html.LabelFor(m => Model.PermitirTerminar)</span>
+                                </label>
+                            </div>
+
+                            <div class="input-field col s12 m10 l10">
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.RequiereAprobacionAlEnviar)
+                                        <span>@Html.LabelFor(m => Model.RequiereAprobacionAlEnviar)</span>
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.PermitirSeleccionarUnidadDestino)
+                                        <span>@Html.LabelFor(m => Model.PermitirSeleccionarUnidadDestino)</span>
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.PermitirSeleccionarPersonasMismaUnidad)
+                                        <span>@Html.LabelFor(m => Model.PermitirSeleccionarPersonasMismaUnidad)</span>
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.PermitirSeleccionarGrupoEspecialDestino)
+                                        <span>@Html.LabelFor(m => Model.PermitirSeleccionarGrupoEspecialDestino)</span>
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.PermitirMultipleEvaluacion)
+                                        <span>@Html.LabelFor(m => Model.PermitirMultipleEvaluacion)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+            </div>
+        </div>
+    }
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {

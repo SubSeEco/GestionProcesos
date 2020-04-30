@@ -130,23 +130,7 @@
             SolicitudCometidoPasaje = 13,
         }
 
-        public enum Estadoorganizacion
-        {
-            EnConstitucion = 1,
-            Vigente = 2,
-            Disuelta = 3,
-            Inexistente = 4,
-            Cancelada = 5,
-            RolAsignado = 6
-        }
-        public enum TipoOrganizacion
-        {
-            Cooperativa = 1,
-            AsociacionGremial = 2,
-            AsociacionConsumidores = 3,
-            AunNoDefinida = 4
-        }
-
+     
         public enum Cometidos
         {
             DiasAnticipacionIngreso = 7,

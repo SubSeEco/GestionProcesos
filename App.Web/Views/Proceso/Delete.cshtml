@@ -1,99 +1,111 @@
 ﻿@model App.Model.Core.Proceso
 
-<h3>Anular proceso</h3>
-
-<div class="card">
-    <div class="card-content">
-        <span class="card-title">Proceso</span>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.ProcesoId)</strong><br />
-            @Html.DisplayFor(m => Model.ProcesoId)
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.DefinicionProceso.Nombre)</strong><br />
-            @Html.DisplayFor(m => Model.DefinicionProceso.Nombre)
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
-            @Html.DisplayFor(m => Model.FechaCreacion)
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.FechaVencimiento)</strong><br />
-            @Html.DisplayFor(m => Model.FechaVencimiento)
-        </div>
-        @if (Model.FechaTermino.HasValue)
-        {
+@{
+    ViewBag.Title = "Eliminar proceso";
+    ViewBag.SubTitle = "Eliminar proceso";
+}
+<div class="red lighten-1 white-text">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Proceso</span>
             <div class="input-field col s12 m10">
-                <strong>@Html.DisplayNameFor(m => Model.FechaTermino)</strong><br />
-                @Html.DisplayFor(m => Model.FechaTermino)
+                <strong>@Html.DisplayNameFor(m => Model.ProcesoId)</strong><br />
+                @Html.DisplayFor(m => Model.ProcesoId)
             </div>
-        }
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Terminada)</strong><br />
-            @string.Format("{0}", @Model.Terminada ? "SI" : "NO")
-        </div>
-        @if (!string.IsNullOrWhiteSpace(Model.Observacion))
-        {
             <div class="input-field col s12 m10">
-                <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
-                @Html.DisplayFor(m => Model.Observacion)
+                <strong>@Html.DisplayNameFor(m => Model.DefinicionProceso.Nombre)</strong><br />
+                @Html.DisplayFor(m => Model.DefinicionProceso.Nombre)
             </div>
-        }
-
-        <div class="section"></div>
-
-
-        <span class="card-title">Ejecución del proceso</span>
-        @if (!Model.Workflows.Any())
-        {
-            <p>No existen tareas para este proceso.</p>
-        }
-        <ul class="stepper">
-            @foreach (var item in Model.Workflows)
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                @Html.DisplayFor(m => Model.FechaCreacion)
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.FechaVencimiento)</strong><br />
+                @Html.DisplayFor(m => Model.FechaVencimiento)
+            </div>
+            @if (Model.FechaTermino.HasValue)
             {
-                <li class="step">
-                    <div class="step-title waves-effect">@string.Format("{0}, {1}", @item.DefinicionWorkflow.Nombre, @item.Terminada ? "terminada" : "no terminada")</div>
-                    <div class="step-content">
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflow.Nombre)</strong><br />
-                            @Html.DisplayFor(m => item.DefinicionWorkflow.Nombre)
-                        </div>
-                        @*<div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => item.Grupo.Nombre)</strong><br />
-                            @Html.DisplayFor(m => item.Grupo.Nombre)
-                        </div>*@
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => item.FechaCreacion)</strong><br />
-                            @Html.DisplayFor(m => item.FechaCreacion)
-                        </div>
-                        @if (item.FechaTermino.HasValue)
-                        {
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.FechaTermino)</strong><br />
+                    @Html.DisplayFor(m => Model.FechaTermino)
+                </div>
+            }
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Terminada)</strong><br />
+                @string.Format("{0}", @Model.Terminada ? "SI" : "NO")
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+            {
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
+                    @Html.DisplayFor(m => Model.Observacion)
+                </div>
+            }
+
+            <div class="section"></div>
+
+
+            <span class="card-title">Ejecución del proceso</span>
+            @if (!Model.Workflows.Any())
+            {
+                <p>No existen tareas para este proceso.</p>
+            }
+            <ul class="stepper">
+                @foreach (var item in Model.Workflows)
+                {
+                    <li class="step">
+                        <div class="step-title waves-effect">@string.Format("{0}, {1}", @item.DefinicionWorkflow.Nombre, @item.Terminada ? "terminada" : "no terminada")</div>
+                        <div class="step-content">
                             <div class="input-field col s12 m10">
-                                <strong>@Html.DisplayNameFor(m => item.FechaTermino)</strong><br />
-                                @Html.DisplayFor(m => item.FechaTermino)
+                                <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflow.Nombre)</strong><br />
+                                @Html.DisplayFor(m => item.DefinicionWorkflow.Nombre)
                             </div>
-                        }
+                            @*<div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.Grupo.Nombre)</strong><br />
+                                    @Html.DisplayFor(m => item.Grupo.Nombre)
+                                </div>*@
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.FechaCreacion)</strong><br />
+                                @Html.DisplayFor(m => item.FechaCreacion)
+                            </div>
+                            @if (item.FechaTermino.HasValue)
+                            {
+                                <div class="input-field col s12 m10">
+                                    <strong>@Html.DisplayNameFor(m => item.FechaTermino)</strong><br />
+                                    @Html.DisplayFor(m => item.FechaTermino)
+                                </div>
+                            }
                             <div class="input-field col s12 m10">
                                 <strong>@Html.DisplayNameFor(m => item.Email)</strong><br />
                                 @Html.DisplayFor(m => item.Email)
                             </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => item.TipoAprobacion.Nombre)</strong><br />
-                            @Html.DisplayFor(m => item.TipoAprobacion.Nombre)
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.TipoAprobacion.Nombre)</strong><br />
+                                @Html.DisplayFor(m => item.TipoAprobacion.Nombre)
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                }
+            </ul>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.ProcesoId)
+
+                <button class="waves-effect waves-light btn red" type="submit">Confirmar anulación</button>
             }
-        </ul>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(q => Model.ProcesoId)
-
-            <button class="waves-effect waves-light btn red" type="submit">Confirmar anulación</button>
-        }
-
+        </div>
     </div>
 </div>
 
@@ -102,8 +114,8 @@
 </div>
 
 
-<link rel="stylesheet" href="~/Content/materialize-stepper.min.css">
-<script src="~/Scripts/materialize-stepper.min.js"></script>
+@*<link rel="stylesheet" href="~/Content/materialize-stepper.min.css">
+<script src="~/Scripts/materialize-stepper.min.js"></script>*@
 
 <script>
     $(function () {

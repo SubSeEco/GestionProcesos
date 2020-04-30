@@ -2,8 +2,6 @@
     $(document).ready(function () {
         if ('@TempData["Success"]' != "")
         {
-            @*Materialize.toast('@TempData["Success"]', 4000) // 4000 is the duration of the toast*@
-
             M.toast({ html: '@TempData["Success"]' })
         }
     });
@@ -11,18 +9,29 @@
 
 @if (TempData["Error"] != null)
 {
-    <div id="card-alert" class="card red lighten-1">
+    @*<div id="card-alert" class="card red lighten-1">
         <div class="card-content white-text">
-            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Aviso</span>
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Aviso</span>*@
             <ul>
                 @foreach (var item in TempData["Error"] as List<string>)
                 {
                     <li>@item</li>
                 }
             </ul>
-        </div>
-    </div>
+        @*</div>
+    </div>*@
 }
+@if (!ViewData.ModelState.IsValid)
+{
+    @*<div id="card-alert" class="card red">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Aviso</span>*@
+            @Html.ValidationSummary(false, "", new { @class = "red-text" })
+        @*</div>
+    </div>*@
+}
+
+
 @if (TempData["Warning"] != null)
 {
     <div id="card-alert" class="card orange lighten-1">
@@ -38,12 +47,3 @@
     </div>
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div id="card-alert" class="card red">
-        <div class="card-content white-text">
-            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Aviso</span>
-            @Html.ValidationSummary(false, "", new { @class = "white-text" })
-        </div>
-    </div>
-}

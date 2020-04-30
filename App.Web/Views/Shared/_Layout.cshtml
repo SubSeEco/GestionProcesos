@@ -3,47 +3,48 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de procesos</title>
-
-    <script type="text/javascript" src="~/Scripts/jquery-3.5.0.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="~/Scripts/materialize.js"></script>
-    <link rel="stylesheet" href="~/Content/materialize.css">
-    <link rel="stylesheet" href="~/Content/custom.css">
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
-    <div id="container">
-        <div id="menu">
-            @{Html.RenderAction("Menu", "Home");}
-        </div>
-        <div id="content">
-            <div class="row">
-                <a href="#" data-target="slide-out" class="sidenav-trigger right hide-on-large-only"><i class="material-icons small">menu</i></a>
-            </div>
-            @Html.Partial("_Message")
-            @RenderBody()
-        </div>
-    </div>
-    <script type="text/javascript">
 
+    <style>
+        nav {
+            box-shadow: none;
+        }
+    </style>
+
+    <div class="navbar-fixed valign-wrapper">
+        <nav class="white">
+            <div class="nav-wrapper container">
+                <a href="/" class="left brand-logo black-text"><img src="~/Content/logo.png" width="90%"></a>
+
+                <ul class="right">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="black-text hide-on-small-and-down">@User.Identity.Name</li>
+                        <li><a href="@Url.Action("Logoff", "Account")" class="waves-effect waves-light blue-text">Cerrar Sesion</a> </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    @RenderBody()
+
+    <script type="text/javascript">
         $(document).on('submit', 'form', function () {
             var buttons = $(this).find('[type="submit"]');
-            if ($(this).valid()) {
-                buttons.each(function (btn) {
-                    $(buttons[btn]).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando');
-                    $(buttons[btn]).prop('disabled', true);
-                });
-            } else {
-                buttons.each(function (btn) {
-                    $(buttons[btn]).prop('disabled', false);
-                });
-            }
+            buttons.each(function (btn) {
+                $(buttons[btn]).prop('disabled', true);
+            });
         });
 
-        $(document).ready(function () {
-            $('.sidenav').sidenav();
-            $('.collapsible').collapsible();
-        });
     </script>
 </body>
 </html>

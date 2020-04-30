@@ -1,57 +1,149 @@
 ﻿@model App.Web.Controllers.WorkflowController.DTOFilter
-
 @{
     ViewBag.Title = "Bandeja de tareas";
-    ViewBag.Subtitle = "";
+    ViewBag.SubTitle = "Listado de tareas pendientes";
 }
 
 <meta http-equiv="refresh" content="120">
-
-<h3>Tareas (@Model.Workflows.Count())</h3>
-
-<ul class="collection">
-    @foreach (var item in Model.Workflows.OrderByDescending(q => q.WorkflowId))
-    {
-        <p></p>
-        <li class="collection-item avatar">
-
-            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
-            {
-                <i class="material-icons circle red large">access_time</i>
-            }
-            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
-            {
-                <i class="material-icons circle amber accent-4">access_time</i>
-            }
-            @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
-            {
-                <i class="material-icons circle green">access_time</i>
-            }
-            <p class="title">
-                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
-            </p>
-            <p class="right">
-                @item.Mensaje
-            </p>
-            <p class="title">
-                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
-            </p>
-
-            <p>
-                Ejecutor:
-                @if (!string.IsNullOrWhiteSpace(item.Email))
-                {
-                    @Html.DisplayFor(modelItem => item.Email)<text>,</text>
-                }
-                @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
-                {
-                    @Html.DisplayFor(modelItem => item.Pl_UndDes)
-                }
-                @if (item.Grupo != null)
-                {
-                    @Html.DisplayFor(modelItem => item.Grupo.Nombre)
-                }
-            </p>
-        </li>
+<style>
+    .tabs .tab a {
+        color: rgba(38, 166, 154, 0.7)
     }
-</ul>
+    .tabs .tab a:hover {
+        color: #26a69a;
+    }
+    .tabs .tab a:focus.active {
+        color: #26a69a;
+        background-color: rgba(38, 166, 154, 0.2);
+    }
+    .tabs .indicator {
+        background-color: #26a69a;
+    }
+</style>
+
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<p></p>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3">
+                    <a class="active" href="#test1">Tareas personales (@Model.TareasPersonales.Count())</a>
+                </li>
+                <li class="tab col s3">
+                    <a href="#test2">Tareas grupales (@Model.TareasGrupales.Count())</a>
+                </li>
+            </ul>
+        </div>
+        <div id="test1" class="col s12">
+            <ul class="collection">
+                @foreach (var item in Model.TareasPersonales.OrderByDescending(q => q.WorkflowId))
+                {
+                    <p></p>
+                    <li class="collection-item avatar">
+
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle red large">access_time</i>
+                        }
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle amber accent-4">access_time</i>
+                        }
+                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        {
+                            <i class="material-icons circle green">access_time</i>
+                        }
+                        <p class="title">
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
+                        </p>
+                        <p class="right">
+                            @item.Mensaje
+                        </p>
+                        <p class="title">
+                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
+                        </p>
+
+                        <p>
+                            Ejecutor:
+                            @if (!string.IsNullOrWhiteSpace(item.Email))
+                            {
+                                @Html.DisplayFor(modelItem => item.Email)<text>,</text>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                            {
+                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                            }
+                            @if (item.Grupo != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                            }
+                        </p>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div id="test2" class="col s12">
+            <ul class="collection">
+                @foreach (var item in Model.TareasGrupales.OrderByDescending(q => q.WorkflowId))
+                {
+                    <p></p>
+                    <li class="collection-item avatar">
+
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle red large">access_time</i>
+                        }
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle amber accent-4">access_time</i>
+                        }
+                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        {
+                            <i class="material-icons circle green">access_time</i>
+                        }
+                        <p class="title">
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
+                        </p>
+                        <p class="right">
+                            @item.Mensaje
+                        </p>
+                        <p class="title">
+                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
+                        </p>
+
+                        <p>
+                            Ejecutor:
+                            @if (!string.IsNullOrWhiteSpace(item.Email))
+                            {
+                                @Html.DisplayFor(modelItem => item.Email)<text>,</text>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                            {
+                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                            }
+                            @if (item.Grupo != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                            }
+                        </p>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.tabs').tabs();
+    });
+</script>

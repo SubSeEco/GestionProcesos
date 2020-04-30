@@ -1,33 +1,46 @@
 ﻿@model App.Model.Core.Proceso
-
-<h3>Iniciar proceso</h3>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="card">
-        <div class="card-content">
-            <div class="row">
-                <div class="input-field col s12 m10 l8">
-                    @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.DefinicionProcesoId)
-                    @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m10 l8">
-                    @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                    @Html.LabelFor(m => Model.Observacion)
-                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                </div>
-            </div>
-
-            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-        </div>
-    </div>
+@{
+    ViewBag.Title = "Iniciar nuevo proceso";
+    ViewBag.SubTitle = "Iniciar nuevo proceso";
 }
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
 
-@*<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+<div class="container">
+    @Html.Partial("_Message")
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Nuevo proceso</span>
+
+                <div class="row">
+                    <div class="input-field col s12 m10 l8">
+                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.DefinicionProcesoId)
+                        @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m10 l8">
+                        @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                        @Html.LabelFor(m => Model.Observacion)
+                        @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                    </div>
+                </div>
+
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+            </div>
+        </div>
+    }
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('select').formSelect();

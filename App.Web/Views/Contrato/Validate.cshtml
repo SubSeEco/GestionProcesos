@@ -2,252 +2,252 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-<div class="row">
-    <div class="col s12 m6 l12">
-        @Html.Action("Validate", "Workflow", new { id = Model.WorkflowId })
-    </div>
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @Html.Action("Validate", "Workflow", new { id = Model.WorkflowId })
+        </div>
 
-    <div class="col s12 m6 l3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Contrato</span>
-                <div class="row">
-                   
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.ProgramaId)</strong><br />
-                        @Html.DisplayFor(m => Model.Programa.Nombre)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">I. Identificación responsable de la solicitud</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.NombreJefeSolicitante)</strong><br />
-                        @Html.DisplayFor(m => Model.NombreJefeSolicitante)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.FechaJefeSolicitante)</strong><br />
-                        @Html.DisplayFor(m => Model.FechaJefeSolicitante)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">II. Persona propuesta</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.NombreCompleto)</strong><br />
-                        @Html.DisplayFor(m => Model.NombreCompleto)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.RUT)</strong><br />
-                        @Html.DisplayFor(m => Model.RUT)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.ProfesionOcupacion)</strong><br />
-                        @Html.DisplayFor(m => Model.ProfesionOcupacion)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.DomicilioParticular)</strong><br />
-                        @Html.DisplayFor(m => Model.DomicilioParticular)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.TelefonoContacto)</strong><br />
-                        @Html.DisplayFor(m => Model.TelefonoContacto)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">III. Condiciones propuestas</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Pl_UndCod)</strong><br />
-                        @Html.DisplayFor(m => Model.Pl_UndDes)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Pl_CodCar)</strong><br />
-                        @Html.DisplayFor(m => Model.Pl_DesCar)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Grado)</strong><br />
-                        @Html.DisplayFor(m => Model.Grado)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.FuncionCritica)
-                            <span>@Html.LabelFor(m => Model.FuncionCritica)</span>
-                        </label>
-                        <div class="section"></div>
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.AgentePublico)
-                            <span>@Html.LabelFor(m => Model.AgentePublico)</span>
-                        </label>
-                        <div class="section"></div>
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.FechaDesde)</strong><br />
-                        @Html.DisplayFor(m => Model.FechaDesde)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.FechaHasta)</strong><br />
-                        @Html.DisplayFor(m => Model.FechaHasta)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.MontoMensual)</strong><br />
-                        @Html.DisplayFor(m => Model.MontoMensual)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.NumeroCuotas)</strong><br />
-                        @Html.DisplayFor(m => Model.NumeroCuotas)
-                    </div>
-                    <div class="input-field col s12 m10 l10">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.ConAsistencia)
-                            <span>@Html.LabelFor(m => Model.ConAsistencia)</span>
-                        </label>
-                        <div class="section"></div>
-                    </div>
-                    <div class="input-field col s12 m10 l10">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.CuentaRed)
-                            <span>@Html.LabelFor(m => Model.CuentaRed)</span>
-                        </label>
-                        <div class="section"></div>
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Poliza)</strong><br />
-                        @Html.DisplayFor(m => Model.Poliza)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">IV. Señalar si presta servicios en otra repartición pública</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.ServiciosOtrasInstitucionesPublicas)</strong><br />
-                        @Html.DisplayFor(m => Model.ServiciosOtrasInstitucionesPublicas)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">V. Breve justificación de la contratación</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.JustificacionContratacion)</strong><br />
-                        @Html.DisplayFor(m => Model.JustificacionContratacion)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">VI. Funciones a realizar (en caso de honorarios, cuando la contratación sea para asesoría o estudio especifico, se deben señalar los productos identificables para los informes mensuales)</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.Funciones)</strong><br />
-                        @Html.DisplayFor(m => Model.Funciones)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">VII. Documentos obligatorios a adjuntar</span>
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Contrato</span>
+                    <div class="row">
 
-                @Html.LabelFor(m => Model.CurriculumVitaeFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.CurriculumVitaeFile, null, new { @type = "file" })
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ProgramaId)</strong><br />
+                            @Html.DisplayFor(m => Model.Programa.Nombre)
+                        </div>
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                    <div class="section"></div>
+                    <span class="card-title">I. Identificación responsable de la solicitud</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NombreJefeSolicitante)</strong><br />
+                            @Html.DisplayFor(m => Model.NombreJefeSolicitante)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaJefeSolicitante)</strong><br />
+                            @Html.DisplayFor(m => Model.FechaJefeSolicitante)
+                        </div>
                     </div>
-                    @Html.ValidationMessageFor(model => model.CurriculumVitaeFile, "", new { @class = "red-text" })
-                </div>
+                    <div class="section"></div>
+                    <span class="card-title">II. Persona propuesta</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NombreCompleto)</strong><br />
+                            @Html.DisplayFor(m => Model.NombreCompleto)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.RUT)</strong><br />
+                            @Html.DisplayFor(m => Model.RUT)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ProfesionOcupacion)</strong><br />
+                            @Html.DisplayFor(m => Model.ProfesionOcupacion)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.DomicilioParticular)</strong><br />
+                            @Html.DisplayFor(m => Model.DomicilioParticular)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.TelefonoContacto)</strong><br />
+                            @Html.DisplayFor(m => Model.TelefonoContacto)
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <span class="card-title">III. Condiciones propuestas</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Pl_UndCod)</strong><br />
+                            @Html.DisplayFor(m => Model.Pl_UndDes)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Pl_CodCar)</strong><br />
+                            @Html.DisplayFor(m => Model.Pl_DesCar)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Grado)</strong><br />
+                            @Html.DisplayFor(m => Model.Grado)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.FuncionCritica)
+                                <span>@Html.LabelFor(m => Model.FuncionCritica)</span>
+                            </label>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.AgentePublico)
+                                <span>@Html.LabelFor(m => Model.AgentePublico)</span>
+                            </label>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaDesde)</strong><br />
+                            @Html.DisplayFor(m => Model.FechaDesde)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaHasta)</strong><br />
+                            @Html.DisplayFor(m => Model.FechaHasta)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.MontoMensual)</strong><br />
+                            @Html.DisplayFor(m => Model.MontoMensual)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NumeroCuotas)</strong><br />
+                            @Html.DisplayFor(m => Model.NumeroCuotas)
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.ConAsistencia)
+                                <span>@Html.LabelFor(m => Model.ConAsistencia)</span>
+                            </label>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.CuentaRed)
+                                <span>@Html.LabelFor(m => Model.CuentaRed)</span>
+                            </label>
+                            <div class="section"></div>
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Poliza)</strong><br />
+                            @Html.DisplayFor(m => Model.Poliza)
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <span class="card-title">IV. Señalar si presta servicios en otra repartición pública</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ServiciosOtrasInstitucionesPublicas)</strong><br />
+                            @Html.DisplayFor(m => Model.ServiciosOtrasInstitucionesPublicas)
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <span class="card-title">V. Breve justificación de la contratación</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.JustificacionContratacion)</strong><br />
+                            @Html.DisplayFor(m => Model.JustificacionContratacion)
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <span class="card-title">VI. Funciones a realizar (en caso de honorarios, cuando la contratación sea para asesoría o estudio especifico, se deben señalar los productos identificables para los informes mensuales)</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Funciones)</strong><br />
+                            @Html.DisplayFor(m => Model.Funciones)
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <span class="card-title">VII. Documentos obligatorios a adjuntar</span>
 
-                @Html.LabelFor(m => Model.CedulaIdentidadFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.CedulaIdentidadFile, null, new { @type = "file" })
+                    @Html.LabelFor(m => Model.CurriculumVitaeFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.CurriculumVitaeFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CurriculumVitaeFile, "", new { @class = "red-text" })
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                    @Html.ValidationMessageFor(model => model.CedulaIdentidadFile, "", new { @class = "red-text" })
-                </div>
 
-                @Html.LabelFor(m => Model.CertificadoTituloFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.CertificadoTituloFile, null, new { @type = "file" })
+                    @Html.LabelFor(m => Model.CedulaIdentidadFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.CedulaIdentidadFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CedulaIdentidadFile, "", new { @class = "red-text" })
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                    @Html.ValidationMessageFor(model => model.CertificadoTituloFile, "", new { @class = "red-text" })
-                </div>
 
-                @Html.LabelFor(m => Model.LicenciaEnsenanzaMediaFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.LicenciaEnsenanzaMediaFile, null, new { @type = "file" })
+                    @Html.LabelFor(m => Model.CertificadoTituloFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.CertificadoTituloFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CertificadoTituloFile, "", new { @class = "red-text" })
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                    @Html.ValidationMessageFor(model => model.LicenciaEnsenanzaMediaFile, "", new { @class = "red-text" })
-                </div>
 
-                @Html.LabelFor(m => Model.CertificadoExpertoFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.CertificadoExpertoFile, null, new { @type = "file" })
+                    @Html.LabelFor(m => Model.LicenciaEnsenanzaMediaFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.LicenciaEnsenanzaMediaFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LicenciaEnsenanzaMediaFile, "", new { @class = "red-text" })
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                    @Html.ValidationMessageFor(model => model.CertificadoExpertoFile, "", new { @class = "red-text" })
-                </div>
 
-                @Html.LabelFor(m => Model.CartaPresentacionFile)
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(m => Model.CartaPresentacionFile, null, new { @type = "file" })
+                    @Html.LabelFor(m => Model.CertificadoExpertoFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.CertificadoExpertoFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CertificadoExpertoFile, "", new { @class = "red-text" })
                     </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
+
+                    @Html.LabelFor(m => Model.CartaPresentacionFile)
+                    <div class="file-field input-field">
+                        <div class="btn grey">
+                            <i class="material-icons">attach_file</i>
+                            @Html.TextBoxFor(m => Model.CartaPresentacionFile, null, new { @type = "file" })
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CartaPresentacionFile, "", new { @class = "red-text" })
                     </div>
-                    @Html.ValidationMessageFor(model => model.CartaPresentacionFile, "", new { @class = "red-text" })
-                </div>
-                <div class="section"></div>
-                <span class="card-title">VIII. Area de finanzas</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.MontoTotalcomprometido)</strong><br />
-                        @Html.DisplayFor(m => Model.MontoTotalcomprometido)
+                    <div class="section"></div>
+                    <span class="card-title">VIII. Area de finanzas</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.MontoTotalcomprometido)</strong><br />
+                            @Html.DisplayFor(m => Model.MontoTotalcomprometido)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ImputacionPresupuestaria)</strong><br />
+                            @Html.DisplayFor(m => Model.ImputacionPresupuestaria)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.DisponibilidadPresupuestoSolicitud)</strong><br />
+                            @Html.DisplayFor(m => Model.DisponibilidadPresupuestoSolicitud)
+                        </div>
                     </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.ImputacionPresupuestaria)</strong><br />
-                        @Html.DisplayFor(m => Model.ImputacionPresupuestaria)
-                    </div>
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.DisponibilidadPresupuestoSolicitud)</strong><br />
-                        @Html.DisplayFor(m => Model.DisponibilidadPresupuestoSolicitud)
-                    </div>
-                </div>
-                <div class="section"></div>
-                <span class="card-title">IX. Otras observaciones gestión y desarrollo de personas</span>
-                <div class="row">
-                    <div class="input-field col s12 m10">
-                        <strong>@Html.DisplayNameFor(m => Model.OtrasObservaciones)</strong><br />
-                        @Html.DisplayFor(m => Model.OtrasObservaciones)
+                    <div class="section"></div>
+                    <span class="card-title">IX. Otras observaciones gestión y desarrollo de personas</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.OtrasObservaciones)</strong><br />
+                            @Html.DisplayFor(m => Model.OtrasObservaciones)
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
-    <div class="col s12 m6 l3">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
-    </div>
-</div>
 
 <div class="fixed-action-btn">
     <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue"><i class="large material-icons">attach_file</i></a>

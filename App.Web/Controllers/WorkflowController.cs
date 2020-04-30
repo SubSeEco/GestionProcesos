@@ -11,6 +11,7 @@ using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Core.UseCases;
 using App.Model.InformeHSA;
+using org.apache.sis.@internal.jaxb.metadata;
 
 namespace App.Web.Controllers
 {
@@ -30,7 +31,8 @@ namespace App.Web.Controllers
             {
                 TextSearch = string.Empty;
                 Select = new List<App.Model.DTO.DTOSelect>();
-                Workflows = new List<Workflow>();
+                TareasGrupales = new List<Workflow>();
+                TareasPersonales = new List<Workflow>();
             }
 
             [Display(Name = "Texto de búsqueda")]
@@ -47,17 +49,25 @@ namespace App.Web.Controllers
             public System.DateTime? Hasta { get; set; }
 
             public List<App.Model.DTO.DTOSelect> Select { get; set; }
-            public List<Workflow> Workflows { get; set; }
+            public List<Workflow> TareasPersonales { get; set; }
+            public List<Workflow> TareasGrupales { get; set; }
         }
         protected readonly IGestionProcesos _repository;
         protected readonly IEmail _email;
         protected readonly ISIGPER _sigper;
+        protected readonly IFolio _folio;
+        protected readonly IFile _file;
+        protected readonly IHSM _hsm;
 
-        public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper)
+
+        public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
         {
             _repository = repository;
             _email = email;
             _sigper = sigper;
+            _folio = folio;
+            _file = file;
+            _hsm = hsm;
         }
 
         public JsonResult GetUser(string term)
@@ -81,270 +91,32 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
-            var model = new DTOFilter();
-
-            var email = UserExtended.Email(User);
-            var user = _sigper.GetUserByEmail(email);
-            var gruposEspeciales = _repository.Get<Usuario>(q => q.Habilitado && q.Email == email && !q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())).Select(q => q.GrupoId).ToList();
-
-            if (user.Funcionario == null || user.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en el sistema SIGPER");
-
-            if (ModelState.IsValid)
-            {
-                //tareas no terminadas, personales y de mis grupos
-                var predicatePersonal = PredicateBuilder.True<Workflow>();
-                var predicateGrupal = PredicateBuilder.True<Workflow>();
-
-                //tareas no terminadas
-                predicatePersonal = predicatePersonal.And(q => !q.Terminada && q.TareaPersonal);
-                predicateGrupal = predicateGrupal.And(q => !q.Terminada && !q.TareaPersonal);
-
-                //filtrar texto
-                if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                {
-                    predicatePersonal = predicatePersonal.And(q => q.Observacion.Contains(model.TextSearch));
-                    predicateGrupal = predicateGrupal.And(q => q.Observacion.Contains(model.TextSearch));
-                }
-                if (model.Desde.HasValue)
-                {
-                    predicatePersonal = predicatePersonal.And(q => q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day);
-                    predicateGrupal = predicateGrupal.And(q => q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day);
-                }
-                if (model.Hasta.HasValue)
-                {
-                    predicatePersonal = predicatePersonal.And(q => q.FechaCreacion.Year <= model.Desde.Value.Year && q.FechaCreacion.Month <= model.Desde.Value.Month && q.FechaCreacion.Day <= model.Desde.Value.Day);
-                    predicateGrupal = predicateGrupal.And(q => q.FechaCreacion.Year <= model.Desde.Value.Year && q.FechaCreacion.Month <= model.Desde.Value.Month && q.FechaCreacion.Day <= model.Desde.Value.Day);
-                }
-
-                //no es administrador, filtrar por grupo y tareas personales
-                if (!_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
-                {
-                    predicatePersonal = predicatePersonal.And(q => q.TareaPersonal && q.Email == email);
-                    predicateGrupal = predicateGrupal.And(q => !q.TareaPersonal && (q.Pl_UndCod == user.Unidad.Pl_UndCod || gruposEspeciales.Contains(q.GrupoId.Value)));
-                }
-
-                model.Workflows = _repository.Get(predicatePersonal).Union(_repository.Get(predicateGrupal)).ToList();
-
-                //foreach (var proceso in model.Workflows)
-                //{
-                //    proceso.NumeroProceso = "0";
-
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CuentaRed.ToString())
-                //{
-                //    if (_repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId).CuentaRedId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.Contrato.ToString())
-                //{
-                //    if (_repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId).ContratoId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CDP.ToString())
-                //{
-                //    if (_repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId).CDPId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.InformeHSA.ToString())
-                //{
-                //    if (_repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId).InformeHSAId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.GDIngreso.ToString())
-                //{
-                //    if (_repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId).GDIngresoId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.SIACSolicitud.ToString())
-                //{
-                //    if(_repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //        proceso.NumeroProceso = _repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId).SIACSolicitudId.ToString();
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.RadioTaxi.ToString())
-                //{
-                //    if(_repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //        proceso.NumeroProceso = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId).RadioTaxiId.ToString();
-                //}
-
-
-                //las llamadas a sigper por cada tarea genera problemas de memoria...
-
-                //if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
-                //{
-                //    if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //        else
-                //            proceso.NombreFuncionario = "S/A";
-                //    }
-
-                //}
-                //if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
-                //{
-                //    if (_repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId).PasajeId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
-                //{
-                //    if (_repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId).ComisionesId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.CometidoPasaje.ToString())
-                //{
-                //    if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-
-                //}
-                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
-                //{
-                //    if (_repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                //    {
-                //        proceso.NumeroProceso = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId).FirmaDocumentoId.ToString();
-                //        /*se muestra nombre del funcionarios*/
-                //        if (proceso.Email != null)
-                //        {
-                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                //            if (inicidor != null)
-                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                //            else
-                //                proceso.NombreFuncionario = "S/A";
-                //        }
-                //    }
-
-                //}
-                //}
-                //}
-                //if (model.Workflows.Count > 0)
-                //{
-                //    var correo = model.Workflows.FirstOrDefault().Email;
-                //}
-            }
-            return View(model);
-
-        }
-
-        [HttpPost]
-        public ActionResult Index(DTOFilter model)
-        {
             var email = UserExtended.Email(User);
             var user = _sigper.GetUserByEmail(email);
             var gruposEspeciales = _repository.Get<Usuario>(q => q.Email == email).Select(q => q.GrupoId).ToList();
 
-            var predicate = PredicateBuilder.True<Workflow>();
-            //tareas no terminadas
-            predicate = predicate.And(q => !q.Terminada);
+            var model = new DTOFilter();
 
-            if (!_repository.GetExists<Usuario>(q => q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
-                predicate = predicate.And(q => q.Email == email || q.Pl_UndCod == user.Unidad.Pl_UndCod || gruposEspeciales.Contains(q.GrupoId.Value));
+            if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+            {
+                //usuario administrador
+                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
+                var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
 
-            //filtrar texto y fechas
-            if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                predicate = predicate.And(q => q.Observacion.Contains(model.TextSearch));
-            if (model.Desde.HasValue)
-                predicate = predicate.And(q => q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day);
-            if (model.Hasta.HasValue)
-                predicate = predicate.And(q => q.FechaCreacion.Year <= model.Desde.Value.Year && q.FechaCreacion.Month <= model.Desde.Value.Month && q.FechaCreacion.Day <= model.Desde.Value.Day);
+                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
+                model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
+            }
+            else
+            {
+                //usuario normal
+                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.Email == email);
+                var predicateUnidad = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod);
+                var predicateGruposEspeciales = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value));
 
-            model.Workflows = _repository.Get(predicate).ToList();
+                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
+                model.TareasGrupales.AddRange(_repository.Get(predicateUnidad));
+                model.TareasGrupales.AddRange(_repository.Get(predicateGruposEspeciales));
+            }
 
             return View(model);
         }
@@ -518,21 +290,27 @@ namespace App.Web.Controllers
             {
                 var workflow = _repository.GetById<Workflow>(model.WorkflowId);
 
-                //if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.Cometido.ToString()
-                //  || workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.Comision.ToString()
-                //  || workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.CometidoPasaje.ToString())
-                if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje
-                    || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
+                if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
                     var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
+                        return RedirectToAction("OK");
                     }
-                    else
-                        TempData["Error"] = _UseCaseResponseMessage.Errors;
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("OK");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
                 else
                 {
@@ -541,10 +319,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
+                        return RedirectToAction("OK");
                     }
-                    else
-                        TempData["Error"] = _UseCaseResponseMessage.Errors;
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
             }
 
@@ -558,42 +335,42 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Validate(int id)
-        {
-            var model = _repository.GetById<Workflow>(id);
-            ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text");
-            ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
+        //public ActionResult Validate(int id)
+        //{
+        //    var model = _repository.GetById<Workflow>(id);
+        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text");
+        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Validate(Workflow model)
-        {
-            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Validate(Workflow model)
+        //{
+        //    var workflow = _repository.GetById<Workflow>(model.WorkflowId);
 
-            model.Email = UserExtended.Email(User);
+        //    model.Email = UserExtended.Email(User);
 
-            if (ModelState.IsValid)
-            {
-                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                if (_UseCaseResponseMessage.IsValid)
-                    TempData["Success"] = "Operación terminada correctamente.";
-                else
-                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+        //    if (ModelState.IsValid)
+        //    {
+        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+        //        if (_UseCaseResponseMessage.IsValid)
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //        else
+        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
 
-                return RedirectToAction("Index", "Workflow");
-            }
+        //        return RedirectToAction("Index", "Workflow");
+        //    }
 
-            ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowId);
-            ViewBag.TipoAprobacionId = workflow.DefinicionWorkflow.RequiereAprobacionAlEnviar ?
-                new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre") :
-                new SelectList(new List<TipoAprobacion>(), "TipoAprobacionId", "Nombre");
+        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowId);
+        //    ViewBag.TipoAprobacionId = workflow.DefinicionWorkflow.RequiereAprobacionAlEnviar ?
+        //        new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre") :
+        //        new SelectList(new List<TipoAprobacion>(), "TipoAprobacionId", "Nombre");
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
 
         public ActionResult Forward(int id)
@@ -643,47 +420,52 @@ namespace App.Web.Controllers
             return PartialView(model);
         }
 
-        public ActionResult Next(int id)
+        //public ActionResult Next(int id)
+        //{
+        //    var model = _repository.GetById<Workflow>(id);
+
+        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
+        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
+        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+        //    if (model.Pl_UndCod.HasValue)
+        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Next(Workflow model)
+        //{
+        //    model.Email = UserExtended.Email(User);
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+        //        if (_UseCaseResponseMessage.IsValid)
+        //        {
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //            return RedirectToAction("Index", "Workflow");
+        //        }
+        //        else
+        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
+        //    }
+
+        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
+        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
+        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+        //    if (model.Pl_UndCod.HasValue)
+        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+
+        //    return View(model);
+        //}
+
+        public ActionResult OK()
         {
-            var model = _repository.GetById<Workflow>(id);
-
-            ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Next(Workflow model)
-        {
-            model.Email = UserExtended.Email(User);
-
-            if (ModelState.IsValid)
-            {
-                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Index", "Workflow");
-                }
-                else
-                    TempData["Error"] = _UseCaseResponseMessage.Errors;
-            }
-
-            ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
-            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-            return View(model);
+            return View();
         }
     }
 }

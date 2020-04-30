@@ -13,7 +13,7 @@ namespace App.Web.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View( new ModelUser());
+            return View(new ModelUser());
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -42,7 +42,8 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public virtual ActionResult Logoff()
         {
             IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;

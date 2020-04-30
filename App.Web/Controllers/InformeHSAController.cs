@@ -22,18 +22,6 @@ namespace App.Web.Controllers
             _file = file;
         }
 
-        public ActionResult Index()
-        {
-            var model = _repository.GetAll<InformeHSA>();
-            return View(model);
-        }
-
-        public ActionResult Details(int id)
-        {
-            var model = _repository.GetById<InformeHSA>(id);
-            return View(model);
-        }
-
         public ActionResult View(int id)
         {
             var model = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == id);
@@ -119,6 +107,12 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+        public ActionResult Details(int id)
+        {
+            var model = _repository.GetById<InformeHSA>(id);
+
+            return View(model);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -139,39 +133,5 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-
-        //public FileResult Download()
-        //{
-        //    var result = _repository.GetAll<InformeHSA>();
-
-        //    var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\InformeHsa.xlsx");
-        //    var fileInfo = new FileInfo(file);
-        //    var excelPackage = new ExcelPackage(fileInfo);
-
-        //    var fila = 1;
-        //    var worksheet = excelPackage.Workbook.Worksheets[1];
-        //    foreach (var item in result.ToList())
-        //    {
-        //        fila++;
-        //        worksheet.Cells[fila, 1].Value = item.InformeHSAId;
-        //        worksheet.Cells[fila, 2].Value = item.FechaSolicitud;
-        //        worksheet.Cells[fila, 3].Value = item.FechaDesde;
-        //        worksheet.Cells[fila, 4].Value = item.FechaHasta;
-        //        worksheet.Cells[fila, 5].Value = item.RUT;
-        //        worksheet.Cells[fila, 6].Value = item.Nombre;
-        //        worksheet.Cells[fila, 7].Value = item.Unidad;
-        //        worksheet.Cells[fila, 8].Value = item.NombreJefatura;
-        //        worksheet.Cells[fila, 9].Value = item.ConJornada ? "SI" : "NO";
-        //        worksheet.Cells[fila, 10].Value = item.Funciones;
-        //        worksheet.Cells[fila, 11].Value = item.Actividades;
-        //        worksheet.Cells[fila, 12].Value = item.Observaciones;
-        //        worksheet.Cells[fila, 13].Value = item.FechaBoleta;
-        //        worksheet.Cells[fila, 14].Value = item.NumeroBoleta;
-        //        worksheet.Cells[fila, 15].Value = item.Proceso.Terminada ? "SI" : "NO";
-        //        worksheet.Cells[fila, 16].Value = !item.Proceso.Terminada && item.Proceso.Workflows.Any() ? item.Proceso.Workflows.OrderByDescending(q => q.WorkflowId).FirstOrDefault().DefinicionWorkflow.Nombre : string.Empty;
-        //    }
-
-        //    return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        //}
     }
 }

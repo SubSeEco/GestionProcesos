@@ -2,56 +2,59 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-<div class="row">
-    <div class="col s12 m6 l3">
-        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.HiddenFor(q => Model.WorkflowId)
-            @Html.HiddenFor(q => Model.ProcesoId)
-            @Html.AntiForgeryToken()
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.AntiForgeryToken()
 
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Ingreso de documento</span>
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Ingreso de documento</span>
 
-                    <div class="section"></div>
-                    <div class="input-field">
-                        @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.TipoDocumentoCodigo)
-                        @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
-                        <span class="helper-text">Indique el tipo de documento</span>
-                    </div>
-                    <div class="section"></div>
-
-                    @Html.LabelFor(m => Model.FileUpload)
-                    <div class="file-field input-field">
-                        <div class="btn grey">
-                            <i class="material-icons">attach_file</i>
-                            @Html.TextBoxFor(m => Model.FileUpload, null, new { @type = "file", accept = ".pdf" })
+                        <div class="section"></div>
+                        <div class="input-field">
+                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
+                            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
+                            <span class="helper-text">Indique el tipo de documento</span>
                         </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
-                        </div>
-                        <span class="helper-text">Solo se permiten archivos con extensión .pdf</span>
-                        @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
-                    </div>
+                        <div class="section"></div>
 
-                    <div class="section"></div>
-                    <div class="input-field">
-                        @Html.TextBoxFor(m => Model.Comentario)
-                        @Html.LabelFor(m => Model.Comentario)
-                        @Html.ValidationMessageFor(m => Model.Comentario, "", new { @class = "text-danger" })
+                        @Html.LabelFor(m => Model.FileUpload)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.FileUpload, null, new { @type = "file", accept = ".pdf" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            <span class="helper-text">Solo se permiten archivos con extensión .pdf</span>
+                            @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
+                        </div>
+
+                        <div class="section"></div>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => Model.Comentario)
+                            @Html.LabelFor(m => Model.Comentario)
+                            @Html.ValidationMessageFor(m => Model.Comentario, "", new { @class = "text-danger" })
+                        </div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
                     </div>
-                    <p>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                    </p>
                 </div>
-            </div>
-        }
-    </div>
-    <div class="col s12 m6 l3">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
 </div>
 
@@ -62,8 +65,3 @@
         $('select').formSelect();
     });
 </script>
-
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

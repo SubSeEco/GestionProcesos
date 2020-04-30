@@ -1,104 +1,111 @@
 ﻿@model App.Web.Controllers.ProcesoController.DTOFilter
 
-<h3>Búsqueda procesos</h3>
+@{
+    ViewBag.Title = "Búsqueda de procesos";
+    ViewBag.SubTitle = "Búsqueda de procesos";
+}
 
-<div class="card">
-    <div class="card-content">
-        <span class="card-title">Filtros</span>
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="row">
-                <div class="col">
-                    <div class="input-field col s12 m12 l12">
-                        @Html.TextBoxFor(m => Model.TextSearch)
-                        @Html.LabelFor(m => Model.TextSearch)
-                        @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
-                    </div>
-                    <div class="input-field col s12 m12 l12">
-                        @Html.EditorFor(m => Model.Desde)
-                        @Html.LabelFor(m => Model.Desde)
-                        @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
-                    </div>
-                    <div class="input-field col s12 m12 l12">
-                        @Html.EditorFor(m => Model.Hasta)
-                        @Html.LabelFor(m => Model.Hasta)
-                        @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
-                    </div>
-                </div>
-                <div class="col">
-                    @Html.EditorFor(q => q.Select)
-                </div>
-            </div>
-            <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
-        }
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
     </div>
 </div>
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Filtros</span>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col s12 m6 l6">
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => Model.TextSearch)
+                            @Html.LabelFor(m => Model.TextSearch)
+                            @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6">
+                        @Html.EditorFor(q => q.Select)
+                    </div>
+                </div>
 
-<div class="card">
-    <div class="card-content">
-        @*<span class="card-title">Procesos</span>*@
-        <table class="table bordered" id="dt">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
-                {
+                <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+            }
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Procesos</span>*@
+            <table class="table bordered" id="dt">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProcesoId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaCreacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProcesoId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
 <script>
     $(document).ready(function () {
         $('select').formSelect();

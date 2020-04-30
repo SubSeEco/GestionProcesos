@@ -1,39 +1,49 @@
 ﻿@model IEnumerable<App.Model.Core.DefinicionProceso>
-
-<h3>Definiciones de procesos</h3>
-<div class="card">
-    <div class="card-content">
-
-        <table class="table bordered">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nombre)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
-                    <td>
-                        @*@Html.ActionLink("Detalles", "Details", new { id = item.DefinicionProcesoId }) |*@
-                        @Html.ActionLink("Editar", "Edit", new { id = item.DefinicionProcesoId })
-                    </td>
-                </tr>
-            }
-        </table>
+@{
+    ViewBag.Title = "Definiciones de procesos";
+    ViewBag.SubTitle = "Listado de definiciones de procesos";
+}
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
     </div>
 </div>
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <table class="table bordered">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </th>
+                    <th></th>
+                </tr>
 
-<div class="fixed-action-btn">
-    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Detalles", "Details", new { id = item.DefinicionProcesoId }) |*@
+                            @Html.ActionLink("Editar", "Edit", new { id = item.DefinicionProcesoId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="fixed-action-btn">
+        <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+    </div>
 </div>

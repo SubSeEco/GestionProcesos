@@ -411,5 +411,11 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult Header(int id)
+        {
+            var model = _repository.GetById<Proceso>(id);
+            return View(model);
+        }
     }
 }

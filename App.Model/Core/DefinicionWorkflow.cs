@@ -151,5 +151,8 @@ namespace App.Model.Core
 
         [Display(Name = "Instrucciones")]
         public string Instrucciones { get; set; }
+
+        [Display(Name = "Seleccionar solo personas de la misma unidad?")]
+        public bool PermitirSeleccionarPersonasMismaUnidad { get; set; } = false;
     }
 }
