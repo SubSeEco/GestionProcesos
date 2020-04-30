@@ -38,6 +38,9 @@ namespace App.Web.Controllers
 
             public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<Proceso> Result { get; set; }
+
+            [Display(Name = "Estado")]
+            public int? EstadoProcesoId { get; set; }
         }
 
         public class Chart
@@ -153,6 +156,8 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
+
             var model = new DTOFilter()
             {
                 Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
@@ -169,7 +174,7 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    predicate = predicate.And(q => q.Observacion.Contains(model.TextSearch));
+                    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.Observacion.Contains(model.TextSearch) || q.Email.Contains(model.TextSearch));
 
                 if (model.Desde.HasValue)
                     predicate = predicate.And(q =>
@@ -187,8 +192,13 @@ namespace App.Web.Controllers
                 if (DefinicionProcesoId.Any())
                     predicate = predicate.And(q => DefinicionProcesoId.Contains(q.DefinicionProcesoId));
 
+                if (model.EstadoProcesoId.HasValue)
+                    predicate = predicate.And(q => q.EstadoProcesoId == model.EstadoProcesoId);
+
                 model.Result = _repository.Get(predicate);
             }
+
+            ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion", model.EstadoProcesoId);
 
             return View(model);
         }
@@ -198,6 +208,13 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Proceso>(id);
             return View(model);
         }
+
+        public ActionResult View(int id)
+        {
+            var model = _repository.GetById<Proceso>(id);
+            return View(model);
+        }
+
 
         public ActionResult Create()
         {
@@ -321,96 +338,7 @@ namespace App.Web.Controllers
             return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
-        public ActionResult Search()
-        {
-            var model = new DTOFilter()
-            {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
-                Result = _repository.Get<Proceso>().ToList()
-            };
 
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Search(DTOFilter model)
-        {
-            var predicate = PredicateBuilder.True<Proceso>();
-
-            if (ModelState.IsValid)
-            {
-                if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.Observacion.Contains(model.TextSearch) || q.Email.Contains(model.TextSearch));
-
-                if (model.Desde.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year >= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month >= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day >= model.Desde.Value.Day);
-
-                if (model.Hasta.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year <= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month <= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day <= model.Desde.Value.Day);
-
-                var DefinicionProcesoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
-                if (DefinicionProcesoId.Any())
-                    predicate = predicate.And(q => DefinicionProcesoId.Contains(q.DefinicionProcesoId));
-
-                model.Result = _repository.Get(predicate);
-            }
-
-            return View(model);
-        }
-
-
-        public ActionResult Me()
-        {
-            var email = UserExtended.Email(User);
-            var model = new DTOFilter()
-            {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
-                Result = _repository.Get<Proceso>(q => q.Email == email).ToList()
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Me(DTOFilter model)
-        {
-            var email = UserExtended.Email(User);
-
-            var predicate = PredicateBuilder.True<Proceso>();
-
-            if (ModelState.IsValid)
-            {
-                predicate = predicate.And(q => q.Email == email);
-
-                if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.Observacion.Contains(model.TextSearch) || q.Email.Contains(model.TextSearch));
-
-                if (model.Desde.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year >= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month >= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day >= model.Desde.Value.Day);
-
-                if (model.Hasta.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year <= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month <= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day <= model.Desde.Value.Day);
-
-                var DefinicionProcesoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
-                if (DefinicionProcesoId.Any())
-                    predicate = predicate.And(q => DefinicionProcesoId.Contains(q.DefinicionProcesoId));
-
-                model.Result = _repository.Get(predicate);
-            }
-
-            return View(model);
-        }
 
         public ActionResult Header(int id)
         {

@@ -1,0 +1,54 @@
+﻿@model App.Core.Entities.Proceso
+
+<h3>Editar periodo</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.ProcesoId)
+    @Html.HiddenFor(q => Model.DefinicionProcesoId)
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s12 m10 l8">
+                    @Html.TextBoxFor(m => Model.FechaVencimiento, new { @class = "datepicker" })
+                    @Html.LabelFor(m => Model.FechaVencimiento)
+                    @Html.ValidationMessageFor(m => Model.FechaVencimiento, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l8">
+                    @Html.TextBoxFor(m => Model.FechaTermino, new { @class = "datepicker" })
+                    @Html.LabelFor(m => Model.FechaTermino)
+                    @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l8">
+                    @Html.TextBoxFor(m => Model.Observacion)
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <p>
+                        <label>
+                            @Html.TextBoxFor(m => Model.Terminada, new { @class = "filled-in", @type = "checkbox" })
+                            <span>@Html.LabelFor(m => Model.Terminada)</span>
+                        </label>
+                    </p>
+                </div>
+            </div>
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        </div>
+    </div>
+}
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('select').formSelect();
+    });
+</script>

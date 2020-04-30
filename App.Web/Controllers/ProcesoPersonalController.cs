@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using App.Model.Core;
 using App.Core.Interfaces;
-using System.Linq;
 using App.Infrastructure.Extensions;
+using App.Core.UseCases;
+using System.IO;
+using OfficeOpenXml;
 
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
-    public class ProcesoConsultorController : Controller
+    public class ProcesoPersonalController : Controller
     {
         public class DTOFilter
         {
@@ -34,41 +38,45 @@ namespace App.Web.Controllers
 
             public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<Proceso> Result { get; set; }
+
             [Display(Name = "Estado")]
             public int? EstadoProcesoId { get; set; }
-
         }
-
         protected readonly IGestionProcesos _repository;
         protected readonly IEmail _email;
+        protected readonly ISIGPER _sigper;
 
-        public ProcesoConsultorController(IGestionProcesos repository, IEmail email)
+        public ProcesoPersonalController(IGestionProcesos repository, IEmail email, ISIGPER sigper)
         {
             _repository = repository;
             _email = email;
+            _sigper = sigper;
         }
-
 
         public ActionResult Index()
         {
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
 
+            var email = UserExtended.Email(User);
             var model = new DTOFilter()
             {
                 Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
-                Result = _repository.Get<Proceso>().ToList()
+                Result = _repository.Get<Proceso>(q => q.Email == email).ToList()
             };
-
             return View(model);
         }
 
         [HttpPost]
         public ActionResult Index(DTOFilter model)
         {
+            var email = UserExtended.Email(User);
+
             var predicate = PredicateBuilder.True<Proceso>();
 
             if (ModelState.IsValid)
             {
+                predicate = predicate.And(q => q.Email == email);
+
                 if (!string.IsNullOrWhiteSpace(model.TextSearch))
                     predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.Observacion.Contains(model.TextSearch) || q.Email.Contains(model.TextSearch));
 
@@ -93,7 +101,9 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
             }
+            
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion", model.EstadoProcesoId);
+
 
             return View(model);
         }
@@ -102,6 +112,27 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Proceso>(id);
             return View(model);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var model = _repository.GetById<Proceso>(id);
+            return View(model);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var _useCaseInteractor = new UseCaseCore(_repository, _email);
+            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
+
+            if (_UseCaseResponseMessage.IsValid)
+                TempData["Success"] = "Operación terminada correctamente.";
+            else
+                TempData["Error"] = _UseCaseResponseMessage.Errors;
+
+            return RedirectToAction("Index");
         }
     }
 }

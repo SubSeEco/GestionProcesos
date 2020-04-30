@@ -1,0 +1,101 @@
+﻿@model IEnumerable<App.Core.Entities.Proceso>
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Procesos</span>
+        <table class="table bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProcesoId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DefinicionProceso.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Solicitante.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaCreacion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaVencimiento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaTermino)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Terminada)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProcesoId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Solicitante.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaCreacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaTermino)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Terminada)
+                    </td>
+
+                    <td>
+                        <a href='@Url.Action("Details", new { id = item.ProcesoId })' class="btn-floating btn-large blue"><i class="large material-icons">chevron_right</i></a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Reportes</span>
+
+        <div class="row">
+            <div class="col l4">
+                <canvas id="PieNumeroProcesos"></canvas>
+            </div>
+            <div class="col l4">
+                <canvas id="PieNumeroProcesos"></canvas>
+            </div>
+            <div class="col l4">
+                <canvas id="PieNumeroProcesos"></canvas>
+            </div>
+        </div>
+
+        <div class="fixed-action-btn">
+            <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Chart.js"></script>
+<script src="~/Scripts/Common.js"></script>
+<script>
+
+    var c = document.getElementById("PieNumeroProcesos");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/NumeroProcesos");
+    var myPieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: tData
+    });
+</script>

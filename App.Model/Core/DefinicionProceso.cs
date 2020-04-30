@@ -34,10 +34,6 @@ namespace App.Model.Core
         [Display(Name = "Habilitado?")]
         public bool Habilitado { get; set; }
 
-        [Required(ErrorMessage = "Es necesario especificar este dato")]
-        [Display(Name = "Ir a la bandeja de tareas tras iniciar proceso")]
-        public bool EjecutarInmediatamente { get; set; } = false;
-
         public virtual ICollection<DefinicionWorkflow> DefinicionWorkflows { get; set; }
         public virtual ICollection<Proceso> Procesos { get; set; }
 

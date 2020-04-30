@@ -13,56 +13,58 @@
 </div>
 <br />
 
-    <div class="row container">
-        @if (Model.IsAdmin)
-        {
-            <div class="col s12 m6 l4">
-                <div class="card hoverable" style="height:300px">
-                    <div class="card-content">
-                        <span class="card-title">Administración</span>
-                    </div>
-                    <div class="card-action">
-                        <a href='@Url.Action("Index", "DefinicionProceso")' class="waves-effect waves-light blue-text">Definiciones de procesos</a><br />
-                        <a href='@Url.Action("Index", "Proceso")' class="waves-effect waves-light blue-text">Procesos</a><br />
-                        <a href='@Url.Action("Index", "Grupo")' class="waves-effect waves-light blue-text">Grupos especiales</a><br />
-                        <a href='@Url.Action("Index", "Rubrica")' class="waves-effect waves-light blue-text">Rúbricas</a><br />
-                        <a href='@Url.Action("Index", "Configuracion")' class="waves-effect waves-light blue-text">Configuración de sistema</a>
-                        <a href='@Url.Action("Index", "CometidoComision")' class="waves-effect waves-light blue-text">Cometido-Comision</a>
-                    </div>
-                </div>
-            </div>
-        }
+<div class="row container">
+    @Html.Partial("_Message")
 
+    @if (Model.IsAdmin)
+    {
         <div class="col s12 m6 l4">
             <div class="card hoverable" style="height:300px">
                 <div class="card-content">
-                    <span class="card-title">Operaciones</span>
+                    <span class="card-title">Administración</span>
                 </div>
                 <div class="card-action">
-                    <a href='@Url.Action("Index","Workflow")' class="waves-effect waves-light blue-text">
-                        Bandeja de tareas
-                        @if (Model.Task > 0)
-                        {
-                            <span class="new badge red" data-badge-caption="">@Model.Task</span>
-                        }
-                    </a>
-                    <br />
-                    <a href='@Url.Action("Create", "Proceso")' class="waves-effect waves-light blue-text">Iniciar nuevo proceso</a><br />
-                    <a href='@Url.Action("Me", "Proceso")' class="waves-effect waves-light blue-text">Administrar mis procesos</a><br />
-
+                    <a href='@Url.Action("Index", "DefinicionProceso")' class="waves-effect waves-light blue-text">Definiciones de procesos</a><br />
+                    <a href='@Url.Action("Index", "Proceso")' class="waves-effect waves-light blue-text">Procesos</a><br />
+                    <a href='@Url.Action("Index", "Grupo")' class="waves-effect waves-light blue-text">Grupos especiales</a><br />
+                    <a href='@Url.Action("Index", "Rubrica")' class="waves-effect waves-light blue-text">Rúbricas</a><br />
+                    <a href='@Url.Action("Index", "Configuracion")' class="waves-effect waves-light blue-text">Configuración de sistema</a>
+                    <a href='@Url.Action("Index", "CometidoComision")' class="waves-effect waves-light blue-text">Cometido-Comision</a>
                 </div>
             </div>
         </div>
+    }
 
-        <div class="col s12 m6 l4">
-            <div class="card hoverable" style="height:300px">
-                <div class="card-content">
-                    <span class="card-title">Consultas</span>
-                </div>
-                <div class="card-action">
-                    <a href='@Url.Action("Search", "Proceso")' class="waves-effect waves-light blue-text">Procesos</a><br />
-                    <a href='@Url.Action("Download", "Proceso")' class="waves-effect waves-light blue-text">Exportar procesos a Excel</a><br />
-                </div>
+    <div class="col s12 m6 l4">
+        <div class="card hoverable" style="height:300px">
+            <div class="card-content">
+                <span class="card-title">Operaciones</span>
+            </div>
+            <div class="card-action">
+                <a href='@Url.Action("Index","Workflow")' class="waves-effect waves-light blue-text">
+                    Bandeja de tareas
+                    @if (Model.Task > 0)
+                    {
+                        <span class="new badge red" data-badge-caption="">@Model.Task</span>
+                    }
+                </a>
+                <br />
+                <a href='@Url.Action("Create", "Proceso")' class="waves-effect waves-light blue-text">Iniciar nuevo proceso</a><br />
+                <a href='@Url.Action("Index", "ProcesoPersonal")' class="waves-effect waves-light blue-text">Administrar mis procesos</a><br />
+
             </div>
         </div>
     </div>
+
+    <div class="col s12 m6 l4">
+        <div class="card hoverable" style="height:300px">
+            <div class="card-content">
+                <span class="card-title">Consultas</span>
+            </div>
+            <div class="card-action">
+                <a href='@Url.Action("Index", "ProcesoConsultor")' class="waves-effect waves-light blue-text">Procesos</a><br />
+                <a href='@Url.Action("Download", "Proceso")' class="waves-effect waves-light blue-text">Exportar procesos a Excel</a><br />
+            </div>
+        </div>
+    </div>
+</div>

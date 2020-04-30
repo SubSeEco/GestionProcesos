@@ -352,6 +352,7 @@ namespace App.Core.UseCases
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                        workflow.TareaPersonal = true;
 
                         break;
 
@@ -363,6 +364,7 @@ namespace App.Core.UseCases
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                        workflow.TareaPersonal = true;
 
                         break;
 
@@ -371,6 +373,7 @@ namespace App.Core.UseCases
                         workflow.GrupoId = definicionWorkflow.GrupoId;
                         workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                         workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+                        workflow.TareaPersonal = false;
 
                         break;
 
@@ -384,6 +387,7 @@ namespace App.Core.UseCases
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                        workflow.TareaPersonal = true;
 
                         break;
                 }

@@ -22,34 +22,6 @@ namespace App.Web.Controllers
             _file = file;
         }
 
-        public ActionResult View(int id)
-        {
-            var model = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == id);
-            if (model == null)
-                return RedirectToAction("Details", "Proceso", new { id });
-
-            return View(model);
-        }
-
-        public ActionResult Pdf(int id)
-        {
-            var model = _repository.GetById<InformeHSA>(id);
-            model.QR = _file.CreateQR(id.ToString());
-
-            //var email = UserExtended.Email(User);
-            //var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email);
-            //if (rubrica != null)
-            //    model.Signature = rubrica.File;
-
-            return new ViewAsPdf("pdf", model);
-        }
-
-        public ActionResult Sign(int id)
-        {
-            var model = _repository.GetById<InformeHSA>(id);
-            return View(model);
-        }
-
         public ActionResult Create(int WorkFlowId)
         {
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
@@ -98,6 +70,34 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
+            return View(model);
+        }
+
+        public ActionResult View(int id)
+        {
+            var model = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == id);
+            if (model == null)
+                return RedirectToAction("View", "Proceso", new { id });
+
+            return View(model);
+        }
+
+        public ActionResult Pdf(int id)
+        {
+            var model = _repository.GetById<InformeHSA>(id);
+            model.QR = _file.CreateQR(id.ToString());
+
+            //var email = UserExtended.Email(User);
+            //var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email);
+            //if (rubrica != null)
+            //    model.Signature = rubrica.File;
+
+            return new ViewAsPdf("pdf", model);
+        }
+
+        public ActionResult Sign(int id)
+        {
+            var model = _repository.GetById<InformeHSA>(id);
             return View(model);
         }
 

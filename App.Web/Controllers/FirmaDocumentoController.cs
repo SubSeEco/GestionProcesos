@@ -41,12 +41,14 @@ namespace App.Web.Controllers
             [DataType(DataType.Upload)]
             public HttpPostedFileBase FileUpload { get; set; }
 
+            [Display(Name = "Documento a firmar")]
             public byte[] File { get; set; }
 
             public string Firmante { get; set; }
 
             public bool TieneFirma { get; set; }
 
+            [Display(Name = "Fecha creación")]
             public System.DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
@@ -79,7 +81,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == id);
             if (model == null)
-                return RedirectToAction("Details","Proceso", new { id });
+                return RedirectToAction("View", "Proceso", new { id });
 
             return View(model);
         }
