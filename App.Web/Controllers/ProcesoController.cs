@@ -271,7 +271,7 @@ namespace App.Web.Controllers
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
             var fileInfo = new FileInfo(file);
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excelPackage = new ExcelPackage(fileInfo);
 
 
