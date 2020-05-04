@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using App.Core.Interfaces;
+using App.Infrastructure.File;
+using App.Model.Core;
 
 namespace App.Infrastructure.Email
 {
@@ -145,7 +150,7 @@ namespace App.Infrastructure.Email
             Send();
         }
 
-        public void NotificacionesCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones)
+        public void NotificacionesCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -155,6 +160,11 @@ namespace App.Infrastructure.Email
             plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[IdCometido]", IdCometido.ToString());
             plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
             plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Observaciones]", Observaciones);
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Url]", Url);
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Folio]", Folio);
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaFirma]", FechaFirma);
+            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
+
 
             if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                 plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
@@ -162,10 +172,19 @@ namespace App.Infrastructure.Email
                 plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
 
             SmtpClient smtpClient = new SmtpClient();
-            MailMessage emailMsg = new MailMessage();
+            MailMessage emailMsg = new MailMessage();            
             emailMsg.IsBodyHtml = true;
             emailMsg.Body = plantillaCorreo.Valor;
             emailMsg.Subject = asunto;
+
+            if (workflow.DefinicionWorkflow.Secuencia == 16) //|| workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
+            {
+                
+                MemoryStream ms = new MemoryStream(documento.File);
+                Attachment attach = new Attachment(ms, documento.FileName);
+                emailMsg.Attachments.Add(attach);
+            }
+            
 
             switch (workflow.DefinicionWorkflow.TipoEjecucionId)
             {

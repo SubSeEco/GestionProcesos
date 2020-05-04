@@ -20,6 +20,9 @@ using OfficeOpenXml;
 using System.IO;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using com.sun.corba.se.spi.ior;
+using System.Net.Mail;
+using com.sun.codemodel.@internal;
 
 namespace App.Web.Controllers
 {
@@ -50,7 +53,7 @@ namespace App.Web.Controllers
             [Display(Name = "ID")]
             public int ID { get; set; }
 
-            [Display(Name = "Funcionarios con tarea asignada")]
+            [Display(Name = "Funcionario")]
             public string Ejecutor { get; set; }
 
             [Display(Name = "Fecha Inicio")]
@@ -79,6 +82,9 @@ namespace App.Web.Controllers
 
             [Display(Name = "Destino")]
             public int? Destino { get; set; }
+
+            [Display(Name = "N° Dias")]
+            public int DiasDiferencia { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
@@ -304,19 +310,22 @@ namespace App.Web.Controllers
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<Cometido>(id);
-
-            /*Validar si existe un documento asociado y si se encuentra firmado*/
-            var doc = _repository.GetAll<Documento>().Where(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
-            if (doc != null)
+            var cdp = _repository.GetAll<GeneracionCDP>().Where(c => c.CometidoId == model.CometidoId).ToList();
+            if (cdp != null)
             {
-                if(doc.Signed != true)
-                    GeneraDocumento(model.CometidoId);
-                //else
-                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
+                model.GeneracionCDP.Add(cdp.FirstOrDefault());
+
+                /*Validar si existe un documento asociado y si se encuentra firmado*/
+                var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+                if (doc != null)
+                {
+                    if (doc.Signed != true)
+                        GeneraDocumento(model.CometidoId);
+                    //else
+                    //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
+                }
             }
-
             
-
             return View(model);
         }
 
@@ -1141,6 +1150,7 @@ namespace App.Web.Controllers
                             model.Folio = obj.folio;
                             model.FechaResolucion = DateTime.Now;
                             model.Firma = true;
+                            model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
 
                             _repository.Update(model);
                             _repository.Save();
@@ -1297,6 +1307,7 @@ namespace App.Web.Controllers
                         model.Folio = obj.folio;
                         model.FechaResolucion = DateTime.Now;
                         model.Firma = true;
+                        model.TipoActoAdministrativo = "Orden de Pago"; 
 
                         _repository.Update(model);
                         _repository.Save();
@@ -1469,6 +1480,7 @@ namespace App.Web.Controllers
                         model.Folio = obj.folio;
                         model.FechaResolucion = DateTime.Now;
                         model.Firma = true;
+                        model.TipoActoAdministrativo = "Resolución Ministerial Exenta";
 
                         _repository.Update(model);
                         _repository.Save();
@@ -1837,32 +1849,36 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.CometidoDescripcion.Contains(model.TextSearch) || q.NombreCometido.Contains(model.TextSearch));
+                //if (!string.IsNullOrWhiteSpace(model.TextSearch))
+                //    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.CometidoDescripcion.Contains(model.TextSearch) || q.NombreCometido.Contains(model.TextSearch));
 
                 if (model.ID != 0)
                     predicate = predicate.And(q => q.CometidoId == model.ID);
 
                 if (!string.IsNullOrWhiteSpace(model.Ejecutor))
-                    predicate = predicate.And(q => q.Proceso.Workflows.Any().Equals(model.Ejecutor));
+                {
+                    var mail = _sigper.GetUserByRut(int.Parse(model.Ejecutor)).Funcionario.Rh_Mail.Trim();
+                    predicate = predicate.And(q => q.Proceso.Workflows.Any(p => p.Email == mail));
+                }
+                    
 
                 if (model.FechaSolicitud.HasValue)
                     predicate = predicate.And(q =>
-                        q.FechaSolicitud.Year >= model.FechaSolicitud.Value.Year &&
-                        q.FechaSolicitud.Month >= model.FechaSolicitud.Value.Month &&
-                        q.FechaSolicitud.Day >= model.FechaSolicitud.Value.Day);
+                        q.FechaSolicitud.Year == model.FechaSolicitud.Value.Year &&
+                        q.FechaSolicitud.Month == model.FechaSolicitud.Value.Month &&
+                        q.FechaSolicitud.Day == model.FechaSolicitud.Value.Day);
 
                 if (model.FechaInicio.HasValue)
                     predicate = predicate.And(q =>
-                        q.Destinos.FirstOrDefault().FechaInicio.Year >= model.FechaInicio.Value.Year &&
-                        q.Destinos.FirstOrDefault().FechaInicio.Month >= model.FechaInicio.Value.Month &&
-                        q.Destinos.FirstOrDefault().FechaInicio.Day >= model.FechaInicio.Value.Day);
+                        q.Destinos.FirstOrDefault().FechaInicio.Year == model.FechaInicio.Value.Year &&
+                        q.Destinos.FirstOrDefault().FechaInicio.Month == model.FechaInicio.Value.Month &&
+                        q.Destinos.FirstOrDefault().FechaInicio.Day == model.FechaInicio.Value.Day);
 
                 if (model.FechaTermino.HasValue)
                     predicate = predicate.And(q =>
-                        q.Destinos.LastOrDefault().FechaInicio.Year <= model.FechaTermino.Value.Year &&
-                        q.Destinos.LastOrDefault().FechaInicio.Month <= model.FechaTermino.Value.Month &&
-                        q.Destinos.LastOrDefault().FechaInicio.Day <= model.FechaTermino.Value.Day);
+                        q.Destinos.LastOrDefault().FechaInicio.Year == model.FechaTermino.Value.Year &&
+                        q.Destinos.LastOrDefault().FechaInicio.Month == model.FechaTermino.Value.Month &&
+                        q.Destinos.LastOrDefault().FechaInicio.Day == model.FechaTermino.Value.Day);
 
                 var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (CometidoId.Any())
@@ -1873,7 +1889,15 @@ namespace App.Web.Controllers
 
             //foreach (var res in model.Result)
             //{
-            //    //model.Result.FirstOrDefault().Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+            //    //res.Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+                
+            //    //foreach(var workflow in res.Proceso.Workflows)
+            //    //{
+            //    //    model.DiasDiferencia = (workflow.FechaTermino.Value.Day - workflow.FechaCreacion.Day);
+            //    //}
+
+
+                
 
             //    //var workflow = _repository.Get<Workflow>(c => c.ProcesoId == res.ProcesoId);
             //    //foreach(var w in workflow)
@@ -1909,6 +1933,49 @@ namespace App.Web.Controllers
 
             ViewBag.Ejecutor = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
             return View(model);
+        }
+
+        public FileResult DownloadSeguimiento()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoUnidades.xlsx");
+            var fileInfo = new FileInfo(file);
+            var excelPackageSeguimientoUnidades = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[1];
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
+            {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                fila++;
+                worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIA DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+                worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
+                worksheet.Cells[fila, 3].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
+                worksheet.Cells[fila, 4].Value = cometido.FechaSolicitud.ToShortDateString();
+                /*datos desde core workflow*/
+                foreach(var w in workflow)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 5].Value = w.Email;
+                    worksheet.Cells[fila, 6].Value = w.Pl_UndDes;
+                    worksheet.Cells[fila, 7].Value = w.FechaCreacion.ToShortDateString();
+                    worksheet.Cells[fila, 8].Value = w.FechaTermino.HasValue ? w.FechaTermino.Value.ToShortDateString() : "Null";
+                    if (w.FechaTermino.HasValue)
+                    {
+                        worksheet.Cells[fila, 9].Value = w.FechaCreacion.Day - w.FechaTermino.Value.Day;
+                    }
+                    else
+                    {
+                        w.FechaTermino = DateTime.Now;
+                        worksheet.Cells[fila, 9].Value = w.FechaCreacion.Day - w.FechaTermino.Value.Day;
+                    }
+                }
+            }
+
+            return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoUnidades_yyyyMMddhhmmss") + ".xlsx");
         }
 
         public ActionResult SolicitudesTransparencia()

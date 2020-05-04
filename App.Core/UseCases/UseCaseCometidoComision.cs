@@ -4680,7 +4680,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEnvíoSolicitudCometido),
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoSolicitudCometido_Solicitante_QuienViaja).Valor + cometido.CometidoId.ToString(),
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*A jefatura*/
                                 emailMsg = new List<string>();
@@ -4689,7 +4690,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEnvíoSolicitudCometidoJefatura),
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoSolicitudCometido_Jefatura).Valor + cometido.CometidoId.ToString(),
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 break;
                             case 2:/*Aprobación/Rechazo de cometido de la jefatura*/
@@ -4703,7 +4705,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobaciónRechazoCometidoJefatura_Solicitante_QuienViaja),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido aprobada por su jefatura",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                     /*Aprobación a jefatura */
                                     emailMsg = new List<string>();
@@ -4712,7 +4715,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobaciónRechazoCometidoJefatura_Jefatura),
                                     "Usted ha aprobado el cometido N°:" + cometido.CometidoId.ToString(),
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                     /*Aprobación a Analista de Unidad de Gestión y Desarrollo de Personas*/
                                     emailMsg = new List<string>();
@@ -4721,7 +4725,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobaciónRechazoCometidoJefatura_GP),
                                     "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para revisión",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if(workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4733,7 +4738,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaRechazoCometidoJefatura_Solicitante_QuienViaja),
                                     "Su solicitud de cometido N°: " + cometido.CometidoId.ToString() + " " + "ha sido rechazada por su jefatura",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                     /*Rechazo a jefatura */
                                     emailMsg = new List<string>();
@@ -4742,7 +4748,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaRechazoCometidoJefatura_Jefatura),
                                     "Usted ha rechazado el cometido N°: " + cometido.CometidoId.ToString(),
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
@@ -4756,7 +4763,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaGeneraciónDocumento),
                                     "Tiene el cometido N°: " + cometido.CometidoId.ToString() + " " + "para aprobación",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4768,7 +4776,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaReasignacionSolicitud),
                                     "Su solicitud de cometido N°: " + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
@@ -4782,7 +4791,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
                                     "Tiene el cometido N°: " + cometido.CometidoId.ToString() + " " + "pendiente de compromiso",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4793,7 +4803,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaGP),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
@@ -4807,7 +4818,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaPppto_JefePpto),
                                     "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para aprobación de CDP",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4818,7 +4830,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaPppto_AnalistaGP),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
@@ -4832,7 +4845,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoPPto_JefaturaAdmin),
                                     "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para aprobación",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4843,22 +4857,29 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoPPto_AnalistaPpto),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
                             case 13: /*Encargado(a) Departamento Administrativo firma de acto administrativo*/
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                                 {
+                                    /*se trae documento para adjuntar*/
+                                    Documento doc = cometido.Proceso.Documentos.Where(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
+
                                     /*Aprueba y notifica a Oficina de Partes*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
-                                    emailMsg.Add("scid@economia.cl"); //oficia de partes
+                                    //emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
+                                    //emailMsg.Add("scid@economia.cl"); //oficia de partes
+                                    emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_OfPartes),
                                     "Se ha tramitado un cometido nacional",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,
+                                    doc,cometido.Folio,cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
 
                                     /*Aprueba y notifica a solicitante y quien viaja*/
                                     emailMsg = new List<string>();
@@ -4868,7 +4889,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_Solicitante_QuienViaja),
                                     "Se ha tramitado el cometido nacional solicitado",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
 
                                     /*Aprueba y notifica a analista de contabilidad para devengo*/
                                     emailMsg = new List<string>();
@@ -4877,7 +4899,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_AnalistaConta),
                                     "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "para devengo",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,doc,"","","");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -4888,7 +4911,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_JefePpto),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,null, "", "", "");
 
                                     /*Rechaza y notifica a Analista de Gestión y Desarrollo de Personas (si cometido no irroga gasto)*/
                                     emailMsg = new List<string>();
@@ -4897,7 +4921,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_AnalistaGP),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 break;
@@ -4909,7 +4934,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaConta_JefeConta),
                                 "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Devengo con observaciones o sin devengo y notifica a Analista de Unidad de Desarrollo y Gestión de Personas*/
                                 emailMsg = new List<string>();
@@ -4918,7 +4944,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaConta_AnalistaGP),
                                 "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Devengo con observaciones o sin devengo y notifica a Encargado(a) de Contabilidad*/
                                 emailMsg = new List<string>();
@@ -4927,7 +4954,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaConta_EncargadoConta),
                                 "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "CON OBSERVACIONES para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 break;
                             case 17: /*Encargado(a) de Contabilidad revisa devengo*/
@@ -4938,7 +4966,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoConta_AnalistaTesoreria),
                                 "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para pago",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 break;
 
                             case 18:/*Analista de Tesorería ingresa pago*/
@@ -4949,7 +4978,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaTesoreria_JefeTesoreria),
                                 "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Aprueba pago con observaciones o sin pago y notifica a Analista de Unidad de Desarrollo y Gestión de Personas */
                                 emailMsg = new List<string>();
@@ -4958,7 +4988,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaTesoreria_AnalistaGP),
                                 "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Aprueba pago con observaciones o sin pago y notifica a Encargado(a) de Tesorería*/
                                 emailMsg = new List<string>();
@@ -4967,7 +4998,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaTesoreria_EncargadoTesoreria),
                                 "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "CON OBSERVACIONES para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 break;
                             case 19: /*Encargado(a) de Tesorería revisa pago*/
@@ -4978,7 +5010,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoTesoreria_EncargadoFinanzas),
                                 "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Aprueba pago con observaciones o sin pago y envía a Encargado(a) de Unidad de Finanzas*/
                                 emailMsg = new List<string>();
@@ -4987,7 +5020,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoTesoreria_EncargadoFinanzas2),
                                 "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "CON OBSERVACIONES para aprobación",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 break;
                             case 20:/*Encargado(a) de Unidad de Finanzas revisa devengo y pago*/
@@ -4999,7 +5033,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
                                 "Su cometido N°" + cometido.CometidoId.ToString() + " " + "ha sido pagado",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Aprueba pago con observaciones o sin pago y envía a interesado(a)*/
                                 emailMsg = new List<string>();
@@ -5009,7 +5044,8 @@ namespace App.Core.UseCases
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja2),
                                 "Su cometido N°" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES para el pago",
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "");
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 break;
                         }

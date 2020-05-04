@@ -296,5 +296,10 @@ namespace App.Model.Cometido
         [NotMapped]
         [Display(Name = "DocumnetoRefrendacion")]
         public bool? DocumentoRefrendacion { get; set; } = false;
+
+        /*Datos Acto Administrativo*/
+        [Display(Name = "Tipo Acto Administrativo")]
+        public string TipoActoAdministrativo { get; set; }
+
     }
 }

@@ -121,6 +121,7 @@
             PlantillaEncargadoTesoreria_EncargadoFinanzas2 = 46,
             PlantillaFinanzas_Solicitante_QuienViaja = 47,
             PlantillaFinanzas_Solicitante_QuienViaja2 = 48,
+            UrlSistema = 50,
         }
 
         public enum DefinicionProceso
