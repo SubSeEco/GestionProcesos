@@ -1,0 +1,173 @@
+﻿@model App.Model.Core.Proceso
+
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Proceso</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ProcesoId)</strong><br />
+                            @Html.DisplayFor(m => Model.ProcesoId)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.DefinicionProceso.Nombre)</strong><br />
+                            @Html.DisplayFor(m => Model.DefinicionProceso.Nombre)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Email)</strong><br />
+                            @Html.DisplayFor(m => Model.Email)
+                        </div>
+
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                            @Html.DisplayFor(m => Model.FechaCreacion)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaVencimiento)</strong><br />
+                            @Html.DisplayFor(m => Model.FechaVencimiento)
+                        </div>
+                        @if (Model.FechaTermino.HasValue)
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.FechaTermino)</strong><br />
+                                @Html.DisplayFor(m => Model.FechaTermino)
+                            </div>
+                        }
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Span)</strong><br />
+                            @String.Format("{0} días, {1} horas, {2} minutos, {3} segundos", Model.Span.Days, Model.Span.Hours, Model.Span.Minutes, Model.Span.Seconds)
+                        </div>
+
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.EstadoProceso.Descripcion)</strong><br />
+                            @Html.DisplayFor(m => Model.EstadoProceso.Descripcion)
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
+                                @Html.DisplayFor(m => Model.Observacion)
+                            </div>
+                        }
+                    </div>
+
+                    @if (!Model.Terminada && !Model.Anulada)
+                    {
+                        <div class="section"></div>
+                        <a href='@Url.Action("Delete", new { id = Model.ProcesoId })' class="btn red">Anular proceso</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            @foreach (var item in Model.Workflows.OrderBy(q => q.WorkflowId))
+            {
+                <div class="col s12 m12 l12">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">
+                                Tarea: @item.DefinicionWorkflow.Nombre - @item.WorkflowId<br />
+                            </span>
+                            <h6 class="caption grey-text">
+                                @String.Format("{0} días, {1} horas, {2} minutos, {3} segundos", item.Span.Days, item.Span.Hours, item.Span.Minutes, item.Span.Seconds)
+                            </h6>
+
+                            <div class="row">
+
+                                <div class="input-field col">
+                                    @if (item.TipoAprobacionId == 1)
+                                    {
+                                        <i class="material-icons large secondary-content grey-text">history</i>
+                                    }
+
+                                    @if (item.TipoAprobacionId == 2)
+                                    {
+                                        <i class="material-icons large secondary-content green-text">check</i>
+                                        <p class="secondary-content">
+
+                                        </p>
+                                    }
+                                    @if (item.TipoAprobacionId == 3)
+                                    {
+                                        <i class="material-icons large secondary-content red-text">clear</i>
+                                    }
+
+                                    <strong>@Html.DisplayNameFor(m => Model.ProcesoId):</strong>
+                                    @Html.DisplayFor(m => Model.ProcesoId)
+                                    <br />
+
+                                    <strong>@Html.DisplayNameFor(m => item.Pl_UndDes):</strong>
+                                    @Html.DisplayFor(m => item.Pl_UndDes)
+                                    <br />
+
+                                    <strong>@Html.DisplayNameFor(m => item.Email):</strong>
+                                    @Html.DisplayFor(m => item.Email)
+                                    <br />
+
+                                    <strong>@Html.DisplayNameFor(m => item.FechaCreacion):</strong>
+                                    @Html.DisplayFor(m => item.FechaCreacion)
+                                    <br />
+
+                                    <strong>@Html.DisplayNameFor(m => item.FechaTermino):</strong>
+                                    @Html.DisplayFor(m => item.FechaTermino)
+                                    <br />
+
+                                    <strong>@Html.DisplayNameFor(m => item.TipoAprobacionId):</strong>
+                                    @Html.DisplayFor(m => item.TipoAprobacion.Nombre)
+                                    <br />
+
+
+                                    @if (!string.IsNullOrWhiteSpace(item.Observacion))
+                                    {
+                                        <strong>@Html.DisplayNameFor(m => item.Observacion):</strong>
+                                        @Html.DisplayFor(m => item.Observacion)
+                                        <br />
+                                    }
+                                    @foreach (var doc in item.Documentos)
+                                    {
+                                        <div class="col">
+                                            <div class="section"></div>
+                                            <div class="col">
+                                                <h6>
+                                                    <i class="material-icons ">attach_file</i>
+                                                    <a href="@Url.Action("Download", "Documento", new { id = doc.DocumentoId })">@doc.FileName</a>
+                                                </h6>
+                                                <p>
+                                                    Fecha creación: @doc.Fecha<br />
+                                                    Autor: @doc.Email<br />
+                                                    Proceso de origen: @doc.Proceso.DefinicionProceso.Nombre, Id @doc.ProcesoId<br />
+                                                    Tarea de origen: @doc.Workflow.DefinicionWorkflow.Nombre
+                                                    <br />
+                                                </p>
+
+                                            </div>
+                                            <div class="col">
+                                                @if (doc.Type.Contains("pdf"))
+                                                {
+                                                    <embed src="@Url.Action("Show", "Documento", new { id = doc.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
+                                                }
+                                            </div>
+
+                                        </div>
+
+
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>

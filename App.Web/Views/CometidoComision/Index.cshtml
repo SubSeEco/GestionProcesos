@@ -1,7 +1,18 @@
 ﻿@model App.Web.Controllers.HomeController.DTOUser
 
-@*<h3>Home</h3>*@
+@{
+    ViewBag.Title = "Cometido-comisiones";
+    ViewBag.SubTitle = "Cometido-comisiones";
+}
 
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<div class="container">
     <div class="row">
         <div class="col s12 m4 l4">
             <div class="card hoverable" style="height:380px">
@@ -47,3 +58,4 @@
         </div>
 
     </div>
+</div>

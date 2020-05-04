@@ -1,11 +1,25 @@
 ﻿@model App.Web.Controllers.HomeController.DTOUser
+@{
+    ViewBag.Title = "Gestión de procesos";
+    ViewBag.SubTitle = "Gestión de procesos automatiza flujos de trabajo de una manera facil y unificada";
+}
 
-<div class="row">
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<br />
+
+<div class="row container">
+    @Html.Partial("_Message")
 
     @if (Model.IsAdmin)
     {
-        <div class="col s12 m4 l4">
-            <div class="card hoverable" style="height:380px">
+        <div class="col s12 m6 l4">
+            <div class="card hoverable" style="height:300px">
                 <div class="card-content">
                     <span class="card-title">Administración</span>
                 </div>
@@ -21,8 +35,8 @@
         </div>
     }
 
-    <div class="col s12 m4 l4">
-        <div class="card hoverable" style="height:380px">
+    <div class="col s12 m6 l4">
+        <div class="card hoverable" style="height:300px">
             <div class="card-content">
                 <span class="card-title">Operaciones</span>
             </div>
@@ -36,24 +50,20 @@
                 </a>
                 <br />
                 <a href='@Url.Action("Create", "Proceso")' class="waves-effect waves-light blue-text">Iniciar nuevo proceso</a><br />
-                <a href='@Url.Action("Me", "Proceso")' class="waves-effect waves-light blue-text">Administrar mis procesos</a><br />
+                <a href='@Url.Action("Index", "ProcesoPersonal")' class="waves-effect waves-light blue-text">Administrar mis procesos</a><br />
 
             </div>
         </div>
     </div>
 
-    <div class="col s12 m4 l4">
-        <div class="card hoverable" style="height:380px">
+    <div class="col s12 m6 l4">
+        <div class="card hoverable" style="height:300px">
             <div class="card-content">
                 <span class="card-title">Consultas</span>
             </div>
             <div class="card-action">
-                <a href='@Url.Action("Search", "Proceso")' class="waves-effect waves-light blue-text">Procesos</a><br />
+                <a href='@Url.Action("Index", "ProcesoConsultor")' class="waves-effect waves-light blue-text">Procesos</a><br />
                 <a href='@Url.Action("Download", "Proceso")' class="waves-effect waves-light blue-text">Exportar procesos a Excel</a><br />
-                @*<a href='@Url.Action("Dashboard", "Proceso")' class="waves-effect waves-light blue-text">Dashboard de procesos</a>*@<br />
-                @*<a href='@Url.Action("Index", "Documento")' class="waves-effect waves-light blue-text">Documentos</a><br />
-        <a href='@Url.Action("Dashboard", "Proceso")' class="waves-effect waves-light blue-text">Dashboard de procesos</a><br />
-        <a href='@Url.Action("Download", "InformeHSA")' class="waves-effect waves-light blue-text">Exportar informes HSA a Excel</a><br />*@
             </div>
         </div>
     </div>

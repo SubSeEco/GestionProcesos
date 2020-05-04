@@ -1,63 +1,55 @@
 ﻿@model App.Model.FirmaDocumento.FirmaDocumento
 
-@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
 
-<div class="row">
-    <div class="col s12 m6 l3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Firma de documento</span>
+<div class="container">
+    @Html.Partial("_Message")
 
-                <div class="input-field col s12 m12 l12">
-                    <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoDescripcion)</strong><br />
-                    @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
-                </div>
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Firma de documento</span>
 
-                <div class="section"></div>
-                <div class="input-field col s12 m12 l12">
-                    <strong>@Html.DisplayNameFor(m => Model.Autor)</strong><br />
-                    @Html.DisplayFor(m => Model.Autor)
-                </div>
-
-                <div class="section"></div>
-                <div class="input-field col s12 m12 l12">
-                    <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
-                    @Html.DisplayFor(m => Model.FechaCreacion)
-                </div>
-
-                @if (!string.IsNullOrWhiteSpace(Model.Folio))
-                {
-                    <div class="section"></div>
-                    <div class="input-field col s12 m12 l12">
-                        <strong>@Html.DisplayNameFor(m => Model.Folio)</strong><br />
-                        @Html.DisplayFor(m => Model.Folio)
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoDescripcion)</strong><br />
+                        @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
                     </div>
-                }
 
-                @if (Model.DocumentoSinFirma != null)
-                {
-                    <div class="section"></div>
-                    <div class="input-field col s12 m12 l12">
-                        <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.Autor)</strong><br />
+                        @Html.DisplayFor(m => Model.Autor)
                     </div>
-                }
 
-                <div class="section"></div>
-                <a class="waves-effect waves-light btn modal-trigger btn blue disabled" href="#modalFirma">Firmar documento</a>
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                        @Html.DisplayFor(m => Model.FechaCreacion)
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Folio))
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.Folio)</strong><br />
+                            @Html.DisplayFor(m => Model.Folio)
+                        </div>
+                    }
+
+                    @if (Model.DocumentoSinFirma != null)
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.DocumentoSinFirma)</strong>
+                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col s12 m6 l3">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
 </div>
-
-@if (!@Model.Proceso.Terminada && !@Model.Proceso.Anulada)
-{
-    <a href='@Url.Action("Delete","Proceso", new { id = Model.ProcesoId })' class="btn red">Anular proceso</a>
-    <div class="section"></div>
-}
 
 <script type="text/javascript">
     $(document).ready(function () {

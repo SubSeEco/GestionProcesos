@@ -20,7 +20,7 @@ namespace App.Model.Core
         public int ProcesoId { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
-        [Display(Name = "Definición proceso")]
+        [Display(Name = "Tipo de proceso")]
         public int DefinicionProcesoId { get; set; }
         public virtual DefinicionProceso DefinicionProceso { get; set; }
 
@@ -75,7 +75,6 @@ namespace App.Model.Core
 
 
 
-
         //deprecado
 
         [Display(Name = "Estado")]
@@ -83,7 +82,5 @@ namespace App.Model.Core
 
         [Display(Name = "Anulada?")]
         public bool Anulada { get; set; } = false;
-
-
     }
 }

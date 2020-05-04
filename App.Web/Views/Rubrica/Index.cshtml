@@ -1,50 +1,62 @@
 ﻿@model IEnumerable<App.Model.Core.Rubrica>
 
-<h3>Rúbricas</h3>
-<div class="card">
-    <div class="card-content">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdentificadorFirma)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HabilitadoFirma)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model.OrderBy(q=>q.IdentificadorFirma))
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IdentificadorFirma)
-                </td>
-                <td>
-                        @if (item.HabilitadoFirma)
-                        {
-                            <p>Si</p>
-                        }
-                        else
-                        {
-                            <p>No</p>
-                        }
-                </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.RubricaId })
-                </td>
-            </tr>
-            }
-        </table>
+@{
+    ViewBag.Title = "Rúbricas";
+    ViewBag.SubTitle = "Rúbricas";
+}
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
     </div>
 </div>
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdentificadorFirma)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HabilitadoFirma)
+                    </th>
+                    <th></th>
+                </tr>
 
+                @foreach (var item in Model.OrderBy(q => q.IdentificadorFirma))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdentificadorFirma)
+                        </td>
+                        <td>
+                            @if (item.HabilitadoFirma)
+                            {
+                                <p>Si</p>
+                            }
+                            else
+                            {
+                                <p>No</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = item.RubricaId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
 <div class="fixed-action-btn">
     <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
 </div>

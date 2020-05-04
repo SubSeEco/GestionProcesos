@@ -1,0 +1,16 @@
+﻿@model App.Model.Core.Proceso
+@{
+    Layout = null;
+}
+
+<div class="grey lighten-3">
+    <div class="container">
+        <div class="section">
+            <h3 class="header">@Model.DefinicionProceso.Nombre</h3>
+            <h5 class="header light">
+                Proceso: @Model.ProcesoId, Estado: @Model.EstadoProceso.Descripcion
+            </h5>
+            <br />
+        </div>
+    </div>
+</div>

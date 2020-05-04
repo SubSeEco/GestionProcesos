@@ -1,21 +1,32 @@
 ﻿@model App.Model.Core.Grupo
-
-<h3>Eliminar grupo</h3>
-<div class="card">
-    <div class="card-content">
-        @*<span class="card-title">Confirmar eliminación</span>*@
-        <div class="row">
-            <div class="input-field col s12 m10">
-                <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
-                <p>@Html.DisplayFor(m => Model.Nombre)</p>
-            </div>
-        </div>
+@{
+    ViewBag.Title = "Eliminr grupo";
+    ViewBag.SubTitle = "Eliminar grupo";
+}
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
         <br />
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <button class="waves-effect waves-light btn red" type="submit">Confirmar eliminación</button>
-        }
+    </div>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Confirmar eliminación</span>*@
+            <div class="row">
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
+                    <p>@Html.DisplayFor(m => Model.Nombre)</p>
+                </div>
+            </div>
+            <br />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <button class="waves-effect waves-light btn red" type="submit">Confirmar eliminación</button>
+            }
+        </div>
     </div>
 </div>
 <div class="fixed-action-btn">

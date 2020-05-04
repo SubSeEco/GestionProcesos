@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Envío de tarea exitoso";
+    ViewBag.Subtitle = "La operación terminó correctamente";
+}
+
+    <div class="grey lighten-3">
+        <div class="section container ">
+            <h3 class="header ">@ViewBag.Title</h3>
+            <h5 class="header light ">@ViewBag.SubTitle</h5>
+            <br />
+        </div>
+    </div>
+
+<div class="section">
+</div>
+
+<div class="container ">
+    @Html.ActionLink("Volver al inicio", "Index", null, null, new { @class = "waves-effect waves-light btn blue " })
+</div>

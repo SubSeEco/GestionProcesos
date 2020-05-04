@@ -390,57 +390,61 @@ namespace App.Infrastructure.SIGPER
                         returnValue.AddRange(rT.ToList());
                     }
                 }
-                else
-                {
-
-                    using (var dbE = new AppContextEconomia())
-                    {
-                        //var rE = from PE in dbE.PEDATPER
-                        var rE = from PE in dbE.PEDATPER
-                                 join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                                 //from r in dbE.ReContra
-                                 where r.Re_ConPyt != 0
-                                 where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-                                 //where r.ReContraSed != 0
-                                 where r.Re_ConCar != 21
-                                 //where r.Re_ConTipHon != 1
-                                 from PL in dbE.PLUNILAB
-                                 where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
-                                 //where PL.Pl_UndCod == codigoUnidad
-                                 where PE.RH_EstLab.Equals("A")
-                                 select PE;
-                        returnValue.AddRange(rE.ToList());
-
-                    }
-
-                    using (var dbT = new AppContextTurismo())
-                    {
-                        //var rT = from PE in dbT.PEDATPER
-                        var rT = from PE in dbT.PEDATPER
-                                 join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                                 where r.Re_ConPyt != 0
-                                 where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-                                 //where r.ReContraSed != 0
-                                 where r.Re_ConCar != 21
-                                 //where r.Re_ConTipHon != 1
-                                 from PL in dbT.PLUNILAB
-                                 where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
-                                 //where PL.Pl_UndCod == codigoUnidad
-                                 where PE.RH_EstLab.Equals("A")
-                                 select PE;
-                        returnValue.AddRange(rT.ToList());
-                    }
-
-                    return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
-                }
             }
             catch (Exception)
             {
                 throw;
             }
+
             return returnValue;
 
         }
+
+        public List<PEDATPER> GetAllUsers()
+        {
+            var returnValue = new List<PEDATPER>();
+
+            using (var dbE = new AppContextEconomia())
+            {
+                //var rE = from PE in dbE.PEDATPER
+                var rE = from PE in dbE.PEDATPER
+                         join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
+                         //from r in dbE.ReContra
+                         where r.Re_ConPyt != 0
+                         where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+                         //where r.ReContraSed != 0
+                         where r.Re_ConCar != 21
+                         //where r.Re_ConTipHon != 1
+                         from PL in dbE.PLUNILAB
+                         where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+                         //where PL.Pl_UndCod == codigoUnidad
+                         where PE.RH_EstLab.Equals("A")
+                         select PE;
+                returnValue.AddRange(rE.ToList());
+
+            }
+
+            using (var dbT = new AppContextTurismo())
+            {
+                //var rT = from PE in dbT.PEDATPER
+                var rT = from PE in dbT.PEDATPER
+                         join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
+                         where r.Re_ConPyt != 0
+                         where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+                         //where r.ReContraSed != 0
+                         where r.Re_ConCar != 21
+                         //where r.Re_ConTipHon != 1
+                         from PL in dbT.PLUNILAB
+                         where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+                         //where PL.Pl_UndCod == codigoUnidad
+                         where PE.RH_EstLab.Equals("A")
+                         select PE;
+                returnValue.AddRange(rT.ToList());
+            }
+
+            return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
+        }
+
         public List<PEDATPER> GetUserByTerm(string term)
         {
             var returnValue = new List<PEDATPER>();

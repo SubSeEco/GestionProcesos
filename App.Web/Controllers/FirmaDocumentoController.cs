@@ -41,55 +41,51 @@ namespace App.Web.Controllers
             [DataType(DataType.Upload)]
             public HttpPostedFileBase FileUpload { get; set; }
 
+            [Display(Name = "Documento a firmar")]
             public byte[] File { get; set; }
 
             public string Firmante { get; set; }
 
             public bool TieneFirma { get; set; }
 
+            [Display(Name = "Fecha creación")]
             public System.DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
         }
 
-
-
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
-        //protected readonly ISistemaIntegrado _daes;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
         protected readonly IHSM _hsm;
+        protected readonly IEmail _email;
 
         static List<DTOTipoDocumento> tipoDocumentoList = null;
 
-        public FirmaDocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm)
+        public FirmaDocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
-            //_daes = daes;
             _file = file;
             _folio = folio;
             _hsm = hsm;
+            _email = email;
 
             if (tipoDocumentoList == null)
                 tipoDocumentoList = _folio.GetTipoDocumento();
         }
 
-        public ActionResult Index()
-        {
-            var model = _repository.GetAll<FirmaDocumento>();
-            return View(model);
-        }
-
-        public ActionResult Details(int id)
-        {
-            var model = _repository.GetById<FirmaDocumento>(id);
-            return View(model);
-        }
-
         public ActionResult View(int id)
+        {
+            var model = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == id);
+            if (model == null)
+                return RedirectToAction("View", "Proceso", new { id });
+
+            return View(model);
+        }
+          public ActionResult Details(int id)
         {
             var model = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == id);
             if (model == null)
@@ -98,13 +94,7 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Validate(int id)
-        {
-            var model = _repository.GetById<FirmaDocumento>(id);
-            return View(model);
-        }
-
-        public ActionResult Create(int? WorkFlowId, int? ProcesoId)
+        public ActionResult Create(int? WorkFlowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
 
@@ -130,7 +120,7 @@ namespace App.Web.Controllers
                 var target = new MemoryStream();
                 model.FileUpload.InputStream.CopyTo(target);
 
-                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _file);
+                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(new FirmaDocumento()
                 {
                     FirmaDocumentoId = model.FirmaDocumentoId,
@@ -187,7 +177,7 @@ namespace App.Web.Controllers
                 var target = new MemoryStream();
                 model.FileUpload.InputStream.CopyTo(target);
 
-                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _file);
+                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository);
                 var _UseCaseResponseMessage = _useCaseInteractor.Edit(new FirmaDocumento()
                 {
                     FirmaDocumentoId = model.FirmaDocumentoId,
@@ -198,7 +188,7 @@ namespace App.Web.Controllers
                     DocumentoSinFirma = target.ToArray(),
                     DocumentoSinFirmaFilename = model.FileUpload.FileName,
                     Observaciones = model.Comentario,
-                    Autor = model.Autor
+                    Autor = model.Autor,
                 });
 
                 if (_UseCaseResponseMessage.IsValid)
@@ -246,7 +236,7 @@ namespace App.Web.Controllers
             {
                 model.Firmante = UserExtended.Email(User);
 
-                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm);
+                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.FirmaDocumentoId, model.Firmante);
                 if (_UseCaseResponseMessage.IsValid)
                 {

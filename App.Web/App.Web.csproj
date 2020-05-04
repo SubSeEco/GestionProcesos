@@ -51,6 +51,12 @@
     <Reference Include="App.Core">
       <HintPath>..\App.Core\bin\Debug\App.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -265,11 +271,8 @@
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\jquery.datetimepicker.css" />
-    <Content Include="Content\logo-gestionprocesos-2.png" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\LogoPieFirma.png" />
-    <Content Include="Content\materialize-stepper.min.css" />
-    <Content Include="Content\materialize.css" />
     <Content Include="Content\custom.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -328,6 +331,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
+    <Content Include="Scripts\init.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery-3.5.0.intellisense.js" />
@@ -356,6 +360,7 @@
     <Content Include="Scripts\MvcFoolproofJQueryValidation.min.js" />
     <Content Include="Scripts\MvcFoolproofValidation.js" />
     <Content Include="Scripts\MvcFoolproofValidation.min.js" />
+    <Content Include="Views\InformeHSA\Details.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DTOSelect.cshtml" />
     <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Delete.cshtml" />
@@ -397,6 +402,7 @@
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
     <Compile Include="Controllers\PasajeController.cs" />
     <Compile Include="Controllers\ProcesoConsultorController.cs" />
+    <Compile Include="Controllers\ProcesoPersonalController.cs" />
     <Compile Include="Controllers\ProcesoController.cs" />
     <Compile Include="Controllers\ProgramaController.cs" />
     <Compile Include="Controllers\EmpresaAerolineaController.cs" />
@@ -441,8 +447,6 @@
     <Content Include="Views\Proceso\Delete.cshtml" />
     <Content Include="Views\Proceso\Details.cshtml" />
     <Content Include="Views\Proceso\Index.cshtml" />
-    <Content Include="Views\Proceso\Dashboard.cshtml" />
-    <Content Include="Views\Workflow\Details.cshtml" />
     <Content Include="Views\Workflow\Index.cshtml" />
     <Content Include="Views\Workflow\Send.cshtml" />
     <Content Include="Views\Configuracion\Details.cshtml" />
@@ -472,8 +476,7 @@
     <Content Include="Views\Grupo\Details.cshtml" />
     <Content Include="Views\Grupo\Edit.cshtml" />
     <Content Include="Views\Grupo\Index.cshtml" />
-    <Content Include="Views\Home\Menu.cshtml" />
-    <Content Include="Views\Proceso\Search.cshtml" />
+    <Content Include="Views\ProcesoConsultor\Index.cshtml" />
     <Content Include="Views\Documento\Create.cshtml" />
     <Content Include="Views\Programa\Create.cshtml" />
     <Content Include="Views\Programa\Delete.cshtml" />
@@ -493,7 +496,6 @@
     <Content Include="Views\Documento\Details.cshtml" />
     <Content Include="Views\Contrato\Index.cshtml" />
     <Content Include="Views\Contrato\View.cshtml" />
-    <Content Include="Views\Proceso\Me.cshtml" />
     <Content Include="Views\Contrato\Validate.cshtml" />
     <Content Include="Views\Cometido\Create.cshtml" />
     <Content Include="Views\Cometido\Index.cshtml" />
@@ -585,15 +587,10 @@
     <Content Include="Views\Shared\_CometidosPartial.cshtml" />
     <Content Include="Views\Shared\_DestinosPasajesPartial.cshtml" />
     <Content Include="Views\FirmaDocumento\Create.cshtml" />
-    <Content Include="Views\FirmaDocumento\Details.cshtml" />
     <Content Include="Views\FirmaDocumento\Edit.cshtml" />
-    <Content Include="Views\FirmaDocumento\Index.cshtml" />
     <Content Include="Views\FirmaDocumento\Sign.cshtml" />
-    <Content Include="Views\FirmaDocumento\Validate.cshtml" />
     <Content Include="Views\FirmaDocumento\View.cshtml" />
     <Content Include="Views\CometidoComision\Index.cshtml" />
-    <Content Include="Views\Proceso\Edit.cshtml" />
-    <Content Include="Views\Proceso\Flow.cshtml" />
     <Content Include="Views\Cometido\ResultSearch.cshtml" />
     <Content Include="Views\Cometido\Search.cshtml" />
     <Content Include="Views\Cometido\SeguimientoUnidades.cshtml" />
@@ -601,9 +598,7 @@
     <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.5.0.min.map" />
     <Content Include="Views\InformeHSA\Create.cshtml" />
-    <Content Include="Views\InformeHSA\Details.cshtml" />
     <Content Include="Views\InformeHSA\Edit.cshtml" />
-    <Content Include="Views\InformeHSA\Index.cshtml" />
     <Content Include="Views\InformeHSA\Pdf.cshtml" />
     <Content Include="Views\InformeHSA\Sign.cshtml" />
     <Content Include="Views\InformeHSA\View.cshtml" />
@@ -614,12 +609,8 @@
     <Content Include="Views\Region\Edit.cshtml" />
     <Content Include="Views\Region\Index.cshtml" />
     <Content Include="Views\Shared\_Message.cshtml" />
-    <Content Include="Views\Workflow\History.cshtml" />
     <Content Include="Views\Workflow\Header.cshtml" />
-    <Content Include="Views\Workflow\Validate.cshtml" />
     <Content Include="Views\Workflow\Forward.cshtml" />
-    <Content Include="Views\Workflow\Archive.cshtml" />
-    <Content Include="Views\Workflow\Next.cshtml" />
     <Content Include="Views\Viatico\Index.cshtml" />
     <Content Include="Views\Viatico\Create.cshtml" />
     <Content Include="Views\Viatico\Details.cshtml" />
@@ -669,6 +660,14 @@
     <Content Include="Views\ProcesoConsultor\Details.cshtml" />
     <Content Include="Views\Shared\_Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Workflow\OK.cshtml" />
+    <Content Include="Views\Proceso\Header.cshtml" />
+    <Content Include="Views\Workflow\History.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Delete.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Details.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Index.cshtml" />
+    <Content Include="Views\Proceso\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

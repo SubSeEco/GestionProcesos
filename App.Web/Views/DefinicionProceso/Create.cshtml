@@ -1,64 +1,67 @@
 ﻿@model App.Model.Core.DefinicionProceso
-
-<h3>Crear definición</h3>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="card">
-        <div class="card-content">
-            @*<span class="card-title">Crear nuevo</span>*@
-            <div class="row">
-                <div class="input-field col s12 m10 l10">
-                    @Html.TextBoxFor(m => Model.Nombre)
-                    @Html.LabelFor(m => Model.Nombre)
-                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m10 l10">
-                    @Html.TextBoxFor(m => Model.Descripcion)
-                    @Html.LabelFor(m => Model.Descripcion)
-                    @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m10 l10">
-                    @Html.TextBoxFor(m => Model.DuracionHoras, new { @type = "number" })
-                    @Html.LabelFor(m => Model.DuracionHoras)
-                    @Html.ValidationMessageFor(m => Model.DuracionHoras, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m10 l10">
-                    @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.EntidadId)
-                    @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
-                </div>
-
-                <div class="input-field col s12 m10 l10">
-                    <label>
-                        @Html.CheckBoxFor(m => m.Habilitado)
-                        <span>@Html.LabelFor(m => Model.Habilitado)</span>
-                    </label>
-                </div>
-                <div class="input-field col s12 m10 l10">
-                    <label>
-                        @Html.CheckBoxFor(m => m.EjecutarInmediatamente)
-                        <span>@Html.LabelFor(m => Model.EjecutarInmediatamente)</span>
-                    </label>
-                    <div class="section"></div>
-                </div>
-            </div>
-            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-        </div>
-    </div>
+@{
+    ViewBag.Title = "Crear definición de proceso";
+    ViewBag.SubTitle = "Crear definición de proceso";
 }
-<div class="fixed-action-btn">
-    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
 </div>
+<div class="container">
+    @Html.Partial("_Message")
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('input:hidden').each(function (index, element) {
-            $(element).appendTo($(element).parent());
+        <div class="card">
+            <div class="card-content">
+                @*<span class="card-title">Crear nuevo</span>*@
+                <div class="row">
+                    <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.Nombre)
+                        @Html.LabelFor(m => Model.Nombre)
+                        @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.Descripcion)
+                        @Html.LabelFor(m => Model.Descripcion)
+                        @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.DuracionHoras, new { @type = "number" })
+                        @Html.LabelFor(m => Model.DuracionHoras)
+                        @Html.ValidationMessageFor(m => Model.DuracionHoras, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.EntidadId)
+                        @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
+                    </div>
+
+                    <div class="input-field col s12 m10 l10">
+                        <label>
+                            @Html.CheckBoxFor(m => m.Habilitado)
+                            <span>@Html.LabelFor(m => Model.Habilitado)</span>
+                        </label>
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+            </div>
+        </div>
+    }
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>
+</div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input:hidden').each(function (index, element) {
+                $(element).appendTo($(element).parent());
+            });
+            $('select').formSelect();
+
         });
-        $('select').formSelect();
-
-    });
-</script>
+    </script>
