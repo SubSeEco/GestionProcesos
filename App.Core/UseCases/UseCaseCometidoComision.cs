@@ -4194,7 +4194,7 @@ namespace App.Core.UseCases
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
 
 
-                if (workflowActual.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+                if (workflowActual.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
                 {
                     //Se toma valor de cometidos para definir curso de accion del flujo
                     var Cometido = new Cometido();
@@ -4351,7 +4351,7 @@ namespace App.Core.UseCases
                                 definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
                         }
                 }
-                else if (workflowActual.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+                else if (workflowActual.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
                 {
                     var Pasaje = new Pasaje();
                     Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
@@ -4565,7 +4565,7 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaJefaturaDeFuncionarioQueViaja)
                     {
-                        if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString() || workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                        if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString() || workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                         {
                             var com = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId);
                             persona = _sigper.GetUserByRut(com.FirstOrDefault().Rut);
@@ -4664,7 +4664,7 @@ namespace App.Core.UseCases
 
                     #region NOTIFICACIONES DE CORREO PROCESO COMETIDO
                     /*Notificaciones de correo proceso cometidos*/
-                    if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+                    if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
                     {
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
                         List<string> emailMsg;

@@ -57,130 +57,95 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.1.0\lib\net45\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.EF6, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.EF6.1.6.5\lib\net45\Glimpse.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+    <Reference Include="ErrorHandlerMvc, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ErrorHandlerMvc.1.1.5\lib\net451\ErrorHandlerMvc.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.AWT.WinForms.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Beans.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Charsets.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Cldrdata">
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Cldrdata.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Corba.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Core.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Jdbc.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Localedata">
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Localedata.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Management.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Media.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Misc.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Naming.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Nashorn">
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Nashorn.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Remoting.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Security.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.SwingAWT.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Text.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.Tools">
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Tools.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.Util.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.API.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.Bind.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.Parse.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
     </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Transform">
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.Transform.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.OpenJDK.XML.XPath.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.Runtime.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Source\App.Web\bin\IKVM.Runtime.JNI.dll</HintPath>
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -275,6 +240,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="TikaOnDotNet, Version=1.17.1.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.1\lib\TikaOnDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="TikaOnDotNet.TextExtraction, Version=1.17.1.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.1\lib\TikaOnDotNet.TextExtraction.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -345,30 +316,28 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="App_Browsers\qt.browser" />
     <Content Include="App_Data\COMETIDOS.xlsx" />
     <Content Include="App_Data\CAIGG.xlsx" />
-    <Content Include="App_Data\SeguimientoGP.xlsx" />
-    <None Include="packages.config" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Common.js" />
+    <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <None Include="Scripts\jquery-3.5.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.5.0.js" />
+    <Content Include="Scripts\jquery-3.5.0.min.js" />
+    <Content Include="Scripts\jquery-3.5.0.slim.js" />
+    <Content Include="Scripts\jquery-3.5.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -423,6 +392,7 @@
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
     <Compile Include="Controllers\PasajeController.cs" />
@@ -432,6 +402,7 @@
     <Compile Include="Controllers\EmpresaAerolineaController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\ParrafosController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\TipoSubTituloController.cs" />
     <Compile Include="Controllers\TipoSubAsignacionController.cs" />
     <Compile Include="Controllers\TipoPartidaController.cs" />
@@ -445,7 +416,6 @@
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ViaticoInternacionalController.cs" />
     <Compile Include="Controllers\WorkflowController.cs" />
-    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -621,8 +591,6 @@
     <Content Include="Views\FirmaDocumento\Sign.cshtml" />
     <Content Include="Views\FirmaDocumento\Validate.cshtml" />
     <Content Include="Views\FirmaDocumento\View.cshtml" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\CometidoComision\Index.cshtml" />
     <Content Include="Views\Proceso\Edit.cshtml" />
     <Content Include="Views\Proceso\Flow.cshtml" />
@@ -630,8 +598,15 @@
     <Content Include="Views\Cometido\Search.cshtml" />
     <Content Include="Views\Cometido\SeguimientoUnidades.cshtml" />
     <Content Include="Views\Cometido\SolicitudesTransparencia.cshtml" />
-    <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
-    <None Include="Views\Shared\_Indice.cshtml" />
+    <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.5.0.min.map" />
+    <Content Include="Views\InformeHSA\Create.cshtml" />
+    <Content Include="Views\InformeHSA\Details.cshtml" />
+    <Content Include="Views\InformeHSA\Edit.cshtml" />
+    <Content Include="Views\InformeHSA\Index.cshtml" />
+    <Content Include="Views\InformeHSA\Pdf.cshtml" />
+    <Content Include="Views\InformeHSA\Sign.cshtml" />
+    <Content Include="Views\InformeHSA\View.cshtml" />
     <Content Include="Views\Workflow\Execute.cshtml" />
     <Content Include="Views\Region\Create.cshtml" />
     <Content Include="Views\Region\Delete.cshtml" />
@@ -691,6 +666,9 @@
     <Content Include="Views\ViaticoInternacional\Edit.cshtml" />
     <Content Include="Views\ViaticoInternacional\Index.cshtml" />
     <Content Include="Views\Cometido\Anular.cshtml" />
+    <Content Include="Views\ProcesoConsultor\Details.cshtml" />
+    <Content Include="Views\Shared\_Error.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

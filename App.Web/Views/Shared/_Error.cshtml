@@ -1,0 +1,17 @@
+﻿@model System.Exception
+
+<p></p>
+
+<h1 class="display-4 my-3 text-danger">Problema encontrado</h1>
+<p class="lead text-danger">@Model.Message</p>
+<hr />
+<a href="javascript:void(0);" onclick="history.go(-1);">Volver a página anterior</a> | <a href='@Url.Action("Index", "Home")'>Ir a DAES digital</a>
+
+@*<p></p>
+<div class="card text-white bg-danger mb-3">
+    <div class="card-body">
+        <h4 class="card-title">Problema encontrado:</h4>
+        <p>@Model.Message</p>
+    </div>
+</div>
+<a href="javascript:void(0);" onclick="history.go(-1);">Volver a página anterior</a> | <a href='@Url.Action("Index", "Home")'>Ir a DAES digital</a>*@

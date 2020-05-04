@@ -10,6 +10,7 @@ using App.Model.Cometido;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Core.UseCases;
+using App.Model.InformeHSA;
 
 namespace App.Web.Controllers
 {
@@ -124,194 +125,201 @@ namespace App.Web.Controllers
                 }
 
                 model.Workflows = _repository.Get(predicatePersonal).Union(_repository.Get(predicateGrupal)).ToList();
-                foreach (var proceso in model.Workflows)
-                {
-                    proceso.NumeroProceso = "0";
 
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CuentaRed.ToString())
-                    //{
-                    //    if (_repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //    {
-                    //        proceso.NumeroProceso = _repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId).CuentaRedId.ToString();
-                    //        /*se muestra nombre del funcionarios*/
-                    //        if (proceso.Email != null)
-                    //        {
-                    //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                    //            if (inicidor != null)
-                    //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                    //            else
-                    //                proceso.NombreFuncionario = "S/A";
-                    //        }
-                    //    }
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.Contrato.ToString())
-                    //{
-                    //    if (_repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //    {
-                    //        proceso.NumeroProceso = _repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId).ContratoId.ToString();
-                    //        /*se muestra nombre del funcionarios*/
-                    //        if (proceso.Email != null)
-                    //        {
-                    //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                    //            if (inicidor != null)
-                    //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                    //            else
-                    //                proceso.NombreFuncionario = "S/A";
-                    //        }
-                    //    }
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CDP.ToString())
-                    //{
-                    //    if (_repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //    {
-                    //        proceso.NumeroProceso = _repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId).CDPId.ToString();
-                    //        /*se muestra nombre del funcionarios*/
-                    //        if (proceso.Email != null)
-                    //        {
-                    //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                    //            if (inicidor != null)
-                    //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                    //            else
-                    //                proceso.NombreFuncionario = "S/A";
-                    //        }
-                    //    }
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.InformeHSA.ToString())
-                    //{
-                    //    if (_repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //    {
-                    //        proceso.NumeroProceso = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId).InformeHSAId.ToString();
-                    //        /*se muestra nombre del funcionarios*/
-                    //        if (proceso.Email != null)
-                    //        {
-                    //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
-                    //            if (inicidor != null)
-                    //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
-                    //            else
-                    //                proceso.NombreFuncionario = "S/A";
-                    //        }
-                    //    }
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.GDIngreso.ToString())
-                    //{
-                    //    if (_repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //    {
-                    //        proceso.NumeroProceso = _repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId).GDIngresoId.ToString();
-                    //        /*se muestra nombre del funcionarios*/
-                    //        if (proceso.Email != null)
-                    //        {
-                    //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                    //            if (inicidor != null)
-                    //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                    //            else
-                    //                proceso.NombreFuncionario = "S/A";
-                    //        }
-                    //    }
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.SIACSolicitud.ToString())
-                    //{
-                    //    if(_repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //        proceso.NumeroProceso = _repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId).SIACSolicitudId.ToString();
-                    //}
-                    //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.RadioTaxi.ToString())
-                    //{
-                    //    if(_repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                    //        proceso.NumeroProceso = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId).RadioTaxiId.ToString();
-                    //}
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
-                    {
-                        if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                        {
-                            proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
-                            /*se muestra nombre del funcionarios*/
-                            if (proceso.Email != null)
-                            {
-                                var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                                if (inicidor != null)
-                                    proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                                else
-                                    proceso.NombreFuncionario = "S/A";
-                            }
-                            else
-                                proceso.NombreFuncionario = "S/A";
-                        }
+                //foreach (var proceso in model.Workflows)
+                //{
+                //    proceso.NumeroProceso = "0";
 
-                    }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
-                    {
-                        if (_repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                        {
-                            proceso.NumeroProceso = _repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId).PasajeId.ToString();
-                            /*se muestra nombre del funcionarios*/
-                            if (proceso.Email != null)
-                            {
-                                var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                                if (inicidor != null)
-                                    proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                                else
-                                    proceso.NombreFuncionario = "S/A";
-                            }
-                        }
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CuentaRed.ToString())
+                //{
+                //    if (_repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<CuentaRed>(q => q.ProcesoId == proceso.ProcesoId).CuentaRedId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.Contrato.ToString())
+                //{
+                //    if (_repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<Contrato>(q => q.ProcesoId == proceso.ProcesoId).ContratoId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.CDP.ToString())
+                //{
+                //    if (_repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<CDP>(q => q.ProcesoId == proceso.ProcesoId).CDPId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.InformeHSA.ToString())
+                //{
+                //    if (_repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == proceso.ProcesoId).InformeHSAId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email).Funcionario;
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.RH_NombFun + inicidor.RH_PaterFun + inicidor.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.GDIngreso.ToString())
+                //{
+                //    if (_repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<GDIngreso>(q => q.ProcesoId == proceso.ProcesoId).GDIngresoId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.SIACSolicitud.ToString())
+                //{
+                //    if(_repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //        proceso.NumeroProceso = _repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == proceso.ProcesoId).SIACSolicitudId.ToString();
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == Core.Enum.Enum.Entidad.RadioTaxi.ToString())
+                //{
+                //    if(_repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //        proceso.NumeroProceso = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == proceso.ProcesoId).RadioTaxiId.ToString();
+                //}
 
-                    }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
-                    {
-                        if (_repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                        {
-                            proceso.NumeroProceso = _repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId).ComisionesId.ToString();
-                            /*se muestra nombre del funcionarios*/
-                            if (proceso.Email != null)
-                            {
-                                var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                                if (inicidor != null)
-                                    proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                                else
-                                    proceso.NombreFuncionario = "S/A";
-                            }
-                        }
 
-                    }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CometidoPasaje.ToString())
-                    {
-                        if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                        {
-                            proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
-                            /*se muestra nombre del funcionarios*/
-                            if (proceso.Email != null)
-                            {
-                                var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                                if (inicidor != null)
-                                    proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                                else
-                                    proceso.NombreFuncionario = "S/A";
-                            }
-                        }
+                //las llamadas a sigper por cada tarea genera problemas de memoria...
 
-                    }
-                    if (proceso != null && proceso.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
-                    {
-                        if (_repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId) != null)
-                        {
-                            proceso.NumeroProceso = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId).FirmaDocumentoId.ToString();
-                            /*se muestra nombre del funcionarios*/
-                            if (proceso.Email != null)
-                            {
-                                var inicidor = _sigper.GetUserByEmail(proceso.Email);
-                                if (inicidor != null)
-                                    proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
-                                else
-                                    proceso.NombreFuncionario = "S/A";
-                            }
-                        }
+                //if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+                //{
+                //    if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //        else
+                //            proceso.NombreFuncionario = "S/A";
+                //    }
 
-                    }
-                }
-            }
-            if (model.Workflows.Count > 0)
-            {
-                var correo = model.Workflows.FirstOrDefault().Email;
+                //}
+                //if (proceso != null && proceso.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+                //{
+                //    if (_repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<Pasaje>(q => q.ProcesoId == proceso.ProcesoId).PasajeId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
+                //{
+                //    if (_repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<Comisiones>(q => q.ProcesoId == proceso.ProcesoId).ComisionesId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.CometidoPasaje.ToString())
+                //{
+                //    if (_repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId).CometidoId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+
+                //}
+                //if (proceso != null && proceso.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+                //{
+                //    if (_repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId) != null)
+                //    {
+                //        proceso.NumeroProceso = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == proceso.ProcesoId).FirmaDocumentoId.ToString();
+                //        /*se muestra nombre del funcionarios*/
+                //        if (proceso.Email != null)
+                //        {
+                //            var inicidor = _sigper.GetUserByEmail(proceso.Email);
+                //            if (inicidor != null)
+                //                proceso.NombreFuncionario = inicidor.Funcionario.RH_NombFun + inicidor.Funcionario.RH_PaterFun + inicidor.Funcionario.RH_MaterFun;
+                //            else
+                //                proceso.NombreFuncionario = "S/A";
+                //        }
+                //    }
+
+                //}
+                //}
+                //}
+                //if (model.Workflows.Count > 0)
+                //{
+                //    var correo = model.Workflows.FirstOrDefault().Email;
+                //}
             }
             return View(model);
+
         }
 
         [HttpPost]
@@ -398,100 +406,6 @@ namespace App.Web.Controllers
             if (workflow != null && workflow.Anulada)
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra anulada");
 
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CuentaRed.ToString())
-            //{
-            //    var obj = _repository.GetFirst<CuentaRed>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CuentaRedId;
-            //        workflow.Entity = App.Util.Enum.Entidad.CuentaRed.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Contrato.ToString())
-            //{
-            //    var obj = _repository.GetFirst<Contrato>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.ContratoId;
-            //        workflow.Entity = App.Util.Enum.Entidad.Contrato.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.CDP.ToString())
-            //{
-            //    var obj = _repository.GetFirst<CDP>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CDPId;
-            //        workflow.Entity = App.Util.Enum.Entidad.CDP.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
-            //{
-            //    var obj = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.InformeHSAId;
-            //        workflow.Entity = App.Util.Enum.Entidad.InformeHSA.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDIngreso.ToString())
-            //{
-            //    var obj = _repository.GetFirst<GDIngreso>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.GDIngresoId;
-            //        workflow.Entity = App.Util.Enum.Entidad.GDIngreso.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.SIACSolicitud.ToString())
-            //{
-            //    var obj = _repository.GetFirst<SIACSolicitud>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.SIACSolicitudId;
-            //        workflow.Entity = App.Util.Enum.Entidad.SIACSolicitud.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
-            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.RadioTaxi.ToString())
-            //{
-            //    var obj = _repository.GetFirst<RadioTaxi>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.RadioTaxiId;
-            //        workflow.Entity = App.Util.Enum.Entidad.RadioTaxi.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
-
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
             if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
             {
                 var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
@@ -533,7 +447,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
             }
-              
+
             if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var obj = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == workflow.ProcesoId);
@@ -548,20 +462,19 @@ namespace App.Web.Controllers
                 }
             }
 
-            //if (workflow != null && workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            //{
-            //    var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
-            //    if (obj != null)
-            //    {
-            //        workflow.EntityId = obj.CometidoId;
-            //        workflow.Entity = (int)App.Util.Enum.Entidad.Cometido.ToString();
-            //        obj.WorkflowId = workflow.WorkflowId;
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
+            {
+                var obj = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.InformeHSAId;
+                    workflow.Entity = App.Util.Enum.Entidad.InformeHSA.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
 
-            //        _repository.Update(obj);
-            //        _repository.Save();
-            //    }
-            //}
-
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
 
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
@@ -608,7 +521,7 @@ namespace App.Web.Controllers
                 //if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.Cometido.ToString()
                 //  || workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.Comision.ToString()
                 //  || workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.ToString() == App.Util.Enum.Entidad.CometidoPasaje.ToString())
-                if(workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje
+                if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje
                     || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
@@ -702,73 +615,11 @@ namespace App.Web.Controllers
         {
             model.Email = UserExtended.Email(User);
 
-            //if (ModelState.IsValid)
-            //{
-            //    var _useCaseInteractor = new App.Core(_repository, _email, _sigper);
-            //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowForward(model);
-            //    if (_UseCaseResponseMessage.IsValid)
-            //    {
-            //        TempData["Success"] = "Operación terminada correctamente.";
-            //        return RedirectToAction("Index", "Workflow");
-            //    }
-            //    else
-            //        TempData["Error"] = _UseCaseResponseMessage.Errors;
-            //}
-
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
-            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-            return View(model);
-        }
-
-        public ActionResult Archive(int id)
-        {
-            var model = _repository.GetById<Workflow>(id);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Archive(Workflow model)
-        {
-            model.Email = UserExtended.Email(User);
-
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-                ResponseMessage _UseCaseResponseMessageDelete = new ResponseMessage();
-
-                var workflow = _repository.Get<Workflow>(c => c.WorkflowId == model.WorkflowId).FirstOrDefault();
-                var Entity = _repository.Get<DefinicionWorkflow>(d => d.DefinicionWorkflowId == workflow.DefinicionWorkflowId).FirstOrDefault().EntidadId;
-                if (Entity == 8)/*Se eliminan datos del destino, luego el cometido*/
-                {
-                    var cometido = _repository.Get<Cometido>(c => c.CometidoId == workflow.EntityId.Value).FirstOrDefault();                    
-                    var destinos = _repository.Get<Destinos>(c => c.CometidoId == cometido.CometidoId);
-                    var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-                    if (destinos != null)
-                    {
-                        foreach (var des in destinos)
-                        {
-                            //_UseCaseResponseMessageDelete = _useCaseInteractor.DestinosDelete(des.DestinoId);
-                        }
-                    }
-
-                    if(cdp != null)
-                    {
-                        foreach(var c in cdp)
-                        {
-                            //_UseCaseResponseMessageDelete = _useCaseInteractor.GeneracionCDPDelete(c.GeneracionCDPId);
-                        }
-                    }                    
-                    //_UseCaseResponseMessageDelete = _useCaseInteractor.CometidoDelete(cometido.CometidoId);
-                }
-
-                /*se elimina datos del proceso*/
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
-                if (_UseCaseResponseMessage.IsValid && _UseCaseResponseMessageDelete.IsValid)
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowForward(model);
+                if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     return RedirectToAction("Index", "Workflow");
@@ -776,6 +627,12 @@ namespace App.Web.Controllers
                 else
                     TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
+
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            if (model.Pl_UndCod.HasValue)
+                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
             return View(model);
         }

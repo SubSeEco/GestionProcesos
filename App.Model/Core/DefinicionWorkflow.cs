@@ -148,5 +148,8 @@ namespace App.Model.Core
 
         public virtual DefinicionWorkflow DefinicionWorkflowRechazo { get; set; }
         public virtual ICollection<Workflow> Workflows { get; set; }
+
+        [Display(Name = "Instrucciones")]
+        public string Instrucciones { get; set; }
     }
 }

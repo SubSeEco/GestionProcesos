@@ -329,6 +329,7 @@ namespace App.Core.UseCases
                 proceso.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionProceso.DuracionHoras);
                 proceso.FechaTermino = null;
                 proceso.Email = obj.Email;
+                proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
 
                 var workflow = new Workflow();
                 workflow.FechaCreacion = DateTime.Now;
@@ -433,7 +434,7 @@ namespace App.Core.UseCases
                     obj.FechaTermino = DateTime.Now;
                     obj.Terminada = true;
                     obj.Anulada = true;
-
+                    obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
                     _repository.Save();
 
                     //notificar al dueño del proceso
@@ -563,6 +564,7 @@ namespace App.Core.UseCases
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
+                    workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();

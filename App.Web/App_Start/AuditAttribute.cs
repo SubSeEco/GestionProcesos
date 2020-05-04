@@ -29,23 +29,33 @@ namespace App.Web
                             content += key + " = " + parsed[key] + Environment.NewLine;
             }
 
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext()) {
-                context.Log.Add( new Model.Core.Log {
-                    LogId = Guid.NewGuid(),
-                    LogUserName = (request.IsAuthenticated) ? filterContext.HttpContext.User.Identity.Name : "Anonymous",
-                    LogIpAddress = request.UserHostAddress ?? request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.ServerVariables["REMOTE_ADDR"],
-                    LogAreaAccessed = request.RawUrl,
-                    LogTimeUtc = DateTime.UtcNow,
-                    LogTimeLocal = DateTime.Now,
-                    LogAgent = request.UserAgent,
-                    LogHttpMethod = request.HttpMethod,
-                    LogHeader = headers,
-                    LogContent = content
-                });
-                context.SaveChanges();
+            try
+            {
+                using (var context = new Infrastructure.GestionProcesos.AppContext())
+                {
+                    context.Log.Add(new Model.Core.Log {
+                        LogId = Guid.NewGuid(),
+                        LogUserName = (request.IsAuthenticated) ? filterContext.HttpContext.User.Identity.Name : "Anonymous",
+                        LogIpAddress = request.UserHostAddress ?? request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.ServerVariables["REMOTE_ADDR"],
+                        LogAreaAccessed = request.RawUrl,
+                        LogTimeUtc = DateTime.UtcNow,
+                        LogTimeLocal = DateTime.Now,
+                        LogAgent = request.UserAgent,
+                        LogHttpMethod = request.HttpMethod,
+                        LogHeader = headers,
+                        LogContent = content
+                    });
+                    context.SaveChanges();
+                }
             }
-
-            System.Diagnostics.Debug.WriteLine(headers);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            finally
+            {
+                System.Diagnostics.Debug.WriteLine(headers);
+            }
 
             base.OnActionExecuting(filterContext);
         }

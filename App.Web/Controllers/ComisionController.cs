@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using App.Model.Comisiones;
 using App.Model.Core;
-using App.Model.SIGPER;
 //using App.Model.Shared;
 using App.Core.Interfaces;
 using App.Core.UseCases;

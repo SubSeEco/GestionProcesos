@@ -21,6 +21,11 @@
                             @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
                         </div>
                         <div class="input-field col s12 m10 l10">
+                            @Html.TextAreaFor(m => Model.Instrucciones, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Instrucciones)
+                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
                             @Html.TextBoxFor(m => Model.Secuencia, new { @type = "number" })
                             @Html.LabelFor(m => Model.Secuencia)
                             @Html.ValidationMessageFor(m => Model.Secuencia, "", new { @class = "red-text" })
@@ -50,7 +55,6 @@
                                 @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
                             </div>
                         </div>
-
                         <div id="UsuarioId">
                             <div class="input-field col s12 m10 l10">
                                 @Html.TextBoxFor(m => Model.NombreUsuario)
@@ -143,8 +147,6 @@
                                 <span>@Html.LabelFor(m => Model.RequireDocumentacion)</span>
                             </label>
                         </div>
-
-
                         <div class="input-field col s12 m10 l10">
                             <label>
                                 @Html.CheckBoxFor(m => m.PermitirGenerarDocumentos)
@@ -163,19 +165,6 @@
                                 <span>@Html.LabelFor(m => Model.PermitirReenvioGrupoEspecial)</span>
                             </label>
                         </div>
-                        <div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirArchivarTarea)
-                                <span>@Html.LabelFor(m => Model.PermitirArchivarTarea)</span>
-                            </label>
-                        </div>
-                        @*<div class="input-field col s12 m10 l10">
-                            <label>
-                                @Html.CheckBoxFor(m => m.PermitirAnularProceso)
-                                <span>@Html.LabelFor(m => Model.PermitirAnularProceso)</span>
-                            </label>
-                        </div>*@
-
                         <div class="input-field col s12 m10 l10">
                             <label>
                                 @Html.CheckBoxFor(m => m.PermitirTerminar)

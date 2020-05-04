@@ -37,13 +37,21 @@ namespace App.Infrastructure.SIGPER
             {
                 using (AppContextEconomia context = new AppContextEconomia())
                 {
-                    return context.PECARGOS.FirstOrDefault(q => q.Pl_CodCar == codigo);
+                    if (context.PECARGOS.Any(q => q.Pl_CodCar == codigo))
+                        return context.PECARGOS.FirstOrDefault(q => q.Pl_CodCar == codigo);
+                }
+                using (AppContextTurismo context = new AppContextTurismo())
+                {
+                    if (context.PECARGOS.Any(q => q.Pl_CodCar == codigo))
+                        return context.PECARGOS.FirstOrDefault(q => q.Pl_CodCar == codigo);
                 }
             }
             catch (Exception)
             {
                 throw;
             }
+
+            return null;
         }
         public PLUNILAB GetUnidad(int codigo)
         {
@@ -51,13 +59,21 @@ namespace App.Infrastructure.SIGPER
             {
                 using (AppContextEconomia context = new AppContextEconomia())
                 {
-                    return context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
+                    if (context.PLUNILAB.Any(q => q.Pl_UndCod == codigo))
+                        return context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
+                }
+                using (AppContextTurismo context = new AppContextTurismo())
+                {
+                    if (context.PLUNILAB.Any(q => q.Pl_UndCod == codigo))
+                        return context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
                 }
             }
             catch (Exception)
             {
                 throw;
             }
+
+            return null;
         }
         public Model.SIGPER.SIGPER GetUserByEmail(string email)
         {
@@ -72,7 +88,7 @@ namespace App.Infrastructure.SIGPER
 
             try
             {
-                using (AppContextEconomia context = new AppContextEconomia())
+                using (var context = new AppContextEconomia())
                 {
                     var funcionario = context.PEDATPER.FirstOrDefault(q => q.Rh_Mail == email && q.RH_EstLab == "A");
                     if (funcionario != null)

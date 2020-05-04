@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de procesos</title>
 
-    <script type="text/javascript" src="~/Scripts/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.0.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="~/Scripts/materialize.js"></script>
     <link rel="stylesheet" href="~/Content/materialize.css">
@@ -25,6 +25,21 @@
         </div>
     </div>
     <script type="text/javascript">
+
+        $(document).on('submit', 'form', function () {
+            var buttons = $(this).find('[type="submit"]');
+            if ($(this).valid()) {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando');
+                    $(buttons[btn]).prop('disabled', true);
+                });
+            } else {
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', false);
+                });
+            }
+        });
+
         $(document).ready(function () {
             $('.sidenav').sidenav();
             $('.collapsible').collapsible();

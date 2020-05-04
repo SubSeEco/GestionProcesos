@@ -47,7 +47,7 @@ namespace App.Model.Core
 
         //[Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Información asociada")]
-        public int? EntidadId { get; set; }
+        public int EntidadId { get; set; }
         public virtual Entidad Entidad { get; set; }
 
     }

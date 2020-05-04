@@ -18,6 +18,10 @@
             @Html.DisplayFor(m => Model.Descripcion)
         </div>
         <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.Entidad.Nombre)</strong><br />
+            @Html.DisplayFor(m => Model.Entidad.Nombre)
+        </div>
+        <div class="input-field col s12 m10">
             <strong>@Html.DisplayNameFor(m => Model.DuracionHoras)</strong><br />
             @Html.DisplayFor(m => Model.DuracionHoras)
         </div>
@@ -52,10 +56,6 @@
                             @Html.DisplayFor(m => item.Secuencia)
                         </div>
 
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => item.EntidadId)</strong><br />
-                            @Html.DisplayFor(m => item.Entidad.Nombre)
-                        </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => item.AccionId)</strong><br />
                             @Html.DisplayFor(m => item.Accion.Nombre)

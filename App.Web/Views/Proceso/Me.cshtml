@@ -35,83 +35,68 @@
     </div>
 </div>
 
-    <div class="card">
-        <div class="card-content">
-            @*<span class="card-title">Procesos</span>*@
-            <table class="table bordered" id="dt">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Terminada)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+<div class="card">
+    <div class="card-content">
+        @*<span class="card-title">Procesos</span>*@
+        <table class="table bordered" id="dt">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
 
-                    @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
-                    {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProcesoId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaCreacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @if (item.Terminada)
-                            {
-                                <p>Finalizado</p>
-                            }
-                            else
-                            {
-                                <p>En proceso</p>
-                            }
-                        </td>
-
-                        <td>
-                            @*@Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)*@
-                            @Html.ActionLink("Detalles", "Details", "Proceso", new { id = item.ProcesoId }, null)
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProcesoId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaCreacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
     </div>
-
-
-<div class="fixed-action-btn">
-    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
 
 <script>
     $(document).ready(function () {

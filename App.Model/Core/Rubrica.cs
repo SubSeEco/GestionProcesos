@@ -14,23 +14,16 @@ namespace App.Model.Core
         [Display(Name = "Id")]
         public int RubricaId { get; set; }
 
-        [Display(Name = "Autor")]
+        [Required]
+        [EmailAddress(ErrorMessage = "Correo electrónico inválido")]
+        [Display(Name = "Correo electrónico usuario")]
         public string Email { get; set; }
-
-        //[Display(Name = "Nombre archivo")]
-        //public string FileName { get; set; }
-
-        //[Display(Name = "Archivo")]
-        //public byte[] File { get; set; }
 
         [Display(Name = "Identificador de firma electrónica")]
         public string IdentificadorFirma { get; set; }        
         
         [Display(Name = "Unidad organizacional")]
         public string UnidadOrganizacional { get; set; }
-
-        //[Display(Name = "Id Proceso")]
-        //public string IdProceso { get; set; }
 
         [Display(Name = "Habilitado para firmar")]
         public bool HabilitadoFirma { get; set; }
