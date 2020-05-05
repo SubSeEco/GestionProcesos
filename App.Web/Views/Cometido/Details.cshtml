@@ -478,6 +478,10 @@
 
                                 if (Model.DocumentoRefrendacion != true)
                                 {
+                                    <div class="row">
+                                        @Html.ActionLink("Editar CDP", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
+                                    </div>
+
                                     <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
                                     @Html.Raw("<span>Subir archivo refrendación</span>")
                                 }

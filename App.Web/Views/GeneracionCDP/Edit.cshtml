@@ -21,12 +21,15 @@
                     <th>
                         @Html.DropDownListFor(model => model.VtcTipoPartidaId, null, "Seleccione...")
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcIdCompromiso)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcIdCompromiso)
-                    </th>
+                    @if (Model.Cometido.Workflow.DefinicionWorkflow.Secuencia != 8)
+                    {
+                        <th>
+                            @Html.DisplayNameFor(model => model.VtcIdCompromiso)
+                        </th>
+                        <th>
+                            @Html.EditorFor(model => model.VtcIdCompromiso)
+                        </th>
+                    }
                 </tr>
                 <tr>
                     <th>

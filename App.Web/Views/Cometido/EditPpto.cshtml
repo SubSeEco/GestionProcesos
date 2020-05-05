@@ -368,12 +368,15 @@ else
                                             <th>
                                                 @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
                                             </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                            </th>
+                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia != 8)
+                                            {
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                            }
                                         </tr>
                                         <tr>
                                             <th>

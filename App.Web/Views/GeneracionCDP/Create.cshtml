@@ -20,11 +20,11 @@
                         @Html.LabelFor(m => Model.VtcTipoPartidaId)
                         @Html.ValidationMessageFor(m => Model.VtcTipoPartidaId, "", new { @class = "red-text" })
                     </div>
-                    <div class="input-field col s12 m6 l3">
+                    @*<div class="input-field col s12 m6 l3">
                         @Html.TextBoxFor(m => Model.VtcIdCompromiso, new { @placeholder = "Ingrese valor para el Compromiso del viatico" })
                         @Html.LabelFor(m => Model.VtcIdCompromiso)
                         @Html.ValidationMessageFor(m => Model.VtcIdCompromiso, "", new { @class = "red-text" })
-                    </div>
+                    </div>*@
                     <div class="input-field col s12 m6 l3">
                         @Html.DropDownListFor(m => Model.VtcTipoCapituloId, null, "Seleccione...")
                         @Html.LabelFor(m => Model.VtcTipoCapituloId)
