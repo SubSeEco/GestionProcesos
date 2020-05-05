@@ -1,24 +1,25 @@
 ﻿@model App.Model.Cometido.GeneracionCDP
+<div class="container">
+    <h3>Tipo Asignacion</h3>
+    <div class="card">
+        <div class="card-content">
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.GeneracionCDPId)</strong>
+                <p>@Html.DisplayFor(m => Model.GeneracionCDPId)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.VtcTipoPartida)</strong>
+                <p>@Html.DisplayFor(m => Model.VtcTipoPartida)</p>
+            </div>
+            <div class="input-field col s12 m10 l10">
+                <strong>@Html.DisplayNameFor(m => Model.VtcTipoCapitulo)</strong>
+                <p>@Html.DisplayFor(m => Model.VtcTipoCapitulo)</p>
+            </div>
+            <br /><br />
+            <a href='@Url.Action("Edit", new { id = Model.GeneracionCDPId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.GeneracionCDPId })' class="btn red">Eliminar</a>
 
-<h3>Tipo Asignacion</h3>
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.GeneracionCDPId)</strong>
-            <p>@Html.DisplayFor(m => Model.GeneracionCDPId)</p>
         </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.VtcTipoPartida)</strong>
-            <p>@Html.DisplayFor(m => Model.VtcTipoPartida)</p>
-        </div>
-        <div class="input-field col s12 m10 l10">
-            <strong>@Html.DisplayNameFor(m => Model.VtcTipoCapitulo)</strong>
-            <p>@Html.DisplayFor(m => Model.VtcTipoCapitulo)</p>
-        </div>
-        <br /><br />
-        <a href='@Url.Action("Edit", new { id = Model.GeneracionCDPId })' class="btn blue">Editar</a>
-        <a href='@Url.Action("Delete", new { id = Model.GeneracionCDPId })' class="btn red">Eliminar</a>
-
     </div>
 </div>
 <div class="fixed-action-btn">

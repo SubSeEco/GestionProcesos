@@ -1,46 +1,47 @@
 ﻿@model IEnumerable<App.Model.Cometido.Parrafos>
-
-<h3>Parrafos</h3>
-<div class="card">
-    <div class="card-content">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParrafosId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParrafoTexto)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParrafoActivo)
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model)
-            {
+<div class="container">
+    <h3>Parrafos</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ParrafosId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ParrafoTexto)
-                    </td>
-                    <td>
-                        @if (item.ParrafoActivo)
-                        {
-                            <p>True</p>
-                        }
-                        else
-                        {
-                            <p>False</p>
-                        }
-                    </td>
-                    <td>
-                        @Html.ActionLink("Detalles", "Details", new { id = item.ParrafosId })
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafosId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoTexto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoActivo)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </table>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParrafosId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParrafoTexto)
+                        </td>
+                        <td>
+                            @if (item.ParrafoActivo)
+                            {
+                                <p>True</p>
+                            }
+                            else
+                            {
+                                <p>False</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalles", "Details", new { id = item.ParrafosId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 </div>
 

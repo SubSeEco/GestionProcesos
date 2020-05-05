@@ -1,46 +1,47 @@
 ﻿@model IEnumerable<App.Model.Comisiones.ParametrosComisiones>
-
-<h3>Parrafos</h3>
-<div class="card">
-    <div class="card-content">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParametrosComisionesId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParametroTexto)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ParametroActivo)
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model)
-            {
+<div class="container">
+    <h3>Parrafos</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ParametrosComisionesId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ParametroTexto)
-                    </td>
-                    <td>
-                        @if (item.ParametroActivo)
-                        {
-                            <p>True</p>
-                        }
-                        else
-                        {
-                            <p>False</p>
-                        }
-                    </td>
-                    <td>
-                        @Html.ActionLink("Detalles", "Details", new { id = item.ParametrosComisionesId })
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParametrosComisionesId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParametroTexto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParametroActivo)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </table>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParametrosComisionesId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParametroTexto)
+                        </td>
+                        <td>
+                            @if (item.ParametroActivo)
+                            {
+                                <p>True</p>
+                            }
+                            else
+                            {
+                                <p>False</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalles", "Details", new { id = item.ParametrosComisionesId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 </div>
 

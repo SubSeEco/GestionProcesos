@@ -1,58 +1,60 @@
 ﻿@model App.Model.Cometido.Viatico
+<div class="container">
 
-<h3>Crear Viatico</h3>
+    <h3>Crear Viatico</h3>
 
-<div class="card">
-    <div class="card-content">
-        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
+    <div class="card">
+        <div class="card-content">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
 
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Rango1, new { @placeholder = "Ingrese valor para el Rango 1" })
-                @Html.LabelFor(m => Model.Rango1)
-                @Html.ValidationMessageFor(m => Model.Rango1, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Rango2, new { @placeholder = "Ingrese valor para el Rango 2" })
-                @Html.LabelFor(m => Model.Rango2)
-                @Html.ValidationMessageFor(m => Model.Rango2, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Rango3, new { @placeholder = "Ingrese valor para el Rango 3" })
-                @Html.LabelFor(m => Model.Rango3)
-                @Html.ValidationMessageFor(m => Model.Rango3, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Rango4, new { @placeholder = "Ingrese valor para el Rango 4" })
-                @Html.LabelFor(m => Model.Rango4)
-                @Html.ValidationMessageFor(m => Model.Rango4, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Rango5, new { @placeholder = "Ingrese valor para el Rango 5" })
-                @Html.LabelFor(m => Model.Rango5)
-                @Html.ValidationMessageFor(m => Model.Rango5, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.Año, new { @placeholder = "Ingrese valor para Año" })
-                @Html.LabelFor(m => Model.Año)
-                @Html.ValidationMessageFor(m => Model.Año, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                <label>
-                    @Html.CheckBoxFor(m => m.Activo)
-                    <span>@Html.LabelFor(m => Model.Activo)</span>
-                </label>
-            </div>
-            <br />
-            <div class="section"></div>
-            <p>
-                <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-            </p>
-        }
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Rango1, new { @placeholder = "Ingrese valor para el Rango 1" })
+                    @Html.LabelFor(m => Model.Rango1)
+                    @Html.ValidationMessageFor(m => Model.Rango1, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Rango2, new { @placeholder = "Ingrese valor para el Rango 2" })
+                    @Html.LabelFor(m => Model.Rango2)
+                    @Html.ValidationMessageFor(m => Model.Rango2, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Rango3, new { @placeholder = "Ingrese valor para el Rango 3" })
+                    @Html.LabelFor(m => Model.Rango3)
+                    @Html.ValidationMessageFor(m => Model.Rango3, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Rango4, new { @placeholder = "Ingrese valor para el Rango 4" })
+                    @Html.LabelFor(m => Model.Rango4)
+                    @Html.ValidationMessageFor(m => Model.Rango4, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Rango5, new { @placeholder = "Ingrese valor para el Rango 5" })
+                    @Html.LabelFor(m => Model.Rango5)
+                    @Html.ValidationMessageFor(m => Model.Rango5, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Año, new { @placeholder = "Ingrese valor para Año" })
+                    @Html.LabelFor(m => Model.Año)
+                    @Html.ValidationMessageFor(m => Model.Año, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.Activo)
+                        <span>@Html.LabelFor(m => Model.Activo)</span>
+                    </label>
+                </div>
+                <br />
+                <div class="section"></div>
+                <p>
+                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                </p>
+            }
+        </div>
+
+
     </div>
-
-   
 </div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>

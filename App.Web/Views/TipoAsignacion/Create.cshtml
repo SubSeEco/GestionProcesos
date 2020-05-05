@@ -1,33 +1,34 @@
 ﻿@model App.Model.Cometido.TipoAsignacion
+<div class="container">
+    <h3>Crear Tipo Asignacion</h3>
 
-<h3>Crear Tipo Asignacion</h3>
+    <div class="card">
+        <div class="card-content">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
 
-<div class="card">
-    <div class="card-content">
-        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.TasNombre, new { @placeholder = "Ingrese valor para el Nombre" })
+                    @Html.LabelFor(m => Model.TasNombre)
+                    @Html.ValidationMessageFor(m => Model.TasNombre, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.TasActivo)
+                        <span>@Html.LabelFor(m => Model.TasActivo)</span>
+                    </label>
+                </div>
+                <br />
+                <div class="section"></div>
+                <p>
+                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                </p>
+            }
+        </div>
 
-            <div class="input-field col s12 m10 l10">
-                @Html.TextBoxFor(m => Model.TasNombre, new { @placeholder = "Ingrese valor para el Nombre" })
-                @Html.LabelFor(m => Model.TasNombre)
-                @Html.ValidationMessageFor(m => Model.TasNombre, "", new { @class = "red-text" })
-            </div>
-            <div class="input-field col s12 m10 l10">
-                <label>
-                    @Html.CheckBoxFor(m => m.TasActivo)
-                    <span>@Html.LabelFor(m => Model.TasActivo)</span>
-                </label>
-            </div>
-            <br />
-            <div class="section"></div>
-            <p>
-                <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-            </p>
-        }
+
     </div>
-
-
 </div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>

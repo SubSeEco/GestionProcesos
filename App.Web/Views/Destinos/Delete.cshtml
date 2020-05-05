@@ -1,107 +1,107 @@
 ﻿@model App.Model.Cometido.Destinos
 
 @*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @*@Html.HiddenFor(q => Model.WorkflowId)*@
+                @Html.HiddenFor(q => Model.DestinoId)
+                @Html.HiddenFor(q => Model.CometidoId)
 
+                @*@Html.HiddenFor(q => Model.FechaInicio)
+                    @Html.HiddenFor(q => Model.FechaHasta)
+                    @Html.HiddenFor(q => Model.Dias50)
+                    @Html.HiddenFor(q => Model.Dias50Aprobados)
+                    @Html.HiddenFor(q => Model.Dias50Monto)
+                    @Html.HiddenFor(q => Model.Dias00)
+                    @Html.HiddenFor(q => Model.Dias00Aprobados)
+                    @Html.HiddenFor(q => Model.Dias00Monto)
+                    @Html.HiddenFor(q => Model.Total)*@
 
-<div class="row">
-    <div class="col s12 m6 l12">
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @*@Html.HiddenFor(q => Model.WorkflowId)*@
-            @Html.HiddenFor(q => Model.DestinoId)
-            @Html.HiddenFor(q => Model.CometidoId)
-
-            @*@Html.HiddenFor(q => Model.FechaInicio)
-            @Html.HiddenFor(q => Model.FechaHasta)
-            @Html.HiddenFor(q => Model.Dias50)
-            @Html.HiddenFor(q => Model.Dias50Aprobados)
-            @Html.HiddenFor(q => Model.Dias50Monto)
-            @Html.HiddenFor(q => Model.Dias00)
-            @Html.HiddenFor(q => Model.Dias00Aprobados)
-            @Html.HiddenFor(q => Model.Dias00Monto)
-            @Html.HiddenFor(q => Model.Total)*@
-
-            @Html.ValidationSummary(true, "", new { @class = "red-text" })
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Destinos Cometidos</span>
-                    <div class="row">
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.RegionDescripcion)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ComunaDescripcion)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FechaInicio)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FechaHasta)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Dias100)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Dias60)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Dias40)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Dias00)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Dias50)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Total)
-                                </th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
-                                </td>
-                                <td>
-                                    @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Dias100, new { style = "width:50px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Dias60, new { style = "width:50px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Dias40, new { style = "width:50px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Dias00, new { style = "width:50px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Dias50, new { style = "width:50px" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => Model.Total, new { style = "width:50px" })
-                                </td>
-                            </tr>
-                        </table>
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Destinos Cometidos</span>
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RegionDescripcion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ComunaDescripcion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FechaInicio)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FechaHasta)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias100)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias60)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias40)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias00)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias50)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Total)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias100, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias60, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias40, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias00, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias50, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Total, new { style = "width:50px" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Borrar</button>
+                    </p>
                 </div>
-                <div class="section"></div>
-                <p>
-                    <button class="waves-effect waves-light btn blue" type="submit">Borrar</button>
-                </p>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
 <div class="fixed-action-btn">

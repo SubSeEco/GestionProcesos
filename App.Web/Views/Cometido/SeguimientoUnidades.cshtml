@@ -1,164 +1,166 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
 
-    <h3>Reporte seguimiento Unidades</h3>
+<h3>Reporte seguimiento Unidades</h3>
 
-<div class="row">
-    <div class="col s12 m12 l3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Filtros</span>
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
+<div class="container">
+    <div class="row">
+        <div class="col s12 m12 l3">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Filtros</span>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-                    <div class="row">
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextBoxFor(m => Model.ID)
-                            @Html.LabelFor(m => Model.ID)
-                            @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.ID)
+                                @Html.LabelFor(m => Model.ID)
+                                @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @*@Html.EditorFor(m => Model.Ejecutor)*@
+                                @Html.DropDownListFor(m => Model.Ejecutor, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Ejecutor)
+                                @Html.ValidationMessageFor(m => Model.Ejecutor, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaInicio)
+                                @Html.LabelFor(m => Model.FechaInicio)
+                                @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaTermino)
+                                @Html.LabelFor(m => Model.FechaTermino)
+                                @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaSolicitud)
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                        <div class="input-field col s12 m12 l12">
-                            @*@Html.EditorFor(m => Model.Ejecutor)*@
-                            @Html.DropDownListFor(m => Model.Ejecutor, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Ejecutor)
-                            @Html.ValidationMessageFor(m => Model.Ejecutor, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaInicio)
-                            @Html.LabelFor(m => Model.FechaInicio)
-                            @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaTermino)
-                            @Html.LabelFor(m => Model.FechaTermino)
-                            @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaSolicitud)
-                            @Html.LabelFor(m => Model.FechaSolicitud)
-                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
-                    @Html.ActionLink("Descargar Excel", "DownloadSeguimiento", "Cometido")
-                }
+                        <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                        @Html.ActionLink("Descargar Excel", "DownloadSeguimiento", "Cometido")
+                    }
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col s12 m12 l12">
-        <div class="card">
-            <div class="card-content">
-                <table>
-                    <tr>
-                        <th style="width:100px">
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ID)
-                        </th>
-                        <th style="width:100px">
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
-                        </th>
-                        <th style="width:100px">
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
-                        </th>
-                        <th>
-                            <table>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Ejecutor)
-                                    </th>
-                                    <th style="width:100px">
-                                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaCreacion)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaTermino)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.DiasDiferencia)
-                                    </th>
-                                </tr>
-                            </table>
-                        </th>
-                    </tr>
-
-                    @foreach (var item in Model.Result)
-                    {
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-content">
+                    <table>
                         <tr>
-                            <td>
-                                @if (item.UnidadDescripcion.Contains("Turismo"))
-                                {
-                                    <p>SUBSECRETARIA DE TURISMO</p>
-                                }
-                                else
-                                {
-                                    <p>SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO</p>
-                                }
-
-                                @Html.DisplayFor(modelItem => item.Subscretaria)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CometidoId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Nombre)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaSolicitud).ToHtmlString().Remove(10)
-                            </td>
-                            <td>
-                                @foreach (var t in item.Proceso.Workflows.Where(c => c.ProcesoId == item.ProcesoId))
-                                {
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => t.Email)
-                                            </td>
-                                            <td style="text-align:justify">
-                                                @Html.DisplayFor(modelItem => t.Pl_UndDes)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => t.FechaCreacion).ToHtmlString().Remove(10)
-                                            </td>
-                                            <td>
-                                                @if (t.FechaTermino.HasValue)
-                                                {
-                                                    @Html.DisplayFor(modelItem => t.FechaTermino.Value).ToHtmlString().Remove(10)
-                                                }
-                                            </td>
-                                            <td>
-                                                @{
-                                                    int dif = 0;
-                                                    if (t.FechaTermino.HasValue)
-                                                    {
-                                                        dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
-                                                    }
-                                                    else
-                                                    {
-                                                        t.FechaTermino = DateTime.Now;
-                                                        dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
-                                                    }
-
-                                                    <p>@dif</p>
-                                                }
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                }
-                            </td>
+                            <th style="width:100px">
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ID)
+                            </th>
+                            <th style="width:100px">
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
+                            </th>
+                            <th style="width:100px">
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
+                            </th>
+                            <th>
+                                <table>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Ejecutor)
+                                        </th>
+                                        <th style="width:100px">
+                                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaCreacion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaTermino)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.DiasDiferencia)
+                                        </th>
+                                    </tr>
+                                </table>
+                            </th>
                         </tr>
-                    }
-                </table>
+
+                        @foreach (var item in Model.Result)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.UnidadDescripcion.Contains("Turismo"))
+                                    {
+                                        <p>SUBSECRETARIA DE TURISMO</p>
+                                    }
+                                    else
+                                    {
+                                        <p>SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO</p>
+                                    }
+
+                                    @Html.DisplayFor(modelItem => item.Subscretaria)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CometidoId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaSolicitud).ToHtmlString().Remove(10)
+                                </td>
+                                <td>
+                                    @foreach (var t in item.Proceso.Workflows.Where(c => c.ProcesoId == item.ProcesoId))
+                                    {
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => t.Email)
+                                                </td>
+                                                <td style="text-align:justify">
+                                                    @Html.DisplayFor(modelItem => t.Pl_UndDes)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => t.FechaCreacion).ToHtmlString().Remove(10)
+                                                </td>
+                                                <td>
+                                                    @if (t.FechaTermino.HasValue)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => t.FechaTermino.Value).ToHtmlString().Remove(10)
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        int dif = 0;
+                                                        if (t.FechaTermino.HasValue)
+                                                        {
+                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                        }
+                                                        else
+                                                        {
+                                                            t.FechaTermino = DateTime.Now;
+                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                        }
+
+                                                        <p>@dif</p>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                </d
             </div>
-        </d
+
+        </div>
     </div>
-
 </div>
-
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>

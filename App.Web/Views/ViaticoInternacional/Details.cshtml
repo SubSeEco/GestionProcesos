@@ -1,59 +1,61 @@
 ﻿@model App.Model.Comisiones.ViaticoInternacional
+<div class="container">
 
-<h3>Viatico Honorario Internacional</h3>
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.CiudadId)</strong>
-            <p>@Html.DisplayFor(m => Model.CiudadId)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.CiudadNombre)</strong>
-            <p>@Html.DisplayFor(m => Model.CiudadNombre)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Año)</strong>
-            <p>@Html.DisplayFor(m => Model.Año)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.CostoVida)</strong>
-            <p>@Html.DisplayFor(m => Model.CostoVida)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango1)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango1)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango2)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango2)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango3)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango3)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango4)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango4)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango5)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango5)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango6)</strong>
-            <p>@Html.DisplayFor(m => Model.PorcentajeRango6)</p>
-        </div>
-        <div class="input-field col s12 m10 l10">
-            <label>
-                @Html.CheckBoxFor(m => m.Activo, new { @disabled = "disabled" })
-                <span>@Html.LabelFor(m => Model.Activo)</span>
-            </label>
-        </div>
-        <br />
-        <br />
-        <a href='@Url.Action("Edit", new { id = Model.ViaticoInternacionalId })' class="btn blue">Editar</a>
-        <a href='@Url.Action("Delete", new { id = Model.ViaticoInternacionalId})' class="btn red">Eliminar</a>
+    <h3>Viatico Honorario Internacional</h3>
+    <div class="card">
+        <div class="card-content">
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.CiudadId)</strong>
+                <p>@Html.DisplayFor(m => Model.CiudadId)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.CiudadNombre)</strong>
+                <p>@Html.DisplayFor(m => Model.CiudadNombre)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Año)</strong>
+                <p>@Html.DisplayFor(m => Model.Año)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.CostoVida)</strong>
+                <p>@Html.DisplayFor(m => Model.CostoVida)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango1)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango1)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango2)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango2)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango3)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango3)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango4)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango4)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango5)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango5)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.PorcentajeRango6)</strong>
+                <p>@Html.DisplayFor(m => Model.PorcentajeRango6)</p>
+            </div>
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.Activo, new { @disabled = "disabled" })
+                    <span>@Html.LabelFor(m => Model.Activo)</span>
+                </label>
+            </div>
+            <br />
+            <br />
+            <a href='@Url.Action("Edit", new { id = Model.ViaticoInternacionalId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.ViaticoInternacionalId})' class="btn red">Eliminar</a>
 
+        </div>
     </div>
 </div>
 <div class="fixed-action-btn">
