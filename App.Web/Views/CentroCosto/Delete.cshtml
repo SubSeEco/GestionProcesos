@@ -1,30 +1,32 @@
 ﻿@model App.Model.Cometido.CentroCosto
+<div class="container">
 
-<h3>Eliminar Centro Costo</h3>
+    <h3>Eliminar Centro Costo</h3>
 
-<div class="card">
-    <div class="card-content">
-        @*<span class="card-title">Confirmar eliminación</span>*@
-        <div class="row">
-            <div class="input-field col s12 m10">
-                <strong>@Html.DisplayNameFor(m => Model.CCNombre)</strong>
-                <p>@Html.DisplayFor(m => Model.CCNombre)</p>
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Confirmar eliminación</span>*@
+            <div class="row">
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.CCNombre)</strong>
+                    <p>@Html.DisplayFor(m => Model.CCNombre)</p>
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.CCActivo)
+                        <span>@Html.LabelFor(m => Model.CCActivo)</span>
+                    </label>
+                </div>
             </div>
-            <div class="input-field col s12 m10 l10">
-                <label>
-                    @Html.CheckBoxFor(m => m.CCActivo)
-                    <span>@Html.LabelFor(m => Model.CCActivo)</span>
-                </label>
-            </div>
+            <br />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.CentroCostoId)
+
+                <button class="waves-effect waves-light btn red" type="submit">Confirmar eliminación</button>
+            }
         </div>
-        <br />
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(q => Model.CentroCostoId)
-
-            <button class="waves-effect waves-light btn red" type="submit">Confirmar eliminación</button>
-        }
     </div>
 </div>
 <div class="fixed-action-btn">
