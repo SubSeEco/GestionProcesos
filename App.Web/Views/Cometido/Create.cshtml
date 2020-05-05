@@ -2,7 +2,7 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-
+<div class="container">
 <div class="row">
     <div class="col s12 m8 l14">
         @using (Html.BeginForm("Create", "Cometido", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -218,6 +218,7 @@
 
 
     </div>
+</div>
 </div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })

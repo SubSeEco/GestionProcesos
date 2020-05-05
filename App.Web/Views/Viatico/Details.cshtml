@@ -1,44 +1,46 @@
 ﻿@model App.Model.Cometido.Viatico
+<div class="container">
 
-<h3>Viatico</h3>
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Rango1)</strong>
-            <p>@Html.DisplayFor(m => Model.Rango1)</p>
+    <h3>Viatico</h3>
+    <div class="card">
+        <div class="card-content">
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Rango1)</strong>
+                <p>@Html.DisplayFor(m => Model.Rango1)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Rango2)</strong>
+                <p>@Html.DisplayFor(m => Model.Rango2)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Rango3)</strong>
+                <p>@Html.DisplayFor(m => Model.Rango3)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Rango4)</strong>
+                <p>@Html.DisplayFor(m => Model.Rango4)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Rango5)</strong>
+                <p>@Html.DisplayFor(m => Model.Rango5)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Año)</strong>
+                <p>@Html.DisplayFor(m => Model.Año)</p>
+            </div>
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.Activo, new { @disabled = "disabled" })
+                    <span>@Html.LabelFor(m => Model.Activo)</span>
+                </label>
+            </div>
+            <br />
+            <br />
+            <a href='@Url.Action("Edit", new { id = Model.ViaticoId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.ViaticoId })' class="btn red">Eliminar</a>
         </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Rango2)</strong>
-            <p>@Html.DisplayFor(m => Model.Rango2)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Rango3)</strong>
-            <p>@Html.DisplayFor(m => Model.Rango3)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Rango4)</strong>
-            <p>@Html.DisplayFor(m => Model.Rango4)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Rango5)</strong>
-            <p>@Html.DisplayFor(m => Model.Rango5)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Año)</strong>
-            <p>@Html.DisplayFor(m => Model.Año)</p>
-        </div>
-        <div class="input-field col s12 m10 l10">
-            <label>
-                @Html.CheckBoxFor(m => m.Activo, new { @disabled = "disabled" })
-                <span>@Html.LabelFor(m => Model.Activo)</span>
-            </label>
-        </div>
-        <br />
-        <br />
-        <a href='@Url.Action("Edit", new { id = Model.ViaticoId })' class="btn blue">Editar</a>
-        <a href='@Url.Action("Delete", new { id = Model.ViaticoId })' class="btn red">Eliminar</a>
+
     </div>
-   
 </div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>

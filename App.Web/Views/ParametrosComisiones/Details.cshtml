@@ -1,27 +1,28 @@
 ﻿@model App.Model.Comisiones.ParametrosComisiones
+<div class="container">
+    <h3>Detalle Parrafo</h3>
+    <div class="card">
+        <div class="card-content">
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.ParametrosComisionesId)</strong>
+                <p>@Html.DisplayFor(m => Model.ParametrosComisionesIdV)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.ParametroTexto)</strong>
+                <p>@Html.DisplayFor(m => Model.ParametroTexto)</p>
+            </div>
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.ParametroActivo, new { @disabled = "disabled" })
+                    <span>@Html.LabelFor(m => Model.ParametroActivo)</span>
+                </label>
+            </div>
+            <br /><br />
+            <a href='@Url.Action("Edit", new { id = Model.ParametrosComisionesId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.ParametrosComisionesId })' class="btn red">Eliminar</a>
+        </div>
 
-<h3>Detalle Parrafo</h3>
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.ParametrosComisionesId)</strong>
-            <p>@Html.DisplayFor(m => Model.ParametrosComisionesIdV)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.ParametroTexto)</strong>
-            <p>@Html.DisplayFor(m => Model.ParametroTexto)</p>
-        </div>
-        <div class="input-field col s12 m10 l10">
-            <label>
-                @Html.CheckBoxFor(m => m.ParametroActivo, new { @disabled = "disabled" })
-                <span>@Html.LabelFor(m => Model.ParametroActivo)</span>
-            </label>
-        </div>
-        <br /><br />
-        <a href='@Url.Action("Edit", new { id = Model.ParametrosComisionesId })' class="btn blue">Editar</a>
-        <a href='@Url.Action("Delete", new { id = Model.ParametrosComisionesId })' class="btn red">Eliminar</a>
     </div>
-
 </div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>

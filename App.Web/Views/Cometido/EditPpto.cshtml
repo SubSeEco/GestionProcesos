@@ -13,557 +13,553 @@ else
     @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 }
 
+<div class="container">
+    <div class="row">
+        <div class="col s12 m10 l8">
+            @using (Html.BeginForm("EditPpto", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.CometidoId)
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(q => Model.FechaSolicitud)
+                @Html.HiddenFor(q => Model.UnidadDescripcion)
+                @Html.HiddenFor(q => Model.NombreId)
+                @Html.HiddenFor(q => Model.Nombre)
+                @Html.HiddenFor(q => Model.Rut)
+                @Html.HiddenFor(q => Model.DV)
+                @Html.HiddenFor(q => Model.CargoDescripcion)
+                @Html.HiddenFor(q => Model.CalidadDescripcion)
+                @Html.HiddenFor(q => Model.GradoDescripcion)
+                @Html.HiddenFor(q => Model.EstamentoDescripcion)
+                @Html.HiddenFor(q => Model.ConglomeradoDescripcion)
+                @Html.HiddenFor(q => Model.ProgramaDescripcion)
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdUnidad)
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdCalidad)
+                @Html.HiddenFor(q => Model.IdGrado)
+                @Html.HiddenFor(q => Model.IdEstamento)
+                @Html.HiddenFor(q => Model.FinanciaOrganismo)
+                @Html.HiddenFor(q => Model.Pasajes)
+                @Html.HiddenFor(q => Model.ReqPasajeAereo)
+                @Html.HiddenFor(q => Model.ReqPasajeTerrestre)
+                @Html.HiddenFor(q => Model.Vehiculo)
+                @Html.HiddenFor(q => Model.TipoVehiculoId)
+                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)
+                @Html.HiddenFor(q => Model.PlacaVehiculo)
+                @Html.HiddenFor(q => Model.SolicitaViatico)
 
 
-
-<div class="row">
-    <div class="col s12 m10 l8">
-        @using (Html.BeginForm("EditPpto", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.HiddenFor(q => Model.WorkflowId)
-            @Html.HiddenFor(q => Model.ProcesoId)
-            @Html.HiddenFor(q => Model.CometidoId)
-            @Html.AntiForgeryToken()
-
-            @Html.HiddenFor(q => Model.FechaSolicitud)
-            @Html.HiddenFor(q => Model.UnidadDescripcion)
-            @Html.HiddenFor(q => Model.NombreId)
-            @Html.HiddenFor(q => Model.Nombre)
-            @Html.HiddenFor(q => Model.Rut)
-            @Html.HiddenFor(q => Model.DV)
-            @Html.HiddenFor(q => Model.CargoDescripcion)
-            @Html.HiddenFor(q => Model.CalidadDescripcion)
-            @Html.HiddenFor(q => Model.GradoDescripcion)
-            @Html.HiddenFor(q => Model.EstamentoDescripcion)
-            @Html.HiddenFor(q => Model.ConglomeradoDescripcion)
-            @Html.HiddenFor(q => Model.ProgramaDescripcion)
-            @Html.HiddenFor(q => Model.IdCargo)
-            @Html.HiddenFor(q => Model.IdUnidad)
-            @Html.HiddenFor(q => Model.IdCargo)
-            @Html.HiddenFor(q => Model.IdCalidad)
-            @Html.HiddenFor(q => Model.IdGrado)
-            @Html.HiddenFor(q => Model.IdEstamento)
-            @Html.HiddenFor(q => Model.FinanciaOrganismo)
-            @Html.HiddenFor(q => Model.Pasajes)
-            @Html.HiddenFor(q => Model.ReqPasajeAereo)
-            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)
-            @Html.HiddenFor(q => Model.Vehiculo)
-            @Html.HiddenFor(q => Model.TipoVehiculoId)
-            @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)
-            @Html.HiddenFor(q => Model.PlacaVehiculo)
-            @Html.HiddenFor(q => Model.SolicitaViatico)
-
-
-            <div class="card">
-                <div class="card-content">
-                    @*<span class="card-title">Cometidos</span>*@
-                    <div class="row">
-                        <div class="input-field col s12 m10 l3">
-                            @Html.LabelFor(m => Model.FechaSolicitud)
-                            @Html.DisplayFor(m => Model.FechaSolicitud)
-                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m6 l4">
-                            @Html.LabelFor(m => Model.CometidoId)
-                            @Html.DisplayFor(m => Model.CometidoId)
-                        </div>
-                    </div>
-                    <div id="jQuery_accordion">
-                        <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+                <div class="card">
+                    <div class="card-content">
+                        @*<span class="card-title">Cometidos</span>*@
                         <div class="row">
-                            <div class="input-field col s12 m10 l10">
-                                @Html.DisplayFor(m => Model.UnidadDescripcion)
-                                @Html.LabelFor(m => Model.UnidadDescripcion)
-                                @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                @Html.DisplayFor(m => Model.Nombre)
-                                @Html.LabelFor(m => Model.Nombre)
-                                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l8">
-                                @Html.DisplayFor(m => Model.Rut)
-                                @Html.LabelFor(m => Model.Rut)
-                                @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                            <div class="input-field col s12 m10 l3">
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                @Html.DisplayFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m6 l4">
-                                @Html.DisplayFor(m => Model.DV)
-                                @Html.LabelFor(m => Model.DV)
-                                @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.CargoDescripcion)
-                                @Html.LabelFor(m => Model.CargoDescripcion)
-                                @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.CalidadDescripcion)
-                                @Html.LabelFor(m => Model.CalidadDescripcion)
-                                @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.GradoDescripcion)
-                                @Html.LabelFor(m => Model.GradoDescripcion)
-                                @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.EstamentoDescripcion)
-                                @Html.LabelFor(m => Model.EstamentoDescripcion)
-                                @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                @Html.LabelFor(m => Model.ProgramaDescripcion)
-                                @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
-                                @Html.LabelFor(m => Model.ConglomeradoDescripcion)
-                                @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
+                                @Html.LabelFor(m => Model.CometidoId)
+                                @Html.DisplayFor(m => Model.CometidoId)
                             </div>
                         </div>
-                        <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
-                        <div class="row">
-                            <div class="input-field col s12 m8 l12">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
+                        <div id="jQuery_accordion">
+                            <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DisplayFor(m => Model.UnidadDescripcion)
+                                    @Html.LabelFor(m => Model.UnidadDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DisplayFor(m => Model.Nombre)
+                                    @Html.LabelFor(m => Model.Nombre)
+                                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l8">
+                                    @Html.DisplayFor(m => Model.Rut)
+                                    @Html.LabelFor(m => Model.Rut)
+                                    @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l4">
+                                    @Html.DisplayFor(m => Model.DV)
+                                    @Html.LabelFor(m => Model.DV)
+                                    @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.CargoDescripcion)
+                                    @Html.LabelFor(m => Model.CargoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.CalidadDescripcion)
+                                    @Html.LabelFor(m => Model.CalidadDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.GradoDescripcion)
+                                    @Html.LabelFor(m => Model.GradoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.EstamentoDescripcion)
+                                    @Html.LabelFor(m => Model.EstamentoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                    @Html.LabelFor(m => Model.ProgramaDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
+                                    @Html.LabelFor(m => Model.ConglomeradoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
+                                </div>
                             </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
-                                </strong>
-                                @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <label style="color:green">
-                                    @Html.Raw("<span>“El cometido incluye” </span>")
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
-                                </strong>
-                                @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
-                            </div>
-                            <div id="divReembolso">
+                            <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m8 l12">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m8 l13">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m8 l13">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m8 l13">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
+                                </div>
                                 <div class="input-field col s12 m10 l10">
                                     <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
+                                        <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
                                     </strong>
-                                    @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                    @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label style="color:green">
+                                        @Html.Raw("<span>“El cometido incluye” </span>")
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
+                                </div>
+                                <div id="divReembolso">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                    </div>
+                                </div>
+                                <div class="input-field col s12 m4 l4">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
+                                </div>
+                                <div class="input-field col s12 m4 l4">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
+                                </div>
+                                <div class="input-field col s12 m4 l4">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.PlacaVehiculo)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.PlacaVehiculo)
                                 </div>
                             </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
-                                </strong>
-                                @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.PlacaVehiculo)
-                                </strong>
-                                @Html.DisplayFor(m => Model.PlacaVehiculo)
-                            </div>
-                        </div>
-                        <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
-                        <div class="row">
-                            <div class="input-field col s12 m10 l10">
-                                @Html.EditorFor(m => Model.NombreCometido)
-                                @Html.LabelFor(m => Model.NombreCometido)
-                                @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                @Html.EditorFor(m => Model.CometidoDescripcion)
-                                @Html.LabelFor(m => Model.CometidoDescripcion)
-                                @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <span class="card-title">Destinos</span>
-                            </div>
+                            <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.EditorFor(m => Model.NombreCometido)
+                                    @Html.LabelFor(m => Model.NombreCometido)
+                                    @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.EditorFor(m => Model.CometidoDescripcion)
+                                    @Html.LabelFor(m => Model.CometidoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <span class="card-title">Destinos</span>
+                                </div>
 
-                            @*@if (Model.Destinos.Count > 0)*@
+                                @*@if (Model.Destinos.Count > 0)*@
 
-                            <table class="table">
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
-                                {
-                                    @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                                <table class="table">
                                     <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaInicio)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaHasta)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                        </td>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>%</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.Raw("<span>Dias 100 %</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.Raw("<span>Dias 60 %</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.Raw("<span>Dias 40 %</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.Raw("<span>Dias 50 %</span>")
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>Solicitados</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>Aprobados</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Aprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>Monto</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Monto)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Monto)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Monto)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>TOTAL</span>")
-                                                    </td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-
-                                        @*<td>
-                                                @Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
-                                            </td>*@
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
+                                        </th>
+                                        <th></th>
                                     </tr>
-                                }
-                            </table>
-                        </div>
-                        <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
-                        <div class="row">
-                            @if (!Model.GeneracionCDP.Any())
-                            {
-                                <div class="row">
-                                    @Html.ActionLink("Crear CDP", "Create", "GeneracionCDP", new { Model.CometidoId }, null)
-                                </div>
-                            }
-                            else
-                            {
-                                if (Model.SolicitaViatico == true || Model.SolicitaViatico != true)
-                                {
-                                    <span class="card-title">Viáticos</span>
-                                    <table class="table">
+                                    @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                                    {
+                                        @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
                                         <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                            </th>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaInicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaHasta)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Raw("<span>%</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.Raw("<span>Dias 100 %</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.Raw("<span>Dias 60 %</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.Raw("<span>Dias 40 %</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.Raw("<span>Dias 50 %</span>")
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Raw("<span>Solicitados</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50)
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Raw("<span>Aprobados</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Raw("<span>Monto</span>")
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Monto)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Monto)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Monto)
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            @Html.Raw("<span>TOTAL</span>")
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            @*<td>
+                                                    @Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
+                                                </td>*@
                                         </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                            </th>
-                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia != 8)
-                                            {
+                                    }
+                                </table>
+                            </div>
+                            <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            <div class="row">
+                                @if (!Model.GeneracionCDP.Any())
+                                {
+                                    <div class="row">
+                                        @Html.ActionLink("Crear CDP", "Create", "GeneracionCDP", new { Model.CometidoId }, null)
+                                    </div>
+                                }
+                                else
+                                {
+                                    if (Model.SolicitaViatico == true || Model.SolicitaViatico != true)
+                                    {
+                                        <span class="card-title">Viáticos</span>
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                </th>
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
                                                 </th>
-                                            }
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
-                                            </th>
-                                        </tr>
-                                    </table>
-
-                                }
-
-                                @*if (Model.ReqPasajeAereo == true)
-                                    {
-                                        <span class="card-title">Pasajes</span>
-                                        <table class="table">
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoPartidaId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
-                                                </th>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjVtcTipoCapituloId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCentroCostoId)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubTituloId)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoItemId)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacionId)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
                                                 </th>
                                                 <th>
                                                     @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
                                                 </th>
                                                 <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacionId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
                                                 </th>
                                             </tr>
                                         </table>
-                                    }*@
 
-                                <div class="row">
-                                    @Html.ActionLink("Editar CDP", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
-                                </div>
-                            }
+                                    }
+
+                                    @*if (Model.ReqPasajeAereo == true)
+                                        {
+                                            <span class="card-title">Pasajes</span>
+                                            <table class="table">
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoPartidaId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjVtcTipoCapituloId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCentroCostoId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubTituloId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoItemId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacionId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacionId)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        }*@
+
+                                    <div class="row">
+                                        @Html.ActionLink("Editar CDP", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
+                                    </div>
+                                }
+                            </div>
                         </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                            @*@Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)*@
+                        </p>
                     </div>
-                    <div class="section"></div>
-                    <p>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                        @*@Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)*@
-                    </p>
                 </div>
-            </div>
 
-        }
+            }
 
-    </div>
+        </div>
 
-    <div class="col s12 m6 l4">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        <div class="col s12 m6 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
 </div>
 

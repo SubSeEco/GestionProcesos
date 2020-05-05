@@ -1,33 +1,34 @@
 ﻿@model IEnumerable<App.Model.Cometido.GeneracionCDP>
-
-<h3>Tipo Asignacion</h3>
-<div class="card">
-    <div class="card-content">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.GeneracionCDPId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GeneracionCDPId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PsjVtcTipoCapituloId)
-                </td>
-            </tr>
-            }
-        </table>
+<div class="container">
+    <h3>Tipo Asignacion</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GeneracionCDPId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GeneracionCDPId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PsjVtcTipoCapituloId)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 </div>
 
@@ -35,6 +36,6 @@
     <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
 </div>
 @*<br />
-<div class="fixed-action-btn">
-    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
-</div>*@
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@
