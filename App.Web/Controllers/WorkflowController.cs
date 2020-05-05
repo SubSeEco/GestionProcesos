@@ -12,6 +12,7 @@ using App.Model.FirmaDocumento;
 using App.Core.UseCases;
 using App.Model.InformeHSA;
 using org.apache.sis.@internal.jaxb.metadata;
+using App.Model.Memorandum;
 
 namespace App.Web.Controllers
 {
@@ -247,6 +248,21 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
             }
+            
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
+            {
+                var obj = _repository.GetFirst<Memorandum>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.MemorandumId;
+                    workflow.Entity = App.Util.Enum.Entidad.Memorandum.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
 
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
