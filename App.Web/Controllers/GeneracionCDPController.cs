@@ -143,6 +143,7 @@ namespace App.Web.Controllers
             model.VtcSaldo = "0";
             model.VtcValorViatico = "0";
             model.VtcCodCompromiso = "0";
+            model.VtcCompromisoAcumulado = "0";
             model.PsjCompromisoAcumulado = "0";
 
             /*CDP Pasajes*/
@@ -291,8 +292,17 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    //return RedirectToAction("Details", new { id = model.GeneracionCDPId });
-                    return RedirectToAction("EditPpto", "Cometido", new { model.WorkflowId, id = model.CometidoId });
+
+                    /*se traen los datos del cometido, para determinar a q tarea se debe devolver*/
+                    model.Cometido = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == model.CometidoId).FirstOrDefault();
+                    if (model.Cometido.Workflow.DefinicionWorkflow.Secuencia == 8)
+                    {
+                        return RedirectToAction("EditPpto", "Cometido", new { model.WorkflowId, id = model.CometidoId });
+                    }
+                    else 
+                    {
+                        return RedirectToAction("Details", "Cometido", new { model.WorkflowId, id = model.CometidoId });
+                    }
                 }
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;

@@ -311,6 +311,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult EditSeleccion(List<CotizacionDocumento> CotizacionDocumento, int PasajeId)
         //public ActionResult EditSeleccion(Pasaje model)
         {
