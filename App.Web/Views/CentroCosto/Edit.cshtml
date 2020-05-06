@@ -1,31 +1,32 @@
 ﻿@model App.Model.Cometido.CentroCosto
+<div class="container">
+    <h3>Editar Centro Costo</h3>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(q => Model.CentroCostoId)
 
-<h3>Editar Centro Costo</h3>
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(q => Model.CentroCostoId)
-
-    <div class="card">
-        <div class="card-content">
-            @*<span class="card-title">Crear nuevo</span>*@
-            <div class="row">
-                <div class="input-field col s12 m10 l10">
-                    @Html.TextBoxFor(m => Model.CCNombre)
-                    @Html.LabelFor(m => Model.CCNombre)
-                    @Html.ValidationMessageFor(m => Model.CCNombre, "", new { @class = "red-text" })
+        <div class="card">
+            <div class="card-content">
+                @*<span class="card-title">Crear nuevo</span>*@
+                <div class="row">
+                    <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.CCNombre)
+                        @Html.LabelFor(m => Model.CCNombre)
+                        @Html.ValidationMessageFor(m => Model.CCNombre, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        <label>
+                            @Html.CheckBoxFor(m => m.CCActivo)
+                            <span>@Html.LabelFor(m => Model.CCActivo)</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="input-field col s12 m10 l10">
-                    <label>
-                        @Html.CheckBoxFor(m => m.CCActivo)
-                        <span>@Html.LabelFor(m => Model.CCActivo)</span>
-                    </label>
-                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
             </div>
-            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
         </div>
-    </div>
-}
+    }
+</div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>

@@ -17,6 +17,7 @@
             Comision,
             CometidoPasaje,
             FirmaDocumento,
+            Memorandum,
         }
 
         public enum Grupo

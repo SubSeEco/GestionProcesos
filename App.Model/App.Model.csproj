@@ -120,6 +120,7 @@
     <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
     <Compile Include="FirmaDocumento\FirmaDocumento.cs" />
     <Compile Include="InformeHSA\InformeHSA.cs" />
+    <Compile Include="Memorandum\Memorandum.cs" />
     <Compile Include="Pasajes\Cotizacion.cs" />
     <Compile Include="Pasajes\CotizacionDocumento.cs" />
     <Compile Include="Pasajes\DestinosPasajes.cs" />

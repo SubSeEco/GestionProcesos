@@ -1,26 +1,28 @@
 ﻿@model App.Model.Cometido.CentroCosto
+<div class="container">
 
-<h3>Centro Costo</h3>
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.CentroCostoId)</strong>
-            <p>@Html.DisplayFor(m => Model.CentroCostoId)</p>
-        </div>
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.CCNombre)</strong>
-            <p>@Html.DisplayFor(m => Model.CCNombre)</p>
-        </div>
-        <div class="input-field col s12 m10 l10">
-            <label>
-                @Html.CheckBoxFor(m => m.CCActivo, new { @disabled = "disabled" })
-                <span>@Html.LabelFor(m => Model.CCActivo)</span>
-            </label>
-        </div>
-        <br /><br />
-        <a href='@Url.Action("Edit", new { id = Model.CentroCostoId })' class="btn blue">Editar</a>
-        <a href='@Url.Action("Delete", new { id = Model.CentroCostoId })' class="btn red">Eliminar</a>
+    <h3>Centro Costo</h3>
+    <div class="card">
+        <div class="card-content">
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.CentroCostoId)</strong>
+                <p>@Html.DisplayFor(m => Model.CentroCostoId)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.CCNombre)</strong>
+                <p>@Html.DisplayFor(m => Model.CCNombre)</p>
+            </div>
+            <div class="input-field col s12 m10 l10">
+                <label>
+                    @Html.CheckBoxFor(m => m.CCActivo, new { @disabled = "disabled" })
+                    <span>@Html.LabelFor(m => Model.CCActivo)</span>
+                </label>
+            </div>
+            <br /><br />
+            <a href='@Url.Action("Edit", new { id = Model.CentroCostoId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.CentroCostoId })' class="btn red">Eliminar</a>
 
+        </div>
     </div>
 </div>
 <div class="fixed-action-btn">
