@@ -6,6 +6,7 @@
         <div class="col s12 m10 l8">
             <div class="card">
                 <div class="card-content">
+                    @Html.Partial("_Message")
                     @*<span class="card-title">Pasajes</span>*@
                     <div class="row">
                         <div class="input-field col s12 m10 l3">
@@ -157,11 +158,11 @@
                                                 }
                                             </td>
                                             @*<td>
-                                                    @Html.ActionLink("Editar", "Edit", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
-                                                </td>
-                                                <td>
-                                                    @Html.ActionLink("Borrar", "Delete", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
-                                                </td>*@
+                                    @Html.ActionLink("Editar", "Edit", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Borrar", "Delete", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
+                                </td>*@
                                         </tr>
                                         <tr>
                                             <td colspan="6">

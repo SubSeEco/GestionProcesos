@@ -31,6 +31,8 @@
 
     <div class="row">
         <div class="col s12 m6 l12">
+            @Html.Partial("_Message")
+
             @using (Html.BeginForm())
             {
                 @*@Html.HiddenFor(q => Model.WorkflowId)*@
@@ -121,43 +123,43 @@
                                 </tr>
                             </table>
                             @*@if (Model.Cometido.ReqPasajeAereo == true)
-                                {
-                                    <span class="card-title">Datos del Origen</span>
-                                    <table>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.OrigenRegion)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.FechaOrigen)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.DropDownListFor(m => Model.IdOrigenRegion, null, "Seleccione...")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(m => Model.FechaOrigen)
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayNameFor(m => Model.ObsOrigen)
-                                            </td>
-                                            <td style="width:75%">
-                                                @Html.TextBoxFor(m => Model.ObsOrigen)
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayNameFor(m => Model.ObsDestino)
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(m => Model.ObsDestino)
-                                            </td>
-                                        </tr>
-                                    </table>
-                                }*@
+                        {
+                            <span class="card-title">Datos del Origen</span>
+                            <table>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.OrigenRegion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.FechaOrigen)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdOrigenRegion, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.FechaOrigen)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayNameFor(m => Model.ObsOrigen)
+                                    </td>
+                                    <td style="width:75%">
+                                        @Html.TextBoxFor(m => Model.ObsOrigen)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayNameFor(m => Model.ObsDestino)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.ObsDestino)
+                                    </td>
+                                </tr>
+                            </table>
+                        }*@
                         </div>
                     </div>
                     <div class="section"></div>
