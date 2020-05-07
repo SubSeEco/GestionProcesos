@@ -6,6 +6,7 @@
 
     <div class="row">
         <div class="col s12 m10 l8">
+            @Html.Partial("_Message")
             @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.HiddenFor(q => Model.WorkflowId)

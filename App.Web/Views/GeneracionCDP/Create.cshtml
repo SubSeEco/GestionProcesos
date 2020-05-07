@@ -7,6 +7,7 @@
             <div class="card">
                 <span class="card-title" style="font-weight: bold">Viaticos</span>
                 <div class="card-content">
+                    @Html.Partial("_Message")
                     @using (Html.BeginForm("Create", "GeneracionCDP", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         @Html.HiddenFor(q => Model.CometidoId)
@@ -20,11 +21,14 @@
                                     @Html.LabelFor(m => Model.VtcTipoPartidaId)
                                     @Html.ValidationMessageFor(m => Model.VtcTipoPartidaId, "", new { @class = "red-text" })
                                 </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.VtcIdCompromiso, new { @placeholder = "Ingrese valor para el Compromiso del viatico" })
-                                    @Html.LabelFor(m => Model.VtcIdCompromiso)
-                                    @Html.ValidationMessageFor(m => Model.VtcIdCompromiso, "", new { @class = "red-text" })
-                                </div>
+                                @if (Model.Cometido.Workflow.DefinicionWorkflow.Secuencia != 8)
+                                {
+                                    <div class="input-field col s12 m6 l3">
+                                        @Html.TextBoxFor(m => Model.VtcIdCompromiso, new { @placeholder = "Ingrese valor para el Compromiso del viatico" })
+                                        @Html.LabelFor(m => Model.VtcIdCompromiso)
+                                        @Html.ValidationMessageFor(m => Model.VtcIdCompromiso, "", new { @class = "red-text" })
+                                    </div>
+                                }
                                 <div class="input-field col s12 m6 l3">
                                     @Html.DropDownListFor(m => Model.VtcTipoCapituloId, null, "Seleccione...")
                                     @Html.LabelFor(m => Model.VtcTipoCapituloId)
@@ -90,81 +94,81 @@
                         <br />
                         <div class="section"></div>
                         @*if (Model.Cometido.ReqPasajeAereo == true)
-                                    {
-                            <div id="dvPasajes">
-                                <span class="card-title" style="font-weight: bold">Pasajes</span>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjTipoPartidaId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjTipoPartidaId)
-                                    @Html.ValidationMessageFor(m => Model.PsjTipoPartidaId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjIdCompromiso, new { @placeholder = "Ingrese valor para el Compromiso del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjIdCompromiso)
-                                    @Html.ValidationMessageFor(m => Model.PsjIdCompromiso, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjVtcTipoCapituloId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjVtcTipoCapituloId)
-                                    @Html.ValidationMessageFor(m => Model.PsjVtcTipoCapituloId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjCodCompromiso, new { @placeholder = "Ingrese valor para el Codigo Compromiso del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjCodCompromiso)
-                                    @Html.ValidationMessageFor(m => Model.PsjCodCompromiso, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjCentroCostoId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjCentroCostoId)
-                                    @Html.ValidationMessageFor(m => Model.PsjCentroCostoId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjPptoTotal, new { @placeholder = "Ingrese valor para el Presupuesto Total del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjPptoTotal)
-                                    @Html.ValidationMessageFor(m => Model.PsjPptoTotal, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjTipoSubTituloId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjTipoSubTituloId)
-                                    @Html.ValidationMessageFor(m => Model.PsjTipoSubTituloId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjCompromisoAcumulado, new { @placeholder = "Ingrese valor para el Compromiso del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjCompromisoAcumulado)
-                                    @Html.ValidationMessageFor(m => Model.PsjCompromisoAcumulado, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjTipoItemId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjTipoItemId)
-                                    @Html.ValidationMessageFor(m => Model.PsjTipoItemId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjObligacionActual, new { @placeholder = "Ingrese valor para la Obligacion Actual del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjObligacionActual)
-                                    @Html.ValidationMessageFor(m => Model.PsjObligacionActual, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjTipoAsignacionId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjTipoAsignacionId)
-                                    @Html.ValidationMessageFor(m => Model.PsjTipoAsignacionId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjSaldo, new { @placeholder = "Ingrese valor para la Saldo del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjSaldo)
-                                    @Html.ValidationMessageFor(m => Model.PsjSaldo, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DropDownListFor(m => Model.PsjTipoSubAsignacionId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.PsjTipoSubAsignacionId)
-                                    @Html.ValidationMessageFor(m => Model.PsjTipoSubAsignacionId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.TextBoxFor(m => Model.PsjValorViatico, new { @placeholder = "Ingrese valor para el Valor del pasaje" })
-                                    @Html.LabelFor(m => Model.PsjValorViatico)
-                                    @Html.ValidationMessageFor(m => Model.PsjValorViatico, "", new { @class = "red-text" })
-                                </div>
-                            </div>
-                                    }*@
+                    {
+            <div id="dvPasajes">
+                <span class="card-title" style="font-weight: bold">Pasajes</span>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjTipoPartidaId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjTipoPartidaId)
+                    @Html.ValidationMessageFor(m => Model.PsjTipoPartidaId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjIdCompromiso, new { @placeholder = "Ingrese valor para el Compromiso del pasaje" })
+                    @Html.LabelFor(m => Model.PsjIdCompromiso)
+                    @Html.ValidationMessageFor(m => Model.PsjIdCompromiso, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjVtcTipoCapituloId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjVtcTipoCapituloId)
+                    @Html.ValidationMessageFor(m => Model.PsjVtcTipoCapituloId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjCodCompromiso, new { @placeholder = "Ingrese valor para el Codigo Compromiso del pasaje" })
+                    @Html.LabelFor(m => Model.PsjCodCompromiso)
+                    @Html.ValidationMessageFor(m => Model.PsjCodCompromiso, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjCentroCostoId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjCentroCostoId)
+                    @Html.ValidationMessageFor(m => Model.PsjCentroCostoId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjPptoTotal, new { @placeholder = "Ingrese valor para el Presupuesto Total del pasaje" })
+                    @Html.LabelFor(m => Model.PsjPptoTotal)
+                    @Html.ValidationMessageFor(m => Model.PsjPptoTotal, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjTipoSubTituloId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjTipoSubTituloId)
+                    @Html.ValidationMessageFor(m => Model.PsjTipoSubTituloId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjCompromisoAcumulado, new { @placeholder = "Ingrese valor para el Compromiso del pasaje" })
+                    @Html.LabelFor(m => Model.PsjCompromisoAcumulado)
+                    @Html.ValidationMessageFor(m => Model.PsjCompromisoAcumulado, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjTipoItemId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjTipoItemId)
+                    @Html.ValidationMessageFor(m => Model.PsjTipoItemId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjObligacionActual, new { @placeholder = "Ingrese valor para la Obligacion Actual del pasaje" })
+                    @Html.LabelFor(m => Model.PsjObligacionActual)
+                    @Html.ValidationMessageFor(m => Model.PsjObligacionActual, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjTipoAsignacionId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjTipoAsignacionId)
+                    @Html.ValidationMessageFor(m => Model.PsjTipoAsignacionId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjSaldo, new { @placeholder = "Ingrese valor para la Saldo del pasaje" })
+                    @Html.LabelFor(m => Model.PsjSaldo)
+                    @Html.ValidationMessageFor(m => Model.PsjSaldo, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.DropDownListFor(m => Model.PsjTipoSubAsignacionId, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.PsjTipoSubAsignacionId)
+                    @Html.ValidationMessageFor(m => Model.PsjTipoSubAsignacionId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m6 l3">
+                    @Html.TextBoxFor(m => Model.PsjValorViatico, new { @placeholder = "Ingrese valor para el Valor del pasaje" })
+                    @Html.LabelFor(m => Model.PsjValorViatico)
+                    @Html.ValidationMessageFor(m => Model.PsjValorViatico, "", new { @class = "red-text" })
+                </div>
+            </div>
+                    }*@
 
                         <p>
                             <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>

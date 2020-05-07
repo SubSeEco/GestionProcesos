@@ -4,6 +4,7 @@
 
     <div class="card">
         <div class="card-content">
+            @Html.Partial("_Message")
             @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()

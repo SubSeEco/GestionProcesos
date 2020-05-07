@@ -9,6 +9,7 @@
         <div class="col s12 m10 l12">
             <div class="card">
                 <div class="card-content">
+                    @Html.Partial("_Message")
                     @*<span class="card-title">Solicitud Cometidos</span>*@
                     <div class="row">
                         <div class="input-field col s12 m10 l3">
@@ -30,11 +31,11 @@
                             @foreach (var item in Model.Proceso.Documentos)
                             {
                                 @*<p>
-                                        Fecha creación: @item.Fecha<br />
-                                        Autor: @item.Email<br />
-                                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
-                                    </p>*@
+                        Fecha creación: @item.Fecha<br />
+                        Autor: @item.Email<br />
+                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
+                    </p>*@
                                 if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2)
                                 {
                                     if (item.Type.Contains("pdf"))

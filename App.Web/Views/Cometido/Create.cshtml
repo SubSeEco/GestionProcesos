@@ -5,6 +5,7 @@
 <div class="container">
 <div class="row">
     <div class="col s12 m8 l14">
+        @Html.Partial("_Message")
         @using (Html.BeginForm("Create", "Cometido", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.HiddenFor(q => Model.WorkflowId)
@@ -115,8 +116,8 @@
                     <div id="Financia">
                         <label>Marque las opciones que SI financia el organismo invitante</label>
                         @*<label style="color:green">
-                                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                            </label>*@
+                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                        </label>*@
                         <div class="col-12">
                             <label>
                                 @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
@@ -147,8 +148,8 @@
                     <div class="col-12">
                         <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
                         @*<label style="color:green">
-                                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-                            </label>*@
+                            @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                        </label>*@
                     </div>
                     <div class="col-12">
                         <label>
