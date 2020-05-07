@@ -64,9 +64,6 @@
                         <p class="title">
                             @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre + ", creada el " + item.FechaCreacion, "Execute", new { id = item.WorkflowId })
                         </p>
-                        <p class="right">
-                            @item.Mensaje
-                        </p>
                         <p class="title">
                             Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por @Html.DisplayFor(modelItem => item.Proceso.Email)
                         </p>
@@ -86,6 +83,14 @@
                                 @Html.DisplayFor(modelItem => item.Grupo.Nombre)
                             }
                         </p>
+
+                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                        {
+                            <p class="red-text">
+                                Comentario: @item.Mensaje
+                            </p>
+                        }
+
                     </li>
                 }
             </ul>

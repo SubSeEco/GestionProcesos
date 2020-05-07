@@ -15,9 +15,9 @@ namespace App.Web.Controllers
     [Authorize]
     public class FirmaDocumentoController : Controller
     {
-        public class DTOFileUpload
+        public class DTOFileUploadCreate
         {
-            public DTOFileUpload()
+            public DTOFileUploadCreate()
             {
             }
 
@@ -53,6 +53,60 @@ namespace App.Web.Controllers
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
+
+            [Display(Name = "URL")]
+            [DataType(DataType.Url)]
+            public string URL { get; set; }
+
+
+
+        }
+
+        public class DTOFileUploadEdit
+        {
+            public DTOFileUploadEdit()
+            {
+            }
+
+            public int FirmaDocumentoId { get; set; }
+            public int ProcesoId { get; set; }
+            public int WorkflowId { get; set; }
+            [Display(Name = "Comentario")]
+            public string Comentario { get; set; }
+            public string Autor { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Tipo documento")]
+            public string TipoDocumentoCodigo { get; set; }
+
+            [Display(Name = "Tipo documento")]
+            public string TipoDocumentoDescripcion { get; set; }
+
+            //[Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Archivo")]
+            [DataType(DataType.Upload)]
+            public HttpPostedFileBase FileUpload { get; set; }
+
+            [Display(Name = "Documento a firmar")]
+            public byte[] File { get; set; }
+
+            public string Firmante { get; set; }
+
+            public bool TieneFirma { get; set; }
+
+            [Display(Name = "Fecha creación")]
+            public System.DateTime? FechaCreacion { get; set; }
+
+            [Display(Name = "Folio")]
+            public string Folio { get; set; }
+
+            [Display(Name = "URL")]
+            [DataType(DataType.Url)]
+            public string URL { get; set; }
+
+
+
         }
 
         protected readonly IGestionProcesos _repository;
@@ -99,7 +153,7 @@ namespace App.Web.Controllers
             ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
 
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
-            var model = new DTOFileUpload
+            var model = new DTOFileUploadCreate
             {
                 WorkflowId = workflow.WorkflowId,
                 ProcesoId = workflow.ProcesoId,
@@ -110,7 +164,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DTOFileUpload model)
+        public ActionResult Create(DTOFileUploadCreate model)
         {
             if (ModelState.IsValid)
             {
@@ -131,7 +185,8 @@ namespace App.Web.Controllers
                     DocumentoSinFirma = target.ToArray(),
                     DocumentoSinFirmaFilename = model.FileUpload.FileName,
                     Observaciones = model.Comentario,
-                    Autor = model.Autor
+                    Autor = model.Autor,
+                    URL = model.URL
                 });
 
                 if (_UseCaseResponseMessage.IsValid)
@@ -153,13 +208,14 @@ namespace App.Web.Controllers
             var firma = _repository.GetById<FirmaDocumento>(id);
             ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion", firma.TipoDocumentoCodigo);
 
-            var model = new DTOFileUpload()
+            var model = new DTOFileUploadEdit()
             {
                 FirmaDocumentoId = firma.FirmaDocumentoId,
                 ProcesoId = firma.ProcesoId,
                 WorkflowId = firma.WorkflowId,
                 File = firma.DocumentoSinFirma,
-                Comentario = firma.Observaciones
+                Comentario = firma.Observaciones,
+                URL = firma.URL
             };
 
             return View(model);
@@ -167,15 +223,17 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(DTOFileUpload model)
+        public ActionResult Edit(DTOFileUploadEdit model)
         {
             if (ModelState.IsValid)
             {
                 model.Autor = UserExtended.Email(User);
 
                 var tipodocumento = tipoDocumentoList.FirstOrDefault(q => q.Codigo == model.TipoDocumentoCodigo);
+
                 var target = new MemoryStream();
-                model.FileUpload.InputStream.CopyTo(target);
+                if (model.FileUpload != null)
+                    model.FileUpload.InputStream.CopyTo(target);
 
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository);
                 var _UseCaseResponseMessage = _useCaseInteractor.Edit(new FirmaDocumento()
@@ -185,11 +243,12 @@ namespace App.Web.Controllers
                     WorkflowId = model.WorkflowId,
                     TipoDocumentoCodigo = model.TipoDocumentoCodigo,
                     TipoDocumentoDescripcion = tipodocumento != null ? tipodocumento.Descripcion : "No encontrado",
-                    DocumentoSinFirma = target.ToArray(),
-                    DocumentoSinFirmaFilename = model.FileUpload.FileName,
+                    DocumentoSinFirma = model.FileUpload != null ? target.ToArray() : null,
+                    DocumentoSinFirmaFilename = model.FileUpload != null ? model.FileUpload.FileName : null,
+                    URL = model.URL,
                     Observaciones = model.Comentario,
                     Autor = model.Autor,
-                });
+                });;
 
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -210,7 +269,7 @@ namespace App.Web.Controllers
             var firma = _repository.GetById<FirmaDocumento>(id);
             var email = UserExtended.Email(User);
 
-            var model = new DTOFileUpload()
+            var model = new DTOFileUploadEdit()
             {
                 FirmaDocumentoId = firma.FirmaDocumentoId,
                 ProcesoId = firma.ProcesoId,
@@ -222,7 +281,8 @@ namespace App.Web.Controllers
                 TipoDocumentoDescripcion = firma.TipoDocumentoDescripcion,
                 FechaCreacion = firma.FechaCreacion,
                 Autor = firma.Autor,
-                Folio = firma.Folio
+                Folio = firma.Folio,
+                URL = firma.URL
             };
 
             return View(model);

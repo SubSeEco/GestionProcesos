@@ -1,4 +1,4 @@
-﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUpload
+﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUploadCreate
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
@@ -23,6 +23,15 @@
                             @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
                             <span class="helper-text">Indique el tipo de documento</span>
                         </div>
+
+                        <div class="section"></div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.URL)
+                            @Html.LabelFor(m => Model.URL)
+                            @Html.ValidationMessageFor(m => Model.URL, "", new { @class = "text-danger" })
+                        </div>
+
+
                         <div class="section"></div>
 
                         @Html.LabelFor(m => Model.FileUpload)
@@ -37,6 +46,7 @@
                             <span class="helper-text">Solo se permiten archivos con extensión .pdf</span>
                             @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
                         </div>
+
 
                         <div class="section"></div>
                         <div class="input-field">

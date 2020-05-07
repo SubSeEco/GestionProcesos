@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using App.Core.Interfaces;
-using App.Infrastructure.FirmaElock;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using App.Infrastructure.FirmaElock;
 
 namespace App.Infrastructure.HSM
 {
@@ -46,16 +46,19 @@ namespace App.Infrastructure.HSM
 
             try
             {
-                using (SignFileImplClient ws = new SignFileImplClient())
-                {
-                    var respuesta = ws.SignFile(documento, Firmante, "BOTTOM_EDGE_CENTER", "0", razon, unidadOrganizacional, 10, 10, 150, 150);
+                SignFileImplClient ws = new SignFileImplClient();
+                var respuesta = ws.SignFile(documento, Firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", "Documento firmado electrónicamente Ley 19.799", unidadOrganizacional, 10, 10, 150, 150);
 
-                    return respuesta.message;
-                }
+                if (respuesta == null)
+                    throw new System.Exception("El servicio de firma no retornó respuesta");
+                if (respuesta != null && respuesta.status.Contains("FAIL"))
+                    throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+
+                return respuesta.message;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
-                throw new System.Exception("Error al firmar documento:" + ex.Message);
+                throw;
             }
         }
 
