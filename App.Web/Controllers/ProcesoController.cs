@@ -36,6 +36,7 @@ namespace App.Web.Controllers
             [DataType(DataType.Date)]
             public System.DateTime? Hasta { get; set; }
 
+            [Display(Name = "Tipos de proceso")]
             public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<Proceso> Result { get; set; }
 

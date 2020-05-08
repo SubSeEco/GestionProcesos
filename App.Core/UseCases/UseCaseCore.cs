@@ -323,6 +323,9 @@ namespace App.Core.UseCases
                 if (definicionWorkflow == null)
                     throw new ArgumentNullException("No se encontró la definición de tarea del proceso asociado al workflow.");
 
+                var persona = new SIGPER();
+                persona = _sigper.GetUserByEmail(obj.Email);
+
                 var proceso = new Proceso();
                 proceso.DefinicionProcesoId = obj.DefinicionProcesoId;
                 proceso.Observacion = obj.Observacion;
@@ -331,6 +334,7 @@ namespace App.Core.UseCases
                 proceso.FechaTermino = null;
                 proceso.Email = obj.Email;
                 proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
+                proceso.NombreFuncionario = persona != null && persona.Funcionario != null? persona.Funcionario.PeDatPerChq.Trim() : null;
 
                 var workflow = new Workflow();
                 workflow.FechaCreacion = DateTime.Now;
@@ -340,8 +344,6 @@ namespace App.Core.UseCases
                 workflow.DefinicionWorkflow = definicionWorkflow;
                 workflow.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionWorkflow.DefinicionProceso.DuracionHoras);
 
-                var persona = new SIGPER();
-
                 switch (definicionWorkflow.TipoEjecucionId)
                 {
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
@@ -350,6 +352,7 @@ namespace App.Core.UseCases
                         if (persona.Funcionario == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
@@ -362,6 +365,7 @@ namespace App.Core.UseCases
                         if (persona.Funcionario == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
@@ -385,6 +389,7 @@ namespace App.Core.UseCases
                             throw new Exception("No se encontró el usuario en SIGPER.");
 
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                         workflow.TareaPersonal = true;
@@ -677,6 +682,7 @@ namespace App.Core.UseCases
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
@@ -688,6 +694,7 @@ namespace App.Core.UseCases
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
@@ -700,6 +707,7 @@ namespace App.Core.UseCases
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
@@ -723,6 +731,7 @@ namespace App.Core.UseCases
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.TareaPersonal = true;
                     }
 
