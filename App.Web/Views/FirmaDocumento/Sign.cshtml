@@ -1,4 +1,4 @@
-﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUpload
+﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUploadEdit
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 @Html.HiddenFor(q => q.WorkflowId)
@@ -20,6 +20,12 @@
                         <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoDescripcion)</strong><br />
                         @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
                     </div>
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.URL)</strong><br />
+                        @Html.DisplayFor(m => Model.URL)
+                    </div>
+
                     <div class="input-field">
                         <strong>@Html.DisplayNameFor(m => Model.Autor)</strong><br />
                         @Html.DisplayFor(m => Model.Autor)

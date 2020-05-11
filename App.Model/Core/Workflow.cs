@@ -52,7 +52,7 @@ namespace App.Model.Core
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
 
-        [Display(Name = "Funcionario")]
+        [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
         [Display(Name = "Funcionario")]
@@ -89,7 +89,6 @@ namespace App.Model.Core
         [Display(Name = "Certificado electrónico")]
         public string SerialNumber { get; set; }
 
-        [NotMapped]
         [Display(Name = "Nombre Funcionario")]
         public string NombreFuncionario { get; set; }
 

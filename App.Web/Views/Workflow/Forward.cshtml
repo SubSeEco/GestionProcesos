@@ -1,54 +1,55 @@
 ﻿@model App.Model.Core.Workflow
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="container">
+    @using (Html.BeginForm("Forward", "Workflow", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(q => Model.WorkflowId)
 
-@using (Html.BeginForm("Forward", "Workflow", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(q => Model.WorkflowId)
+        @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+        @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+        @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
+        @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
 
-    @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-    @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
-    @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
-    @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Asignar tarea</span>
+                <div class="section"></div>
+                <div class="row">
+                    @if (Model.DefinicionWorkflow.PermitirReenvioUnidad)
+                    {
+                        <div class="input-field col s12 m8 l10">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m8 l10">
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.To)
+                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                        </div>
+                    }
+                    @if (Model.DefinicionWorkflow.PermitirReenvioGrupoEspecial)
+                    {
+                        <div class="input-field col s12 m8 l10">
+                            @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.GrupoId)
+                            @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                        </div>
+                    }
 
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">Asignar tarea</span>
-            <div class="section"></div>
-            <div class="row">
-                @if (Model.DefinicionWorkflow.PermitirReenvioUnidad)
-                {
                     <div class="input-field col s12 m8 l10">
-                        @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.Pl_UndCod)
-                        @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                        @Html.LabelFor(m => Model.Observacion)
+                        @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                     </div>
-                    <div class="input-field col s12 m8 l10">
-                        @Html.DropDownListFor(model => model.To, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.To)
-                        @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
-                    </div>
-                }
-                @if (Model.DefinicionWorkflow.PermitirReenvioGrupoEspecial)
-                {
-                    <div class="input-field col s12 m8 l10">
-                        @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
-                        @Html.LabelFor(m => Model.GrupoId)
-                        @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
-                    </div>
-                }
-
-                <div class="input-field col s12 m8 l10">
-                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
-                    @Html.LabelFor(m => Model.Observacion)
-                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                 </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
             </div>
-            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
         </div>
-    </div>
-}
+    }
+</div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>

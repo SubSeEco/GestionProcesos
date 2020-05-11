@@ -333,8 +333,8 @@
     <Content Include="App_Data\ReportePresupuesto.xlsx" />
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Produccion.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <Content Include="Scripts\init.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />

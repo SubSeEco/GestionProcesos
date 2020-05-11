@@ -44,8 +44,11 @@ namespace App.Model.Core
         public string Observacion { get; set; }
 
 
-        [Display(Name = "Autor")]
+        [Display(Name = "Email autor")]
         public string Email { get; set; }
+
+        [Display(Name = "Nombre autor")]
+        public string NombreFuncionario { get; set; }
 
         //[Display(Name = "RUT")]
         //public int? RUT { get; set; }

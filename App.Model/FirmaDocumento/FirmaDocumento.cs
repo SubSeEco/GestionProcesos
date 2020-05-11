@@ -89,6 +89,10 @@ namespace App.Model.FirmaDocumento
         [NotMapped]
         public bool TieneFirma { get; set; }
 
+        [Display(Name = "URL")]
+        [DataType(DataType.Url)]
+        public string URL { get; set; }
+
 
     }
 }
