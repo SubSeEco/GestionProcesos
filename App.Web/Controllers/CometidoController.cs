@@ -1648,7 +1648,7 @@ namespace App.Web.Controllers
             };
 
             ViewBag.Estado = new SelectList(Estado, "Value", "Text");
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             return View(model);
@@ -1702,12 +1702,12 @@ namespace App.Web.Controllers
             foreach (var res in model.Result)
             {
                 res.Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                if (res.Proceso.Anulada == false && res.Proceso.Terminada == false)
-                    model.Estado = 1; // "En Proceso";
-                else if (res.Proceso.Terminada == true)
-                    model.Estado = 3; //Terminado
-                else if (res.Proceso.Anulada == true)
-                    model.Estado = 2; //Anulado
+                //if (res.Proceso.Anulada == false && res.Proceso.Terminada == false)
+                //    model.Estado = 1; // "En Proceso";
+                //else if (res.Proceso.Terminada == true)
+                //    model.Estado = 3; //Terminado
+                //else if (res.Proceso.Anulada == true)
+                //    model.Estado = 2; //Anulado
 
                 //model.Result.FirstOrDefault().Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
 
@@ -1753,7 +1753,7 @@ namespace App.Web.Controllers
             };
 
             ViewBag.Estado = new SelectList(Estado, "Value", "Text");
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             return View(model);
@@ -1801,10 +1801,11 @@ namespace App.Web.Controllers
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CAIGG.xlsx");
             var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excelPackageCaigg = new ExcelPackage(fileInfo);
 
             var fila = 1;
-            var worksheet = excelPackageCaigg.Workbook.Worksheets[1];
+            var worksheet = excelPackageCaigg.Workbook.Worksheets[0];
             foreach (var rpt in result.ToList())
             {
                 var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == rpt.ProcesoId);
@@ -1834,13 +1835,13 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 22].Value = "S/A"; ;
             }
 
-            return File(excelPackageCaigg.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("Caigg_yyyyMMddhhmmss") + ".xlsx");
+            return File(excelPackageCaigg.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptCaigg_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
         public ActionResult SeguimientoUnidades()
         {
             var model = new DTOFilterCometido();
-            ViewBag.Ejecutor = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             return View(model);
         }
 
@@ -1933,7 +1934,7 @@ namespace App.Web.Controllers
             //    //}
             //}
 
-            ViewBag.Ejecutor = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             return View(model);
         }
 
@@ -2028,7 +2029,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            return File(excelPackageAjusteAsistencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptAjusteAsistencia_yyyyMMddhhmmss") + ".xlsx");
+            return File(excelPackageAjusteAsistencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptAjusteAsistencia_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
         public FileResult SolicitudTransparencia()
@@ -2079,7 +2080,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            return File(excelPackageTransparencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSolicitudTransparencia_yyyyMMddhhmmss") + ".xlsx");
+            return File(excelPackageTransparencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSolicitudTransparencia_" +  DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
         public FileResult ReportePresupuesto()
@@ -2088,33 +2089,44 @@ namespace App.Web.Controllers
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\ReportePresupuesto.xlsx");
             var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excelPackagePresupuesto = new ExcelPackage(fileInfo);
 
             var fila = 1;
-            var worksheet = excelPackagePresupuesto.Workbook.Worksheets[1];
-            foreach (var cometido in result.ToList())
+            var worksheet = excelPackagePresupuesto.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId && w.DefinicionWorkflow.Secuencia == 9).FirstOrDefault();
                 var cdp = _repository.GetAll<GeneracionCDP>().Where(w => w.CometidoId == cometido.CometidoId).FirstOrDefault();
                 var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
-                if (destino.Count > 0)
+                if (cdp != null)
                 {
                     fila++;
                     worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                     worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
                     worksheet.Cells[fila, 3].Value = cdp.VtcIdCompromiso != null ? cdp.VtcIdCompromiso.ToString() : "S/A" ;
-                    //worksheet.Cells[fila, 4].Value = cometido.NombreId;
-                    //worksheet.Cells[fila, 5].Value = cometido.UnidadDescripcion;
-                    //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                    //worksheet.Cells[fila, 7].Value = cometido.FechaSolicitud.ToString();
-                    //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                    //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
-                    //worksheet.Cells[fila, 10].Value = cdp.LastOrDefault().Email;
-                    //worksheet.Cells[fila, 11].Value = cdp.LastOrDefault().FechaCreacion.ToString();
+                    worksheet.Cells[fila, 4].Value = cdp.VtcTipoSubTituloId.HasValue && cdp.VtcTipoItemId.HasValue ? cdp.TipoSubTitulo.TstNombre + "." + cdp.TipoItem.TitNombre : "S/A";
+                    worksheet.Cells[fila, 5].Value = workflow != null && workflow.FechaTermino.HasValue ? workflow.FechaTermino.Value.ToString() : "S/A";
+                    worksheet.Cells[fila, 6].Value = cometido.Rut; ;
+                    worksheet.Cells[fila, 7].Value = cometido.Nombre != null ? cometido.Nombre : "S/A";
+                    worksheet.Cells[fila, 8].Value = cometido.UnidadDescripcion;
+                    worksheet.Cells[fila, 9].Value = cometido.GradoDescripcion;
+                    worksheet.Cells[fila, 10].Value = destino != null ? destino.FirstOrDefault().ComunaDescripcion : "S/A";
+                    worksheet.Cells[fila, 11].Value = destino != null ? destino.FirstOrDefault().FechaInicio.Month.ToString() : "S/A";
+                    worksheet.Cells[fila, 12].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                    worksheet.Cells[fila, 13].Value = destino != null ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                    worksheet.Cells[fila, 14].Value = destino != null ? destino.LastOrDefault().Dias100Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 15].Value = destino != null ? destino.LastOrDefault().Dias60Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 16].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 17].Value = destino != null ? destino.LastOrDefault().Dias50Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 18].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
+                    worksheet.Cells[fila, 19].Value = cdp.VtcCompromisoAcumulado != null ? cdp.VtcCompromisoAcumulado : "S/A";
+                    worksheet.Cells[fila, 20].Value = cdp.VtcSaldo != null ? cdp.VtcSaldo : "S/A";
                 }
             }
 
-            return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptReportePresupuesto_yyyyMMddhhmmss") + ".xlsx");
+            return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet,"rptPresupuesto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
     }
 }
