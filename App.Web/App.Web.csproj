@@ -679,6 +679,7 @@
     <Content Include="Views\Memorandum\Edit.cshtml" />
     <Content Include="Views\Memorandum\Sign.cshtml" />
     <Content Include="Views\Memorandum\View.cshtml" />
+    <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
