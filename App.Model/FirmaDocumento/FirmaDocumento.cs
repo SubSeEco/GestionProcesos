@@ -89,7 +89,7 @@ namespace App.Model.FirmaDocumento
         [NotMapped]
         public bool TieneFirma { get; set; }
 
-        [Display(Name = "URL")]
+        [Display(Name = "URL gestión documental")]
         [DataType(DataType.Url)]
         public string URL { get; set; }
 

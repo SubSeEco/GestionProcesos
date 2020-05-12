@@ -16,14 +16,20 @@
     <style>
         nav {
             box-shadow: none;
-        } 
+        }
+
+        .nav-wrapper > ul {
+            margin-left: 150px;
+        }
     </style>
 
     <div class="navbar-fixed valign-wrapper">
         <nav class="white">
             <div class="nav-wrapper container">
-                <a href="/" class="left brand-logo black-text"><img src="~/Content/logo.png" width="90%"></a>
-
+                <a href="/" class="left brand-logo black-text hide-on-small-and-down"><img src="~/Content/logo.png" width="90%"></a>
+                <ul>
+                    <li><a href="/" class="left brand-logo black-text">Inicio</a></li>
+                </ul>
                 <ul class="right">
                     @if (Request.IsAuthenticated)
                     {
