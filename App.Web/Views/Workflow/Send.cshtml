@@ -25,7 +25,7 @@
                     @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     {
                         <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "TipoAprobacionId" })
+                            @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new {@onchange = "onchangeevent();", @id = "TipoAprobacionId" })
                             @Html.LabelFor(m => Model.TipoAprobacionId)
                             @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
                         </div>
@@ -55,11 +55,12 @@
                         </div>
                     }
 
-                    <div class="input-field col s12 m8 l10">
-                        @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
-                        @Html.LabelFor(m => Model.Observacion)
-                        @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                    </div>
+                <div class="input-field col s12 m8 l10">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+
+                </div>
                 </div>
                 <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
             </div>

@@ -1,20 +1,22 @@
 ﻿@model HandleErrorInfo
 @{
-    Layout = "_Layout.cshtml";
     ViewBag.Title = "Error";
 }
-<div class="text-danger">
-    <h2>Error!</h2>
-    Ha ocurrido un error inesperado mientras se procesaba su solicitud. Por favor contacte al administrador de sistema
-    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
-    {
-        <h4>Exception:</h4>
-        <pre>@Model.Exception.Message</pre>
-        <h4>Controller:</h4>
-        <pre>@Model.ControllerName</pre>
-        <h4>Action:</h4>
-        <pre>@Model.ActionName</pre>
-        <h4>StackTrace:</h4>
-        <pre>@Model.Exception.StackTrace</pre>
-    }
+
+<div class="container">
+    <div class="text-danger">
+        <h2>Error!</h2>
+        Ha ocurrido un error inesperado mientras se procesaba su solicitud. Por favor contacte al administrador de sistema
+        @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+        {
+            <h4>Exception:</h4>
+            <pre>@Model.Exception.Message</pre>
+            <h4>Controller:</h4>
+            <pre>@Model.ControllerName</pre>
+            <h4>Action:</h4>
+            <pre>@Model.ActionName</pre>
+            <h4>StackTrace:</h4>
+            <pre>@Model.Exception.StackTrace</pre>
+        }
+    </div>
 </div>

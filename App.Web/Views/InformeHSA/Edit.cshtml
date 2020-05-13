@@ -1,109 +1,111 @@
 ﻿@model App.Model.InformeHSA.InformeHSA
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-    <div class="container">
-        @Html.Partial("_Message")
+<div class="container">
 
-        <div class="row">
-            <div class="col s12 m6 l6">
-                @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.HiddenFor(q => Model.WorkflowId)
-                    @Html.HiddenFor(q => Model.ProcesoId)
-                    @Html.HiddenFor(q => Model.InformeHSAId)
-                    @Html.AntiForgeryToken()
+    @Html.Partial("_Message")
 
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-title">Informe HSA</span>
-                            <div class="section"></div>
-                            <div class="row">
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.EditorFor(m => Model.FechaDesde)
-                                    @Html.LabelFor(m => Model.FechaDesde)
-                                    @Html.ValidationMessageFor(m => Model.FechaDesde, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.EditorFor(m => Model.FechaHasta)
-                                    @Html.LabelFor(m => Model.FechaHasta)
-                                    @Html.ValidationMessageFor(m => Model.FechaHasta, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.EditorFor(m => Model.RUT)
-                                    @Html.LabelFor(m => Model.RUT)
-                                    @Html.ValidationMessageFor(m => Model.RUT, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.EditorFor(m => Model.Nombre)
-                                    @Html.LabelFor(m => Model.Nombre)
-                                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                                </div>
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.InformeHSAId)
+                @Html.AntiForgeryToken()
 
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.EditorFor(m => Model.Unidad)
-                                    @Html.LabelFor(m => Model.Unidad)
-                                    @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.EditorFor(m => Model.NombreJefatura)
-                                    @Html.LabelFor(m => Model.NombreJefatura)
-                                    @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.ConJornada)
-                                        <span>@Html.LabelFor(m => Model.ConJornada)</span>
-                                    </label>
-                                    <div class="section"></div>
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.TextAreaFor(m => Model.Funciones, new { @class = "materialize-textarea" })
-                                    @Html.LabelFor(m => Model.Funciones)
-                                    @Html.ValidationMessageFor(m => Model.Funciones, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.TextAreaFor(m => Model.Actividades, new { @class = "materialize-textarea" })
-                                    @Html.LabelFor(m => Model.Actividades)
-                                    @Html.ValidationMessageFor(m => Model.Actividades, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m12 l12">
-                                    @Html.TextAreaFor(m => Model.Observaciones, new { @class = "materialize-textarea" })
-                                    @Html.LabelFor(m => Model.Observaciones)
-                                    @Html.ValidationMessageFor(m => Model.Observaciones, "", new { @class = "red-text" })
-                                </div>
-
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.EditorFor(m => Model.NumeroBoleta)
-                                    @Html.LabelFor(m => Model.NumeroBoleta)
-                                    @Html.ValidationMessageFor(m => Model.NumeroBoleta, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.EditorFor(m => Model.FechaBoleta)
-                                    @Html.LabelFor(m => Model.FechaBoleta)
-                                    @Html.ValidationMessageFor(m => Model.FechaBoleta, "", new { @class = "red-text" })
-                                </div>
-
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Informe HSA</span>
+                        <div class="section"></div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.FechaDesde)
+                                @Html.LabelFor(m => Model.FechaDesde)
+                                @Html.ValidationMessageFor(m => Model.FechaDesde, "", new { @class = "red-text" })
                             </div>
-                            <p>
-                                <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                            </p>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.FechaHasta)
+                                @Html.LabelFor(m => Model.FechaHasta)
+                                @Html.ValidationMessageFor(m => Model.FechaHasta, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.RUT)
+                                @Html.LabelFor(m => Model.RUT)
+                                @Html.ValidationMessageFor(m => Model.RUT, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.Nombre)
+                                @Html.LabelFor(m => Model.Nombre)
+                                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                            </div>
+
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.Unidad)
+                                @Html.LabelFor(m => Model.Unidad)
+                                @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.NombreJefatura)
+                                @Html.LabelFor(m => Model.NombreJefatura)
+                                @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.ConJornada)
+                                    <span>@Html.LabelFor(m => Model.ConJornada)</span>
+                                </label>
+                                <div class="section"></div>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Funciones, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Funciones)
+                                @Html.ValidationMessageFor(m => Model.Funciones, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Actividades, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Actividades)
+                                @Html.ValidationMessageFor(m => Model.Actividades, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Observaciones, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Observaciones)
+                                @Html.ValidationMessageFor(m => Model.Observaciones, "", new { @class = "red-text" })
+                            </div>
+
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.NumeroBoleta)
+                                @Html.LabelFor(m => Model.NumeroBoleta)
+                                @Html.ValidationMessageFor(m => Model.NumeroBoleta, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.FechaBoleta)
+                                @Html.LabelFor(m => Model.FechaBoleta)
+                                @Html.ValidationMessageFor(m => Model.FechaBoleta, "", new { @class = "red-text" })
+                            </div>
+
                         </div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
                     </div>
-                }
-            </div>
-            <div class="col s12 m6 l6">
-                @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-                @Html.Action("History", "Workflow", new { Model.WorkflowId })
-            </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
+</div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.datepicker').datepicker();
+        $('.modal').modal();
         $('select').formSelect();
+        $('.tooltipped').tooltip();
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
