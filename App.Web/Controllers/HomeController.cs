@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
 using App.Model.Core;
+using App.Util;
 
 namespace App.Web.Controllers
 {

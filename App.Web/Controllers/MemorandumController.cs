@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Model.Memorandum;
@@ -9,9 +8,6 @@ using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
 using App.Core.Interfaces;
-using App.Model.Shared;
-using App.Infrastructure.Extensions;
-using Newtonsoft.Json;
 using App.Core.UseCases;
 
 namespace App.Web.Controllers

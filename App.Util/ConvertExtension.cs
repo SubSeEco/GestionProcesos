@@ -2,7 +2,7 @@
 using System.Text;
 using System.Globalization;
 
-namespace App.Infrastructure.Extensions
+namespace App.Util
 {
     public class ConvertExtension
     {

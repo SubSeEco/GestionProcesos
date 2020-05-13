@@ -3,17 +3,15 @@
     Layout = null;
 }
 
-<div class="grey lighten-3">
-    <div class="container">
-        <div class="section">
-            <h3 class="header">@Model.DefinicionWorkflow.Nombre</h3>
-            <h5 class="header light">
-                @Model.DefinicionWorkflow.Instrucciones
-            </h5>
-            <h5 class="header light">
-                Proceso: @Model.ProcesoId, Tarea: @Model.WorkflowId
-            </h5>
-            <br />
-        </div>
-    </div>
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@Model.DefinicionWorkflow.Nombre</h3>
+        <h5 class="header light">
+            @Model.DefinicionWorkflow.Instrucciones
+        </h5>
+        <h5 class="header light">
+            Proceso: @Model.ProcesoId, Tarea: @Model.WorkflowId
+        </h5>
+        <div class="section"></div>    </div>
 </div>
+<div class="section"></div>

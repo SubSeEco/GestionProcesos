@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
-namespace App.Infrastructure.Extensions
+namespace App.Util
 {
     /// <summary>    
     /// Enables the efficient, dynamic composition of query predicates.    

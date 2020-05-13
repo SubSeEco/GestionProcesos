@@ -24,14 +24,15 @@
     }
 </style>
 
-<div class="grey lighten-3">
-    <div class="section container ">
+<div class="grey lighten-3 section">
+    <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
         <h5 class="header light">@ViewBag.SubTitle</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
-<p></p>
+<div class="section"></div>
+
 <div class="container">
     @Html.Partial("_Message")
     <div class="row">
@@ -74,39 +75,39 @@
 
                             @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
 
-                        <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
+                            <p class="truncate ultra-small">
+                                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
 
-                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
-                            {
-                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => item.Proceso.Email)
-                            }
+                                @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Proceso.Email)
+                                }
 
-                        </p>
-                        <p class="truncate ultra-small grey-text">
-                            Asignada a:
+                            </p>
+                            <p class="truncate ultra-small">
+                                Asignada a:
 
-                            @if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
-                            {
-                                @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => item.Email)<text>, </text>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
-                            {
-                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
-                            }
-                            @if (item.Grupo != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
-                            }
-                        </p>
+                                @if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Email)<text>, </text>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                                {
+                                    @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                                }
+                                @if (item.Grupo != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                                }
+                            </p>
 
                             @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
                             {
@@ -130,67 +131,67 @@
                 <ul class="collection">
                     @foreach (var item in Model.TareasGrupales.OrderByDescending(q => q.WorkflowId))
                     {
-                    <li class="collection-item avatar section">
+                        <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+                            <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
 
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle red large"></i>
-                        }
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle amber accent-4"></i>
-                        }
-                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
-                        {
-                            <i class="material-icons circle green"></i>
-                        }
-
-                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
-
-                        <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
-
-                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                                <i class="material-icons circle red large"></i>
                             }
-                            else
+                            @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.Email)
+                                <i class="material-icons circle amber accent-4"></i>
+                            }
+                            @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                            {
+                                <i class="material-icons circle green"></i>
                             }
 
-                        </p>
-                        <p class="truncate ultra-small">
-                            Asignada a:
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
 
-                            @if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
-                            {
-                                @Html.DisplayFor(modelItem => item.NombreFuncionario)<text> </text>
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => item.Email)<text> </text>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
-                            {
-                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
-                            }
-                            @if (item.Grupo != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
-                            }
-                        </p>
+                            <p class="truncate ultra-small">
+                                Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
 
-                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
-                        {
-                            <div class="section">
-                                <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
-                            </div>
-                        }
+                                @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Proceso.Email)
+                                }
 
-                    </li>
+                            </p>
+                            <p class="truncate ultra-small">
+                                Asignada a:
+
+                                @if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text> </text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Email)<text> </text>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                                {
+                                    @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                                }
+                                @if (item.Grupo != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                                }
+                            </p>
+
+                            @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                            {
+                                <div class="section">
+                                    <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                                </div>
+                            }
+
+                        </li>
                     }
                 </ul>
             }

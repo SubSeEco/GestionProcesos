@@ -1,7 +1,6 @@
 ﻿using App.Model.Cometido;
 using App.Model.Core;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Core.UseCases;
+using App.Util;
 
 namespace App.Web.Controllers
 {

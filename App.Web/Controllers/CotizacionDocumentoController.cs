@@ -1,7 +1,6 @@
 ﻿using App.Model.Pasajes;
 using App.Model.Core;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using App.Util;
 
 namespace App.Web.Controllers
 {
