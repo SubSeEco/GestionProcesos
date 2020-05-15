@@ -1,7 +1,7 @@
 ﻿using App.Model.Pasajes;
 using App.Model.Core;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
+using App.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

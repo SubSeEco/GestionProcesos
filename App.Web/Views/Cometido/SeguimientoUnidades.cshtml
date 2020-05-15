@@ -75,7 +75,7 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.Ejecutor)
                                         </th>
-                                        <th style="width:100px">
+                                        <th>
                                             @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
                                         </th>
                                         <th>
@@ -92,7 +92,7 @@
                             </th>
                         </tr>
 
-                        @foreach (var item in Model.Result)
+                        @foreach (var item in Model.Result.OrderByDescending(c => c.CometidoId))
                         {
                             <tr>
                                 <td>
@@ -121,11 +121,11 @@
                                     {
                                         <table>
                                             <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => t.Email)
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.Email).ToString().Trim()
                                                 </td>
-                                                <td style="text-align:justify">
-                                                    @Html.DisplayFor(modelItem => t.Pl_UndDes)
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.Pl_UndDes).ToString().Trim()
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => t.FechaCreacion).ToHtmlString().Remove(10)

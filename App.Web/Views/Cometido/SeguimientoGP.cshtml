@@ -75,7 +75,8 @@
                                 @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().DestinoId)
+                                @*@Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().DestinoId)*@
+                                @Html.Raw("<span>Destino</span>")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
@@ -90,7 +91,8 @@
                                 @Html.DisplayNameFor(model => model.Ejecutor)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.FechaInicio)
+                                @*@Html.DisplayNameFor(model => model.FechaInicio)*@
+                                @Html.Raw("<span>Fecha Asignacion</span>")
                             </th>
                             <th>
                             </th>
@@ -114,7 +116,14 @@
                                     }
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Subscretaria)
+                                    @if (item.UnidadDescripcion.Contains("Turismo"))
+                                    {
+                                        <p>SUBSECRETARIA DE TURISMO</p>
+                                    }
+                                    else
+                                    {
+                                        <p>SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO</p>
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CometidoId)
@@ -129,7 +138,7 @@
                                     @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().RegionDescripcion)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                    @Html.DisplayFor(modelItem => item.FechaSolicitud).ToHtmlString().Remove(10)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().FechaInicio)
@@ -141,7 +150,7 @@
                                     @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().FechaCreacion)
+                                    @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().FechaCreacion).ToHtmlString().Remove(10)
                                 </td>
                                 @*<td>
                                     @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })

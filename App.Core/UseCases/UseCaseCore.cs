@@ -5,7 +5,7 @@ using App.Model.Core;
 using App.Core.Interfaces;
 using FluentDateTime;
 using App.Model.SIGPER;
-using App.Infrastructure.Extensions;
+using App.Util;
 
 namespace App.Core.UseCases
 {

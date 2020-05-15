@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Core.Interfaces;
 using System.Linq;
-using App.Infrastructure.Extensions;
+using App.Util;
 
 namespace App.Web.Controllers
 {
