@@ -58,9 +58,8 @@ namespace App.Model.Core
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
-        [Display(Name = "Observaciones")]
+        [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
-        //[RequiredIf("TipoAprobacionId != 2", ErrorMessage = "Se debe señalar el motivo del rechazo para la tarea")]
         [RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Se debe señalar el motivo del rechazo para la tarea")]
         public string Observacion { get; set; }
 

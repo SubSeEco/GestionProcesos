@@ -21,9 +21,16 @@
                         @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field truncate">
                         <strong>@Html.DisplayNameFor(m => Model.URL)</strong><br />
-                        @Html.DisplayFor(m => Model.URL)
+                        @if (!string.IsNullOrWhiteSpace(Model.URL))
+                        {
+                            <a href="@Model.URL" target="_blank">@Model.URL</a>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(m => Model.URL)
+                        }
                     </div>
 
                     <div class="input-field">
@@ -84,9 +91,13 @@
     </div>
 </div>
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('.modal').modal();
-        $('select').formSelect();
+        $('.tooltipped').tooltip();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
     });
 </script>

@@ -272,6 +272,8 @@
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\jquery.datetimepicker.css" />
     <Content Include="Content\logo.png" />
+    <Content Include="Content\logo1.png" />
+    <Content Include="Content\logo2.jpg" />
     <Content Include="Content\LogoPieFirma.png" />
     <Content Include="Content\custom.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -680,6 +682,7 @@
     <Content Include="Views\Memorandum\Sign.cshtml" />
     <Content Include="Views\Memorandum\View.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

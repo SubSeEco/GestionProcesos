@@ -54,12 +54,9 @@ namespace App.Web.Controllers
             [Display(Name = "Folio")]
             public string Folio { get; set; }
 
-            [Display(Name = "URL")]
+            [Display(Name = "URL gestión documental")]
             [DataType(DataType.Url)]
             public string URL { get; set; }
-
-
-
         }
 
         public class DTOFileUploadEdit
@@ -101,12 +98,9 @@ namespace App.Web.Controllers
             [Display(Name = "Folio")]
             public string Folio { get; set; }
 
-            [Display(Name = "URL")]
+            [Display(Name = "URL gestión documental")]
             [DataType(DataType.Url)]
             public string URL { get; set; }
-
-
-
         }
 
         protected readonly IGestionProcesos _repository;
