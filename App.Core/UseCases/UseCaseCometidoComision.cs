@@ -688,25 +688,27 @@ namespace App.Core.UseCases
                     response.Errors.Add("Documento ya se encuentra firmado");
 
                 var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
+                /*old firma*/
                 //var rubrica = _repository.Get<Rubrica>(q => q.Email == email && q.HabilitadoFirma == true);
                 //string IdentificadorFirma = string.Empty;
                 //bool habilitado = false;
                 //foreach (var fir in rubrica)
                 //{
-                //if (fir == null)
-                //    response.Errors.Add("Usuario sin información de firma electrónica");
-                //if (fir != null && string.IsNullOrWhiteSpace(fir.IdentificadorFirma))
-                //    response.Errors.Add("Usuario no tiene identificador de firma electrónica");
+                //    if (fir == null)
+                //        response.Errors.Add("Usuario sin información de firma electrónica");
+                //    if (fir != null && string.IsNullOrWhiteSpace(fir.IdentificadorFirma))
+                //        response.Errors.Add("Usuario no tiene identificador de firma electrónica");
 
-                //if (documento.Proceso.DefinicionProcesoId == int.Parse(fir.IdProceso))
-                //{
-                //habilitado = true;
-                //IdentificadorFirma = fir.IdentificadorFirma;
-                //}
+                //    if (documento.Proceso.DefinicionProcesoId == int.Parse(fir.IdProceso))
+                //    {
+                //        habilitado = true;
+                //        IdentificadorFirma = fir.IdentificadorFirma;
+                //    }
 
-                //if (fir.HabilitadoFirma != true)
-                //    response.Errors.Add("Usuario no se encuentra habilitado para firmar");
+                //    if (fir.HabilitadoFirma != true)
+                //        response.Errors.Add("Usuario no se encuentra habilitado para firmar");
                 //}
+                /**/
 
                 if (rubrica == null)
                     response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
@@ -4068,10 +4070,11 @@ namespace App.Core.UseCases
         
         //metodos migrados desde usecase core
 
-        public ResponseMessage WorkflowUpdate(Workflow obj)
+        public ResponseMessage WorkflowUpdate(Workflow obj, string userLoged)
         {
             var response = new ResponseMessage();
             var persona = new SIGPER();
+
 
             try
             {
@@ -4092,6 +4095,7 @@ namespace App.Core.UseCases
                 //{
                 //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
                 //}
+
                 /*Valida la carga de adjuntos segun el tipo de proceso*/
                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
@@ -4172,12 +4176,19 @@ namespace App.Core.UseCases
                 }
 
                 //terminar workflow actual
+                var personaEjecutor = _sigper.GetUserByEmail(userLoged);
+
                 workflowActual.FechaTermino = DateTime.Now;
                 workflowActual.Observacion = obj.Observacion;
                 workflowActual.Terminada = true;
-                workflowActual.Pl_UndCod = obj.Pl_UndCod;
+                //workflowActual.Pl_UndCod = obj.Pl_UndCod;
+                //workflowActual.Pl_UndDes = obj.Pl_UndDes.Trim();                
+                //workflowActual.Email = obj.Email;
+                workflowActual.Pl_UndCod = personaEjecutor.Unidad.Pl_UndCod;
+                workflowActual.Pl_UndDes = personaEjecutor.Unidad.Pl_UndDes.Trim();
+                workflowActual.Email = personaEjecutor.Funcionario.Rh_Mail.Trim();
+                workflowActual.NombreFuncionario = personaEjecutor.Funcionario.RH_NombFun.Trim();
                 workflowActual.GrupoId = obj.GrupoId;
-                workflowActual.Email = obj.Email;
                 workflowActual.To = obj.To;
 
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
@@ -4431,6 +4442,9 @@ namespace App.Core.UseCases
                 {
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
+                    //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                    //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
                     _repository.Save();
                 }
 

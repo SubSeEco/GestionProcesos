@@ -87,6 +87,9 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.DiasDiferencia)
                                         </th>
+                                        <th>
+                                            @Html.Raw("<span>Etapa</span>")
+                                        </th>
                                     </tr>
                                 </table>
                             </th>
@@ -141,16 +144,19 @@
                                                         int dif = 0;
                                                         if (t.FechaTermino.HasValue)
                                                         {
-                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days +1;
                                                         }
                                                         else
                                                         {
                                                             t.FechaTermino = DateTime.Now;
-                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days + 1;
                                                         }
 
                                                         <p>@dif</p>
                                                     }
+                                                </td>
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.DefinicionWorkflow.Nombre)
                                                 </td>
                                             </tr>
                                         </table>
