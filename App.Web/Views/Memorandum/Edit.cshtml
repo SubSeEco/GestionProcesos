@@ -1,31 +1,233 @@
 ﻿@model App.Model.Memorandum.Memorandum
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
 <div class="container">
     <div class="row">
         <div class="col s12 m6 l6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Formulario Consulta</span>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l3">
-                            @Html.LabelFor(m => Model.FechaSolicitud)<br /><br />
-                            @Html.DisplayFor(m => Model.FechaSolicitud)
-                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                        </div>
-                        @*<div class="input-field col s12 m10 l3">
-                                @Html.LabelFor(m => Model.Rut)<br /><br />
-                                @Html.DisplayFor(m => Model.Rut)
-                                @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                @Html.HiddenFor(q => Model.MemorandumId)
+
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdUnidad)
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdCalidad)
+                @Html.HiddenFor(q => Model.IdGrado)
+                @*@Html.HiddenFor(q => Model.IdEstamento)*@
+                @*@Html.HiddenFor(q => Model.IdPrograma)*@
+                @*@Html.HiddenFor(q => Model.IdConglomerado)*@
+                @Html.HiddenFor(q => Model.Rut)
+                @Html.HiddenFor(q => Model.DV)
+                @Html.HiddenFor(q => Model.CalidadDescripcion)
+                @Html.HiddenFor(q => Model.GradoDescripcion)
+                @*@Html.HiddenFor(q => Model.EstamentoDescripcion)*@
+                @*@Html.HiddenFor(q => Model.ProgramaDescripcion)*@
+                @*@Html.HiddenFor(q => Model.ConglomeradoDescripcion)*@
+                @Html.HiddenFor(q => Model.EmailRem)
+                @Html.HiddenFor(q => Model.NombreChqRem)
+
+                @Html.HiddenFor(q => Model.IdCargoDest)
+                @Html.HiddenFor(q => Model.IdUnidadDest)
+                @Html.HiddenFor(q => Model.IdCargoDest)
+                @*@Html.HiddenFor(q => Model.IdCalidadDest)*@
+                @*@Html.HiddenFor(q => Model.IdGradoDest)*@
+                @*@Html.HiddenFor(q => Model.IdEstamentoDest)*@
+                @*@Html.HiddenFor(q => Model.IdProgramaDest)*@
+                @*@Html.HiddenFor(q => Model.IdConglomeradoDest)*@
+                @Html.HiddenFor(q => Model.RutDest)
+                @Html.HiddenFor(q => Model.DVDest)
+                @*@Html.HiddenFor(q => Model.CalidadDescripcionDest)*@
+                @*@Html.HiddenFor(q => Model.GradoDescripcionDest)*@
+                @*@Html.HiddenFor(q => Model.EstamentoDescripcionDest)*@
+                @*@Html.HiddenFor(q => Model.ProgramaDescripcionDest)*@
+                @*@Html.HiddenFor(q => Model.ConglomeradoDescripcionDest)*@
+                @Html.HiddenFor(q => Model.EmailDest)
+                @Html.HiddenFor(q => Model.NombreChqDest)
+
+                @*@Html.HiddenFor(q => Model.IdCargoSecre)*@
+                @Html.HiddenFor(q => Model.IdUnidadSecre)
+                @*@Html.HiddenFor(q => Model.IdCargoSecre)*@
+                @*@Html.HiddenFor(q => Model.IdCalidadSecre)*@
+                @*@Html.HiddenFor(q => Model.IdGradoSecre)*@
+                @*@Html.HiddenFor(q => Model.IdEstamentoSecre)*@
+                @*@Html.HiddenFor(q => Model.IdProgramaSecre)*@
+                @*@Html.HiddenFor(q => Model.IdConglomeradoSecre)*@
+                @Html.HiddenFor(q => Model.RutSecre)
+                @Html.HiddenFor(q => Model.DVSecre)
+                @*@Html.HiddenFor(q => Model.CalidadDescripcionSecre)*@
+                @*@Html.HiddenFor(q => Model.GradoDescripcionSecre)*@
+                @*@Html.HiddenFor(q => Model.EstamentoDescripcionSecre)*@
+                @*@Html.HiddenFor(q => Model.ProgramaDescripcionSecre)*@
+                @*@Html.HiddenFor(q => Model.ConglomeradoDescripcionSecre)*@
+                @Html.HiddenFor(q => Model.EmailSecre)
+                @Html.HiddenFor(q => Model.NombreChqSecre)
+                @Html.HiddenFor(q => Model.UnidadDescripcionSecre)
+                @*@Html.HiddenFor(q => Model.CargoDescripcionSecre)*@
+
+                @*@Html.HiddenFor(q => Model.IdCargoVisa1)*@
+                @Html.HiddenFor(q => Model.IdUnidadVisa1)
+                @*@Html.HiddenFor(q => Model.IdCargoVisa1)*@
+                @*@Html.HiddenFor(q => Model.IdCalidadVisa1)*@
+                @*@Html.HiddenFor(q => Model.IdGradoVisa1)*@
+                @*@Html.HiddenFor(q => Model.IdEstamentoVisa1)*@
+                @*@Html.HiddenFor(q => Model.IdProgramaVisa1)*@
+                @*@Html.HiddenFor(q => Model.IdConglomeradoVisa1)*@
+                @Html.HiddenFor(q => Model.RutVisa1)
+                @Html.HiddenFor(q => Model.DVVisa1)
+                @*@Html.HiddenFor(q => Model.CalidadDescripcionVisa1)*@
+                @*@Html.HiddenFor(q => Model.GradoDescripcionVisa1)*@
+                @*@Html.HiddenFor(q => Model.EstamentoDescripcionVisa1)*@
+                @*@Html.HiddenFor(q => Model.ProgramaDescripcionVisa1)*@
+                @*@Html.HiddenFor(q => Model.ConglomeradoDescripcionVisa1)*@
+                @Html.HiddenFor(q => Model.EmailVisa1)
+                @Html.HiddenFor(q => Model.NombreChqVisa1)
+                @Html.HiddenFor(q => Model.UnidadDescripcionVisa1)
+                @*@Html.HiddenFor(q => Model.CargoDescripcionVisa1)*@
+
+                @*@Html.HiddenFor(q => Model.IdCargoVisa2)*@
+                @Html.HiddenFor(q => Model.IdUnidadVisa2)
+                @*@Html.HiddenFor(q => Model.IdCargoVisa2)*@
+                @*@Html.HiddenFor(q => Model.IdCalidadVisa2)*@
+                @*@Html.HiddenFor(q => Model.IdGradoVisa2)*@
+                @*@Html.HiddenFor(q => Model.IdEstamentoVisa2)*@
+                @*@Html.HiddenFor(q => Model.IdProgramaVisa2)*@
+                @*@Html.HiddenFor(q => Model.IdConglomeradoVisa2)*@
+                @Html.HiddenFor(q => Model.RutVisa2)
+                @Html.HiddenFor(q => Model.DVVisa2)
+                @*@Html.HiddenFor(q => Model.CalidadDescripcionVisa2)*@
+                @*@Html.HiddenFor(q => Model.GradoDescripcionVisa2)*@
+                @*@Html.HiddenFor(q => Model.EstamentoDescripcionVisa2)*@
+                @*@Html.HiddenFor(q => Model.ProgramaDescripcionVisa2)*@
+                @*@Html.HiddenFor(q => Model.ConglomeradoDescripcionVisa2)*@
+                @Html.HiddenFor(q => Model.EmailVisa2)
+                @Html.HiddenFor(q => Model.NombreChqVisa2)
+                @Html.HiddenFor(q => Model.UnidadDescripcionVisa2)
+                @*@Html.HiddenFor(q => Model.CargoDescripcionVisa2)*@
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Formulario Memorandum</span>
+                        @*@Html.ValidationMessageFor(m => Model.Comuna, "", new { @class = "red-text" })*@
+                        <div class="row">
+                            <div class="col s12 m10 l12">
+                                <div class="row">
+                                    <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+                                </div>
+                                @*<a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)">Firmar</a>*@
                             </div>
-                            <div class="input-field col s12 m10 l3">
-                                @Html.LabelFor(m => Model.DV)<br /><br />
-                                @Html.DisplayFor(m => Model.DV)
-                                @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                            <div class="input-field col s12 m10 l10">
+                                <strong>Datos del Proceso : </strong>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                @Html.DisplayFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                            </div><br />
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.NumDocumento)
+                                @Html.TextBoxFor(m => Model.NumDocumento)
+                                @Html.ValidationMessageFor(m => Model.NumDocumento, "", new { @class = "red-text" })
+                            </div><br>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.NumMemoRef)
+                                @Html.TextBoxFor(m => Model.NumMemoRef)
+                                @Html.ValidationMessageFor(m => Model.NumMemoRef, "", new { @class = "red-text" })
+                            </div><br />
+                            <div class="input-field col s12 m10 l10">
+                                <strong>Datos del Remitente :</strong>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.UnidadDescripcion)
+                                @Html.LabelFor(m => Model.UnidadDescripcion)
+                                @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreId)
+                                @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.CargoDescripcion)
+                                @Html.LabelFor(m => Model.CargoDescripcion)
+                                @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <strong>Datos del Destinatario :</strong>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.UnidadDescripcionDest)
+                                @Html.LabelFor(m => Model.UnidadDescripcionDest)
+                                @Html.ValidationMessageFor(m => Model.UnidadDescripcionDest, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreIdDest, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreIdDest)
+                                @Html.ValidationMessageFor(m => Model.NombreIdDest, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.CargoDescripcionDest)
+                                @Html.LabelFor(m => Model.CargoDescripcionDest)
+                                @Html.ValidationMessageFor(m => Model.CargoDescripcionDest, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreIdSecre, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreIdSecre)
+                                @Html.ValidationMessageFor(m => Model.NombreIdSecre, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <strong>Cuerpo del Documento : </strong>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.Asunto)
+                                @Html.TextBoxFor(m => Model.Asunto)
+                                @Html.ValidationMessageFor(m => Model.Asunto, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.Antecedentes)
+                                @Html.TextAreaFor(m => Model.Antecedentes)
+                                @Html.ValidationMessageFor(m => Model.Antecedentes, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.LabelFor(m => Model.Materia)
+                                @Html.TextAreaFor(m => Model.Materia)
+                                @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                            </div>
+                            @*<div class="input-field col s12 m10 l10">
+                                <strong>Información del Visador 1 :</strong>
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreIdVisa1, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreIdVisa1)
+                                @Html.ValidationMessageFor(m => Model.NombreIdVisa1, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreIdVisa2, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreIdVisa2)
+                                @Html.ValidationMessageFor(m => Model.NombreIdVisa2, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DropDownListFor(m => Model.NombreIdVisa3, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreIdVisa3)
+                                @Html.ValidationMessageFor(m => Model.NombreIdVisa3, "", new { @class = "red-text" })
                             </div>*@
+                        </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p><br />
+                        @*<p>
+                                @Html.ActionLink("Generar Memorandum", "GeneraDocumento", "Memorandum", new { Id = Model.MemorandumId }, null)
+                            </p>*@
                     </div>
                 </div>
-            </div>
+            }
         </div>
         <div class="col s12 m6 l6">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
@@ -36,8 +238,197 @@
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreId').on('change', function () {
+        var Rut = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuario", { Rut: Rut },
+            function (classesData) {
+                document.getElementById('Rut').value = classesData["Rut"];
+                document.getElementById('DV').value = classesData["DV"];
+                document.getElementById('IdCargo').value = classesData["IdCargo"];
+                document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                document.getElementById('IdCalidad').value = classesData["IdCalidad"];
+                document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+                document.getElementById('IdGrado').value = classesData["IdGrado"];
+                document.getElementById('GradoDescripcion').value = classesData["Grado"];
+                document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
+                document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
+                document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
+                document.getElementById('EmailRem').value = classesData["EmailRem"];
+                document.getElementById('NombreChqRem').value = classesData["NombreChqRem"];
+                /*valida antecedentes para desabilitar controles*/
+                if (document.getElementById("EstamentoDescripcion").value == "") {
+                    $("#EstamentoDescripcion").attr('disabled', true);
+                }
+                else {
+                    $("#EstamentoDescripcion").attr('disabled', false);
+                }
+                if (document.getElementById("ConglomeradoDescripcion").value == "") {
+                    $("#ConglomeradoDescripcion").attr('disabled', true);
+                }
+                else {
+                    $("#ConglomeradoDescripcion").attr('disabled', false);
+                }
+            })
+    })
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdDest').on('change', function () {
+        var RutDest = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioDest", { RutDest: RutDest },
+            function (classesData) {
+                document.getElementById('RutDest').value = classesData["RutDest"];
+                document.getElementById('DVDest').value = classesData["DVDest"];
+                document.getElementById('IdCargoDest').value = classesData["IdCargoDest"];
+                document.getElementById('CargoDescripcionDest').value = classesData["CargoDest"];
+                document.getElementById('IdCalidadDest').value = classesData["IdCalidadDest"];
+                document.getElementById('CalidadDescripcionDest').value = classesData["CalidadJuridicaDest"];
+                document.getElementById('UnidadDescripcionDest').value = classesData["UnidadDest"];
+                document.getElementById('IdGradoDest').value = classesData["IdGradoDest"];
+                document.getElementById('GradoDescripcionDest').value = classesData["GradoDest"];
+                document.getElementById('EstamentoDescripcionDest').value = classesData["EstamentoDest"];
+                document.getElementById('ProgramaDescripcionDest').value = classesData["ProgramaDest"];
+                document.getElementById('ConglomeradoDescripcionDest').value = classesData["ConglomeradoDest"];
+                document.getElementById('EmailDest').value = classesData["EmailDest"];
+                document.getElementById('NombreChqDest').value = classesData["NombreChqDest"];
+                /*valida antecedentes para desabilitar controles*/
+                if (document.getElementById("EstamentoDescripcionDest").value == "") {
+                    $("#EstamentoDescripcionDest").attr('disabled', true);
+                }
+                else {
+                    $("#EstamentoDescripcionDest").attr('disabled', false);
+                }
+                if (document.getElementById("ConglomeradoDescripcionDest").value == "") {
+                    $("#ConglomeradoDescripcionDest").attr('disabled', true);
+                }
+                else {
+                    $("#ConglomeradoDescripcionDest").attr('disabled', false);
+                }
+
+
+            })
+    })
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdSecre').on('change', function () {
+        var RutSecre = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioSecre", { RutSecre: RutSecre },
+            function (classesData) {
+                document.getElementById('RutSecre').value = classesData["RutSecre"];
+                document.getElementById('DVSecre').value = classesData["DVSecre"];
+                document.getElementById('IdCargoSecre').value = classesData["IdCargoSecre"];
+                document.getElementById('CargoDescripcionSecre').value = classesData["CargoSecre"];
+                document.getElementById('IdCalidadSecre').value = classesData["IdCalidadSecre"];
+                document.getElementById('CalidadDescripcionSecre').value = classesData["CalidadJuridicaSecre"];
+                document.getElementById('UnidadDescripcionSecre').value = classesData["UnidadSecre"];
+                document.getElementById('IdGradoSecre').value = classesData["IdGradoSecre"];
+                document.getElementById('GradoDescripcionSecre').value = classesData["GradoSecre"];
+                document.getElementById('EstamentoDescripcionSecre').value = classesData["EstamentoSecre"];
+                document.getElementById('ProgramaDescripcionSecre').value = classesData["ProgramaSecre"];
+                document.getElementById('ConglomeradoDescripcionSecre').value = classesData["ConglomeradoSecre"];
+                document.getElementById('EmailSecre').value = classesData["EmailSecre"];
+                document.getElementById('NombreChqSecre').value = classesData["NombreChqSecre"];
+                /*valida antecedentes para desabilitar controles*/
+                if (document.getElementById("EstamentoDescripcionSecre").value == "") {
+                    $("#EstamentoDescripcionSecre").attr('disabled', true);
+                }
+                else {
+                    $("#EstamentoDescripcionSecre").attr('disabled', false);
+                }
+                if (document.getElementById("ConglomeradoDescripcionSecre").value == "") {
+                    $("#ConglomeradoDescripcionSecre").attr('disabled', true);
+                }
+                else {
+                    $("#ConglomeradoDescripcionSecre").attr('disabled', false);
+                }
+
+
+            })
+    })
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa1').on('change', function () {
+        var RutVisa1 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa1", { RutVisa1: RutVisa1 },
+            function (classesData) {
+                document.getElementById('RutVisa1').value = classesData["RutVisa1"];
+                document.getElementById('DVVisa1').value = classesData["DVVisa1"];
+                document.getElementById('IdCargoVisa1').value = classesData["IdCargoVisa1"];
+                document.getElementById('CargoDescripcionVisa1').value = classesData["CargoVisa1"];
+                document.getElementById('IdCalidadVisa1').value = classesData["IdCalidadVisa1"];
+                document.getElementById('CalidadDescripcionVisa1').value = classesData["CalidadJuridicaVisa1"];
+                document.getElementById('UnidadDescripcionVisa1').value = classesData["UnidadVisa1"];
+                document.getElementById('IdGradoVisa1').value = classesData["IdGradoVisa1"];
+                document.getElementById('GradoDescripcionVisa1').value = classesData["GradoVisa1"];
+                document.getElementById('EstamentoDescripcionVisa1').value = classesData["EstamentoVisa1"];
+                document.getElementById('ProgramaDescripcionVisa1').value = classesData["ProgramaVisa1"];
+                document.getElementById('ConglomeradoDescripcionVisa1').value = classesData["ConglomeradoVisa1"];
+                document.getElementById('EmailVisa1').value = classesData["EmailVisa1"];
+                document.getElementById('NombreChqVisa1').value = classesData["NombreChqVisa1"];
+                /*valida antecedentes para desabilitar controles*/
+                if (document.getElementById("EstamentoDescripcionVisa1").value == "") {
+                    $("#EstamentoDescripcionVisa1").attr('disabled', true);
+                }
+                else {
+                    $("#EstamentoDescripcionVisa1").attr('disabled', false);
+                }
+                if (document.getElementById("ConglomeradoDescripcionVisa1").value == "") {
+                    $("#ConglomeradoDescripcionVisa1").attr('disabled', true);
+                }
+                else {
+                    $("#ConglomeradoDescripcionVisa1").attr('disabled', false);
+                }
+
+
+            })
+    })
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa2').on('change', function () {
+        var RutVisa2 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa2", { RutVisa2: RutVisa2 },
+            function (classesData) {
+                document.getElementById('RutVisa2').value = classesData["RutVisa2"];
+                document.getElementById('DVVisa2').value = classesData["DVVisa2"];
+                document.getElementById('IdCargoVisa2').value = classesData["IdCargoVisa2"];
+                document.getElementById('CargoDescripcionVisa2').value = classesData["CargoVisa2"];
+                document.getElementById('IdCalidadVisa2').value = classesData["IdCalidadVisa2"];
+                document.getElementById('CalidadDescripcionVisa2').value = classesData["CalidadJuridicaVisa2"];
+                document.getElementById('UnidadDescripcionVisa2').value = classesData["UnidadVisa2"];
+                document.getElementById('IdGradoVisa2').value = classesData["IdGradoVisa2"];
+                document.getElementById('GradoDescripcionVisa2').value = classesData["GradoVisa2"];
+                document.getElementById('EstamentoDescripcionVisa2').value = classesData["EstamentoVisa2"];
+                document.getElementById('ProgramaDescripcionVisa2').value = classesData["ProgramaVisa2"];
+                document.getElementById('ConglomeradoDescripcionVisa2').value = classesData["ConglomeradoVisa2"];
+                document.getElementById('EmailVisa2').value = classesData["EmailVisa2"];
+                document.getElementById('NombreChqVisa2').value = classesData["NombreChqVisa2"];
+                /*valida antecedentes para desabilitar controles*/
+                if (document.getElementById("EstamentoDescripcionVisa2").value == "") {
+                    $("#EstamentoDescripcionVisa2").attr('disabled', true);
+                }
+                else {
+                    $("#EstamentoDescripcionVisa2").attr('disabled', false);
+                }
+                if (document.getElementById("ConglomeradoDescripcionVisa2").value == "") {
+                    $("#ConglomeradoDescripcionVisa1").attr('disabled', true);
+                }
+                else {
+                    $("#ConglomeradoDescripcionVisa2").attr('disabled', false);
+                }
+
+
+            })
+    })
+
+</script>
+
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
