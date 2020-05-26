@@ -309,7 +309,7 @@ namespace App.Web.Controllers
                 if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model,User.Email());
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";

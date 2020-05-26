@@ -20,6 +20,10 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.Linq;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -76,6 +80,9 @@ namespace App.Web.Controllers
 
             [Display(Name = "Unidad Funcionario")]
             public int? IdUnidad { get; set; }
+
+            [Display(Name = "Unidad")]
+            public string NombreUnidad { get; set; }
 
             [Display(Name = "Estado")]
             public int? Estado { get; set; }
@@ -1763,51 +1770,114 @@ namespace App.Web.Controllers
             foreach (var com in cometido.OrderByDescending(r => r.CometidoId).ToList())
             {
                 var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == com.ProcesoId);
-                var pasaje = _repository.GetAll<Pasaje>().Where(p => p.ProcesoId == com.ProcesoId);
+                var pasaje = _repository.Get<Pasaje>().Where(p => p.ProcesoId == com.ProcesoId).ToList();
                 var cotizacion = _repository.GetAll<Cotizacion>().Where(p =>p.PasajeId == pasaje.FirstOrDefault().PasajeId);
 
-                fila++;
-                worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
-                worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
-                worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
-                worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
-                worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
-                worksheet.Cells[fila, 7].Value = com.Nombre;
-                worksheet.Cells[fila, 8].Value = com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";
-                worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
-                worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
-                worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
-                worksheet.Cells[fila, 12].Value = "N/A";
-                worksheet.Cells[fila, 13].Value = "N/A";
-                if(pasaje.Count() > 0)
+                if(pasaje.Count > 0)
                 {
-                    worksheet.Cells[fila, 14].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
-                    worksheet.Cells[fila, 17].Value = cotizacion.Count() > 0 ? cotizacion.FirstOrDefault().ValorPasaje.ToString() :"S/A" ;
-                }                  
-                else
+                    for (var pas = 0; pas < pasaje.Count + 1 ; pas++)//foreach (var pas in pasaje)
+                    {
+                        fila++;
+                        worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                        worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
+                        worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
+                        worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
+                        worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
+                        worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
+                        worksheet.Cells[fila, 7].Value = com.Nombre;
+
+                        var desPasaje = _repository.Get<DestinosPasajes>().Where(c => c.PasajeId == pasaje.FirstOrDefault().PasajeId).ToList();
+                        if (desPasaje.Count > 0)
+                        {
+                            foreach(var p in desPasaje)
+                            {
+                                if ((pas % 2) == 0)
+                                {
+                                    worksheet.Cells[fila, 8].Value = p.RegionDescripcion.Trim(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";
+                                    worksheet.Cells[fila, 15].Value = p.FechaIda.ToShortDateString(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                                    worksheet.Cells[fila, 16].Value = p.FechaVuelta.ToShortDateString();// com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A";
+                                    worksheet.Cells[fila, 20].Value = ((com.FechaSolicitud - p.FechaIda).Days + 1).ToString();
+                                }
+                                else
+                                {
+                                    worksheet.Cells[fila, 8].Value = p.OrigenRegionDescripcion.Trim();
+                                    worksheet.Cells[fila, 15].Value = p.FechaIda.ToShortDateString();
+                                    worksheet.Cells[fila, 16].Value = p.FechaVuelta.ToShortDateString();
+                                    worksheet.Cells[fila, 20].Value = "0";
+                                }
+                            }
+                        }
+                        
+                        worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
+                        worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
+                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
+                        worksheet.Cells[fila, 12].Value = "N/A";
+                        worksheet.Cells[fila, 13].Value = "N/A";
+                        if (pasaje.Count() > 0)
+                        {
+                            worksheet.Cells[fila, 14].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
+                            worksheet.Cells[fila, 17].Value = cotizacion.Count() > 0 ? cotizacion.FirstOrDefault().ValorPasaje.ToString() : "S/A";
+                        }
+                        else
+                        {
+                            worksheet.Cells[fila, 14].Value = "N/A";
+                            worksheet.Cells[fila, 17].Value = "0";
+                        }                        
+
+                        worksheet.Cells[fila, 18].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
+                        worksheet.Cells[fila, 19].Value = com.FechaSolicitud.ToShortDateString();
+                        worksheet.Cells[fila, 21].Value = com.CometidoDescripcion;
+
+                        var tarea = workflow.LastOrDefault().DefinicionWorkflow;
+                        if (tarea.Secuencia < 9)
+                            worksheet.Cells[fila, 22].Value = "Solicitado";
+                        else if (tarea.Secuencia >= 9 && tarea.Secuencia < 17)
+                            worksheet.Cells[fila, 22].Value = "Comprometido";
+                        else if (tarea.Secuencia >= 17 && tarea.Secuencia < 20)
+                            worksheet.Cells[fila, 22].Value = "Devengado";
+                        else if (tarea.Secuencia >= 19)
+                            worksheet.Cells[fila, 22].Value = "Pagado";
+                    }
+                }
+                else 
                 {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                    worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
+                    worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
+                    worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
+                    worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
+                    worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
+                    worksheet.Cells[fila, 7].Value = com.Nombre;
+                    
+                    worksheet.Cells[fila, 8].Value = "S/A";
+
+                    worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
+                    worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
+                    worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
+                    worksheet.Cells[fila, 12].Value = "N/A";
+                    worksheet.Cells[fila, 13].Value = "N/A";
+
                     worksheet.Cells[fila, 14].Value = "N/A";
+                    worksheet.Cells[fila, 15].Value = "N/A";
+                    worksheet.Cells[fila, 16].Value = "N/A";
                     worksheet.Cells[fila, 17].Value = "0";
-                }                    
 
-                worksheet.Cells[fila, 15].Value = com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                worksheet.Cells[fila, 16].Value = com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A";
-                
-                worksheet.Cells[fila, 18].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
-                worksheet.Cells[fila, 19].Value = com.FechaSolicitud.ToShortDateString();
-                worksheet.Cells[fila, 20].Value = com.Destinos.Any() ? (com.FechaSolicitud - com.Destinos.FirstOrDefault().FechaInicio).Days.ToString() : "S/A";
-                worksheet.Cells[fila, 21].Value = com.CometidoDescripcion;
+                    worksheet.Cells[fila, 18].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
+                    worksheet.Cells[fila, 19].Value = com.FechaSolicitud.ToShortDateString();
 
-                var tarea = workflow.LastOrDefault().DefinicionWorkflow;
-                if(tarea.Secuencia < 9)
-                    worksheet.Cells[fila, 22].Value = "Solicitado";
-                else if (tarea.Secuencia >= 9 && tarea.Secuencia < 17)
-                    worksheet.Cells[fila, 22].Value = "Comprometido";
-                else if (tarea.Secuencia >= 17 && tarea.Secuencia < 22)
-                    worksheet.Cells[fila, 22].Value = "Devengado";
-                else if (tarea.Secuencia >= 22)
-                    worksheet.Cells[fila, 22].Value = "Pagado";
+                    worksheet.Cells[fila, 20].Value = "0";
+
+                    var tarea = workflow.LastOrDefault().DefinicionWorkflow;
+                    if (tarea.Secuencia < 9)
+                        worksheet.Cells[fila, 22].Value = "Solicitado";
+                    else if (tarea.Secuencia >= 9 && tarea.Secuencia < 17)
+                        worksheet.Cells[fila, 22].Value = "Comprometido";
+                    else if (tarea.Secuencia >= 17 && tarea.Secuencia < 20)
+                        worksheet.Cells[fila, 22].Value = "Devengado";
+                    else if (tarea.Secuencia >= 19)
+                        worksheet.Cells[fila, 22].Value = "Pagado";
+                }
             }
 
             return File(excelPackageCaigg.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptCaigg_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
@@ -1816,7 +1886,9 @@ namespace App.Web.Controllers
         public ActionResult SeguimientoUnidades()
         {
             var model = new DTOFilterCometido();
-            ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.Ejecutor = new SelectList(_repository.GetAll<DefinicionWorkflow>().Where(c => c.DefinicionProcesoId == 13 && c.NombreUsuario != null).ToList(), "NombreUsuario", "NombreUsuario");
+            ViewBag.Ejecutor = new SelectList(_repository.GetAll<Workflow>().Where(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x =>x.First()).ToList(), "Email", "Email");
             return View(model);
         }
 
@@ -1832,7 +1904,12 @@ namespace App.Web.Controllers
 
                 if (!string.IsNullOrWhiteSpace(model.Ejecutor))
                 {
-                    var mail = _sigper.GetUserByRut(int.Parse(model.Ejecutor)).Funcionario.Rh_Mail.Trim();
+                    //int valor = model.Ejecutor.IndexOf("(",0);
+                    //int valor2 = model.Ejecutor.IndexOf(")",0);
+                    //var mail = model.Ejecutor.Substring(valor + 1, (valor2-valor) - 1);
+                    var mail = model.Ejecutor;
+
+                    //var mail = _sigper.GetUserByRut(int.Parse(model.Ejecutor)).Funcionario.Rh_Mail.Trim();
                     predicate = predicate.And(q => q.Proceso.Workflows.Any(p => p.Email == mail));
                 }
                     
@@ -1861,6 +1938,21 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
             }
+
+            //foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
+            //{
+            //    var work = _repository.Get<Workflow>(c => c.ProcesoId == model.Result.FirstOrDefault().ProcesoId.Value).ToList();
+            //    if(work != null)
+            //    {
+            //        foreach(var w in work)
+            //        {
+            //            res.Workflow.Pl_UndDes = _sigper.GetUserByEmail(w.Email).Unidad.Pl_UndDes.Trim();
+            //        }
+            //    }
+            //}
+
+            
+
 
             ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             return View(model);
@@ -1891,7 +1983,7 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 4].Value = cometido.FechaSolicitud.ToShortDateString();
                     /*datos desde core workflow*/
 
-                    worksheet.Cells[fila, 5].Value = w.Email.Trim();
+                    worksheet.Cells[fila, 5].Value = w.Email != null ? w.Email.Trim() : "S/A";
                     worksheet.Cells[fila, 6].Value = w.Pl_UndDes != null ? w.Pl_UndDes.Trim() : "";
                     worksheet.Cells[fila, 7].Value = w.FechaCreacion.ToShortDateString().Trim();
                     worksheet.Cells[fila, 8].Value = w.FechaTermino.HasValue ? w.FechaTermino.Value.ToShortDateString().Trim() : "Pendiente";
@@ -1904,7 +1996,7 @@ namespace App.Web.Controllers
                         var hoy = DateTime.Now;
                         worksheet.Cells[fila, 9].Value = w.FechaCreacion.Day - hoy.Day;
                     }
-                    fila++;
+                    //fila++;
                 }
             }
             
@@ -2075,16 +2167,20 @@ namespace App.Web.Controllers
                     else
                         worksheet.Cells[fila, 8].Value = "REGION METROPOLITANA";
 
-
                     worksheet.Cells[fila, 9].Value = cometido.GradoDescripcion;
-                    worksheet.Cells[fila, 10].Value = destino != null ? destino.FirstOrDefault().ComunaDescripcion : "S/A";
-                    worksheet.Cells[fila, 11].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString("MMMM") : "S/A";
-                    worksheet.Cells[fila, 12].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                    worksheet.Cells[fila, 13].Value = destino != null ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
-                    worksheet.Cells[fila, 14].Value = destino != null ? destino.LastOrDefault().Dias100Aprobados.ToString() : "S/A";
-                    worksheet.Cells[fila, 15].Value = destino != null ? destino.LastOrDefault().Dias60Aprobados.ToString() : "S/A";
-                    worksheet.Cells[fila, 16].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
-                    worksheet.Cells[fila, 17].Value = destino != null ? destino.LastOrDefault().Dias50Aprobados.ToString() : "S/A";
+
+                    if(destino.Count > 0)
+                    {
+                        worksheet.Cells[fila, 10].Value = destino != null ? destino.FirstOrDefault().ComunaDescripcion : "S/A";
+                        worksheet.Cells[fila, 11].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString("MMMM") : "S/A";
+                        worksheet.Cells[fila, 12].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                        worksheet.Cells[fila, 13].Value = destino != null ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                        worksheet.Cells[fila, 14].Value = destino != null ? destino.LastOrDefault().Dias100Aprobados.ToString() : "S/A";
+                        worksheet.Cells[fila, 15].Value = destino != null ? destino.LastOrDefault().Dias60Aprobados.ToString() : "S/A";
+                        worksheet.Cells[fila, 16].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
+                        worksheet.Cells[fila, 17].Value = destino != null ? destino.LastOrDefault().Dias50Aprobados.ToString() : "S/A";
+                    }
+                    
                     worksheet.Cells[fila, 18].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                     worksheet.Cells[fila, 19].Value = cdp.VtcCompromisoAcumulado != null ? cdp.VtcCompromisoAcumulado : "S/A";
                     worksheet.Cells[fila, 20].Value = cdp.VtcSaldo != null ? cdp.VtcSaldo : "S/A";
@@ -2093,5 +2189,201 @@ namespace App.Web.Controllers
 
             return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet,"rptPresupuesto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
+
+        //public FileResult DownloadXML(string id)
+        //{
+        //    var cometido = _repository.GetAll<Cometido>();
+
+        //    //var model = service.GetAllDefinitions().First(x => x.ID == id);
+        //    var definitionDetails = new StatisticDefinitionModel(cometido);
+        //    string xmlString = definitionDetails.ToXml;
+        //    string fileName = definitionDetails.Name + ".xml";
+
+
+        //    return File(Encoding.UTF8.GetBytes(xmlString), "application/xml", fileName);
+        //}
+
+        public FileResult GetXmlFile()
+        {
+            string xml = "<?xml version='1.0' encoding='UTF - 8' standalone='yes'?> <LISTADOCUMENTOS xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'> <DOCUMENTO> <RUN>10323587</RUN> <DIGITO_VERIFICADOR>1</DIGITO_VERIFICADOR> <TIPO_DOCUMENTO>RESOLUCION EXENTA</TIPO_DOCUMENTO> <NUMERO_DOCUMENTO>4037</NUMERO_DOCUMENTO> <FECHA_DOCUMENTO>26/12/2018</FECHA_DOCUMENTO> <SERVICIO_EMISOR>119246</SERVICIO_EMISOR> <DEPENDENCIA_EMISORA>119247</DEPENDENCIA_EMISORA> <SERVICIO_DESTINO>119247</SERVICIO_DESTINO> <DEPENDENCIA_DESTINO>119247</DEPENDENCIA_DESTINO> <REGION_DESTINO>8</REGION_DESTINO> <COMUNA_DESTINO>413</COMUNA_DESTINO> <FECHA_DESDE>17/12/2018</FECHA_DESDE> <FECHA_HASTA>18/12/2018</FECHA_HASTA> <MOTIVO_COMETIDO_FUNCIONARIO>Reunión fuera del servicio</MOTIVO_COMETIDO_FUNCIONARIO> <TIENE_BENEFICIOS> <SELECCIONE_BENEFICIOS> <PASAJE>NO</PASAJE> <VIATICO>SI</VIATICO> <ALOJAMIENTO>SI</ALOJAMIENTO> </SELECCIONE_BENEFICIOS> </TIENE_BENEFICIOS> <MONTO>77973</MONTO> </DOCUMENTO> </LISTADOCUMENTOS> "; //string presented xml
+            var stream = new MemoryStream();
+            var writer = XmlWriter.Create(stream);
+            writer.WriteRaw(xml);
+            stream.Position = 0;
+            //var fileStreamResult = File(stream, "application/octet-stream", "ReporteContraloria.xml");
+            var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
+            return fileStreamResult;
+        }
+
+        //public FileContentResult Downloadxml()
+        //{
+        //    var model = _repository.GetAll<Cometido>();
+
+        //    if (model.Count() < 1)
+        //    {
+        //        byte[] content = new byte[0];
+        //        return new FileContentResult(content, "xml");
+        //    }
+
+        //    XmlSerializer serializer = new XmlSerializer(model.FirstOrDefault().GetType());
+
+        //    MemoryStream xmlStream = new MemoryStream();
+        //    foreach (Cometido s in model)
+        //    {
+        //        serializer.Serialize(xmlStream, s);
+        //    }
+
+        //    byte[] content2 = new byte[xmlStream.Length];
+        //    xmlStream.Position = 0;
+        //    xmlStream.Read(content2, 0, (int)xmlStream.Length);
+
+        //    return File(content2, "xml");
+        //}
+
+
+        //public partial class TimeTable
+        //{
+        //    public int Id { get; set; }
+        //    public string Company { get; set; }
+        //    public string INN { get; set; }
+        //    public string StartDay { get; set; }
+        //    public string StartPause { get; set; }
+        //    public string EndDay { get; set; }
+        //    public string EndPause { get; set; }
+        //}
+
+        public ActionResult ReporteContraloria()
+        {
+            var model = new DTOFilterCometido();
+            return View(model);
+        }
+
+        [HttpPost]
+        //public ContentResult ReporteContraloria(DTOFilterCometido model)
+        public FileStreamResult ReporteContraloria(DTOFilterCometido model)
+        {
+            var predicate = PredicateBuilder.True<Cometido>();
+
+            if (ModelState.IsValid)
+            {
+                if (model.FechaInicio.HasValue)
+                    predicate = predicate.And(q =>
+                        q.FechaSolicitud.Year >= model.FechaInicio.Value.Year &&
+                        q.FechaSolicitud.Month >= model.FechaInicio.Value.Month &&
+                        q.FechaSolicitud.Day >= model.FechaInicio.Value.Day);
+
+                if (model.FechaTermino.HasValue)
+                    predicate = predicate.And(q =>
+                        q.FechaSolicitud.Year <= model.FechaTermino.Value.Year &&
+                        q.FechaSolicitud.Month <= model.FechaTermino.Value.Month &&
+                        q.FechaSolicitud.Day <= model.FechaTermino.Value.Day);
+
+                model.Result = _repository.Get(predicate);
+            }
+
+            var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Result.Select(w => new XElement("DOCUMENTO",
+                                                                           new XElement("RUN", w.Rut),
+                                                                           new XElement("DIGITO_VERIFICADOR", w.DV),
+                                                                           new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
+                                                                           new XElement("NUMERO_DOCUMENTO", w.CometidoId),
+                                                                           new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToShortDateString()),
+                                                                           new XElement("SERVICIO_EMISOR", "119246"),
+                                                                           new XElement("DEPENDENCIA_EMISORA", "119247"),
+                                                                           new XElement("SERVICIO_DESTINO", "119247"),
+                                                                           new XElement("DEPENDENCIA_DESTINO", "119247"),
+                                                                           new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().RegionDescripcion : "S/A"),
+                                                                           new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
+                                                                           new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToShortDateString() : "S/A"),
+                                                                           new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToShortDateString() : "S/A"),
+                                                                           new XElement("MOTIVO_COMETIDO_FUNCIONARIO", w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"),
+                                                                           new XElement("TIENE_BENEFICIOS",
+                                                                                           new XElement("SELECCIONE_BENEFICIOS",
+                                                                                           new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
+                                                                                           new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
+                                                                                           new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
+                                                                                           ),
+                                                                           new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
+                                                                           ))));
+
+            var xmldoc = new XmlDocument();
+            xmldoc.LoadXml(xdoc.ToString());
+
+            //XmlElement root = xmldoc.DocumentElement;
+            //XmlDeclaration xmldecl;
+            //xmldecl = xmldoc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+
+            //XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmldoc.NameTable);
+            //nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            
+            //xmldoc.DocumentElement.InsertBefore(xmldecl, root);
+            xmldoc.DocumentElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+            //XmlWriterSettings settings = new XmlWriterSettings();
+            //settings.Indent = true;
+            //settings.Encoding = Encoding.UTF8;
+
+            //xmldoc.LoadXml(xdoc);
+            //xdoc.DocumentElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+
+            //return Content(xdoc.ToString(), "application/xml", Encoding.UTF8);
+
+            //string xml = xdoc.ToString();
+            var stream = new MemoryStream();
+            var writer = XmlWriter.Create(stream);
+            writer.WriteStartDocument(true);
+            writer.WriteRaw(xmldoc.InnerXml);
+            stream.Position = 0;
+            var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
+            return fileStreamResult;
+
+            //return File(stream.ToArray(), "application/xml", "ReporteContraloria.xml");
+
+        }
+
+
+
+
+        //public ContentResult DownloadXML()
+        //{
+        //    var model = _repository.GetAll<Cometido>();
+        //    //            var xdoc = new XDocument(new XElement("data", model.Select(w => new XElement("worker",new XAttribute("id", w.CometidoId),
+        //    //                                                                            new XElement("start", w.FechaSolicitud),
+        //    //                                                                            new XElement("pause", w.Rut),
+        //    //                                                                            new XElement("continue", w.DV),
+        //    //                                                                            new XElement("end", w.Grado)
+        //    //            )
+        //    //        )
+        //    //    )
+        //    //);          
+        //    var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Select(w => new XElement("DOCUMENTO",
+        //                                                                    new XElement("RUN", w.Rut),
+        //                                                                    new XElement("DIGITO_VERIFICADOR", w.DV),
+        //                                                                    new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
+        //                                                                    new XElement("NUMERO_DOCUMENTO", w.CometidoId),
+        //                                                                    new XElement("FECHA_DOCUMENTO", w.FechaSolicitud),
+        //                                                                    new XElement("SERVICIO_EMISOR", "119246"),
+        //                                                                    new XElement("DEPENDENCIA_EMISORA", "119247"),
+        //                                                                    new XElement("SERVICIO_DESTINO", "119247"),
+        //                                                                    new XElement("DEPENDENCIA_DESTINO", "119247"),
+        //                                                                    new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().RegionDescripcion : "S/A"),
+        //                                                                    new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
+        //                                                                    new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToShortDateString() : "S/A"),
+        //                                                                    new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.LastOrDefault().FechaHasta.ToShortDateString() : "S/A"),
+        //                                                                    new XElement("MOTIVO_COMETIDO_FUNCIONARIO", w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"),
+        //                                                                    new XElement("TIENE_BENEFICIOS",
+        //                                                                                    new XElement("SELECCIONE_BENEFICIOS",
+        //                                                                                    new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
+        //                                                                                    new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
+        //                                                                                    new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
+        //                                                                                    ),
+        //                                                                    new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
+        //                                                                    ))));
+
+        //    return Content(xdoc.ToString(), "application/xml", Encoding.UTF8);
+        //}
+
+
+
     }
 }
