@@ -2334,55 +2334,63 @@ namespace App.Web.Controllers
             }
             else
             {
-                if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                {
-                    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                    //{
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    pdf = resultPdf.BuildFile(ControllerContext);
-                    //data = GetBynary(pdf);
-                    data = _file.BynaryToText(pdf);
+                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
+                //{
+                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
+                //    //{
+                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //    pdf = resultPdf.BuildFile(ControllerContext);
+                //    //data = GetBynary(pdf);
+                //    data = _file.BynaryToText(pdf);
 
-                    tipoDoc = 8;
-                    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                    //}
-                    //else
-                    //{
-                    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //}
-                }
-                else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    pdf = resultPdf.BuildFile(ControllerContext);
-                    //data = GetBynary(pdf);
-                    data = _file.BynaryToText(pdf);
-                    tipoDoc = 8;
-                    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                }
-                else
-                {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    pdf = resultPdf.BuildFile(ControllerContext);
-                    //data = GetBynary(pdf);
-                    data = _file.BynaryToText(pdf);
+                //    tipoDoc = 8;
+                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                //    //}
+                //    //else
+                //    //{
+                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
+                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
+                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
+                //    //}
+                //}
+                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
+                //{
+                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //    pdf = resultPdf.BuildFile(ControllerContext);
+                //    //data = GetBynary(pdf);
+                //    data = _file.BynaryToText(pdf);
+                //    tipoDoc = 8;
+                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                //}
+                //else
+                //{
+                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //    pdf = resultPdf.BuildFile(ControllerContext);
+                //    //data = GetBynary(pdf);
+                //    data = _file.BynaryToText(pdf);
 
-                    tipoDoc = 8;
-                    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                }
+                //    tipoDoc = 8;
+                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                //}
+
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                pdf = resultPdf.BuildFile(ControllerContext);
+                //data = GetBynary(pdf);
+                data = _file.BynaryToText(pdf);
+
+                tipoDoc = 8;
+                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //if (resolucion != null)
-                //{
-                //    foreach (var res in resolucion)
-                //    {
-                //        if (res.TipoDocumentoId == 1)
-                //            IdDocto = res.DocumentoId;
-                //    }
-                //}
+                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                if (resolucion != null)
+                {
+                    foreach (var res in resolucion)
+                    {
+                        if (res.TipoDocumentoId == 8)
+                            IdDocto = res.DocumentoId;
+                    }
+                }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
                 if (IdDocto == 0)
