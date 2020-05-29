@@ -130,6 +130,7 @@
             SIACIngreso = 7,
             SolicitudPasaje = 11,
             SolicitudCometidoPasaje = 13,
+            Memorandum = 15,
         }
 
      
