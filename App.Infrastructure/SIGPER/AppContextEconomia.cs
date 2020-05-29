@@ -2,6 +2,8 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using App.Model.Cometido;
 using App.Model.Comisiones;
+using App.Model.DTO;
+using App.Model.Shared;
 using App.Model.SIGPER;
 
 namespace App.Infrastructure.SIGPER
@@ -31,6 +33,7 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<TipoItem> TipoItem { get; set; }
         public virtual DbSet<TipoSubAsignacion> TipoSubAsignacion { get; set; }
         public virtual DbSet<TipoSubTitulo> TipoSubTitulo { get; set; }
+        public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
 
         //public virtual DbSet<PEFERJEF> PEFERJEF { get; set; }
         //public virtual DbSet<DGPAISES> DGPAISES { get; set; }

@@ -324,7 +324,7 @@
                             <!--se agregan datos de pasajes si se solicitan-->
                             @if (Model.ReqPasajeAereo == true)
                             {
-                                <h3><span style="font-weight: bold">IV. Datos del Pasaje: </span></h3>
+                                <h3><span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span></h3>
                                 <div class="row">
                                     @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
 
@@ -514,7 +514,7 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
+            collapsible: true, heightStyle: "auto"
         });
     });
 

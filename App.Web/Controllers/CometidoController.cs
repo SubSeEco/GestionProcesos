@@ -24,6 +24,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Linq;
+using jdk.nashorn.@internal.objects.annotations;
+using com.mp4parser.streaming.extensions;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -639,14 +641,8 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Cometido model, DestinosPasajes DesPasajes)
         {
-            //var com = _repository.GetById<Cometido>(model.CometidoId);
-            //model.Alojamiento = com.Alojamiento;
-            //model.Alimentacion = com.Alimentacion;
-            //model.Pasajes = com.Pasajes;
-
             if (ModelState.IsValid)
             {
-                //var _useCaseInteractor = new UseCaseInteractorCustom(_repository, _sigper);
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var resp = new ResponseMessage();
@@ -701,18 +697,32 @@ namespace App.Web.Controllers
                             //}
                         }
                         //else
-                        //    TempData["Errors"] = "Debe agregar datos del pasaje";
+                        //{
+                        //    _UseCaseResponseMessage.Errors.Add("Debe agregar datos del pasaje");
+                        //    //TempData["Errors"] = "Debe agregar datos del pasaje";
+                        //    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                        //}
                     }
 
-
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    /*se valiada se si ha creado los pasajes, cuando se solicitan*/
+                    if (model.ReqPasajeAereo == true)
+                    {
+                        var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == model.ProcesoId).ToList();
+                        if (pasaje.Count <= 0)
+                        {
+                            _UseCaseResponseMessage.Errors.Add("Debe agregar datos del pasaje");
+                            //TempData["Errors"] = "Debe agregar datos del pasaje";
+                        }
+                    }
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
                 {
                     ModelState.AddModelError(string.Empty, item);
                 }
+
+                //TempData["Success"] = "Operación terminada correctamente.";
+                //return Redirect(Request.UrlReferrer.PathAndQuery);
             }
             else
             {
@@ -2188,81 +2198,17 @@ namespace App.Web.Controllers
             }
 
             return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet,"rptPresupuesto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        }
-
-        //public FileResult DownloadXML(string id)
-        //{
-        //    var cometido = _repository.GetAll<Cometido>();
-
-        //    //var model = service.GetAllDefinitions().First(x => x.ID == id);
-        //    var definitionDetails = new StatisticDefinitionModel(cometido);
-        //    string xmlString = definitionDetails.ToXml;
-        //    string fileName = definitionDetails.Name + ".xml";
-
-
-        //    return File(Encoding.UTF8.GetBytes(xmlString), "application/xml", fileName);
-        //}
-
-        public FileResult GetXmlFile()
-        {
-            string xml = "<?xml version='1.0' encoding='UTF - 8' standalone='yes'?> <LISTADOCUMENTOS xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'> <DOCUMENTO> <RUN>10323587</RUN> <DIGITO_VERIFICADOR>1</DIGITO_VERIFICADOR> <TIPO_DOCUMENTO>RESOLUCION EXENTA</TIPO_DOCUMENTO> <NUMERO_DOCUMENTO>4037</NUMERO_DOCUMENTO> <FECHA_DOCUMENTO>26/12/2018</FECHA_DOCUMENTO> <SERVICIO_EMISOR>119246</SERVICIO_EMISOR> <DEPENDENCIA_EMISORA>119247</DEPENDENCIA_EMISORA> <SERVICIO_DESTINO>119247</SERVICIO_DESTINO> <DEPENDENCIA_DESTINO>119247</DEPENDENCIA_DESTINO> <REGION_DESTINO>8</REGION_DESTINO> <COMUNA_DESTINO>413</COMUNA_DESTINO> <FECHA_DESDE>17/12/2018</FECHA_DESDE> <FECHA_HASTA>18/12/2018</FECHA_HASTA> <MOTIVO_COMETIDO_FUNCIONARIO>Reunión fuera del servicio</MOTIVO_COMETIDO_FUNCIONARIO> <TIENE_BENEFICIOS> <SELECCIONE_BENEFICIOS> <PASAJE>NO</PASAJE> <VIATICO>SI</VIATICO> <ALOJAMIENTO>SI</ALOJAMIENTO> </SELECCIONE_BENEFICIOS> </TIENE_BENEFICIOS> <MONTO>77973</MONTO> </DOCUMENTO> </LISTADOCUMENTOS> "; //string presented xml
-            var stream = new MemoryStream();
-            var writer = XmlWriter.Create(stream);
-            writer.WriteRaw(xml);
-            stream.Position = 0;
-            //var fileStreamResult = File(stream, "application/octet-stream", "ReporteContraloria.xml");
-            var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
-            return fileStreamResult;
-        }
-
-        //public FileContentResult Downloadxml()
-        //{
-        //    var model = _repository.GetAll<Cometido>();
-
-        //    if (model.Count() < 1)
-        //    {
-        //        byte[] content = new byte[0];
-        //        return new FileContentResult(content, "xml");
-        //    }
-
-        //    XmlSerializer serializer = new XmlSerializer(model.FirstOrDefault().GetType());
-
-        //    MemoryStream xmlStream = new MemoryStream();
-        //    foreach (Cometido s in model)
-        //    {
-        //        serializer.Serialize(xmlStream, s);
-        //    }
-
-        //    byte[] content2 = new byte[xmlStream.Length];
-        //    xmlStream.Position = 0;
-        //    xmlStream.Read(content2, 0, (int)xmlStream.Length);
-
-        //    return File(content2, "xml");
-        //}
-
-
-        //public partial class TimeTable
-        //{
-        //    public int Id { get; set; }
-        //    public string Company { get; set; }
-        //    public string INN { get; set; }
-        //    public string StartDay { get; set; }
-        //    public string StartPause { get; set; }
-        //    public string EndDay { get; set; }
-        //    public string EndPause { get; set; }
-        //}
-
+        }     
         public ActionResult ReporteContraloria()
         {
             var model = new DTOFilterCometido();
             return View(model);
         }
-
         [HttpPost]
-        //public ContentResult ReporteContraloria(DTOFilterCometido model)
         public FileStreamResult ReporteContraloria(DTOFilterCometido model)
         {
             var predicate = PredicateBuilder.True<Cometido>();
+            var RegionComunaContraloria = _repository.GetAll<RegionComunaContraloria>().ToList();
 
             if (ModelState.IsValid)
             {
@@ -2280,110 +2226,52 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
             }
-
+            
             var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Result.Select(w => new XElement("DOCUMENTO",
-                                                                           new XElement("RUN", w.Rut),
-                                                                           new XElement("DIGITO_VERIFICADOR", w.DV),
-                                                                           new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
-                                                                           new XElement("NUMERO_DOCUMENTO", w.CometidoId),
-                                                                           new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToShortDateString()),
-                                                                           new XElement("SERVICIO_EMISOR", "119246"),
-                                                                           new XElement("DEPENDENCIA_EMISORA", "119247"),
-                                                                           new XElement("SERVICIO_DESTINO", "119247"),
-                                                                           new XElement("DEPENDENCIA_DESTINO", "119247"),
-                                                                           new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().RegionDescripcion : "S/A"),
-                                                                           new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
-                                                                           new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToShortDateString() : "S/A"),
-                                                                           new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToShortDateString() : "S/A"),
-                                                                           new XElement("MOTIVO_COMETIDO_FUNCIONARIO", w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"),
-                                                                           new XElement("TIENE_BENEFICIOS",
-                                                                                           new XElement("SELECCIONE_BENEFICIOS",
-                                                                                           new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
-                                                                                           new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
-                                                                                           new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
-                                                                                           ),
-                                                                           new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
-                                                                           ))));
+                                                new XElement("RUN", w.Rut),
+                                                new XElement("DIGITO_VERIFICADOR", w.DV),
+                                                new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
+                                                new XElement("NUMERO_DOCUMENTO", w.CometidoId),
+                                                new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToShortDateString()),
+                                                new XElement("SERVICIO_EMISOR", "119246"),
+                                                new XElement("DEPENDENCIA_EMISORA", "119247"),
+                                                new XElement("SERVICIO_DESTINO", "119247"),
+                                                new XElement("DEPENDENCIA_DESTINO", "119247"),
+                                                //new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
+                                                new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
+                                                new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
+                                                new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy") : "S/A"),
+                                                new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToString("dd/MM/yyyy") : "S/A"),
+                                                new XElement("MOTIVO_COMETIDO_FUNCIONARIO", "Reunión fuera del servicio" /*w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"*/),
+                                                new XElement("TIENE_BENEFICIOS",
+                                                                new XElement("SELECCIONE_BENEFICIOS",
+                                                                new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
+                                                                new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
+                                                                new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
+                                                                ),
+                                                new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
+                                                ))));
 
             var xmldoc = new XmlDocument();
             xmldoc.LoadXml(xdoc.ToString());
 
-            //XmlElement root = xmldoc.DocumentElement;
-            //XmlDeclaration xmldecl;
-            //xmldecl = xmldoc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-
-            //XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmldoc.NameTable);
-            //nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            
-            //xmldoc.DocumentElement.InsertBefore(xmldecl, root);
             xmldoc.DocumentElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-            //XmlWriterSettings settings = new XmlWriterSettings();
-            //settings.Indent = true;
-            //settings.Encoding = Encoding.UTF8;
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.Encoding = Encoding.UTF8;
+            settings.NewLineHandling = NewLineHandling.Replace;
+            settings.NewLineChars = Environment.NewLine;
+            settings.IndentChars = "\t";
 
-            //xmldoc.LoadXml(xdoc);
-            //xdoc.DocumentElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-
-
-            //return Content(xdoc.ToString(), "application/xml", Encoding.UTF8);
-
-            //string xml = xdoc.ToString();
             var stream = new MemoryStream();
-            var writer = XmlWriter.Create(stream);
+            var writer = XmlWriter.Create(stream,settings);
             writer.WriteStartDocument(true);
-            writer.WriteRaw(xmldoc.InnerXml);
+            writer.WriteRaw(xmldoc.InnerXml.ToString());
+            writer.Close();
             stream.Position = 0;
             var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
             return fileStreamResult;
-
-            //return File(stream.ToArray(), "application/xml", "ReporteContraloria.xml");
-
         }
-
-
-
-
-        //public ContentResult DownloadXML()
-        //{
-        //    var model = _repository.GetAll<Cometido>();
-        //    //            var xdoc = new XDocument(new XElement("data", model.Select(w => new XElement("worker",new XAttribute("id", w.CometidoId),
-        //    //                                                                            new XElement("start", w.FechaSolicitud),
-        //    //                                                                            new XElement("pause", w.Rut),
-        //    //                                                                            new XElement("continue", w.DV),
-        //    //                                                                            new XElement("end", w.Grado)
-        //    //            )
-        //    //        )
-        //    //    )
-        //    //);          
-        //    var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Select(w => new XElement("DOCUMENTO",
-        //                                                                    new XElement("RUN", w.Rut),
-        //                                                                    new XElement("DIGITO_VERIFICADOR", w.DV),
-        //                                                                    new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
-        //                                                                    new XElement("NUMERO_DOCUMENTO", w.CometidoId),
-        //                                                                    new XElement("FECHA_DOCUMENTO", w.FechaSolicitud),
-        //                                                                    new XElement("SERVICIO_EMISOR", "119246"),
-        //                                                                    new XElement("DEPENDENCIA_EMISORA", "119247"),
-        //                                                                    new XElement("SERVICIO_DESTINO", "119247"),
-        //                                                                    new XElement("DEPENDENCIA_DESTINO", "119247"),
-        //                                                                    new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().RegionDescripcion : "S/A"),
-        //                                                                    new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
-        //                                                                    new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToShortDateString() : "S/A"),
-        //                                                                    new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.LastOrDefault().FechaHasta.ToShortDateString() : "S/A"),
-        //                                                                    new XElement("MOTIVO_COMETIDO_FUNCIONARIO", w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"),
-        //                                                                    new XElement("TIENE_BENEFICIOS",
-        //                                                                                    new XElement("SELECCIONE_BENEFICIOS",
-        //                                                                                    new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
-        //                                                                                    new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
-        //                                                                                    new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
-        //                                                                                    ),
-        //                                                                    new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
-        //                                                                    ))));
-
-        //    return Content(xdoc.ToString(), "application/xml", Encoding.UTF8);
-        //}
-
-
-
     }
 }

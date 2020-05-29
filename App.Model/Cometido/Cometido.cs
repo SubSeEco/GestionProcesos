@@ -134,7 +134,7 @@ namespace App.Model.Cometido
         [Display(Name = "El cometido incluye pago de pasaje terrestre?")]
         public bool ReqPasajeTerrestre { get; set; }
 
-        [Display(Name = "El cometido incluye pago de vehículo?")]
+        [Display(Name = "Reembolso por traslado (vehículo)")]
         public bool Vehiculo { get; set; }
 
         [Display(Name = "Reembolso")]

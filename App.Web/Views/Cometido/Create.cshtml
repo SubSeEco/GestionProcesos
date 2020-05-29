@@ -116,8 +116,8 @@
                     <div id="Financia">
                         <label>Marque las opciones que SI financia el organismo invitante</label>
                         @*<label style="color:green">
-                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                        </label>*@
+                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+            </label>*@
                         <div class="col-12">
                             <label>
                                 @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
@@ -148,8 +148,8 @@
                     <div class="col-12">
                         <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
                         @*<label style="color:green">
-                            @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-                        </label>*@
+                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+            </label>*@
                     </div>
                     <div class="col-12">
                         <label>
@@ -179,19 +179,19 @@
                         </label>
                         <div class="section"></div>
                     </div>
-                    <div class="col-12">
-                        @Html.LabelFor(m => Model.TipoVehiculoId)
-                        @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new { @id = "TipoVehiculoId", @type = "select"/*disabled = "disabled"*/ })
-                        @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "")
+                    <div id="auto">
+                        <div class="col-12">
+                            @Html.LabelFor(m => Model.TipoVehiculoId)
+                            @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new { @id = "TipoVehiculoId", @type = "select"/*disabled = "disabled"*/ })
+                            @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "")
+                        </div>
+                        <div class="col-12">
+                            @Html.LabelFor(m => Model.PlacaVehiculo)
+                            @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                            @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                        </div>
                     </div>
-                    <div class="col-12">
-                        @Html.LabelFor(m => Model.PlacaVehiculo)
-                        @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                        @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
-                    </div>
-
                 </div>
-
 
                 <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                 <div class="col-12">
@@ -246,6 +246,7 @@
         $("#FechaSolicitud").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);
         //$("#TipoReembolsoId").attr('disabled', true);
+        $('#auto').hide(100);
         $('#Financia').hide(100);
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
@@ -332,28 +333,29 @@
 
         /*Habilita tipo vehiculo*/
         if (document.getElementById("Vehiculo").checked == false) {
-            $("#TipoVehiculoId").prop("disabled", true);
-            $("#TipoVehiculoId").attr('disabled', true);
+            $('#auto').hide(100);
+            //$("#TipoVehiculoId").attr('disabled', true);
             $("#PlacaVehiculo").attr('disabled', true);
         }
         else {
-            $("#TipoVehiculoId").attr('disabled', false);
+            //$("#TipoVehiculoId").attr('disabled', false);
             $("#PlacaVehiculo").attr('disabled', false);
-            $("#TipoVehiculoId").prop("disabled", false);
+            $('#auto').show();
         }
     });
 
     /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
-            $("#TipoVehiculoId").prop("disabled", true);
-            $("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
+            $('#auto').hide(100);
+            //$("#TipoVehiculoId").attr('disabled', true);
+            $("#PlacaVehiculo").attr('disabled', true);            
         }
         else {
-            $("#TipoVehiculoId").attr('disabled', false);
+            //$("#TipoVehiculoId").attr('disabled', false);            
             $("#PlacaVehiculo").attr('disabled', false);
-            $("#TipoVehiculoId").prop("disabled", false);
+            $('#auto').show();
+
         }
     });
 
@@ -439,7 +441,7 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
+            collapsible: true, heightStyle: "auto"
         });
     });
 
