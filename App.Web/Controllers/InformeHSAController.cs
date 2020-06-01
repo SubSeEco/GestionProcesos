@@ -4,9 +4,52 @@ using App.Model.Core;
 using App.Model.InformeHSA;
 using App.Core.Interfaces;
 using Rotativa.MVC;
+using System.Web;
+using RestSharp;
+using App.Infrastructure.Email;
+using App.Core.UseCases;
+using System.Net;
 
 namespace App.Web.Controllers
 {
+    public class DTOInformeHSA
+    {
+        public DTOInformeHSA()
+        {
+        }
+
+        public DateTime FechaSolicitud { get; set; }
+
+        public DateTime FechaDesde { get; set; }
+
+        public DateTime FechaHasta { get; set; }
+
+        public int RUT { get; set; }
+
+        public string Nombre { get; set; }
+
+        public string Unidad { get; set; }
+
+        public string NombreJefatura { get; set; }
+
+        public bool ConJornada { get; set; } = false;
+
+        public string Funciones { get; set; }
+
+        public string Actividades { get; set; }
+
+        public string Observaciones { get; set; }
+
+        public string NumeroBoleta { get; set; }
+
+        public DateTime FechaBoleta { get; set; }
+
+        public byte[] Boleta { get; set; }
+
+        public string Email { get; set; }
+    }
+
+
     [Audit]
     [Authorize]
     public class InformeHSAController : Controller
@@ -14,12 +57,14 @@ namespace App.Web.Controllers
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
+        protected readonly IEmail _email;
 
-        public InformeHSAController(IGestionProcesos repository, ISIGPER sigper, IFile file)
+        public InformeHSAController(IGestionProcesos repository, ISIGPER sigper, IFile file, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
+            _email = email;
         }
 
         public ActionResult Create(int WorkFlowId)
@@ -132,6 +177,87 @@ namespace App.Web.Controllers
             }
 
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public JsonResult GetHonorarioByRUT(int id)
+        {
+            var persona = _sigper.GetUserByRut(id);
+            if (persona == null)
+                return null;
+
+            if (persona != null && persona.FunDatosLaborales != null && persona.FunDatosLaborales.RH_ContCod != 10)
+                return null;
+
+            return Json(new
+            {
+                Nombre = persona.Funcionario.PeDatPerChq,
+                Unidad = persona.Unidad.Pl_UndDes,
+                NombreJefatura = persona.Jefatura.PeDatPerChq,
+                Email = persona.Funcionario.Rh_Mail
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
+        public JsonResult StartProcess(DTOInformeHSA model)
+        {
+            //crear proceso
+            var _useCaseCore = new UseCaseCore(_repository, _email, _sigper);
+            var _UseCaseCoreResponseMessage = _useCaseCore.ProcesoInsert(new Proceso {
+                DefinicionProcesoId = (int)App.Util.Enum.DefinicionProceso.InformeHSA,
+                Email = model.Email
+            });
+
+            if (!_UseCaseCoreResponseMessage.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Json("Problemas al crear proceso", JsonRequestBehavior.AllowGet);
+            }
+
+            //crear workflow
+            var workflow = _repository.GetFirst<Workflow>(q => q.ProcesoId == _UseCaseCoreResponseMessage.EntityId);
+            if (workflow == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Json("Problemas al obtener el workflow inicial", JsonRequestBehavior.AllowGet);
+            }
+
+            //crear informe hsa
+            var _useCaseInformeHSAInteractor = new UseCaseInformeHSA(_repository);
+            var _UseCaseInformeHSAResponseMessage = _useCaseInformeHSAInteractor.Insert(new InformeHSA {
+                Actividades = model.Actividades,
+                ConJornada = model.ConJornada,
+                FechaBoleta = model.FechaBoleta,
+                FechaDesde = model.FechaDesde,
+                FechaHasta = model.FechaHasta,
+                FechaSolicitud = model.FechaSolicitud,
+                Funciones = model.Funciones,
+                Nombre = model.Nombre,
+                NombreJefatura = model.NombreJefatura,
+                NumeroBoleta = model.NumeroBoleta,
+                Observaciones = model.Observaciones,
+                RUT = model.RUT,
+                Unidad = model.Unidad,
+                WorkflowId = workflow.WorkflowId,
+                ProcesoId = workflow.ProcesoId,
+            });
+
+            if (!_UseCaseInformeHSAResponseMessage.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Json("Problemas al crear informe HSA", JsonRequestBehavior.AllowGet);
+            }
+
+            //enviar tarea a paso 2
+            var _UseCaseWorkflowResponseMessage = _useCaseCore.WorkflowUpdate(workflow);
+            if (!_UseCaseWorkflowResponseMessage.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Json("Problemas al activar la segunda tarea", JsonRequestBehavior.AllowGet);
+            }
+
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            return Json(_UseCaseCoreResponseMessage.EntityId, JsonRequestBehavior.AllowGet);
         }
     }
 }

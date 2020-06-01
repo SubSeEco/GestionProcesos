@@ -1,43 +1,45 @@
 ﻿@model App.Model.Core.Workflow
 
-<h3>Detalle de tarea</h3>
+    <div class="container">
 
-<div class="card">
-    <div class="card-content">
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.Proceso.DefinicionProceso.Nombre)</strong><br />
-            @Html.DisplayFor(m => Model.Proceso.DefinicionProceso.Nombre)
-        </div>
+        <h3>Detalle de tarea</h3>
 
-        <div class="input-field col s12 m10">
-            <strong>@Html.DisplayNameFor(m => Model.DefinicionWorkflow.Nombre)</strong><br />
-            @Html.DisplayFor(m => Model.DefinicionWorkflow.Nombre)
-        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.Proceso.DefinicionProceso.Nombre)</strong><br />
+                    @Html.DisplayFor(m => Model.Proceso.DefinicionProceso.Nombre)
+                </div>
 
-        @if (!string.IsNullOrWhiteSpace(Model.Mensaje))
-        {
-            <div class="input-field col s12 m10">
-                <strong>@Html.DisplayNameFor(m => Model.Mensaje)</strong><br />
-                @Html.DisplayFor(m => Model.Mensaje)
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.DefinicionWorkflow.Nombre)</strong><br />
+                    @Html.DisplayFor(m => Model.DefinicionWorkflow.Nombre)
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Mensaje))
+                {
+                    <div class="input-field col s12 m10">
+                        <strong>@Html.DisplayNameFor(m => Model.Mensaje)</strong><br />
+                        @Html.DisplayFor(m => Model.Mensaje)
+                    </div>
+                }
+                <div class="input-field col s12 m10">
+                    <a href='@Url.Action("Details","Proceso", new { id = Model.ProcesoId })' target="_blank">Ver detalles del proceso</a>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(model => model.WorkflowId)
+                    @Html.HiddenFor(model => model.ProcesoId)
+                    @Html.AntiForgeryToken()
+
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue" type="submit">Ejecutar tarea</button>
+                }
+
             </div>
-        }
-        <div class="input-field col s12 m10">
-            <a href='@Url.Action("Details","Proceso", new { id = Model.ProcesoId })' target="_blank">Ver detalles del proceso</a>
         </div>
-
-        @using (Html.BeginForm())
-        {
-            @Html.HiddenFor(model => model.WorkflowId)
-            @Html.HiddenFor(model => model.ProcesoId)
-            @Html.AntiForgeryToken()
-
-            <div class="section"></div>
-            <button class="waves-effect waves-light btn blue" type="submit">Ejecutar tarea</button>
-        }
-
     </div>
-</div>
-
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>
