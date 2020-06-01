@@ -136,6 +136,7 @@
     <Compile Include="Shared\Pais.cs" />
     <Compile Include="Shared\Programa.cs" />
     <Compile Include="Shared\Region.cs" />
+    <Compile Include="Shared\RegionComunaContraloria.cs" />
     <Compile Include="Shared\Subsecretaria.cs" />
     <Compile Include="Shared\TipoPagoSIGFE.cs" />
     <Compile Include="SIGPER\DGCOMUNAS.cs" />
