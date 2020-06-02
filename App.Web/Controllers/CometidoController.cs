@@ -2208,7 +2208,7 @@ namespace App.Web.Controllers
         public FileStreamResult ReporteContraloria(DTOFilterCometido model)
         {
             var predicate = PredicateBuilder.True<Cometido>();
-            var RegionComunaContraloria = _repository.GetAll<RegionComunaContraloria>().ToList();
+            var RegionComunaContraloria = _repository.Get<RegionComunaContraloria>().ToList();
 
             if (ModelState.IsValid)
             {
@@ -2230,16 +2230,15 @@ namespace App.Web.Controllers
             var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Result.Select(w => new XElement("DOCUMENTO",
                                                 new XElement("RUN", w.Rut),
                                                 new XElement("DIGITO_VERIFICADOR", w.DV),
-                                                new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo : "S/A"),
+                                                new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo.Contains("Ministerial") ? "DECRETO EXENTO" : "RESOLUCION EXENTA" : "S/A"),
                                                 new XElement("NUMERO_DOCUMENTO", w.CometidoId),
                                                 new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToShortDateString()),
                                                 new XElement("SERVICIO_EMISOR", "119246"),
                                                 new XElement("DEPENDENCIA_EMISORA", "119247"),
                                                 new XElement("SERVICIO_DESTINO", "119247"),
                                                 new XElement("DEPENDENCIA_DESTINO", "119247"),
-                                                //new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
+                                                new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? RegionComunaContraloria.Where(r => r.COMUNA.Contains(w.Destinos.FirstOrDefault().ComunaDescripcion.Trim())).FirstOrDefault().CODIGOCOMUNA.ToString() : "S/A"),
                                                 new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
-                                                new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().ComunaDescripcion : "S/A"),
                                                 new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy") : "S/A"),
                                                 new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToString("dd/MM/yyyy") : "S/A"),
                                                 new XElement("MOTIVO_COMETIDO_FUNCIONARIO", "Reunión fuera del servicio" /*w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"*/),
@@ -2267,7 +2266,7 @@ namespace App.Web.Controllers
             var stream = new MemoryStream();
             var writer = XmlWriter.Create(stream,settings);
             writer.WriteStartDocument(true);
-            writer.WriteRaw(xmldoc.InnerXml.ToString());
+            writer.WriteRaw(xmldoc.InnerXml);
             writer.Close();
             stream.Position = 0;
             var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
