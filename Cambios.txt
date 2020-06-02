@@ -1,6 +1,0 @@
-update CoreProceso set EstadoProcesoId = 1 where EstadoProcesoId is null
-update CoreProceso set EstadoProcesoId = 3 where Terminada = 1
-update CoreProceso set EstadoProcesoId = 2 where Anulada = 1
-update CoreProceso set EstadoProcesoId = 1 where Anulada = 0 and Terminada = 0
-
-

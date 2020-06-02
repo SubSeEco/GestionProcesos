@@ -131,6 +131,7 @@
             SolicitudPasaje = 11,
             SolicitudCometidoPasaje = 13,
             Memorandum = 15,
+            InformeHSA = 1
         }
 
      
