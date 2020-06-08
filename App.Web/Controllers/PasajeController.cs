@@ -306,6 +306,19 @@ namespace App.Web.Controllers
             var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
             ViewBag.Pasaje = pasaje;
 
+            if (model.Workflow.DefinicionWorkflow.Secuencia == 5)
+            {
+                var cotizacion = _repository.GetAll<Cotizacion>().Where(c => c.PasajeId == model.PasajeId).ToList();
+
+                var max = cotizacion.Max(c =>c.ValorPasaje);
+                var min = cotizacion.Min(c => c.ValorPasaje);
+
+                var seleccion = _repository.Get<Cotizacion>(c => c.ValorPasaje == min).FirstOrDefault().Seleccion;
+
+                if(seleccion == false)
+                    ViewBag.MasBarato = "La cotizacion seleccionada no es la mas económica";
+            }
+
             return View(model);
         }
 
@@ -313,7 +326,6 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult EditSeleccion(List<CotizacionDocumento> CotizacionDocumento, int PasajeId)
-        //public ActionResult EditSeleccion(Pasaje model)
         {
             var model = _repository.Get<Pasaje>(c => c.PasajeId == PasajeId).FirstOrDefault();
             var Cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == PasajeId).ToList();

@@ -780,38 +780,27 @@ namespace App.Core.UseCases
                 if (!obj.Any())
                     response.Errors.Add("No existe documento");
 
-                //buscar documento por id y solo actualiuzar el estado seleccionado
+                //buscar documento por id y solo actualizar el estado seleccionado
                 foreach (var item in obj)
                 {
-                    var cotizacion = _repository.Get<CotizacionDocumento>().FirstOrDefault(q => q.CotizacionDocumentoId == item.CotizacionDocumentoId);
-                    if (cotizacion != null)
-                        cotizacion.Selected = item.Selected;
+                    var cotizacionDocto = _repository.Get<CotizacionDocumento>().FirstOrDefault(q => q.CotizacionDocumentoId == item.CotizacionDocumentoId);
+                    if (cotizacionDocto != null)
+                        cotizacionDocto.Selected = item.Selected;
+
+                    if(item.Selected == true)
+                    {
+                        /*se marca cotizacion seleccionda en lista de cotizaciones*/
+                        var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
+                        if (cotiza != null)
+                        {
+                            cotiza.Seleccion = true;
+
+                            _repository.Update<Cotizacion>(cotiza);
+                            _repository.Save();
+                        }
+                    }
                 }
                 _repository.Save();
-
-
-
-                //bool select = false;
-                //if (obj.Count > 0)
-                //{
-                //    foreach (var doc in obj)
-                //    {
-                //        if (doc.Selected == true)
-                //            select = true;
-
-                //        if (select == false)
-                //            response.Errors.Add("No se ha seleccionado una cotizacion");
-                //    }
-                //}
-
-                //if (response.IsValid)
-                //{
-                //    foreach (var lis in obj)
-                //    {
-                //        _repository.Update(lis);
-                //        _repository.Save();
-                //    }
-                //}
             }
             catch (Exception ex)
             {

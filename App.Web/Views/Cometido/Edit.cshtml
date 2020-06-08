@@ -318,7 +318,9 @@
                                     </table>
 
                                 }
-                                @Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)
+                                <div class="section"></div>
+                                @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
+                                <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
 
                             <!--se agregan datos de pasajes si se solicitan-->
@@ -355,18 +357,23 @@
                                                             @destinopasaje.ObservacionesDestinos
                                                         </td>
                                                         <td>@destinopasaje.FechaVuelta</td>
+                                                        <td>
+                                                            <a href='@Url.Action("Edit", "Pasaje", new { id = destinopasaje.PasajeId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        </td>
                                                     </tr>
                                                 }
                                             </tbody>
                                         </table>
                                     }
+                                   
+
                                 </div>
                             }
 
                         </div>
                         <div class="section"></div>
                         <p>
-                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                            <button class="waves-effect waves-light btn blue" onclick="Pasaje()" type="submit">Guardar</button>
                         </p>
                     </div>
                 </div>
@@ -389,6 +396,26 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            //datepicker: false,
+            //format: 'H:i',
+            timepicker: false,
+            format: 'd-m-Y',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            //formatDate: 'd-m-Y',
+            //minDate: 0
+        });
+
         $("#PlacaVehiculo").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);
         $('#Financia').hide(100);
@@ -426,6 +453,10 @@
         $('input:checkbox[name="Pasajes"]').change(function () {
             Bloqueo();
         });
+
+        //$('input:checkbox[name="IdRegionOrigen"]').change(function () {
+        //    Pasaje();
+        //});
 
         function Bloqueo() {
             if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
@@ -517,6 +548,32 @@
             collapsible: true, heightStyle: "auto"
         });
     });
+
+    /*Validacion de ingreso de los pasajes, si es q se solicitan*/
+    function Pasaje() {
+        if (document.getElementById("ReqPasajeAereo").checked == true) {
+            IdRegion = document.getElementById("IdRegion").value;
+            if (IdRegion == null || IdRegion == 0) {
+                alert("Se debe señalar la region de destino");
+                return false;
+            }
+            IdRegionOrigen = document.getElementById("IdRegionOrigen").value;
+            if (IdRegionOrigen == null || IdRegionOrigen == 0) {
+                alert("Se debe señalar la region de origen");
+                return false;
+            }            
+            FechaOrigen = document.getElementById("FechaOrigen").value;
+            if (FechaOrigen == null || FechaOrigen.length == 0 || FechaOrigen == "01-01-0001 0:00:00") {
+                alert("Se debe ingresar la fecha de origen para los pasajes");
+                return false;
+            }
+            FechaVuelta = document.getElementById("FechaVuelta").value;
+            if (FechaVuelta == null || FechaVuelta.length == 0 || FechaVuelta == "01-01-0001 0:00:00") {
+                alert("Se debe ingresar la fecha de vuelta para los pasajes");
+                return false;
+            }
+        }
+    }
 
 </script>
 
