@@ -4548,9 +4548,14 @@ namespace App.Core.UseCases
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
-                        workflow.Email = persona.Jefatura.Rh_Mail.Trim();
-                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+
+                        var jefatura = _sigper.GetUserByEmail(persona.Jefatura.Rh_Mail.Trim());
+                        if (jefatura == null)
+                            throw new Exception("No se encontró la jefatura en SIGPER.");
+                        workflow.Email = jefatura.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = jefatura.Funcionario.PeDatPerChq.Trim();
+                        workflow.Pl_UndCod = jefatura.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = jefatura.Unidad.Pl_UndDes;
                         workflow.TareaPersonal = true;
                     }
 

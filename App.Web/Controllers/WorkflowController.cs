@@ -313,8 +313,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
@@ -324,8 +325,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
                 else
@@ -335,8 +337,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
             }
