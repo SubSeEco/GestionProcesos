@@ -6,6 +6,8 @@ using App.Core.Interfaces;
 using FluentDateTime;
 using App.Model.SIGPER;
 using App.Util;
+using System.Runtime.InteropServices;
+using App.Model.Cometido;
 
 namespace App.Core.UseCases
 {
@@ -438,6 +440,35 @@ namespace App.Core.UseCases
                         workflow.FechaTermino = DateTime.Now;
                         workflow.Terminada = true;
                         workflow.Anulada = true;
+                    }
+
+                    /*Si el proceso corresponde a cometido se deja como falso*/
+                    if(obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometido)
+                    {
+                        var cometido = _repository.Get<Cometido>(c => c.ProcesoId == obj.ProcesoId).FirstOrDefault();
+                        if(cometido != null)
+                        {
+                            var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
+                            var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
+
+                            var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
+                            if (destino != null)
+                            {
+                                foreach (var d in destino)
+                                {
+                                    _UseCaseResponseMessage  = _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
+                                }
+                            }
+
+                            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
+                            if(cdp != null)
+                            {
+                                foreach(var c in cdp)
+                                {
+                                    _UseCaseResponseMessage = _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);                                    
+                                }
+                            }
+                        }
                     }
 
                     //terminar proceso

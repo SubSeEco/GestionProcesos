@@ -123,12 +123,24 @@
             PlantillaFinanzas_Solicitante_QuienViaja = 44,
             PlantillaFinanzas_Solicitante_QuienViaja2 = 45,
             UrlSistema = 46,
+            PlantillaFinanzasRechazo_EncargadoTesoreria = 47,
+            PlantillaEnvíoSolicitudCometidoPasaje = 48,
+            PlantillaEnvioSolicitudAnalistaAbastecimiento = 49,
+            PlantillaSeleccionPasaje_Jefatura = 50,
+            PlantillaSeleccionPasaje_Solicitante = 51,
+            PlantillaAprobacionPasaje_Jefatura = 52,
+            PlantillaAprobacionPasaje_JefaturaAbastecimiento = 53,
+            PlantillaRechazoPasaje_AnalistaAbastecimiento = 54,
+            PlantillaCompraPasajes_AnalistaGP = 55,
+            PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
+            PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
         }
 
         public enum DefinicionProceso
         {
             SIACIngreso = 7,
             SolicitudPasaje = 11,
+            SolicitudCometido = 10,
             SolicitudCometidoPasaje = 13,
             Memorandum = 15,
             InformeHSA = 1

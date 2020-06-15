@@ -35,30 +35,27 @@
                                             <th></th>
                                         </tr>
                                         <tr>
-
                                             <td>
-                                                @Html.DropDownListFor(m => Model.IdRegionOrigen, null, "Seleccione...", new { style = "width:100px" })
+                                                @Html.DisplayFor(m => Model.OrigenRegionDescripcion)
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
-                                                @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                                @Html.DisplayFor(model => Model.FechaOrigen)
                                             </td>
                                             <td>
-                                                @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
+                                                @Html.DisplayFor(m => Model.RegionDescripcion)
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
-                                                @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                                @Html.DisplayFor(model => Model.FechaVuelta)
                                             </td>
                                         </tr>
                                     </table>
                                     <div class="input-field col s12 m10 l3">
-                                        @Html.TextBoxFor(m => Model.ObservacionesDestinos)
-                                        @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                        @Html.DisplayNameFor(m => Model.ObservacionesDestinos)
+                                        @Html.DisplayFor(m => Model.ObservacionesDestinos)
                                     </div>
                                     <div class="input-field col s12 m10 l3">
-                                        @Html.TextBoxFor(m => Model.ObservacionesOrigen)
-                                        @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                        @Html.DisplayNameFor(m => Model.ObservacionesOrigen)
+                                        @Html.DisplayFor(m => Model.ObservacionesOrigen)
                                     </div>
                                 </div>
                             }
@@ -110,7 +107,7 @@
                             }
                             <div class="section"></div>
                             <p>
-                                <button class="waves-effect waves-light btn blue" type="submit" onclick="valida">Guardar</button>
+                                <button class="waves-effect waves-light btn blue" type="submit" onclick="valida">Borrar</button>
                             </p>
                         </div>
                     </div>

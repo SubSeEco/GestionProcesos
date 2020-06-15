@@ -348,11 +348,9 @@
     $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
             $('#auto').hide(100);
-            //$("#TipoVehiculoId").attr('disabled', true);
             $("#PlacaVehiculo").attr('disabled', true);            
         }
         else {
-            //$("#TipoVehiculoId").attr('disabled', false);            
             $("#PlacaVehiculo").attr('disabled', false);
             $('#auto').show();
 
