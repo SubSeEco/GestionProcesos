@@ -36,11 +36,11 @@
                 @Html.HiddenFor(q => Model.Alimentacion)
                 @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
-            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
+                @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
-                @Html.HiddenFor(q => Model.TipoVehiculoId)
-                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)
-                @Html.HiddenFor(q => Model.PlacaVehiculo)
+                @*@Html.HiddenFor(q => Model.TipoVehiculoId)
+                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
+                @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
                 @Html.HiddenFor(q => Model.Jefatura)
 
@@ -147,8 +147,8 @@
                                     <div class="input-field col s12 m8 l12">
                                         <label>Marque las opciones que SI financia el organismo invitante</label>
                                         @*<label style="color:green">
-                                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                                    </label>*@
+                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                    </label>*@
                                     </div>
                                     <div class="input-field col s12 m8 l13">
                                         <label>
@@ -209,17 +209,18 @@
                                     </label>
                                     <div class="section"></div>
                                 </div>
-                                <div class="input-field col s12 m6 l10">
-                                    @Html.LabelFor(m => Model.TipoVehiculoId)
-                                    @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
-                                    @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                <div id="auto">
+                                    <div class="input-field col s12 m6 l10">
+                                        @Html.LabelFor(m => Model.TipoVehiculoId)
+                                        @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                        @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.LabelFor(m => Model.PlacaVehiculo)
+                                        @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                        @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                    </div>
                                 </div>
-                                <div class="input-field col s12 m2 l10">
-                                    @Html.LabelFor(m => Model.PlacaVehiculo)
-                                    @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                    @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
-                                </div>
-
                             </div>
                             @*<div class="section"></div>*@
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
@@ -365,7 +366,7 @@
                                             </tbody>
                                         </table>
                                     }
-                                   
+
 
                                 </div>
                             }
@@ -418,6 +419,7 @@
 
         $("#PlacaVehiculo").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);
+        $('#auto').hide(100);
         $('#Financia').hide(100);
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
@@ -508,15 +510,17 @@
             $("#Vehiculo").attr('disabled', false);
         }
 
-        //Habilita tipo vehiculo
-        if (document.getElementById("Vehiculo").checked == true) {
-            $("#TipoVehiculoId").attr('disabled', false);
-            $("#PlacaVehiculo").attr('disabled', false);
-        }
-        else {
-            $("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
-        }
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+            }
+        });
     });
 
     /*funcion que bloquea pasajes*/
@@ -531,15 +535,15 @@
         }
     });
 
-    //Habilita tipo vehiculo
+    /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
-        if (document.getElementById("Vehiculo").checked == true) {
-            $("#TipoVehiculoId").attr('disabled', false);
-            $("#PlacaVehiculo").attr('disabled', false);
+        if (document.getElementById("Vehiculo").checked == false) {
+            $('#auto').hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
         }
         else {
-            $("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
+            $("#PlacaVehiculo").attr('disabled', false);
+            $('#auto').show();
         }
     });
 
