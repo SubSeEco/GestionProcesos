@@ -6,32 +6,35 @@ using App.Core.Interfaces;
 using Rotativa.MVC;
 using App.Core.UseCases;
 using System.Linq;
+using App.Util;
 
 namespace App.Web.Controllers
 {
-    public class DTOProceso
-    {
-        public DTOProceso()
-        {
+    //public class DTOProceso
+    //{
+    //    public DTOProceso()
+    //    {
 
-        }
-        public int Id { get; set; }
-        public DateTime Inicio { get; set; }
-        public string Tipo { get; set; }
-        public string Estado { get; set; }
-        public string Tarea { get; set; }
-    }
+    //    }
+    //    public int Id { get; set; }
+    //    public DateTime Inicio { get; set; }
+    //    public string Tipo { get; set; }
+    //    public string Estado { get; set; }
+    //    public string Tarea { get; set; }
+    //}
     public class DTOInformeHSA
     {
         public DTOInformeHSA()
         {
         }
 
-        public DateTime FechaSolicitud { get; set; }
+        public int InformHSAId { get; set; }
 
-        public DateTime FechaDesde { get; set; }
+        public DateTime? FechaSolicitud { get; set; }
 
-        public DateTime FechaHasta { get; set; }
+        public DateTime? FechaDesde { get; set; }
+
+        public DateTime? FechaHasta { get; set; }
 
         public int RUT { get; set; }
 
@@ -58,6 +61,8 @@ namespace App.Web.Controllers
         public string BoletaFilename { get; set; }
         public string BoletaFiletype { get; set; }
         public string Email { get; set; }
+
+        public string Estado { get; set; }
     }
 
     [Audit]
@@ -305,16 +310,21 @@ namespace App.Web.Controllers
             if (persona != null && persona.Funcionario == null)
                 return Json(new { ok = false, error = "No se encontró información del funcionario en SIGPER" }, JsonRequestBehavior.AllowGet);
 
-            var DTOProcesos = _repository.Get<Proceso>(q => q.Email == persona.Funcionario.Rh_Mail.Trim()).Select(q => new DTOProceso
-            {
-                Id = q.ProcesoId,
-                Inicio = q.FechaCreacion,
-                Tipo = q.DefinicionProceso.Descripcion,
-                Estado = q.EstadoProceso.Descripcion,
-                Tarea = q.Workflows.Any() ? q.Workflows.OrderByDescending(i=>i.WorkflowId).FirstOrDefault().DefinicionWorkflow.Nombre : string.Empty
-            }).ToList();
+            int definicionProcesoId = (int)App.Util.Enum.DefinicionProceso.InformeHSA;
 
-            return Json(new { ok = true, error = "", DTOProcesos }, JsonRequestBehavior.AllowGet);
+            var DTOInformeHSA = _repository
+                .Get<InformeHSA>(q => q.Proceso.DefinicionProcesoId == definicionProcesoId && q.Proceso.Email == persona.Funcionario.Rh_Mail.Trim())
+                .Select(q => new DTOInformeHSA
+                {
+                    InformHSAId = q.InformeHSAId,
+                    FechaSolicitud = q.FechaSolicitud,
+                    FechaDesde = q.FechaDesde,
+                    FechaHasta = q.FechaHasta,
+                    Estado = q.Proceso.EstadoProceso.Descripcion,
+                    NumeroBoleta = q.NumeroBoleta
+                }).ToList();
+
+            return Json(new { ok = true, error = "", DTOInformeHSA}, JsonRequestBehavior.AllowGet);
         }
     }
 }
