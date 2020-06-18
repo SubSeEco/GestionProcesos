@@ -11,9 +11,27 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Core.UseCases;
+using com.sun.xml.@internal.txw2;
+using org.bouncycastle.cert.dane;
 
 namespace App.Web.Controllers
 {
+    public class DTODocumento
+    {
+        public DTODocumento()
+        {
+
+        }
+
+        public int Id { get; set; }
+        public string Archivo { get; set; }
+        public string Nombre { get; set; }
+        public DateTime FechaEmision { get; set; }
+        public bool OK { get; set; }
+        public string Error { get; set; }
+    }
+
+
     [Authorize]
     public class DocumentoController : Controller
     {
@@ -68,7 +86,7 @@ namespace App.Web.Controllers
             _file = pdf;
             _IHSM = hsm;
         }
-        
+
         public ActionResult Index()
         {
             var model = new DTOFilter()
@@ -175,7 +193,7 @@ namespace App.Web.Controllers
                                 doc.TipoDocumentoId = 7;
                             }
                         }
-                    }                        
+                    }
 
                     _repository.Create(doc);
                     _repository.Save();
@@ -219,7 +237,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sign(Documento model,int? DocumentoId)
+        public ActionResult Sign(Documento model, int? DocumentoId)
         {
             /*Se debe volver a generar el documento si corresponde a cometido para agregar los campos que se han actualizado*/
             /*Se verifica que corresponde a un proceso de cometido*/
@@ -371,6 +389,43 @@ namespace App.Web.Controllers
 
         //    return File(imagebyte, "image/png"); 
         //}
+
+
+        [AllowAnonymous]
+        public JsonResult GetById(string id)
+        {
+            if (id.IsNullOrWhiteSpace())
+                return Json(new DTODocumento { OK = false, Error = "Error: código no especificado" }, JsonRequestBehavior.AllowGet);
+
+            var documento = new App.Model.Core.Documento();
+            if (id.IsInt())
+                documento = _repository.GetById<Documento>(id.ToInt());
+            else
+                documento = _repository.GetFirst<Documento>(q=>q.Codigo == id);
+
+            if (documento == null)
+                return Json(new DTODocumento { OK = false, Error = "Error: documento no encontrado" }, JsonRequestBehavior.AllowGet);
+
+            if (documento != null && documento.File == null)
+                return Json(new DTODocumento { OK = false, Error = "Error: documento encontrado, pero sin contenido" }, JsonRequestBehavior.AllowGet);
+
+            if (documento != null && !documento.FileName.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
+                return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
+
+            //validacion documento firmado...
+            //if (documento != null && !documento.firma.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
+            //    return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
+
+            var model = new DTODocumento() {
+                OK = true,
+                Id = documento.DocumentoId,
+                FechaEmision = documento.Fecha,
+                Nombre = documento.FileName,
+                Archivo = System.Text.Encoding.Default.GetString(documento.File)
+            };
+
+            return Json(model , JsonRequestBehavior.AllowGet);
+        }
     }
 }
 
