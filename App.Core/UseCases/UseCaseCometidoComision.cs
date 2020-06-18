@@ -8,6 +8,7 @@ using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
+using System.Web.UI;
 
 namespace App.Core.UseCases
 {
@@ -1278,7 +1279,7 @@ namespace App.Core.UseCases
 
                     /*se valida que los rangos de fecha no se topen con otros destinos*/
                     //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
-                    foreach (var otrosDestinos in _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut))
+                    foreach (var otrosDestinos in _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true))
                     {
                         foreach (var destinoCometido in listaDestinosCometido)
                         {
@@ -2325,16 +2326,19 @@ namespace App.Core.UseCases
                         {
                             if (destinos.FechaInicio.Date == objController.FechaInicio.Date)
                             {
-                                //response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
-                                if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
+                                if (destinos.CometidoId != objController.CometidoId)
                                 {
-                                    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                                    obj.Dias100 = 0;
-                                    obj.Dias60 = 0;
-                                    obj.Dias40 = 0;
-                                    obj.Total = 0;
-                                    obj.TotalViatico = 0;
+                                    if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
+                                        obj.Dias100 = 0;
+                                        obj.Dias60 = 0;
+                                        obj.Dias40 = 0;
+                                        obj.Total = 0;
+                                        obj.TotalViatico = 0;
+                                    }
                                 }
+                                
                             }
                         }
                     }
