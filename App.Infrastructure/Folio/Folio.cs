@@ -10,7 +10,7 @@ namespace App.Infrastructure.Folio
     {
         public List<Model.FirmaDocumento.DTOTipoDocumento> GetTipoDocumento()
         {
-            var url = "http://wsfolio.economia.cl/api/tipodocumento";
+            var url = "http://wsfolio.test.economia.cl/api/tipodocumento";
             var client = new RestClient(url);
             var response = client.Execute(new RestRequest());
             var returnValue = JsonConvert.DeserializeObject<List<Model.FirmaDocumento.DTOTipoDocumento>>(response.Content);
@@ -25,7 +25,7 @@ namespace App.Infrastructure.Folio
             };
 
             //conexion a servicios de folo de documentos
-            var url = "http://wsfolio.economia.cl/api/folio";
+            var url = "http://wsfolio.test.economia.cl/api/folio";
             var client = new RestClient(url);
             var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
 

@@ -134,6 +134,8 @@
             PlantillaCompraPasajes_AnalistaGP = 55,
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
+            url_verificacion_documento,
+            url_tramites_en_linea,
         }
 
         public enum DefinicionProceso

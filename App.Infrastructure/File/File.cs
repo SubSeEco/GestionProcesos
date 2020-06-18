@@ -23,11 +23,11 @@ namespace App.Infrastructure.File
             return data;
         }
 
-        public byte[] CreateQR(string id)
+        public byte[] CreateQR(string text)
         {
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
-                QRCodeData qrCodeData = qrGenerator.CreateQrCode(id, QRCodeGenerator.ECCLevel.Q);
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
                 using (QRCode qrCode = new QRCode(qrCodeData))
                 {
                     Bitmap qrCodeImage = qrCode.GetGraphic(20);

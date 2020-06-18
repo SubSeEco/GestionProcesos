@@ -133,11 +133,11 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-          public ActionResult Details(int id)
+        public ActionResult Details(int id)
         {
             var model = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == id);
             if (model == null)
-                return RedirectToAction("Details","Proceso", new { id });
+                return RedirectToAction("Details", "Proceso", new { id });
 
             return View(model);
         }
@@ -242,7 +242,7 @@ namespace App.Web.Controllers
                     URL = model.URL,
                     Observaciones = model.Comentario,
                     Autor = model.Autor,
-                });;
+                }); ;
 
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -291,7 +291,7 @@ namespace App.Web.Controllers
                 model.Firmante = UserExtended.Email(User);
 
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.FirmaDocumentoId, model.Firmante);
+                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.FirmaDocumentoId, new List<string> { model.Firmante });
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
