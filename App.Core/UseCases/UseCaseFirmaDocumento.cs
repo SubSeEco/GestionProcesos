@@ -4,6 +4,9 @@ using App.Model.FirmaDocumento;
 using App.Core.Interfaces;
 using App.Model.SIGPER;
 using System.Linq;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using App.Util;
 
 namespace App.Core.UseCases
 {
@@ -15,7 +18,6 @@ namespace App.Core.UseCases
         protected readonly IEmail _email;
         protected readonly IFolio _folio;
         protected readonly IFile _file;
-
         public UseCaseFirmaDocumento(IGestionProcesos repository)
         {
             _repository = repository;
@@ -50,7 +52,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage Edit(FirmaDocumento obj)
         {
             var response = new ResponseMessage();
@@ -63,62 +64,79 @@ namespace App.Core.UseCases
 
             if (response.IsValid)
             {
-                var ingreso = _repository.GetFirst<FirmaDocumento>(q => q.FirmaDocumentoId == obj.FirmaDocumentoId);
-                if (ingreso != null)
+                var firmaDocumento = _repository.GetFirst<FirmaDocumento>(q => q.FirmaDocumentoId == obj.FirmaDocumentoId);
+                if (firmaDocumento != null)
                 {
                     if (obj.DocumentoSinFirma != null)
-                        ingreso.DocumentoSinFirma = obj.DocumentoSinFirma;
+                        firmaDocumento.DocumentoSinFirma = obj.DocumentoSinFirma;
 
                     if (obj.DocumentoSinFirmaFilename != null)
-                        ingreso.DocumentoSinFirmaFilename = obj.DocumentoSinFirmaFilename;
+                        firmaDocumento.DocumentoSinFirmaFilename = obj.DocumentoSinFirmaFilename;
 
-                    ingreso.TipoDocumentoCodigo = obj.TipoDocumentoCodigo;
-                    ingreso.URL = obj.URL;
-                    ingreso.Observaciones = obj.Observaciones;
-                    ingreso.Firmado = false;
+                    firmaDocumento.TipoDocumentoCodigo = obj.TipoDocumentoCodigo;
+                    firmaDocumento.URL = obj.URL;
+                    firmaDocumento.Observaciones = obj.Observaciones;
+                    firmaDocumento.Firmado = false;
 
-                    _repository.Update(ingreso);
+                    _repository.Update(firmaDocumento);
                     _repository.Save();
                 }
             }
 
             return response;
         }
-
-        public ResponseMessage Sign(int id, string firmante)
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
         {
             var response = new ResponseMessage();
 
             if (id == 0)
                 response.Errors.Add("Documento a firmar no encontrado");
-            if (string.IsNullOrWhiteSpace(firmante))
-                response.Errors.Add("No se especificó el firmante");
-            if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-                response.Errors.Add("No se encontró rúbrica habilitada para el firmante");
-            var documento = _repository.GetById<FirmaDocumento>(id);
-            if (documento == null)
+            var firmaDocumento = _repository.GetById<FirmaDocumento>(id);
+            if (firmaDocumento == null)
                 response.Errors.Add("Documento a firmar no encontrado");
-            if (documento != null && documento.DocumentoSinFirma == null)
+            if (firmaDocumento != null && firmaDocumento.DocumentoSinFirma == null)
                 response.Errors.Add("Documento a firmar no encontrado");
+
+            var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.url_tramites_en_linea.ToString());
+            if (url_tramites_en_linea == null)
+                response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+            if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())
+                response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+
+            if (!emailsFirmantes.Any())
+                response.Errors.Add("Debe especificar al menos un firmante");
+            if (emailsFirmantes.Any())
+                foreach (var firmante in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
 
             if (!response.IsValid)
                 return response;
 
+            //listado de id de firmantes
+            var idsFirma = new List<string>();
+            foreach (var firmante in emailsFirmantes)
+            {
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                if (rubrica != null)
+                    idsFirma.Add(rubrica.IdentificadorFirma);
+            }
+
             //si el documento ya tiene folio no solicitarlo nuevamente
-            if (string.IsNullOrWhiteSpace(documento.Folio))
+            if (string.IsNullOrWhiteSpace(firmaDocumento.Folio))
             {
                 try
                 {
-                    var _folioResponse = _folio.GetFolio(firmante, documento.TipoDocumentoCodigo);
+                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo);
                     if (_folioResponse == null)
                         response.Errors.Add("Servicio de folio no entregó respuesta");
 
                     if (_folioResponse != null && _folioResponse.status == "ERROR")
                         response.Errors.Add(_folioResponse.error);
 
-                    documento.Folio = _folioResponse.folio;
+                    firmaDocumento.Folio = _folioResponse.folio;
 
-                    _repository.Update(documento);
+                    _repository.Update(firmaDocumento);
                     _repository.Save();
                 }
                 catch (Exception ex)
@@ -130,43 +148,46 @@ namespace App.Core.UseCases
             if (!response.IsValid)
                 return response;
 
-            try
-            {
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
-                var _hsmResponse = _hsm.Sign(documento.DocumentoSinFirma, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, documento.Folio, null);
+            //crear nuevo documento
+            var documento = new Documento() {
+                Proceso = firmaDocumento.Proceso,
+                Workflow = firmaDocumento.Workflow,
+                Fecha = DateTime.Now,
+                Email = firmaDocumento.Autor,
+                FileName = firmaDocumento.DocumentoConFirmaFilename,
+                Signed = false,
+                Type = "application/pdf",
+                TipoPrivacidadId = 1,
+                TipoDocumentoId = 6,
+                Folio = firmaDocumento.Folio
+            };
+            _repository.Create(documento);
+            _repository.Save();
 
-                documento.DocumentoConFirma = _hsmResponse;
-                documento.DocumentoConFirmaFilename = "FIRMADO - " + documento.DocumentoSinFirmaFilename;
-                documento.Firmante = firmante;
-                documento.Firmado = true;
-                documento.FechaFirma = DateTime.Now;
+            //generar código QR
+            var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
-                _repository.Update(documento);
-                _repository.Save();
+            //firmar documento
+            var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
 
-                _repository.Create<Documento>(new Documento()
-                {
-                    Proceso = documento.Proceso,
-                    Workflow = documento.Workflow,
-                    Fecha = DateTime.Now,
-                    Email = documento.Autor,
-                    FileName = documento.DocumentoConFirmaFilename,
-                    File = documento.DocumentoConFirma,
-                    Signed = true,
-                    Type = "application/pdf",
-                    TipoPrivacidadId = 1,
-                    TipoDocumentoId = 6
-                });
-                _repository.Save();
-            }
-            catch (Exception ex)
-            {
-                response.Errors.Add(ex.Message);
-            }
+            //actualizar firma documento
+            firmaDocumento.DocumentoConFirma = _hsmResponse;
+            firmaDocumento.DocumentoConFirmaFilename = "FIRMADO - " + firmaDocumento.DocumentoSinFirmaFilename;
+            firmaDocumento.Firmante = string.Join(", ", idsFirma);
+            firmaDocumento.Firmado = true;
+            firmaDocumento.FechaFirma = DateTime.Now;
+            _repository.Update(firmaDocumento);
+
+            //actualizar documento con contenido firmado
+            documento.File = _hsmResponse;
+            documento.Signed = true;
+            _repository.Update(firmaDocumento);
+
+            //guardar cambios
+            _repository.Save();
 
             return response;
         }
-
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
             var response = new ResponseMessage();

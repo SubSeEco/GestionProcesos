@@ -10,18 +10,6 @@ using App.Util;
 
 namespace App.Web.Controllers
 {
-    //public class DTOProceso
-    //{
-    //    public DTOProceso()
-    //    {
-
-    //    }
-    //    public int Id { get; set; }
-    //    public DateTime Inicio { get; set; }
-    //    public string Tipo { get; set; }
-    //    public string Estado { get; set; }
-    //    public string Tarea { get; set; }
-    //}
     public class DTOInformeHSA
     {
         public DTOInformeHSA()
@@ -316,11 +304,11 @@ namespace App.Web.Controllers
                 .Get<InformeHSA>(q => q.Proceso.DefinicionProcesoId == definicionProcesoId && q.Proceso.Email == persona.Funcionario.Rh_Mail.Trim())
                 .Select(q => new DTOInformeHSA
                 {
-                    InformHSAId = q.InformeHSAId,
+                    InformHSAId = q.Proceso.ProcesoId,
+                    Estado = q.Proceso.EstadoProceso.Descripcion,
                     FechaSolicitud = q.FechaSolicitud,
                     FechaDesde = q.FechaDesde,
                     FechaHasta = q.FechaHasta,
-                    Estado = q.Proceso.EstadoProceso.Descripcion,
                     NumeroBoleta = q.NumeroBoleta
                 }).ToList();
 
