@@ -154,7 +154,6 @@ namespace App.Core.UseCases
                 Workflow = firmaDocumento.Workflow,
                 Fecha = DateTime.Now,
                 Email = firmaDocumento.Autor,
-                FileName = firmaDocumento.DocumentoConFirmaFilename,
                 Signed = false,
                 Type = "application/pdf",
                 TipoPrivacidadId = 1,
@@ -172,14 +171,16 @@ namespace App.Core.UseCases
 
             //actualizar firma documento
             firmaDocumento.DocumentoConFirma = _hsmResponse;
-            firmaDocumento.DocumentoConFirmaFilename = "FIRMADO - " + firmaDocumento.DocumentoSinFirmaFilename;
+            firmaDocumento.DocumentoConFirmaFilename = firmaDocumento.DocumentoSinFirmaFilename;
             firmaDocumento.Firmante = string.Join(", ", idsFirma);
             firmaDocumento.Firmado = true;
             firmaDocumento.FechaFirma = DateTime.Now;
+            firmaDocumento.DocumentoId = documento.DocumentoId;
             _repository.Update(firmaDocumento);
 
             //actualizar documento con contenido firmado
             documento.File = _hsmResponse;
+            documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
             documento.Signed = true;
             _repository.Update(firmaDocumento);
 
@@ -410,6 +411,33 @@ namespace App.Core.UseCases
             catch (Exception ex)
             {
                 response.Errors.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public ResponseMessage FixFolio()
+        {
+            var response = new ResponseMessage();
+
+            var firmaDocumentos = _repository.GetAll<FirmaDocumento>();
+            foreach (var firmaDocumento in firmaDocumentos.ToList())
+            {
+                var documento = _repository.GetFirst<Documento>(q=>q.File == firmaDocumento.DocumentoConFirma);
+                if (documento != null)
+                {
+                    documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
+                    documento.Folio = firmaDocumento.Folio;
+                    _repository.Update<Documento>(documento);
+
+                    firmaDocumento.DocumentoId = documento.DocumentoId;
+                    _repository.Update<FirmaDocumento>(firmaDocumento);
+                }
+            }
+
+            if (response.IsValid)
+            {
+                _repository.Save();
             }
 
             return response;

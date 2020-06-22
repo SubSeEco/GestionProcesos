@@ -3,10 +3,6 @@ using System.Web.Mvc;
 using App.Core.Interfaces;
 using App.Util;
 using App.Model.Core;
-using jdk.nashorn.@internal.ir;
-using com.sun.tools.javac.util;
-using System.Collections.Generic;
-using App.Model.FirmaDocumento;
 
 namespace App.Web.Controllers
 {
