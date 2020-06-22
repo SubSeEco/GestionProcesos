@@ -29,6 +29,8 @@ namespace App.Web.Controllers
         public DateTime FechaEmision { get; set; }
         public bool OK { get; set; }
         public string Error { get; set; }
+        public string Autor { get; set; }
+        public string Folio { get; set; }
     }
 
 
@@ -401,7 +403,7 @@ namespace App.Web.Controllers
             if (id.IsInt())
                 documento = _repository.GetById<Documento>(id.ToInt());
             else
-                documento = _repository.GetFirst<Documento>(q=>q.Codigo == id);
+                documento = _repository.GetFirst<Documento>(q=>q.Folio == id);
 
             if (documento == null)
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no encontrado" }, JsonRequestBehavior.AllowGet);
@@ -421,7 +423,9 @@ namespace App.Web.Controllers
                 Id = documento.DocumentoId,
                 FechaEmision = documento.Fecha,
                 Nombre = documento.FileName,
-                Archivo = System.Text.Encoding.Default.GetString(documento.File)
+                Archivo = System.Text.Encoding.Default.GetString(documento.File),
+                Autor = documento.Email,
+                Folio = documento.Folio,
             };
 
             return Json(model , JsonRequestBehavior.AllowGet);

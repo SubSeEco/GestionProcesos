@@ -6,6 +6,7 @@ using App.Model.Core;
 using jdk.nashorn.@internal.ir;
 using com.sun.tools.javac.util;
 using System.Collections.Generic;
+using App.Model.FirmaDocumento;
 
 namespace App.Web.Controllers
 {
@@ -35,10 +36,6 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
-            //byte[] fileBytes = System.IO.File.ReadAllBytes(@"C://Users//admin//Downloads//test.pdf");
-            //var result = _hsm.Sign(fileBytes, new List<string> { "VICTOR MANUEL SILVA MUÑOZ", "CRISTIAN RODRIGUEZ VASQUEZ" }, "23424", "234543", "https://tramites.economia.gob.cl/");
-            //return File(result, System.Net.Mime.MediaTypeNames.Application.Octet, "test_modificado.pdf");
-
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {
