@@ -9,6 +9,7 @@ using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace App.Core.UseCases
 {
@@ -1767,9 +1768,36 @@ namespace App.Core.UseCases
                     {
                         if (destinos.FechaInicio.Date == obj.FechaInicio.Date)
                         {
-                            if (destinos.Dias40 > 0 && destinos.Dias100 == 0 && destinos.Dias60 == 0)
+
+                            if(destinos.DestinoId != obj.DestinoId)
                             {
-                                if (obj.Dias100 > 0 || obj.Dias40 > 0)
+                                if (destinos.Dias40 > 0 && destinos.Dias100 == 0 && destinos.Dias60 == 0)
+                                {
+                                    if (obj.Dias100 > 0 || obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
+                                        obj.Dias100 = 0;
+                                        obj.Dias60 = 0;
+                                        obj.Dias40 = 0;
+                                        obj.Total = 0;
+                                        obj.TotalViatico = 0;
+                                    }
+                                }
+
+                                if (destinos.Dias40 == 0 && destinos.Dias100 == 0 && destinos.Dias60 > 0)
+                                {
+                                    if (obj.Dias100 > 0 || obj.Dias60 > 0)
+                                    {
+                                        response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
+                                        obj.Dias100 = 0;
+                                        obj.Dias60 = 0;
+                                        obj.Dias40 = 0;
+                                        obj.Total = 0;
+                                        obj.TotalViatico = 0;
+                                    }
+                                }
+
+                                if (destinos.Dias40 == 0 && destinos.Dias100 > 0 && destinos.Dias60 == 0)
                                 {
                                     response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
                                     obj.Dias100 = 0;
@@ -1778,42 +1806,19 @@ namespace App.Core.UseCases
                                     obj.Total = 0;
                                     obj.TotalViatico = 0;
                                 }
+
+
+                                ////response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
+                                //if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
+                                //{
+                                //    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
+                                //    obj.Dias100 = 0;
+                                //    obj.Dias60 = 0;
+                                //    obj.Dias40 = 0;
+                                //    obj.Total = 0;
+                                //    obj.TotalViatico = 0;
+                                //}
                             }
-
-                            if (destinos.Dias40 == 0 && destinos.Dias100 == 0 && destinos.Dias60 > 0)
-                            {
-                                if (obj.Dias100 > 0 || obj.Dias60 > 0)
-                                {
-                                    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                                    obj.Dias100 = 0;
-                                    obj.Dias60 = 0;
-                                    obj.Dias40 = 0;
-                                    obj.Total = 0;
-                                    obj.TotalViatico = 0;
-                                }
-                            }
-
-                            if (destinos.Dias40 == 0 && destinos.Dias100 > 0 && destinos.Dias60 == 0)
-                            {
-                                response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                                obj.Dias100 = 0;
-                                obj.Dias60 = 0;
-                                obj.Dias40 = 0;
-                                obj.Total = 0;
-                                obj.TotalViatico = 0;
-                            }
-
-
-                            ////response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
-                            //if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
-                            //{
-                            //    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                            //    obj.Dias100 = 0;
-                            //    obj.Dias60 = 0;
-                            //    obj.Dias40 = 0;
-                            //    obj.Total = 0;
-                            //    obj.TotalViatico = 0;
-                            //}
                         }
                     }
                 }
@@ -1953,25 +1958,23 @@ namespace App.Core.UseCases
                 if (objController.EditGP == true)
                 {
                     if (dias != cant)
-                    {
-                        //response.Errors.Add("la cantidad de dias no coincide con los viaticos solicitados");
-                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
-                    }
+                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");                    
                 }
                 else
                 {
                     if (dias != cant2)
                     {
-                        //response.Errors.Add("la cantidad de dias no coincide con los viaticos solicitados");
-                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
-                    }
+                        if(objController.FechaInicio.Hour < 17)
+                        {
+                            response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
+                        }
+                    }                        
                 }
 
                 /*se valida que la fecha de inicio no se superior que la de termino*/
                 if (objController.FechaHasta < objController.FechaInicio)
-                {
                     response.Errors.Add("La fecha de inicio no puede ser superior o igual a la de término");
-                }
+                
 
                 /*Se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
                 if (obj.Dias100 > 0)
@@ -1988,13 +1991,10 @@ namespace App.Core.UseCases
                         if (solicitanteDestino == solicitante)
                         {
                             if (destinos.FechaInicio.Month == mes && destinos.Dias100 != 0 && destinos.Dias100 != null)
-                            {
                                 Totaldias100Mes += destinos.Dias100.Value;
-                            }
+                            
                             if (destinos.FechaInicio.Year == year && destinos.Dias100 != 0 && destinos.Dias100 != null)
-                            {
-                                Totaldias100Ano += destinos.Dias100.Value;
-                            }
+                                Totaldias100Ano += destinos.Dias100.Value;                            
                         }
                     }
                     if (Totaldias100Mes + obj.Dias100 > 10)
@@ -2008,9 +2008,8 @@ namespace App.Core.UseCases
                         response.Warnings.Add("Se ha excedido en: " + (Totaldias100Mes + obj.Dias100.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
                     }
                     if (Totaldias100Ano + obj.Dias100 > 90)
-                    {
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
-                    }
+                    
                 }
 
                 /*	Cualquier cometido con duración menor a 4 horas no se le asigna viático*/
@@ -2054,9 +2053,8 @@ namespace App.Core.UseCases
                     obj.ComunaDescripcion = comuna;
                 }
                 else
-                {
                     response.Errors.Add("Se debe señalar la comuna de destino");
-                }
+                
 
                 if (objController.IdRegion != null)
                 {
@@ -2064,9 +2062,8 @@ namespace App.Core.UseCases
                     obj.RegionDescripcion = region;
                 }
                 else
-                {
                     response.Errors.Add("Se debe señalar la region de destino");
-                }
+                
 
                 //if (com.ReqPasajeAereo == true)
                 //{
@@ -2342,12 +2339,23 @@ namespace App.Core.UseCases
                 /*Se valida que la cantidad de dias solicitados correspondan con los viaticos*/
                 if (adyacente == false)
                 {
-                    var dias1 = (obj.FechaHasta - obj.FechaInicio).Days + 1;
-                    var cant1 = obj.Dias100 + obj.Dias60 + obj.Dias40 + obj.Dias50 + obj.Dias00;
-                    if (dias1 != cant1)
+                    var diasAdyacencia = (objController.FechaHasta - objController.FechaInicio).Days + 1;
+                    var cantAdyacencia = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
+                    var cant2Adyacencia = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
+                    if (objController.EditGP == true)
                     {
-                        //response.Errors.Add("la cantidad de dias no coincide con los viaticos solicitados");
-                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias1 + " en total");
+                        if (diasAdyacencia != cantAdyacencia)
+                            response.Errors.Add("La cantidad de días solicitados debe(n) ser " + diasAdyacencia + " en total");                        
+                    }
+                    else
+                    {
+                        if (diasAdyacencia != cant2Adyacencia)
+                        {
+                            if (objController.FechaInicio.Hour < 17)
+                            {
+                                response.Errors.Add("La cantidad de días solicitados debe(n) ser " + diasAdyacencia + " en total");
+                            }
+                        }
                     }
                 }
 
@@ -2400,20 +2408,8 @@ namespace App.Core.UseCases
                                         obj.Total = 0;
                                         obj.TotalViatico = 0;
                                     }
-
-
-
-                                //    if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
-                                //{
-                                //    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                                //    obj.Dias100 = 0;
-                                //    obj.Dias60 = 0;
-                                //    obj.Dias40 = 0;
-                                //    obj.Total = 0;
-                                //    obj.TotalViatico = 0;
-                                //}
+                                }                                
                             }
-                        }
                         }
                     }
 
