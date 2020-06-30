@@ -309,10 +309,12 @@
                                                     @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
                                                 </td>
                                                 <td>
-                                                    @Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
+                                                    @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
                                                 </td>
                                                 <td>
-                                                    @Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
+                                                    @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
                                                 </td>
                                             </tr>
                                         }
