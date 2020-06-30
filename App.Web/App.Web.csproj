@@ -259,7 +259,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\InformeHSA.xlsx" />
+    <Content Include="App_Data\HSA.xlsx" />
     <Content Include="App_Data\PROCESOS.xlsx" />
     <Content Include="Content\images\FirmaGato.png" />
     <Content Include="Content\images\icon-borrar.png" />

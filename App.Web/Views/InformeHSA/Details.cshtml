@@ -14,11 +14,11 @@
                     <div class="row">
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.FechaDesde)</strong><br />
-                            @Html.DisplayFor(m => Model.FechaDesde)
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde)
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.FechaHasta)</strong><br />
-                            @Html.DisplayFor(m => Model.FechaHasta)
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong><br />
@@ -63,7 +63,7 @@
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.FechaBoleta)</strong><br />
-                            @Html.DisplayFor(m => Model.FechaBoleta)
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaBoleta)
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.NumeroBoleta)</strong><br />

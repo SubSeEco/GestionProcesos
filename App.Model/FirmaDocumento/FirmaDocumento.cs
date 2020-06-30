@@ -92,7 +92,6 @@ namespace App.Model.FirmaDocumento
         [Display(Name = "URL gestión documental")]
         [DataType(DataType.Url)]
         public string URL { get; set; }
-
-
+        public int? DocumentoId { get; set; }
     }
 }

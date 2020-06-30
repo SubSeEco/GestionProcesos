@@ -7,6 +7,8 @@ using Rotativa.MVC;
 using App.Core.UseCases;
 using System.Linq;
 using App.Util;
+using System.IO;
+using OfficeOpenXml;
 
 namespace App.Web.Controllers
 {
@@ -313,6 +315,34 @@ namespace App.Web.Controllers
                 }).ToList();
 
             return Json(new { ok = true, error = "", DTOInformeHSA}, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileResult Report()
+        {
+            var result = _repository.Get<InformeHSA>(q => !q.Proceso.Anulada).Select(hsa => new {
+                hsa.InformeHSAId,
+                hsa.ProcesoId,
+                hsa.FechaSolicitud,
+                hsa.FechaDesde,
+                hsa.FechaHasta,
+                hsa.RUT,
+                hsa.Nombre,
+                hsa.Unidad,
+                hsa.NombreJefatura,
+                hsa.ConJornada,
+                hsa.Funciones,
+                hsa.Actividades,
+                hsa.Observaciones,
+                hsa.FechaBoleta,
+                hsa.NumeroBoleta,
+                hsa.Proceso.Terminada
+            });
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
+            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
+
+            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
     }
 }
