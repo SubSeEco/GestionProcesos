@@ -403,12 +403,12 @@ namespace App.Web.Controllers
         public ActionResult EditGP(Destinos model)
         {
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
-            
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
 
-            //var model = _repository.GetById<Destinos>(id);
-            //model.IdRegion = model.IdRegion;
-            //model.IdComuna = model.IdComuna;
+
+            var modelOld = _repository.GetById<Destinos>(model.DestinoId);
+            model.IdRegion = modelOld.IdRegion;
+            model.IdComuna = modelOld.IdComuna;
             model.FechaInicio = model.FechaInicio;
             model.FechaHasta = model.FechaHasta;
             if (ModelState.IsValid)

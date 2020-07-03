@@ -1712,8 +1712,10 @@ namespace App.Core.UseCases
                     var cant = obj.Dias100 + obj.Dias60 + obj.Dias40 + obj.Dias50 + obj.Dias00;
                     if (dias != cant)
                     {
-                        //response.Errors.Add("la cantidad de dias no coincide con los viaticos solicitados");
-                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
+                        if (obj.FechaInicio.Hour < 17)
+                        {
+                            response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
+                        }
                     }
                 }
 
