@@ -59,7 +59,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Funciones))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Funciones.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Funciones.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
@@ -67,7 +67,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Actividades))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Actividades.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Actividades.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
@@ -75,7 +75,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Observaciones.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Observaciones.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
