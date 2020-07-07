@@ -52,15 +52,14 @@ namespace App.Model.Core
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
 
-        [Display(Name = "Funcionario")]
+        [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
-        [Display(Name = "Observaciones")]
+        [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
-        //[RequiredIf("TipoAprobacionId != 2", ErrorMessage = "Se debe señalar el motivo del rechazo para la tarea")]
         [RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Se debe señalar el motivo del rechazo para la tarea")]
         public string Observacion { get; set; }
 
@@ -89,7 +88,6 @@ namespace App.Model.Core
         [Display(Name = "Certificado electrónico")]
         public string SerialNumber { get; set; }
 
-        [NotMapped]
         [Display(Name = "Nombre Funcionario")]
         public string NombreFuncionario { get; set; }
 

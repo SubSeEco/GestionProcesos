@@ -18,7 +18,7 @@
                 <strong>Proceso de origen:</strong> @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
                 <strong>Tarea de origen:</strong> @item.Workflow.DefinicionWorkflow.Nombre
             </p>
-            if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf"))
+            if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf") &&item.File != null )
             {
                 <br />
                 <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
@@ -34,14 +34,3 @@
         @Html.Action("Create", "Documento", new { Model.ProcesoId, Model.WorkflowId })
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.modal').modal();
-    });
-</script>
-
-@*<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@

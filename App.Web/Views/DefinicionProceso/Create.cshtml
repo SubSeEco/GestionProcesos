@@ -3,13 +3,15 @@
     ViewBag.Title = "Crear definición de proceso";
     ViewBag.SubTitle = "Crear definición de proceso";
 }
-<div class="grey lighten-3">
-    <div class="section container ">
+<div class="grey lighten-3 section">
+    <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
         <h5 class="header light">@ViewBag.SubTitle</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
+<div class="section"></div>
+
 <div class="container">
     @Html.Partial("_Message")
     @using (Html.BeginForm())
@@ -56,12 +58,12 @@
         <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
     </div>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('input:hidden').each(function (index, element) {
-                $(element).appendTo($(element).parent());
-            });
-            $('select').formSelect();
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
         });
-    </script>
+        $('select').formSelect();
+
+    });
+</script>

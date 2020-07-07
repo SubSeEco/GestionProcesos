@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de procesos</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script type="text/javascript" src="~/Scripts/jquery-3.5.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script type="text/javascript" src="~/Scripts/jquery-3.5.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -16,28 +16,40 @@
     <style>
         nav {
             box-shadow: none;
-        } 
+        }
+
+        .nav-wrapper > ul {
+            margin-left: 140px;
+        }
     </style>
 
-    <div class="navbar-fixed valign-wrapper">
-        <nav class="white">
-            <div class="nav-wrapper container">
-                <a href="/" class="left brand-logo black-text"><img src="~/Content/logo.png" width="90%"></a>
 
+    <div class="navbar-fixed valign-wrapper">
+        <nav class="white ">
+            <div class="nav-wrapper container">
+                <a href="/" class="left brand-logo black-text hide-on-med-and-down"><img class="responsive-img" src="~/Content/logo.png"></a>
+
+                <ul>
+                    <li><a href="/" class="left brand-logo black-text tooltipped" data-tooltip="Ir al inicio" data-position="right"><i class="material-icons left black-text">home</i>Inicio</a></li>
+                </ul>
                 <ul class="right">
                     @if (Request.IsAuthenticated)
                     {
-                        <li class="black-text hide-on-small-and-down">@User.Identity.Name</li>
-                        <li><a href="@Url.Action("Logoff", "Account")" class="waves-effect waves-light blue-text">Cerrar Sesion</a> </li>
+                        <li><a class="black-text hide-on-small-and-down"><i class="material-icons left black-text">person_pin</i>@User.Identity.Name</a></li>
+                        <li><a href="@Url.Action("Logoff", "Account")" class="waves-effect waves-light blue-text tooltipped" data-tooltip="Cerrar sesión y salir del sistema" data-position="right">Cerrar Sesion</a> </li>
                     }
                 </ul>
             </div>
         </nav>
     </div>
-
     @RenderBody()
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('.modal').modal();
+            $('.tooltipped').tooltip();
+        });
+
         $(document).on('submit', 'form', function () {
             var buttons = $(this).find('[type="submit"]');
             buttons.each(function (btn) {

@@ -226,7 +226,8 @@ namespace App.Infrastructure.SIGPER
                 Funcionario = null,
                 Jefatura = null,
                 Secretaria = null,
-                Unidad = null
+                Unidad = null,
+                FunDatosLaborales = null
             };
 
             try
@@ -254,6 +255,7 @@ namespace App.Infrastructure.SIGPER
                         var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
+                            sigper.FunDatosLaborales = PeDatLab;
 
                             //unidad del funcionario
                             var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);
@@ -295,6 +297,7 @@ namespace App.Infrastructure.SIGPER
                         var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
+                            sigper.FunDatosLaborales = PeDatLab;
 
                             //unidad del funcionario
                             var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);

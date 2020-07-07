@@ -4,13 +4,15 @@
     ViewBag.Title = "Editar grupo";
     ViewBag.SubTitle = "Editar grupo";
 }
-<div class="grey lighten-3">
-    <div class="section container ">
+<div class="grey lighten-3 section">
+    <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
         <h5 class="header light">@ViewBag.SubTitle</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
+<div class="section"></div>
+
 <div class="container">
     @using (Html.BeginForm())
     {
@@ -36,4 +38,4 @@
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>
 @*<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@

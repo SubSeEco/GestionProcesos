@@ -280,10 +280,10 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<DestinosPasajes>(id);
             var pasaje = _repository.GetById<Pasaje>(model.PasajeId);
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
-            ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
+            ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
             model.Pasaje.TipoDestino = pasaje.TipoDestino;
 
             return View(model);
@@ -375,10 +375,10 @@ namespace App.Web.Controllers
             var model = _repository.GetById<DestinosPasajes>(id);
             var pasaje = _repository.GetById<Pasaje>(model.PasajeId);
 
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
-            ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
+            ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
             model.Pasaje.TipoDestino = pasaje.TipoDestino;
 
             return View(model);
@@ -404,8 +404,10 @@ namespace App.Web.Controllers
             foreach (var item in _UseCaseResponseMessage.Errors)
             {
                 ModelState.AddModelError(string.Empty, item);
-                ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
-                ViewBag.IdCiudad = new SelectList(_repository.Get<Ciudad>(), "CiudadId", "CiudadNombre");
+                ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+                ViewBag.IdPais = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
+                ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+                ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre".Trim());
             }
             return View(model);
         }

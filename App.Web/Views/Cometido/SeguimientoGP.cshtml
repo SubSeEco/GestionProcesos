@@ -1,156 +1,175 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
 
-    <h3>Reporte Seguimiento Gestión de Personas</h3>
-
-<div class="row">
-    <div class="col s12 m12 l3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Filtros</span>
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="row">
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => Model.Estado, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Estado)
-                            @Html.ValidationMessageFor(m => Model.Estado, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.NombreId)
-                            @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.IdUnidad)
-                            @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => Model.Destino, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Destino)
-                            @Html.ValidationMessageFor(m => Model.Destino, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaInicio)
-                            @Html.LabelFor(m => Model.FechaInicio)
-                            @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaTermino)
-                            @Html.LabelFor(m => Model.FechaTermino)
-                            @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
-                    @Html.ActionLink("Descargar Excel", "DownloadGP", "Cometido")
-                }
-            </div>
+<div class="grey lighten-3">
+    <div class="container">
+        <div class="section">
+            <h3 class="header">Reporte Seguimiento Gestión de Personas</h3>            
+            <br />
         </div>
     </div>
-    <div class="col s12 m12 l12">
-        <div class="card">
-            <div class="card-content">
-                @* <span class="card-title">Cometidos</span>*@
-                <table class="table bordered">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Estado)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ID)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().DestinoId)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().FechaInicio)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.LastOrDefault().FechaHasta)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Ejecutor)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FechaInicio)
-                        </th>
-                        <th>
-                        </th>
-                    </tr>
-
-                    @foreach (var item in Model.Result.OrderByDescending(c => c.CometidoId))
-                    {
-                        <tr>
-                            <td>
-                                @if(Model.Estado == 3)
-                                {
-                                    @Html.Raw("<span>Terminado</span>")
-                                }
-                                @if(Model.Estado == 2)
-                                {
-                                    @Html.Raw("<span>Anulado</span>")
-                                }
-                                @if(Model.Estado == 1)
-                                {
-                                    @Html.Raw("<span>En proceso</span>")
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Subscretaria)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CometidoId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Nombre)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnidadDescripcion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().RegionDescripcion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().FechaInicio)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Destinos.LastOrDefault().FechaHasta)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().FechaCreacion)
-                            </td>
-                            @*<td>
-                    @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })
-                </td>*@
-                        </tr>
-                    }
-                </table>
-            </div>
-        </div>
-    </div>
-
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <span class="card-title">Filtros</span>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        @Html.DropDownListFor(m => Model.Estado, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.Estado)
+                        @Html.ValidationMessageFor(m => Model.Estado, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.NombreId)
+                        @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.IdUnidad)
+                        @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        @Html.DropDownListFor(m => Model.Destino, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.Destino)
+                        @Html.ValidationMessageFor(m => Model.Destino, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        @Html.EditorFor(m => Model.FechaInicio)
+                        @Html.LabelFor(m => Model.FechaInicio)
+                        @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        @Html.EditorFor(m => Model.FechaTermino)
+                        @Html.LabelFor(m => Model.FechaTermino)
+                        @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                @Html.ActionLink("Descargar Excel", "DownloadGP", "Cometido")
+            }
+        </div>
+
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-content">
+                    @* <span class="card-title">Cometidos</span>*@
+                    <table class="table bordered">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
+                            </th>
+                            <th>
+                                @*@Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().DestinoId)*@
+                                @Html.Raw("<span>Destino</span>")
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.FirstOrDefault().FechaInicio)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Destinos.LastOrDefault().FechaHasta)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Ejecutor)
+                            </th>
+                            <th>
+                                @*@Html.DisplayNameFor(model => model.FechaInicio)*@
+                                @Html.Raw("<span>Fecha Asignacion</span>")
+                            </th>
+                            <th>
+                                @Html.Raw("<span>Etapa</span>")
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+
+                        @foreach (var item in Model.Result.OrderByDescending(c => c.CometidoId))
+                        {
+                    <tr>
+                        <td>
+                            @if (item.Proceso.Anulada == true)
+                            {
+                                @Html.Raw("<span>Anulado</span>")
+                            }
+                            @if (item.Proceso.Terminada == true)
+                            {
+                                @Html.Raw("<span>Terminado</span>")
+                            }
+                            @if (item.Proceso.Terminada == false && item.Proceso.Anulada == false)
+                            {
+                                @Html.Raw("<span>En Curso</span>")
+                            }
+                        </td>
+                        <td>
+                            @if (item.UnidadDescripcion.Contains("Turismo"))
+                            {
+                                <p>SUBSECRETARIA DE TURISMO</p>
+                            }
+                            else
+                            {
+                                <p>SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CometidoId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnidadDescripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().RegionDescripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaSolicitud).ToHtmlString().Remove(10)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Destinos.FirstOrDefault().FechaInicio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Destinos.LastOrDefault().FechaHasta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().FechaCreacion).ToHtmlString().Remove(10)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().DefinicionWorkflow.Nombre)
+                        </td>
+                        @*<td>
+            @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })
+        </td>*@
+                    </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>

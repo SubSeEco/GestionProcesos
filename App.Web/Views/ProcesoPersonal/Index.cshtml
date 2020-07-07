@@ -5,13 +5,14 @@
     ViewBag.SubTitle = "Administrar procesos";
 }
 
-<div class="grey lighten-3">
-    <div class="section container ">
+<div class="grey lighten-3 section">
+    <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
         <h5 class="header light">@ViewBag.SubTitle</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
+<div class="section"></div>
 <div class="container">
     @Html.Partial("_Message")
     <div class="card">
@@ -46,6 +47,7 @@
 
                     </div>
                     <div class="col s12 m6 l6">
+                        @Html.LabelFor(m => Model.Select)<br /><br />
                         @Html.EditorFor(q => q.Select)
                     </div>
                 </div>
@@ -107,7 +109,7 @@
                                 @Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)
                                 @if (!item.Terminada && !item.Anulada)
                                 {
-                                   <text>|</text> @Html.ActionLink("Anular", "Delete", new { id = item.ProcesoId }, null)
+                                    <text>|</text> @Html.ActionLink("Anular", "Delete", new { id = item.ProcesoId }, null)
                                 }
                             </td>
                         </tr>

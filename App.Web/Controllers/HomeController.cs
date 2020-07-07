@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
+using App.Util;
 using App.Model.Core;
 
 namespace App.Web.Controllers
@@ -12,6 +12,7 @@ namespace App.Web.Controllers
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
+        protected readonly IHSM _hsm;
 
         public class DTOUser
         {
@@ -22,10 +23,11 @@ namespace App.Web.Controllers
             public int Task { get; set; } = 0;
         }
 
-        public HomeController(IGestionProcesos repository, ISIGPER sigper)
+        public HomeController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm)
         {
             _sigper = sigper;
             _repository = repository;
+            _hsm = hsm;
         }
 
         public ActionResult Index()
@@ -69,7 +71,8 @@ namespace App.Web.Controllers
         public PartialViewResult Menu()
         {
             var email = UserExtended.Email(User);
-            var model = new DTOUser() {
+            var model = new DTOUser()
+            {
                 IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())),
                 IsConsultor = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Consultor.ToString()))
             };

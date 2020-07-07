@@ -84,5 +84,11 @@ namespace App.Model.Core
 
         [Display(Name = "Hash md5")]
         public string Md5 { get; set; }
+
+        [Display(Name = "Folio")]
+        public string Folio { get; set; }
+
+        [Display(Name = "Tipo documento firma")]
+        public string TipoDocumentoFirma { get; set; }
     }
 }

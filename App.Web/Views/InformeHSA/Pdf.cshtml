@@ -15,16 +15,16 @@
         <div class="left">
             .<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
         </div>
-        <div class="right">
+        @*<div class="right">
             <img src="data:image;base64,@System.Convert.ToBase64String(Model.QR)" width="170px" />
-        </div>
+        </div>*@
     </div>
     <center>
         <p class="flow-text">
             <h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br />PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>
         </p>
         <p class="flow-text">
-            Desde el @Html.DisplayFor(m => Model.FechaDesde) y el @Html.DisplayFor(m => Model.FechaHasta)
+            Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)
         </p>
     </center>
 
@@ -59,7 +59,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Funciones))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Funciones.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Funciones.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
@@ -67,7 +67,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Actividades))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Actividades.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Actividades.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
@@ -75,7 +75,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
     {
         <p class="flow-text">
-            @Html.Raw(Model.Observaciones.Replace(Environment.NewLine, "<br/>"))
+            @Html.Raw(Model.Observaciones.Trim().Replace(Environment.NewLine, "<br/>"))
         </p>
     }
 
@@ -89,22 +89,26 @@
             </tr>
             <tr>
                 <td width="250"><b>@Html.DisplayNameFor(m => Model.FechaBoleta)</b></td>
-                <td> @Html.DisplayFor(m => Model.FechaBoleta)</td>
+                <td> @string.Format("{0:dd-MM-yyyy}", Model.FechaBoleta)</td>
             </tr>
         </tbody>
     </table>
 
     <div class="section"></div>
-    <center>
+    <div class="section"></div>
+    <div class="section"></div>
+    @*<center>
         <img src="~/Content/LogoPieFirma.png" width="220px" />
-    </center>
+    </center>*@
     <center>
         <p class="flow-text">
-            <b>@Model.Nombre</b>
+            <b>
+                @Model.Nombre<br />
+                        @Model.Unidad
+                    </b>
         </p>
     </center>
-    <div class="section"></div>
-    <p class="flow-text center">Se certifica el cumplimiento de las funciones encomendadas y se aprueba el presente Informe, autorizándose el pago correspondiente.</p>
-
+    @*<div class="section"></div>*@
+    <p class="flow-text center grey-text text-darken-2">Se certifica el cumplimiento de las funciones encomendadas y se aprueba el presente Informe, autorizándose el pago correspondiente.</p>
 </body>
 </html>

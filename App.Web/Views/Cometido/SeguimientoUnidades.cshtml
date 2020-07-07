@@ -1,10 +1,16 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
-
-<h3>Reporte seguimiento Unidades</h3>
+    <div class="grey lighten-3">
+        <div class="container">
+            <div class="section">
+                <h3 class="header">Reporte seguimiento Unidades</h3>
+                <br />
+            </div>
+        </div>
+    </div>
 
 <div class="container">
     <div class="row">
-        <div class="col s12 m12 l3">
+     
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Filtros</span>
@@ -45,7 +51,7 @@
                     }
                 </div>
             </div>
-        </div>
+       
         <div class="col s12 m12 l12">
             <div class="card">
                 <div class="card-content">
@@ -69,7 +75,7 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.Ejecutor)
                                         </th>
-                                        <th style="width:100px">
+                                        <th>
                                             @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
                                         </th>
                                         <th>
@@ -81,12 +87,15 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.DiasDiferencia)
                                         </th>
+                                        <th>
+                                            @Html.Raw("<span>Etapa</span>")
+                                        </th>
                                     </tr>
                                 </table>
                             </th>
                         </tr>
 
-                        @foreach (var item in Model.Result)
+                        @foreach (var item in Model.Result.OrderByDescending(c => c.CometidoId))
                         {
                             <tr>
                                 <td>
@@ -115,11 +124,11 @@
                                     {
                                         <table>
                                             <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => t.Email)
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.Email).ToString().Trim()
                                                 </td>
-                                                <td style="text-align:justify">
-                                                    @Html.DisplayFor(modelItem => t.Pl_UndDes)
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.Pl_UndDes).ToString().Trim()
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => t.FechaCreacion).ToHtmlString().Remove(10)
@@ -135,16 +144,19 @@
                                                         int dif = 0;
                                                         if (t.FechaTermino.HasValue)
                                                         {
-                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days +1;
                                                         }
                                                         else
                                                         {
                                                             t.FechaTermino = DateTime.Now;
-                                                            dif = (t.FechaTermino.Value.Day - t.FechaCreacion.Day);
+                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days + 1;
                                                         }
 
                                                         <p>@dif</p>
                                                     }
+                                                </td>
+                                                <td style="text-align:left;width:50px">
+                                                    @Html.DisplayFor(modelItem => t.DefinicionWorkflow.Nombre)
                                                 </td>
                                             </tr>
                                         </table>

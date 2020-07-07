@@ -36,11 +36,11 @@
                 @Html.HiddenFor(q => Model.Alimentacion)
                 @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
-            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
+                @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
-                @Html.HiddenFor(q => Model.TipoVehiculoId)
-                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)
-                @Html.HiddenFor(q => Model.PlacaVehiculo)
+                @*@Html.HiddenFor(q => Model.TipoVehiculoId)
+                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
+                @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
                 @Html.HiddenFor(q => Model.Jefatura)
 
@@ -147,8 +147,8 @@
                                     <div class="input-field col s12 m8 l12">
                                         <label>Marque las opciones que SI financia el organismo invitante</label>
                                         @*<label style="color:green">
-                                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                                    </label>*@
+                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                    </label>*@
                                     </div>
                                     <div class="input-field col s12 m8 l13">
                                         <label>
@@ -209,17 +209,18 @@
                                     </label>
                                     <div class="section"></div>
                                 </div>
-                                <div class="input-field col s12 m6 l10">
-                                    @Html.LabelFor(m => Model.TipoVehiculoId)
-                                    @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
-                                    @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                <div id="auto">
+                                    <div class="input-field col s12 m6 l10">
+                                        @Html.LabelFor(m => Model.TipoVehiculoId)
+                                        @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                        @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.LabelFor(m => Model.PlacaVehiculo)
+                                        @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                        @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                    </div>
                                 </div>
-                                <div class="input-field col s12 m2 l10">
-                                    @Html.LabelFor(m => Model.PlacaVehiculo)
-                                    @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                    @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
-                                </div>
-
                             </div>
                             @*<div class="section"></div>*@
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
@@ -308,23 +309,27 @@
                                                     @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
                                                 </td>
                                                 <td>
-                                                    @Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
+                                                    @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
                                                 </td>
                                                 <td>
-                                                    @Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)
+                                                    @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
                                                 </td>
                                             </tr>
                                         }
                                     </table>
 
                                 }
-                                @Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)
+                                <div class="section"></div>
+                                @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
+                                <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
 
                             <!--se agregan datos de pasajes si se solicitan-->
                             @if (Model.ReqPasajeAereo == true)
                             {
-                                <h3><span style="font-weight: bold">IV. Datos del Pasaje: </span></h3>
+                                <h3><span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span></h3>
                                 <div class="row">
                                     @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
 
@@ -355,18 +360,23 @@
                                                             @destinopasaje.ObservacionesDestinos
                                                         </td>
                                                         <td>@destinopasaje.FechaVuelta</td>
+                                                        <td>
+                                                            <a href='@Url.Action("Edit", "Pasaje", new { id = destinopasaje.PasajeId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        </td>
                                                     </tr>
                                                 }
                                             </tbody>
                                         </table>
                                     }
+
+
                                 </div>
                             }
 
                         </div>
                         <div class="section"></div>
                         <p>
-                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                            <button class="waves-effect waves-light btn blue" onclick="Pasaje()" type="submit">Guardar</button>
                         </p>
                     </div>
                 </div>
@@ -389,8 +399,29 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            //datepicker: false,
+            //format: 'H:i',
+            timepicker: false,
+            format: 'd-m-Y',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            //formatDate: 'd-m-Y',
+            //minDate: 0
+        });
+
         $("#PlacaVehiculo").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);
+        $('#auto').hide(100);
         $('#Financia').hide(100);
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
@@ -426,6 +457,10 @@
         $('input:checkbox[name="Pasajes"]').change(function () {
             Bloqueo();
         });
+
+        //$('input:checkbox[name="IdRegionOrigen"]').change(function () {
+        //    Pasaje();
+        //});
 
         function Bloqueo() {
             if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
@@ -477,15 +512,17 @@
             $("#Vehiculo").attr('disabled', false);
         }
 
-        //Habilita tipo vehiculo
-        if (document.getElementById("Vehiculo").checked == true) {
-            $("#TipoVehiculoId").attr('disabled', false);
-            $("#PlacaVehiculo").attr('disabled', false);
-        }
-        else {
-            $("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
-        }
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+            }
+        });
     });
 
     /*funcion que bloquea pasajes*/
@@ -500,23 +537,49 @@
         }
     });
 
-    //Habilita tipo vehiculo
+    /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
-        if (document.getElementById("Vehiculo").checked == true) {
-            $("#TipoVehiculoId").attr('disabled', false);
-            $("#PlacaVehiculo").attr('disabled', false);
+        if (document.getElementById("Vehiculo").checked == false) {
+            $('#auto').hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
         }
         else {
-            $("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
+            $("#PlacaVehiculo").attr('disabled', false);
+            $('#auto').show();
         }
     });
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
+            collapsible: true, heightStyle: "auto"
         });
     });
+
+    /*Validacion de ingreso de los pasajes, si es q se solicitan*/
+    function Pasaje() {
+        if (document.getElementById("ReqPasajeAereo").checked == true) {
+            IdRegion = document.getElementById("IdRegion").value;
+            if (IdRegion == null || IdRegion == 0) {
+                alert("Se debe señalar la region de destino");
+                return false;
+            }
+            IdRegionOrigen = document.getElementById("IdRegionOrigen").value;
+            if (IdRegionOrigen == null || IdRegionOrigen == 0) {
+                alert("Se debe señalar la region de origen");
+                return false;
+            }            
+            FechaOrigen = document.getElementById("FechaOrigen").value;
+            if (FechaOrigen == null || FechaOrigen.length == 0 || FechaOrigen == "01-01-0001 0:00:00") {
+                alert("Se debe ingresar la fecha de origen para los pasajes");
+                return false;
+            }
+            FechaVuelta = document.getElementById("FechaVuelta").value;
+            if (FechaVuelta == null || FechaVuelta.length == 0 || FechaVuelta == "01-01-0001 0:00:00") {
+                alert("Se debe ingresar la fecha de vuelta para los pasajes");
+                return false;
+            }
+        }
+    }
 
 </script>
 

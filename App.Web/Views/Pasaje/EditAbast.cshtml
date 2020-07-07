@@ -78,7 +78,7 @@
                                 </div>
 
                             </div>
-                            <h3><span style="font-weight: bold">III. Datos del Destino: </span></h3>
+                            <h3><span style="font-weight: bold">III. Datos Pasajes: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m8 l12">
                                     <strong>
@@ -263,9 +263,10 @@
                                         }
                                     </table>
                                 }
-                                <div class="input-field col s12 m10 l10">
-                                    @Html.ActionLink("Agregar Cotización", "Create", "Cotizacion", new { id = Model.PasajeId }, null)
-                                </div>
+                            <div class="input-field col s12 m10 l10">
+                                @*@Html.ActionLink("Agregar Cotización", "Create", "Cotizacion", new { id = Model.PasajeId }, null)*@
+                                <a href='@Url.Action("Create","Cotizacion", new { id = Model.PasajeId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+                            </div>
                             </div>
                         </div>
 

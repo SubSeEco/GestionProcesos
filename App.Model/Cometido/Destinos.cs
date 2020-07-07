@@ -109,7 +109,7 @@ namespace App.Model.Cometido
         [Display(Name = "Comuna")]
         public string ComunaDescripcion { get; set; }
 
-        [Required(ErrorMessage = "Es necesario especificar este dato")]
+        [Required(ErrorMessage = "Es necesario especificar este dato - IdRegion")]
         [Display(Name = "Región")]
         public string IdRegion { get; set; }
         [Display(Name = "Región")]

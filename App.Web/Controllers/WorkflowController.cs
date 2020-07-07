@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.Pasajes;
 using App.Core.Interfaces;
-using App.Infrastructure.Extensions;
+using App.Util;
 using App.Model.Cometido;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
@@ -309,12 +309,13 @@ namespace App.Web.Controllers
                 if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model,User.Email());
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
@@ -324,8 +325,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
@@ -346,8 +348,9 @@ namespace App.Web.Controllers
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
+                        return RedirectToAction("Index", "Workflow");
                     }
+
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
             }

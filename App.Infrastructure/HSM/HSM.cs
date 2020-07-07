@@ -1,9 +1,13 @@
 ﻿using System;
 using System.IO;
 using App.Core.Interfaces;
-using App.Infrastructure.FirmaElock;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using App.Infrastructure.FirmaElock;
+using QRCoder;
+using App.Util;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace App.Infrastructure.HSM
 {
@@ -46,16 +50,19 @@ namespace App.Infrastructure.HSM
 
             try
             {
-                using (SignFileImplClient ws = new SignFileImplClient())
-                {
-                    var respuesta = ws.SignFile(documento, Firmante, "BOTTOM_EDGE_CENTER", "0", razon, unidadOrganizacional, 10, 10, 150, 150);
+                SignFileImplClient ws = new SignFileImplClient();
+                var respuesta = ws.SignFile(documento, Firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", "Documento firmado electrónicamente Ley 19.799", unidadOrganizacional, 10, 10, 150, 150);
 
-                    return respuesta.message;
-                }
+                if (respuesta == null)
+                    throw new System.Exception("El servicio de firma no retornó respuesta");
+                if (respuesta != null && respuesta.status.Contains("FAIL"))
+                    throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+
+                return respuesta.message;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
-                throw new System.Exception("Error al firmar documento:" + ex.Message);
+                throw;
             }
         }
 
@@ -63,15 +70,105 @@ namespace App.Infrastructure.HSM
         {
 
             SignFileImplClient ws = new SignFileImplClient();
-            signerInfo firmantes = new signerInfo();
-            signBase64EncodedResponse respBase64 = new signBase64EncodedResponse();
-
             var obj = ws.getSignerNameList();
-
             if (obj != null)
                 return ws.getSignerNameList().signer;
 
             return null;
+        }
+
+        public byte[] Sign(byte[] documento, List<string> firmantes, int documentoId, string folio, string url, byte[] QR)
+        {
+            //validaciones
+            if (documentoId == 0)
+                throw new System.Exception("No se especificó el código de verificación del documento.");
+            if (documento == null)
+                throw new System.Exception("No se especificó el contenido del documento.");
+            if (!firmantes.Any())
+                throw new System.Exception("Debe especificar al menos un firmante.");
+            if (url.IsNullOrWhiteSpace())
+                throw new System.Exception("No se especificó la url de verificación del documento.");
+            if (QR == null)
+                throw new System.Exception("No se especificó el código QR.");
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (var reader = new PdfReader(documento))
+                {
+                    using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
+                    {
+                        //agregar folio
+                        if (!folio.IsNullOrWhiteSpace())
+                        {
+                            try
+                            {
+                                var pagesize = reader.GetPageSize(1);
+                                var pdfContentFirstPage = stamper.GetOverContent(1);
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_RIGHT, new Phrase(string.Format("Folio N° {0}", folio), new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.DARK_GRAY)), 550, pagesize.Height - 95, 0);
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_RIGHT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.DARK_GRAY)), 550, pagesize.Height - 115, 0);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
+                            }
+                        }
+
+                        //agregar tabla de verificacion
+                        try
+                        {
+                            var img = Image.GetInstance(QR);
+                            var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
+                            var fontBold = new iTextSharp.text.Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
+                            var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
+                            var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+
+                            table.TotalWidth = 520f;
+                            table.SetWidths(new float[] { 8f, 25f, 6f });
+                            table.AddCell(new PdfPCell(new Phrase("Información de la firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)) { });
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(url, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            throw new System.Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                        }
+
+                        stamper.Close();
+                    }
+                }
+                documento = ms.ToArray();
+            }
+
+            //firma documento
+            var respuesta = new signFileResponse();
+            using (var ws = new SignFileImplClient())
+            {
+                try
+                {
+                    foreach (var firmante in firmantes)
+                    {
+                        respuesta = ws.SignFile(documento, firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", null, null, 0, 0, 0, 0);
+                        if (respuesta == null)
+                            throw new System.Exception("El servicio de firma no retornó respuesta");
+                        if (respuesta != null && respuesta.status.Contains("FAIL"))
+                            throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    throw new System.Exception("Error firmar el documento:" + ex.Message);
+                }
+            }
+
+            return respuesta.message;
         }
     }
 }

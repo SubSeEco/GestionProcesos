@@ -162,15 +162,15 @@
             <td></td>
             <td>
                 <p align="justify">
-                    <strong>RESUELVO:</strong>
+                    1. <strong>RESUELVO:</strong>
 
                     @if (Model.Tiempo == "Pasado")
                     {
-                        <text>1. Reconócese</text>
+                        <text>Reconócese</text>
                     }
                     else
                     {
-                        <text>1. Desígnese</text>
+                        <text>Desígnese</text>
                     }
                 </p>
                 <p>
@@ -311,7 +311,7 @@
                 <p align="justify">
                     @Html.DisplayFor(m => Model.ViaticodeVuelta) <!--Que no se pagara viático por el día xxx de xxxx de xxx, por motivo de encontrarse en viaje de regreso.-->
                 </p>
-                @if (Model.SolicitaViatico == false && Model.ReqPasajeAereo == false)
+                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
                 {
                     <p align="justify">
                         Que, la presente Resolución no

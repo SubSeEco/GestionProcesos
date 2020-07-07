@@ -40,14 +40,14 @@
                                                 @Html.DropDownListFor(m => Model.IdRegionOrigen, null, "Seleccione...", new { style = "width:100px" })
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:150px"/*, disabled = "disabled" */})
                                                 @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
                                             </td>
                                             <td>
                                                 @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:150px"/*, disabled = "disabled" */})
                                                 @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
                                             </td>
                                         </tr>
@@ -135,10 +135,13 @@
                     ]
                 }
             },
+            //datepicker: false,
+            //format: 'H:i',
             timepicker: false,
+            format: 'd-m-Y',
             todayButton: true,
             dayOfWeekStart: 1,
-            formatDate: 'd-m-Y',
+            //formatDate: 'd-m-Y',
             //minDate: 0
         });
         $('select').formSelect();

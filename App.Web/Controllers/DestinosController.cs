@@ -254,8 +254,8 @@ namespace App.Web.Controllers
             var cometido = _repository.GetById<Cometido>(id);
             var model = new Destinos();
             ViewBag.IdComuna = new List<SelectListItem>();// SelectList(Enumerable.Empty<SelectListItem>());// (_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             model.FechaInicio = DateTime.Now;
             model.FechaHasta = DateTime.Now;
             model.Dias100 = 0;
@@ -288,9 +288,9 @@ namespace App.Web.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Create(Destinos model)
         {
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
             if (ModelState.IsValid)
             {
@@ -317,8 +317,8 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new List<SelectListItem>();
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg",model.IdOrigenRegion);
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
             model.Cometido = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
 
             model.Dias100Aprobados = 0;
@@ -366,9 +366,9 @@ namespace App.Web.Controllers
                 }
             }
 
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
             return View(model);
         }
@@ -376,8 +376,8 @@ namespace App.Web.Controllers
         public ActionResult EditGP(int id)
         {
             var model = _repository.GetById<Destinos>(id);
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
             model.IdRegion = model.IdRegion;
             model.IdComuna = model.IdComuna;
@@ -402,13 +402,13 @@ namespace App.Web.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult EditGP(Destinos model)
         {
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
 
-            //var model = _repository.GetById<Destinos>(id);
-            //model.IdRegion = model.IdRegion;
-            //model.IdComuna = model.IdComuna;
+
+            var modelOld = _repository.GetById<Destinos>(model.DestinoId);
+            model.IdRegion = modelOld.IdRegion;
+            model.IdComuna = modelOld.IdComuna;
             model.FechaInicio = model.FechaInicio;
             model.FechaHasta = model.FechaHasta;
             if (ModelState.IsValid)
@@ -420,8 +420,8 @@ namespace App.Web.Controllers
 
                 if (_UseCaseResponseMessage.IsValid)
                 {
-                    ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-                    ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+                    ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+                    ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
                     TempData["Success"] = "Operación terminada correctamente.";
                     //return Redirect(Request.UrlReferrer.PathAndQuery);
@@ -441,8 +441,8 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new List<SelectListItem>();
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
 
             return View(model);
         }
@@ -468,8 +468,8 @@ namespace App.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, item);
 
-                ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-                ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+                ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+                ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             }
             return View(model);
         }

@@ -14,16 +14,20 @@
                 @Html.HiddenFor(q => Model.EditGP)
                 @Html.HiddenFor(q => Model.IdRegion)
                 @Html.HiddenFor(q => Model.IdComuna)
+                @Html.HiddenFor(q => Model.RegionDescripcion)
+                @Html.HiddenFor(q => Model.ComunaDescripcion)
                 @Html.HiddenFor(q => Model.FechaInicio)
                 @Html.HiddenFor(q => Model.FechaHasta)
                 @Html.HiddenFor(q => Model.Dias100)
                 @Html.HiddenFor(q => Model.Dias60)
                 @Html.HiddenFor(q => Model.Dias40)
                 @Html.HiddenFor(q => Model.Dias50)
+                @Html.HiddenFor(q => Model.Dias00)
                 @Html.HiddenFor(q => Model.Dias100Monto)
                 @Html.HiddenFor(q => Model.Dias60Monto)
                 @Html.HiddenFor(q => Model.Dias50Monto)
                 @Html.HiddenFor(q => Model.Dias40Monto)
+                @Html.HiddenFor(q => Model.Dias00Monto)
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
                 <div class="card">
@@ -45,12 +49,12 @@
                         </tr>
                         <tr>
                             <td>
-                                @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
-                                @*@Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                                @Html.HiddenFor(m => Model.IdRegion)
+                                @Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
                             </td>
                             <td>
-                                @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...")
-                                @*@Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                                @*@Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...")*@
+                                @Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
                             </td>
                             <td>
                                 @Html.DisplayFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})

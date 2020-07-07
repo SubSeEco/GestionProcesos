@@ -1,4 +1,4 @@
-﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUpload
+﻿@model App.Web.Controllers.FirmaDocumentoController.DTOFileUploadEdit
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
@@ -24,6 +24,15 @@
                             @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
                             <span class="helper-text">Indique el tipo de documento</span>
                         </div>
+
+                        <div class="section"></div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.URL)
+                            @Html.LabelFor(m => Model.URL)
+                            @Html.ValidationMessageFor(m => Model.URL, "", new { @class = "text-danger" })
+                        </div>
+
+
                         <div class="section"></div>
 
                         @Html.LabelFor(m => Model.FileUpload)<br />
@@ -43,11 +52,13 @@
 
                         @if (Model.File != null)
                         {
-                    <div class="input-field">
-                        <strong>@Html.DisplayNameFor(m => Model.File)</strong>
-                        <embed src="@Url.Action("ShowDocumentoSinFirma", null, new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
-                    </div>
+                            <div class="input-field">
+                                <strong>@Html.DisplayNameFor(m => Model.File)</strong>
+                                <embed src="@Url.Action("ShowDocumentoSinFirma", null, new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
+                            </div>
                         }
+
+
 
                         <div class="section"></div>
                         <div class="input-field">
@@ -73,6 +84,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.modal').modal();
         $('select').formSelect();
+        $('.tooltipped').tooltip();
     });
 </script>

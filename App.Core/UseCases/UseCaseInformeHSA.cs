@@ -2,7 +2,7 @@
 using App.Model.Core;
 using App.Core.Interfaces;
 using App.Model.InformeHSA;
-using App.Infrastructure.Extensions;
+using App.Util;
 
 namespace App.Core.UseCases
 {

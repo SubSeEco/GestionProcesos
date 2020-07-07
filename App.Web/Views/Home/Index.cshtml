@@ -4,14 +4,15 @@
     ViewBag.SubTitle = "Gestión de procesos automatiza flujos de trabajo de una manera facil y unificada";
 }
 
-<div class="grey lighten-3">
-    <div class="section container ">
+<div class="grey lighten-3 section">
+    <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
         <h5 class="header light">@ViewBag.SubTitle</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
-<br />
+<div class="section"></div>
+
 
 <div class="row container">
     @Html.Partial("_Message")
@@ -63,7 +64,8 @@
             </div>
             <div class="card-action">
                 <a href='@Url.Action("Index", "ProcesoConsultor")' class="waves-effect waves-light blue-text">Procesos</a><br />
-                <a href='@Url.Action("Download", "Proceso")' class="waves-effect waves-light blue-text">Exportar procesos a Excel</a><br />
+                <a href='@Url.Action("Download", "Proceso")' class="waves-effect waves-light blue-text">Reporte de procesos</a><br />
+                <a href='@Url.Action("Report", "InformeHSA")' class="waves-effect waves-light blue-text">Reporte informes HSA</a><br />
             </div>
         </div>
     </div>

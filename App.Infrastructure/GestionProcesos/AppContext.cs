@@ -8,6 +8,7 @@ using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Model.InformeHSA;
 using App.Model.Memorandum;
+using App.Model.DTO;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -78,6 +79,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<InformeHSA> InformeHSA { get; set; }
         public virtual DbSet<EstadoProceso> EstadoProceso { get; set; }
         public virtual DbSet<Memorandum> Memorandum { get; set; }
+        public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }
