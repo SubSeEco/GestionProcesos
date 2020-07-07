@@ -123,6 +123,10 @@
             PlantillaFinanzas_Solicitante_QuienViaja = 47,
             PlantillaFinanzas_Solicitante_QuienViaja2 = 48,
             UrlSistema = 50,
+
+            //Notificaciones Memorandum
+            PlantillaMemoFirmado = 61,
+
         }
 
         public enum DefinicionProceso
@@ -130,6 +134,7 @@
             SIACIngreso = 7,
             SolicitudPasaje = 11,
             SolicitudCometidoPasaje = 13,
+            Memorandum = 15,
         }
 
      

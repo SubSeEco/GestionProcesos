@@ -20,7 +20,8 @@ namespace App.Infrastructure.GestionProcesos
         // If you wish to target a different database and/or database provider, modify the 'App.Context' 
         // connection string in the application configuration file.
 
-        public AppContext() : base("name=GestionProcesos")
+        public AppContext() : 
+            base("name=GestionProcesos")
         {
 
         }

@@ -333,7 +333,6 @@
     <Content Include="App_Data\ReportePresupuesto.xlsx" />
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <Content Include="Scripts\init.js" />
@@ -679,6 +678,9 @@
     <Content Include="Views\Memorandum\Edit.cshtml" />
     <Content Include="Views\Memorandum\Sign.cshtml" />
     <Content Include="Views\Memorandum\View.cshtml" />
+    <Content Include="Views\Memorandum\Pdf.cshtml" />
+    <Content Include="Views\Memorandum\EditAna.cshtml" />
+    <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

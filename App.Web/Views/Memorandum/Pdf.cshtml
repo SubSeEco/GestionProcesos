@@ -1,0 +1,150 @@
+﻿@model App.Model.Memorandum.Memorandum
+@{
+    Layout = null;
+}
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+@*<body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
+    <table>
+
+    </table>
+</body>*@
+
+<body style="font-family:Calibri;font-size:9;line-height:11px>
+    <table>
+        <tr>
+            <td width="32%">
+                <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+            </td>
+            <td>
+                <p align="center">
+                    <br />
+                    @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                    {
+                        <strong>
+                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                        </strong>
+                    }*@
+                    <strong>
+                        <h1 align="center">MEMORANDUM N° @Html.DisplayFor(m => Model.Folio)</h1>
+                    </strong>
+                </p>
+                <p align="center">
+                    <br />
+                    @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                    {
+                        <strong>
+                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                        </strong>
+                    }*@
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h1>
+                    <p align="justify">
+                        A : @Html.DisplayFor(m => Model.NombreChqDest)<br />
+                        @Html.DisplayFor(m => Model.UnidadDescripcionDest)<br />
+                        DE : @Html.DisplayFor(m => Model.NombreChqRem)<br />
+                        @Html.DisplayFor(m => Model.UnidadDescripcion)<br />
+                        REF : @Html.DisplayFor(m => Model.Asunto) <br />
+                        FECHA : @Html.DisplayFor(m => Model.FechaSolicitud)<br />
+                        _____________________________________________________
+                    </p>
+                </h1>
+            </td>
+        </tr>
+        <div>
+
+        </div>
+        <td>
+            @*<p align="center">*@
+            <p align="justify">
+                <br />
+                @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
+                <strong>
+                    <h1 align="center">@Html.DisplayFor(m => Model.Antecedentes)</h1>
+                </strong>
+            </p>
+            <p align="center">
+                <br />
+                @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
+            </p>
+        </td>
+        <td>
+            @*<p align="center">*@
+            <p align="justify">
+                <br />
+                @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
+                <strong>
+                    <h1 align="center">@Html.DisplayFor(m => Model.Materia)</h1>
+                </strong>
+            </p>
+            <p align="center">
+                <br />
+                @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
+            </p>
+        </td>
+    </table>
+    @*<div class="section"></div>
+        <center>
+            <img src="~/Content/LogoPieFirma.png" width="220px" />
+        </center>
+        <center>
+            <p class="flow-text">
+                <b>@Model.NombreChqRem</b><br />
+                <b>@Model.UnidadDescripcion</b>
+            </p>
+        </center>
+        <div class="section"></div>*@
+
+    <footer>
+        <center>
+            <img src="~/Content/LogoPieFirma.png" width="220px" />
+        </center>
+        <center>
+            <p class="flow-text">
+                <h1>@Model.NombreChqRem</h1><br />
+                <b>@Model.UnidadDescripcion</b>
+            </p>
+        </center>
+    </footer>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
