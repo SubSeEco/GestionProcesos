@@ -258,7 +258,7 @@
                     </p>
                 }
                 <p align="justify"></p>
-                @if (Model.SolicitaViatico == false)
+                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0)
                 {
                     @Html.DisplayFor(m => Model.DejaseConstancia)
 
