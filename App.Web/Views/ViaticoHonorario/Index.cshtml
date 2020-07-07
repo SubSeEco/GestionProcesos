@@ -1,82 +1,84 @@
 ﻿@model IEnumerable<App.Model.Cometido.ViaticoHonorario>
+<div class="container">
 
-<h3>ViaticoHonorario</h3>
-<div class="card">
-    <div class="card-content">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Año)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Desde)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Hasta)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Porcentaje100)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Porcentaje60)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Porcentaje40)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Porcentaje50)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tramo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Activo)
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Año)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Desde)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Hasta)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Porcentaje100)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Porcentaje60)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Porcentaje40)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Porcentaje50)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tramo)
-                </td>
-                <td>
-                    @if (item.Activo)
-                    {
-                        <p>True</p>
-                    }
-                    else
-                    {
-                        <p>False</p>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Detalles", "Details", new { id = item.ViaticoHonorarioId })
-                </td>
-            </tr>
-            }
-        </table>
+    <h3>ViaticoHonorario</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Año)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Desde)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Hasta)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Porcentaje100)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Porcentaje60)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Porcentaje40)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Porcentaje50)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tramo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Activo)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Año)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Desde)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Hasta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Porcentaje100)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Porcentaje60)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Porcentaje40)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Porcentaje50)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tramo)
+                        </td>
+                        <td>
+                            @if (item.Activo)
+                            {
+                                <p>True</p>
+                            }
+                            else
+                            {
+                                <p>False</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalles", "Details", new { id = item.ViaticoHonorarioId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 </div>
 
@@ -84,6 +86,6 @@
     <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
 </div>
 @*<br />
-<div class="fixed-action-btn">
-    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
-</div>*@
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@

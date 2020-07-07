@@ -1,132 +1,110 @@
 ﻿@model App.Model.Pasajes.Pasaje
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
-
-<div class="row">
-    <div class="col s12 m10 l8">
-        <div class="card">
-            <div class="card-content">
-                @*<span class="card-title">Pasajes</span>*@
-                <div class="row">
-                    <div class="input-field col s12 m10 l3">
-                        @Html.DisplayNameFor(m => Model.FechaSolicitud)
-                        @Html.DisplayFor(m => Model.FechaSolicitud)
-                    </div>
-                    <div class="input-field col s12 m10 l3">
-                        @Html.DisplayFor(m => Model.PasajeId)
-                        @Html.LabelFor(m => Model.PasajeId)
-                    </div>
-                </div>
-                <div id="jQuery_accordion">
-                    <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m10 l8">
+            <div class="card">
+                <div class="card-content">
+                    @Html.Partial("_Message")
+                    @*<span class="card-title">Pasajes</span>*@
                     <div class="row">
-                        <div class="input-field col s12 m10 l8">
-                            @Html.DisplayNameFor(m => Model.Nombre)
-                            @Html.DisplayFor(m => Model.Nombre)
+                        <div class="input-field col s12 m10 l3">
+                            @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                            @Html.DisplayFor(m => Model.FechaSolicitud)
                         </div>
-                        <div class="input-field col s12 m6 l8">
-                            @Html.DisplayNameFor(m => Model.Rut)
-                            @Html.DisplayFor(m => Model.Rut)
-                        </div>
-                        <div class="input-field col s12 m6 l4">
-                            @Html.DisplayNameFor(m => Model.DV)
-                            @Html.DisplayFor(m => Model.DV)
-                        </div>
-                        <div class="input-field col s12 m6 l6">
-                            @Html.DisplayNameFor(m => Model.CalidadDescripcion)
-                            @Html.DisplayFor(m => Model.CalidadDescripcion)
+                        <div class="input-field col s12 m10 l3">
+                            @Html.DisplayFor(m => Model.PasajeId)
+                            @Html.LabelFor(m => Model.PasajeId)
                         </div>
                     </div>
-                    <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l10">
-                            @Html.DisplayNameFor(m => Model.PasajeDescripcion)
-                            @Html.DisplayFor(m => Model.PasajeDescripcion)
-                        </div>
-                    </div>
-                    <h3><span style="font-weight: bold">III. Datos del Destino: </span></h3>
-                    <div class="row">
-                        <div class="input-field col s12 m8 l12">
-                            <strong>
-                                <span>@Html.DisplayNameFor(m => Model.TipoDestino)</span>
-                            </strong>
-                            @string.Format("{0}", Model.TipoDestino.Value ? "SI" : "NO")
-                        </div>
+                    <div id="jQuery_accordion">
+                        <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                         <div class="row">
-                            <span class="card-title">Destinos</span>
-                            @if (Model.DestinosPasajes.Count > 0)
-                            {
-                                <table class="table">
-                                    <tr>
-                                        @if (Model.TipoDestino == true)
-                                        {
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenRegionDescripcion)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().RegionDescripcion)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
-                                        }
-                                        else
-                                        {
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenPaisDescripcion)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().PaisDescripcion)</th>
-                                            <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
-                                        }
-                                        <th></th>
-                                    </tr>
-                                    @for (int i = 0; i < Model.DestinosPasajes.ToArray().Length; i++)
-                                    {
-                                <tr>
-                                    @if (Model.TipoDestino == true)
-                                    {
-                                        <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].OrigenRegionDescripcion)</th>
-                                        <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].FechaOrigen)</th>
-                                        <th>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].RegionDescripcion)</th>
-                                        <td>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta)</td>
-                                    }
-                                    else
-                                    {
-                                        <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].OrigenPaisDescripcion)</th>
-                                        <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].FechaOrigen)</th>
-                                        <td>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].PaisDescripcion)</td>
-                                        <th>@Html.TextBoxFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})</th>
-                                        
-                                    }
-                                </tr>
-                                    }
-                                </table>
-                            }
+                            <div class="input-field col s12 m10 l8">
+                                @Html.DisplayNameFor(m => Model.Nombre)
+                                @Html.DisplayFor(m => Model.Nombre)
+                            </div>
+                            <div class="input-field col s12 m6 l8">
+                                @Html.DisplayNameFor(m => Model.Rut)
+                                @Html.DisplayFor(m => Model.Rut)
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                @Html.DisplayNameFor(m => Model.DV)
+                                @Html.DisplayFor(m => Model.DV)
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                @Html.DisplayFor(m => Model.CalidadDescripcion)
+                            </div>
                         </div>
-
-                    </div>
-                    @if (Model.Cotizacion.Count > 0)
-                    {
-                        <h3><span style="font-weight: bold">IV. Cotizaciones: </span></h3>
+                        <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
                         <div class="row">
-                            <table class="table">
-                                <tr>
-                                    @if (Model.TipoDestino != true)
-                                    {
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().TipoCambio)
-                                        </th>
-                                    }
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().FechaTipoCambio)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().ValorPasaje)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().NombreEmpresa)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => Model.Cotizacion.FirstOrDefault().VencimientoCotizacion)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                @for (int i = 0; i < Model.Cotizacion.ToArray().Length; i++)
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DisplayNameFor(m => Model.PasajeDescripcion)
+                                @Html.DisplayFor(m => Model.PasajeDescripcion)
+                            </div>
+                        </div>
+                        <h3><span style="font-weight: bold">III. Datos del Destino: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m8 l12">
+                                <strong>
+                                    <span>@Html.DisplayNameFor(m => Model.TipoDestino)</span>
+                                </strong>
+                                @string.Format("{0}", Model.TipoDestino.Value ? "SI" : "NO")
+                            </div>
+                            <div class="row">
+                                <span class="card-title">Destinos</span>
+                                @if (Model.DestinosPasajes.Count > 0)
                                 {
+                                    <table class="table">
+                                        <tr>
+                                            @if (Model.TipoDestino == true)
+                                            {
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenRegionDescripcion)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().RegionDescripcion)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
+                                            }
+                                            else
+                                            {
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenPaisDescripcion)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().PaisDescripcion)</th>
+                                                <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
+                                            }
+                                            <th></th>
+                                        </tr>
+                                        @for (int i = 0; i < Model.DestinosPasajes.ToArray().Length; i++)
+                                        {
+                                            <tr>
+                                                @if (Model.TipoDestino == true)
+                                                {
+                                                    <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].OrigenRegionDescripcion)</th>
+                                                    <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].FechaOrigen)</th>
+                                                    <th>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].RegionDescripcion)</th>
+                                                    <td>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta)</td>
+                                                }
+                                                else
+                                                {
+                                                    <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].OrigenPaisDescripcion)</th>
+                                                    <th>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].FechaOrigen)</th>
+                                                    <td>@Html.DisplayFor(m => Model.DestinosPasajes.ToArray()[i].PaisDescripcion)</td>
+                                                    <th>@Html.TextBoxFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})</th>
+
+                                                }
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                            </div>
+
+                        </div>
+                        @if (Model.Cotizacion.Count > 0)
+                        {
+                            <h3><span style="font-weight: bold">IV. Cotizaciones: </span></h3>
+                            <div class="row">
+                                <table class="table">
                                     <tr>
                                         @if (Model.TipoDestino != true)
                                         {
@@ -134,54 +112,78 @@
                                                 @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().TipoCambio)
                                             </th>
                                         }
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Cotizacion.ToArray()[i].FechaTipoCambio)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Cotizacion.ToArray()[i].ValorPasaje)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Cotizacion.ToArray()[i].NombreEmpresa)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Cotizacion.ToArray()[i].VencimientoCotizacion)
-                                        </td>
-                                        <td>
-                                            @for (int x = 0; x < Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray().Length; x++)
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().FechaTipoCambio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().ValorPasaje)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().NombreEmpresa)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => Model.Cotizacion.FirstOrDefault().VencimientoCotizacion)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    @for (int i = 0; i < Model.Cotizacion.ToArray().Length; i++)
+                                    {
+                                        <tr>
+                                            @if (Model.TipoDestino != true)
                                             {
-                                                <label>
-                                                    @Html.CheckBoxFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
-                                                    <span></span>
-                                                </label>
-                                                <div class="section"></div>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.Cotizacion.FirstOrDefault().TipoCambio)
+                                                </th>
                                             }
-                                        </td>
-                                        @*<td>
-                                            @Html.ActionLink("Editar", "Edit", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Borrar", "Delete", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
-                                        </td>*@
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6">
-                                            <hr />
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                     }
-                </div>
-
-                        <div class="section"></div>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Cotizacion.ToArray()[i].FechaTipoCambio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Cotizacion.ToArray()[i].ValorPasaje)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Cotizacion.ToArray()[i].NombreEmpresa)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Cotizacion.ToArray()[i].VencimientoCotizacion)
+                                            </td>
+                                            <td>
+                                                @for (int x = 0; x < Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray().Length; x++)
+                                                {
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => Model.Cotizacion.ToArray()[i].CotizacionDocumento.ToArray()[x].Selected)
+                                                        <span></span>
+                                                    </label>
+                                                    <div class="section"></div>
+                                                }
+                                            </td>
+                                            @*<td>
+                                    @Html.ActionLink("Editar", "Edit", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Borrar", "Delete", "Cotizacion", new { id = Model.Cotizacion.ToArray()[i].CotizacionId }, null)
+                                </td>*@
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6">
+                                                <hr />
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        }
                     </div>
-        </div>
-    </div>
 
-    <div class="col s12 m6 l4">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+                    <div class="section"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m6 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
 </div>
 

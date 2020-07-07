@@ -327,6 +327,11 @@
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Common.js" />
+    <Content Include="App_Data\SeguimientoUnidades.xlsx" />
+    <Content Include="App_Data\SeguimientoGP.xlsx" />
+    <Content Include="App_Data\AjusteAsistencia.xlsx" />
+    <Content Include="App_Data\ReportePresupuesto.xlsx" />
+    <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
@@ -398,6 +403,7 @@
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
+    <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
     <Compile Include="Controllers\PasajeController.cs" />
@@ -668,6 +674,11 @@
     <Content Include="Views\ProcesoPersonal\Details.cshtml" />
     <Content Include="Views\ProcesoPersonal\Index.cshtml" />
     <Content Include="Views\Proceso\View.cshtml" />
+    <Content Include="Views\Memorandum\Create.cshtml" />
+    <Content Include="Views\Memorandum\Details.cshtml" />
+    <Content Include="Views\Memorandum\Edit.cshtml" />
+    <Content Include="Views\Memorandum\Sign.cshtml" />
+    <Content Include="Views\Memorandum\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

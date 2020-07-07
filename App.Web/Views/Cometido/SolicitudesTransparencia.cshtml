@@ -1,145 +1,145 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
 
-    <h3>Búsqueda Cometidos / 4.	Reporte Solicitudes de Transparencia</h3>
-
-<div class="row">
-    <div class="col s12 m12 l10">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Filtros</span>
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-            <div class="row">
-                <div class="input-field col s12 m12 l12">
-                    @Html.TextBoxFor(m => Model.ID)
-                    @Html.LabelFor(m => Model.ID)
-                    @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.NombreId)
-                    @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    @Html.EditorFor(m => Model.FechaInicio) 
-                    @Html.LabelFor(m => Model.FechaInicio)
-                    @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    @Html.EditorFor(m => Model.FechaTermino)
-                    @Html.LabelFor(m => Model.FechaTermino)
-                    @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    @Html.EditorFor(m => Model.Rut)
-                    @Html.LabelFor(m => Model.Rut)
-                    @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
-                </div>
-                <div class="input-field col s12 m12 l12">
-                    @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.IdUnidad)
-                    @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
-                </div>
-            </div>
-                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m12 l12">
-        <div class="card">
-            <div class="card-content">
-                @* <span class="card-title">Cometidos</span>*@
-                <table class="table bordered">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ID)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().Email)
-                            @*@Html.Raw("<span>Funcionario que <br /> ejecuta tarea</span>")*@
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaCreacion)
-                            @*@Html.Raw("<span>Fecha Inicio</span>")*@
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaTermino)
-                            @*@Html.Raw("<span>Fecha Término</span>")*@
-                        </th>
-                        <th>
-                            @Html.Raw("<span>N° días </span>")
-                        </th>
-                        <th>
-                        </th>
-                    </tr>
-
-                    @foreach (var item in Model.Result)
+<h3>Búsqueda Cometidos / 4.	Reporte Solicitudes de Transparencia</h3>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m12 l10">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Filtros</span>
+                    @using (Html.BeginForm())
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Subscretaria)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CometidoId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnidadDescripcion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Nombre)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                            </td>
-                            <td>
-                                @foreach (var t in item.Proceso.Workflows.Where(c => c.ProcesoId == item.ProcesoId))
-                                {
+                        @Html.AntiForgeryToken()
 
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => t.Email)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => t.FechaCreacion)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => t.FechaTermino)
-                                            </td>
-                                            <td>
-                                                @*@Html.DisplayFor(modelItem => (t.FechaCreacion - t.FechaTermino).ToString())*@
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                }
-                            </td>
-
-                            @*<td>
-                                    @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })
-                                </td>*@
-                        </tr>
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.ID)
+                                @Html.LabelFor(m => Model.ID)
+                                @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.NombreId)
+                                @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaInicio)
+                                @Html.LabelFor(m => Model.FechaInicio)
+                                @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaTermino)
+                                @Html.LabelFor(m => Model.FechaTermino)
+                                @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.Rut)
+                                @Html.LabelFor(m => Model.Rut)
+                                @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.IdUnidad)
+                                @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
                     }
-                </table>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-content">
+                    @* <span class="card-title">Cometidos</span>*@
+                    <table class="table bordered">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Subscretaria)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().Email)
+                                @*@Html.Raw("<span>Funcionario que <br /> ejecuta tarea</span>")*@
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaCreacion)
+                                @*@Html.Raw("<span>Fecha Inicio</span>")*@
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Proceso.Workflows.FirstOrDefault().FechaTermino)
+                                @*@Html.Raw("<span>Fecha Término</span>")*@
+                            </th>
+                            <th>
+                                @Html.Raw("<span>N° días </span>")
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+
+                        @foreach (var item in Model.Result)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Subscretaria)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CometidoId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnidadDescripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                </td>
+                                <td>
+                                    @foreach (var t in item.Proceso.Workflows.Where(c => c.ProcesoId == item.ProcesoId))
+                                    {
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => t.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => t.FechaCreacion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => t.FechaTermino)
+                                                </td>
+                                                <td>
+                                                    @*@Html.DisplayFor(modelItem => (t.FechaCreacion - t.FechaTermino).ToString())*@
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    }
+                                </td>
+
+                                @*<td>
+                                        @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })
+                                    </td>*@
+                            </tr>
+                        }
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="fixed-action-btn">

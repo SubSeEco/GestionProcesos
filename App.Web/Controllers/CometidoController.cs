@@ -336,7 +336,9 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().Where(q => q.Activo == true).OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
 
 
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
@@ -1995,6 +1997,124 @@ namespace App.Web.Controllers
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             return View(model);
+        }
+
+        public FileResult AjusteAsistencia()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\AjusteAsistencia.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackageAjusteAsistencia = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageAjusteAsistencia.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().OrderByDescending(c =>c.CometidoId))
+            {
+                //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                if (destino.Count > 0)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = cometido.Rut;
+                    worksheet.Cells[fila, 2].Value = destino.Any() ? (destino.FirstOrDefault().FechaInicio.Day - destino.LastOrDefault().FechaHasta.Day).ToString() : "S/A";
+                    worksheet.Cells[fila, 3].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                    worksheet.Cells[fila, 4].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                    worksheet.Cells[fila, 5].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.Hour.ToString() : "S/A";
+                    worksheet.Cells[fila, 6].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.Hour.ToString() : "S/A";
+                    worksheet.Cells[fila, 7].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
+                }
+            }
+
+            return File(excelPackageAjusteAsistencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptAjusteAsistencia_yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public FileResult SolicitudTransparencia()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SolicitudTransparencia.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackageTransparencia = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageTransparencia.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
+            {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                if (destino.Count > 0)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía"; 
+                    worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
+                    worksheet.Cells[fila, 3].Value = cometido.NombreCometido;
+                    worksheet.Cells[fila, 4].Value = cometido.FechaSolicitud.ToString();
+                    worksheet.Cells[fila, 5].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
+                    worksheet.Cells[fila, 6].Value = cometido.Proceso.Terminada == false && cometido.Proceso.Anulada == false ? "En Proceso" : cometido.Workflow.Terminada == true ? "Terminada" : "Anulada";
+                    worksheet.Cells[fila, 7].Value = cometido.Folio != null ? cometido.Folio.ToString() : "S/A";
+                    worksheet.Cells[fila, 8].Value = cometido.TipoActoAdministrativo != null ? cometido.TipoActoAdministrativo.ToString() : "S/A";
+                    worksheet.Cells[fila, 9].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
+                    worksheet.Cells[fila, 10].Value = cometido.EstamentoDescripcion;
+                    worksheet.Cells[fila, 11].Value = cometido.Rut;
+                    worksheet.Cells[fila, 12].Value = cometido.UnidadDescripcion;
+                    worksheet.Cells[fila, 13].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
+                    worksheet.Cells[fila, 14].Value = destino.FirstOrDefault().ComunaDescripcion != null ? destino.FirstOrDefault().ComunaDescripcion : "S/A";
+                    worksheet.Cells[fila, 15].Value = destino.FirstOrDefault().FechaInicio != null ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                    worksheet.Cells[fila, 16].Value = destino.LastOrDefault().FechaHasta != null ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                    worksheet.Cells[fila, 17].Value = "0";
+                    worksheet.Cells[fila, 18].Value = "0";
+                    worksheet.Cells[fila, 19].Value = "0";
+                    worksheet.Cells[fila, 20].Value = "0";
+                    worksheet.Cells[fila, 21].Value = "0";
+                    worksheet.Cells[fila, 22].Value = "0";
+                    worksheet.Cells[fila, 23].Value = "0";
+                    worksheet.Cells[fila, 24].Value = "0";
+                    worksheet.Cells[fila, 25].Value = "0";
+                    worksheet.Cells[fila, 26].Value = cometido.CometidoDescripcion;
+                }
+            }
+
+            return File(excelPackageTransparencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSolicitudTransparencia_yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public FileResult ReportePresupuesto()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\ReportePresupuesto.xlsx");
+            var fileInfo = new FileInfo(file);
+            var excelPackagePresupuesto = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackagePresupuesto.Workbook.Worksheets[1];
+            foreach (var cometido in result.ToList())
+            {
+                var cdp = _repository.GetAll<GeneracionCDP>().Where(w => w.CometidoId == cometido.CometidoId).FirstOrDefault();
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                if (destino.Count > 0)
+                {
+                    fila++;
+                    worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                    worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
+                    worksheet.Cells[fila, 3].Value = cdp.VtcIdCompromiso != null ? cdp.VtcIdCompromiso.ToString() : "S/A" ;
+                    //worksheet.Cells[fila, 4].Value = cometido.NombreId;
+                    //worksheet.Cells[fila, 5].Value = cometido.UnidadDescripcion;
+                    //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
+                    //worksheet.Cells[fila, 7].Value = cometido.FechaSolicitud.ToString();
+                    //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                    //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                    //worksheet.Cells[fila, 10].Value = cdp.LastOrDefault().Email;
+                    //worksheet.Cells[fila, 11].Value = cdp.LastOrDefault().FechaCreacion.ToString();
+                }
+            }
+
+            return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptReportePresupuesto_yyyyMMddhhmmss") + ".xlsx");
         }
     }
 }

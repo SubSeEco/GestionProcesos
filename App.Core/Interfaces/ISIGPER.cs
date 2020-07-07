@@ -12,6 +12,9 @@ namespace App.Core.Interfaces
         SIGPER GetUserByRut(int rut);
         List<PEDATPER> GetUserByTerm(string term);
         List<PEDATPER> GetUserByUnidad(int codigo);
+
+        List<PEDATPER> GetAllUsers();
+
         List<PLUNILAB> GetUnidades();
         SIGPER GetJefaturaByUnidad(int codigo);
         SIGPER GetSecretariaByUnidad(int codigo);

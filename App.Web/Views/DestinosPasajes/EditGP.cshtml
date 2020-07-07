@@ -1,44 +1,45 @@
 ﻿@model App.Model.Pasajes.DestinosPasajes
 @*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @Html.Partial("_Message")
+            @using (Html.BeginForm("EditGP", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @*@Html.HiddenFor(q => Model.WorkflowId)*@
+                @Html.HiddenFor(q => Model.DestinosPasajesId)
+                @Html.HiddenFor(q => Model.PasajeId)
 
-<div class="row">
-    <div class="col s12 m6 l12">
-        @using (Html.BeginForm("EditGP", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @*@Html.HiddenFor(q => Model.WorkflowId)*@
-            @Html.HiddenFor(q => Model.DestinosPasajesId)
-            @Html.HiddenFor(q => Model.PasajeId)
-
-            @Html.ValidationSummary(true, "", new { @class = "red-text" })
-            <div class="card">
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PaisDescripcion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CiudadDescripcion)
-                        </th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
-                            @*@Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
-                        </td>
-                        <td>
-                            @Html.DropDownListFor(m => Model.IdCiudad, null, "Seleccione...")
-                            @*@Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
-                        </td>
-                    </tr>
-                </table>
-                <div class="section"></div>
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.Raw("<span>%</span>")
-                        </th>
-                        @*<th style="width:20px">
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaisDescripcion)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CiudadDescripcion)
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
+                                @*@Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.IdCiudad, null, "Seleccione...")
+                                @*@Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})*@
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="section"></div>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.Raw("<span>%</span>")
+                            </th>
+                            @*<th style="width:20px">
                             @Html.DisplayNameFor(m => Model.Dias100)
                         </th>
                         <th>
@@ -53,13 +54,13 @@
                         <th>
                             @Html.DisplayNameFor(m => Model.Dias00)
                         </th>*@
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.Raw("Días solicitados")
-                        </td>
-                        @*<td>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.Raw("Días solicitados")
+                            </td>
+                            @*<td>
                             @Html.DisplayFor(m => Model.Dias100)
                         </td>
                         <td>
@@ -74,12 +75,12 @@
                         <td>
                             @Html.DisplayFor(m => Model.Dias00)
                         </td>*@
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.Raw("Días aprobados")
-                        </td>
-                        @*<td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.Raw("Días aprobados")
+                            </td>
+                            @*<td>
                             @Html.EditorFor(m => Model.Dias100Aprobados)
                             @Html.ValidationMessageFor(m => Model.Dias100Aprobados, "", new { @class = "red-text" })
                         </td>
@@ -99,12 +100,12 @@
                             @Html.EditorFor(m => Model.Dias00Aprobados)
                             @Html.ValidationMessageFor(m => Model.Dias00Aprobados, "", new { @class = "red-text" })
                         </td>*@
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.Raw("Monto aprobado")
-                        </td>
-                        @*<td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.Raw("Monto aprobado")
+                            </td>
+                            @*<td>
                             @Html.EditorFor(m => Model.Dias100Monto)
                             @Html.ValidationMessageFor(m => Model.Dias100Monto, "", new { @class = "red-text" })
                         </td>
@@ -124,26 +125,27 @@
                             @Html.EditorFor(m => Model.Dias00Monto)
                             @Html.ValidationMessageFor(m => Model.Dias00Monto, "", new { @class = "red-text" })
                         </td>*@
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.Raw("<span>TOTAL</span>")
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            @*@Html.EditorFor(m => Model.Total)
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.Raw("<span>TOTAL</span>")
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                @*@Html.EditorFor(m => Model.Total)
                             @Html.ValidationMessageFor(m => Model.Total, "", new { @class = "red-text" })*@
-                        </td>
-                    </tr>
-                </table>
-                <div class="section"></div>
-                <p>
-                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                </p>
-            </div>
-        }
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            }
+        </div>
     </div>
 </div>
 <div class="fixed-action-btn">
@@ -151,7 +153,7 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {        
+    $(document).ready(function () {
         jQuery.datetimepicker.setLocale('es');
         jQuery('#FechaInicio,#FechaHasta').datetimepicker({
             i18n: {
@@ -168,13 +170,13 @@
         });
 
         $("#IdComuna").attr('disabled', true);
-        $("#IdRegion").attr('disabled', true);        
+        $("#IdRegion").attr('disabled', true);
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
 
-        
+
     });
 
     /*Carga dropdown de comunas*/

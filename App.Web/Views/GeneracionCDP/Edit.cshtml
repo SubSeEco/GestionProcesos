@@ -1,227 +1,232 @@
 ﻿@model App.Model.Cometido.GeneracionCDP
+    <div class="container">
+        <h3>Editar Generacion CDP</h3>
+        @Html.Partial("_Message")
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(q => Model.CometidoId)
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(q => Model.GeneracionCDPId)
 
-<h3>Editar Generacion CDP</h3>
-@using (Html.BeginForm())
-{
-    @Html.HiddenFor(q => Model.CometidoId)
-    @Html.HiddenFor(q => Model.WorkflowId)
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(q => Model.GeneracionCDPId)
-
-    <div class="card">
-        <div class="card-content">
-            @if (Model.Cometido.SolicitaViatico == true || Model.Cometido.SolicitaViatico != true)
-            {
-            <span class="card-title">Viaticos</span>
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoPartidaId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoPartidaId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcIdCompromiso)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcIdCompromiso)
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoCapituloId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoCapituloId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcCodCompromiso)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcCodCompromiso)
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcCentroCostoId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcCentroCostoId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcPptoTotal)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcPptoTotal)
-                    </th>   
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoSubTituloId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoSubTituloId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcCompromisoAcumulado)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcCompromisoAcumulado)
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoItemId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoItemId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcObligacionActual)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcObligacionActual)
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoAsignacionId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoAsignacionId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcSaldo)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcSaldo)
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcTipoSubAsignacionId)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(model => model.VtcTipoSubAsignacionId, null, "Seleccione...")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.VtcValorViatico)
-                    </th>
-                    <th>
-                        @Html.EditorFor(model => model.VtcValorViatico)
-                    </th>
-                </tr>
-            </table>
-            }
-            @*@if (Model.Cometido.ReqPasajeAereo == true)
-            {
-                <span class="card-title">Pasajes</span>
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjTipoPartidaId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjTipoPartidaId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjIdCompromiso)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjIdCompromiso)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjVtcTipoCapituloId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjCodCompromiso)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjCodCompromiso)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjCentroCostoId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjCentroCostoId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjPptoTotal)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjPptoTotal)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjTipoSubTituloId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjTipoSubTituloId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjCompromisoAcumulado)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjCompromisoAcumulado)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjTipoItemId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjTipoItemId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjObligacionActual)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjObligacionActual)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjTipoAsignacionId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjTipoAsignacionId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjSaldo)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjSaldo)
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjTipoSubAsignacionId)
-                        </th>
-                        <th>
-                            @Html.DropDownListFor(model => model.PsjTipoSubAsignacionId, null, "Seleccione...")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PsjValorViatico)
-                        </th>
-                        <th>
-                            @Html.EditorFor(model => model.PsjValorViatico)
-                        </th>
-                    </tr>
-                </table>
-            }*@
-            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-        </div>
+            <div class="card">
+                <div class="card-content">
+                    @if (Model.Cometido.SolicitaViatico == true || Model.Cometido.SolicitaViatico != true)
+                    {
+                        <span class="card-title">Viaticos</span>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoPartidaId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoPartidaId, null, "Seleccione...")
+                                </th>
+                                @if (Model.Cometido.Workflow.DefinicionWorkflow.Secuencia != 8)
+                                {
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VtcIdCompromiso)
+                                    </th>
+                                    <th>
+                                        @Html.EditorFor(model => model.VtcIdCompromiso)
+                                    </th>
+                                }
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoCapituloId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoCapituloId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcCodCompromiso)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcCodCompromiso)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcCentroCostoId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcCentroCostoId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcPptoTotal)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcPptoTotal)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoSubTituloId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoSubTituloId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcCompromisoAcumulado)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcCompromisoAcumulado)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoItemId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoItemId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcObligacionActual)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcObligacionActual)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoAsignacionId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoAsignacionId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcSaldo)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcSaldo)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcTipoSubAsignacionId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.VtcTipoSubAsignacionId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VtcValorViatico)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.VtcValorViatico)
+                                </th>
+                            </tr>
+                        </table>
+                    }
+                    @*@if (Model.Cometido.ReqPasajeAereo == true)
+                    {
+                        <span class="card-title">Pasajes</span>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjTipoPartidaId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjTipoPartidaId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjIdCompromiso)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjIdCompromiso)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjVtcTipoCapituloId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjVtcTipoCapituloId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjCodCompromiso)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjCodCompromiso)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjCentroCostoId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjCentroCostoId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjPptoTotal)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjPptoTotal)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjTipoSubTituloId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjTipoSubTituloId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjCompromisoAcumulado)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjCompromisoAcumulado)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjTipoItemId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjTipoItemId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjObligacionActual)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjObligacionActual)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjTipoAsignacionId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjTipoAsignacionId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjSaldo)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjSaldo)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjTipoSubAsignacionId)
+                                </th>
+                                <th>
+                                    @Html.DropDownListFor(model => model.PsjTipoSubAsignacionId, null, "Seleccione...")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PsjValorViatico)
+                                </th>
+                                <th>
+                                    @Html.EditorFor(model => model.PsjValorViatico)
+                                </th>
+                            </tr>
+                        </table>
+                    }*@
+                    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                </div>
+            </div>
+        }
     </div>
-}
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>
