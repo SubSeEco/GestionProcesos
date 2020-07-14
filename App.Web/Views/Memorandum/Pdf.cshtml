@@ -10,6 +10,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
+@*<body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
+    <table>
+
+    </table>
+</body>*@
+
 <body style="font-family:Calibri;font-size:9;line-height:11px>
     <table>
         <tr>
@@ -20,11 +26,11 @@
                 <p align="center">
                     <br />
                     @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                        {
-                            <strong>
-                                RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                            </strong>
-                        }*@
+                    {
+                        <strong>
+                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                        </strong>
+                    }*@
                     <strong>
                         <h1 align="center">MEMORANDUM N° @Html.DisplayFor(m => Model.Folio)</h1>
                     </strong>
@@ -32,11 +38,11 @@
                 <p align="center">
                     <br />
                     @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                        {
-                            <strong>
-                                RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                            </strong>
-                        }*@
+                    {
+                        <strong>
+                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                        </strong>
+                    }*@
                 </p>
             </td>
         </tr>
@@ -59,49 +65,51 @@
 
         </div>
         <td>
-            <p align="center">
+            @*<p align="center">*@
+            <p align="justify">
                 <br />
                 @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                    {
-                        <strong>
-                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                        </strong>
-                    }*@
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
                 <strong>
-                    <h align="center">@Html.DisplayFor(m => Model.Antecedentes)</h>
+                    <h1 align="center">@Html.DisplayFor(m => Model.Antecedentes)</h1>
                 </strong>
             </p>
             <p align="center">
                 <br />
                 @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                    {
-                        <strong>
-                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                        </strong>
-                    }*@
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
             </p>
         </td>
         <td>
-            <p align="center">
+            @*<p align="center">*@
+            <p align="justify">
                 <br />
                 @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                    {
-                        <strong>
-                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                        </strong>
-                    }*@
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
                 <strong>
-                    <h align="center">@Html.DisplayFor(m => Model.Materia)</h>
+                    <h1 align="center">@Html.DisplayFor(m => Model.Materia)</h1>
                 </strong>
             </p>
             <p align="center">
                 <br />
                 @*@if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
-                    {
-                        <strong>
-                            RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
-                        </strong>
-                    }*@
+                {
+                    <strong>
+                        RESOLUCIÓN MINISTERIAL EXENTA N° @Html.DisplayFor(m => Model.Folio)
+                    </strong>
+                }*@
             </p>
         </td>
     </table>
@@ -131,8 +139,6 @@
 </body>
 
 </html>
-
-
 
 
 

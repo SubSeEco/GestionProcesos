@@ -330,6 +330,17 @@ namespace App.Web.Controllers
 
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("OK");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
                 else
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCore(_repository, _email, _sigper);
