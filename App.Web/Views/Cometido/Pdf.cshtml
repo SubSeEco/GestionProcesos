@@ -311,7 +311,7 @@
                 <p align="justify">
                     @Html.DisplayFor(m => Model.ViaticodeVuelta) <!--Que no se pagara viático por el día xxx de xxxx de xxx, por motivo de encontrarse en viaje de regreso.-->
                 </p>
-                @if (Model.SolicitaViatico == false && Model.ReqPasajeAereo == false)
+                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
                 {
                     <p align="justify">
                         Que, la presente Resolución no

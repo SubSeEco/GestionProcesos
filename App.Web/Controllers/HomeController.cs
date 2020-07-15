@@ -18,7 +18,7 @@ namespace App.Web.Controllers
         {
             public bool IsAdmin { get; set; } = false;
             public bool IsConsultor { get; set; } = false;
-            //public bool IsCometido { get; set; } = false;
+            public bool IsCometido { get; set; } = false;
 
             public int Task { get; set; } = 0;
         }
@@ -37,7 +37,7 @@ namespace App.Web.Controllers
             {
                 IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())),
                 IsConsultor = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Consultor.ToString())),
-                //IsCometido = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()))
+                IsCometido = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()))
             };
 
             var user = _sigper.GetUserByEmail(email);

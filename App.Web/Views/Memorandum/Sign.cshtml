@@ -1,53 +1,104 @@
 ﻿@model App.Model.Memorandum.Memorandum
 
-
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
 
-<div class="container">
-    @Html.Partial("_Message")
+<div class="row">
+    <div class="col s12 m6 l3">
+        @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Sistema de Integridad- Denuncia</span>
+                <div class="row">
+                    <div class="input-field col s12 m10 l3">
+                        <strong>
 
-    @*@if (!Model.TieneFirma)
-        {
-            <p class="red-text">Usted no posee una firma electrónica configurada.</p>
-        }*@
-    <div class="row">
-        <div class="col s12 m6 l6">
-            <div class="row">
-                <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
+
+                            @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.FechaSolicitud)
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.Nombre)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.Nombre)
+                    </div>
+                    <div class="input-field col s12 m10 l3">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.Rut)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.Rut)
+                    </div>
+                    <div class="input-field col s12 m10 l1">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.DV)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.DV)
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.UnidadDescripcion)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.UnidadDescripcion)
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.EmailRem)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.EmailRem)
+                    </div>
+                    @*<div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.Region)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.Region)
+                    </div>*@
+                    @*<div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.Comuna)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.Comuna)
+                    </div>*@
+                    @*<div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.NombreDenunciado)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.NombreDenunciado)
+                    </div>*@
+                    @*<div class="input-field col s12 m10 l10">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.LugarHechos)
+                        </strong><br />
+                        @Html.DisplayFor(m => Model.LugarHechos)
+                    </div>*@
+                    @*<div class="input-field col s12 m10 l10">
+                        @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea" })
+                        @Html.LabelFor(m => Model.Descripcion)
+                        @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+                    </div>*@
+                    @*<div class="input-field col s12 m10 l10">
+                        @Html.TextAreaFor(m => Model.Antecedentes, new { @class = "materialize-textarea" })
+                        @Html.LabelFor(m => Model.Antecedentes)
+                        @Html.ValidationMessageFor(m => Model.Antecedentes, "", new { @class = "red-text" })
+                    </div>*@
+                </div>
             </div>
-            <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)">Firmar</a>
         </div>
-
-
-        <div id="@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)" class="modal">
-            <div class="modal-content">
-                <h4>Confirma Firma de Memorandum</h4>
-                @using (Html.BeginForm("Sign", "Documento", new { DocumentoId = Model.Proceso.Documentos.FirstOrDefault().DocumentoId }, FormMethod.Post, new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId, enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.HiddenFor(model => Model.Proceso.Documentos.FirstOrDefault().DocumentoId)
-                    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-                }
-            </div>
-
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            </div>
-        </div>
-
-        <div class="col s12 m6 l6">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
-        </div>
+        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+        @Html.Action("History", "Workflow", new { Model.WorkflowId })
     </div>
 </div>
+
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('.modal').modal();
-        $('select').formSelect();
+        //$('select').formSelect();
     });
 </script>
-
