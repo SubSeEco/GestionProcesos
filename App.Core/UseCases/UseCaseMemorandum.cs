@@ -3975,15 +3975,15 @@ namespace App.Core.UseCases
 
                     //notificar actualización del estado al dueño
                     if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
-                        _email.NotificarCambioWorkflow(workflowActual,
+                        _email.NotificarNuevoWorkflow(workflowActual,
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                     //notificar por email al ejecutor de proxima tarea
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                        _email.NotificarCambioWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                        _email.NotificarNuevoWorkflow(workflow,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                     /*Si el proceso corresponde a Cometidos y esta en la tarea de firma electronica se notifica con correo*/
                     if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
@@ -3998,7 +3998,7 @@ namespace App.Core.UseCases
 
                             _email.NotificarFirmaResolucionCometido(workflow,
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFirmaResolucion),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea), emailMsg);
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
                         }
                     }
 
@@ -4015,7 +4015,7 @@ namespace App.Core.UseCases
 
                                 _email.NotificarFirmaResolucionCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
-                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea), emailMsg);
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
                             }
                         }
                         else if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
@@ -4026,7 +4026,7 @@ namespace App.Core.UseCases
 
                             _email.NotificarFirmaResolucionCometido(workflow,
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea), emailMsg);
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
                         }
                     }
                 }

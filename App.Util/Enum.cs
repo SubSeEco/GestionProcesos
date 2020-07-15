@@ -78,8 +78,8 @@
         }
         public enum Configuracion
         {
-            PlantillaCorreoNotificacionTarea = 1,
-            AsuntoCorreoNotificacionTarea = 2,
+            PlantillaNuevaTarea = 1,
+            AsuntoCorreoNotificacion = 2,
             HSMUser = 4,
             HSMPassword = 5,
             PlantillaCorreoArchivoTarea = 7,
@@ -135,6 +135,7 @@
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
             url_tramites_en_linea,
+            plantilla_fin_proceso,
         }
 
         public enum DefinicionProceso

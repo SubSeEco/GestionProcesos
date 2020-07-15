@@ -109,7 +109,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository);
+                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -170,7 +170,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository);
+                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -233,18 +233,18 @@ namespace App.Web.Controllers
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar la unidad del funcionario" }, JsonRequestBehavior.AllowGet);
 
             //crear proceso
-            var _useCaseCore = new UseCaseCore(_repository, _email, _sigper);
-            var _UseCaseCoreResponseMessage = _useCaseCore.ProcesoInsert(new Proceso
+            var _useCaseInformHSA = new UseCaseInformeHSA(_repository, _sigper, _email);
+            var _UseCaseCrearInformeHSAResponseMessage = _useCaseInformHSA.InicioExterno(new Proceso
             {
                 DefinicionProcesoId = (int)App.Util.Enum.DefinicionProceso.InformeHSA,
                 Email = model.Email
             });
 
-            if (!_UseCaseCoreResponseMessage.IsValid)
+            if (!_UseCaseCrearInformeHSAResponseMessage.IsValid)
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso" }, JsonRequestBehavior.AllowGet);
 
             //crear workflow
-            var workflow = _repository.GetFirst<Workflow>(q => q.ProcesoId == _UseCaseCoreResponseMessage.EntityId);
+            var workflow = _repository.GetFirst<Workflow>(q => q.ProcesoId == _UseCaseCrearInformeHSAResponseMessage.EntityId);
             if (workflow == null)
                 return Json(new { ok = false, id = 0, error = "Problemas al obtener el workflow inicial" }, JsonRequestBehavior.AllowGet);
 
@@ -260,8 +260,7 @@ namespace App.Web.Controllers
             });
 
             //crear informe hsa
-            var _useCaseInformeHSAInteractor = new UseCaseInformeHSA(_repository);
-            var _UseCaseInformeHSAResponseMessage = _useCaseInformeHSAInteractor.Insert(new InformeHSA
+            var _UseCaseDocumentoResponseMessage = _useCaseInformHSA.Insert(new InformeHSA
             {
                 Actividades = model.Actividades,
                 ConJornada = model.ConJornada,
@@ -280,15 +279,17 @@ namespace App.Web.Controllers
                 ProcesoId = workflow.ProcesoId,
             });
 
-            if (!_UseCaseInformeHSAResponseMessage.IsValid)
+            if (!_UseCaseDocumentoResponseMessage.IsValid)
                 return Json(new { ok = false, id = 0, error = "Problemas al crear informe HSA" }, JsonRequestBehavior.AllowGet);
 
             //enviar tarea a siguiente paso
-            var _UseCaseWorkflowResponseMessage = _useCaseCore.WorkflowUpdate(workflow);
-            if (!_UseCaseWorkflowResponseMessage.IsValid)
+            var _useCaseCore = new UseCaseCore(_repository, _email, _sigper);
+
+            var _UseCaseCoreResponseMessage = _useCaseCore.WorkflowUpdate(workflow);
+            if (!_UseCaseCoreResponseMessage.IsValid)
                 return Json(new { ok = false, id = 0, error = "Problemas al enviar informe a la siguiente tarea" }, JsonRequestBehavior.AllowGet);
 
-            return Json(new { ok = true, id = _UseCaseCoreResponseMessage.EntityId }, JsonRequestBehavior.AllowGet);
+            return Json(new { ok = true, id = _UseCaseCrearInformeHSAResponseMessage.EntityId }, JsonRequestBehavior.AllowGet);
         }
 
         [AllowAnonymous]

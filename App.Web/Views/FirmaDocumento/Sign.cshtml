@@ -4,6 +4,12 @@
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
 
+<style>
+    .container {
+        width: 85%;
+    }
+</style>
+
 <div class="container">
     @Html.Partial("_Message")
 
@@ -12,7 +18,7 @@
         <p class="red-text">Usted no posee una firma electrónica configurada.</p>
     }
     <div class="row">
-        <div class="col s12 m6 l6">
+        <div class="col s12 m8 l8">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Firma de documento</span>
@@ -52,7 +58,7 @@
                     {
                         <div class="input-field">
                             <strong>@Html.DisplayNameFor(m => Model.File)</strong>
-                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="600px"></embed>
                         </div>
                     }
 
@@ -84,7 +90,7 @@
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l6">
+        <div class="col s12 m4 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>

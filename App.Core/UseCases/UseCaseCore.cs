@@ -377,10 +377,17 @@ namespace App.Core.UseCases
 
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
+                        if (!workflow.Pl_UndCod.HasValue)
+                            throw new Exception("No se encontró el grupo de destino." + definicionWorkflow.Pl_UndCod);
+
                         workflow.GrupoId = definicionWorkflow.GrupoId;
                         workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                         workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
                         workflow.TareaPersonal = false;
+
+                        var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q=>q.Rh_Mail.Trim());
+                        if (emails.Any())
+                            workflow.Email = string.Join(";", emails);
 
                         break;
 
@@ -405,17 +412,17 @@ namespace App.Core.UseCases
                 _repository.Create(proceso);
                 _repository.Save();
 
-                ////notificar al dueño del proceso
+                //notificar al dueño del proceso
                 if (workflow.DefinicionWorkflow.NotificarAlAutor)
                     _email.NotificarInicioProceso(proceso,
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNuevoProceso),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 //notificar por email al destinatario de la tarea
                 if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                    _email.NotificarCambioWorkflow(workflow,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                    _email.NotificarNuevoWorkflow(workflow,
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 response.EntityId = proceso.ProcesoId;
             }
@@ -480,9 +487,9 @@ namespace App.Core.UseCases
                     _repository.Save();
 
                     //notificar al dueño del proceso
-                    _email.NotificarInicioProceso(obj,
+                    _email.NotificarAnulacionProceso(obj,
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoProcesoAnulado),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 }
             }
@@ -545,9 +552,9 @@ namespace App.Core.UseCases
 
                 //notificar por email
                 if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                    _email.NotificarCambioWorkflow(workflow,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                    _email.NotificarNuevoWorkflow(workflow,
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
             }
             catch (Exception ex)
             {
@@ -621,6 +628,11 @@ namespace App.Core.UseCases
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
+
+                    //notificar al dueño del proceso
+                    _email.NotificarFinProceso(workflowActual.Proceso,
+                    _repository.GetFirst<Configuracion>(q=>q.Nombre == App.Util.Enum.Configuracion.plantilla_fin_proceso.ToString()),
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
 
                 //en el caso de existir mas tareas, crearla
@@ -646,6 +658,11 @@ namespace App.Core.UseCases
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
                             workflow.TareaPersonal = false;
+
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+
                         }
 
                         if (!string.IsNullOrEmpty(obj.To))
@@ -663,7 +680,6 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
                     {
-
                         var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && (q.To != null || q.Pl_UndCod != null) && q.WorkflowId != workflowActual.WorkflowId).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
                         if (workflowInicial == null)
                             throw new Exception("No se encontró el workflow inicial.");
@@ -677,6 +693,10 @@ namespace App.Core.UseCases
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
                             workflow.TareaPersonal = false;
+
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
                         }
 
                         if (!string.IsNullOrEmpty(workflowInicial.To))
@@ -743,7 +763,6 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
                     {
-
                         persona = _sigper.GetUserByEmail(obj.Email);
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en SIGPER.");
@@ -756,11 +775,35 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                     {
+                        if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
+                            throw new Exception("No se especificó la unidad o grupo de destino.");
 
-                        workflow.GrupoId = definicionWorkflow.GrupoId;
-                        workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
-                        workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
-                        workflow.TareaPersonal = false;
+                        if (definicionWorkflow.Pl_UndCod.HasValue)
+                        {
+                            var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
+                            if (unidad == null)
+                                throw new Exception("No se encontró la unidad destino en SIGPER.");
+                            workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
+                            workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+                        }
+                        if (definicionWorkflow.GrupoId.HasValue)
+                        {
+                            var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                            if (grupo == null)
+                                throw new Exception("No se encontró el grupo de destino.");
+                            workflow.GrupoId = definicionWorkflow.GrupoId;
+                            workflow.Pl_UndCod = null;
+                            workflow.Pl_UndDes = null;
+                            workflow.TareaPersonal = false;
+                            var emails = grupo.Usuarios.Where(q=>q.Habilitado).Select(q => q.Email);
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+                        }
+
                     }
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
@@ -780,17 +823,11 @@ namespace App.Core.UseCases
                     _repository.Create(workflow);
                     _repository.Save();
 
-                    //notificar actualización del estado al dueño
-                    if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
-                        _email.NotificarCambioWorkflow(workflowActual,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
-
                     //notificar por email al ejecutor de proxima tarea
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                        _email.NotificarCambioWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                        _email.NotificarNuevoWorkflow(workflow,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
             }
             catch (Exception ex)
@@ -827,9 +864,9 @@ namespace App.Core.UseCases
 
                 //notificar por email
                 if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                    _email.NotificarCambioWorkflow(workflow,
+                    _email.NotificarNuevoWorkflow(workflow,
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoArchivoTarea),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
             }
             catch (Exception ex)
             {
