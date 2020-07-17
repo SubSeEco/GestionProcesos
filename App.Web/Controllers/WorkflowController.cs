@@ -332,7 +332,7 @@ namespace App.Web.Controllers
                 }
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper);
                     var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                     if (_UseCaseResponseMessage.IsValid)
                     {

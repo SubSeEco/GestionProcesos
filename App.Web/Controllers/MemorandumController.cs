@@ -21,7 +21,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using Rotativa;
 using org.mp4parser.aspectj.runtime.@internal;
-using App.Infrastructure.Extensions;
+//using App.Infrastructure.Extensions;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -958,7 +958,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.MemorandumInsert(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -1226,7 +1226,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -1416,7 +1416,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)

@@ -5555,6 +5555,7 @@ namespace App.Core.UseCases
                                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                     }
 
+
                                     if (cometido.ObservacionesPagoSigfeTesoreria != null)
                                     {
                                         /*Aprueba pago con observaciones o sin pago y envía a interesado(a)*/

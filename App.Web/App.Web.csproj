@@ -48,9 +48,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="App.Core">
-      <HintPath>..\App.Core\bin\Debug\App.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -255,7 +252,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\InformeHSA.xlsx" />
     <Content Include="App_Data\PROCESOS.xlsx" />
     <Content Include="Content\images\FirmaGato.png" />
     <Content Include="Content\images\icon-borrar.png" />
@@ -692,6 +688,10 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\App.Core\App.Core.csproj">
+      <Project>{3325f871-6960-4787-b291-a1408a337c8d}</Project>
+      <Name>App.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj">
       <Project>{4966979d-b29f-44ad-9ec9-31289385877b}</Project>
       <Name>App.Infrastructure</Name>
