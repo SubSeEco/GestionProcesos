@@ -171,7 +171,7 @@ namespace App.Core.UseCases
 
             //actualizar firma documento
             firmaDocumento.DocumentoConFirma = _hsmResponse;
-            firmaDocumento.DocumentoConFirmaFilename = firmaDocumento.DocumentoSinFirmaFilename;
+            firmaDocumento.DocumentoConFirmaFilename = "Firmado " + firmaDocumento.DocumentoSinFirmaFilename;
             firmaDocumento.Firmante = string.Join(", ", idsFirma);
             firmaDocumento.Firmado = true;
             firmaDocumento.FechaFirma = DateTime.Now;
@@ -397,15 +397,15 @@ namespace App.Core.UseCases
 
                     //notificar actualización del estado al dueño
                     if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
-                        _email.NotificarCambioWorkflow(workflowActual,
+                        _email.NotificarNuevoWorkflow(workflowActual,
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                     //notificar por email al ejecutor de proxima tarea
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                        _email.NotificarCambioWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
+                        _email.NotificarNuevoWorkflow(workflow,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
             }
             catch (Exception ex)

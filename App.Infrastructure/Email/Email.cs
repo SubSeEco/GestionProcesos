@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Mail;
-using System.Net.Mime;
+using System.Linq;
 using App.Core.Interfaces;
-using App.Infrastructure.File;
 using App.Model.Core;
 
 namespace App.Infrastructure.Email
 {
     public class Email : IEmail
     {
-        public void Send()
+        public void Send(MailMessage message)
         {
             try
             {
-                //smtpClient.Send(emailMsg);
+                var smtpClient = new SmtpClient();
+                smtpClient.Send(message);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public void NotificarInicioProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
@@ -30,58 +30,107 @@ namespace App.Infrastructure.Email
             if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
                 throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
+            var body = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
+            body = body.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
 
             using (MailMessage emailMsg = new MailMessage())
             {
                 emailMsg.IsBodyHtml = true;
-                emailMsg.Body = plantillaCorreo.Valor;
+                emailMsg.Body = body;
                 emailMsg.Subject = asunto.Valor;
                 emailMsg.To.Add(proceso.Email);
+                Send(emailMsg);
             }
-
-            Send();
         }
 
-        public void NotificarCambioWorkflow(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarNuevoWorkflow(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
             if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
                 throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", workflow.WorkflowId.ToString());
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", workflow.DefinicionWorkflow.DefinicionProceso.Nombre);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Tarea]", workflow.DefinicionWorkflow.Nombre);
-
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
+            var body = plantillaCorreo.Valor.Replace("[Id]", workflow.WorkflowId.ToString());
+            body = body.Replace("[IdProceso]", workflow.ProcesoId.ToString());
+            body = body.Replace("[Proceso]", workflow.DefinicionWorkflow.DefinicionProceso.Nombre);
+            body = body.Replace("[Tarea]", workflow.DefinicionWorkflow.Nombre);
+            if (!string.IsNullOrWhiteSpace(workflow.Mensaje))
+                body = body.Replace("[Observacion]", workflow.Mensaje);
+            else
+                body = body.Replace("[Observacion]", string.Empty);
 
             using (MailMessage emailMsg = new MailMessage())
             {
                 emailMsg.IsBodyHtml = true;
-                emailMsg.Body = plantillaCorreo.Valor;
+                emailMsg.Body = body;
                 emailMsg.Subject = asunto.Valor;
 
                 switch (workflow.DefinicionWorkflow.TipoEjecucionId)
                 {
-                    case (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+                    case (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico:
 
+                        //copiar a la persona
                         emailMsg.To.Add(workflow.Email);
                         break;
 
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
-                        return;
+                        //copiar a las personas del grupo
+                        foreach (var email in workflow.Email.Split(';'))
+                            if (!emailMsg.To.Any(q=>q.Address == email))
+                                emailMsg.To.Add(email);
+                        break;
                 }
-            }
 
-            Send();
+                //copiar al dueño del proceso
+                if (!string.IsNullOrEmpty(workflow.Proceso.Email))
+                    if (!emailMsg.To.Any(q => q.Address == workflow.Proceso.Email))
+                        emailMsg.CC.Add(workflow.Proceso.Email);
+
+                Send(emailMsg);
+            }
+        }
+
+        public void NotificarFinProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        {
+            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+                throw new Exception("No existe la plantilla fin de proceso");
+            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
+                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+
+            var body = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
+            body = body.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
+
+            using (MailMessage emailMsg = new MailMessage())
+            {
+                emailMsg.IsBodyHtml = true;
+                emailMsg.Body = body;
+                emailMsg.Subject = asunto.Valor;
+                emailMsg.To.Add(proceso.Email);
+                Send(emailMsg);
+            }
+        }
+
+        public void NotificarAnulacionProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        {
+            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+                throw new Exception("No existe la plantilla fin de proceso");
+            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
+                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+
+            var body = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
+            body = body.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
+
+            using (MailMessage emailMsg = new MailMessage())
+            {
+                emailMsg.IsBodyHtml = true;
+                emailMsg.Body = body;
+                emailMsg.Subject = asunto.Valor;
+                emailMsg.To.Add(proceso.Email);
+                Send(emailMsg);
+            }
         }
 
         public void NotificarRespuestaSIAC(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
@@ -100,9 +149,8 @@ namespace App.Infrastructure.Email
                 emailMsg.Body = plantillaCorreo.Valor;
                 emailMsg.Subject = asunto.Valor;
                 emailMsg.To.Add(proceso.Email);
+                //Send(emailMsg);
             }
-
-            Send();
         }
 
         public void NotificarFirmaResolucionCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto, List<string> Mails)
@@ -145,9 +193,8 @@ namespace App.Infrastructure.Email
                 {
                     emailMsg.To.Add(correo);
                 }
+                //Send(emailMsg);
             }
-
-            Send();
         }
 
         public void NotificacionesCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)

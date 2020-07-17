@@ -30,8 +30,8 @@ namespace App.Web.Controllers
             _hsm = hsm;
         }
 
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
+
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {
