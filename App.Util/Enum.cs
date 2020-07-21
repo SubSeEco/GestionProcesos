@@ -78,8 +78,10 @@
         }
         public enum Configuracion
         {
-            PlantillaCorreoNotificacionTarea = 1,
-            AsuntoCorreoNotificacionTarea = 2,
+            PlantillaNuevaTarea = 1,
+            //PlantillaCorreoNotificacionTarea = 1,
+            //AsuntoCorreoNotificacionTarea = 2,
+            AsuntoCorreoNotificacion = 2,
             HSMUser = 4,
             HSMPassword = 5,
             PlantillaCorreoArchivoTarea = 7,
