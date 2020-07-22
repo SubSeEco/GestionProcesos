@@ -678,6 +678,7 @@
     <Content Include="Views\Memorandum\Pdf.cshtml" />
     <Content Include="Views\Memorandum\EditAna.cshtml" />
     <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
+    <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
