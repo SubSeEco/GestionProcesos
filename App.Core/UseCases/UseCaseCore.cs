@@ -415,7 +415,7 @@ namespace App.Core.UseCases
                 //notificar al dueño del proceso
                 if (workflow.DefinicionWorkflow.NotificarAlAutor)
                     _email.NotificarInicioProceso(proceso,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNuevoProceso),
+                    _repository.GetFirst<Configuracion>(q=>q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_nuevo_proceso)),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 //notificar por email al destinatario de la tarea
@@ -488,7 +488,7 @@ namespace App.Core.UseCases
 
                     //notificar al dueño del proceso
                     _email.NotificarAnulacionProceso(obj,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoProcesoAnulado),
+                    _repository.GetFirst<Configuracion>(q=>q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_anulacion_proceso)),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 }
@@ -631,7 +631,7 @@ namespace App.Core.UseCases
 
                     //notificar al dueño del proceso
                     _email.NotificarFinProceso(workflowActual.Proceso,
-                    _repository.GetFirst<Configuracion>(q=>q.Nombre == App.Util.Enum.Configuracion.plantilla_fin_proceso.ToString()),
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
 
@@ -1098,7 +1098,7 @@ namespace App.Core.UseCases
             if (documento == null)
                 response.Errors.Add("Documento a firmar no encontrado");
 
-            var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.url_tramites_en_linea.ToString());
+            var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
             if (url_tramites_en_linea == null)
                 response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
             if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())

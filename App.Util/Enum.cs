@@ -78,18 +78,19 @@
         }
         public enum Configuracion
         {
+            url_tramites_en_linea,
+            plantilla_nuevo_proceso,
+            plantilla_fin_proceso,
+            plantilla_anulacion_proceso,
+
             PlantillaNuevaTarea = 1,
             AsuntoCorreoNotificacion = 2,
             HSMUser = 4,
             HSMPassword = 5,
             PlantillaCorreoArchivoTarea = 7,
-            PlantillaCorreoNuevoProceso = 8,
-            PlantillaCorreoProcesoAnulado = 9,
             PlantillaCorreoCambioEstado = 10,
             PlantillaFirmaResolucion = 11,
             PlantillaNotificacionPago = 12,
-            url_tramites_en_linea,
-            plantilla_fin_proceso,
 
 
             /*PLANTILLAS DE CORREOP --> COMETIDOS*/
