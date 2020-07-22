@@ -12,6 +12,10 @@
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
                 @Html.HiddenFor(q => Model.InformeHSAId)
+                @Html.HiddenFor(q => Model.RUT)
+                @Html.HiddenFor(q => Model.Unidad)
+                @Html.HiddenFor(q => Model.Nombre)
+                @Html.HiddenFor(q => Model.NombreJefatura)
                 @Html.AntiForgeryToken()
 
                 <div class="card">
@@ -30,23 +34,23 @@
                                 @Html.ValidationMessageFor(m => Model.FechaHasta, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m6 l6">
-                                @Html.EditorFor(m => Model.RUT)
+                                @Html.TextBoxFor(m => Model.RUT, new { @disabled = "disabled" })
                                 @Html.LabelFor(m => Model.RUT)
                                 @Html.ValidationMessageFor(m => Model.RUT, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.Nombre)
+                                @Html.TextBoxFor(m => Model.Nombre, new { @disabled = "disabled" })
                                 @Html.LabelFor(m => Model.Nombre)
                                 @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
                             </div>
 
                             <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.Unidad)
+                                @Html.TextBoxFor(m => Model.Unidad, new { @disabled = "disabled" })
                                 @Html.LabelFor(m => Model.Unidad)
                                 @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.NombreJefatura)
+                                @Html.TextBoxFor(m => Model.NombreJefatura, new { @disabled = "disabled" })
                                 @Html.LabelFor(m => Model.NombreJefatura)
                                 @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
                             </div>

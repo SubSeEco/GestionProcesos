@@ -321,8 +321,8 @@ namespace App.Web.Controllers
         public FileResult Report()
         {
             var result = _repository.Get<InformeHSA>(q => !q.Proceso.Anulada).Select(hsa => new {
-                hsa.InformeHSAId,
                 hsa.ProcesoId,
+                Terminada = hsa.Proceso.Terminada ? "Terminado" : "Pendiente",
                 hsa.FechaSolicitud,
                 hsa.FechaDesde,
                 hsa.FechaHasta,
@@ -336,7 +336,6 @@ namespace App.Web.Controllers
                 hsa.Observaciones,
                 hsa.FechaBoleta,
                 hsa.NumeroBoleta,
-                hsa.Proceso.Terminada
             });
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

@@ -79,8 +79,6 @@
         public enum Configuracion
         {
             PlantillaNuevaTarea = 1,
-            //PlantillaCorreoNotificacionTarea = 1,
-            //AsuntoCorreoNotificacionTarea = 2,
             AsuntoCorreoNotificacion = 2,
             HSMUser = 4,
             HSMPassword = 5,
@@ -90,6 +88,10 @@
             PlantillaCorreoCambioEstado = 10,
             PlantillaFirmaResolucion = 11,
             PlantillaNotificacionPago = 12,
+            url_tramites_en_linea,
+            plantilla_fin_proceso,
+
+
             /*PLANTILLAS DE CORREOP --> COMETIDOS*/
             PlantillaEnvíoSolicitudCometido = 13,
             AsuntoSolicitudCometido_Solicitante_QuienViaja = 14,
@@ -136,9 +138,7 @@
             PlantillaCompraPasajes_AnalistaGP = 55,
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
-            url_tramites_en_linea = 60,
             Plantilla_Memo_Firmado = 61,
-            plantilla_fin_proceso = 62,
         }
 
         public enum DefinicionProceso

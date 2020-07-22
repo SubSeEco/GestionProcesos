@@ -824,6 +824,7 @@ namespace App.Core.UseCases
                     _repository.Save();
 
                     //notificar por email al ejecutor de proxima tarea
+                    //se adjunta copia al autor
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
                         _email.NotificarNuevoWorkflow(workflow,
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
