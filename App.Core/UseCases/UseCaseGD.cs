@@ -21,7 +21,7 @@ namespace App.Core.UseCases
             _folio = folio;
         }
 
-        public ResponseMessage Insert(GDIngreso obj)
+        public ResponseMessage Insert(GD obj)
         {
             var response = new ResponseMessage();
 
@@ -43,7 +43,7 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage Update(GDIngreso obj)
+        public ResponseMessage Update(GD obj)
         {
             var response = new ResponseMessage();
 
@@ -71,7 +71,7 @@ namespace App.Core.UseCases
 
             try
             {
-                var obj = _repository.GetById<GDIngreso>(id);
+                var obj = _repository.GetById<GD>(id);
                 if (obj == null)
                     response.Errors.Add("Dato no encontrado");
 

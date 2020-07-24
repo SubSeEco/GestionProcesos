@@ -86,8 +86,8 @@ namespace App.Infrastructure.GestionProcesos
         //public virtual DbSet<Contrato> Contrato { get; set; }
         //public virtual DbSet<CDP> CDP { get; set; }
         //public virtual DbSet<CDPBien> Bien { get; set; }
-        //public virtual DbSet<GDIngreso> Ingreso { get; set; }
-        //public virtual DbSet<GDTipoIngreso> TipoIngreso { get; set; }
+        //public virtual DbSet<GD> GD { get; set; }
+        //public virtual DbSet<GDTipo> GDTipo { get; set; }
         //public virtual DbSet<CDPTipoSolicitud> TipoSolicitud { get; set; }
         //public virtual DbSet<SIACSolicitud> SIACSolicitud { get; set; }
         //public virtual DbSet<SIACOcupacion> SIACOcupacion { get; set; }

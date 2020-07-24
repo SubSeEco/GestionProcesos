@@ -41,15 +41,24 @@
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Funciones)</strong><br />
-                            @Html.DisplayFor(m => Model.Funciones)
+                            @if (!string.IsNullOrWhiteSpace(Model.Funciones))
+                            {
+                                @Html.Raw(Model.Funciones.Replace(Environment.NewLine, "<br/>"))
+                            }
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Actividades)</strong><br />
-                            @Html.DisplayFor(m => Model.Actividades)
+                            @if (!string.IsNullOrWhiteSpace(Model.Actividades))
+                            {
+                                @Html.Raw(Model.Actividades.Replace(Environment.NewLine, "<br/>"))
+                            }
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Observaciones)</strong><br />
-                            @Html.DisplayFor(m => Model.Observaciones)
+                            @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                            {
+                                @Html.Raw(Model.Observaciones.Replace(Environment.NewLine, "<br/>"))
+                            }
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.FechaBoleta)</strong><br />

@@ -26,6 +26,7 @@
             Operador,
             Consultor,
             Cometido,
+            Remuneraciones
         }
 
         public enum TipoWorkflow
