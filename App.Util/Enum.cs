@@ -9,7 +9,7 @@
             CuentaRed,
             Contrato,
             InformeHSA,
-            GDIngreso,
+            GD,
             SIACSolicitud,
             RadioTaxi,
             Cometido,

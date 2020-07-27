@@ -9,6 +9,7 @@ using App.Model.FirmaDocumento;
 using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.DTO;
+using App.Model.GestionDocumental;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -80,13 +81,13 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<EstadoProceso> EstadoProceso { get; set; }
         public virtual DbSet<Memorandum> Memorandum { get; set; }
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
+        public virtual DbSet<GD> GD { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }
         //public virtual DbSet<Contrato> Contrato { get; set; }
         //public virtual DbSet<CDP> CDP { get; set; }
         //public virtual DbSet<CDPBien> Bien { get; set; }
-        //public virtual DbSet<GD> GD { get; set; }
         //public virtual DbSet<GDTipo> GDTipo { get; set; }
         //public virtual DbSet<CDPTipoSolicitud> TipoSolicitud { get; set; }
         //public virtual DbSet<SIACSolicitud> SIACSolicitud { get; set; }

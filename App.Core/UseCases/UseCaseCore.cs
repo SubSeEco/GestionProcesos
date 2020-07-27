@@ -312,23 +312,23 @@ namespace App.Core.UseCases
 
             try
             {
+                //validaciones
                 if (!_repository.GetExists<DefinicionProceso>(q => q.DefinicionProcesoId == obj.DefinicionProcesoId))
                     throw new ArgumentNullException("No se encontró la definición del proceso");
-
                 if (string.IsNullOrWhiteSpace(obj.Email))
                     throw new ArgumentNullException("No se encontró el usuario que ejecutó el workflow.");
-
                 var definicionProceso = _repository.GetById<DefinicionProceso>(obj.DefinicionProcesoId);
                 if (definicionProceso == null)
                     throw new ArgumentNullException("No se encontró la definición proceso.");
-
                 var definicionWorkflow = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == obj.DefinicionProcesoId).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId).FirstOrDefault();
                 if (definicionWorkflow == null)
                     throw new ArgumentNullException("No se encontró la definición de tarea del proceso asociado al workflow.");
 
+                //traer informacion del ejecutor
                 var persona = new SIGPER();
                 persona = _sigper.GetUserByEmail(obj.Email);
 
+                //nuevo proceso
                 var proceso = new Proceso();
                 proceso.DefinicionProcesoId = obj.DefinicionProcesoId;
                 proceso.Observacion = obj.Observacion;
@@ -339,6 +339,7 @@ namespace App.Core.UseCases
                 proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
 
+                //nuevo workflow
                 var workflow = new Workflow();
                 workflow.FechaCreacion = DateTime.Now;
                 workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
@@ -347,6 +348,7 @@ namespace App.Core.UseCases
                 workflow.DefinicionWorkflow = definicionWorkflow;
                 workflow.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionWorkflow.DefinicionProceso.DuracionHoras);
 
+                //determinar destino del workflow
                 switch (definicionWorkflow.TipoEjecucionId)
                 {
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
@@ -391,7 +393,6 @@ namespace App.Core.UseCases
 
                         break;
 
-
                     case (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico:
 
                         persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
@@ -407,8 +408,8 @@ namespace App.Core.UseCases
                         break;
                 }
 
+                //guardar información
                 proceso.Workflows.Add(workflow);
-
                 _repository.Create(proceso);
                 _repository.Save();
 
@@ -424,6 +425,7 @@ namespace App.Core.UseCases
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
+                //reternar id del proceso para efectos de seguimiento
                 response.EntityId = proceso.ProcesoId;
             }
             catch (Exception ex)

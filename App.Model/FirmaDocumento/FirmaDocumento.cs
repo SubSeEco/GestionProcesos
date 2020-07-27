@@ -90,7 +90,7 @@ namespace App.Model.FirmaDocumento
         public bool TieneFirma { get; set; }
 
         [Display(Name = "URL gestión documental")]
-        [DataType(DataType.Url)]
+        [DataType(DataType.Url, ErrorMessage = "Debe indicar una URL válida")]
         public string URL { get; set; }
         public int? DocumentoId { get; set; }
     }

@@ -231,7 +231,7 @@ namespace App.Web.Controllers
             var Email = UserExtended.Email(User);
 
             model.FechaCreacion = DateTime.Now;
-            model.Email = UserExtended.Email(User);
+            model.Email = Email;
 
             if (ModelState.IsValid)
             {

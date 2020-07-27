@@ -1,4 +1,4 @@
-﻿@model App.Model.GestionDocumental.GDIngreso
+﻿@model App.Model.GestionDocumental.GD
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
@@ -28,11 +28,11 @@
                             <p class="card-title">@Html.DisplayFor(m => Model.Folio)</p>
                         </div>
 
-                        <div class="input-field col s12 m10 l12">
+                        @*<div class="input-field col s12 m10 l12">
                             @Html.DropDownListFor(m => Model.GDTipoIngresoId, null, "Seleccione...")
                             @Html.LabelFor(m => Model.GDTipoIngresoId)
                             @Html.ValidationMessageFor(m => Model.GDTipoIngresoId, "", new { @class = "red-text" })
-                        </div>
+                        </div>*@
                         <div class="input-field col s12 m8 l12">
                             @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
                             @Html.LabelFor(m => Model.Pl_UndCod)

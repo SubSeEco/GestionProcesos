@@ -393,6 +393,7 @@
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
+    <Compile Include="Controllers\GDController.cs" />
     <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
     <Compile Include="Controllers\GeneracionCDPController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
@@ -679,6 +680,13 @@
     <Content Include="Views\Memorandum\EditAna.cshtml" />
     <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
+    <Content Include="Views\GD\Create.cshtml" />
+    <Content Include="Views\GD\Details.cshtml" />
+    <Content Include="Views\GD\Edit.cshtml" />
+    <Content Include="Views\GD\Index.cshtml" />
+    <Content Include="Views\GD\Sign.cshtml" />
+    <Content Include="Views\GD\Validate.cshtml" />
+    <Content Include="Views\GD\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

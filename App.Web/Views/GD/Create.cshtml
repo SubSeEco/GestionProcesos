@@ -1,81 +1,71 @@
-﻿@model App.Model.GestionDocumental.GDIngreso
+﻿@model App.Model.GestionDocumental.GD
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-<div class="row">
-    <div class="col s12 m6 l3">
-        @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.HiddenFor(q => Model.WorkflowId)
-            @Html.HiddenFor(q => Model.ProcesoId)
-            @Html.HiddenFor(q => q.OrganizacionId)
-            @Html.HiddenFor(q => q.Pl_UndDes)
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @*@Html.HiddenFor(q => q.OrganizacionId)*@
+                @Html.HiddenFor(q => q.Pl_UndDes)
+                @Html.AntiForgeryToken()
 
-            @Html.AntiForgeryToken()
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Nuevo ingreso documental</span>
+                        <div class="section"></div>
 
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Ingreso documental</span>
-                    <div class="row">
-                        <div class="input-field col s12 m10 l12">
-                            @if (Model.BarCode != null)
-                            {
-                            <img id="barcodeimage" src="data:image;base64,@System.Convert.ToBase64String(Model.BarCode)" /><br />
-                            }
-                            <p class="card-title">@Html.DisplayFor(m => Model.Folio)</p>
-                        </div>
-                        <div class="input-field col s12 m10 l12">
-                            @Html.DropDownListFor(m => Model.GDTipoIngresoId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.GDTipoIngresoId)
-                            @Html.ValidationMessageFor(m => Model.GDTipoIngresoId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m8 l12">
-                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Pl_UndCod)
-                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m8 l12">
-                            @Html.DropDownListFor(model => model.UsuarioDestino, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.UsuarioDestino)
-                            @Html.ValidationMessageFor(m => Model.UsuarioDestino, "", new { @class = "red-text" })
+                        @*<div class="col s12 m12 l12">
+                                @if (Model.BarCode != null)
+                                {
+                                    <img id="barcodeimage" src="data:image;base64,@System.Convert.ToBase64String(Model.BarCode)" /><br />
+                                }
+                                <p class="card-title">@Html.DisplayFor(m => Model.Folio)</p>
+                            </div>*@
+
+                        <div class="input-field col s12 m12 l12">
+                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
+                            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
                         </div>
 
-                        <div id="PanelRazonSocial">
-                            <div class="input-field col s12 m8 l12">
-                                @Html.TextBoxFor(m => Model.RazonSocial, new { @placeholder = "Ingrese registro o razón social" })
-                                @Html.LabelFor(m => Model.RazonSocial)
-                                @Html.ValidationMessageFor(m => Model.RazonSocial, "", new { @class = "red-text" })
-                            </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Materia)
+                            @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
                         </div>
-
-                        <div class="input-field col s12 m10 l12">
-                            @Html.LabelFor(m => Model.Asunto)
-                            @Html.TextAreaFor(m => Model.Asunto, new { @class = "materialize-textarea" })
-                            @Html.ValidationMessageFor(m => Model.Asunto, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l12">
+                        <div class="input-field col s12 m12 l12">
                             @Html.LabelFor(m => Model.Referencia)
                             @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
                             @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
                         </div>
-                        <div class="input-field col s12 m10 l12">
-                            @Html.LabelFor(m => Model.Descripcion)
-                            @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea" })
-                            @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+                        <div class="input-field col s12 m12 l12">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
                         </div>
-                    </div>
-
-                    <p>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.DropDownListFor(model => model.UsuarioDestino, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.UsuarioDestino)
+                            @Html.ValidationMessageFor(m => Model.UsuarioDestino, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.LabelFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                        </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                        @*<button class="waves-effect waves-light btn blue" type="submit">Imprimir etiqueta</button>*@
-                    </p>
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
-    <div class="col s12 m6 l3">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
     </div>
 </div>
 
