@@ -1,160 +1,129 @@
 ﻿@model App.Model.GestionDocumental.GD
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+    <div class="container">
 
-<div class="container">
-    <div class="row">
-        <div class="col s12 m6 l6">
-            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.HiddenFor(q => Model.WorkflowId)
-                @Html.HiddenFor(q => Model.ProcesoId)
-                @*@Html.HiddenFor(q => q.OrganizacionId)*@
-                @Html.HiddenFor(q => q.Pl_UndDes)
-                @Html.AntiForgeryToken()
+        @Html.Partial("_Message")
 
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">Nuevo ingreso documental</span>
-                        <div class="section"></div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(q => Model.WorkflowId)
+                    @Html.HiddenFor(q => Model.ProcesoId)
 
-                        @*<div class="col s12 m12 l12">
-                                @if (Model.BarCode != null)
-                                {
-                                    <img id="barcodeimage" src="data:image;base64,@System.Convert.ToBase64String(Model.BarCode)" /><br />
-                                }
-                                <p class="card-title">@Html.DisplayFor(m => Model.Folio)</p>
-                            </div>*@
-
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
-                            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Información del ingreso</span>
+                            <div class="row">
+                                <div class="input-field col s12 m12 l12">
+                                    @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                                    @Html.LabelFor(m => Model.Materia)
+                                    @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12">
+                                    @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
+                                    @Html.LabelFor(m => Model.Referencia)
+                                    @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12">
+                                    @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                                    @Html.LabelFor(m => Model.Observacion)
+                                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12">
+                                    <div class="switch">
+                                        <label>
+                                            @if (Model.RequiereFirmaElectronica)
+                                            {
+                                                <input type="checkbox" id="RequiereFirmaElectronica" onchange="CheckFirma();" checked="checked">
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="RequiereFirmaElectronica" onchange="CheckFirma();">
+                                            }
+                                            <span class="lever"></span>Requiere firma electrónica ?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
+                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.Pl_UndCod)
+                                    @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
+                                    @Html.DropDownListFor(model => model.UsuarioDestino, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.UsuarioDestino)
+                                    @Html.ValidationMessageFor(m => Model.UsuarioDestino, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                         </div>
-
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Materia)
-                            @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.LabelFor(m => Model.Referencia)
-                            @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
-                            @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Pl_UndCod)
-                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.DropDownListFor(model => model.UsuarioDestino, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.UsuarioDestino)
-                            @Html.ValidationMessageFor(m => Model.UsuarioDestino, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.LabelFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                        </div>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
-                </div>
-            }
+                }
+            </div>
+            <div class="col s12 m6 l6">
+                @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+                @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            </div>
         </div>
-        <div class="col s12 m6 l6">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
-        </div>
+
     </div>
-</div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.datepicker').datepicker();
+        $('.modal').modal();
         $('select').formSelect();
-        $('input:hidden').each(function (index, element) {
-            $(element).appendTo($(element).parent());
+        $('.tooltipped').tooltip();
+        //$('input:hidden').each(function (index, element) {
+        //    $(element).appendTo($(element).parent());
+        //});
+
+        $("input[type='hidden']").each(function (index, element) {
+            $(this).appendTo($(element).parent());
         });
 
-        var Pl_UndCod = document.getElementById('Pl_UndCod').value;
-        if (Pl_UndCod == 201010) {
-            $("#PanelRazonSocial").show();
+        CheckFirma();
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#Pl_UndCod").change(function () {
+        var Pl_UndCod = $(this).val();
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+            function (classesData) {
+                var select = $("#UsuarioDestino");
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+                $('#UsuarioDestino').formSelect();
+            });
+    });
+
+    //Chequear si requiere firma electrónica
+    function CheckFirma() {
+        var checkedValue = $("#RequiereFirmaElectronica").is(":checked");
+        if (checkedValue) {
+            $('#divRequiereFirmaUnidad').show();
+            $('#divRequiereFirmaUsuario').show();
         }
         else {
-            $("#PanelRazonSocial").hide();
+            $('#divRequiereFirmaUnidad').hide();
+            $('#divRequiereFirmaUsuario').hide();
         }
 
-        //Al cambiar unidad traer funcionarios
-        $("#Pl_UndCod").change(function (){
-            var Pl_UndCod = $(this).val();
-            $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
-                function (classesData) {
-                    var select = $("#UsuarioDestino");
-                    select.empty();
-                    select.append($('<option/>', {
-                        value: "",
-                        text: "Seleccione..."
-                    }));
-                    $.each(classesData, function (index, itemData) {
-                        select.append($('<option/>', {
-                            value: itemData.Email,
-                            text: itemData.Nombre
-                        }));
-                    });
-                    $('#UsuarioDestino').formSelect();
-                });
+        @Model.RequiereFirmaElectronica = checkedValue;
+    }
 
-            //obtener barcode
-            @*var Pl_UndCod = $(this).val();
-            var GDTipoIngresoId = document.getElementById('GDTipoIngresoId').value;
-
-            var link = '@Url.Action("GetBarCode", "Documento", new { Pl_UndCod = "ParPl_UndCod", GDTipoIngresoId = "ParGDTipoIngresoId" })';
-            link = link.replace("ParPl_UndCod", Pl_UndCod);
-            link = link.replace("ParGDTipoIngresoId", GDTipoIngresoId);
-            document.getElementById("barcodeimage").src = link;*@
-
-            //ver ocultar panel organizacion
-            var Pl_UndCod = document.getElementById('Pl_UndCod').value;
-            if (Pl_UndCod == 201010) {
-                $("#PanelRazonSocial").show();
-            }
-            else {
-                $("#PanelRazonSocial").hide();
-            }
-        });
-
-        //Al buscar organizaciones
-        $("#RazonSocial").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/GDIngreso/GetOrganizacion/",
-                    data: { term: request.term },
-                    type: "POST",
-                    success: function (data) {
-                        response($.map(data,
-                            function (item) {
-                                return { id: item.id, value: item.value };
-                            }));
-                    }
-                });
-            },
-
-            select: function (event, ui) {
-                $("#RazonSocial").val(ui.item.value);
-                $("#OrganizacionId").val(ui.item.id);
-                return false;
-            }
-        });
-
-
-
-    });
 </script>
 
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

@@ -28,7 +28,6 @@ namespace App.Web.Controllers
 
             if (tipoDocumentoList == null)
                 tipoDocumentoList = _folio.GetTipoDocumento();
-
         }
 
         public ActionResult Index()
@@ -49,12 +48,11 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Validate(int id)
+        public ActionResult Validate(int id) 
         {
             var model = _repository.GetById<GD>(id);
             return View(model);
         }
-
 
         public ActionResult Sign(int id)
         {
@@ -64,11 +62,9 @@ namespace App.Web.Controllers
 
         public ActionResult Create(int? WorkFlowId, int? ProcesoId)
         {
-            ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            //ViewBag.GDTipoIngresoId = new SelectList(_repository.Get<GDTipoIngreso>().OrderBy(q => q.Nombre), "GDTipoIngresoId", "Nombre");
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.UsuarioDestino = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            
+
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
             var model = new GD
             {
@@ -81,7 +77,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(GD model, string Pl_UndDes)
+        public ActionResult Create(GD model)
         {
             if (ModelState.IsValid)
             {
@@ -96,9 +92,9 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            //ViewBag.GDTipoIngresoId = new SelectList(_repository.Get<GDTipoIngreso>().OrderBy(q => q.Nombre), "GDTipoIngresoId", "Nombre", model.GDTipoIngresoId);
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.UsuarioDestino = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            
             if (model.Pl_UndCod.HasValue)
                 ViewBag.UsuarioDestino = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.UsuarioDestino);
 
@@ -108,7 +104,6 @@ namespace App.Web.Controllers
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<GD>(id);
-            //ViewBag.GDTipoIngresoId = new SelectList(_repository.Get<GDTipoIngreso>().OrderBy(q => q.Nombre), "GDTipoIngresoId", "Nombre", model.GDTipoIngresoId);
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.UsuarioDestino = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
@@ -134,7 +129,6 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            //ViewBag.GDTipoIngresoId = new SelectList(_repository.Get<GDTipoIngreso>().OrderBy(q => q.Nombre), "GDTipoIngresoId", "Nombre", model.GDTipoIngresoId);
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.UsuarioDestino = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
@@ -142,11 +136,5 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-
-        //public JsonResult GetOrganizacion(string term)
-        //{
-        //    var result = _daes.Get<App.Model.SistemaIntegrado.Organizacion>(q=>q.RazonSocial.Contains(term) || q.NumeroRegistro.ToString().Contains(term)).Select(c => new { id = c.OrganizacionId, value = c.TipoOrganizacion.Nombre + " " + c.NumeroRegistro + " - " + c.RazonSocial }).Take(25).ToList();
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}
     }
 }

@@ -24,16 +24,16 @@ namespace App.Model.GestionDocumental
         [DataType(DataType.Date)]
         public DateTime? Fecha { get; set; } = DateTime.Now;
 
-        [Required]
-        [Display(Name = "Tipo documento")]
-        public string TipoDocumentoCodigo { get; set; }
+        //[Required]
+        //[Display(Name = "Tipo documento")]
+        //public string TipoDocumentoCodigo { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar el dato Materia")]
         [Display(Name = "Materia")]
         [DataType(DataType.MultilineText)]
         public string Materia { get; set; }
 
-        [Required(ErrorMessage = "Es necesario especificar el dato Referencia")]
+        //[Required(ErrorMessage = "Es necesario especificar el dato Referencia")]
         [Display(Name = "Referencia")]
         [DataType(DataType.MultilineText)]
         public string Referencia { get; set; }
@@ -49,13 +49,13 @@ namespace App.Model.GestionDocumental
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        [Display(Name = "Unidad destino")]
+        [Display(Name = "Unidad del firmante")]
         public int? Pl_UndCod { get; set; }
 
-        [Display(Name = "Unidad destino")]
+        [Display(Name = "Unidad del firmante")]
         public string Pl_UndDes { get; set; }
 
-        [Display(Name = "Usuario destino")]
+        [Display(Name = "Usuario firmante")]
         public string UsuarioDestino { get; set; }
 
         //[Display(Name = "Organización")]
@@ -78,6 +78,10 @@ namespace App.Model.GestionDocumental
         [Display(Name = "Workflow")]
         public int WorkflowId { get; set; }
         public virtual Core.Workflow Workflow { get; set; }
+
+        [Display(Name = "Requiere firma electrónica?")]
+        public bool RequiereFirmaElectronica { get; set; } = false;
+
 
         public void GetFolio()
         {

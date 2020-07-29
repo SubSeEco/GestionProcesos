@@ -651,7 +651,22 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                     {
-                        if (obj.Pl_UndCod.HasValue)
+                        // si seleccionó unidad y usuario...
+                        if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
+                        {
+                            persona = _sigper.GetUserByEmail(obj.To);
+                            if (persona == null)
+                                throw new Exception("No se encontró el usuario en SIGPER.");
+
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.TareaPersonal = true;
+                        }
+
+                        // si seleccionó solo unidad ...
+                        if (obj.Pl_UndCod.HasValue && string.IsNullOrEmpty(obj.To))
                         {
                             var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
                             if (unidad == null)
@@ -667,18 +682,6 @@ namespace App.Core.UseCases
 
                         }
 
-                        if (!string.IsNullOrEmpty(obj.To))
-                        {
-                            persona = _sigper.GetUserByEmail(obj.To);
-                            if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
-
-                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                            workflow.TareaPersonal = true;
-                        }
                     }
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
