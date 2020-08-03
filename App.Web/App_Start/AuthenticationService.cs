@@ -49,8 +49,7 @@ namespace App.Web
             try
             {
                 PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, LDAPServer,LDAPContainer, LDAPUsername, LDAPPassword);
-                //isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
-                isAuthenticated = principalContext.ValidateCredentials(username, password);
+                isAuthenticated = principalContext.ValidateCredentials(username, password,ContextOptions.Negotiate);
 
                 if (isAuthenticated)
                     userPrincipal = UserPrincipal.FindByIdentity(principalContext, username);

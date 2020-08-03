@@ -1,0 +1,36 @@
+﻿@model App.Model.Core.Workflow
+@{
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Documentos</span>
+        @foreach (var item in Model.Proceso.Documentos)
+        {
+            <h6>
+                <i class="material-icons ">attach_file</i>
+                <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
+            </h6>
+            <p>
+                <strong>Fecha creación: </strong>@item.Fecha<br />
+                <strong>Autor:</strong> @item.Email<br />
+                <strong>Proceso de origen:</strong> @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                <strong>Tarea de origen:</strong> @item.Workflow.DefinicionWorkflow.Nombre
+            </p>
+            if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf") &&item.File != null )
+            {
+                <br />
+                <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
+            }
+            <div class="section"></div>
+        }
+    </div>
+</div>
+
+<div id="modalCreate" class="modal">
+    <div class="modal-content">
+        <h4>Adjuntar documento</h4>
+        @Html.Action("Create", "Documento", new { Model.ProcesoId, Model.WorkflowId })
+    </div>
+</div>

@@ -331,6 +331,7 @@
     <Content Include="App_Data\HSA.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Produccion.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <Content Include="Scripts\init.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
@@ -687,6 +688,8 @@
     <Content Include="Views\GD\Sign.cshtml" />
     <Content Include="Views\GD\Validate.cshtml" />
     <Content Include="Views\GD\View.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\GD\Documents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

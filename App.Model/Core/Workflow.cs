@@ -109,5 +109,11 @@ namespace App.Model.Core
 
         [Display(Name = "Asunto")]
         public string Asunto { get; set; }
+
+
+        [Display(Name = "Firmante")]
+        public string Firmante { get; set; }
+
+
     }
 }

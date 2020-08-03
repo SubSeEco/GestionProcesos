@@ -468,7 +468,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage FixFolio()
         {
             var response = new ResponseMessage();

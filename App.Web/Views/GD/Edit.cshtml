@@ -34,41 +34,45 @@
                                 @Html.LabelFor(m => Model.Observacion)
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
-                            <div class="input-field col s12 m12 l12">
+                            @*<div class="input-field col s12 m12 l12">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
+                                <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
+                            </label>
+                            <br />
+                            <br />
+
+                            <div class="switch">
                                 <label>
                                     @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                    <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
+                                    <span class="lever"></span>
+                                    Requiere firma electrónica?
                                 </label>
-                                <br />
-                                <br />
+                            </div>
+                            <br />
+                        </div>*@
+                            @*<div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
 
-                                @*<div class="switch">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                        <span class="lever"></span>
-                                        Requiere firma electrónica?
-                                    </label>
-                                </div>
-                                <br />*@
-                            </div>
-                            <div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
-                                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.Pl_UndCod)
-                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
-                                @Html.DropDownListFor(model => model.UsuarioDestino, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.UsuarioDestino)
-                                @Html.ValidationMessageFor(m => Model.UsuarioDestino, "", new { @class = "red-text" })
-                            </div>
+                        @Html.HiddenFor(q => q.Pl_UndDes)
+
+                        <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
+                            @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.UsuarioFirmante)
+                            @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
+                        </div>*@
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                 </div>
             }
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+
         </div>
         <div class="col s12 m6 l6">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
@@ -89,7 +93,6 @@
         var isChecked = $("#RequiereFirmaElectronica").is(':checked');
         $('#divRequiereFirmaUnidad').toggle(isChecked);
         $('#divRequiereFirmaUsuario').toggle(isChecked);
-
     });
 
     //Al cambiar unidad traer funcionarios
@@ -97,7 +100,7 @@
         var Pl_UndCod = $(this).val();
         $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
             function (classesData) {
-                var select = $("#UsuarioDestino");
+                var select = $("#UsuarioFirmante");
                 select.empty();
                 select.append($('<option/>', {
                     value: "",
@@ -109,7 +112,7 @@
                         text: itemData.Nombre
                     }));
                 });
-                $('#UsuarioDestino').formSelect();
+                $('#UsuarioFirmante').formSelect();
             });
     });
 

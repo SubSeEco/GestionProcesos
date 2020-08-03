@@ -272,6 +272,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\FirmaElock\signfile.wsdl" />
+    <None Include="Connected Services\FirmaElock\soapfile.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\HSMService\App.Infrastructure.HSMService.EncabezadoResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
