@@ -102,7 +102,7 @@ namespace App.Web.Controllers
                 //usuario administrador
                 var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
                 var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
-
+                                
                 model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
                 model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
             }
