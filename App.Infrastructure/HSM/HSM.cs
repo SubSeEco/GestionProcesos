@@ -148,6 +148,9 @@ namespace App.Infrastructure.HSM
             }
 
             //firma documento
+
+
+            var documentoFirmado = documento;
             var respuesta = new signFileResponse();
             using (var ws = new SignFileImplClient())
             {
@@ -155,11 +158,20 @@ namespace App.Infrastructure.HSM
                 {
                     foreach (var firmante in firmantes)
                     {
-                        respuesta = ws.SignFile(documento, firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", null, null, 0, 0, 0, 0);
+                        //ejecutar llamada a servicio
+                        respuesta = ws.SignFile(documentoFirmado, firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", null, null, 0, 0, 0, 0);
+                        
+                        //sin respuesta 
                         if (respuesta == null)
                             throw new System.Exception("El servicio de firma no retornó respuesta");
-                        if (respuesta != null && respuesta.status.Contains("FAIL"))
+                        
+                        //respuesta con error
+                        else if (respuesta != null && respuesta.status.Contains("FAIL"))
                             throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+                        
+                        //firma ok
+                        else
+                            documentoFirmado = respuesta.message;
                     }
                 }
                 catch (System.Exception ex)
@@ -168,7 +180,7 @@ namespace App.Infrastructure.HSM
                 }
             }
 
-            return respuesta.message;
+            return documentoFirmado;
         }
     }
 }

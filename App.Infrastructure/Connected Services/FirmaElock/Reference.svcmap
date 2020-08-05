@@ -22,6 +22,7 @@
     <MetadataSource Address="http://172.16.1.191:8080/ElockFileSigning/soapfile?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="soapfile.xsd" MetadataType="Schema" ID="dd5bcb10-d3fc-4ba5-9f0a-74d68fd712a5" SourceId="1" SourceUrl="http://172.16.1.191:8080/ElockFileSigning/soapfile?xsd=1" />
     <MetadataFile FileName="signfile.wsdl" MetadataType="Wsdl" ID="620449a7-4e56-46f3-97f3-2aac2438d3cf" SourceId="1" SourceUrl="http://172.16.1.191:8080/ElockFileSigning/soapfile?wsdl" />
   </Metadata>
   <Extensions>

@@ -184,7 +184,7 @@ namespace App.Core.UseCases
                 //notificar al dueño del proceso
                 if (workflow.DefinicionWorkflow.NotificarAlAutor)
                     _email.NotificarInicioProceso(proceso,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNuevoProceso),
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_nuevo_proceso)),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 response.EntityId = proceso.ProcesoId;

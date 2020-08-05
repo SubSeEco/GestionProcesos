@@ -28,3 +28,8 @@ strong {
     top: 16px;
     right: 50px;
 }
+
+
+.textarea.materialize-textarea {
+    min-height: 8rem;
+}

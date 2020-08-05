@@ -119,6 +119,7 @@
     <Compile Include="FirmaDocumento\DTOSolicitud.cs" />
     <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
     <Compile Include="FirmaDocumento\FirmaDocumento.cs" />
+    <Compile Include="GestionDocumental\GD.cs" />
     <Compile Include="InformeHSA\InformeHSA.cs" />
     <Compile Include="Memorandum\Memorandum.cs" />
     <Compile Include="Pasajes\Cotizacion.cs" />

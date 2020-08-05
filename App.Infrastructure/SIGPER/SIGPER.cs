@@ -90,6 +90,8 @@ namespace App.Infrastructure.SIGPER
             {
                 using (var context = new AppContextEconomia())
                 {
+                    var func = context.PEDATPER.Where(q => q.Rh_Mail == email && q.RH_EstLab == "A").ToList();
+
                     var funcionario = context.PEDATPER.FirstOrDefault(q => q.Rh_Mail == email && q.RH_EstLab == "A");
                     if (funcionario != null)
                     {

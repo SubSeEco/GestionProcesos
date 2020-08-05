@@ -20,11 +20,11 @@ namespace App.Web.Controllers
 
         public int InformHSAId { get; set; }
 
-        public DateTime? FechaSolicitud { get; set; }
+        public DateTime FechaSolicitud { get; set; }
 
-        public DateTime? FechaDesde { get; set; }
+        public DateTime FechaDesde { get; set; }
 
-        public DateTime? FechaHasta { get; set; }
+        public DateTime FechaHasta { get; set; }
 
         public int RUT { get; set; }
 
@@ -213,12 +213,14 @@ namespace App.Web.Controllers
         public JsonResult StartProcess(DTOInformeHSA model)
         {
             //validaciones
+            if (model == null)
+                return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: informe vacio" }, JsonRequestBehavior.AllowGet);
+            if (string.IsNullOrEmpty(model.Funciones))
+                return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar las funciones" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.Actividades))
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar las actividades" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.BoletaString) || string.IsNullOrEmpty(model.BoletaFilename))
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe adjuntar el archivo con la boleta de honorarios" }, JsonRequestBehavior.AllowGet);
-            if (string.IsNullOrEmpty(model.Funciones))
-                return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar las funciones" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.NumeroBoleta))
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar el número de boleta" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.Email))
@@ -255,7 +257,8 @@ namespace App.Web.Controllers
                 ProcesoId = workflow.ProcesoId,
                 FileName = model.BoletaFilename,
                 Type = model.BoletaFiletype,
-                File = System.Text.Encoding.Default.GetBytes(model.BoletaString),
+                //File = System.Text.Encoding.Default.GetBytes(model.BoletaString),
+                File = System.Convert.FromBase64String(model.BoletaString),
                 Email = model.Email
             });
 
@@ -309,9 +312,9 @@ namespace App.Web.Controllers
                 {
                     InformHSAId = q.Proceso.ProcesoId,
                     Estado = q.Proceso.EstadoProceso.Descripcion,
-                    FechaSolicitud = q.FechaSolicitud,
-                    FechaDesde = q.FechaDesde,
-                    FechaHasta = q.FechaHasta,
+                    FechaSolicitud = q.FechaSolicitud.Value,
+                    FechaDesde = q.FechaDesde.Value,
+                    FechaHasta = q.FechaHasta.Value,
                     NumeroBoleta = q.NumeroBoleta
                 }).ToList();
 
@@ -321,8 +324,8 @@ namespace App.Web.Controllers
         public FileResult Report()
         {
             var result = _repository.Get<InformeHSA>(q => !q.Proceso.Anulada).Select(hsa => new {
-                hsa.InformeHSAId,
                 hsa.ProcesoId,
+                Terminada = hsa.Proceso.Terminada ? "Terminado" : "Pendiente",
                 hsa.FechaSolicitud,
                 hsa.FechaDesde,
                 hsa.FechaHasta,
@@ -336,7 +339,6 @@ namespace App.Web.Controllers
                 hsa.Observaciones,
                 hsa.FechaBoleta,
                 hsa.NumeroBoleta,
-                hsa.Proceso.Terminada
             });
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

@@ -9,7 +9,7 @@
             CuentaRed,
             Contrato,
             InformeHSA,
-            GDIngreso,
+            GD,
             SIACSolicitud,
             RadioTaxi,
             Cometido,
@@ -26,6 +26,7 @@
             Operador,
             Consultor,
             Cometido,
+            Remuneraciones
         }
 
         public enum TipoWorkflow
@@ -78,18 +79,21 @@
         }
         public enum Configuracion
         {
+            url_tramites_en_linea,
+            plantilla_nuevo_proceso,
+            plantilla_fin_proceso,
+            plantilla_anulacion_proceso,
+
             PlantillaNuevaTarea = 1,
-            //PlantillaCorreoNotificacionTarea = 1,
-            //AsuntoCorreoNotificacionTarea = 2,
             AsuntoCorreoNotificacion = 2,
             HSMUser = 4,
             HSMPassword = 5,
             PlantillaCorreoArchivoTarea = 7,
-            PlantillaCorreoNuevoProceso = 8,
-            PlantillaCorreoProcesoAnulado = 9,
             PlantillaCorreoCambioEstado = 10,
             PlantillaFirmaResolucion = 11,
             PlantillaNotificacionPago = 12,
+
+
             /*PLANTILLAS DE CORREOP --> COMETIDOS*/
             PlantillaEnvíoSolicitudCometido = 13,
             AsuntoSolicitudCometido_Solicitante_QuienViaja = 14,
@@ -136,9 +140,7 @@
             PlantillaCompraPasajes_AnalistaGP = 55,
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
-            url_tramites_en_linea = 60,
             Plantilla_Memo_Firmado = 61,
-            plantilla_fin_proceso = 62,
         }
 
         public enum DefinicionProceso

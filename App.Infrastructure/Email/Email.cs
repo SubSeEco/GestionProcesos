@@ -15,7 +15,12 @@ namespace App.Infrastructure.Email
             try
             {
                 var smtpClient = new SmtpClient();
-                smtpClient.Send(message);
+                if (message != null)
+                {
+                    //temporalmente para efectos de monitoreo de envío de correos
+                    message.Bcc.Add("vsilva@economia.cl");
+                    smtpClient.Send(message);
+                }
             }
             catch (Exception)
             {
@@ -65,24 +70,15 @@ namespace App.Infrastructure.Email
                 emailMsg.Body = body;
                 emailMsg.Subject = asunto.Valor;
 
-                switch (workflow.DefinicionWorkflow.TipoEjecucionId)
-                {
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico:
+                //copiar a las personas del grupo
+                if (!string.IsNullOrEmpty(workflow.Email) && workflow.Email.Contains(';'))
+                    foreach (var email in workflow.Email.Split(';'))
+                        if (!emailMsg.To.Any(q => q.Address == email))
+                            emailMsg.To.Add(email);
 
-                        //copiar a la persona
-                        emailMsg.To.Add(workflow.Email);
-                        break;
-
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
-
-                        //copiar a las personas del grupo
-                        foreach (var email in workflow.Email.Split(';'))
-                            if (!emailMsg.To.Any(q=>q.Address == email))
-                                emailMsg.To.Add(email);
-                        break;
-                }
+                //copiar a la persona
+                if (!string.IsNullOrEmpty(workflow.Email) && !workflow.Email.Contains(';'))
+                    emailMsg.To.Add(workflow.Email);
 
                 //copiar al dueño del proceso
                 if (!string.IsNullOrEmpty(workflow.Proceso.Email))
@@ -219,19 +215,19 @@ namespace App.Infrastructure.Email
                 plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
 
             SmtpClient smtpClient = new SmtpClient();
-            MailMessage emailMsg = new MailMessage();            
+            MailMessage emailMsg = new MailMessage();
             emailMsg.IsBodyHtml = true;
             emailMsg.Body = plantillaCorreo.Valor;
             emailMsg.Subject = asunto;
 
             if (workflow.DefinicionWorkflow.Secuencia == 16) //|| workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
             {
-                
+
                 MemoryStream ms = new MemoryStream(documento.File);
                 Attachment attach = new Attachment(ms, documento.FileName);
                 emailMsg.Attachments.Add(attach);
             }
-            
+
 
             switch (workflow.DefinicionWorkflow.TipoEjecucionId)
             {
