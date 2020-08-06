@@ -159,12 +159,8 @@ namespace App.Web.Controllers
             var IdGrado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "0" : per.FunDatosLaborales.RhConGra.Trim();
             var grado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : per.FunDatosLaborales.RhConGra.Trim();
             var estamento = per.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-
-
-            //var algo = _sigper.GetReContra().Where(c => /*c.RH_NumInte == per.Funcionario.RH_NumInte && */c.Re_ConIni >= Convert.ToDateTime("01-01-2020")).ToList(); 
-            //var jhkj = algo.Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte);
-
-
+            var IdEscalafon = int.Parse(per.FunDatosLaborales.RhConEsc.Trim());
+            var Escalafon = per.FunDatosLaborales.RhConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == per.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim();
             var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
@@ -193,7 +189,9 @@ namespace App.Web.Controllers
                 Programa = Programa.Trim(),
                 Conglomerado = conglomerado,
                 Unidad = per.Unidad.Pl_UndDes.Trim(),
-                Jefatura = jefatura
+                Jefatura = jefatura,
+                IdEscalafon = IdEscalafon,
+                Escalafon = Escalafon
             }, JsonRequestBehavior.AllowGet);
 
 
@@ -397,6 +395,8 @@ namespace App.Web.Controllers
                 //model.ProgramaDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt.ToString();
                 model.ProgramaDescripcion = model.IdPrograma != null ? _sigper.GetREPYTs().Where(c => c.RePytCod == model.IdPrograma).FirstOrDefault().RePytDes : "S/A";
                 model.Jefatura = persona.Jefatura.PeDatPerChq;
+                model.IdEscalafon = int.Parse(persona.FunDatosLaborales.RhConEsc.Trim());
+                model.EscalafonDescripcion = persona.FunDatosLaborales.RhConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == persona.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim();
 
                 model.Destinos = ListDestino;
             }
@@ -414,7 +414,7 @@ namespace App.Web.Controllers
             model.FechaSolicitud = DateTime.Now;
             model.SolicitaReembolso = true;
             model.Destinos = ListDestino;
-
+            
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
@@ -964,26 +964,7 @@ namespace App.Web.Controllers
             }
             else
             {
-                if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                {
-                    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                    //{
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                        pdf = resultPdf.BuildFile(ControllerContext);
-                        //data = GetBynary(pdf);
-                        data = _file.BynaryToText(pdf);
-
-                    tipoDoc = 1;
-                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                    //}
-                    //else
-                    //{
-                    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //}
-                }
-                else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
+                if(model.IdEscalafon == 1 && model.IdEscalafon != null) /*Autoridad de Gobierno*/
                 {
                     Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                     pdf = resultPdf.BuildFile(ControllerContext);
@@ -994,14 +975,45 @@ namespace App.Web.Controllers
                 }
                 else
                 {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    pdf = resultPdf.BuildFile(ControllerContext);
-                    //data = GetBynary(pdf);
-                    data = _file.BynaryToText(pdf);
+                    if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
+                    {
+                        //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
+                        //{
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        pdf = resultPdf.BuildFile(ControllerContext);
+                        //data = GetBynary(pdf);
+                        data = _file.BynaryToText(pdf);
 
-                    tipoDoc = 1;
-                    Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                }
+                        tipoDoc = 1;
+                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                        //}
+                        //else
+                        //{
+                        //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
+                        //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
+                        //    return Redirect(Request.UrlReferrer.PathAndQuery);
+                        //}
+                    }
+                    //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
+                    //{
+                    //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    //    pdf = resultPdf.BuildFile(ControllerContext);
+                    //    //data = GetBynary(pdf);
+                    //    data = _file.BynaryToText(pdf);
+                    //    tipoDoc = 1;
+                    //    Name = "Resolucion Ministerial Exenta nro" + " " + model.CometidoId.ToString() + ".pdf";
+                    //}
+                    else
+                    {
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        pdf = resultPdf.BuildFile(ControllerContext);
+                        //data = GetBynary(pdf);
+                        data = _file.BynaryToText(pdf);
+
+                        tipoDoc = 1;
+                        Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                    }
+                }                
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);

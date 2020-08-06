@@ -19,6 +19,8 @@
             @Html.HiddenFor(q => Model.IdPrograma)
             @Html.HiddenFor(q => Model.IdConglomerado)
             @Html.HiddenFor(q => Model.FinanciaOrganismo)
+            @Html.HiddenFor(q => Model.IdEscalafon)
+            @Html.HiddenFor(q => Model.EscalafonDescripcion)
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "red-text" })
 
@@ -295,6 +297,8 @@
                     document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
                     document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
                     document.getElementById('Jefatura').value = classesData["Jefatura"];
+                    document.getElementById('IdEscalafon').value = classesData["IdEscalafon"];
+                    document.getElementById('EscalafonDescripcion').value = classesData["Escalafon"];
                     /*valida antecedentes para desabilitar controles*/
                     if (document.getElementById("EstamentoDescripcion").value == "") {
                         $("#EstamentoDescripcion").attr('disabled', true);
