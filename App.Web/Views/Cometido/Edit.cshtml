@@ -36,13 +36,15 @@
                 @Html.HiddenFor(q => Model.Alimentacion)
                 @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
-                @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
+            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
                 @*@Html.HiddenFor(q => Model.TipoVehiculoId)
-                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
+            @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
                 @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
                 @Html.HiddenFor(q => Model.Jefatura)
+                @Html.HiddenFor(q => Model.IdEscalafon)
+                @Html.HiddenFor(q => Model.EscalafonDescripcion)
 
 
                 <div class="card">
@@ -146,8 +148,8 @@
                                     <div class="input-field col s12 m8 l12">
                                         <label>Marque las opciones que SI financia el organismo invitante</label>
                                         @*<label style="color:green">
-                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                    </label>*@
+                                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                                    </label>*@
                                     </div>
                                     <div class="input-field col s12 m8 l13">
                                         <label>
@@ -205,7 +207,7 @@
                                     <label>
                                         @Html.CheckBoxFor(m => Model.Vehiculo)
                                         <span>@Html.LabelFor(m => Model.Vehiculo)</span>
-                                    </label>                                    
+                                    </label>
                                     <div class="section"></div>
                                 </div>
                                 <div id="auto">

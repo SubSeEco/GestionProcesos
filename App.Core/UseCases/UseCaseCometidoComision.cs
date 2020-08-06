@@ -4507,6 +4507,12 @@ namespace App.Core.UseCases
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
                             throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
                     }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                    {
+                        var com = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                        if (!com.Destinos.Any())
+                            throw new Exception("Se deben ingresar destinos al cometido.");
+                    }
                 }
                 else
                 {
