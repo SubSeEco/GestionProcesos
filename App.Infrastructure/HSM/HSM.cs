@@ -167,7 +167,7 @@ namespace App.Infrastructure.HSM
                         
                         //respuesta con error
                         else if (respuesta != null && respuesta.status.Contains("FAIL"))
-                            throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+                            throw new System.Exception(respuesta.error);
                         
                         //firma ok
                         else
@@ -176,7 +176,7 @@ namespace App.Infrastructure.HSM
                 }
                 catch (System.Exception ex)
                 {
-                    throw new System.Exception("Error firmar el documento:" + ex.Message);
+                    throw new System.Exception("Error firmar el documento: " + ex.Message);
                 }
             }
 

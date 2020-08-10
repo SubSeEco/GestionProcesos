@@ -329,17 +329,31 @@ namespace App.Infrastructure.SIGPER
         public List<PLUNILAB> GetUnidades()
         {
             var returnValue = new List<PLUNILAB>();
+            var criterioExclusion = "COMISIONADO";
 
             try
             {
                 using (var context = new AppContextEconomia())
                 {
-                    returnValue.AddRange(context.PLUNILAB.ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" }));
-
+                    //excluir las unidades sin funcionarios
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" });
+                    foreach (var item in unidades)
+                    {
+                        var rE = GetUserByUnidad(item.Pl_UndCod);
+                        if (rE != null && rE.Any())
+                            returnValue.Add(item);
+                    }
                 }
                 using (var context = new AppContextTurismo())
                 {
-                    returnValue.AddRange(context.PLUNILAB.ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" }));
+                    //excluir las unidades sin funcionarios
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" });
+                    foreach (var item in unidades)
+                    {
+                        var rT = GetUserByUnidad(item.Pl_UndCod);
+                        if (rT != null && rT.Any())
+                            returnValue.Add(item);
+                    }
                 }
             }
             catch (Exception)

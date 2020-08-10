@@ -90,5 +90,8 @@ namespace App.Model.Core
 
         [Display(Name = "Tipo documento firma")]
         public string TipoDocumentoFirma { get; set; }
+
+        [Display(Name = "Activo")]
+        public bool Activo { get; set; } = true;
     }
 }

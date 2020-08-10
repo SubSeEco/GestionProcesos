@@ -159,34 +159,45 @@ namespace App.Core.UseCases
                 Type = "application/pdf",
                 TipoPrivacidadId = 1,
                 TipoDocumentoId = 6,
-                Folio = firmaDocumento.Folio
+                Folio = firmaDocumento.Folio,
             };
             _repository.Create(documento);
             _repository.Save();
 
-            //generar código QR
-            var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+            try
+            {
+                //generar código QR
+                var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
-            //firmar documento
-            var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
+                //firmar documento
+                var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
 
-            //actualizar firma documento
-            firmaDocumento.DocumentoConFirma = _hsmResponse;
-            firmaDocumento.DocumentoConFirmaFilename = "Firmado " + firmaDocumento.DocumentoSinFirmaFilename;
-            firmaDocumento.Firmante = string.Join(", ", idsFirma);
-            firmaDocumento.Firmado = true;
-            firmaDocumento.FechaFirma = DateTime.Now;
-            firmaDocumento.DocumentoId = documento.DocumentoId;
-            _repository.Update(firmaDocumento);
+                //actualizar firma documento
+                firmaDocumento.DocumentoConFirma = _hsmResponse;
+                firmaDocumento.DocumentoConFirmaFilename = "Firmado " + firmaDocumento.DocumentoSinFirmaFilename;
+                firmaDocumento.Firmante = string.Join(", ", idsFirma);
+                firmaDocumento.Firmado = true;
+                firmaDocumento.FechaFirma = DateTime.Now;
+                firmaDocumento.DocumentoId = documento.DocumentoId;
+                _repository.Update(firmaDocumento);
 
-            //actualizar documento con contenido firmado
-            documento.File = _hsmResponse;
-            documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
-            documento.Signed = true;
-            _repository.Update(firmaDocumento);
+                //actualizar documento con contenido firmado
+                documento.File = _hsmResponse;
+                documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
+                documento.Signed = true;
+                _repository.Update(firmaDocumento);
 
-            //guardar cambios
-            _repository.Save();
+                //guardar cambios
+                _repository.Save();
+            }
+            catch (Exception ex)
+            {
+                documento.Activo = false;
+                _repository.Update(documento);
+                _repository.Save();
+
+                response.Errors.Add(ex.Message);
+            }
 
             return response;
         }
