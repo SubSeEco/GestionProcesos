@@ -13,13 +13,13 @@
                     @Html.Partial("_Message")
                     @*<span class="card-title">Aprobación de disponibilidad presupuestaria y refrendación</span>*@
                     <div class="row">
-                        <div class="input-field col s12 m10 l3">
+                        <div class="input-field col s12 m6 l6">
                             <strong>
                                 @Html.DisplayNameFor(m => Model.FechaSolicitud)
                             </strong>
                             @Html.DisplayFor(m => Model.FechaSolicitud)
                         </div>
-                        <div class="input-field col s12 m6 l4">
+                        <div class="input-field col s12 m10 l6">
                             <strong>
                                 @Html.DisplayNameFor(m => Model.CometidoId)
                             </strong>
@@ -171,13 +171,16 @@
                         <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                         <div class="row">
                             <div class="input-field col s12 m10 l10">
-                                @Html.LabelFor(m => Model.NombreCometido)
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.NombreCometido)
+                                </strong>
                                 @Html.DisplayFor(m => Model.NombreCometido)
                                 @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l12">
-                                @*@Html.DisplayFor(m => Model.CometidoDescripcion)*@
-                                @Html.LabelFor(m => Model.CometidoDescripcion)
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                </strong>                                
                                 @Html.TextAreaFor(m => Model.CometidoDescripcion, new { @disabled = "disabled", rows = 10 })
                                 @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                             </div>
@@ -480,7 +483,7 @@
                                     if (Model.DocumentoRefrendacion != true)
                                     {
                                         <div class="row">
-                                            @Html.ActionLink("Editar CDP", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
+                                            @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
                                         </div>
 
                                         <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
@@ -536,3 +539,8 @@
 
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

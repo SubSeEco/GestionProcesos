@@ -223,7 +223,7 @@ namespace App.Web.Controllers
 
 
             //var model = _repository.GetById<Cometido>(id);
-            var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+            var model = _repository.GetFirst<Cometido>(q => q.CometidoId == id);
             if (model == null)
                 return RedirectToAction("Details", "Proceso", new { id });
 

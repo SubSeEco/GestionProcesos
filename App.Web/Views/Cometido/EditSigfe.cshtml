@@ -53,12 +53,16 @@
                         @*<span class="card-title">Cometidos EDIT SIGFE</span>*@
                         <div class="row">
                             <div class="input-field col s12 m10 l3">
-                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                                </strong>
                                 @Html.DisplayFor(m => Model.FechaSolicitud)
                                 @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m6 l4">
-                                @Html.LabelFor(m => Model.CometidoId)
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.CometidoId)
+                                </strong>
                                 @Html.DisplayFor(m => Model.CometidoId)
                             </div>
                         </div>
@@ -66,53 +70,73 @@
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
-                                    @Html.DisplayFor(m => Model.UnidadDescripcion)
-                                    @Html.LabelFor(m => Model.UnidadDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.UnidadDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.UnidadDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
-                                    @Html.DisplayFor(m => Model.Nombre)
-                                    @Html.LabelFor(m => Model.Nombre)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Nombre)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.Nombre)                                    
                                     @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l8">
-                                    @Html.DisplayFor(m => Model.Rut)
-                                    @Html.LabelFor(m => Model.Rut)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Rut)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.Rut)                                    
                                     @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l4">
-                                    @Html.DisplayFor(m => Model.DV)
-                                    @Html.LabelFor(m => Model.DV)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.DV)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.DV)                                    
                                     @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.CargoDescripcion)
-                                    @Html.LabelFor(m => Model.CargoDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CargoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.CargoDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.CalidadDescripcion)
-                                    @Html.LabelFor(m => Model.CalidadDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.CalidadDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.GradoDescripcion)
-                                    @Html.LabelFor(m => Model.GradoDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.GradoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.GradoDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.EstamentoDescripcion)
-                                    @Html.LabelFor(m => Model.EstamentoDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.EstamentoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.EstamentoDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                    @Html.LabelFor(m => Model.ProgramaDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.ProgramaDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.ProgramaDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
-                                    @Html.LabelFor(m => Model.ConglomeradoDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.ConglomeradoDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
                                 </div>
                             </div>
@@ -195,13 +219,17 @@
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
-                                    @Html.DisplayFor(m => Model.NombreCometido)
-                                    @Html.LabelFor(m => Model.NombreCometido)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.NombreCometido)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.NombreCometido)                                    
                                     @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
-                                    @Html.DisplayFor(m => Model.CometidoDescripcion)
-                                    @Html.LabelFor(m => Model.CometidoDescripcion)
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.CometidoDescripcion)                                    
                                     @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
@@ -596,7 +624,10 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
-
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

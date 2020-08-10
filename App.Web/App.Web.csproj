@@ -448,7 +448,7 @@
     <Content Include="Views\Proceso\Delete.cshtml" />
     <Content Include="Views\Proceso\Details.cshtml" />
     <Content Include="Views\Proceso\Index.cshtml" />
-    <Content Include="Views\Workflow\Index.cshtml" />
+    <Content Include="Views\Workflow\Index_old.cshtml" />
     <Content Include="Views\Workflow\Send.cshtml" />
     <Content Include="Views\Configuracion\Details.cshtml" />
     <Content Include="Views\Configuracion\Edit.cshtml" />
@@ -679,6 +679,7 @@
     <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
+    <Content Include="Views\Workflow\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

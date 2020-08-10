@@ -196,7 +196,7 @@
                     {
                         @Html.DisplayFor(m => Model.DiasPlural)
                     }
-                    , en la:
+                    a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta), en la localidad antes señalada.
                 </p>
                 <br />
                 <p class="breakhere"></p>

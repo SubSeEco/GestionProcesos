@@ -46,15 +46,15 @@
                     <div class="card-content">
                         @*<span class="card-title">Cometidos</span>*@
                         <div class="row">
-                            <div class="input-field col s12 m10 l4">
+                            <div class="input-field col s12 m6 l6">
                                 <strong>
-                                    @Html.LabelFor(m => Model.FechaSolicitud)
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
                                 </strong>
                                 @Html.DisplayFor(m => Model.FechaSolicitud)
 
                             </div>
-                            <div class="input-field col s12 m10 l4">
-                                <strong>@Html.LabelFor(m => Model.CometidoId)</strong>
+                            <div class="input-field col s12 m10 l6">
+                                <strong>@Html.DisplayNameFor(m => Model.CometidoId)</strong>
                                 @Html.DisplayFor(m => Model.CometidoId)
                             </div>
                         </div>
@@ -62,43 +62,43 @@
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
-                                    <strong>@Html.LabelFor(m => Model.UnidadDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.UnidadDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.UnidadDescripcion)
                                 </div>
                                 <div class="input-field col s12 m10 l10">
-                                    <strong>@Html.LabelFor(m => Model.Nombre)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
                                     @Html.DisplayFor(m => Model.Nombre)
                                 </div>
                                 <div class="input-field col s12 m6 l8">
-                                    <strong>@Html.LabelFor(m => Model.Rut)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.Rut)</strong>
                                     @Html.DisplayFor(m => Model.Rut)
                                 </div>
                                 <div class="input-field col s12 m6 l4">
-                                    <strong>@Html.LabelFor(m => Model.DV)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.DV)</strong>
                                     @Html.DisplayFor(m => Model.DV)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.CargoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.CargoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.CargoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.CalidadDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.CalidadDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.CalidadDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.GradoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.GradoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.GradoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.EstamentoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.EstamentoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.EstamentoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.ProgramaDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.ProgramaDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.ProgramaDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.ConglomeradoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
                                 </div>
                             </div>
@@ -107,7 +107,9 @@
                             <div class="row">
                                 <div class="input-field col s12 m8 l12">
                                     <div class="row">
-                                        <span>@Html.LabelFor(m => Model.FinanciaOrganismo)</span><br />
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span><br />
+                                        </strong>
                                         <label>
                                             @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
                                             <span>SI</span>
@@ -189,13 +191,17 @@
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.NombreCometido)
+                                    </strong>
                                     @Html.EditorFor(m => Model.NombreCometido)
-                                    @Html.LabelFor(m => Model.NombreCometido)
                                     @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                    </strong>
                                     @Html.EditorFor(m => Model.CometidoDescripcion)
-                                    @Html.LabelFor(m => Model.CometidoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
@@ -500,3 +506,8 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>
