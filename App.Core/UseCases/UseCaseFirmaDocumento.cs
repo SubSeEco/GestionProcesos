@@ -90,12 +90,12 @@ namespace App.Core.UseCases
             var response = new ResponseMessage();
 
             if (id == 0)
-                response.Errors.Add("Documento a firmar no encontrado");
+                response.Errors.Add("Id de documento a firmar no encontrado");
             var firmaDocumento = _repository.GetById<FirmaDocumento>(id);
             if (firmaDocumento == null)
                 response.Errors.Add("Documento a firmar no encontrado");
             if (firmaDocumento != null && firmaDocumento.DocumentoSinFirma == null)
-                response.Errors.Add("Documento a firmar no encontrado");
+                response.Errors.Add("Documento a firmar sin contenido");
 
             var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
             if (url_tramites_en_linea == null)
@@ -179,25 +179,26 @@ namespace App.Core.UseCases
                 firmaDocumento.Firmado = true;
                 firmaDocumento.FechaFirma = DateTime.Now;
                 firmaDocumento.DocumentoId = documento.DocumentoId;
-                _repository.Update(firmaDocumento);
 
                 //actualizar documento con contenido firmado
                 documento.File = _hsmResponse;
                 documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
                 documento.Signed = true;
-                _repository.Update(firmaDocumento);
 
-                //guardar cambios
-                _repository.Save();
+                //actualizar datos
+                _repository.Update(firmaDocumento);
+                _repository.Update(documento);
             }
             catch (Exception ex)
             {
                 documento.Activo = false;
                 _repository.Update(documento);
-                _repository.Save();
 
                 response.Errors.Add(ex.Message);
             }
+
+            //guardar cambios
+            _repository.Save();
 
             return response;
         }

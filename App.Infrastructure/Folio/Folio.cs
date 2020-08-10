@@ -24,7 +24,6 @@ namespace App.Infrastructure.Folio
                 tipodocumento = tipoDocumento
             };
 
-            //conexion a servicios de folo de documentos
             var url = "http://wsfolio.economia.cl/api/folio";
             var client = new RestClient(url);
             var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
