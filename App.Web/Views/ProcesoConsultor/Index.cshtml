@@ -4,6 +4,7 @@
     ViewBag.Title = "Búsqueda de procesos";
     ViewBag.SubTitle = "Búsqueda de procesos";
 }
+
 <div class="grey lighten-3 section">
     <div class="container section">
         <h3 class="header">@ViewBag.Title</h3>
@@ -96,9 +97,18 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
                             </td>
-                            <td class="truncate">
-                                @Html.DisplayFor(modelItem => item.Observacion)
-                            </td>
+                            @if (!string.IsNullOrEmpty(item.Observacion) && item.Observacion.Contains(" "))
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Observacion)
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="max-width:250px;" class="truncate">
+                                    @Html.DisplayFor(modelItem => item.Observacion)
+                                </td>
+                            }
                             <td>
                                 @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
                             </td>

@@ -95,6 +95,12 @@ namespace App.Model.Cometido
         
         [Display(Name = "Estamento")]
         public string EstamentoDescripcion { get; set; }
+        
+        [Display(Name = "Escalafon")]
+        public int? IdEscalafon { get; set; }
+        
+        [Display(Name = "Escalafon")]
+        public string EscalafonDescripcion { get; set; }
 
         [Display(Name = "Programa")]
         public int? IdPrograma { get; set; }
