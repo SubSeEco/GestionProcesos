@@ -1,0 +1,220 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+@{
+    ViewBag.Title = "Bandeja de tareas";
+    ViewBag.SubTitle = "Listado de tareas pendientes";
+}
+
+<style>
+    .tabs .tab a {
+        color: rgb(33, 150, 243)
+    }
+        .tabs .tab a:hover {
+            color: #2196f3;
+        }
+
+        .tabs .tab a:focus.active {
+            color: #2196f3;
+            background-color: rgba(33, 150, 243, 0.10);
+        }
+
+    .tabs .indicator {
+        background-color: #0094ff;
+    }
+
+    .tabs .tab a:hover, .tabs .tab a.active {
+        color: #0094ff;
+    }
+</style>
+
+<meta http-equiv="refresh" content="60">
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+
+<div class="container">
+    @Html.Partial("_Message")
+    <p class="right truncate grey-text ultra-small">Actualizado al @DateTime.Now</p>
+
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab">
+            <a class="active" href="#test1">Tareas personales (@Model.TareasPersonales.Count())</a>
+        </li>
+        <li class="tab">
+            <a href="#test2">Tareas grupales (@Model.TareasGrupales.Count())</a>
+        </li>
+    </ul>
+
+    <div id="test1" class="col s12">
+        @if (!Model.TareasPersonales.Any())
+        {
+            <p>No existen tareas pendientes</p>
+        }
+        else
+        {
+            <ul class="collection">
+                @foreach (var item in Model.TareasPersonales.OrderByDescending(q => q.WorkflowId))
+                {
+                    <li class="collection-item avatar section">
+
+                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso fuera de plazo"></i>
+                        }
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso pronto a vencer"></i>
+                        }
+                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        {
+                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso dentro de plazo"></i>
+                        }
+
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
+
+                        <p class="truncate ultra-small">
+                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
+
+                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.Email)
+                            }
+
+                        </p>
+                        <p class="truncate ultra-small">
+                            Asignada a:
+
+                            @if (item.TareaPersonal)
+                            {
+                                if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Email)<text>, </text>
+                                }
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                            {
+                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                            }
+                            @if (item.Grupo != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                            }
+
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                        {
+                            <div class="section">
+                                <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                            </div>
+                        }
+
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div id="test2" class="col s12">
+        @if (!Model.TareasGrupales.Any())
+        {
+            <p>No existen tareas pendientes</p>
+        }
+        else
+        {
+            <ul class="collection">
+                @foreach (var item in Model.TareasGrupales.OrderByDescending(q => q.WorkflowId))
+                {
+                    <li class="collection-item avatar section">
+
+                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle red large"></i>
+                        }
+                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        {
+                            <i class="material-icons circle amber accent-4"></i>
+                        }
+                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        {
+                            <i class="material-icons circle green"></i>
+                        }
+
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
+
+                        <p class="truncate ultra-small">
+                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
+
+                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.Email)
+                            }
+
+                        </p>
+                        <p class="truncate ultra-small">
+                            Asignada a:
+
+                            @if (item.TareaPersonal)
+                            {
+                                if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
+                                {
+                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Email)<text>, </text>
+                                }
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                            {
+                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                            }
+                            @if (item.Grupo != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                            }
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                        {
+                            <div class="section">
+                                <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                            </div>
+                        }
+
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create", "Proceso")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Iniciar nuevo proceso"><i class="large material-icons">add</i></a>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.tooltipped').tooltip();
+        $('.tabs').tabs();
+    });
+</script>

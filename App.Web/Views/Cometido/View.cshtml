@@ -263,7 +263,9 @@
         </div>
     </div>
 </div>
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -289,3 +291,8 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>
