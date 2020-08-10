@@ -52,6 +52,7 @@ namespace App.Web.Controllers
         //public string BoletaString { get; set; }
         //public string BoletaFilename { get; set; }
         //public string BoletaFiletype { get; set; }
+
         public string Email { get; set; }
 
         public string Estado { get; set; }
