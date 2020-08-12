@@ -27,6 +27,6 @@ namespace App.Model.FirmaDocumento
         public string folio { get; set; }
 
         [Display(Name = "Subsecretaría")]
-        public string Subsecretaria { get; set; }
+        public string subsecretaria { get; set; }
     }
 }

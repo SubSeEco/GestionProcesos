@@ -40,7 +40,7 @@ namespace App.Infrastructure.Folio
                 periodo = DateTime.Now.Year.ToString(),
                 solicitante = solicitante,
                 tipodocumento = tipoDocumento,
-                Subsecretaria = subSecretaria
+                subsecretaria = subSecretaria
             };
 
             var url = "http://wsfolio.test.economia.cl/api/folio";
