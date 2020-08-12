@@ -17,6 +17,9 @@ namespace App.Model.Shared
                 
         [Display(Name = "Descripcion Tipo Pago")]
         public string DescripcionTipoPago { get; set; }
+
+        [Display(Name = "Descripcion Tipo Pago Contabilidad")]
+        public string DescripcionTipoPagoContabilidad { get; set; }
                 
         [Display(Name = "Estado Tipo Pago")]
         public bool TipoActivo { get; set; }
