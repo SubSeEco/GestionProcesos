@@ -248,7 +248,7 @@ namespace App.Model.Cometido
 
         /*Propiedades registro SIGFE Contabilidad*/
         //[Required(ErrorMessage = "Se debe ingresar el Id de SIGFE")]
-        [Display(Name = "Id Sigfe")]
+        [Display(Name = "Folio Sigfe")]
         public string IdSigfe { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago")]
@@ -275,7 +275,7 @@ namespace App.Model.Cometido
 
         /*Propiedades registro SIGFE Tesoreria*/
         //[Required(ErrorMessage = "Se debe ingresar el Id de Tesoreria")]
-        [Display(Name = "Id Sigfe Tesorería")]
+        [Display(Name = "Folio Sigfe Tesorería")]
         public string IdSigfeTesoreria { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago en tesoreria")]

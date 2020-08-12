@@ -533,14 +533,15 @@ namespace App.Web.Controllers
 
             List<SelectListItem> tipoPago = new List<SelectListItem>
             {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
+            new SelectListItem {Text = "Devengo", Value = "1"},
+            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            new SelectListItem {Text = "No Devengo", Value = "3"},
             };
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
+            //ViewBag.IdTipoPago = new SelectList(tipoPago, "Value","Text");
             return View(model);
         }
 
@@ -560,7 +561,7 @@ namespace App.Web.Controllers
                 resp.Errors.Add("Debe ingresar tipo de pago.");
 
             if(string.IsNullOrEmpty(model.IdSigfe))
-                resp.Errors.Add("Debe ingresar ID SIGFE.");
+                resp.Errors.Add("Debe ingresar Folio SIGFE.");
 
             if(!model.FechaPagoSigfe.HasValue)
                 resp.Errors.Add("Debe ingresar fecha pago sigfe");
@@ -605,15 +606,15 @@ namespace App.Web.Controllers
 
             List<SelectListItem> tipoPago = new List<SelectListItem>
             {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
+            new SelectListItem {Text = "Devengo", Value = "1"},
+            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            new SelectListItem {Text = "No Devengo", Value = "3"},
             };
 
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -1013,17 +1014,21 @@ namespace App.Web.Controllers
                         tipoDoc = 1;
                         Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
                     }
-                }                
+                }
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+                var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                 if (resolucion != null)
                 {
-                    foreach (var res in resolucion)
-                    {
-                        if (res.TipoDocumentoId == 1)
-                            IdDocto = res.DocumentoId;
-                    }
+                    IdDocto = resolucion.DocumentoId;
+
+
+                    //foreach (var res in resolucion)
+                    //{
+                    //    if (res.TipoDocumentoId == 1)
+                    //        IdDocto = res.DocumentoId;
+                    //}
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
