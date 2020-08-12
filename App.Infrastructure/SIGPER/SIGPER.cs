@@ -83,7 +83,8 @@ namespace App.Infrastructure.SIGPER
                 Jefatura = null,
                 Secretaria = null,
                 Unidad = null,
-                FunDatosLaborales = null
+                FunDatosLaborales = null,
+                SubSecretaria = null
             };
 
             try
@@ -160,6 +161,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "ECONOMIA";
+
                         return sigper;
                     }
                 }
@@ -209,6 +212,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "TURISMO";
+
                         return sigper;
                     }
                 }
@@ -220,7 +225,6 @@ namespace App.Infrastructure.SIGPER
 
             return sigper;
         }
-
         public Model.SIGPER.SIGPER GetUserByRut(int rut)
         {
             var sigper = new Model.SIGPER.SIGPER()
@@ -229,7 +233,8 @@ namespace App.Infrastructure.SIGPER
                 Jefatura = null,
                 Secretaria = null,
                 Unidad = null,
-                FunDatosLaborales = null
+                FunDatosLaborales = null,
+                SubSecretaria = null
             };
 
             try
@@ -272,6 +277,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "ECONOMIA";
+
                         return sigper;
                     }
                 }
@@ -313,6 +320,8 @@ namespace App.Infrastructure.SIGPER
                                     sigper.Secretaria = secretaria;
                             }
                         }
+
+                        sigper.SubSecretaria = "TURISMO";
 
                         return sigper;
                     }
@@ -363,7 +372,6 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
         }
-
         public List<PEDATPER> GetUserByUnidad(int codigoUnidad)
         {
             var returnValue = new List<PEDATPER>();
@@ -418,7 +426,6 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
-
         public List<PEDATPER> GetAllUsers()
         {
             var returnValue = new List<PEDATPER>();
@@ -463,7 +470,6 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
-
         public List<PEDATPER> GetUserByTerm(string term)
         {
             var returnValue = new List<PEDATPER>();

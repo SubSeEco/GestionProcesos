@@ -25,5 +25,8 @@ namespace App.Model.FirmaDocumento
         
         [Display(Name = "Folio")]
         public string folio { get; set; }
+
+        [Display(Name = "Subsecretaría")]
+        public string Subsecretaria { get; set; }
     }
 }
