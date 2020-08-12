@@ -35,11 +35,8 @@
                             RESOLUCIÓN ADMINISTRATIVA EXENTA N° @Html.DisplayFor(m => Model.Folio)
                         </strong>
                     }
-                    <br /><br />SANTIAGO,
-                    @if (Model.Firma == true)
-                    {
-                        @Html.DisplayFor(m => Model.FechaResolucion).ToHtmlString().Remove(10)
-                    }
+                    <br /><br />SANTIAGO,@Html.DisplayFor(m => Model.FechaResolucion).ToHtmlString().Remove(10)
+
                 </p>
             </td>
         </tr>
