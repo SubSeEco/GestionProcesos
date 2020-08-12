@@ -56,7 +56,7 @@ namespace App.Infrastructure.HSM
                 if (respuesta == null)
                     throw new System.Exception("El servicio de firma no retornó respuesta");
                 if (respuesta != null && respuesta.status.Contains("FAIL"))
-                    throw new System.Exception("Error al firmar el documento: " + respuesta.error);
+                    throw new System.Exception(respuesta.error);
 
                 return respuesta.message;
             }

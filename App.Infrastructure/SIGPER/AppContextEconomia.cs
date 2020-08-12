@@ -2,7 +2,6 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using App.Model.Cometido;
 using App.Model.Comisiones;
-using App.Model.DTO;
 using App.Model.Shared;
 using App.Model.SIGPER;
 
