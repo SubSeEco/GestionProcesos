@@ -837,11 +837,11 @@ namespace App.Web.Controllers
 
         public ActionResult GeneraDocumento(int id)
         {
-            Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            foreach (var key in Request.Cookies.AllKeys)
-            {
-                cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            }
+            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
+            //foreach (var key in Request.Cookies.AllKeys)
+            //{
+            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
+            //}
 
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
@@ -853,7 +853,8 @@ namespace App.Web.Controllers
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
