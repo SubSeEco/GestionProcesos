@@ -74,6 +74,7 @@ namespace App.Core.UseCases
                         firmaDocumento.DocumentoSinFirmaFilename = obj.DocumentoSinFirmaFilename;
 
                     firmaDocumento.TipoDocumentoCodigo = obj.TipoDocumentoCodigo;
+                    firmaDocumento.TipoDocumentoDescripcion = obj.TipoDocumentoDescripcion;
                     firmaDocumento.URL = obj.URL;
                     firmaDocumento.Observaciones = obj.Observaciones;
                     firmaDocumento.Firmado = false;
@@ -85,8 +86,27 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
+            //fix de metadata de documentos
+            //var docs = _repository.Get<Documento>(q=> string.IsNullOrEmpty(q.Metadata));
+            //foreach (var doc in docs)
+            //{
+            //    //obtener metadata del documento
+            //    var metadata = _file.BynaryToText(doc.File);
+            //    if (metadata != null)
+            //    {
+            //        doc.Texto = metadata.Text;
+            //        doc.Metadata = metadata.Metadata;
+            //        doc.Type = metadata.Type;
+            //    }
+
+            //    //actualizar datos
+            //    _repository.Update(doc);
+            //    _repository.Save();
+            //}
+
+
             var response = new ResponseMessage();
 
             if (id == 0)
@@ -106,18 +126,25 @@ namespace App.Core.UseCases
             if (!emailsFirmantes.Any())
                 response.Errors.Add("Debe especificar al menos un firmante");
             if (emailsFirmantes.Any())
-                foreach (var firmante in emailsFirmantes)
-                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
+                foreach (var email in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
+
+            var persona = _sigper.GetUserByEmail(firmante);
+            if (persona == null)
+                response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+            if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                response.Errors.Add("No se encontró la subsecretaría del firmante");
 
             if (!response.IsValid)
                 return response;
 
             //listado de id de firmantes
             var idsFirma = new List<string>();
-            foreach (var firmante in emailsFirmantes)
+            foreach (var email in emailsFirmantes)
             {
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
                 if (rubrica != null)
                     idsFirma.Add(rubrica.IdentificadorFirma);
             }
@@ -127,7 +154,7 @@ namespace App.Core.UseCases
             {
                 try
                 {
-                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo);
+                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
                     if (_folioResponse == null)
                         response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -156,8 +183,8 @@ namespace App.Core.UseCases
                 Fecha = DateTime.Now,
                 Email = firmaDocumento.Autor,
                 Signed = false,
-                Type = "application/pdf",
-                TipoPrivacidadId = 1,
+                //Type = "application/pdf",
+                TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Publico,
                 TipoDocumentoId = 6,
                 Folio = firmaDocumento.Folio,
             };
@@ -184,6 +211,15 @@ namespace App.Core.UseCases
                 documento.File = _hsmResponse;
                 documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
                 documento.Signed = true;
+
+                //obtener metadata del documento
+                var metadata = _file.BynaryToText(documento.File);
+                if (metadata != null)
+                {
+                    documento.Texto = metadata.Text;
+                    documento.Metadata = metadata.Metadata;
+                    documento.Type = metadata.Type;
+                }
 
                 //actualizar datos
                 _repository.Update(firmaDocumento);

@@ -1074,7 +1074,7 @@ namespace App.Core.UseCases
         }
 
         //Sobrecarga de firma multiple con tabla de verificacion
-        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
             var response = new ResponseMessage();
 
@@ -1093,18 +1093,26 @@ namespace App.Core.UseCases
             if (!emailsFirmantes.Any())
                 response.Errors.Add("Debe especificar al menos un firmante");
             if (emailsFirmantes.Any())
-                foreach (var firmante in emailsFirmantes)
-                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
+                foreach (var email in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
+
+            var persona = _sigper.GetUserByEmail(firmante);
+            if (persona == null)
+                response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+            if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                response.Errors.Add("No se encontró la subsecretaría del firmante");
+
 
             if (!response.IsValid)
                 return response;
 
             //listado de id de firmantes
             var idsFirma = new List<string>();
-            foreach (var firmante in emailsFirmantes)
+            foreach (var email in emailsFirmantes)
             {
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
                 if (rubrica != null)
                     idsFirma.Add(rubrica.IdentificadorFirma);
             }
@@ -1112,7 +1120,7 @@ namespace App.Core.UseCases
             //si el documento ya tiene folio no solicitarlo nuevamente
             if (string.IsNullOrWhiteSpace(documento.Folio))
             {
-                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma);
+                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma, persona.SubSecretaria);
                 if (_folioResponse == null)
                     response.Errors.Add("Servicio de folio no entregó respuesta");
 

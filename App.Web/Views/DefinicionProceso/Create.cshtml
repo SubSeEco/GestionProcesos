@@ -45,8 +45,14 @@
 
                     <div class="input-field col s12 m10 l10">
                         <label>
-                            @Html.CheckBoxFor(m => m.Habilitado)
+                            @Html.CheckBoxFor(m => Model.Habilitado)
                             <span>@Html.LabelFor(m => Model.Habilitado)</span>
+                        </label>
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        <label>
+                            @Html.CheckBoxFor(m => Model.EjecutarInmediatamente)
+                            <span>@Html.LabelFor(m => Model.EjecutarInmediatamente)</span>
                         </label>
                     </div>
                 </div>
