@@ -837,11 +837,11 @@ namespace App.Web.Controllers
 
         public ActionResult GeneraDocumento(int id)
         {
-            Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            foreach (var key in Request.Cookies.AllKeys)
-            {
-                cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            }
+            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
+            //foreach (var key in Request.Cookies.AllKeys)
+            //{
+            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
+            //}
 
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
@@ -853,7 +853,8 @@ namespace App.Web.Controllers
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
@@ -966,7 +967,8 @@ namespace App.Web.Controllers
             {
                 if(model.IdEscalafon == 1 && model.IdEscalafon != null) /*Autoridad de Gobierno*/
                 {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf"};
                     pdf = resultPdf.BuildFile(ControllerContext);
                     //data = GetBynary(pdf);
                     data = _file.BynaryToText(pdf);
@@ -979,7 +981,8 @@ namespace App.Web.Controllers
                     {
                         //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
                         //{
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf"};
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
@@ -1005,7 +1008,8 @@ namespace App.Web.Controllers
                     //}
                     else
                     {
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf"};
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
