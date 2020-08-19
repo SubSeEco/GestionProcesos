@@ -88,26 +88,8 @@ namespace App.Core.UseCases
         }
         public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
-            //fix de metadata de documentos
-            //var docs = _repository.Get<Documento>(q=> string.IsNullOrEmpty(q.Metadata));
-            //foreach (var doc in docs)
-            //{
-            //    //obtener metadata del documento
-            //    var metadata = _file.BynaryToText(doc.File);
-            //    if (metadata != null)
-            //    {
-            //        doc.Texto = metadata.Text;
-            //        doc.Metadata = metadata.Metadata;
-            //        doc.Type = metadata.Type;
-            //    }
-
-            //    //actualizar datos
-            //    _repository.Update(doc);
-            //    _repository.Save();
-            //}
-
-
             var response = new ResponseMessage();
+            var persona = new SIGPER();
 
             if (id == 0)
                 response.Errors.Add("Id de documento a firmar no encontrado");
@@ -130,12 +112,18 @@ namespace App.Core.UseCases
                     if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
                         response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
 
-            var persona = _sigper.GetUserByEmail(firmante);
-            if (persona == null)
-                response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+            if (string.IsNullOrEmpty(firmante))
+                response.Errors.Add("Debe especificar el email del usuario firmante");
 
-            if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
-                response.Errors.Add("No se encontró la subsecretaría del firmante");
+            if (!string.IsNullOrEmpty(firmante))
+            {
+                persona = _sigper.GetUserByEmail(firmante);
+                if (persona == null)
+                    response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+                if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                    response.Errors.Add("No se encontró la subsecretaría del firmante");
+            }
 
             if (!response.IsValid)
                 return response;
@@ -149,14 +137,14 @@ namespace App.Core.UseCases
                     idsFirma.Add(rubrica.IdentificadorFirma);
             }
 
-            //si el documento ya tiene folio no solicitarlo nuevamente
+            //si el documento ya tiene folio, no solicitarlo nuevamente
             if (string.IsNullOrWhiteSpace(firmaDocumento.Folio))
             {
                 try
                 {
                     var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
                     if (_folioResponse == null)
-                        response.Errors.Add("Servicio de folio no entregó respuesta");
+                        response.Errors.Add("Error al llamar el servicio externo de folio");
 
                     if (_folioResponse != null && _folioResponse.status == "ERROR")
                         response.Errors.Add(_folioResponse.error);
@@ -183,7 +171,6 @@ namespace App.Core.UseCases
                 Fecha = DateTime.Now,
                 Email = firmaDocumento.Autor,
                 Signed = false,
-                //Type = "application/pdf",
                 TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Publico,
                 TipoDocumentoId = 6,
                 Folio = firmaDocumento.Folio,
@@ -194,10 +181,10 @@ namespace App.Core.UseCases
             try
             {
                 //generar código QR
-                var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+                var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
                 //firmar documento
-                var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
+                var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _qrResponse);
 
                 //actualizar firma documento
                 firmaDocumento.DocumentoConFirma = _hsmResponse;
@@ -213,12 +200,12 @@ namespace App.Core.UseCases
                 documento.Signed = true;
 
                 //obtener metadata del documento
-                var metadata = _file.BynaryToText(documento.File);
-                if (metadata != null)
+                var _metadataResponse = _file.BynaryToText(documento.File);
+                if (_metadataResponse != null)
                 {
-                    documento.Texto = metadata.Text;
-                    documento.Metadata = metadata.Metadata;
-                    documento.Type = metadata.Type;
+                    documento.Texto = _metadataResponse.Text;
+                    documento.Metadata = _metadataResponse.Metadata;
+                    documento.Type = _metadataResponse.Type;
                 }
 
                 //actualizar datos
@@ -229,7 +216,6 @@ namespace App.Core.UseCases
             {
                 documento.Activo = false;
                 _repository.Update(documento);
-
                 response.Errors.Add(ex.Message);
             }
 
@@ -537,6 +523,31 @@ namespace App.Core.UseCases
 
             if (response.IsValid)
             {
+                _repository.Save();
+            }
+
+            return response;
+        }
+        public ResponseMessage FixFileMetadata()
+        {
+            var response = new ResponseMessage();
+
+            var ids = _repository.Get<Documento>(q => string.IsNullOrEmpty(q.Metadata)).Select(q=>q.DocumentoId);
+            foreach (var id in ids)
+            {
+                var doc = _repository.GetById<Documento>(id);
+
+                //obtener metadata del documento
+                var metadata = _file.BynaryToText(doc.File);
+                if (metadata != null)
+                {
+                    doc.Texto = metadata.Text;
+                    doc.Metadata = metadata.Metadata;
+                    doc.Type = metadata.Type;
+                }
+
+                //actualizar datos
+                _repository.Update(doc);
                 _repository.Save();
             }
 

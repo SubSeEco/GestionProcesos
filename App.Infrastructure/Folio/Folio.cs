@@ -8,7 +8,7 @@ namespace App.Infrastructure.Folio
 {
     public class Folio : IFolio
     {
-        string url = "http://wsfolio.test.economia.cl";
+        string url = "http://wsfolio.economia.cl";
 
         public List<Model.FirmaDocumento.DTOTipoDocumento> GetTipoDocumento()
         {

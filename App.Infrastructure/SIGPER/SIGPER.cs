@@ -593,20 +593,6 @@ namespace App.Infrastructure.SIGPER
                 throw;
             }
         }
-        //public List<DGPAISES> GetDGPAISESs()
-        //{
-        //    try
-        //    {
-        //        using (var context = new AppContextEconomia())
-        //        {
-        //            return context.DGPAISES.ToList();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
         public List<DGESCALAFONES> GetGESCALAFONEs()
         {
             try
