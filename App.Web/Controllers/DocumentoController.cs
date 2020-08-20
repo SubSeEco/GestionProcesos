@@ -37,8 +37,10 @@ namespace App.Web.Controllers
     [Authorize]
     public class DocumentoController : Controller
     {
+        protected readonly IGestionProcesos _repository;        
         protected readonly IFile _file;
         protected readonly IHSM _IHSM;
+        protected readonly IFolio _folio;
 
         public class DTOFilter
         {
@@ -78,9 +80,7 @@ namespace App.Web.Controllers
 
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
-        }
-
-        protected readonly IGestionProcesos _repository;
+        }       
 
         public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm)
         {
@@ -258,6 +258,8 @@ namespace App.Web.Controllers
             {
                 var _useCaseInteractor = new UseCaseCore(_repository, _IHSM);
                 var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
+                //var _useCaseInteractor = new UseCaseCometidoComision(_repository, _IHSM, _file, _folio);
+                //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;

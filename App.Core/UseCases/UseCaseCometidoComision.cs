@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using App.Core.Interfaces;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using App.Util;
 
 namespace App.Core.UseCases
 {
@@ -31,16 +32,19 @@ namespace App.Core.UseCases
             _repository = repository;
             _sigper = sigper;
         }
-        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm)
+        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm, IFile file, IFolio folio)
         {
             _repository = repositoryGestionProcesos;
             _hsm = hsm;
+            _file = file;
+            _folio = folio;
         }
-        public UseCaseCometidoComision(IGestionProcesos repository, IEmail email, ISIGPER sigper)
+        public UseCaseCometidoComision(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFile file)
         {
             _repository = repository;
             _email = email;
             _sigper = sigper;
+            _file = file;
         }
 
         public ResponseMessage RegionInsert(Region obj)
@@ -676,7 +680,7 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage DocumentoSign(Documento obj, string email)
+        public ResponseMessage DocumentoSign(Documento obj, string email, int? cometidoId)
         {
             var response = new ResponseMessage();
 
@@ -727,6 +731,13 @@ namespace App.Core.UseCases
                 if (HSMPassword != null && string.IsNullOrWhiteSpace(HSMPassword.Valor))
                     response.Errors.Add("La configuración de password de HSM es inválida.");
 
+                var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
+                if (url_tramites_en_linea == null)
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+                if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+
+
                 if (response.IsValid)
                 {
                     //documento.File = _hsm.Sign(documento, rubrica, HSMUser, HSMPassword);
@@ -736,8 +747,80 @@ namespace App.Core.UseCases
                     //_repository.Update(documento);
                     //_repository.Save();
 
-                    var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
-                    documento.File = doc;
+                    /*Se busca cometido para determinar tipo de documento*/
+                    var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
+                    string TipoDocto;
+                    if (com.IdCalidad == 10)
+                    {
+                        TipoDocto = "RAEX";/*"ORPA";*/
+                    }
+                    else
+                    {
+                        switch (com.IdGrado)
+                        {
+                            case "B":/*Resolución Ministerial Exenta*/
+                                TipoDocto = "RMEX";
+                                break;
+                            case "C": /*Resolución Ministerial Exenta*/
+                                TipoDocto = "RMEX";
+                                break;
+                            default:
+                                TipoDocto = "RAEX";/*Resolución Administrativa Exenta*/
+                                break;
+                        }
+                    }                   
+
+                    //listado de id de firmantes
+                    var idsFirma = new List<string>();
+                    idsFirma.Add(rubrica.IdentificadorFirma);
+
+                    //generar código QR
+                    byte[] QR = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+
+                    //si el documento ya tiene folio no solicitarlo nuevamente
+                    if (string.IsNullOrWhiteSpace(documento.Folio))
+                    {
+                        try
+                        {
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email),documento.TipoDocumentoId);
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto);
+                            var _folioResponse = _folio.GetFolioSubsecretaria(string.Join(", ", email), TipoDocto,"ECONOMIA");
+                            if (_folioResponse == null)
+                                response.Errors.Add("Servicio de folio no entregó respuesta");
+
+                            if (_folioResponse != null && _folioResponse.status == "ERROR")
+                                response.Errors.Add(_folioResponse.error);
+
+                            documento.Folio = _folioResponse.folio;
+
+                            _repository.Update(documento);
+                            _repository.Save();
+
+                            /*Se agregan lo datos del folio al objeto cometido*/
+                            com.Folio = _folioResponse.folio;
+                            com.FechaResolucion = DateTime.Now;
+                            com.Firma = true;
+                            if (com.IdEscalafon == 1 && com.IdEscalafon != null)
+                                com.TipoActoAdministrativo = "Resolución Ministerial Exenta";
+                            else if (com.CalidadDescripcion.Contains("HONORARIOS"))
+                                com.TipoActoAdministrativo = "Orden de Pago";
+                            else
+                                com.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+
+                            _repository.Update(com);
+                            _repository.Save();
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            response.Errors.Add(ex.Message);
+                        }
+                    }
+
+                    //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
+                    var docto = _hsm.Sign(documento.File,idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
+                    documento.File = docto;
                     documento.Signed = true;
 
                     _repository.Update(documento);
@@ -787,20 +870,33 @@ namespace App.Core.UseCases
                 {
                     var cotizacionDocto = _repository.Get<CotizacionDocumento>().FirstOrDefault(q => q.CotizacionDocumentoId == item.CotizacionDocumentoId);
                     if (cotizacionDocto != null)
-                        cotizacionDocto.Selected = item.Selected;
-
-                    if(item.Selected == true)
                     {
-                        /*se marca cotizacion seleccionda en lista de cotizaciones*/
+                        cotizacionDocto.Selected = item.Selected;
+                        _repository.Update(cotizacionDocto);
+
+                        /*se marca o desmarca la cotizacion seleccionda en lista de cotizaciones*/
                         var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
                         if (cotiza != null)
                         {
-                            cotiza.Seleccion = true;
-
-                            _repository.Update<Cotizacion>(cotiza);
-                            _repository.Save();
+                            cotiza.Seleccion = item.Selected;
+                            _repository.Update(cotiza);
                         }
-                    }
+
+
+
+                            //if (item.Selected == true)
+                            //{
+                            //    /*se marca cotizacion seleccionda en lista de cotizaciones*/
+                            //    var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
+                            //    if (cotiza != null)
+                            //    {
+                            //        cotiza.Seleccion = true;
+
+                            //        _repository.Update(cotiza);
+                            //        //_repository.Save();
+                            //    }
+                            //}
+                        }
                 }
                 _repository.Save();
             }

@@ -1,8 +1,25 @@
 ﻿@model App.Model.Pasajes.Pasaje
 
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">Cotización de pasajes</h3>
+        <h5 class="light">
+            Tarea @Model.WorkflowId <text>-</text> @Model.Workflow.DefinicionWorkflow.Nombre
+        </h5>
+    </div>
+</div>
+<div class="section"></div>
+
 @*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
 <div class="container">
-    <h3>Cotización de pasajes</h3>
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            <p>
+                Faltan @((Model.DestinosPasajes.FirstOrDefault().FechaIda - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+            </p>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col s12 m10 l8">
@@ -62,10 +79,10 @@
                             <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
                             <div class="row">
                                 @*<div class="input-field col s12 m10 l12">
-                                @Html.TextAreaFor(m => Model.PasajeDescripcion, new { @disabled = "disabled", rows = 10 })
-                                @Html.LabelFor(m => Model.PasajeDescripcion)
-                                @Html.ValidationMessageFor(m => Model.PasajeDescripcion, "", new { @class = "red-text" })
-                            </div>*@
+                                        @Html.TextAreaFor(m => Model.PasajeDescripcion, new { @disabled = "disabled", rows = 10 })
+                                        @Html.LabelFor(m => Model.PasajeDescripcion)
+                                        @Html.ValidationMessageFor(m => Model.PasajeDescripcion, "", new { @class = "red-text" })
+                                    </div>*@
                                 <div class="input-field col s12 m10 l10">
                                     <label>Objetivo del cometido:</label><br /><br />
                                     @ViewBag.Pasaje.PasajeDescripcion
@@ -263,10 +280,10 @@
                                         }
                                     </table>
                                 }
-                            <div class="input-field col s12 m10 l10">
-                                @*@Html.ActionLink("Agregar Cotización", "Create", "Cotizacion", new { id = Model.PasajeId }, null)*@
-                                <a href='@Url.Action("Create","Cotizacion", new { id = Model.PasajeId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
-                            </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @*@Html.ActionLink("Agregar Cotización", "Create", "Cotizacion", new { id = Model.PasajeId }, null)*@
+                                    <a href='@Url.Action("Create","Cotizacion", new { id = Model.PasajeId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+                                </div>
                             </div>
                         </div>
 

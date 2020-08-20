@@ -730,11 +730,11 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm);
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file,_folio);
                 //var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5).FirstOrDefault();
                 var user = User.Email();
-                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user);
+                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
 
 
 

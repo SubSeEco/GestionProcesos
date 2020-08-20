@@ -2,6 +2,16 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            <p>
+                Toda solicitud deberá ser tramitada con al menos 20 días corridos previos a su inicio (este plazo incluye la tramitación del acto administrativo), de lo contrario, deberá contar con la respectiva justificación y la visación del Jefe de Servicio.
+                Además, siempre deberá adjuntar el itinerario de desplazamiento y el programa de actividades a realizar.
+            </p>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
@@ -36,10 +46,10 @@
                 @Html.HiddenFor(q => Model.Alimentacion)
                 @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
-            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
+                    @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
                 @*@Html.HiddenFor(q => Model.TipoVehiculoId)
-            @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
+                    @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
                 @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
                 @Html.HiddenFor(q => Model.Jefatura)
@@ -178,8 +188,8 @@
                                     <div class="input-field col s12 m8 l12">
                                         <label>Marque las opciones que SI financia el organismo invitante</label>
                                         @*<label style="color:green">
-                                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                                    </label>*@
+                                                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                                            </label>*@
                                     </div>
                                     <div class="input-field col s12 m8 l13">
                                         <label>

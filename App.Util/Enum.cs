@@ -141,6 +141,7 @@
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
             Plantilla_Memo_Firmado = 61,
+            PlantillaAnulacionCometido = 62,
         }
 
         public enum DefinicionProceso

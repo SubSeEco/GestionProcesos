@@ -2,6 +2,14 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+        <p>
+            Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+        </p>
+        </div>
+    </div>
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")

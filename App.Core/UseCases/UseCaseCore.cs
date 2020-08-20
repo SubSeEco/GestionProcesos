@@ -458,25 +458,52 @@ namespace App.Core.UseCases
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == obj.ProcesoId).FirstOrDefault();
                         if (cometido != null)
                         {
-                            var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
-                            var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
-
-                            var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
-                            if (destino != null)
+                            /*se valida que la tarea en que se encuentre el cometido permita la anulacion*/
+                            if (cometido.ReqPasajeAereo == true && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 5)
                             {
-                                foreach (var d in destino)
-                                {
-                                    _UseCaseResponseMessage = _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
-                                }
+                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido posee pasaje aereo el cual ya fue tramitado");
                             }
-
-                            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-                            if (cdp != null)
+                            else if (cometido.ReqPasajeAereo == false && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 13)
                             {
-                                foreach (var c in cdp)
+                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada");
+                            }
+                            else 
+                            {
+                                var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
+                                var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
+
+                                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
+                                if (destino != null)
                                 {
-                                    _UseCaseResponseMessage = _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);
+                                    foreach (var d in destino)
+                                    {
+                                        _UseCaseResponseMessage = _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
+                                    }
                                 }
+
+                                var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
+                                if (cdp != null)
+                                {
+                                    foreach (var c in cdp)
+                                    {
+                                        _UseCaseResponseMessage = _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);
+                                    }
+                                }
+
+                                //notificar a todos los que participaron en el proceso
+                                var workflow = obj.Workflows.FirstOrDefault();
+                                var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                                var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
+                                List<string> emailMsg = new List<string>();
+                                emailMsg.Add(solicitante.Trim()); //solicitante
+                                emailMsg.Add(QuienViaja);//quien viaja
+
+                                _email.NotificacionesCometido(workflow,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnulacionCometido),
+                                "Se ha anulado el cometido N°: " + cometido.CometidoId.ToString(),
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+
                             }
                         }
                     }
@@ -1058,7 +1085,7 @@ namespace App.Core.UseCases
 
                 if (response.IsValid)
                 {
-                    documento.File = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
+                    documento.File = _hsm.Sign_old(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
                     documento.Signed = true;
 
                     _repository.Update(documento);

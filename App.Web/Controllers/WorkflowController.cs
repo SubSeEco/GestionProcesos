@@ -322,7 +322,7 @@ namespace App.Web.Controllers
 
                 if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
                     var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model,User.Email());
                     if (_UseCaseResponseMessage.IsValid)
                     {

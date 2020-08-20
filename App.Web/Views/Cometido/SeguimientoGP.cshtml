@@ -150,7 +150,14 @@
                             @Html.DisplayFor(modelItem => item.Destinos.LastOrDefault().FechaHasta)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
+                            @if (item.Proceso.Workflows.LastOrDefault().NombreFuncionario != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().NombreFuncionario)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().FechaCreacion).ToHtmlString().Remove(10)

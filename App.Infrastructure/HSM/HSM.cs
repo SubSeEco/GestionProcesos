@@ -13,7 +13,7 @@ namespace App.Infrastructure.HSM
 {
     public class HSM : IHSM
     {
-        public byte[] Sign(byte[] documento, string Firmante, string unidadOrganizacional, string folio = null, string razon = "Documento firmado electrónicamente Ley 19.799")
+        public byte[] Sign_old(byte[] documento, string Firmante, string unidadOrganizacional, string folio = null, string razon = "Documento firmado electrónicamente Ley 19.799")
         {
             if (documento == null)
                 throw new System.Exception("No se especificó el contenido del documento.");

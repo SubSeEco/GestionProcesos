@@ -8,21 +8,25 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
     <style TYPE="text/css">
         .breakhere {
             page-break-after: always
         }
     </style>
 </head>
-<body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
-    <table>
+<body style="font-family: Calibri;font-style:italic;
+        padding: 0px;
+        margin: 0px;        
+        text-align: justify">    
+    <table border="0" style="margin-top:650px">
         <tr>
-            <td width="32%">
-                .<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+            <td width="20%">
+                <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
             </td>
             <td>
-                <p align="justify">
-                    <br />
+                @*<p align="justify">
                     @if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
                     {
                         <strong>
@@ -35,9 +39,9 @@
                             RESOLUCIÓN ADMINISTRATIVA EXENTA N° @Html.DisplayFor(m => Model.Folio)
                         </strong>
                     }
-                    <br /><br />SANTIAGO,@Html.DisplayFor(m => Model.FechaResolucion).ToHtmlString().Remove(10)
+                    <br />SANTIAGO,@Html.DisplayFor(m => Model.FechaResolucion).ToHtmlString().Remove(10)
 
-                </p>
+                </p>*@
             </td>
         </tr>
         <tr>
@@ -49,8 +53,7 @@
                         N° COMETIDO :@Html.DisplayFor(m => Model.CometidoId)
                     </p>
                 </h6>
-                <br />
-                <table border="1">
+                <table border="1" style="margin-top:-20px">
                     <tr>
                         <td colspan="2">
                             <h5>
@@ -86,7 +89,7 @@
                     </tr>
                 </table>
             </td>
-            <td>
+            <td style="margin-top:-1px">
                 <strong>
                     VISTOS:
                 </strong>
@@ -133,7 +136,7 @@
                     designar en cometido funcionario a don/ña
                     <strong> @Html.DisplayFor(m => Model.Nombre)</strong>,&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                 </p>
-                <br />
+
                 <table border="1" width="100%">
                     <tr>
                         <td style="border-style: solid; border-width: 1px; border-color: #000000;">
@@ -195,10 +198,9 @@
                     }
                     a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta).ToHtmlString().Remove(10), en la localidad antes señalada.
                 </p>
-                <br />
-                <p class="breakhere"></p>
+                 @*<p class="breakhere"></p>*@ 
             </td>
-        </tr>        
+        </tr>
         <tr>
             <td></td>
             <td>
@@ -229,15 +231,15 @@
                                 @Html.Raw("Dias 60%")
                             </td>
                             @*<td>
-                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
-                            </td>*@
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                    </td>*@
                             <td>
                                 @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
                                 @Html.Raw("Dias 40%")
                             </td>
                             @*<td>
-                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
-                            </td>*@
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                    </td>*@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
@@ -258,14 +260,14 @@
                                     @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
                                 </td>
                                 @*<td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                                </td>*@
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                        </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
                                 </td>
                                 @*<td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
-                                </td>*@
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                        </td>*@
                             </tr>
                         }
                     </table>
@@ -325,12 +327,13 @@
                     @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
                     ,de acuerdo a su naturaleza.
                 </p>
-            </td>
+                <p class="breakhere"></p>
+            </td>            
         </tr>
         <tr><td></td><td></td></tr>
         <tr>
             <td></td>
-            <td>                
+            <td>
                 @if (Model.GeneracionCDP.Count > 0)
                 {
                     <p align="justify" style="text-align:justify">
@@ -397,14 +400,14 @@
 
                         }
                         @*@if (Model.SolicitaViatico != true)
-                        {
-                            @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                            @Html.Raw(",y al Subtítulo 22")
-                            @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
-                            @Html.DisplayFor(m => Model.Anno)
-                            @Html.Raw("de la ")
-                            @Html.DisplayFor(m => Model.Subscretaria)
-                        }*@
+                            {
+                                @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw(",y al Subtítulo 22")
+                                @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
+                                @Html.DisplayFor(m => Model.Anno)
+                                @Html.Raw("de la ")
+                                @Html.DisplayFor(m => Model.Subscretaria)
+                            }*@
                     </p>
                 }
                 @if (Model.SolicitaViatico != true)
@@ -449,15 +452,15 @@
         </tr>
         <tr>
             <td>
-                <strong>
-                    <p align="center">
-                        @Html.DisplayFor(m => Model.Firmante)
-                        <br />
-                        @Html.DisplayFor(m => Model.CargoFirmante)
-                        <br />
-                        @Html.DisplayFor(m => Model.Subscretaria)
-                    </p>
-                </strong>
+                 <strong> 
+                 <p align="center"> 
+                 @Html.DisplayFor(m => Model.Firmante) 
+                 <br /> 
+                 @Html.DisplayFor(m => Model.CargoFirmante) 
+                 <br /> 
+                 @Html.DisplayFor(m => Model.Subscretaria) 
+                 </p> 
+                 </strong> 
             </td>
             <td></td>
         </tr>
