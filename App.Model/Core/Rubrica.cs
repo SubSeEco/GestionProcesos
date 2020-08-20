@@ -19,10 +19,11 @@ namespace App.Model.Core
         [Display(Name = "Correo electrónico usuario")]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Identificador de firma electrónica")]
         public string IdentificadorFirma { get; set; }        
         
-        [Display(Name = "Unidad organizacional")]
+        [Display(Name = "Unidad organizacional (opcional)")]
         public string UnidadOrganizacional { get; set; }
 
         [Display(Name = "Habilitado para firmar")]

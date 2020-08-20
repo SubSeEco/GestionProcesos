@@ -160,8 +160,6 @@ namespace App.Web.Controllers
                     var target = new MemoryStream();
                     file.InputStream.CopyTo(target);
 
-                    var data = _file.BynaryToText(target.ToArray());
-
                     var doc = new Documento();
                     doc.Fecha = DateTime.Now;
                     doc.Email = email;
@@ -170,11 +168,17 @@ namespace App.Web.Controllers
                     doc.ProcesoId = model.ProcesoId;
                     doc.WorkflowId = model.WorkflowId;
                     doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
+                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                     doc.TipoDocumentoId = 6; /*Por default el tipo de documento es "Otros"*/
+
+                    //obtener metadata del documento
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        doc.Texto = metadata.Text;
+                        doc.Metadata = metadata.Metadata;
+                        doc.Type = metadata.Type;
+                    }
 
                     /*Se define el tipo de documento de acuerdo a la tarea dentro del proceso de cometido*/
                     var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
@@ -200,29 +204,6 @@ namespace App.Web.Controllers
                     _repository.Create(doc);
                     _repository.Save();
                 }
-
-
-                //var file = Request.Files[0];
-                //var target = new MemoryStream();
-                //file.InputStream.CopyTo(target);
-
-                //var data = _file.BynaryToText(target.ToArray());
-
-                //var doc = new Documento();
-                //doc.Fecha = DateTime.Now;
-                //doc.Email = email;
-                //doc.FileName = file.FileName;
-                //doc.File = target.ToArray();
-                //doc.ProcesoId = model.ProcesoId;
-                //doc.WorkflowId = model.WorkflowId;
-                //doc.Signed = false;
-                //doc.Texto = data.Text;
-                //doc.Metadata = data.Metadata;
-                //doc.Type = data.Type;
-                //doc.TipoPrivacidadId = 1;
-
-                //_repository.Create(doc);
-                //_repository.Save();
 
                 TempData["Success"] = "Operación terminada correctamente.";
                 return Redirect(Request.UrlReferrer.PathAndQuery);
@@ -346,7 +327,7 @@ namespace App.Web.Controllers
                 doc.Texto = data.Text;
                 doc.Metadata = data.Metadata;
                 doc.Type = data.Type;
-                doc.TipoPrivacidadId = 1;
+                doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                 doc.TipoDocumentoId = 1;
 
                 _repository.Create(doc);
@@ -364,37 +345,8 @@ namespace App.Web.Controllers
             //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
-        //private DTOFileMetadata GetBynary(byte[] pdf)
-        //{
-        //    var data = new App.Model.DTO.DTOFileMetadata();
-        //    var textExtractor = new TextExtractor();
-        //    var extract = textExtractor.Extract(pdf);
-
-        //    data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;
-        //    data.Metadata = extract.Metadata.Any() ? string.Join(";", extract.Metadata) : null;
-        //    data.Type = extract.ContentType;
-
-        //    return data;
-        //}
-
-
-        //public ActionResult GetBarCode(string Pl_UndCod, string GDTipoIngresoId)
-        //{
-        //    byte[] imagebyte;
-
-        //    var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-        //    var image = barcode39.Draw(string.Concat(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,Pl_UndCod, GDTipoIngresoId), 80);
-
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-        //        imagebyte = ms.ToArray();
-        //    }
-
-        //    return File(imagebyte, "image/png"); 
-        //}
-
-
+        //metodo para verificación de documento
+        //el documento debe ser pdf y publico
         [AllowAnonymous]
         public JsonResult GetById(string id)
         {
@@ -416,9 +368,8 @@ namespace App.Web.Controllers
             if (documento != null && !documento.FileName.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
 
-            //validacion documento firmado...
-            //if (documento != null && !documento.firma.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
-            //    return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
+            if (documento != null && documento.TipoPrivacidadId == (int)App.Util.Enum.Privacidad.Privado)
+                return Json(new DTODocumento { OK = false, Error = "Error: documento no es público" }, JsonRequestBehavior.AllowGet);
 
             var model = new DTODocumento() {
                 OK = true,

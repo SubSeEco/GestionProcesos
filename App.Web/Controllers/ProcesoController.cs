@@ -240,6 +240,16 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
+
+                    //ver si proceso se ejecuta inmediatamente
+                    var proceso = _repository.GetById<Proceso>(_UseCaseResponseMessage.EntityId);
+                    if (proceso != null && proceso.DefinicionProceso.EjecutarInmediatamente)
+                    {
+                        var workflow = proceso.Workflows.OrderByDescending(q => q.WorkflowId).FirstOrDefault(q => !q.Terminada && !q.Anulada);
+                        if (workflow != null)
+                            return RedirectToAction("Execute", "Workflow", new { id = workflow.WorkflowId });
+                    }
+
                     return RedirectToAction("Index", "Workflow");
                 }
                 else

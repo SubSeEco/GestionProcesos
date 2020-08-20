@@ -28,17 +28,18 @@ namespace App.Model.Core
         public int? TipoDocumentoId { get; set; }
         public virtual TipoDocumento TipoDocumento { get; set; }
 
+
+        //Todo documento nace privado, solo cambia a publico cuando se firma para efectos de verificación 
         [Display(Name = "Privacidad")]
-        public int? TipoPrivacidadId { get; set; } = 1;
+        public int? TipoPrivacidadId { get; set; } = (int)Util.Enum.Privacidad.Privado;
         public virtual TipoPrivacidad TipoPrivacidad { get; set; }
+
 
         [Display(Name = "Fecha")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         [Display(Name = "Autor")]
-        //public int? UsuarioId { get; set; }
-        //public virtual Usuario Usuario { get; set; }
         public string Email { get; set; }
 
         [Display(Name = "Nombre")]
@@ -68,20 +69,12 @@ namespace App.Model.Core
         [Display(Name = "Firmado")]
         public bool Signed { get; set; } = false;
 
-        //[Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Código")]
         public string Codigo { get; set; }
 
         [Display(Name = "Código de barra")]
         public byte[] BarCode { get; set; }
         
-        [NotMapped]
-        public bool Selected { get; set; } = false;
-
-        [NotMapped]
-        [Display(Name = "Certificado electrónico")]
-        public string SerialNumber { get; set; }
-
         [Display(Name = "Hash md5")]
         public string Md5 { get; set; }
 
@@ -91,7 +84,19 @@ namespace App.Model.Core
         [Display(Name = "Tipo documento firma")]
         public string TipoDocumentoFirma { get; set; }
 
+        //todo documento nace habilitado
         [Display(Name = "Activo")]
         public bool Activo { get; set; } = true;
+
+
+
+
+
+        [NotMapped]
+        public bool Selected { get; set; } = false;
+
+        [NotMapped]
+        [Display(Name = "Certificado electrónico")]
+        public string SerialNumber { get; set; }
     }
 }

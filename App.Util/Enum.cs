@@ -166,5 +166,11 @@
             Anulado = 2,
             Terminado = 3,
         }
+
+        public enum Privacidad
+        {
+            Publico = 1,
+            Privado = 2,
+        }
     }
 }

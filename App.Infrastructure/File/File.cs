@@ -12,8 +12,11 @@ namespace App.Infrastructure.File
     {
         public Model.DTO.DTOFileMetadata BynaryToText(byte[] content)
         {
-            var data = new Model.DTO.DTOFileMetadata();
+            if (content == null)
+                return null;
+
             var textExtractor = new TextExtractor();
+            var data = new Model.DTO.DTOFileMetadata();
             var extract = textExtractor.Extract(content);
 
             data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;

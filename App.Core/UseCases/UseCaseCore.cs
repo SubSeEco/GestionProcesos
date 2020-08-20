@@ -20,7 +20,6 @@ namespace App.Core.UseCases
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
-
         public UseCaseCore(IGestionProcesos repositoryGestionProcesos, IHSM hsm)
         {
             _repository = repositoryGestionProcesos;
@@ -1011,6 +1010,9 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            if (_repository.GetExists<Rubrica>(q=>q.Email == obj.Email && q.IdentificadorFirma == obj.IdentificadorFirma))
+                response.Errors.Add("El email e identificador de firma ya está registrado");
+
             try
             {
                 if (response.IsValid)
@@ -1029,6 +1031,10 @@ namespace App.Core.UseCases
         public ResponseMessage RubricaUpdate(Rubrica obj)
         {
             var response = new ResponseMessage();
+
+            var rubrica = _repository.GetById<Usuario>(obj.RubricaId);
+            if (rubrica == null)
+                response.Errors.Add("Dato no encontrado");
 
             try
             {
@@ -1101,7 +1107,7 @@ namespace App.Core.UseCases
         }
 
         //Sobrecarga de firma multiple con tabla de verificacion
-        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
             var response = new ResponseMessage();
 
@@ -1120,18 +1126,26 @@ namespace App.Core.UseCases
             if (!emailsFirmantes.Any())
                 response.Errors.Add("Debe especificar al menos un firmante");
             if (emailsFirmantes.Any())
-                foreach (var firmante in emailsFirmantes)
-                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
+                foreach (var email in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
+
+            var _personaResponse = _sigper.GetUserByEmail(firmante);
+            if (_personaResponse == null)
+                response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+            if (_personaResponse != null && string.IsNullOrWhiteSpace(_personaResponse.SubSecretaria))
+                response.Errors.Add("No se encontró la subsecretaría del firmante");
+
 
             if (!response.IsValid)
                 return response;
 
             //listado de id de firmantes
             var idsFirma = new List<string>();
-            foreach (var firmante in emailsFirmantes)
+            foreach (var email in emailsFirmantes)
             {
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
                 if (rubrica != null)
                     idsFirma.Add(rubrica.IdentificadorFirma);
             }
@@ -1139,7 +1153,7 @@ namespace App.Core.UseCases
             //si el documento ya tiene folio no solicitarlo nuevamente
             if (string.IsNullOrWhiteSpace(documento.Folio))
             {
-                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma);
+                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma, _personaResponse.SubSecretaria);
                 if (_folioResponse == null)
                     response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -1156,10 +1170,10 @@ namespace App.Core.UseCases
                 return response;
 
             //generar código QR
-            var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+            var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
             //firmar documento
-            var _hsmResponse = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
+            var _hsmResponse = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _qrResponse);
 
             //actualizar documento con contenido firmado
             documento.File = _hsmResponse;

@@ -310,6 +310,5 @@ namespace App.Infrastructure.Email
                 throw ex;
             }
         }
-
     }
 }

@@ -343,6 +343,7 @@
     <Content Include="App_Data\AjusteAsistencia.xlsx" />
     <Content Include="App_Data\ReportePresupuesto.xlsx" />
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
+    <Content Include="App_Data\HSA.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
@@ -696,6 +697,7 @@
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
     <Content Include="Views\Workflow\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

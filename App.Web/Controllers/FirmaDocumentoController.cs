@@ -291,7 +291,7 @@ namespace App.Web.Controllers
                 model.Firmante = UserExtended.Email(User);
 
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.FirmaDocumentoId, new List<string> { model.Firmante });
+                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.FirmaDocumentoId, new List<string> { model.Firmante }, model.Firmante);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";

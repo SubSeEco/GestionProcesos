@@ -49,160 +49,6 @@ namespace App.Infrastructure.FirmaElock {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://impl.soap.com/")]
-    public partial class signBase64EncodedResponse : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string errorField;
-        
-        private string messageField;
-        
-        private string statusField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
-        public string error {
-            get {
-                return this.errorField;
-            }
-            set {
-                this.errorField = value;
-                this.RaisePropertyChanged("error");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
-        public string message {
-            get {
-                return this.messageField;
-            }
-            set {
-                this.messageField = value;
-                this.RaisePropertyChanged("message");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
-        public string status {
-            get {
-                return this.statusField;
-            }
-            set {
-                this.statusField = value;
-                this.RaisePropertyChanged("status");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://impl.soap.com/", ConfigurationName="FirmaElock.SignFileImpl")]
-    public interface SignFileImpl {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignBase64EncodedRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignBase64EncodedResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(App.Infrastructure.FirmaElock.Exception), Action="http://impl.soap.com/SignFileImpl/SignBase64Encoded/Fault/Exception", Name="Exception")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(Style=System.ServiceModel.OperationFormatStyle.Document, SupportFaults=true)]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        App.Infrastructure.FirmaElock.signBase64EncodedResponse SignBase64Encoded(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignBase64EncodedRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignBase64EncodedResponse")]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signBase64EncodedResponse> SignBase64EncodedAsync(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/getSignerNameListRequest", ReplyAction="http://impl.soap.com/SignFileImpl/getSignerNameListResponse")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(Style=System.ServiceModel.OperationFormatStyle.Document, SupportFaults=true)]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        App.Infrastructure.FirmaElock.signerInfo getSignerNameList();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/getSignerNameListRequest", ReplyAction="http://impl.soap.com/SignFileImpl/getSignerNameListResponse")]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signerInfo> getSignerNameListAsync();
-        
-        // CODEGEN: Parameter 'inputfile' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignFileRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignFileResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(App.Infrastructure.FirmaElock.Exception), Action="http://impl.soap.com/SignFileImpl/SignFile/Fault/Exception", Name="Exception")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        App.Infrastructure.FirmaElock.SignFileResponse1 SignFile(App.Infrastructure.FirmaElock.SignFileRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignFileRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignFileResponse")]
-        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.SignFileResponse1> SignFileAsync(App.Infrastructure.FirmaElock.SignFileRequest request);
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://impl.soap.com/")]
-    public partial class signerInfo : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string errorField;
-        
-        private string[] signerField;
-        
-        private string statusField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
-        public string error {
-            get {
-                return this.errorField;
-            }
-            set {
-                this.errorField = value;
-                this.RaisePropertyChanged("error");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("signer", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
-        public string[] signer {
-            get {
-                return this.signerField;
-            }
-            set {
-                this.signerField = value;
-                this.RaisePropertyChanged("signer");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
-        public string status {
-            get {
-                return this.statusField;
-            }
-            set {
-                this.statusField = value;
-                this.RaisePropertyChanged("status");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://impl.soap.com/")]
     public partial class signFileResponse : object, System.ComponentModel.INotifyPropertyChanged {
         
         private string errorField;
@@ -255,6 +101,40 @@ namespace App.Infrastructure.FirmaElock {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://impl.soap.com/", ConfigurationName="FirmaElock.SignFileImpl")]
+    public interface SignFileImpl {
+        
+        // CODEGEN: Parameter 'inputfile' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignFileRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignFileResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(App.Infrastructure.FirmaElock.Exception), Action="http://impl.soap.com/SignFileImpl/SignFile/Fault/Exception", Name="Exception")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        App.Infrastructure.FirmaElock.SignFileResponse1 SignFile(App.Infrastructure.FirmaElock.SignFileRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignFileRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignFileResponse")]
+        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.SignFileResponse1> SignFileAsync(App.Infrastructure.FirmaElock.SignFileRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignBase64EncodedRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignBase64EncodedResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(App.Infrastructure.FirmaElock.Exception), Action="http://impl.soap.com/SignFileImpl/SignBase64Encoded/Fault/Exception", Name="Exception")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(Style=System.ServiceModel.OperationFormatStyle.Rpc, SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        App.Infrastructure.FirmaElock.signBase64EncodedResponse SignBase64Encoded(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/SignBase64EncodedRequest", ReplyAction="http://impl.soap.com/SignFileImpl/SignBase64EncodedResponse")]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signBase64EncodedResponse> SignBase64EncodedAsync(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/getSignerNameListRequest", ReplyAction="http://impl.soap.com/SignFileImpl/getSignerNameListResponse")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(Style=System.ServiceModel.OperationFormatStyle.Rpc, SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        App.Infrastructure.FirmaElock.signerInfo getSignerNameList();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://impl.soap.com/SignFileImpl/getSignerNameListRequest", ReplyAction="http://impl.soap.com/SignFileImpl/getSignerNameListResponse")]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signerInfo> getSignerNameListAsync();
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -328,6 +208,126 @@ namespace App.Infrastructure.FirmaElock {
         }
     }
     
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://impl.soap.com/")]
+    public partial class signBase64EncodedResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string errorField;
+        
+        private string messageField;
+        
+        private string statusField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        public string error {
+            get {
+                return this.errorField;
+            }
+            set {
+                this.errorField = value;
+                this.RaisePropertyChanged("error");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        public string message {
+            get {
+                return this.messageField;
+            }
+            set {
+                this.messageField = value;
+                this.RaisePropertyChanged("message");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
+        public string status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+                this.RaisePropertyChanged("status");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3761.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://impl.soap.com/")]
+    public partial class signerInfo : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string errorField;
+        
+        private string[] signerField;
+        
+        private string statusField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        public string error {
+            get {
+                return this.errorField;
+            }
+            set {
+                this.errorField = value;
+                this.RaisePropertyChanged("error");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("signer", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        public string[] signer {
+            get {
+                return this.signerField;
+            }
+            set {
+                this.signerField = value;
+                this.RaisePropertyChanged("signer");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
+        public string status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+                this.RaisePropertyChanged("status");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface SignFileImplChannel : App.Infrastructure.FirmaElock.SignFileImpl, System.ServiceModel.IClientChannel {
     }
@@ -353,22 +353,6 @@ namespace App.Infrastructure.FirmaElock {
         
         public SignFileImplClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public App.Infrastructure.FirmaElock.signBase64EncodedResponse SignBase64Encoded(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width) {
-            return base.Channel.SignBase64Encoded(inputfile, signer_name, position, pagenumber, reason, location, xmargin, ymargin, height, width);
-        }
-        
-        public System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signBase64EncodedResponse> SignBase64EncodedAsync(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width) {
-            return base.Channel.SignBase64EncodedAsync(inputfile, signer_name, position, pagenumber, reason, location, xmargin, ymargin, height, width);
-        }
-        
-        public App.Infrastructure.FirmaElock.signerInfo getSignerNameList() {
-            return base.Channel.getSignerNameList();
-        }
-        
-        public System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signerInfo> getSignerNameListAsync() {
-            return base.Channel.getSignerNameListAsync();
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -410,6 +394,22 @@ namespace App.Infrastructure.FirmaElock {
             inValue.height = height;
             inValue.width = width;
             return ((App.Infrastructure.FirmaElock.SignFileImpl)(this)).SignFileAsync(inValue);
+        }
+        
+        public App.Infrastructure.FirmaElock.signBase64EncodedResponse SignBase64Encoded(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width) {
+            return base.Channel.SignBase64Encoded(inputfile, signer_name, position, pagenumber, reason, location, xmargin, ymargin, height, width);
+        }
+        
+        public System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signBase64EncodedResponse> SignBase64EncodedAsync(string inputfile, string signer_name, string position, string pagenumber, string reason, string location, int xmargin, int ymargin, int height, int width) {
+            return base.Channel.SignBase64EncodedAsync(inputfile, signer_name, position, pagenumber, reason, location, xmargin, ymargin, height, width);
+        }
+        
+        public App.Infrastructure.FirmaElock.signerInfo getSignerNameList() {
+            return base.Channel.getSignerNameList();
+        }
+        
+        public System.Threading.Tasks.Task<App.Infrastructure.FirmaElock.signerInfo> getSignerNameListAsync() {
+            return base.Channel.getSignerNameListAsync();
         }
     }
 }
