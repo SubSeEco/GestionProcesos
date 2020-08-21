@@ -5,7 +5,6 @@ namespace App.Core.Interfaces
     public interface IFolio
     {
         List<Model.FirmaDocumento.DTOTipoDocumento> GetTipoDocumento();
-        Model.FirmaDocumento.DTOSolicitud GetFolio(string solicitante, string tipoDocumento);
-        Model.FirmaDocumento.DTOSolicitud GetFolioSubsecretaria(string solicitante, string tipoDocumento, string subSecretaria);
+        Model.FirmaDocumento.DTOSolicitud GetFolio(string solicitante, string tipoDocumento, string subSecretaria);        
     }
 }

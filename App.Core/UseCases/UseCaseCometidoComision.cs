@@ -683,6 +683,7 @@ namespace App.Core.UseCases
         public ResponseMessage DocumentoSign(Documento obj, string email, int? cometidoId)
         {
             var response = new ResponseMessage();
+            var persona = new SIGPER();
 
             try
             {
@@ -747,6 +748,17 @@ namespace App.Core.UseCases
                     //_repository.Update(documento);
                     //_repository.Save();
 
+                    /*se buscar la persona para determinar la subsecretaria*/
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        persona = _sigper.GetUserByEmail(email);
+                        if (persona == null)
+                            response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+                        if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                            response.Errors.Add("No se encontró la subsecretaría del firmante");
+                    }
+
                     /*Se busca cometido para determinar tipo de documento*/
                     var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
                     string TipoDocto;
@@ -784,7 +796,7 @@ namespace App.Core.UseCases
                         {
                             //var _folioResponse = _folio.GetFolio(string.Join(", ", email),documento.TipoDocumentoId);
                             //var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto);
-                            var _folioResponse = _folio.GetFolioSubsecretaria(string.Join(", ", email), TipoDocto,"ECONOMIA");
+                            var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto, persona.SubSecretaria);
                             if (_folioResponse == null)
                                 response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -4722,7 +4734,7 @@ namespace App.Core.UseCases
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && Cometido.IdEscalafon != 1 && Cometido.IdEscalafon == null) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
                                     }
