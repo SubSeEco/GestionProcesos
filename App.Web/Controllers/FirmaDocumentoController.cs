@@ -110,8 +110,6 @@ namespace App.Web.Controllers
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
 
-        static List<DTOTipoDocumento> tipoDocumentoList = null;
-
         public FirmaDocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
@@ -120,9 +118,6 @@ namespace App.Web.Controllers
             _folio = folio;
             _hsm = hsm;
             _email = email;
-
-            if (tipoDocumentoList == null)
-                tipoDocumentoList = _folio.GetTipoDocumento();
         }
 
         public ActionResult View(int id)
@@ -144,7 +139,7 @@ namespace App.Web.Controllers
 
         public ActionResult Create(int? WorkFlowId)
         {
-            ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
 
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
             var model = new DTOFileUploadCreate
@@ -164,7 +159,7 @@ namespace App.Web.Controllers
             {
                 model.Autor = UserExtended.Email(User);
 
-                var tipodocumento = tipoDocumentoList.FirstOrDefault(q => q.Codigo == model.TipoDocumentoCodigo);
+                var tipodocumento = _folio.GetTipoDocumento().FirstOrDefault(q => q.Codigo == model.TipoDocumentoCodigo);
                 var target = new MemoryStream();
                 model.FileUpload.InputStream.CopyTo(target);
 
@@ -192,7 +187,7 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
 
             return View(model);
         }
@@ -200,7 +195,7 @@ namespace App.Web.Controllers
         public ActionResult Edit(int id)
         {
             var firma = _repository.GetById<FirmaDocumento>(id);
-            ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion", firma.TipoDocumentoCodigo);
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion", firma.TipoDocumentoCodigo);
 
             var model = new DTOFileUploadEdit()
             {
@@ -223,7 +218,7 @@ namespace App.Web.Controllers
             {
                 model.Autor = UserExtended.Email(User);
 
-                var tipodocumento = tipoDocumentoList.FirstOrDefault(q => q.Codigo == model.TipoDocumentoCodigo);
+                var tipodocumento = _folio.GetTipoDocumento().FirstOrDefault(q => q.Codigo == model.TipoDocumentoCodigo);
 
                 var target = new MemoryStream();
                 if (model.FileUpload != null)
@@ -253,7 +248,7 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            ViewBag.TipoDocumentoCodigo = new SelectList(tipoDocumentoList.Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion", model.TipoDocumentoCodigo);
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion", model.TipoDocumentoCodigo);
 
             return View(model);
         }

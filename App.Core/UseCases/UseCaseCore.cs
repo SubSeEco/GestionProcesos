@@ -1091,7 +1091,7 @@ namespace App.Core.UseCases
 
                 if (response.IsValid)
                 {
-                    documento.File = _hsm.Sign_old(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
+                    documento.File = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
                     documento.Signed = true;
 
                     _repository.Update(documento);

@@ -21,29 +21,12 @@
         .nav-wrapper > ul {
             margin-left: 140px;
         }
-        /*Estilo para boton ir arriba*/
-        #myBtn {
+
+        #btnUp {
             display: none;
-            position: fixed;
             bottom: 75px;
-            right: 10px;
-            z-index: 99;
-            font-size: 18px;
-            border: none;
-            outline: none;
-            /*            background-color: green;*/
-            /*            color: white;*/
-            cursor: pointer;
-            /*padding: 15px;*/
-            border-radius: 4px;
         }
-
-            #myBtn:hover {
-                /*                background-color: #007bff;*/
-            }
     </style>
-
-
 
     <div class="navbar-fixed valign-wrapper">
         <nav class="white ">
@@ -65,13 +48,24 @@
     </div>
     @RenderBody()
 
-    <a id="myBtn" onclick="topFunction()" data-tooltip="Ir arriba"><i class="large material-icons">arrow_circle_up</i></a>
-    @*<img id="myBtn" onclick="topFunction()" title="Go Up" class="btn-floating modal-trigger btn-large green tooltipped"/>*@
+    <div class="fixed-action-btn">
+        <a id="btnUp" onclick="topFunction()" class="btn-floating btn-large blue tooltipped" data-position="left" data-tooltip="Ir arriba"><i class="large material-icons">arrow_upward</i></a>
+    </div>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('.modal').modal();
             $('.tooltipped').tooltip();
+
+            var btnUp = document.getElementById("btnUp");
+            window.onscroll = function () { scrollFunction() };
+            function scrollFunction() {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    btnUp.style.display = "block";
+                } else {
+                    btnUp.style.display = "none";
+                }
+            }
         });
 
         $(document).on('submit', 'form', function () {
@@ -81,24 +75,10 @@
             });
         });
 
-        /*Boton Ir arriba*/
-        var mybutton = document.getElementById("myBtn");
-        // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function () { scrollFunction() };
-        function scrollFunction() {
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                mybutton.style.display = "block";
-            } else {
-                mybutton.style.display = "none";
-            }
-        }
-
-        // When the user clicks on the button, scroll to the top of the document
         function topFunction() {
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
-
     </script>
 </body>
 </html>
