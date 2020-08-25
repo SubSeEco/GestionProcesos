@@ -281,7 +281,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio);
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 //var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var doc = _repository.Get<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5).FirstOrDefault();
                 var user = User.Email();
@@ -338,7 +338,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio);
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email, CometidoId);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -347,7 +347,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                    return RedirectToAction("Sign", "Cometido", new { id = CometidoId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -357,7 +358,8 @@ namespace App.Web.Controllers
                 //TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            return View(model);
+            //return View(model);
+            return RedirectToAction("Sign", "Cometido", new { id = CometidoId });
         }
 
         public ActionResult Sign(int id)

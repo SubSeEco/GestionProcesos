@@ -443,14 +443,6 @@ namespace App.Core.UseCases
                 var obj = _repository.GetById<Proceso>(id);
                 if (response.IsValid)
                 {
-                    //terminar todas las tareas pendientes
-                    foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
-                    {
-                        workflow.FechaTermino = DateTime.Now;
-                        workflow.Terminada = true;
-                        workflow.Anulada = true;
-                    }
-
                     /*Si el proceso corresponde a cometido se deja como falso*/
                     if (obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometido)
                     {
@@ -466,7 +458,7 @@ namespace App.Core.UseCases
                             {
                                 response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada");
                             }
-                            else 
+                            else
                             {
                                 var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
                                 var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
@@ -489,6 +481,22 @@ namespace App.Core.UseCases
                                     }
                                 }
 
+
+                                //terminar todas las tareas pendientes
+                                foreach (var _workflow in obj.Workflows.Where(q => !q.Terminada))
+                                {
+                                    _workflow.FechaTermino = DateTime.Now;
+                                    _workflow.Terminada = true;
+                                    _workflow.Anulada = true;
+                                }
+
+                                //terminar proceso
+                                obj.FechaTermino = DateTime.Now;
+                                obj.Terminada = true;
+                                obj.Anulada = true;
+                                obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                                _repository.Save();
+
                                 //notificar a todos los que participaron en el proceso
                                 var workflow = obj.Workflows.FirstOrDefault();
                                 var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
@@ -506,19 +514,28 @@ namespace App.Core.UseCases
                             }
                         }
                     }
+                    else 
+                    {
+                        //terminar todas las tareas pendientes
+                        foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
+                        {
+                            workflow.FechaTermino = DateTime.Now;
+                            workflow.Terminada = true;
+                            workflow.Anulada = true;
+                        }
 
-                    //terminar proceso
-                    obj.FechaTermino = DateTime.Now;
-                    obj.Terminada = true;
-                    obj.Anulada = true;
-                    obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
-                    _repository.Save();
+                        //terminar proceso
+                        obj.FechaTermino = DateTime.Now;
+                        obj.Terminada = true;
+                        obj.Anulada = true;
+                        obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                        _repository.Save();
 
-                    //notificar al dueño del proceso
-                    _email.NotificarAnulacionProceso(obj,
-                    _repository.GetFirst<Configuracion>(q=>q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_anulacion_proceso)),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
-
+                        //notificar al dueño del proceso
+                        _email.NotificarAnulacionProceso(obj,
+                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_anulacion_proceso)),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    }
                 }
             }
             catch (Exception ex)

@@ -32,12 +32,13 @@ namespace App.Core.UseCases
             _repository = repository;
             _sigper = sigper;
         }
-        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm, IFile file, IFolio folio)
+        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm, IFile file, IFolio folio, ISIGPER sigper)
         {
             _repository = repositoryGestionProcesos;
             _hsm = hsm;
             _file = file;
             _folio = folio;
+            _sigper = sigper;
         }
         public UseCaseCometidoComision(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFile file)
         {
@@ -4734,7 +4735,7 @@ namespace App.Core.UseCases
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && Cometido.IdEscalafon != 1 && Cometido.IdEscalafon == null) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
                                     }
