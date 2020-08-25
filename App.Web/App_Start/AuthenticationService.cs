@@ -63,6 +63,15 @@ namespace App.Web
                 if (userPrincipal.Enabled.HasValue && userPrincipal.Enabled.Value == false)
                     return new AuthenticationResult("Cuenta deshabilitada");
 
+                if (userPrincipal.Enabled.HasValue && userPrincipal.Enabled.Value == false)
+                    return new AuthenticationResult("Cuenta deshabilitada");
+
+                if (string.IsNullOrEmpty(userPrincipal.DisplayName))
+                    return new AuthenticationResult("El dato 'DisplayName' no está configurado en Active Directory");
+
+                if (string.IsNullOrEmpty(userPrincipal.EmailAddress))
+                    return new AuthenticationResult("El dato 'EmailAddress' no está configurado en Active Directory");
+
                 ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
                 identity.AddClaim(new Claim(ClaimTypes.Name, userPrincipal.DisplayName, "http://www.w3.org/2001/XMLSchema#string"));
                 identity.AddClaim(new Claim(ClaimTypes.Email, userPrincipal.EmailAddress, "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"));
