@@ -28,7 +28,14 @@
                         @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m12 l12">
-                        @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
+                        @if (Model.Admin == true)
+                        {
+                            @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...", new { @disabled = "disabled" })
+                        }
                         @Html.LabelFor(m => Model.IdUnidad)
                         @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
                     </div>

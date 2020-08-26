@@ -306,7 +306,7 @@ namespace App.Web.Controllers
 
             /*se busca si existe una resolucion asociada al proceso*/
             int IdDocto = 0;
-            var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+            var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
             if (resolucion != null)
             {
                 IdDocto = resolucion.FirstOrDefault().DocumentoId;

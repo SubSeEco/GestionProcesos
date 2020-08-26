@@ -26,6 +26,8 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using jdk.nashorn.@internal.objects.annotations;
 using com.mp4parser.streaming.extensions;
+using System.ServiceModel.Security;
+using System.Net.Configuration;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -94,6 +96,9 @@ namespace App.Web.Controllers
 
             [Display(Name = "N° Dias")]
             public int DiasDiferencia { get; set; }
+
+            [Display(Name = "Admin")]
+            public bool Admin { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
@@ -371,7 +376,7 @@ namespace App.Web.Controllers
                 model.GeneracionCDP.Add(cdp.FirstOrDefault());
 
                 /*Validar si existe un documento asociado y si se encuentra firmado*/
-                var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+                var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
                 if (doc != null)
                 {
                     if (doc.Signed != true)
@@ -906,7 +911,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -1740,6 +1745,7 @@ namespace App.Web.Controllers
 
         public ActionResult SeguimientoGP()
         {
+            var persona = _sigper.GetUserByEmail(User.Email());
             var model = new DTOFilterCometido();
 
             List<SelectListItem> Estado = new List<SelectListItem>
@@ -1749,9 +1755,33 @@ namespace App.Web.Controllers
             new SelectListItem {Text = "Anulado", Value = "3"},
             };
 
+            /*Se busca rol de funcionario y unidad para mostrar el dropdwon de unidades en la busqueda del reporte*/
+            var GrupoId = _repository.Get<Usuario>(c => c.Email == persona.Funcionario.Rh_Mail.Trim() && c.Habilitado == true);
+            if (GrupoId.Count() > 0)
+            {
+                foreach (var usr in GrupoId)
+                {
+                    if (usr.GrupoId == 1)
+                    {
+                        ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+                        model.Admin = true;
+                    }
+                    else
+                    {
+                        ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", persona.Unidad.Pl_UndCod);
+                        model.Admin = false;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", persona.Unidad.Pl_UndCod);
+                model.Admin = false;
+            }
+
             ViewBag.Estado = new SelectList(Estado, "Value", "Text");
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+            //ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             return View(model);
         }
