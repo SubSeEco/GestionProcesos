@@ -73,18 +73,6 @@ namespace App.Infrastructure.HSM
             }
         }
 
-        //public string[] GetSigners()
-        //{
-
-        //    SignFileImplClient ws = new SignFileImplClient();
-        //    var obj = ws.getSignerNameList();
-        //    if (obj != null)
-        //        return ws.getSignerNameList().signer;
-
-        //    return null;
-        //}
-
-        //Nuevo método, agrega tabla e verificación de documentos
         public byte[] Sign(byte[] documento, List<string> firmantes, int documentoId, string folio, string url, byte[] QR)
         {
             //validaciones

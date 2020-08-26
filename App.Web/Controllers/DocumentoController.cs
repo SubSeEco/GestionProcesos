@@ -13,6 +13,7 @@ using System.Web.Security;
 using App.Core.UseCases;
 using com.sun.xml.@internal.txw2;
 using org.bouncycastle.cert.dane;
+using App.Infrastructure.Folio;
 
 namespace App.Web.Controllers
 {
@@ -41,6 +42,7 @@ namespace App.Web.Controllers
         protected readonly IFile _file;
         protected readonly IHSM _IHSM;
         protected readonly IFolio _folio;
+        protected readonly ISIGPER _sigper;
 
         public class DTOFilter
         {
@@ -81,12 +83,50 @@ namespace App.Web.Controllers
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
         }       
+        public class FileSignUpload
+        {
+            public FileSignUpload()
+            {
+            }
 
-        public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm)
+            public int ProcesoId { get; set; }
+            public int WorkflowId { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Archivo")]
+            [DataType(DataType.Upload)]
+            public HttpPostedFileBase[] File { get; set; }
+
+
+            [Display(Name = "Requiere firma electrónica?")]
+            public bool RequiereFirmaElectronica { get; set; } = false;
+
+            [Display(Name = "Es documento oficial?")]
+            public bool EsOficial { get; set; } = false;
+
+            [Display(Name = "Unidad del firmante")]
+            public int? Pl_UndCod { get; set; }
+
+            [Display(Name = "Unidad del firmante")]
+            public string Pl_UndDes { get; set; }
+
+            [Display(Name = "Usuario firmante")]
+            public string UsuarioFirmante { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Tipo documento")]
+            public string TipoDocumentoCodigo { get; set; }
+        }
+
+        public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm, ISIGPER sigper, Folio folio)
         {
             _repository = repository;
             _file = pdf;
             _IHSM = hsm;
+            _sigper = sigper;
+            _folio = folio;
         }
 
         public ActionResult Index()
@@ -383,6 +423,70 @@ namespace App.Web.Controllers
 
             return Json(model , JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult Upload(int ProcesoId, int WorkflowId)
+        {
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+
+            var model = new FileSignUpload() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Upload(FileSignUpload model)
+        {
+            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+
+            var email = UserExtended.Email(User);
+
+            if (Request.Files.Count == 0)
+                ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
+
+            if (ModelState.IsValid)
+            {
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+                    var target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = file.FileName;
+                    doc.File = target.ToArray();
+                    doc.ProcesoId = model.ProcesoId;
+                    doc.WorkflowId = model.WorkflowId;
+                    doc.Signed = false;
+                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoDocumentoId = 6; /*Por default el tipo de documento es "Otros"*/
+
+                    //obtener metadata del documento
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        doc.Texto = metadata.Text;
+                        doc.Metadata = metadata.Metadata;
+                        doc.Type = metadata.Type;
+                    }
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
+
+                TempData["Success"] = "Operación terminada correctamente.";
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
+            return View(model);
+        }
+
     }
 }
 
