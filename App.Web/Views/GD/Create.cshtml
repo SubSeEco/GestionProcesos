@@ -1,4 +1,7 @@
 ﻿@model App.Model.GestionDocumental.GD
+@{
+    var FileUpload = new App.Web.Controllers.GDController.FileUpload { ProcesoId = Model.ProcesoId, WorkflowId = Model.WorkflowId };
+}
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
@@ -20,6 +23,11 @@
                         <div class="section"></div>
                         <div class="row">
                             <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaIngreso)
+                                @Html.LabelFor(m => Model.FechaIngreso)
+                                @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
                                 @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
                                 @Html.LabelFor(m => Model.Materia)
                                 @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
@@ -34,36 +42,6 @@
                                 @Html.LabelFor(m => Model.Observacion)
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
-                            <div class="input-field col s12 m12 l12">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                    <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
-                                </label>
-                                <br />
-                                <br />
-
-                                @*<div class="switch">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                            <span class="lever"></span>
-                                            Requiere firma electrónica?
-                                        </label>
-                                    </div>
-                                    <br />*@
-                            </div>
-                            @*<div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
-                                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.Pl_UndCod)
-                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                            </div>
-
-                            @Html.HiddenFor(q=>q.Pl_UndDes)
-
-                            <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
-                                @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.UsuarioFirmante)
-                                @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
-                            </div>*@
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
@@ -77,7 +55,75 @@
     </div>
 </div>
 
+<div class="fixed-action-btn">
+    <a href="#modalFile" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo GD"><i class="large material-icons">attach_file</i></a>
+</div>
+
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<div id="modalFile" class="modal">
+    <div class="modal-content">
+        @using (Html.BeginForm("Upload", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(model => model.ProcesoId)
+            @Html.HiddenFor(model => model.WorkflowId)
+            @Html.AntiForgeryToken()
+
+            <div class="input-field col s12 m10 l12">
+
+                <div class="input-field col s12 m12 l12">
+                    <label>
+                        @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
+                        <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
+                    </label>
+                    <br />
+                    <br />
+
+                    <div class="switch">
+                        <label>
+                            @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
+                            <span class="lever"></span>
+                            Requiere firma electrónica?
+                        </label>
+                    </div>
+                    <br />
+                </div>
+                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
+                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.Pl_UndCod)
+                    @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                </div>
+
+                @Html.HiddenFor(q => q.Pl_UndDes)
+
+                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
+                    @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
+                    @Html.LabelFor(m => Model.UsuarioFirmante)
+                    @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
+                </div>
+
+                <div class="file-field input-field">
+                    <div class="btn grey">
+                        <i class="material-icons">attach_file</i>
+                        @Html.TextBoxFor(model => FileUpload.File, "", new { @type = "file", @multiple = "multiple" })
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                    </div>
+                    @Html.ValidationMessageFor(model => FileUpload.File, "", new { @class = "red-text" })
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                <div class="section"></div>
+            </div>
+        }
+
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -116,14 +162,14 @@
             });
     });
 
-    //si requiere firma electrónica, mostrar destino
-    //$(function () {
-    //    $('#RequiereFirmaElectronica').change(function () {
-    //        var isChecked = $(this).is(':checked');
-    //        $('#divRequiereFirmaUnidad').toggle(isChecked);
-    //        $('#divRequiereFirmaUsuario').toggle(isChecked);
-    //    });
-    //});
+            //si requiere firma electrónica, mostrar destino
+            //$(function () {
+            //    $('#RequiereFirmaElectronica').change(function () {
+            //        var isChecked = $(this).is(':checked');
+            //        $('#divRequiereFirmaUnidad').toggle(isChecked);
+            //        $('#divRequiereFirmaUsuario').toggle(isChecked);
+            //    });
+            //});
 
 </script>
 
