@@ -155,6 +155,10 @@ namespace App.Model.Cometido
         [Display(Name = "Placa Vehículo")]
         public string PlacaVehiculo { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Observaciones Vehiculo")]
+        public string VehiculoObservaciones { get; set; }
+
         [Display(Name = "Tipo Reembolso")]
         public int? TipoReembolsoId { get; set; }
         [Display(Name = "Tipo Reembolso")]

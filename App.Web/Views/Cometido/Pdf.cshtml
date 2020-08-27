@@ -8,8 +8,6 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="~/Content/bootstrap.css" />
-    <link rel="stylesheet" href="~/Content/Site.css" />
     <style TYPE="text/css">
         .breakhere {
             page-break-after: always
@@ -19,8 +17,8 @@
 <body style="font-family: Calibri;font-style:italic;
         padding: 0px;
         margin: 0px;        
-        text-align: justify">    
-    <table border="0" style="margin-top:650px">
+        text-align: justify">
+    <table border="0" style="margin-top:400px">
         <tr>
             <td width="20%">
                 <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
@@ -91,9 +89,9 @@
             </td>
             <td style="margin-top:-1px">
                 <strong>
-                    VISTOS:
+                    <br /><br /><br /><br /><br /> VISTOS:
                 </strong>
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     @if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
                     {
                         @Html.DisplayFor(m => Model.Vistos)
@@ -112,18 +110,18 @@
                 <strong>
                     CONSIDERANDO:
                 </strong>
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     1.	Que, los funcionarios públicos pueden cumplir cometidos funcionarios que los obliguen a   desplazarse dentro o fuera de su lugar de desempeño habitual para
                     realizar labores especificas inherentes al cargo que sirven.
                 </p>
                 @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar
                         este cometido de forma extemporánea.
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     Que,
                     @if (Model.Tiempo == "Pasado")
                     {
@@ -178,8 +176,8 @@
                         <text>Desígnese</text>
                     }
                 </p>
-                <p>
-                    en cometido funcionario, a don/ña <strong> @Model.Nombre.Trim(), </strong> RUN N° <strong> @Model.Rut <text>-</text> @Model.DV,</strong>
+                <p align="justify" style="margin-right:30px">
+                    en cometido funcionario, a don/ña <strong> @Model.Nombre.Trim(), </strong>&nbsp;&nbsp;&nbsp; RUN N° <strong> @Model.Rut <text>-</text> @Model.DV,</strong>
                     @Model.UnidadDescripcion.Trim(), <text> </text>@Model.CalidadDescripcion.Trim(), <text> </text>@Model.CargoDescripcion.Trim(), grado <text> </text>@Model.GradoDescripcion.Trim() de la E.U.S. de la Subsecretaría de Economía y Empresas de Menor Tamaño,
 
                     @if (Model.Tiempo == "Pasado")
@@ -207,8 +205,8 @@
                 2. <strong>DÉJASE CONSTANCIA:</strong>
                 @if (Model.SolicitaViatico == true)
                 {
-                    <p align="justify">
-                        Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>viático de acuerdo al siguiente esquema:
+                    <p align="justify" style="margin-right:30px">                        
+                            Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>viático de acuerdo al siguiente esquema:                        
                         <br />
                     </p>
                     <table border="1" width="100%">
@@ -288,7 +286,7 @@
                         como medio de transporte el @Html.DisplayFor(m => Model.TipoVehiculoDescripcion) patente @Html.DisplayFor(m => Model.PlacaVehiculo).
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     @Html.DisplayFor(m => Model.ViaticodeVuelta) <!--Que no se pagara viático por el día xxx de xxxx de xxx, por motivo de encontrarse en viaje de regreso.-->
                 </p>
                 @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
@@ -309,17 +307,17 @@
                 }
                 @if (Model.ReqPasajeAereo == true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, esta Subsecretaría pagará a <strong>@Html.DisplayFor(m => Model.Nombre), </strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
                     </p>
                 }
                 @if (Model.Tiempo == "Pasado")
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, por razones impostergables de buen servicio no ha resultado necesario esperar la total tramitación de esta resolución para iniciarla.
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
                     al ítem o los ítems y asignaciones correspondientes al subtítulo
                     @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
@@ -336,7 +334,7 @@
             <td>
                 @if (Model.GeneracionCDP.Count > 0)
                 {
-                    <p align="justify" style="text-align:justify">
+                    <p align="justify" style="margin-right:30px" >
                         3. <strong>IMPÚTESE</strong>,
                         @if (Model.SolicitaViatico == true)
                         {
@@ -412,7 +410,7 @@
                 }
                 @if (Model.SolicitaViatico != true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         3.<strong>IMPÚTESE</strong>,
                         @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
                         @Html.Raw(",y al Subtítulo 22 ")

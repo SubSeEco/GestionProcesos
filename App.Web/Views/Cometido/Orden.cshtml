@@ -82,9 +82,9 @@
             </td>
             <td>
                 <strong>
-                    VISTOS:
+                    <br /><br /><br /><br /><br /> VISTOS:
                 </strong>
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     @Html.DisplayFor(m => Model.Vistos)
                 </p>
             </td>
@@ -97,11 +97,11 @@
                 </strong>
                 @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
                     </p>
                 }
-            <p align="justify">
+            <p align="justify" style="margin-right:30px">
                 Que, don/ña
                 <strong>@Html.DisplayFor(m => Model.Nombre)</strong>
                 @Html.Raw(",")&nbsp;&nbsp;Rut N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>, prestador(a) de servicios a honorarios suma alzada con desempeño en
@@ -169,7 +169,7 @@
             <td>
                 @if (Model.SolicitaViatico == true)
                 {
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     <strong>ORDÉNESE EL PAGO:</strong>
                     &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().Total).- pesos, @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras)
                     concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
@@ -262,7 +262,7 @@
                 {
                     @Html.DisplayFor(m => Model.DejaseConstancia)
 
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, la presente orden de pago no
                         @if (Model.Tiempo == "Pasado")
                         {
@@ -277,18 +277,18 @@
                 }
                 @if (Model.ReqPasajeAereo == true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre)</strong>, los gastos de pasajes aéreos.
                     </p>
                 }
                 <p align="justify"></p>
                 @if (Model.Tiempo == "Pasado")
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, por razones impostergables de buen servicio, no fue necesario esperar la total tramitación de esta orden de pago para iniciarla.
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
                     siempre y cuando se encuentren debidamente justificados y documentados, de acuerdo a la normativa interna que regule esta materia y al contrato de prestaciones de servicios respectivo,
                     con cargo al ítem o los ítems y asignaciones correspondientes al subtítulo
@@ -305,7 +305,7 @@
             <td>
                 @if (Model.GeneracionCDP.Count > 0)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         3. <strong>IMPÚTESE</strong>,
                         @if (Model.SolicitaViatico == true)
                         {
@@ -369,7 +369,7 @@
                 }
                 @if (Model.SolicitaViatico != true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         3.<strong>IMPÚTESE</strong>,
                         @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
                         @Html.Raw(",y al Subtítulo 22 ")

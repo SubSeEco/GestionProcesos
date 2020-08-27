@@ -34,10 +34,13 @@ namespace App.Model.SIGPER
         //public Int16 ReContraEst { get; set; }
 
         //[Display(Name = "Re_ConTipHon")]
-        //public Int16 Re_ConTipHon { get; set; }
+        //public Int16 Re_ConTipHon { get; set; }RE_ConCor
 
         [Display(Name = "Re_ConCar")]
         public Int32 Re_ConCar { get; set; }
+
+        [Display(Name = "RE_ConCor")]
+        public Int32 RE_ConCor { get; set; }
 
         [Display(Name = "RH_ContCod")]
         public Int16 RH_ContCod { get; set; }
