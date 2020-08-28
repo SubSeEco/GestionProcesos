@@ -11,8 +11,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Core.UseCases;
-using com.sun.xml.@internal.txw2;
-using org.bouncycastle.cert.dane;
 using App.Infrastructure.Folio;
 
 namespace App.Web.Controllers
@@ -34,7 +32,6 @@ namespace App.Web.Controllers
         public string Folio { get; set; }
     }
 
-
     [Authorize]
     public class DocumentoController : Controller
     {
@@ -43,6 +40,43 @@ namespace App.Web.Controllers
         protected readonly IHSM _IHSM;
         protected readonly IFolio _folio;
         protected readonly ISIGPER _sigper;
+
+        public class DTOFileUploadFEA
+        {
+            public DTOFileUploadFEA()
+            {
+            }
+
+            public int ProcesoId { get; set; }
+            public int WorkflowId { get; set; }
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Archivo")]
+            [DataType(DataType.Upload)]
+            public HttpPostedFileBase[] File { get; set; }
+
+            [Display(Name = "Requiere firma electrónica?")]
+            public bool RequiereFirmaElectronica { get; set; } = false;
+
+            [Display(Name = "Es documento oficial?")]
+            public bool EsOficial { get; set; } = false;
+
+            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Unidad del firmante")]
+            public string Pl_UndCod { get; set; }
+
+            [Display(Name = "Unidad del firmante")]
+            public string Pl_UndDes { get; set; }
+
+            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Usuario firmante")]
+            public string UsuarioFirmante { get; set; }
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Tipo documento")]
+            public string TipoDocumentoCodigo { get; set; }
+        }
+
 
         public class DTOFilter
         {
@@ -83,42 +117,6 @@ namespace App.Web.Controllers
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
         }       
-        public class FileSignUpload
-        {
-            public FileSignUpload()
-            {
-            }
-
-            public int ProcesoId { get; set; }
-            public int WorkflowId { get; set; }
-
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            public HttpPostedFileBase[] File { get; set; }
-
-
-            [Display(Name = "Requiere firma electrónica?")]
-            public bool RequiereFirmaElectronica { get; set; } = false;
-
-            [Display(Name = "Es documento oficial?")]
-            public bool EsOficial { get; set; } = false;
-
-            [Display(Name = "Unidad del firmante")]
-            public int? Pl_UndCod { get; set; }
-
-            [Display(Name = "Unidad del firmante")]
-            public string Pl_UndDes { get; set; }
-
-            [Display(Name = "Usuario firmante")]
-            public string UsuarioFirmante { get; set; }
-
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Tipo documento")]
-            public string TipoDocumentoCodigo { get; set; }
-        }
 
         public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm, ISIGPER sigper, Folio folio)
         {
@@ -431,13 +429,13 @@ namespace App.Web.Controllers
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
-            var model = new FileSignUpload() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
+            var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(FileSignUpload model)
+        public ActionResult Upload(DTOFileUploadFEA model)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
