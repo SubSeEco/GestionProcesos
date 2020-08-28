@@ -383,6 +383,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\GDController.cs" />
     <Compile Include="Helper\AuditAttribute.cs" />
     <Compile Include="Helper\AuthenticationService.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -693,6 +694,15 @@
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
     <Content Include="Views\Workflow\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Documento\Upload.cshtml" />
+    <Content Include="Views\GD\Create.cshtml" />
+    <Content Include="Views\GD\Details.cshtml" />
+    <Content Include="Views\GD\Documents.cshtml" />
+    <Content Include="Views\GD\Edit.cshtml" />
+    <Content Include="Views\GD\Index.cshtml" />
+    <Content Include="Views\GD\Sign.cshtml" />
+    <Content Include="Views\GD\Validate.cshtml" />
+    <Content Include="Views\GD\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

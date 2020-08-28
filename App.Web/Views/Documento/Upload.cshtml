@@ -9,7 +9,6 @@
     @Html.HiddenFor(model => model.WorkflowId)
     @Html.HiddenFor(q => q.Pl_UndDes)
     @Html.AntiForgeryToken()
-    <br />
     <div class="row">
         <div class="col s12 m12 l12">
             <div class="switch">
@@ -65,21 +64,20 @@
     <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
 }
 
-
 <script>
     $(document).ready(function () {
         $('#divRequiereFEA').toggle(false)
     });
 
-    //si requiere firma electrónica, mostrar destino
+    //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
     $('#RequiereFirmaElectronica').change(function () {
         var isChecked = $(this).is(':checked');
-        $('#divRequiereFEA').toggle(isChecked);
-
         if (isChecked) {
+            $('#divRequiereFEA').toggle(true);
             $('#FileInput').attr("accept", ".pdf");
         }
         else {
+            $('#divRequiereFEA').toggle(false);
             $('#FileInput').attr("accept", ".*");
         }
     });
@@ -94,7 +92,7 @@
             text: "Seleccione..."
         }));
 
-        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val()},
             function (classesData) {
                 $.each(classesData, function (index, itemData) {
                     select.append($('<option/>', {
