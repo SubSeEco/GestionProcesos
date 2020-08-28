@@ -58,7 +58,7 @@ namespace App.Web.Controllers
             [DataType(DataType.Date)]
             public System.DateTime? Hasta { get; set; }
 
-            [Display(Name = "ID")]
+            [Display(Name = "ID Cometido")]
             public int ID { get; set; }
 
             [Display(Name = "Funcionario")]
@@ -157,8 +157,13 @@ namespace App.Web.Controllers
 
         public JsonResult GetUsuario(int Rut)
         {
+
             var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
             var per = _sigper.GetUserByEmail(correo.Trim());
+
+            //var test = _sigper.GetReContra();//.Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
+            
+
             var IdCargo = per.FunDatosLaborales.RhConCar.Value;
             var cargo = string.IsNullOrEmpty(per.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == per.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
             var IdCalidad = per.FunDatosLaborales.RH_ContCod;
@@ -196,6 +201,7 @@ namespace App.Web.Controllers
                 Programa = Programa.Trim(),
                 Conglomerado = conglomerado,
                 Unidad = per.Unidad.Pl_UndDes.Trim(),
+                IdUnidad = per.Unidad.Pl_UndCod,
                 Jefatura = jefatura,
                 IdEscalafon = IdEscalafon,
                 Escalafon = Escalafon
@@ -438,7 +444,7 @@ namespace App.Web.Controllers
                 model.SolicitaReembolso = true;
                 model.IdConglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed;
                 model.ConglomeradoDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed.ToString();
-                model.IdPrograma = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt);
+                model.IdPrograma = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
                 //model.ProgramaDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt.ToString();
                 model.ProgramaDescripcion = model.IdPrograma != null ? _sigper.GetREPYTs().Where(c => c.RePytCod == model.IdPrograma).FirstOrDefault().RePytDes : "S/A";
                 model.Jefatura = persona.Jefatura.PeDatPerChq;
@@ -1153,7 +1159,7 @@ namespace App.Web.Controllers
             else
             {
                 model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                model.DiasPlural = "s";
+                model.DiasPlural = "(s)";
                 model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
                 model.Anno = DateTime.Now.Year.ToString();
                 model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
@@ -1313,7 +1319,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(id);
             model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-            model.DiasPlural = "s";
+            model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
             model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
@@ -1432,7 +1438,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Cometido>(id);
 
             model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-            model.DiasPlural = "s";
+            model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
             model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
@@ -1793,6 +1799,9 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (model.ID != 0)
+                    predicate = predicate.And(q => q.CometidoId == model.ID);
+
                 if (model.Estado.HasValue)
                 {
                     if (model.Estado == 1)

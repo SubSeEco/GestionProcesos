@@ -192,6 +192,12 @@
                                 </strong>
                                 @Html.DisplayFor(m => Model.PlacaVehiculo)
                             </div>
+                            <div class="input-field col s12 m4 l4">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                </strong>
+                                @Html.DisplayFor(m => Model.VehiculoObservaciones)
+                            </div>
                         </div>
 
                         <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
@@ -517,9 +523,10 @@
                                     }
                                     else
                                     {
-                                        <div class="row">
-                                            @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
-                                        </div>
+                            <div class="row">
+                                @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+                                @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
+                            </div>
                                     }
                                 }
                             </div>

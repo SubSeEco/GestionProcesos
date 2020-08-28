@@ -184,16 +184,22 @@
                                     </label>
                                     <div class="section"></div>
                                 </div>
-                                <div class="input-field col s12 m6 l10">
-                                    @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.TipoVehiculoId)
-                                    @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m2 l10">
-                                    @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                    @Html.LabelFor(m => Model.PlacaVehiculo)
-                                    @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
-                                </div>
+                                <div id="auto">
+                                    <div class="input-field col s12 m6 l10">
+                                        @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.TipoVehiculoId)
+                                        @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                        @Html.LabelFor(m => Model.PlacaVehiculo)
+                                        @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.TextBoxFor(m => Model.VehiculoObservaciones)
+                                        @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                    </div>
+                                </div>                                
                             </div>
 
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
@@ -458,9 +464,11 @@
             if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
+                $("#VehiculoObservaciones").attr('disabled', false);
             }
             else {
                 $("#IdTipoVehiculo").attr('disabled', true);
+                $("#VehiculoObservaciones").attr('disabled', true);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
         });
@@ -474,9 +482,36 @@
             $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
         }
+
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+
+            }
+        });
     });
 
     /**************************************************************************************************/
+    /*Habilita tipo vehiculo*/
+    $('input:checkbox[name="Vehiculo"]').change(function () {
+        if (document.getElementById("Vehiculo").checked == false) {
+            $('#auto').hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
+        }
+        else {
+            $("#PlacaVehiculo").attr('disabled', false);
+            $('#auto').show();
+
+        }
+    });
+
+
 
     $(function () {
         $("#jQuery_accordion").accordion({

@@ -4544,7 +4544,7 @@ namespace App.Core.UseCases
                 //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
                 //}
 
-                /*Valida la carga de adjuntos segun el tipo de proceso*/
+                /*Valida la carga de adjuntos segun el tipo de proceso*/ /*27082020 --> se agrega validacion en firma dr acto administrativo, que el documento debe ser firmado*/
                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     if (workflowActual.DefinicionWorkflow.Secuencia == 4)
@@ -4605,6 +4605,12 @@ namespace App.Core.UseCases
                                     throw new Exception("No se ha ingresado cotización.");
                             }
                         }
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
+                    {
+                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
+                        if (doc == false)
+                            throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
                     {
