@@ -216,7 +216,11 @@
                                 <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                        <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
+                                        <span>
+                                            <strong style="color:green">
+                                                @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                            </strong>
+                                        </span>
                                     </label>
                                     <div class="section"></div>
                                 </div>
@@ -233,6 +237,15 @@
                                         <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
                                     </label>
                                     <div class="section"></div>
+                                </div>
+                                <div id="terrestre">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <label style="color:green">
+                                                “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                            </label>
+                                        </strong>
+                                    </div>
                                 </div>
                                 <div id="divReembolso">
                                     <div class="input-field col s12 m4 l3">
@@ -573,6 +586,15 @@
             $("#PlacaVehiculo").attr('disabled', false);
             $('#auto').show();
         }
+
+        /*Muestra texto de pasaje terrestre*/
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+        }
+
     });
 
     /*******************TERMINO METODO FUNCTION*************************************************************************************/
@@ -586,6 +608,17 @@
         else {
             $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
+        }
+    });
+
+    /*Muestra texto de pasaje terrestre*/
+    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+
         }
     });
 

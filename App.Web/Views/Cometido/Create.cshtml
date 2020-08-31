@@ -124,8 +124,8 @@
                         <div id="Financia">
                             <label>Marque las opciones que SI financia el organismo invitante</label>
                             @*<label style="color:green">
-                    @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                </label>*@
+                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                        </label>*@
                             <div class="col-12">
                                 <label>
                                     @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
@@ -148,7 +148,9 @@
                         <div class="col-12">
                             <label>
                                 @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                <span>@Html.LabelFor(m => Model.SolicitaViatico)</span>
+                                <span>
+                                    <strong>@Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })</strong>
+                                </span>
                             </label>
                         </div>
                         <div class="section"></div>
@@ -156,8 +158,8 @@
                         <div class="col-12">
                             <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
                             @*<label style="color:green">
-                    @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-                </label>*@
+                            @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                        </label>*@
                         </div>
                         <div class="col-12">
                             <label>
@@ -170,6 +172,15 @@
                                 @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre)
                                 <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
                             </label>
+                        </div>
+                        <div id="terrestre">
+                            <div class="col-12">
+                                <strong>
+                                    <label style="color:green">
+                                        “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                    </label>
+                                </strong>
+                            </div>
                         </div>
                         <div id="divReembolso">
                             <div class="col-12">
@@ -216,7 +227,7 @@
                             @Html.LabelFor(m => Model.CometidoDescripcion)
                             @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                         </div>
-                    </div>                    
+                    </div>
                 </div>
                 <p>
                     <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
@@ -250,6 +261,7 @@
         //$("#TipoVehiculoId").attr('disabled', true);
         //$("#TipoReembolsoId").attr('disabled', true);
         $('#auto').hide(100);
+        //$('#terrestre').hide(100);
         $('#Financia').hide(100);
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
@@ -348,7 +360,18 @@
             $("#PlacaVehiculo").attr('disabled', false);
             $('#auto').show();
         }
+
+
+        /*Muestra texto de pasaje terrestre*/
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+        }
     });
+
+    /***********************termino script function*******************************************************************************************************/
 
     /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
@@ -359,6 +382,17 @@
         else {
             $("#PlacaVehiculo").attr('disabled', false);
             $('#auto').show();
+
+        }
+    });
+
+    /*Muestra texto de pasaje terrestre*/
+    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
 
         }
     });

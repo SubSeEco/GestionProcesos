@@ -1267,6 +1267,9 @@ namespace App.Core.UseCases
                 //{
                 //    response.Errors.Add("Se ha selecionado la opcion de Solicita Reembolso, por lo tanto debe señalar el Tipo de Reembolso");
                 //}
+                if(!obj.NombreId.HasValue)
+                    response.Errors.Add("No se ha señalado el nombre del funcionario que viaja.");
+
                 if (string.IsNullOrEmpty(obj.CometidoDescripcion))
                 {
                     response.Errors.Add("Debe ingresar la descripción del cometido.");
@@ -1322,21 +1325,24 @@ namespace App.Core.UseCases
                         var nombre = _sigper.GetUserByRut(obj.NombreId.Value).Funcionario.PeDatPerChq;
                         obj.Nombre = nombre.Trim();
                         obj.FechaSolicitud = DateTime.Now;
+
+
+                        _repository.Create(obj);
+                        _repository.Save();
+
+                        /*Se guardan los datos en la tabla mantenedor*/
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Rut", ValorCampo = obj.Rut.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Dv", ValorCampo = obj.DV.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Cargo", ValorCampo = obj.IdCargo.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Calidad Juridica", ValorCampo = obj.IdCalidad.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Grado", ValorCampo = obj.IdGrado.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Estamento", ValorCampo = obj.IdEstamento.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Programa", ValorCampo = obj.IdPrograma.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Conglomerado", ValorCampo = obj.IdConglomerado.ToString() });
+                        _repository.Save();
                     }
-
-                    _repository.Create(obj);
-                    _repository.Save();
-
-                    /*Se guardan los datos en la tabla mantenedor*/
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Rut", ValorCampo = obj.Rut.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Dv", ValorCampo = obj.DV.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Cargo", ValorCampo = obj.IdCargo.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Calidad Juridica", ValorCampo = obj.IdCalidad.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Grado", ValorCampo = obj.IdGrado.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Estamento", ValorCampo = obj.IdEstamento.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Programa", ValorCampo = obj.IdPrograma.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Conglomerado", ValorCampo = obj.IdConglomerado.ToString() });
-                    _repository.Save();
+                    else
+                        response.Errors.Add("No se ha señalado el nombre del funcionario que viaja");
                 }
             }
             catch (Exception ex)
@@ -3169,6 +3175,25 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            /*Se valida que ppto sea mayor que el compromiso*/
+            if (int.Parse(obj.VtcPptoTotal) < int.Parse(obj.VtcCodCompromiso))
+                response.Errors.Add("El presupuesto debe ser mayor que el compromiso");
+            if (!obj.VtcTipoPartidaId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de partida");
+            if (!obj.VtcTipoCapituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de capitulo");
+            if (!obj.VtcCentroCostoId.HasValue)
+                response.Errors.Add("Se debe ingresar el programa");
+            if (!obj.VtcTipoSubTituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subtitulo");
+            if (!obj.VtcTipoItemId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de item");
+            if (!obj.VtcTipoAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de asignacion");
+            if (!obj.VtcTipoSubAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subasignacion");
+
+
             try
             {
                 if (response.IsValid)
@@ -3187,6 +3212,24 @@ namespace App.Core.UseCases
         public ResponseMessage GeneracionCDPUpdate(GeneracionCDP obj)
         {
             var response = new ResponseMessage();
+
+            /*Se valida que ppto sea mayor que el compromiso*/
+            if (int.Parse(obj.VtcPptoTotal) < int.Parse(obj.VtcCodCompromiso))
+                response.Errors.Add("El presupuesto debe ser mayor que el compromiso");
+            if (!obj.VtcTipoPartidaId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de partida");
+            if (!obj.VtcTipoCapituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de capitulo");
+            if (!obj.VtcCentroCostoId.HasValue)
+                response.Errors.Add("Se debe ingresar el programa");
+            if (!obj.VtcTipoSubTituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subtitulo");
+            if (!obj.VtcTipoItemId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de item");
+            if (!obj.VtcTipoAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de asignacion");
+            if (!obj.VtcTipoSubAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subasignacion");
 
             try
             {
@@ -4736,6 +4779,11 @@ namespace App.Core.UseCases
                                         //    _destino.ObservacionesDestinos = com.ObsDestino;
                                         //    var res = DestinosPasajesInsert(_destino);
                                         //}
+                                    }
+                                    /*Si cometido corresponde al ministro se va directamente a analista de gestion personas*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B")
+                                    {
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 2 && Cometido.ReqPasajeAereo != true)
                                     {

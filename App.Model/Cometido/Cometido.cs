@@ -130,8 +130,8 @@ namespace App.Model.Cometido
 
         [Display(Name = "Pasajes")]
         public bool Pasajes { get; set; }
-
-        [Display(Name = "El cometido incluye pago de viatico?")]
+                
+        [Display(Name = "El cometido incluye pago de viatico?")]        
         public bool SolicitaViatico { get; set; }
 
         [Display(Name = "El cometido incluye pago de pasaje aéreo?")]

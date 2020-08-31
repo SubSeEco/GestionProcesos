@@ -248,7 +248,7 @@ namespace App.Infrastructure.Email
 
             try
             {
-                smtpClient.Send(emailMsg);
+                //smtpClient.Send(emailMsg);
             }
             catch (Exception ex)
             {

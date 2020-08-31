@@ -5,9 +5,16 @@
     <div id="card-alert" class="card blue-grey lighten-1">
         <div class="card-content white-text">
             <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
-        <p>
-            Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
-        </p>
+            @if (Model.Destinos.Any())
+            {
+                <p>
+                    Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+                </p>
+            }
+            else
+            {
+                <p>No existen destinos asociados al cometido</p>
+            }
         </div>
     </div>
     <div class="row">
@@ -159,7 +166,11 @@
                                 <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                        <span>@Html.LabelFor(m => Model.SolicitaViatico)</span>
+                                        <span>
+                                            <strong>
+                                                @Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })
+                                            </strong>
+                                        </span>
                                     </label>
                                     <div class="section"></div>
                                 </div>
@@ -176,6 +187,15 @@
                                         <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
                                     </label>
                                     <div class="section"></div>
+                                </div>
+                                <div id="terrestre">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <label style="color:green">
+                                                “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                            </label>
+                                        </strong>
+                                    </div>
                                 </div>
                                 <div class="input-field col s12 m4 l3">
                                     <label>
@@ -199,7 +219,7 @@
                                         @Html.TextBoxFor(m => Model.VehiculoObservaciones)
                                         @Html.LabelFor(m => Model.VehiculoObservaciones)
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
 
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
@@ -495,6 +515,14 @@
 
             }
         });
+
+        /*Muestra texto de pasaje terrestre*/
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+        };
     });
 
     /**************************************************************************************************/
@@ -511,7 +539,16 @@
         }
     });
 
+    /*Muestra texto de pasaje terrestre*/
+    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
 
+        }
+    });
 
     $(function () {
         $("#jQuery_accordion").accordion({

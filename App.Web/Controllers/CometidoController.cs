@@ -951,6 +951,7 @@ namespace App.Web.Controllers
                 else
                 {
                     var docOld = _repository.GetById<Documento>(idDoctoViatico);
+                    docOld.Fecha = DateTime.Now;
                     docOld.File = pdf;
                     docOld.Signed = false;
                     docOld.Texto = data.Text;
@@ -1114,6 +1115,7 @@ namespace App.Web.Controllers
                     var docOld = _repository.GetById<Documento>(IdDocto);
                     if (docOld.Signed != true)
                     {
+                        docOld.Fecha = DateTime.Now;
                         docOld.File = pdf;
                         docOld.Signed = false;
                         docOld.Texto = data.Text;

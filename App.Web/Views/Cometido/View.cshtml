@@ -118,7 +118,11 @@
                             </div>
                             <div class="input-field col s12 m10 l10">
                                 <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
+                                    <span>
+                                        <strong style="color:green">
+                                            @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                        </strong>
+                                    </span>
                                 </strong>
                                 @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
                             </div>
