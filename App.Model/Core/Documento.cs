@@ -81,17 +81,23 @@ namespace App.Model.Core
         [Display(Name = "Folio")]
         public string Folio { get; set; }
 
-        [Display(Name = "Tipo documento firma")]
-        public string TipoDocumentoFirma { get; set; }
-
-        //todo documento nace habilitado
         [Display(Name = "Activo")]
         public bool Activo { get; set; } = true;
 
 
 
+        [Display(Name = "Tipo documento (foliador)")]
+        public string TipoDocumentoFirma { get; set; }
+
+        [Display(Name = "Requiere firma electrónica?")]
+        public bool RequiereFirmaElectronica { get; set; }
+
+        [Display(Name = "Es documento oficial?")]
+        public bool EsOficial { get; set; }
 
 
+
+        
         [NotMapped]
         public bool Selected { get; set; } = false;
 

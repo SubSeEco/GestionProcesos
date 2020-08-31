@@ -1,7 +1,4 @@
 ﻿@model App.Model.GestionDocumental.GD
-@{
-    var FileUpload = new App.Web.Controllers.GDController.FileUpload { ProcesoId = Model.ProcesoId, WorkflowId = Model.WorkflowId };
-}
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
@@ -20,7 +17,8 @@
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Información del ingreso</span>
-                        <div class="section"></div>
+                            <div class="section"></div>
+                    <div class="section"></div>
                         <div class="row">
                             <div class="input-field col s12 m12 l12">
                                 @Html.EditorFor(m => Model.FechaIngreso)
@@ -42,12 +40,6 @@
                                 @Html.LabelFor(m => Model.Observacion)
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
-                            @*<div class="input-field col s12 m12 l12">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.EsReservado)
-                                        <span>@Html.LabelFor(m => Model.EsReservado)</span>
-                                    </label>
-                                </div>*@
                             <div class="input-field col s12 m12 l12">
                                 <div class="switch">
                                     <label>

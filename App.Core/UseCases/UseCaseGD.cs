@@ -31,11 +31,6 @@ namespace App.Core.UseCases
             {
                 if (response.IsValid)
                 {
-                    //actualizar el firmante en el workflow
-                    //var workflow = _repository.GetById<Workflow>(obj.WorkflowId);
-                    //if (workflow != null)
-                    //    workflow.Firmante = obj.UsuarioFirmante;
-
                     _repository.Create(obj);
                     _repository.Save();
                 }

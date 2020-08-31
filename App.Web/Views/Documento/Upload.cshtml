@@ -9,13 +9,15 @@
     @Html.HiddenFor(model => model.WorkflowId)
     @Html.HiddenFor(q => q.Pl_UndDes)
     @Html.AntiForgeryToken()
+
+    <br />
     <div class="row">
         <div class="col s12 m12 l12">
             <div class="switch">
                 <label>
                     @Html.CheckBoxFor(m => Model.EsOficial)
                     <span class="lever"></span>
-                    Es documento oficial?
+                    @Html.LabelFor(m => Model.EsOficial)
                 </label>
             </div>
         </div>
@@ -26,7 +28,7 @@
                 <label>
                     @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
                     <span class="lever"></span>
-                    Requiere firma electrónica? (solo documentos pdf)
+                    @Html.LabelFor(m => Model.RequiereFirmaElectronica)
                 </label>
             </div>
         </div>
@@ -61,6 +63,7 @@
             </div>
         </div>
     </div>
+    <br />
     <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
 }
 
@@ -92,7 +95,7 @@
             text: "Seleccione..."
         }));
 
-        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val()},
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
             function (classesData) {
                 $.each(classesData, function (index, itemData) {
                     select.append($('<option/>', {

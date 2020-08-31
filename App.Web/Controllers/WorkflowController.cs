@@ -20,6 +20,37 @@ namespace App.Web.Controllers
     [Authorize]
     public class WorkflowController : Controller
     {
+        public class DTOSend
+        {
+            public DTOSend()
+            {
+            }
+
+            public int WorkflowId { get; set; }
+            public bool RequiereAprobacionAlEnviar { get; set; }
+            public bool PermitirMultipleEvaluacion { get; set; }
+            public bool PermitirSeleccionarUnidadDestino { get; set; }
+            public bool PermitirSeleccionarPersonasMismaUnidad { get; set; }
+
+            [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Aprobación")]
+            public int TipoAprobacionId { get; set; }
+
+            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Unidad")]
+            public int? Unidad { get; set; }
+
+            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Funcionario")]
+            public string Funcionario { get; set; }
+
+            [RequiredIf("TipoAprobacionId", Enum.TipoAprobacion.Rechazada, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Observaciones")]
+            [DataType(DataType.MultilineText)]
+            public string Observaciones { get; set; }
+        }
+
+
         public class DTOUser
         {
             public string id { get; set; }
@@ -53,13 +84,13 @@ namespace App.Web.Controllers
             public List<Workflow> TareasPersonales { get; set; }
             public List<Workflow> TareasGrupales { get; set; }
         }
+
         protected readonly IGestionProcesos _repository;
         protected readonly IEmail _email;
         protected readonly ISIGPER _sigper;
         protected readonly IFolio _folio;
         protected readonly IFile _file;
         protected readonly IHSM _hsm;
-
 
         public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
         {

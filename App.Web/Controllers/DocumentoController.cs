@@ -111,7 +111,6 @@ namespace App.Web.Controllers
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Archivo")]
             [DataType(DataType.Upload)]
-            //public HttpPostedFileBase File { get; set; }
             public HttpPostedFileBase[] File { get; set; }
 
             public int ProcesoId { get; set; }
@@ -450,31 +449,37 @@ namespace App.Web.Controllers
             {
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
+                    var documento = new Documento();
+                    documento.Fecha = DateTime.Now;
+                    documento.Email = email;
+                    documento.ProcesoId = model.ProcesoId;
+                    documento.WorkflowId = model.WorkflowId;
+                    documento.Signed = false;
+                    documento.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
+                    documento.EsOficial = model.EsOficial;
+                    documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
+
+                    //contenido
                     var file = Request.Files[i];
                     var target = new MemoryStream();
-                    file.InputStream.CopyTo(target);
+                    if (target != null)
+                    {
+                        file.InputStream.CopyTo(target);
+                        documento.FileName = file.FileName;
+                        documento.File = target.ToArray();
+                    }
 
-                    var doc = new Documento();
-                    doc.Fecha = DateTime.Now;
-                    doc.Email = email;
-                    doc.FileName = file.FileName;
-                    doc.File = target.ToArray();
-                    doc.ProcesoId = model.ProcesoId;
-                    doc.WorkflowId = model.WorkflowId;
-                    doc.Signed = false;
-                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
-                    doc.TipoDocumentoId = 6; /*Por default el tipo de documento es "Otros"*/
-
-                    //obtener metadata del documento
+                    //metadata
                     var metadata = _file.BynaryToText(target.ToArray());
                     if (metadata != null)
                     {
-                        doc.Texto = metadata.Text;
-                        doc.Metadata = metadata.Metadata;
-                        doc.Type = metadata.Type;
+                        documento.Texto = metadata.Text;
+                        documento.Metadata = metadata.Metadata;
+                        documento.Type = metadata.Type;
                     }
 
-                    _repository.Create(doc);
+                    _repository.Create(documento);
                     _repository.Save();
                 }
 
@@ -484,7 +489,6 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-
     }
 }
 
