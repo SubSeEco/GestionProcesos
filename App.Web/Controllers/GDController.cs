@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.GestionDocumental;
 using App.Core.Interfaces;
 using App.Core.UseCases;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
-using System.IO;
-using System;
 
 namespace App.Web.Controllers
 {
@@ -20,34 +16,12 @@ namespace App.Web.Controllers
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
-        public class FileUpload
-        {
-            public FileUpload()
-            {
-            }
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            public HttpPostedFileBase[] File { get; set; }
-
-            public int ProcesoId { get; set; }
-            public int WorkflowId { get; set; }
-        }
-
-
         public GDController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
             _folio = folio;
-        }
-
-        public ActionResult Index()
-        {
-            var model = _repository.GetAll<GD>();
-            return View(model);
         }
 
         public ActionResult Details(int id)
@@ -62,23 +36,14 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Validate(int id) 
-        {
-            var model = _repository.GetById<GD>(id);
-            return View(model);
-        }
-
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<GD>(id);
             return View(model);
         }
 
-        public ActionResult Create(int? WorkFlowId, int? ProcesoId)
+        public ActionResult Create(int? WorkFlowId)
         {
-            //ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            //ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
             var model = new GD
             {
@@ -106,23 +71,12 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
-            //ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            //ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            
-            //if (model.Pl_UndCod.HasValue)
-            //    ViewBag.UsuarioDestino = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.UsuarioFirmante);
-
             return View(model);
         }
 
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<GD>(id);
-            //ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            //ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            //if (model.Pl_UndCod.HasValue)
-            //    ViewBag.UsuarioFirmante = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.UsuarioFirmante);
-
             return View(model);
         }
 
@@ -142,11 +96,6 @@ namespace App.Web.Controllers
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-
-            //ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            //ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            //if (model.Pl_UndCod.HasValue)
-            //    ViewBag.UsuarioFirmante = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.UsuarioFirmante);
 
             return View(model);
         }

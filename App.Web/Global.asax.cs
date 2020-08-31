@@ -14,6 +14,8 @@ namespace App.Web
     {
         protected void Application_Start()
         {
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(RequiredIfAttribute),typeof(RequiredAttributeAdapter));
+
             //AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimsIdentity.DefaultNameClaimType;

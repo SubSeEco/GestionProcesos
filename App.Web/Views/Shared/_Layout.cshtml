@@ -10,6 +10,8 @@
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <link href="~/Content/custom.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -22,10 +24,10 @@
             margin-left: 140px;
         }
 
-        #btnUp {
+/*        #btnUp {
             display: none;
             bottom: 850px;            
-        }
+        }*/
     </style>
 
     <div class="navbar-fixed valign-wrapper">
@@ -46,27 +48,28 @@
             </div>
         </nav>
     </div>
+
     @RenderBody()
 
-    <div style="position: fixed;float: left;bottom: 23px;margin-top: 150px;z-index: 997;">
+    @*<div style="position: fixed;float: left;bottom: 23px;margin-top: 150px;z-index: 997;">
         <a id="btnUp" onclick="topFunction()" class="btn-floating btn-large blue tooltipped" data-position="left" data-tooltip="Ir arriba"><i class="large material-icons">arrow_upward</i></a>
-    </div>
+    </div>*@
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('.modal').modal();
             $('.tooltipped').tooltip();
 
-            var btnUp = document.getElementById("btnUp");
-            window.onscroll = function () { scrollFunction() };
-            function scrollFunction() {
-                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                    btnUp.style.display = "block";
-                } else {
-                    btnUp.style.display = "none";
-                }
-            }
-        });
+        //    var btnUp = document.getElementById("btnUp");
+        //    window.onscroll = function () { scrollFunction() };
+        //    function scrollFunction() {
+        //        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        //            btnUp.style.display = "block";
+        //        } else {
+        //            btnUp.style.display = "none";
+        //        }
+        //    }
+        //});
 
         $(document).on('submit', 'form', function () {
             var buttons = $(this).find('[type="submit"]');
@@ -75,10 +78,10 @@
             });
         });
 
-        function topFunction() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
+        //function topFunction() {
+        //    document.body.scrollTop = 0;
+        //    document.documentElement.scrollTop = 0;
+        //}
     </script>
 </body>
 </html>

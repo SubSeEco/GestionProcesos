@@ -1,4 +1,4 @@
-﻿@model App.Web.Controllers.DocumentoController.FileSignUpload
+﻿@model App.Web.Controllers.DocumentoController.DTOFileUploadFEA
 @{
     Layout = null;
 }
@@ -10,119 +10,100 @@
     @Html.HiddenFor(q => q.Pl_UndDes)
     @Html.AntiForgeryToken()
 
-
-    <div class="col s12 m12 l12">
-        <label>Browser Disabled</label>
-        <select class="browser-default" disabled>
-            <option value="" disabled selected>Choose your option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </select>
-    </div>
+    <br />
+    <div class="row">
         <div class="col s12 m12 l12">
             <div class="switch">
                 <label>
                     @Html.CheckBoxFor(m => Model.EsOficial)
                     <span class="lever"></span>
-                    Es documento oficial?
+                    @Html.LabelFor(m => Model.EsOficial)
                 </label>
             </div>
         </div>
-
-        <div class="input-field col s12 m12 l12">
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
             <div class="switch">
                 <label>
                     @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
                     <span class="lever"></span>
-                    Requiere firma electrónica? (solo documentos pdf)
+                    @Html.LabelFor(m => Model.RequiereFirmaElectronica)
                 </label>
             </div>
         </div>
-
-        <div class="input-field col s12 m12 l12">
-
-
-
-            <label>Browser Disabled</label><br />
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
             @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
-
-            @*@Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")*@
-            @*@Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })*@
-            @*@Html.LabelFor(m => Model.TipoDocumentoCodigo)<br />*@
-            @*@Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })*@
+            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
         </div>
-
-        <div class="file-field col s12 m12 l12">
-            <div class="btn grey">
-                <i class="material-icons">attach_file</i>
-                @Html.TextBoxFor(model => Model.File, "", new { @type = "file", @id = "FileInput", @accept = ".*" })
-            </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text" placeholder="Buscar archivo...">
-            </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.File)<br />
+            @Html.TextBoxFor(model => Model.File, "", new { @type = "file", @id = "FileInput", @accept = ".*" })<br />
             @Html.ValidationMessageFor(model => Model.File, "", new { @class = "red-text" })
-            <br />
         </div>
-
-        <div id="divRequiereFEA">
-            <div class="input-field col s12 m12 l12">
+    </div>
+    <div id="divRequiereFEA">
+        <div class="row">
+            <div class="col s12 m12 l12">
                 @Html.LabelFor(m => Model.Pl_UndCod)<br />
-                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default" })
                 @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
             </div>
-            <div class="input-field col s12 m12 l12">
+        </div>
+        <div class="row">
+            <div class="col s12 m12 l12">
                 @Html.LabelFor(m => Model.UsuarioFirmante)<br />
-                @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
+                @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...", new { @class = "browser-default" })
                 @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
             </div>
         </div>
-        <br />
-        <br />
+    </div>
+    <br />
+    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+}
 
-        <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+<script>
+    $(document).ready(function () {
+        $('#divRequiereFEA').toggle(false)
+    });
+
+    //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
+    $('#RequiereFirmaElectronica').change(function () {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#divRequiereFEA').toggle(true);
+            $('#FileInput').attr("accept", ".pdf");
         }
+        else {
+            $('#divRequiereFEA').toggle(false);
+            $('#FileInput').attr("accept", ".*");
+        }
+    });
 
-        <script>
+    //Al cambiar unidad traer funcionarios
+    $("#Pl_UndCod").change(function () {
 
+        var select = $("#UsuarioFirmante");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
 
-            $(document).ready(function () {
-                $('select').formSelect();
-                $('#divRequiereFEA').toggle(false)
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
             });
+    });
 
-            //si requiere firma electrónica, mostrar destino
-            $('#RequiereFirmaElectronica').change(function () {
-                var isChecked = $(this).is(':checked');
-                $('#divRequiereFEA').toggle(isChecked);
-
-                if (isChecked) {
-                    $('#FileInput').attr("accept", ".pdf");
-                }
-                else {
-                    $('#FileInput').attr("accept", ".*");
-                }
-            });
-
-            //Al cambiar unidad traer funcionarios
-            $("#Pl_UndCod").change(function () {
-                var Pl_UndCod = $(this).val();
-                $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
-                    function (classesData) {
-                        var select = $("#UsuarioFirmante");
-                        select.empty();
-                        select.append($('<option/>', {
-                            value: "",
-                            text: "Seleccione..."
-                        }));
-                        $.each(classesData, function (index, itemData) {
-                            select.append($('<option/>', {
-                                value: itemData.Email,
-                                text: itemData.Nombre
-                            }));
-                        });
-                        $('#UsuarioFirmante').formSelect();
-                    });
-            });
-
-        </script>
+</script>
