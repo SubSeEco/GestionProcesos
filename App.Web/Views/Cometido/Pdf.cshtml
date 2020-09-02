@@ -289,7 +289,7 @@
                 <p align="justify" style="margin-right:30px">
                     @Html.DisplayFor(m => Model.ViaticodeVuelta) <!--Que no se pagara viático por el día xxx de xxxx de xxx, por motivo de encontrarse en viaje de regreso.-->
                 </p>
-                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
+                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
                 {
                     <p align="justify">
                         Que, la presente Resolución no
@@ -452,8 +452,8 @@
             <td>
                  <strong> 
                  <p align="center"> 
-                 @*@Html.DisplayFor(m => Model.Firmante) 
-                 <br />*@ 
+                 @*@Html.DisplayFor(m => Model.Firmante)*@ 
+                 <br /> 
                  @Html.DisplayFor(m => Model.CargoFirmante) 
                  <br /> 
                  @Html.DisplayFor(m => Model.Subscretaria) 

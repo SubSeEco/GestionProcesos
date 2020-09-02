@@ -258,7 +258,7 @@
                     </p>
                 }
                 <p align="justify"></p>
-                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0)
+                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
                 {
                     @Html.DisplayFor(m => Model.DejaseConstancia)
 
@@ -402,8 +402,8 @@
             <td>
                 <strong>
                     <p align="center">
-                        @*@Html.DisplayFor(m => Model.Firmante)
-                        <br />*@
+                        @*@Html.DisplayFor(m => Model.Firmante)*@
+                        <br />
                         @Html.DisplayFor(m => Model.CargoFirmante)
                         <br />
                         @Html.DisplayFor(m => Model.Subscretaria)

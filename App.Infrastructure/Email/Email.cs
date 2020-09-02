@@ -143,7 +143,7 @@ namespace App.Infrastructure.Email
                 emailMsg.Body = plantillaCorreo.Valor;
                 emailMsg.Subject = asunto.Valor;
                 emailMsg.To.Add(proceso.Email);
-                //Send(emailMsg);
+                Send(emailMsg);
             }
         }
 
@@ -187,7 +187,7 @@ namespace App.Infrastructure.Email
                 {
                     emailMsg.To.Add(correo);
                 }
-                //Send(emailMsg);
+                Send(emailMsg);
             }
         }
 
@@ -248,7 +248,7 @@ namespace App.Infrastructure.Email
 
             try
             {
-                //smtpClient.Send(emailMsg);
+                smtpClient.Send(emailMsg);
             }
             catch (Exception ex)
             {

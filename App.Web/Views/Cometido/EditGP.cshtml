@@ -135,6 +135,7 @@
                                         </label>
                                     </div>
                                 </div>
+                                <p></p>
                                 <div id="Financia" class="input-field col s12 m4 l10">
                                     <div class="input-field col s12 m8 l12">
                                         <label style="color:green">
@@ -197,7 +198,7 @@
                                         </strong>
                                     </div>
                                 </div>
-                                <div class="input-field col s12 m4 l3">
+                                <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.Vehiculo)
                                         <span>@Html.LabelFor(m => Model.Vehiculo)</span>
@@ -216,7 +217,7 @@
                                         @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                     </div>
                                     <div class="input-field col s12 m2 l10">
-                                        @Html.TextBoxFor(m => Model.VehiculoObservaciones)
+                                        @Html.EditorFor(m => Model.VehiculoObservaciones)
                                         @Html.LabelFor(m => Model.VehiculoObservaciones)
                                     </div>
                                 </div>
@@ -523,6 +524,9 @@
         else {
             $('#terrestre').show();
         };
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
     });
 
     /**************************************************************************************************/
@@ -552,15 +556,15 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
+            collapsible: true, heightStyle: "auto"
         });
     });
 
-    $(function () {
-        $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
-        });
-    });
+    //$(function () {
+    //    $("#jQuery_accordion").accordion({
+    //        collapsible: true, heightStyle: true
+    //    });
+    //});
 
     /*funcion que bloquea pasajes*/
     $('input:checkbox[name="ReqPasajeAereo"]').change(function () {

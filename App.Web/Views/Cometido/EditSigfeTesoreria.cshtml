@@ -667,6 +667,9 @@
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
     });
 
     $(function () {

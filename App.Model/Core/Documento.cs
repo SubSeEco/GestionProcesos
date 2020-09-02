@@ -89,9 +89,11 @@ namespace App.Model.Core
         [Display(Name = "Tipo documento (foliador)")]
         public string TipoDocumentoFirma { get; set; }
 
+        [NotMapped]
         [Display(Name = "Requiere firma electrónica?")]
         public bool RequiereFirmaElectronica { get; set; }
 
+        [NotMapped]
         [Display(Name = "Es documento oficial?")]
         public bool EsOficial { get; set; }
 
