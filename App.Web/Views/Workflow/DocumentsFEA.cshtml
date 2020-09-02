@@ -9,9 +9,7 @@
         @foreach (var item in Model.Proceso.Documentos.Where(q => q.Activo))
         {
             <div class="section">
-                <p></p>
             </div>
-
             <h6>
                 <i class="material-icons ">attach_file</i>
                 <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
@@ -46,6 +44,8 @@
                     </div>
                 </div>
             }
+            <div class="section">
+            </div>
         }
     </div>
 </div>
