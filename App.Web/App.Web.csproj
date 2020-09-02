@@ -66,6 +66,13 @@
     <Reference Include="ErrorHandlerMvc, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ErrorHandlerMvc.1.1.5\lib\net451\ErrorHandlerMvc.dll</HintPath>
     </Reference>
+    <Reference Include="ExpressiveAnnotations, Version=2.7.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\App.Model\bin\Release\ExpressiveAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive">
+      <HintPath>..\App.Model\bin\Release\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
+    </Reference>
     <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
     </Reference>
@@ -383,7 +390,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuditAttribute.cs" />
+    <Compile Include="App_Start\AuthenticationService.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UserExtended.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CentroCostoController.cs" />
     <Compile Include="Controllers\CometidoComisionController.cs" />
