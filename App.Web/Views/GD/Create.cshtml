@@ -1,7 +1,4 @@
 ﻿@model App.Model.GestionDocumental.GD
-@{
-    var FileUpload = new App.Web.Controllers.GDController.FileUpload { ProcesoId = Model.ProcesoId, WorkflowId = Model.WorkflowId };
-}
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
@@ -10,16 +7,16 @@
 
     <div class="row">
         <div class="col s12 m6 l6">
-            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
-                @Html.HiddenFor(q => Model.GDId)
 
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Información del ingreso</span>
+                        <div class="section"></div>
                         <div class="section"></div>
                         <div class="row">
                             <div class="input-field col s12 m12 l12">
@@ -42,6 +39,15 @@
                                 @Html.LabelFor(m => Model.Observacion)
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
+                            <div class="input-field col s12 m12 l12">
+                                <div class="switch">
+                                    <label>
+                                        @Html.CheckBoxFor(m => Model.EsReservado)
+                                        <span class="lever"></span>
+                                        Documentación reservada?
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
@@ -49,81 +55,13 @@
             }
         </div>
         <div class="col s12 m6 l6">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("DocumentsFEA", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
 </div>
 
-<div class="fixed-action-btn">
-    <a href="#modalFile" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo GD"><i class="large material-icons">attach_file</i></a>
-</div>
-
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
-
-<div id="modalFile" class="modal">
-    <div class="modal-content">
-        @using (Html.BeginForm("Upload", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.HiddenFor(model => model.ProcesoId)
-            @Html.HiddenFor(model => model.WorkflowId)
-            @Html.AntiForgeryToken()
-
-            <div class="input-field col s12 m10 l12">
-
-                <div class="input-field col s12 m12 l12">
-                    <label>
-                        @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                        <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
-                    </label>
-                    <br />
-                    <br />
-
-                    <div class="switch">
-                        <label>
-                            @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                            <span class="lever"></span>
-                            Requiere firma electrónica?
-                        </label>
-                    </div>
-                    <br />
-                </div>
-                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
-                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.Pl_UndCod)
-                    @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                </div>
-
-                @Html.HiddenFor(q => q.Pl_UndDes)
-
-                <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
-                    @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
-                    @Html.LabelFor(m => Model.UsuarioFirmante)
-                    @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
-                </div>
-
-                <div class="file-field input-field">
-                    <div class="btn grey">
-                        <i class="material-icons">attach_file</i>
-                        @Html.TextBoxFor(model => FileUpload.File, "", new { @type = "file", @multiple = "multiple" })
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Buscar archivo...">
-                    </div>
-                    @Html.ValidationMessageFor(model => FileUpload.File, "", new { @class = "red-text" })
-                </div>
-                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-                <div class="section"></div>
-            </div>
-        }
-
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-</div>
-
-
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -134,42 +72,5 @@
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());
         });
-
-        //var isChecked = $("#RequiereFirmaElectronica").is(':checked');
-        //$('#divRequiereFirmaUnidad').toggle(isChecked);
-        //$('#divRequiereFirmaUsuario').toggle(isChecked);
-
     });
-
-    //Al cambiar unidad traer funcionarios
-    $("#Pl_UndCod").change(function () {
-        var Pl_UndCod = $(this).val();
-        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
-            function (classesData) {
-                var select = $("#UsuarioFirmante");
-                select.empty();
-                select.append($('<option/>', {
-                    value: "",
-                    text: "Seleccione..."
-                }));
-                $.each(classesData, function (index, itemData) {
-                    select.append($('<option/>', {
-                        value: itemData.Email,
-                        text: itemData.Nombre
-                    }));
-                });
-                $('#UsuarioFirmante').formSelect();
-            });
-    });
-
-            //si requiere firma electrónica, mostrar destino
-            //$(function () {
-            //    $('#RequiereFirmaElectronica').change(function () {
-            //        var isChecked = $(this).is(':checked');
-            //        $('#divRequiereFirmaUnidad').toggle(isChecked);
-            //        $('#divRequiereFirmaUsuario').toggle(isChecked);
-            //    });
-            //});
-
 </script>
-

@@ -377,12 +377,6 @@
     <Content Include="Scripts\materialize-stepper.min.js" />
     <Content Include="Scripts\materialize.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\mvcfoolproof.unobtrusive.js" />
-    <Content Include="Scripts\mvcfoolproof.unobtrusive.min.js" />
-    <Content Include="Scripts\MvcFoolproofJQueryValidation.js" />
-    <Content Include="Scripts\MvcFoolproofJQueryValidation.min.js" />
-    <Content Include="Scripts\MvcFoolproofValidation.js" />
-    <Content Include="Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Views\InformeHSA\Details.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DTOSelect.cshtml" />
     <Content Include="Views\Usuario\Create.cshtml" />
@@ -716,6 +710,7 @@
     <Content Include="Views\GD\Validate.cshtml" />
     <Content Include="Views\GD\View.cshtml" />
     <Content Include="Views\Documento\Upload.cshtml" />
+    <Content Include="Views\Workflow\DocumentsFEA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -45,6 +45,15 @@ namespace App.Core.UseCases
             _email = email;
             _sigper = sigper;
         }
+        public UseCaseCore(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        {
+            _repository = repository;
+            _sigper = sigper;
+            _file = file;
+            _folio = folio;
+            _hsm = hsm;
+            _email = email;
+        }
 
         public ResponseMessage DefinicionProcesoInsert(DefinicionProceso obj)
         {
