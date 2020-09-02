@@ -352,6 +352,7 @@
     <Content Include="App_Data\HSA.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <Content Include="Scripts\expressive.annotations.validate.js" />
     <Content Include="Scripts\expressive.annotations.validate.min.js" />

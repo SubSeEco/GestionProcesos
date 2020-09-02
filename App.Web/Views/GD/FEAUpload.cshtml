@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-@using (Html.BeginForm("FEAUpload","GD", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("FEAUpload", "GD", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.ProcesoId)
     @Html.HiddenFor(model => model.WorkflowId)
