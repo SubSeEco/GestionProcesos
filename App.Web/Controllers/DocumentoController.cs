@@ -35,43 +35,6 @@ namespace App.Web.Controllers
     [Authorize]
     public class DocumentoController : Controller
     {
-        public class DTOFileUploadFEA
-        {
-            public DTOFileUploadFEA()
-            {
-            }
-
-            public int ProcesoId { get; set; }
-            public int WorkflowId { get; set; }
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            public HttpPostedFileBase[] File { get; set; }
-
-            [Display(Name = "Requiere firma electrónica?")]
-            public bool RequiereFirmaElectronica { get; set; } = false;
-
-            [Display(Name = "Es documento oficial?")]
-            public bool EsOficial { get; set; } = false;
-
-            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Unidad del firmante")]
-            public string Pl_UndCod { get; set; }
-
-            [Display(Name = "Unidad del firmante")]
-            public string Pl_UndDes { get; set; }
-
-            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Usuario firmante")]
-            public string UsuarioFirmante { get; set; }
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Tipo documento")]
-            public string TipoDocumentoCodigo { get; set; }
-        }
-
-
         public class DTOFilter
         {
             public DTOFilter()
@@ -264,12 +227,12 @@ namespace App.Web.Controllers
             {
                 var _useCaseInteractor = new UseCaseCore(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Sign(id, new List<string> { email }, email);
-                if (_UseCaseResponseMessage.IsValid)
-                {
+                if (_UseCaseResponseMessage.IsValid) {
                     TempData["Success"] = "Operación terminada correctamente.";
                 }
-
-                TempData["Error"] = _UseCaseResponseMessage.Errors;
+                else {
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+                }
             }
             return Redirect(Request.UrlReferrer.ToString());
         }
@@ -395,75 +358,6 @@ namespace App.Web.Controllers
             };
 
             return Json(model , JsonRequestBehavior.AllowGet);
-        }
-
-
-        public ActionResult Upload(int ProcesoId, int WorkflowId)
-        {
-            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-
-            var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Upload(DTOFileUploadFEA model)
-        {
-            ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-
-            var email = UserExtended.Email(User);
-
-            if (Request.Files.Count == 0)
-                ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
-
-            if (ModelState.IsValid)
-            {
-                for (int i = 0; i < Request.Files.Count; i++)
-                {
-                    var documento = new Documento();
-                    documento.Fecha = DateTime.Now;
-                    documento.Email = email;
-                    documento.ProcesoId = model.ProcesoId;
-                    documento.WorkflowId = model.WorkflowId;
-                    documento.Signed = false;
-                    documento.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
-                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
-                    documento.EsOficial = model.EsOficial;
-                    documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
-
-                    //contenido
-                    var file = Request.Files[i];
-                    var target = new MemoryStream();
-                    if (target != null)
-                    {
-                        file.InputStream.CopyTo(target);
-                        documento.FileName = file.FileName;
-                        documento.File = target.ToArray();
-                    }
-
-                    //metadata
-                    var metadata = _file.BynaryToText(target.ToArray());
-                    if (metadata != null)
-                    {
-                        documento.Texto = metadata.Text;
-                        documento.Metadata = metadata.Metadata;
-                        documento.Type = metadata.Type;
-                    }
-
-                    _repository.Create(documento);
-                    _repository.Save();
-                }
-
-                TempData["Success"] = "Operación terminada correctamente.";
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
-            return View(model);
         }
     }
 }

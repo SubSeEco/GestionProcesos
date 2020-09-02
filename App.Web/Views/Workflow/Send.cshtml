@@ -6,67 +6,97 @@
 
     @Html.Partial("_Message")
 
-    @using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
+    @if (Model.DefinicionWorkflow.PermitirFinalizarProceso)
     {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(q => Model.WorkflowId)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
-        @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
-
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Enviar tarea</span>
+                <span class="card-title">Finalizar tarea</span>
                 <div class="section"></div>
-                <div class="row">
-                    @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-                    {
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new {@onchange = "onchangeevent();", @id = "TipoAprobacionId" })
-                            @Html.LabelFor(m => Model.TipoAprobacionId)
-                            @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
-                        </div>
-                    }
-                    @if (Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
-                    {
-                        if (!Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
-                        {
-                            <div class="input-field col s12 m8 l10">
-                                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.Pl_UndCod)
-                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                            </div>
-                        }
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.To)
-                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
-                        </div>
-                    }
-                    @if (Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
-                    {
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.GrupoId)
-                            @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
-                        </div>
-                    }
+                @using (Html.BeginForm("Stop", "Workflow", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(q => Model.WorkflowId)
 
-                <div class="input-field col s12 m8 l10">
-                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
-                    @Html.LabelFor(m => Model.Observacion)
-                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                    <div class="row">
+                        <div class="input-field col s12 m8 l10">
+                            @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Observacion)
+                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
 
-                </div>
-                </div>
-                <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+                        </div>
+                    </div>
+
+                    <button class="waves-effect waves-light btn blue" type="submit">Finalizar</button>
+                }
             </div>
         </div>
     }
+
+    @if (Model.DefinicionWorkflow.PermitirTerminar)
+    {
+        using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(q => Model.WorkflowId)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
+            @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Enviar tarea</span>
+                    <div class="section"></div>
+                    <div class="row">
+                        @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+                        {
+                            <div class="input-field col s12 m8 l10">
+                                @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "TipoAprobacionId" })
+                                @Html.LabelFor(m => Model.TipoAprobacionId)
+                                @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
+                            </div>
+                        }
+                        @if (Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
+                        {
+                            if (!Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
+                            {
+                                <div class="input-field col s12 m8 l10">
+                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.Pl_UndCod)
+                                    @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                </div>
+                            }
+                            <div class="input-field col s12 m8 l10">
+                                @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.To)
+                                @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                            </div>
+                        }
+                        @if (Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
+                        {
+                            <div class="input-field col s12 m8 l10">
+                                @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.GrupoId)
+                                @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                            </div>
+                        }
+
+                        <div class="input-field col s12 m8 l10">
+                            @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Observacion)
+                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+                </div>
+            </div>
+        }
+    }
+
     <div class="fixed-action-btn">
         <a href="javascript:history.back(-2)" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
     </div>
