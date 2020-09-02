@@ -191,14 +191,17 @@ namespace App.Web.Controllers
                             if (workflowActual.DefinicionWorkflow.Secuencia == 16)/*analista contabilidad*/
                             {
                                 doc.TipoDocumentoId = 4;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                             else if (workflowActual.DefinicionWorkflow.Secuencia == 18)/*analista tesoreria*/
                             {
                                 doc.TipoDocumentoId = 5;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                             else if (workflowActual.DefinicionWorkflow.Secuencia == 9)/*jefatura ppto*/
                             {
                                 doc.TipoDocumentoId = 7;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                         }
                     }
