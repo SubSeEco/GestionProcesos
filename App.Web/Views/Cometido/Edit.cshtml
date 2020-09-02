@@ -256,7 +256,7 @@
                                         <div class="section"></div>
                                     </div>
                                 </div>
-                                <div class="input-field col s12 m4 l6">
+                                <div class="input-field col s12 m4 l3">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.Vehiculo)
                                         <span>@Html.LabelFor(m => Model.Vehiculo)</span>
@@ -595,6 +595,9 @@
             $('#terrestre').show();
         }
 
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
+
     });
 
     /*******************TERMINO METODO FUNCTION*************************************************************************************/
@@ -638,7 +641,7 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: "auto"
+            collapsible: true, heightStyle: true
         });
     });
 

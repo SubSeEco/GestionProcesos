@@ -270,7 +270,7 @@
                         }
                     </table>
                 }
-                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
+                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
                 {
                     <p align="justify" style="margin-right:30px">
                         Que, la presente Resolución no
@@ -442,8 +442,8 @@
                 <p align="center">
                     <strong>
                         @*<br />
-                        @Html.DisplayFor(m => Model.Firmante)
-                        <br /><br />*@
+                         @Html.DisplayFor(m => Model.Firmante)*@
+                        <br /><br />
                         @Html.DisplayFor(m => Model.CargoFirmante)
                         <br /><br />
                         @*@Html.DisplayFor(m => Model.Subscretaria)*@

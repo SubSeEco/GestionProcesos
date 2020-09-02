@@ -4781,7 +4781,7 @@ namespace App.Core.UseCases
                                         //}
                                     }
                                     /*Si cometido corresponde al ministro se va directamente a analista de gestion personas*/
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B")
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
                                     }

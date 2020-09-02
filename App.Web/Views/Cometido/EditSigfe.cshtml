@@ -26,7 +26,7 @@
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
                 @Html.HiddenFor(q => Model.CometidoId)
-                @Html.AntiForgeryToken()
+                @*@Html.AntiForgeryToken()*@
 
                 @Html.HiddenFor(q => Model.FechaSolicitud)
                 @Html.HiddenFor(q => Model.UnidadDescripcion)
@@ -627,11 +627,16 @@
             formatTime: 'H:i',
             formatDate: 'd-m-Y'
         });
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
 
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
     });
 
     $(function () {
