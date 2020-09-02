@@ -35,12 +35,6 @@ namespace App.Web.Controllers
     [Authorize]
     public class DocumentoController : Controller
     {
-        protected readonly IGestionProcesos _repository;        
-        protected readonly IFile _file;
-        protected readonly IHSM _IHSM;
-        protected readonly IFolio _folio;
-        protected readonly ISIGPER _sigper;
-
         public class DTOFileUploadFEA
         {
             public DTOFileUploadFEA()
@@ -115,15 +109,23 @@ namespace App.Web.Controllers
 
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
-        }       
+        }
 
-        public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm, ISIGPER sigper, Folio folio)
+        protected readonly IGestionProcesos _repository;
+        protected readonly ISIGPER _sigper;
+        protected readonly IFile _file;
+        protected readonly IFolio _folio;
+        protected readonly IHSM _hsm;
+        protected readonly IEmail _email;
+
+        public DocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
-            _file = pdf;
-            _IHSM = hsm;
             _sigper = sigper;
+            _file = file;
             _folio = folio;
+            _hsm = hsm;
+            _email = email;
         }
 
         public ActionResult Index()
@@ -249,55 +251,25 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Sign(int DocumentoId)
-        {
-            var model = _repository.GetById<Documento>(DocumentoId);
-            return View(model);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sign(Documento model, int? DocumentoId)
+        public ActionResult Sign(int id)
         {
-            /*Se debe volver a generar el documento si corresponde a cometido para agregar los campos que se han actualizado*/
-            /*Se verifica que corresponde a un proceso de cometido*/
-            //var doc = _repository.GetById<Documento>(model.DocumentoId);
-            //var DefinicionProceso = _repository.GetAll<Proceso>().Where(p => p.ProcesoId == doc.ProcesoId).FirstOrDefault().DefinicionProcesoId;
-            //if(DefinicionProceso == 10)
-            //{
-            //    var IdCom = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == doc.ProcesoId).FirstOrDefault().CometidoId;
-            //    GeneraDocumento(IdCom);
-            //}
-
-
             var email = UserExtended.Email(User);
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCore(_repository, _IHSM);
-                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
-                //var _useCaseInteractor = new UseCaseCometidoComision(_repository, _IHSM, _file, _folio);
-                //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
-
-                if (_UseCaseResponseMessage.Warnings.Count > 0)
-                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
-
+                var _useCaseInteractor = new UseCaseCore(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.Sign(id, new List<string> { email }, email);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
                 }
 
-                foreach (var item in _UseCaseResponseMessage.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item);
-                }
-                //TempData["Error"] = _UseCaseResponseMessage.Errors;
+                TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-
-            return View(model);
+            return Redirect(Request.UrlReferrer.ToString());
         }
-
 
         public FileResult Download(int id)
         {
@@ -308,6 +280,7 @@ namespace App.Web.Controllers
             else
                 return File(model.File, model.Type, model.FileName);
         }
+
         public FileResult Show(int id)
         {
             var model = _repository.GetById<Documento>(id);

@@ -177,29 +177,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Sign(Workflow model)
-
-        //{
-        //    var email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseInteractorCustom(_repository);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return Redirect(Request.UrlReferrer.PathAndQuery);
-        //        }
-
-        //        TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    return View(model);
-        //}
-
         public ActionResult Execute(int id)
         {
             var workflow = _repository.GetById<Workflow>(id);
@@ -410,44 +387,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //public ActionResult Validate(int id)
-        //{
-        //    var model = _repository.GetById<Workflow>(id);
-        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text");
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Validate(Workflow model)
-        //{
-        //    var workflow = _repository.GetById<Workflow>(model.WorkflowId);
-
-        //    model.Email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //        else
-        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
-
-        //        return RedirectToAction("Index", "Workflow");
-        //    }
-
-        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowId);
-        //    ViewBag.TipoAprobacionId = workflow.DefinicionWorkflow.RequiereAprobacionAlEnviar ?
-        //        new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre") :
-        //        new SelectList(new List<TipoAprobacion>(), "TipoAprobacionId", "Nombre");
-
-        //    return View(model);
-        //}
-
-
         public ActionResult Forward(int id)
         {
             var model = _repository.GetById<Workflow>(id);
@@ -495,52 +434,21 @@ namespace App.Web.Controllers
             return PartialView(model);
         }
 
-        //public ActionResult Next(int id)
-        //{
-        //    var model = _repository.GetById<Workflow>(id);
-
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
-        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-        //    if (model.Pl_UndCod.HasValue)
-        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Next(Workflow model)
-        //{
-        //    model.Email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return RedirectToAction("Index", "Workflow");
-        //        }
-        //        else
-        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
-        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
-        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-        //    if (model.Pl_UndCod.HasValue)
-        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-        //    return View(model);
-        //}
-
         public ActionResult OK()
         {
             return View();
+        }
+
+        public ActionResult DocumentsFEA(int workflowId)
+        {
+            var model = _repository.GetById<Workflow>(workflowId);
+            if (model != null)
+            {
+                var email = UserExtended.Email(User);
+                foreach (var item in model.Documentos)
+                    item.AutorizadoParaFirma = _repository.GetExists<Rubrica>(q => q.Email == email);
+            }
+            return View(model);
         }
     }
 }
