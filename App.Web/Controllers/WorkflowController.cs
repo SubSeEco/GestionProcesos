@@ -134,7 +134,7 @@ namespace App.Web.Controllers
                 //usuario administrador
                 var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
                 var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
-                                
+
                 model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
                 model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
             }
@@ -176,6 +176,28 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Workflow>(workflowId);
             return View(model);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Sign(Workflow model)
+        //{
+        //    var email = UserExtended.Email(User);
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var _useCaseInteractor = new UseCaseInteractorCustom(_repository);
+        //        var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
+        //        if (_UseCaseResponseMessage.IsValid)
+        //        {
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //            return Redirect(Request.UrlReferrer.PathAndQuery);
+        //        }
+
+        //        TempData["Error"] = _UseCaseResponseMessage.Errors;
+        //    }
+
+        //    return View(model);
+        //}
 
         public ActionResult Execute(int id)
         {
@@ -256,7 +278,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
             }
-            
+
             if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
             {
                 var obj = _repository.GetFirst<Memorandum>(q => q.ProcesoId == workflow.ProcesoId);
@@ -331,7 +353,7 @@ namespace App.Web.Controllers
                 if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model,User.Email());
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
@@ -438,17 +460,6 @@ namespace App.Web.Controllers
         {
             return View();
         }
-
-        public ActionResult DocumentsFEA(int workflowId)
-        {
-            var model = _repository.GetById<Workflow>(workflowId);
-            if (model != null)
-            {
-                var email = UserExtended.Email(User);
-                foreach (var item in model.Documentos)
-                    item.AutorizadoParaFirma = _repository.GetExists<Rubrica>(q => q.Email == email);
-            }
-            return View(model);
-        }
+    
     }
 }

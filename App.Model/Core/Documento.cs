@@ -86,21 +86,28 @@ namespace App.Model.Core
         
 
 
-        [NotMapped]
         [Display(Name = "Tipo documento (foliador)")]
         public string TipoDocumentoFirma { get; set; }
 
-        [NotMapped]
         [Display(Name = "Requiere firma electrónica?")]
-        public bool RequiereFirmaElectronica { get; set; } = true;
+        public bool RequiereFirmaElectronica { get; set; }
 
-        [NotMapped]
         [Display(Name = "Es documento oficial?")]
-        public bool EsOficial { get; set; } = true;
+        public bool EsOficial { get; set; }
+
+        [Display(Name = "Unidad del firmante")]
+        public string FirmanteUnidad { get; set; }
+
+        [Display(Name = "Usuario firmante")]
+        public string FirmanteEmail  { get; set; }
+
+        [Display(Name = "Descripción")]
+        public string Descripcion  { get; set; }
+
 
         [NotMapped]
         [Display(Name = "Autorizado para firmar documentos?")]
-        public bool AutorizadoParaFirma { get; set; } = false;
+        public bool AutorizadoParaFirma { get; set; }
 
         [NotMapped]
         public bool Selected { get; set; } = false;
@@ -108,6 +115,5 @@ namespace App.Model.Core
         [NotMapped]
         [Display(Name = "Certificado electrónico")]
         public string SerialNumber { get; set; }
-
     }
 }

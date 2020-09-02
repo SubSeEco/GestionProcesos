@@ -67,11 +67,10 @@
       <HintPath>..\packages\ErrorHandlerMvc.1.1.5\lib\net451\ErrorHandlerMvc.dll</HintPath>
     </Reference>
     <Reference Include="ExpressiveAnnotations, Version=2.7.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\App.Model\bin\Release\ExpressiveAnnotations.dll</HintPath>
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.dll</HintPath>
     </Reference>
-    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive">
-      <HintPath>..\App.Model\bin\Release\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
+    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
     </Reference>
     <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
@@ -354,6 +353,8 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
+    <Content Include="Scripts\expressive.annotations.validate.js" />
+    <Content Include="Scripts\expressive.annotations.validate.min.js" />
     <Content Include="Scripts\init.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
@@ -709,8 +710,8 @@
     <Content Include="Views\GD\Sign.cshtml" />
     <Content Include="Views\GD\Validate.cshtml" />
     <Content Include="Views\GD\View.cshtml" />
-    <Content Include="Views\Documento\Upload.cshtml" />
-    <Content Include="Views\Workflow\DocumentsFEA.cshtml" />
+    <Content Include="Views\GD\FEAUpload.cshtml" />
+    <Content Include="Views\GD\FEADocumentos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
