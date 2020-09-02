@@ -181,6 +181,14 @@
                             </div>
                             <div class="input-field col s12 m10 l10">
                                 <label>
+                                    @Html.CheckBoxFor(m => m.PermitirFinalizarProceso)
+                                    <span>@Html.LabelFor(m => Model.PermitirFinalizarProceso)</span>
+                                </label>
+                            </div>
+
+
+                            <div class="input-field col s12 m10 l10">
+                                <label>
                                     @Html.CheckBoxFor(m => m.PermitirTerminar)
                                     <span>@Html.LabelFor(m => Model.PermitirTerminar)</span>
                                 </label>

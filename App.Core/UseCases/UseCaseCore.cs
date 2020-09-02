@@ -902,11 +902,10 @@ namespace App.Core.UseCases
 
                 _repository.Save();
 
-                //notificar por email
-                if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                    _email.NotificarNuevoWorkflow(workflow,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoArchivoTarea),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                //notificar al dueño del proceso
+                _email.NotificarFinProceso(workflow.Proceso,
+                _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
+                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
             }
             catch (Exception ex)
             {

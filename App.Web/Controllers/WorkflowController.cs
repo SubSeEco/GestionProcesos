@@ -461,6 +461,35 @@ namespace App.Web.Controllers
         {
             return View();
         }
-    
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Stop(Workflow model)
+        {
+            model.Email = UserExtended.Email(User);
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+                else
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
+
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            if (model.Pl_UndCod.HasValue)
+                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+
+            return View(model);
+        }
+
     }
 }
