@@ -165,18 +165,17 @@
             @*<td></td>*@
             <td colspan="2">
                 <p align="justify">
-                    1. <strong>RESUELVO:</strong>
-
+                    1. <strong>RESUELVO:</strong>                    
+                </p>
+                <p align="justify" style="margin-right:30px">
                     @if (Model.Tiempo == "Pasado")
                     {
-                        <text>Reconócese</text>
+                        <text>Reconócese </text>
                     }
                     else
                     {
-                        <text>Desígnese</text>
+                        <text>Desígnese </text>
                     }
-                </p>
-                <p align="justify" style="margin-right:30px">
                     en cometido funcionario, a don/ña <strong> @Model.Nombre.Trim(), </strong>&nbsp;&nbsp;&nbsp; RUN N° <strong> @Model.Rut <text>-</text> @Model.DV,</strong>
                     @Model.UnidadDescripcion.Trim(), <text> </text>@Model.CalidadDescripcion.Trim(), <text> </text>@Model.CargoDescripcion.Trim(), grado <text> </text>@Model.GradoDescripcion.Trim() de la E.U.S. de la Subsecretaría de Economía y Empresas de Menor Tamaño,
 

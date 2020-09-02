@@ -331,7 +331,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-
         public ActionResult SignResolucion(Documento model, int? DocumentoId)
         {
             /*Se debe volver a generar el documento si corresponde a cometido para agregar los campos que se han actualizado*/
