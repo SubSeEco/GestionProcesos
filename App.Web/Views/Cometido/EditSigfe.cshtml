@@ -587,7 +587,8 @@
                             {
                                 <h3><span style="font-weight: bold">VII. Firma Documento SIGFE</span></h3>
                                 <div class="row">
-                                    @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+                                    @*@Html.Action("SignOther", "Cometido", new {Model})*@
+                                    @Html.Action("Sign", "Workflow", new {Model})
                                 </div>
                             }
                         </div>
