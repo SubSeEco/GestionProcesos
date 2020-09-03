@@ -899,6 +899,7 @@ namespace App.Core.UseCases
                 workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
                 workflow.Proceso.Terminada = true;
                 workflow.Proceso.FechaTermino = DateTime.Now;
+                workflow.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
 
                 _repository.Save();
 

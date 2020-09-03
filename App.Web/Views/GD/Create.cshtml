@@ -6,7 +6,7 @@
     @Html.Partial("_Message")
 
     <div class="row">
-        <div class="col s12 m6 l6">
+        <div class="col s12 m6 l5">
             @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
@@ -55,7 +55,7 @@
                 </div>
             }
         </div>
-        <div class="col s12 m6 l6">
+        <div class="col s12 m6 l7">
             @Html.Action("FEADocumentos", "GD", new { ProcesoId = Model.ProcesoId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
