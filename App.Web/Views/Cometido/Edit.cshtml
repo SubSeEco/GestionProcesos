@@ -2,6 +2,16 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            <p>
+                Toda solicitud deberá ser tramitada con al menos 20 días corridos previos a su inicio (este plazo incluye la tramitación del acto administrativo), de lo contrario, deberá contar con la respectiva justificación y la visación del Jefe de Servicio.
+                Además, siempre deberá adjuntar el itinerario de desplazamiento y el programa de actividades a realizar.
+            </p>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
@@ -36,90 +46,122 @@
                 @Html.HiddenFor(q => Model.Alimentacion)
                 @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
-                @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
+            @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
                 @*@Html.HiddenFor(q => Model.TipoVehiculoId)
-                @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
+            @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
                 @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
                 @Html.HiddenFor(q => Model.Jefatura)
+                @Html.HiddenFor(q => Model.IdEscalafon)
+                @Html.HiddenFor(q => Model.EscalafonDescripcion)
 
 
                 <div class="card">
                     <div class="card-content">
                         @*<span class="card-title">Cometidos</span>*@
                         <div class="row">
-                            <div class="input-field col s12 m10 l3">
-                                @Html.LabelFor(m => Model.FechaSolicitud)
+                            <div class="input-field col s12 m6 l6">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                                </strong>
                                 @Html.DisplayFor(m => Model.FechaSolicitud)
                                 @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
                             </div>
-                            <div class="input-field col s12 m6 l4">
+                            <div class="input-field col s12 m10 l6">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.CometidoId)
+                                </strong>
                                 @Html.DisplayFor(m => Model.CometidoId)
-                                @Html.LabelFor(m => Model.CometidoId)
+
                             </div>
                         </div>
                         <div id="jQuery_accordion">
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.UnidadDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.UnidadDescripcion)
-                                    @Html.LabelFor(m => Model.UnidadDescripcion)
                                     @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Jefatura)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.Jefatura)
-                                    @Html.LabelFor(m => Model.Jefatura)
+
                                     @Html.ValidationMessageFor(m => Model.Jefatura, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Nombre)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.Nombre)
-                                    @Html.LabelFor(m => Model.Nombre)
                                     @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l8">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Rut)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.Rut)
-                                    @Html.LabelFor(m => Model.Rut)
                                     @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l4">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.DV)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.DV)
-                                    @Html.LabelFor(m => Model.DV)
                                     @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CargoDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.CargoDescripcion)
-                                    @Html.LabelFor(m => Model.CargoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.CalidadDescripcion)
-                                    @Html.LabelFor(m => Model.CalidadDescripcion)
                                     @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.GradoDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.GradoDescripcion)
-                                    @Html.LabelFor(m => Model.GradoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.EstamentoDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.EstamentoDescripcion)
-                                    @Html.LabelFor(m => Model.EstamentoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.ProgramaDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                    @Html.LabelFor(m => Model.ProgramaDescripcion)
                                     @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
-                                    @Html.LabelFor(m => Model.ConglomeradoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m6 l3">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Jefatura)
+                                    </strong>
                                     @Html.DisplayFor(m => Model.Jefatura)
-                                    @Html.LabelFor(m => Model.Jefatura)
                                     @Html.ValidationMessageFor(m => Model.Jefatura, "", new { @class = "red-text" })
                                 </div>
 
@@ -146,8 +188,8 @@
                                     <div class="input-field col s12 m8 l12">
                                         <label>Marque las opciones que SI financia el organismo invitante</label>
                                         @*<label style="color:green">
-                        @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                    </label>*@
+                    @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                </label>*@
                                     </div>
                                     <div class="input-field col s12 m8 l13">
                                         <label>
@@ -174,7 +216,11 @@
                                 <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                        <span>@Html.LabelFor(m => Model.SolicitaViatico)</span>
+                                        <span>
+                                            <strong style="color:green">
+                                                @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                            </strong>
+                                        </span>
                                     </label>
                                     <div class="section"></div>
                                 </div>
@@ -192,6 +238,15 @@
                                     </label>
                                     <div class="section"></div>
                                 </div>
+                                <div id="terrestre">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <label style="color:green">
+                                                “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                            </label>
+                                        </strong>
+                                    </div>
+                                </div>
                                 <div id="divReembolso">
                                     <div class="input-field col s12 m4 l3">
                                         <label>
@@ -201,11 +256,11 @@
                                         <div class="section"></div>
                                     </div>
                                 </div>
-                                <div class="input-field col s12 m4 l6">
+                                <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.Vehiculo)
                                         <span>@Html.LabelFor(m => Model.Vehiculo)</span>
-                                    </label>                                    
+                                    </label>
                                     <div class="section"></div>
                                 </div>
                                 <div id="auto">
@@ -219,183 +274,191 @@
                                         @Html.TextBoxFor(m => Model.PlacaVehiculo)
                                         @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                     </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.EditorFor(m => Model.VehiculoObservaciones)
+                                        @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                    </div>
                                 </div>
                             </div>
-                            @*<div class="section"></div>*@
-                            <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l10">
-                                    @Html.EditorFor(m => Model.NombreCometido)
-                                    @Html.LabelFor(m => Model.NombreCometido)
-                                    @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    @Html.EditorFor(m => Model.CometidoDescripcion)
-                                    @Html.LabelFor(m => Model.CometidoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <span class="card-title">Destinos</span>
-                                </div>
-
-                                @if (Model.Destinos.Count > 0)
-                                {
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                        @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                                </td>
-                                                <td>
-                                                    @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                                    <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                </td>
-                                                <td>
-                                                    @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                                    <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-
-                                }
-                                <div class="section"></div>
-                                @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
-                                <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
-                            </div>
-
-                            <!--se agregan datos de pasajes si se solicitan-->
-                            @if (Model.ReqPasajeAereo == true)
-                            {
-                                <h3><span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span></h3>
+                                @*<div class="section"></div>*@
+                                <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                                 <div class="row">
-                                    @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.NombreCometido)
+                                        </strong>
+                                        @Html.EditorFor(m => Model.NombreCometido)
+                                        @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                        </strong>
+                                        @Html.EditorFor(m => Model.CometidoDescripcion)
+                                        @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <span class="card-title">Destinos</span>
+                                    </div>
 
-                                    @if (ViewBag.DestinosPasajes != null)
+                                    @if (Model.Destinos.Count > 0)
                                     {
                                         <table class="table">
-                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                            @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                                            {
                                                 <tr>
-                                                    <th>Región de origen</th>
-                                                    <th>Fecha de origen</th>
-                                                    <th>Región de retorno</th>
-                                                    <th>Fecha retorno</th>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                    </td>
+                                                    <td>
+                                                        @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                        <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                    </td>
+                                                    <td>
+                                                        @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                        <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                @foreach (var destinopasaje in ViewBag.DestinosPasajes)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @destinopasaje.OrigenRegionDescripcion
-                                                            <br />
-                                                            @destinopasaje.ObservacionesOrigen
-                                                        </td>
-                                                        <td>@destinopasaje.FechaOrigen</td>
-                                                        <td>
-                                                            @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
-                                                            @destinopasaje.ObservacionesDestinos
-                                                        </td>
-                                                        <td>@destinopasaje.FechaVuelta</td>
-                                                        <td>
-                                                            <a href='@Url.Action("Edit", "Pasaje", new { id = destinopasaje.PasajeId })'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            </tbody>
+                                            }
                                         </table>
+
                                     }
-
-
+                                    <div class="section"></div>
+                                    @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
+                                    <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                                 </div>
-                            }
 
+                                <!--se agregan datos de pasajes si se solicitan-->
+                                @if (Model.ReqPasajeAereo == true)
+                                {
+                                    <h3><span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span></h3>
+                                    <div class="row">
+                                        @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
+
+                                        @if (ViewBag.DestinosPasajes != null)
+                                        {
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Región de origen</th>
+                                                        <th>Fecha de origen</th>
+                                                        <th>Región de retorno</th>
+                                                        <th>Fecha retorno</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach (var destinopasaje in ViewBag.DestinosPasajes)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @destinopasaje.OrigenRegionDescripcion
+                                                                <br />
+                                                                @destinopasaje.ObservacionesOrigen
+                                                            </td>
+                                                            <td>@destinopasaje.FechaOrigen</td>
+                                                            <td>
+                                                                @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
+                                                                @destinopasaje.ObservacionesDestinos
+                                                            </td>
+                                                            <td>@destinopasaje.FechaVuelta</td>
+                                                            <td>
+                                                                <a href='@Url.Action("Edit", "Pasaje", new { id = destinopasaje.PasajeId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+
+
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="section"></div>
+                            <p>
+                                <button class="waves-effect waves-light btn blue" onclick="Pasaje()" type="submit">Guardar</button>
+                            </p>
                         </div>
-                        <div class="section"></div>
-                        <p>
-                            <button class="waves-effect waves-light btn blue" onclick="Pasaje()" type="submit">Guardar</button>
-                        </p>
                     </div>
-                </div>
 
 
-                if (Model.CometidoOk == true)
-                {
+                    if (Model.CometidoOk == true)
+                    {
                     @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
-                }
+                    }
 
-            }
-
-        </div>
-
+                    }                
+            </div>
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
-    </div>
+   
 </div>
+    </div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery.datetimepicker.setLocale('es');
@@ -523,6 +586,18 @@
             $("#PlacaVehiculo").attr('disabled', false);
             $('#auto').show();
         }
+
+        /*Muestra texto de pasaje terrestre*/
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+        }
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
+
     });
 
     /*******************TERMINO METODO FUNCTION*************************************************************************************/
@@ -539,14 +614,27 @@
         }
     });
 
+    /*Muestra texto de pasaje terrestre*/
+    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+
+        }
+    });
+
     /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
             $('#auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
+            $("#VehiculoObservaciones").attr('disabled', true);
         }
         else {
             $("#PlacaVehiculo").attr('disabled', false);
+            $("#VehiculoObservaciones").attr('disabled', false);
             $('#auto').show();
         }
     });
@@ -589,11 +677,10 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
-
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
-
-@*<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">*@
-@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>*@
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

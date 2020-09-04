@@ -27,7 +27,7 @@
                         @Html.ValidationMessageFor(m => Model.Email, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m10 l10">
-                        @Html.DropDownListFor(m => Model.IdentificadorFirma, null, "Seleccione...")
+                        @Html.EditorFor(m => Model.IdentificadorFirma)
                         @Html.LabelFor(m => Model.IdentificadorFirma)
                         @Html.ValidationMessageFor(m => Model.IdentificadorFirma, "", new { @class = "red-text" })
                     </div>
@@ -36,12 +36,13 @@
                         @Html.LabelFor(m => Model.UnidadOrganizacional)
                         @Html.ValidationMessageFor(m => Model.UnidadOrganizacional, "", new { @class = "red-text" })
                     </div>
-                    <div class="input-field col s12 m4 l3">
+                    <div class="input-field col s12 m10 l10">
                         <label>
                             @Html.CheckBoxFor(m => Model.HabilitadoFirma)
                             <span>@Html.LabelFor(m => Model.HabilitadoFirma)</span>
                         </label>
                     </div>
+
                 </div>
                 <div class="section"></div>
                 <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
@@ -49,7 +50,6 @@
         </div>
     }
 </div>
-
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>

@@ -8,6 +8,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style TYPE="text/css">
+        .breakhere {
+            page-break-after: always
+        }
+    </style>
 </head>
 
 <body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
@@ -17,7 +22,7 @@
                 <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
             </td>
             <td>
-                <p align="justify">
+                @*<p align="justify">
                     <br />
                     @if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
                     {
@@ -36,7 +41,7 @@
                     {
                         @Html.DisplayFor(m => Model.FechaResolucion).ToHtmlString().Remove(10)
                     }
-                </p>
+                </p>*@
             </td>
         </tr>
         <tr>
@@ -87,9 +92,9 @@
             </td>
             <td>
                 <strong>
-                    VISTOS:
+                    <br /><br /><br /><br /><br /> VISTOS:
                 </strong>
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     @if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
                     {
                         @Html.DisplayFor(m => Model.Vistos)
@@ -107,18 +112,18 @@
                 <strong>
                     CONSIDERANDO:
                 </strong>
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     1.	Que, los funcionarios públicos pueden cumplir cometidos funcionarios que los obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
                     especificas inherentes al cargo que sirven.
                 </p>
                 @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         2.	Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
                         cometido de forma extemporánea.
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     Que,
                     @if (Model.Tiempo == "Pasado")
                     {
@@ -162,7 +167,8 @@
             <td></td>
             <td>
                 <strong>RESUELVO:</strong>
-                <p align="justify">
+                <br />
+                <p align="justify" style="margin-right:30px">
                     @if (Model.Tiempo == "Pasado")
                     {
                         @Html.Raw("<span>1. Reconócese</span>")
@@ -187,42 +193,86 @@
                     {
                         @Html.DisplayFor(m => Model.DiasPlural)
                     }
-                    , en:
+                    a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta).ToHtmlString().Remove(10), en la localidad antes señalada.
                 </p>
                 <br />
-                <table border="1" width="100%">
-                    <tr>
-                        <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                            COMUNA
-                        </td>
-                        <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                            REGION
-                        </td>
-                    </tr>
-
-                    @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
-                    {
-                        <tr>
-                            @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                            <td>
-                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                            </td>
-                        </tr>
-                    }
-                </table>
-                <br />
+                <p class="breakhere"></p>
             </td>
         </tr>
         <tr>
             <td></td>
             <td>
                 2. <strong>DÉJASE CONSTANCIA:</strong>
-                @if (Model.SolicitaViatico == false || Model.TotalViatico == 0 && Model.ReqPasajeAereo == false)
+                @if (Model.SolicitaViatico == true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
+                        Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>viático de acuerdo al siguiente esquema:
+                        <br />
+                    </p>
+                    <table border="1" width="100%">
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().ComunaDescripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().FechaInicio)
+                            </td>
+                            <td>
+                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().FechaHasta)
+                            </td>
+                            <td>
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)*@
+                                @Html.Raw("Dias 100%")
+                            </td>
+                            <td>
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)*@
+                                @Html.Raw("Dias 60%")
+                            </td>
+                            @*<td>
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                    </td>*@
+                            <td>
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
+                                @Html.Raw("Dias 40%")
+                            </td>
+                            @*<td>
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                    </td>*@
+                        </tr>
+                        @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaInicio.Date).ToHtmlString().Remove(10)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaHasta.Date).ToHtmlString().Remove(10)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                </td>
+                                @*<td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                        </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                </td>
+                                @*<td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                        </td>*@
+                            </tr>
+                        }
+                    </table>
+                }
+                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
+                {
+                    <p align="justify" style="margin-right:30px">
                         Que, la presente Resolución no
                         @if (Model.Tiempo == "Pasado")
                         {
@@ -237,9 +287,9 @@
                 }
                 @if (Model.ReqPasajeAereo == true)
                 {
-            <p align="justify">
-                Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
-            </p>
+                    <p align="justify" style="margin-right:30px">
+                        Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
+                    </p>
                 }
 
                 @if (Model.Vehiculo == true)
@@ -260,11 +310,11 @@
                 }
                 @if (Model.Tiempo == "Pasado")
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         Que, por razones impostergables de buen servicio, se dio inicio al presente cometido funcionario, en la fecha antes señalada, sin esperar la total tramitación de esta resolución.
                     </p>
                 }
-                <p align="justify">
+                <p align="justify" style="margin-right:30px">
                     Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
                     al ítem o los ítems y asignaciones correspondientes al subtítulo
                     @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
@@ -272,22 +322,22 @@
                     @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
                     ,de acuerdo a su naturaleza.
                 </p>
-            </td>
+            </td>            
         </tr>
         <tr><td></td><td></td></tr>
         <tr>
             <td></td>
-            <td>
+            <td>                
                 @if (Model.GeneracionCDP.Count > 0)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         3. <strong>IMPÚTESE</strong>,
                         @if (Model.SolicitaViatico == true)
                         {
 
                             if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre != "24")
                             {
-                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                 if (Model.SolicitaViatico == true)
                                 {
                                     @Html.Raw(", al Subtítulo")
@@ -327,7 +377,7 @@
                             }
                             if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre == "24")
                             {
-                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                 @Html.Raw(", al Subtítulo ")
                                 @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                                 @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
@@ -356,9 +406,9 @@
                 }
                 @if (Model.SolicitaViatico != true)
                 {
-                    <p align="justify">
+                    <p align="justify" style="margin-right:30px">
                         3.<strong>IMPÚTESE</strong>,
-                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                         @Html.Raw(",y al Subtítulo 22 ")
                         @Html.Raw(" por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
                         @Html.DisplayFor(m => Model.Anno)
@@ -391,11 +441,11 @@
             <td>
                 <p align="center">
                     <strong>
-
-                        @Html.DisplayFor(m => Model.Firmante)
-                        <br />
+                        @*<br />
+                         @Html.DisplayFor(m => Model.Firmante)*@
+                        <br /><br />
                         @Html.DisplayFor(m => Model.CargoFirmante)
-                        <br />
+                        <br /><br />
                         @*@Html.DisplayFor(m => Model.Subscretaria)*@
 
                     </strong>

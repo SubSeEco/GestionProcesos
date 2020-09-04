@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using App.Core.Interfaces;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using App.Util;
 
 namespace App.Core.UseCases
 {
@@ -31,16 +32,20 @@ namespace App.Core.UseCases
             _repository = repository;
             _sigper = sigper;
         }
-        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm)
+        public UseCaseCometidoComision(IGestionProcesos repositoryGestionProcesos, IHSM hsm, IFile file, IFolio folio, ISIGPER sigper)
         {
             _repository = repositoryGestionProcesos;
             _hsm = hsm;
+            _file = file;
+            _folio = folio;
+            _sigper = sigper;
         }
-        public UseCaseCometidoComision(IGestionProcesos repository, IEmail email, ISIGPER sigper)
+        public UseCaseCometidoComision(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFile file)
         {
             _repository = repository;
             _email = email;
             _sigper = sigper;
+            _file = file;
         }
 
         public ResponseMessage RegionInsert(Region obj)
@@ -676,9 +681,10 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage DocumentoSign(Documento obj, string email)
+        public ResponseMessage DocumentoSign(Documento obj, string email, int? cometidoId)
         {
             var response = new ResponseMessage();
+            var persona = new SIGPER();
 
             try
             {
@@ -727,6 +733,13 @@ namespace App.Core.UseCases
                 if (HSMPassword != null && string.IsNullOrWhiteSpace(HSMPassword.Valor))
                     response.Errors.Add("La configuración de password de HSM es inválida.");
 
+                var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
+                if (url_tramites_en_linea == null)
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+                if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+
+
                 if (response.IsValid)
                 {
                     //documento.File = _hsm.Sign(documento, rubrica, HSMUser, HSMPassword);
@@ -736,8 +749,91 @@ namespace App.Core.UseCases
                     //_repository.Update(documento);
                     //_repository.Save();
 
-                    var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
-                    documento.File = doc;
+                    /*se buscar la persona para determinar la subsecretaria*/
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        persona = _sigper.GetUserByEmail(email);
+                        if (persona == null)
+                            response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+                        if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                            response.Errors.Add("No se encontró la subsecretaría del firmante");
+                    }
+
+                    /*Se busca cometido para determinar tipo de documento*/
+                    var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
+                    string TipoDocto;
+                    if (com.IdCalidad == 10)
+                    {
+                        TipoDocto = "RAEX";/*"ORPA";*/
+                    }
+                    else
+                    {
+                        switch (com.IdGrado)
+                        {
+                            case "B":/*Resolución Ministerial Exenta*/
+                                TipoDocto = "RMEX";
+                                break;
+                            case "C": /*Resolución Ministerial Exenta*/
+                                TipoDocto = "RMEX";
+                                break;
+                            default:
+                                TipoDocto = "RAEX";/*Resolución Administrativa Exenta*/
+                                break;
+                        }
+                    }                   
+
+                    //listado de id de firmantes
+                    var idsFirma = new List<string>();
+                    idsFirma.Add(rubrica.IdentificadorFirma);
+
+                    //generar código QR
+                    byte[] QR = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+
+                    //si el documento ya tiene folio no solicitarlo nuevamente
+                    if (string.IsNullOrWhiteSpace(documento.Folio))
+                    {
+                        try
+                        {
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email),documento.TipoDocumentoId);
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto);
+                            var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto, persona.SubSecretaria);
+                            if (_folioResponse == null)
+                                response.Errors.Add("Servicio de folio no entregó respuesta");
+
+                            if (_folioResponse != null && _folioResponse.status == "ERROR")
+                                response.Errors.Add(_folioResponse.error);
+
+                            documento.Folio = _folioResponse.folio;
+
+                            _repository.Update(documento);
+                            _repository.Save();
+
+                            /*Se agregan lo datos del folio al objeto cometido*/
+                            com.Folio = _folioResponse.folio;
+                            com.FechaResolucion = DateTime.Now;
+                            com.Firma = true;
+                            if (com.IdEscalafon == 1 && com.IdEscalafon != null)
+                                com.TipoActoAdministrativo = "Resolución Ministerial Exenta";
+                            else if (com.CalidadDescripcion.Contains("HONORARIOS"))
+                                com.TipoActoAdministrativo = "Orden de Pago";
+                            else
+                                com.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+
+                            _repository.Update(com);
+                            _repository.Save();
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            response.Errors.Add(ex.Message);
+                        }
+                    }
+
+                    //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
+                    var docto = _hsm.Sign(documento.File,idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
+                    documento.File = docto;
                     documento.Signed = true;
 
                     _repository.Update(documento);
@@ -787,20 +883,33 @@ namespace App.Core.UseCases
                 {
                     var cotizacionDocto = _repository.Get<CotizacionDocumento>().FirstOrDefault(q => q.CotizacionDocumentoId == item.CotizacionDocumentoId);
                     if (cotizacionDocto != null)
-                        cotizacionDocto.Selected = item.Selected;
-
-                    if(item.Selected == true)
                     {
-                        /*se marca cotizacion seleccionda en lista de cotizaciones*/
+                        cotizacionDocto.Selected = item.Selected;
+                        _repository.Update(cotizacionDocto);
+
+                        /*se marca o desmarca la cotizacion seleccionda en lista de cotizaciones*/
                         var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
                         if (cotiza != null)
                         {
-                            cotiza.Seleccion = true;
-
-                            _repository.Update<Cotizacion>(cotiza);
-                            _repository.Save();
+                            cotiza.Seleccion = item.Selected;
+                            _repository.Update(cotiza);
                         }
-                    }
+
+
+
+                            //if (item.Selected == true)
+                            //{
+                            //    /*se marca cotizacion seleccionda en lista de cotizaciones*/
+                            //    var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
+                            //    if (cotiza != null)
+                            //    {
+                            //        cotiza.Seleccion = true;
+
+                            //        _repository.Update(cotiza);
+                            //        //_repository.Save();
+                            //    }
+                            //}
+                        }
                 }
                 _repository.Save();
             }
@@ -1158,6 +1267,9 @@ namespace App.Core.UseCases
                 //{
                 //    response.Errors.Add("Se ha selecionado la opcion de Solicita Reembolso, por lo tanto debe señalar el Tipo de Reembolso");
                 //}
+                if(!obj.NombreId.HasValue)
+                    response.Errors.Add("No se ha señalado el nombre del funcionario que viaja.");
+
                 if (string.IsNullOrEmpty(obj.CometidoDescripcion))
                 {
                     response.Errors.Add("Debe ingresar la descripción del cometido.");
@@ -1213,21 +1325,24 @@ namespace App.Core.UseCases
                         var nombre = _sigper.GetUserByRut(obj.NombreId.Value).Funcionario.PeDatPerChq;
                         obj.Nombre = nombre.Trim();
                         obj.FechaSolicitud = DateTime.Now;
+
+
+                        _repository.Create(obj);
+                        _repository.Save();
+
+                        /*Se guardan los datos en la tabla mantenedor*/
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Rut", ValorCampo = obj.Rut.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Dv", ValorCampo = obj.DV.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Cargo", ValorCampo = obj.IdCargo.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Calidad Juridica", ValorCampo = obj.IdCalidad.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Grado", ValorCampo = obj.IdGrado.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Estamento", ValorCampo = obj.IdEstamento.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Programa", ValorCampo = obj.IdPrograma.ToString() });
+                        _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Conglomerado", ValorCampo = obj.IdConglomerado.ToString() });
+                        _repository.Save();
                     }
-
-                    _repository.Create(obj);
-                    _repository.Save();
-
-                    /*Se guardan los datos en la tabla mantenedor*/
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Rut", ValorCampo = obj.Rut.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Dv", ValorCampo = obj.DV.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Cargo", ValorCampo = obj.IdCargo.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Calidad Juridica", ValorCampo = obj.IdCalidad.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Grado", ValorCampo = obj.IdGrado.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Estamento", ValorCampo = obj.IdEstamento.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Programa", ValorCampo = obj.IdPrograma.ToString() });
-                    _repository.Create(new Mantenedor { IdCometido = obj.CometidoId.ToString(), NombreCampo = "Conglomerado", ValorCampo = obj.IdConglomerado.ToString() });
-                    _repository.Save();
+                    else
+                        response.Errors.Add("No se ha señalado el nombre del funcionario que viaja");
                 }
             }
             catch (Exception ex)
@@ -3060,6 +3175,25 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            /*Se valida que ppto sea mayor que el compromiso*/
+            if (int.Parse(obj.VtcPptoTotal) < int.Parse(obj.VtcCodCompromiso))
+                response.Errors.Add("El presupuesto debe ser mayor que el compromiso");
+            if (!obj.VtcTipoPartidaId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de partida");
+            if (!obj.VtcTipoCapituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de capitulo");
+            if (!obj.VtcCentroCostoId.HasValue)
+                response.Errors.Add("Se debe ingresar el programa");
+            if (!obj.VtcTipoSubTituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subtitulo");
+            if (!obj.VtcTipoItemId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de item");
+            if (!obj.VtcTipoAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de asignacion");
+            if (!obj.VtcTipoSubAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subasignacion");
+
+
             try
             {
                 if (response.IsValid)
@@ -3078,6 +3212,24 @@ namespace App.Core.UseCases
         public ResponseMessage GeneracionCDPUpdate(GeneracionCDP obj)
         {
             var response = new ResponseMessage();
+
+            /*Se valida que ppto sea mayor que el compromiso*/
+            if (int.Parse(obj.VtcPptoTotal) < int.Parse(obj.VtcCodCompromiso))
+                response.Errors.Add("El presupuesto debe ser mayor que el compromiso");
+            if (!obj.VtcTipoPartidaId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de partida");
+            if (!obj.VtcTipoCapituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de capitulo");
+            if (!obj.VtcCentroCostoId.HasValue)
+                response.Errors.Add("Se debe ingresar el programa");
+            if (!obj.VtcTipoSubTituloId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subtitulo");
+            if (!obj.VtcTipoItemId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de item");
+            if (!obj.VtcTipoAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de asignacion");
+            if (!obj.VtcTipoSubAsignacionId.HasValue)
+                response.Errors.Add("Se debe ingresar el tipo de subasignacion");
 
             try
             {
@@ -4435,7 +4587,7 @@ namespace App.Core.UseCases
                 //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
                 //}
 
-                /*Valida la carga de adjuntos segun el tipo de proceso*/
+                /*Valida la carga de adjuntos segun el tipo de proceso*/ /*27082020 --> se agrega validacion en firma dr acto administrativo, que el documento debe ser firmado*/
                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
                     if (workflowActual.DefinicionWorkflow.Secuencia == 4)
@@ -4497,6 +4649,12 @@ namespace App.Core.UseCases
                             }
                         }
                     }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
+                    {
+                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
+                        if (doc == false)
+                            throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
+                    }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
                     {
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 4 && c.TipoDocumentoId != null))
@@ -4506,6 +4664,12 @@ namespace App.Core.UseCases
                     {
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
                             throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                    {
+                        var com = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                        if (!com.Destinos.Any())
+                            throw new Exception("Se deben ingresar destinos al cometido.");
                     }
                 }
                 else
@@ -4616,11 +4780,16 @@ namespace App.Core.UseCases
                                         //    var res = DestinosPasajesInsert(_destino);
                                         //}
                                     }
+                                    /*Si cometido corresponde al ministro se va directamente a analista de gestion personas*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
+                                    {
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
+                                    }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 2 && Cometido.ReqPasajeAereo != true)
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
                                     }
@@ -4806,6 +4975,7 @@ namespace App.Core.UseCases
                     workflow.ProcesoId = workflowActual.ProcesoId;
                     workflow.Mensaje = obj.Observacion;
                     workflow.TareaPersonal = false;
+                    workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<Cometido>(c =>c.ProcesoId == workflow.ProcesoId).FirstOrDefault().CometidoId;
 
                     ///*Si el proceso corresponde a Cometidos y esta en la tarea de pago tesoreria se notifica con correo a quien viaja*/
                     //if (workflow.DefinicionWorkflow.Entidad.Codigo == (int)App.Util.Enum.Entidad.Cometido.ToString())

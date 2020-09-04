@@ -7,5 +7,6 @@
         public PEDATPER Jefatura { get; set; }
         public PEDATPER Secretaria { get; set; }
         public PeDatLab FunDatosLaborales { get; set; }
+        public string SubSecretaria { get; set; }
     }
 }

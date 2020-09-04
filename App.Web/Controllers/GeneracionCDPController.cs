@@ -270,7 +270,6 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(GeneracionCDP model)
         {
-
             /*Se toma usuario logeado para guardar registro del ejecutor de la tarea*/
             var persona = _sigper.GetUserByEmail(User.Email());
             if (string.IsNullOrEmpty(model.VtcNombre))
@@ -282,13 +281,16 @@ namespace App.Web.Controllers
             {
                 model.PsjNombreId = persona.Funcionario.RH_NumInte;
                 model.PsjNombre = persona.Funcionario.PeDatPerChq.Trim();
-            }
-            
+            }            
 
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository);
                 var _UseCaseResponseMessage = _useCaseInteractor.GeneracionCDPUpdate(model);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
@@ -313,6 +315,24 @@ namespace App.Web.Controllers
                     .Where(y => y.Count > 0)
                     .ToList();
             }
+
+            model.Cometido = _repository.GetAll<Cometido>().Where(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+            /*Viaticos*/
+            ViewBag.VtcTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre", model.VtcTipoPartidaId);
+            ViewBag.VtcTipoCapituloId = new SelectList(_repository.GetAll<TipoCapitulo>(), "TipoCapituloId", "TcaNombre", model.VtcTipoCapituloId);
+            ViewBag.VtcCentroCostoId = new SelectList(_sigper.GetREPYTs(), "RePytCod", "RePytDes", model.VtcCentroCostoId.Value);
+            ViewBag.VtcTipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre", model.VtcTipoSubTituloId);
+            ViewBag.VtcTipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre", model.VtcTipoItemId);
+            ViewBag.VtcTipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre", model.VtcTipoAsignacionId);
+            ViewBag.VtcTipoSubAsignacionId = new SelectList(_repository.GetAll<TipoSubAsignacion>(), "TipoSubAsignacionId", "TsaNombre", model.VtcTipoSubAsignacionId);
+            /*pasajes*/
+            ViewBag.PsjTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre", model.PsjTipoPartidaId);
+            ViewBag.PsjVtcTipoCapituloId = new SelectList(_repository.GetAll<TipoCapitulo>(), "TipoCapituloId", "TcaNombre", model.PsjVtcTipoCapituloId);
+            ViewBag.PsjCentroCostoId = new SelectList(_sigper.GetREPYTs(), "RePytCod", "RePytDes", model.PsjCentroCostoId);
+            ViewBag.PsjTipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre", model.PsjTipoSubTituloId);
+            ViewBag.PsjTipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre", model.PsjTipoItemId);
+            ViewBag.PsjTipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre", model.PsjTipoAsignacionId);
+            ViewBag.PsjTipoSubAsignacionId = new SelectList(_repository.GetAll<TipoSubAsignacion>(), "TipoSubAsignacionId", "TsaNombre", model.PsjTipoSubAsignacionId);
 
             return View(model);
         }

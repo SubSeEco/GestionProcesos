@@ -19,6 +19,14 @@
         }
     }
 
+    @if (Model.DefinicionWorkflow.PermitirAdjuntarDocumentosConFirmaElectronica)
+    {
+        if (!Request.Url.ToString().Contains("Create"))
+        {
+            <a href="#modalUpload" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+        }
+    }
+
     @if (Model.DefinicionWorkflow.PermitirReenvioUnidad || Model.DefinicionWorkflow.PermitirReenvioGrupoEspecial)
     {
         <a href='@Url.Action("Forward","Workflow", new { id = Model.WorkflowId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Reasignar tarea"><i class="large material-icons">reply</i></a>

@@ -46,5 +46,7 @@ namespace App.Model.Core
         public int EntidadId { get; set; }
         public virtual Entidad Entidad { get; set; }
 
+        [Display(Name = "Ejecutar primera tarea inmediatamente?")]
+        public bool EjecutarInmediatamente { get; set; } = false;
     }
 }

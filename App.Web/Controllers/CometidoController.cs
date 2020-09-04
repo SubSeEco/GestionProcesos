@@ -26,6 +26,8 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using jdk.nashorn.@internal.objects.annotations;
 using com.mp4parser.streaming.extensions;
+using System.ServiceModel.Security;
+using System.Net.Configuration;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -56,7 +58,7 @@ namespace App.Web.Controllers
             [DataType(DataType.Date)]
             public System.DateTime? Hasta { get; set; }
 
-            [Display(Name = "ID")]
+            [Display(Name = "ID Cometido")]
             public int ID { get; set; }
 
             [Display(Name = "Funcionario")]
@@ -95,6 +97,9 @@ namespace App.Web.Controllers
             [Display(Name = "N° Dias")]
             public int DiasDiferencia { get; set; }
 
+            [Display(Name = "Admin")]
+            public bool Admin { get; set; }
+
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
         }
@@ -123,15 +128,17 @@ namespace App.Web.Controllers
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IHSM _hsm;
+        protected readonly IFolio _folio;
         private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<Destinos> ListDestino = new List<Destinos>();
 
-        public CometidoController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm, IFile file)
+        public CometidoController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm, IFile file, IFolio folio)
         {
             _repository = repository;
             _sigper = sigper;
             _hsm = hsm;
             _file = file;
+            _folio = folio;
 
             if (ActiveDirectoryUsers == null)
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
@@ -150,8 +157,13 @@ namespace App.Web.Controllers
 
         public JsonResult GetUsuario(int Rut)
         {
+
             var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
             var per = _sigper.GetUserByEmail(correo.Trim());
+
+            //var test = _sigper.GetReContra();//.Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
+            
+
             var IdCargo = per.FunDatosLaborales.RhConCar.Value;
             var cargo = string.IsNullOrEmpty(per.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == per.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
             var IdCalidad = per.FunDatosLaborales.RH_ContCod;
@@ -159,12 +171,8 @@ namespace App.Web.Controllers
             var IdGrado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "0" : per.FunDatosLaborales.RhConGra.Trim();
             var grado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : per.FunDatosLaborales.RhConGra.Trim();
             var estamento = per.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-
-
-            //var algo = _sigper.GetReContra().Where(c => /*c.RH_NumInte == per.Funcionario.RH_NumInte && */c.Re_ConIni >= Convert.ToDateTime("01-01-2020")).ToList(); 
-            //var jhkj = algo.Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte);
-
-
+            var IdEscalafon = int.Parse(per.FunDatosLaborales.RhConEsc.Trim());
+            var Escalafon = per.FunDatosLaborales.RhConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == per.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim();
             var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
@@ -193,7 +201,10 @@ namespace App.Web.Controllers
                 Programa = Programa.Trim(),
                 Conglomerado = conglomerado,
                 Unidad = per.Unidad.Pl_UndDes.Trim(),
-                Jefatura = jefatura
+                IdUnidad = per.Unidad.Pl_UndCod,
+                Jefatura = jefatura,
+                IdEscalafon = IdEscalafon,
+                Escalafon = Escalafon
             }, JsonRequestBehavior.AllowGet);
 
 
@@ -225,7 +236,7 @@ namespace App.Web.Controllers
 
 
             //var model = _repository.GetById<Cometido>(id);
-            var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+            var model = _repository.GetFirst<Cometido>(q => q.CometidoId == id);
             if (model == null)
                 return RedirectToAction("Details", "Proceso", new { id });
 
@@ -281,13 +292,11 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm);
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 //var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var doc = _repository.Get<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5).FirstOrDefault();
                 var user = User.Email();
-                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user);
-
-
+                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
 
                 //if (_UseCaseResponseMessage.Warnings.Count > 0)
                 //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -322,6 +331,47 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult SignResolucion(Documento model, int? DocumentoId)
+        {
+            /*Se debe volver a generar el documento si corresponde a cometido para agregar los campos que se han actualizado*/
+            /*Se verifica que corresponde a un proceso de cometido*/
+            //var doc = _repository.GetById<Documento>(model.DocumentoId);
+            //var DefinicionProceso = _repository.GetAll<Proceso>().Where(p => p.ProcesoId == doc.ProcesoId).FirstOrDefault().DefinicionProcesoId;
+            //if(DefinicionProceso == 10)
+            //{
+            //    var IdCom = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == doc.ProcesoId).FirstOrDefault().CometidoId;
+            //    GeneraDocumento(IdCom);
+            //}
+            var ProcesoDocto = _repository.Get<Documento>(d => d.DocumentoId == model.DocumentoId).FirstOrDefault().ProcesoId;
+            var CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == ProcesoDocto).FirstOrDefault().CometidoId;
+            var email = UserExtended.Email(User);
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email, CometidoId);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                    return RedirectToAction("Sign", "Cometido", new { id = CometidoId });
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+                //TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
+
+            //return View(model);
+            return RedirectToAction("Sign", "Cometido", new { id = CometidoId });
+        }
+
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<Cometido>(id);
@@ -331,7 +381,7 @@ namespace App.Web.Controllers
                 model.GeneracionCDP.Add(cdp.FirstOrDefault());
 
                 /*Validar si existe un documento asociado y si se encuentra firmado*/
-                var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+                var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
                 if (doc != null)
                 {
                     if (doc.Signed != true)
@@ -343,6 +393,13 @@ namespace App.Web.Controllers
             
             return View(model);
         }
+
+        public ActionResult SignOther(int id)
+        {
+            var model = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == id);
+            return View(model);
+        }
+        
 
         public ActionResult Create(int? WorkFlowId, int? ProcesoId)
         {
@@ -393,10 +450,12 @@ namespace App.Web.Controllers
                 model.SolicitaReembolso = true;
                 model.IdConglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed;
                 model.ConglomeradoDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed.ToString();
-                model.IdPrograma = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt);
+                model.IdPrograma = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
                 //model.ProgramaDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt.ToString();
                 model.ProgramaDescripcion = model.IdPrograma != null ? _sigper.GetREPYTs().Where(c => c.RePytCod == model.IdPrograma).FirstOrDefault().RePytDes : "S/A";
                 model.Jefatura = persona.Jefatura.PeDatPerChq;
+                model.IdEscalafon = int.Parse(persona.FunDatosLaborales.RhConEsc.Trim());
+                model.EscalafonDescripcion = persona.FunDatosLaborales.RhConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == persona.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim();
 
                 model.Destinos = ListDestino;
             }
@@ -414,7 +473,7 @@ namespace App.Web.Controllers
             model.FechaSolicitud = DateTime.Now;
             model.SolicitaReembolso = true;
             model.Destinos = ListDestino;
-
+            
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
@@ -533,14 +592,14 @@ namespace App.Web.Controllers
 
             List<SelectListItem> tipoPago = new List<SelectListItem>
             {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
+            new SelectListItem {Text = "Devengo", Value = "1"},
+            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            new SelectListItem {Text = "No Devengo", Value = "3"},
             };
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");            
             return View(model);
         }
 
@@ -560,7 +619,7 @@ namespace App.Web.Controllers
                 resp.Errors.Add("Debe ingresar tipo de pago.");
 
             if(string.IsNullOrEmpty(model.IdSigfe))
-                resp.Errors.Add("Debe ingresar ID SIGFE.");
+                resp.Errors.Add("Debe ingresar Folio SIGFE.");
 
             if(!model.FechaPagoSigfe.HasValue)
                 resp.Errors.Add("Debe ingresar fecha pago sigfe");
@@ -605,15 +664,15 @@ namespace App.Web.Controllers
 
             List<SelectListItem> tipoPago = new List<SelectListItem>
             {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
+            new SelectListItem {Text = "Devengo", Value = "1"},
+            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            new SelectListItem {Text = "No Devengo", Value = "3"},
             };
 
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPago = new SelectList(_repository.GetAll<TipoPagoSIGFE>().Where(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -835,13 +894,14 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public ActionResult GeneraDocumento(int id)
         {
-            Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            foreach (var key in Request.Cookies.AllKeys)
-            {
-                cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            }
+            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
+            //foreach (var key in Request.Cookies.AllKeys)
+            //{
+            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
+            //}
 
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
@@ -853,7 +913,8 @@ namespace App.Web.Controllers
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
@@ -862,7 +923,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -896,6 +957,7 @@ namespace App.Web.Controllers
                 else
                 {
                     var docOld = _repository.GetById<Documento>(idDoctoViatico);
+                    docOld.Fecha = DateTime.Now;
                     docOld.File = pdf;
                     docOld.Signed = false;
                     docOld.Texto = data.Text;
@@ -964,28 +1026,10 @@ namespace App.Web.Controllers
             }
             else
             {
-                if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
+                if(model.IdEscalafon == 1 && model.IdEscalafon != null) /*Autoridad de Gobierno*/
                 {
-                    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                    //{
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                        pdf = resultPdf.BuildFile(ControllerContext);
-                        //data = GetBynary(pdf);
-                        data = _file.BynaryToText(pdf);
-
-                    tipoDoc = 1;
-                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                    //}
-                    //else
-                    //{
-                    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //}
-                }
-                else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf"};
                     pdf = resultPdf.BuildFile(ControllerContext);
                     //data = GetBynary(pdf);
                     data = _file.BynaryToText(pdf);
@@ -994,24 +1038,61 @@ namespace App.Web.Controllers
                 }
                 else
                 {
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    pdf = resultPdf.BuildFile(ControllerContext);
-                    //data = GetBynary(pdf);
-                    data = _file.BynaryToText(pdf);
+                    if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
+                    {
+                        //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
+                        //{
+                        //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf"};
+                        pdf = resultPdf.BuildFile(ControllerContext);
+                        //data = GetBynary(pdf);
+                        data = _file.BynaryToText(pdf);
 
-                    tipoDoc = 1;
-                    Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                        tipoDoc = 1;
+                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                        //}
+                        //else
+                        //{
+                        //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
+                        //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
+                        //    return Redirect(Request.UrlReferrer.PathAndQuery);
+                        //}
+                    }
+                    //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
+                    //{
+                    //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                    //    pdf = resultPdf.BuildFile(ControllerContext);
+                    //    //data = GetBynary(pdf);
+                    //    data = _file.BynaryToText(pdf);
+                    //    tipoDoc = 1;
+                    //    Name = "Resolucion Ministerial Exenta nro" + " " + model.CometidoId.ToString() + ".pdf";
+                    //}
+                    else
+                    {
+                        //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf"};
+                        pdf = resultPdf.BuildFile(ControllerContext);
+                        //data = GetBynary(pdf);
+                        data = _file.BynaryToText(pdf);
+
+                        tipoDoc = 1;
+                        Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                    }
                 }
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+                var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                 if (resolucion != null)
                 {
-                    foreach (var res in resolucion)
-                    {
-                        if (res.TipoDocumentoId == 1)
-                            IdDocto = res.DocumentoId;
-                    }
+                    IdDocto = resolucion.DocumentoId;
+
+
+                    //foreach (var res in resolucion)
+                    //{
+                    //    if (res.TipoDocumentoId == 1)
+                    //        IdDocto = res.DocumentoId;
+                    //}
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
@@ -1040,6 +1121,7 @@ namespace App.Web.Controllers
                     var docOld = _repository.GetById<Documento>(IdDocto);
                     if (docOld.Signed != true)
                     {
+                        docOld.Fecha = DateTime.Now;
                         docOld.File = pdf;
                         docOld.Signed = false;
                         docOld.Texto = data.Text;
@@ -1085,7 +1167,7 @@ namespace App.Web.Controllers
             else
             {
                 model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                model.DiasPlural = "s";
+                model.DiasPlural = "(s)";
                 model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
                 model.Anno = DateTime.Now.Year.ToString();
                 model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
@@ -1123,71 +1205,75 @@ namespace App.Web.Controllers
 
                         break;
                 }
-                                
+
+                #region SE BUSCA FOLIO PARA RESOLUCION  --> SE ELIMINA POR LA NUEVA FIRMA
+
                 /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 13 || (workflowActual.DefinicionWorkflow.Secuencia == 13 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
-                {
-                    if (model.Folio == null)
-                    {
-                        #region Folio
-                        /*se va a buscar el folio de testing*/
-                        DTOFolio folio = new DTOFolio();
-                        folio.periodo = DateTime.Now.Year.ToString();
-                        folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
-                        if (model.IdCalidad == 10)
-                        {
-                            folio.tipodocumento = "RAEX";/*"ORPA";*/
-                        }
-                        else
-                        {
-                            switch (model.IdGrado)
-                            {
-                                case "B":/*Resolución Ministerial Exenta*/
-                                    folio.tipodocumento = "RMEX";
-                                    break;
-                                case "C": /*Resolución Ministerial Exenta*/
-                                    folio.tipodocumento = "RMEX";
-                                    break;
-                                default:
-                                    folio.tipodocumento = "RAEX";/*Resolución Administrativa Exenta*/
-                                    break;
-                            }
-                        }
+                //var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
+                //if (workflowActual.DefinicionWorkflow.Secuencia == 13 || (workflowActual.DefinicionWorkflow.Secuencia == 13 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+                //{
+                //    if (model.Folio == null)
+                //    {
+                //        #region Folio
+                //        /*se va a buscar el folio de testing*/
+                //        DTOFolio folio = new DTOFolio();
+                //        folio.periodo = DateTime.Now.Year.ToString();
+                //        folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
+                //        if (model.IdCalidad == 10)
+                //        {
+                //            folio.tipodocumento = "RAEX";/*"ORPA";*/
+                //        }
+                //        else
+                //        {
+                //            switch (model.IdGrado)
+                //            {
+                //                case "B":/*Resolución Ministerial Exenta*/
+                //                    folio.tipodocumento = "RMEX";
+                //                    break;
+                //                case "C": /*Resolución Ministerial Exenta*/
+                //                    folio.tipodocumento = "RMEX";
+                //                    break;
+                //                default:
+                //                    folio.tipodocumento = "RAEX";/*Resolución Administrativa Exenta*/
+                //                    break;
+                //            }
+                //        }
 
 
-                        //definir url
-                        var url = "http://wsfolio.test.economia.cl/api/folio/";
+                //        //definir url
+                //        var url = "http://wsfolio.test.economia.cl/api/folio/";
 
-                        //definir cliente http
-                        var clientehttp = new WebClient();
-                        clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
+                //        //definir cliente http
+                //        var clientehttp = new WebClient();
+                //        clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
 
-                        //invocar metodo remoto
-                        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
+                //        //invocar metodo remoto
+                //        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
 
-                        //convertir resultado en objeto 
-                        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
+                //        //convertir resultado en objeto 
+                //        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
 
-                        //verificar resultado
-                        if (obj.status == "OK")
-                        {
-                            model.Folio = obj.folio;
-                            model.FechaResolucion = DateTime.Now;
-                            model.Firma = true;
-                            model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+                //        //verificar resultado
+                //        if (obj.status == "OK")
+                //        {
+                //            model.Folio = obj.folio;
+                //            model.FechaResolucion = DateTime.Now;
+                //            model.Firma = true;
+                //            model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
 
-                            _repository.Update(model);
-                            _repository.Save();
-                        }
-                        if (obj.status == "ERROR")
-                        {
-                            TempData["Error"] = obj.error;
-                            //return View(DTOFolio);
-                        }
-                        #endregion
-                    }
-                }
+                //            _repository.Update(model);
+                //            _repository.Save();
+                //        }
+                //        if (obj.status == "ERROR")
+                //        {
+                //            TempData["Error"] = obj.error;
+                //            //return View(DTOFolio);
+                //        }
+                //        #endregion
+                //    }
+                //}
+
+                #endregion
 
                 //if (model.CalidadDescripcion.Contains("honorario"))
                 //if (model.IdGrado == "0")
@@ -1236,19 +1322,19 @@ namespace App.Web.Controllers
             //return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
             return null;
         }
-
+        [AllowAnonymous]
         public ActionResult Orden(int id)
         {
             var model = _repository.GetById<Cometido>(id);
             model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-            model.DiasPlural = "s";
+            model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
             model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
             model.FechaResolucion = DateTime.Now;
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
-            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
+            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().Total.ToString());            
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();
@@ -1281,81 +1367,86 @@ namespace App.Web.Controllers
             //        break;
             //}
 
-            /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
-            var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-            if (workflowActual.DefinicionWorkflow.Secuencia == 13)
-            {
-                if (model.Folio == null)
-                {
-                    #region Folio
-                    /*se va a buscar el folio de testing*/
-                    DTOFolio folio = new DTOFolio();
-                    folio.periodo = DateTime.Now.Year.ToString();
-                    folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
-                    folio.tipodocumento = "OP";
-                    //if (model.IdCalidad == 10)
-                    //{
-                    //    folio.tipodocumento = "RAEX";/*"ORPA";*/
-                    //}
-                    //else
-                    //{
-                    //    switch (model.IdGrado)
-                    //    {
-                    //        case "B":/*Resolución Ministerial Exenta*/
-                    //            folio.tipodocumento = "RMEX";
-                    //            break;
-                    //        case "C": /*Resolución Ministerial Exenta*/
-                    //            folio.tipodocumento = "RMEX";
-                    //            break;
-                    //        default:
-                    //            /*Resolución Administrativa Exenta*/
-                    //            break;
-                    //    }
-                    //}
+            #region SE BUSCA FOLIO PARA RESOLUCION  --> SE ELIMINA POR LA NUEVA FIRMA
 
-                    //definir url
-                    var url = "http://wsfolio.test.economia.cl/api/folio/";
 
-                    //definir cliente http
-                    var clientehttp = new WebClient();
-                    clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
+            ///*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
+            //var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
+            //if (workflowActual.DefinicionWorkflow.Secuencia == 13)
+            //{
+            //    if (model.Folio == null)
+            //    {
+            //        #region Folio
+            //        /*se va a buscar el folio de testing*/
+            //        DTOFolio folio = new DTOFolio();
+            //        folio.periodo = DateTime.Now.Year.ToString();
+            //        folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
+            //        folio.tipodocumento = "OP";
+            //        //if (model.IdCalidad == 10)
+            //        //{
+            //        //    folio.tipodocumento = "RAEX";/*"ORPA";*/
+            //        //}
+            //        //else
+            //        //{
+            //        //    switch (model.IdGrado)
+            //        //    {
+            //        //        case "B":/*Resolución Ministerial Exenta*/
+            //        //            folio.tipodocumento = "RMEX";
+            //        //            break;
+            //        //        case "C": /*Resolución Ministerial Exenta*/
+            //        //            folio.tipodocumento = "RMEX";
+            //        //            break;
+            //        //        default:
+            //        //            /*Resolución Administrativa Exenta*/
+            //        //            break;
+            //        //    }
+            //        //}
 
-                    //invocar metodo remoto
-                    string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
+            //        //definir url
+            //        var url = "http://wsfolio.test.economia.cl/api/folio/";
 
-                    //convertir resultado en objeto 
-                    var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
+            //        //definir cliente http
+            //        var clientehttp = new WebClient();
+            //        clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
 
-                    //verificar resultado
-                    if (obj.status == "OK")
-                    {
-                        model.Folio = obj.folio;
-                        model.FechaResolucion = DateTime.Now;
-                        model.Firma = true;
-                        model.TipoActoAdministrativo = "Orden de Pago"; 
+            //        //invocar metodo remoto
+            //        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
 
-                        _repository.Update(model);
-                        _repository.Save();
-                    }
-                    if (obj.status == "ERROR")
-                    {
-                        TempData["Error"] = obj.error;
-                        //return View(DTOFolio);
-                    }
-                    #endregion
-                }
-            }
+            //        //convertir resultado en objeto 
+            //        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
+
+            //        //verificar resultado
+            //        if (obj.status == "OK")
+            //        {
+            //            model.Folio = obj.folio;
+            //            model.FechaResolucion = DateTime.Now;
+            //            model.Firma = true;
+            //            model.TipoActoAdministrativo = "Orden de Pago"; 
+
+            //            _repository.Update(model);
+            //            _repository.Save();
+            //        }
+            //        if (obj.status == "ERROR")
+            //        {
+            //            TempData["Error"] = obj.error;
+            //            //return View(DTOFolio);
+            //        }
+            //        #endregion
+            //    }
+            //}
+
+            #endregion
 
 
             return View(model);
         }
-
+        [AllowAnonymous]
         public ActionResult Resolucion(int id)
         {
             var model = _repository.GetById<Cometido>(id);
 
             model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-            model.DiasPlural = "s";
+            model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
             model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
@@ -1393,9 +1484,73 @@ namespace App.Web.Controllers
                     break;
             }
 
-            /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
-            var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-            //if (workflowActual.DefinicionWorkflow.Secuencia == 8)
+            #region SE BUSCA FOLIO PARA RESOLUCION  --> SE ELIMINA POR LA NUEVA FIRMA
+
+
+            ///*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
+            //var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
+            ////if (workflowActual.DefinicionWorkflow.Secuencia == 8)
+            ////{
+            ////    if (model.Folio == null)
+            ////    {
+            ////        #region Folio
+            ////        /*se va a buscar el folio de testing*/
+            ////        DTOFolio folio = new DTOFolio();
+            ////        folio.periodo = DateTime.Now.Year.ToString();
+            ////        folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
+            ////        if (model.IdCalidad == 10)
+            ////        {
+            ////            folio.tipodocumento = "RAEX";/*"ORPA";*/
+            ////        }
+            ////        else
+            ////        {
+            ////            switch (model.IdGrado)
+            ////            {
+            ////                case "B":/*Resolución Ministerial Exenta*/
+            ////                    folio.tipodocumento = "RMEX";
+            ////                    break;
+            ////                case "C": /*Resolución Ministerial Exenta*/
+            ////                    folio.tipodocumento = "RMEX";
+            ////                    break;
+            ////                default:
+            ////                    folio.tipodocumento = "RAEX";/*Resolución Administrativa Exenta*/
+            ////                    break;
+            ////            }
+            ////        }
+
+
+            ////        //definir url
+            ////        var url = "http://wsfolio.test.economia.cl/api/folio/";
+
+            ////        //definir cliente http
+            ////        var clientehttp = new WebClient();
+            ////        clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+            ////        //invocar metodo remoto
+            ////        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
+
+            ////        //convertir resultado en objeto 
+            ////        var obj = JsonConvert.DeserializeObject<App.App.Model.DTO.DTOFolio>(result);
+
+            ////        //verificar resultado
+            ////        if (obj.status == "OK")
+            ////        {
+            ////            model.Folio = obj.folio;
+            ////            model.FechaResolucion = DateTime.Now;
+            ////            model.Firma = true;
+
+            ////            _repository.Update(model);
+            ////            _repository.Save();
+            ////        }
+            ////        if (obj.status == "ERROR")
+            ////        {
+            ////            TempData["Error"] = obj.error;
+            ////        }
+            ////        #endregion
+            ////    }
+            ////}
+
+            //if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             //{
             //    if (model.Folio == null)
             //    {
@@ -1436,7 +1591,7 @@ namespace App.Web.Controllers
             //        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
 
             //        //convertir resultado en objeto 
-            //        var obj = JsonConvert.DeserializeObject<App.App.Model.DTO.DTOFolio>(result);
+            //        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
 
             //        //verificar resultado
             //        if (obj.status == "OK")
@@ -1444,6 +1599,7 @@ namespace App.Web.Controllers
             //            model.Folio = obj.folio;
             //            model.FechaResolucion = DateTime.Now;
             //            model.Firma = true;
+            //            model.TipoActoAdministrativo = "Resolución Ministerial Exenta";
 
             //            _repository.Update(model);
             //            _repository.Save();
@@ -1456,67 +1612,9 @@ namespace App.Web.Controllers
             //    }
             //}
 
-            if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            {
-                if (model.Folio == null)
-                {
-                    #region Folio
-                    /*se va a buscar el folio de testing*/
-                    DTOFolio folio = new DTOFolio();
-                    folio.periodo = DateTime.Now.Year.ToString();
-                    folio.solicitante = "Gestion Procesos - Cometidos";/*Sistema que solicita el numero de Folio*/
-                    if (model.IdCalidad == 10)
-                    {
-                        folio.tipodocumento = "RAEX";/*"ORPA";*/
-                    }
-                    else
-                    {
-                        switch (model.IdGrado)
-                        {
-                            case "B":/*Resolución Ministerial Exenta*/
-                                folio.tipodocumento = "RMEX";
-                                break;
-                            case "C": /*Resolución Ministerial Exenta*/
-                                folio.tipodocumento = "RMEX";
-                                break;
-                            default:
-                                folio.tipodocumento = "RAEX";/*Resolución Administrativa Exenta*/
-                                break;
-                        }
-                    }
 
+            #endregion
 
-                    //definir url
-                    var url = "http://wsfolio.test.economia.cl/api/folio/";
-
-                    //definir cliente http
-                    var clientehttp = new WebClient();
-                    clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-                    //invocar metodo remoto
-                    string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
-
-                    //convertir resultado en objeto 
-                    var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
-
-                    //verificar resultado
-                    if (obj.status == "OK")
-                    {
-                        model.Folio = obj.folio;
-                        model.FechaResolucion = DateTime.Now;
-                        model.Firma = true;
-                        model.TipoActoAdministrativo = "Resolución Ministerial Exenta";
-
-                        _repository.Update(model);
-                        _repository.Save();
-                    }
-                    if (obj.status == "ERROR")
-                    {
-                        TempData["Error"] = obj.error;
-                    }
-                    #endregion
-                }
-            }
 
             if (model.GradoDescripcion == "0")
             {
@@ -1661,6 +1759,7 @@ namespace App.Web.Controllers
 
         public ActionResult SeguimientoGP()
         {
+            var persona = _sigper.GetUserByEmail(User.Email());
             var model = new DTOFilterCometido();
 
             List<SelectListItem> Estado = new List<SelectListItem>
@@ -1670,9 +1769,33 @@ namespace App.Web.Controllers
             new SelectListItem {Text = "Anulado", Value = "3"},
             };
 
+            /*Se busca rol de funcionario y unidad para mostrar el dropdwon de unidades en la busqueda del reporte*/
+            var GrupoId = _repository.Get<Usuario>(c => c.Email == persona.Funcionario.Rh_Mail.Trim() && c.Habilitado == true);
+            if (GrupoId.Count() > 0)
+            {
+                foreach (var usr in GrupoId)
+                {
+                    if (usr.GrupoId == 1)
+                    {
+                        ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+                        model.Admin = true;
+                    }
+                    else
+                    {
+                        ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", persona.Unidad.Pl_UndCod);
+                        model.Admin = false;
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", persona.Unidad.Pl_UndCod);
+                model.Admin = false;
+            }
+
             ViewBag.Estado = new SelectList(Estado, "Value", "Text");
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
+            //ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             ViewBag.Destino = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             return View(model);
         }
@@ -1684,6 +1807,9 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                if (model.ID != 0)
+                    predicate = predicate.And(q => q.CometidoId == model.ID);
+
                 if (model.Estado.HasValue)
                 {
                     if (model.Estado == 1)

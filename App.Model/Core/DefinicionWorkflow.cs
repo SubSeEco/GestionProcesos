@@ -102,9 +102,15 @@ namespace App.Model.Core
         [Display(Name = "Permitir ver documentos adjuntos?")]
         public bool PermitirVerDocumentos { get; set; } = false;
 
+
         [Required(ErrorMessage = "Es necesario especificar este dato")]
-        [Display(Name = "Permitir adjuntar documentos nuevos?")]
+        [Display(Name = "Permitir adjuntar documentos simples?")]
         public bool PermitirAdjuntarDocumentos { get; set; } = false;
+
+        [Display(Name = "Permitir adjuntar documentos para FEA?")]
+        public bool PermitirAdjuntarDocumentosConFirmaElectronica { get; set; } = false;
+
+
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Requiere documentos adjuntos?")]
@@ -127,6 +133,7 @@ namespace App.Model.Core
 
         //[Display(Name = "Permitir anular proceso?")]
         //public bool PermitirAnularProceso { get; set; } = false;
+
 
         [Display(Name = "Permitir envío de tarea?")]
         public bool PermitirTerminar { get; set; } = false;
@@ -154,5 +161,8 @@ namespace App.Model.Core
 
         [Display(Name = "Seleccionar solo personas de la misma unidad?")]
         public bool PermitirSeleccionarPersonasMismaUnidad { get; set; } = false;
+
+        [Display(Name = "Permitir finalizar proceso?")]
+        public bool PermitirFinalizarProceso { get; set; } = false;
     }
 }

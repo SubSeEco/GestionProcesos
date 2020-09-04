@@ -18,7 +18,6 @@
             CometidoPasaje,
             FirmaDocumento,
             Memorandum,
-            ProgramacionHorasExtraordinarias,
         }
 
         public enum Grupo
@@ -141,9 +140,8 @@
             PlantillaCompraPasajes_AnalistaGP = 55,
             PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
-
-            //Notificaciones Memorandum
-            PlantillaMemoFirmado = 61,
+            Plantilla_Memo_Firmado = 61,
+            PlantillaAnulacionCometido = 63,
         }
 
         public enum DefinicionProceso
@@ -154,7 +152,6 @@
             Memorandum = 15,
             SolicitudCometido = 10,
             InformeHSA = 1,
-            ProgramacionHorasExtraordinarias = 16,
         }
 
      
@@ -168,6 +165,12 @@
             EnProceso = 1,
             Anulado = 2,
             Terminado = 3,
+        }
+
+        public enum Privacidad
+        {
+            Publico = 1,
+            Privado = 2,
         }
     }
 }

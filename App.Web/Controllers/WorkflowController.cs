@@ -15,12 +15,44 @@ using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 
+
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
     public class WorkflowController : Controller
     {
+        public class DTOSend
+        {
+            public DTOSend()
+            {
+            }
+
+            public int WorkflowId { get; set; }
+            public bool RequiereAprobacionAlEnviar { get; set; }
+            public bool PermitirMultipleEvaluacion { get; set; }
+            public bool PermitirSeleccionarUnidadDestino { get; set; }
+            public bool PermitirSeleccionarPersonasMismaUnidad { get; set; }
+
+            [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Aprobación")]
+            public int TipoAprobacionId { get; set; }
+
+            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Unidad")]
+            public int? Unidad { get; set; }
+
+            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Funcionario")]
+            public string Funcionario { get; set; }
+
+            [RequiredIf("TipoAprobacionId", Enum.TipoAprobacion.Rechazada, ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Observaciones")]
+            [DataType(DataType.MultilineText)]
+            public string Observaciones { get; set; }
+        }
+
+
         public class DTOUser
         {
             public string id { get; set; }
@@ -54,13 +86,13 @@ namespace App.Web.Controllers
             public List<Workflow> TareasPersonales { get; set; }
             public List<Workflow> TareasGrupales { get; set; }
         }
+
         protected readonly IGestionProcesos _repository;
         protected readonly IEmail _email;
         protected readonly ISIGPER _sigper;
         protected readonly IFolio _folio;
         protected readonly IFile _file;
         protected readonly IHSM _hsm;
-
 
         public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
         {
@@ -104,7 +136,7 @@ namespace App.Web.Controllers
                 //usuario administrador
                 var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
                 var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
-                                
+
                 model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
                 model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
             }
@@ -150,7 +182,6 @@ namespace App.Web.Controllers
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult Sign(Workflow model)
-
         //{
         //    var email = UserExtended.Email(User);
 
@@ -249,7 +280,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
             }
-            
+
             if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
             {
                 var obj = _repository.GetFirst<Memorandum>(q => q.ProcesoId == workflow.ProcesoId);
@@ -337,8 +368,8 @@ namespace App.Web.Controllers
 
                 if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model,User.Email());
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
                     if (_UseCaseResponseMessage.IsValid)
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
@@ -405,44 +436,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //public ActionResult Validate(int id)
-        //{
-        //    var model = _repository.GetById<Workflow>(id);
-        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text");
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Validate(Workflow model)
-        //{
-        //    var workflow = _repository.GetById<Workflow>(model.WorkflowId);
-
-        //    model.Email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //        else
-        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
-
-        //        return RedirectToAction("Index", "Workflow");
-        //    }
-
-        //    ViewBag.DefinicionWorkflowId = new SelectList(_repository.Get<DefinicionWorkflow>(q => q.DefinicionWorkflowDependeDeId == model.DefinicionWorkflowId).OrderBy(q => q.Secuencia).AsEnumerable().Select(q => new { Value = q.DefinicionWorkflowId.ToString(), Text = q.Nombre }), "Value", "Text", model.DefinicionWorkflowId);
-        //    ViewBag.TipoAprobacionId = workflow.DefinicionWorkflow.RequiereAprobacionAlEnviar ?
-        //        new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre") :
-        //        new SelectList(new List<TipoAprobacion>(), "TipoAprobacionId", "Nombre");
-
-        //    return View(model);
-        //}
-
-
         public ActionResult Forward(int id)
         {
             var model = _repository.GetById<Workflow>(id);
@@ -490,52 +483,39 @@ namespace App.Web.Controllers
             return PartialView(model);
         }
 
-        //public ActionResult Next(int id)
-        //{
-        //    var model = _repository.GetById<Workflow>(id);
-
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
-        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-        //    if (model.Pl_UndCod.HasValue)
-        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Next(Workflow model)
-        //{
-        //    model.Email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return RedirectToAction("Index", "Workflow");
-        //        }
-        //        else
-        //            TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
-        //    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
-        //    ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-        //    ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-        //    if (model.Pl_UndCod.HasValue)
-        //        ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-
-        //    return View(model);
-        //}
-
         public ActionResult OK()
         {
             return View();
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Stop(Workflow model)
+        {
+            model.Email = UserExtended.Email(User);
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowArchive(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+                else
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
+
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            if (model.Pl_UndCod.HasValue)
+                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+
+            return View(model);
+        }
+
     }
 }

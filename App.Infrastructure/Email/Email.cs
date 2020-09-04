@@ -17,9 +17,7 @@ namespace App.Infrastructure.Email
                 var smtpClient = new SmtpClient();
                 if (message != null)
                 {
-                    //temporalmente para efectos de monitoreo de envío de correos
-                    //message.Bcc.Add("vsilva@economia.cl");
-                    //smtpClient.Send(message);
+                    smtpClient.Send(message);
                 }
             }
             catch (Exception)
@@ -145,7 +143,7 @@ namespace App.Infrastructure.Email
                 emailMsg.Body = plantillaCorreo.Valor;
                 emailMsg.Subject = asunto.Valor;
                 emailMsg.To.Add(proceso.Email);
-                //Send(emailMsg);
+                Send(emailMsg);
             }
         }
 
@@ -189,7 +187,7 @@ namespace App.Infrastructure.Email
                 {
                     emailMsg.To.Add(correo);
                 }
-                //Send(emailMsg);
+                Send(emailMsg);
             }
         }
 
@@ -312,6 +310,5 @@ namespace App.Infrastructure.Email
                 throw ex;
             }
         }
-
     }
 }

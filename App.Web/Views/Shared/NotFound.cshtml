@@ -1,9 +1,10 @@
 ﻿
-<div class="red lighten-1">
+
+<div class="red lighten-1 section">
     <div class="section container ">
-        <h3 class="header white-text">Error</h3>
+        <h3 class="header white-text">Problema detectado</h3>
         <h5 class="header light white-text">Página no encontrada</h5>
-        <br />
+        <div class="section"></div>
     </div>
 </div>
 
@@ -11,8 +12,6 @@
     <div class="section"></div>
     <h5 class="header light red-text">No se encontró la página @ViewBag.RequestedUrl</h5>
     <div class="section"></div>
-    @Html.ActionLink("Volver al inicio", "Index","Home", null, new { @class = "waves-effect waves-light btn blue " })
+    <a href="javascript:void(0);" onclick="history.go(-1);">Volver a página anterior</a> | <a href='@Url.Action("Index", "Home")'>Ir al inicio</a>
 
-
-    @(new string(' ', 512))
 </div>

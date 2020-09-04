@@ -19,30 +19,27 @@ namespace App.Model.GestionDocumental
         [DataType(DataType.Date)]
         public DateTime? Fecha { get; set; } = DateTime.Now;
 
+        [Required(ErrorMessage = "Es necesario especificar este dato")]
+        [Display(Name = "Fecha ingreso (requerido)")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime? FechaIngreso { get; set; } = DateTime.Now;
+
         [Required(ErrorMessage = "Es necesario especificar el dato Materia")]
-        [Display(Name = "Materia")]
+        [Display(Name = "Materia (requerido)")]
         [DataType(DataType.MultilineText)]
         public string Materia { get; set; }
 
-        [Display(Name = "Referencia")]
+        [Display(Name = "Referencia (opcional)")]
         [DataType(DataType.MultilineText)]
         public string Referencia { get; set; }
 
-        [Display(Name = "Observación")]
+        [Display(Name = "Observación (opcional)")]
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
 
-        [Display(Name = "Autor")]
-        public string Autor { get; set; }
-
-        [Display(Name = "Unidad del firmante")]
-        public int? Pl_UndCod { get; set; }
-
-        [Display(Name = "Unidad del firmante")]
-        public string Pl_UndDes { get; set; }
-
-        [Display(Name = "Usuario firmante")]
-        public string UsuarioFirmante { get; set; }
+        [Display(Name = "Es documentación reservada?")]
+        public bool EsReservado { get; set; } = false;
 
         [Display(Name = "Proceso")]
         public int ProcesoId { get; set; }
@@ -51,8 +48,5 @@ namespace App.Model.GestionDocumental
         [Display(Name = "Workflow")]
         public int WorkflowId { get; set; }
         public virtual Core.Workflow Workflow { get; set; }
-
-        [Display(Name = "Requiere firma electrónica?")]
-        public bool RequiereFirmaElectronica { get; set; } = false;
     }
 }

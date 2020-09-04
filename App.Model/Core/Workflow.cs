@@ -84,6 +84,14 @@ namespace App.Model.Core
         public string Entity { get; set; }
         public int? EntityId { get; set; }
 
+        public virtual ICollection<Documento> Documentos { get; set; }
+
+        [Display(Name = "Asunto")]
+        public string Asunto { get; set; }
+
+        [Display(Name = "Firmante")]
+        public string Firmante { get; set; }
+
         [NotMapped]
         [Display(Name = "Certificado electrónico")]
         public string SerialNumber { get; set; }
@@ -95,6 +103,9 @@ namespace App.Model.Core
         [Display(Name = "Numero Proceso")]
         public string NumeroProceso { get; set; }
 
+
+
+
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
         public TimeSpan Span
@@ -104,16 +115,6 @@ namespace App.Model.Core
                 return ((FechaTermino.HasValue ? FechaTermino.Value : DateTime.Now) - FechaCreacion);
             }
         }
-
-        public virtual ICollection<Documento> Documentos { get; set; }
-
-        [Display(Name = "Asunto")]
-        public string Asunto { get; set; }
-
-
-        [Display(Name = "Firmante")]
-        public string Firmante { get; set; }
-
 
     }
 }

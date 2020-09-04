@@ -53,10 +53,13 @@
             }
         </div>
     </div>
+
+    @if (Model.Result.Any())
+    {
     <div class="card">
         <div class="card-content">
             @*<span class="card-title">Procesos</span>*@
-            <table class="table bordered" id="dt">
+            <table class="table table-responsive bordered" id="dt">
                 <thead>
                     <tr>
                         <th>
@@ -97,9 +100,18 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Observacion)
-                            </td>
+                            @if (!string.IsNullOrEmpty(item.Observacion) && item.Observacion.Contains(" "))
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Observacion)
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="max-width:250px;" class="truncate">
+                                    @Html.DisplayFor(modelItem => item.Observacion)
+                                </td>
+                            }
                             <td>
                                 @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
                             </td>
@@ -112,6 +124,7 @@
             </table>
         </div>
     </div>
+    }
 </div>
 <script>
     $(document).ready(function () {

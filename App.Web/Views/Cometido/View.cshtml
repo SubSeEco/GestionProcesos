@@ -118,7 +118,11 @@
                             </div>
                             <div class="input-field col s12 m10 l10">
                                 <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
+                                    <span>
+                                        <strong style="color:green">
+                                            @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                        </strong>
+                                    </span>
                                 </strong>
                                 @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
                             </div>
@@ -159,6 +163,12 @@
                                     @Html.DisplayNameFor(m => Model.PlacaVehiculo)
                                 </strong>
                                 @Html.DisplayFor(m => Model.PlacaVehiculo)
+                            </div>
+                            <div class="input-field col s12 m4 l4">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                </strong>
+                                @Html.DisplayFor(m => Model.VehiculoObservaciones)
                             </div>
                         </div>
 
@@ -253,7 +263,8 @@
                             }
                         </div>
                     </div>
-                    <div class="section"></div>
+                    <div class="section"></div>                    
+                    <a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>
                 </div>
             </div>
         </div>
@@ -263,7 +274,9 @@
         </div>
     </div>
 </div>
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -289,3 +302,8 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

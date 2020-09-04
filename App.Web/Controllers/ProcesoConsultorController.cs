@@ -57,7 +57,6 @@ namespace App.Web.Controllers
             var model = new DTOFilter()
             {
                 Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
-                Result = _repository.Get<Proceso>().ToList()
             };
 
             return View(model);
@@ -81,9 +80,9 @@ namespace App.Web.Controllers
 
                 if (model.Hasta.HasValue)
                     predicate = predicate.And(q =>
-                        q.FechaCreacion.Year <= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month <= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day <= model.Desde.Value.Day);
+                        q.FechaCreacion.Year <= model.Hasta.Value.Year &&
+                        q.FechaCreacion.Month <= model.Hasta.Value.Month &&
+                        q.FechaCreacion.Day <= model.Hasta.Value.Day);
 
                 var DefinicionProcesoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (DefinicionProcesoId.Any())

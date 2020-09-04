@@ -34,3 +34,10 @@
         @Html.Action("Create", "Documento", new { Model.ProcesoId, Model.WorkflowId })
     </div>
 </div>
+
+<div id="modalUpload" class="modal">
+    <div class="modal-content">
+        <h4>Adjuntar documento</h4>
+        @Html.Action("Upload", "Documento", new { Model.ProcesoId, Model.WorkflowId })
+    </div>
+</div>

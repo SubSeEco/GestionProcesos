@@ -95,6 +95,12 @@ namespace App.Model.Cometido
         
         [Display(Name = "Estamento")]
         public string EstamentoDescripcion { get; set; }
+        
+        [Display(Name = "Escalafon")]
+        public int? IdEscalafon { get; set; }
+        
+        [Display(Name = "Escalafon")]
+        public string EscalafonDescripcion { get; set; }
 
         [Display(Name = "Programa")]
         public int? IdPrograma { get; set; }
@@ -124,8 +130,8 @@ namespace App.Model.Cometido
 
         [Display(Name = "Pasajes")]
         public bool Pasajes { get; set; }
-
-        [Display(Name = "El cometido incluye pago de viatico?")]
+                
+        [Display(Name = "El cometido incluye pago de viatico?")]        
         public bool SolicitaViatico { get; set; }
 
         [Display(Name = "El cometido incluye pago de pasaje aéreo?")]
@@ -148,6 +154,10 @@ namespace App.Model.Cometido
         [StringLength(6,ErrorMessage="Se acepta un maximo de 6 caracteres", MinimumLength = 1)]
         [Display(Name = "Placa Vehículo")]
         public string PlacaVehiculo { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Observaciones Vehiculo")]
+        public string VehiculoObservaciones { get; set; }
 
         [Display(Name = "Tipo Reembolso")]
         public int? TipoReembolsoId { get; set; }
@@ -242,7 +252,7 @@ namespace App.Model.Cometido
 
         /*Propiedades registro SIGFE Contabilidad*/
         //[Required(ErrorMessage = "Se debe ingresar el Id de SIGFE")]
-        [Display(Name = "Id Sigfe")]
+        [Display(Name = "Folio Sigfe")]
         public string IdSigfe { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago")]
@@ -269,7 +279,7 @@ namespace App.Model.Cometido
 
         /*Propiedades registro SIGFE Tesoreria*/
         //[Required(ErrorMessage = "Se debe ingresar el Id de Tesoreria")]
-        [Display(Name = "Id Sigfe Tesorería")]
+        [Display(Name = "Folio Sigfe Tesorería")]
         public string IdSigfeTesoreria { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago en tesoreria")]

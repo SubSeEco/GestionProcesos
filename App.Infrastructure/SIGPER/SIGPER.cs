@@ -83,14 +83,15 @@ namespace App.Infrastructure.SIGPER
                 Jefatura = null,
                 Secretaria = null,
                 Unidad = null,
-                FunDatosLaborales = null
+                FunDatosLaborales = null,
+                SubSecretaria = null
             };
 
             try
             {
                 using (var context = new AppContextEconomia())
                 {
-                    var func = context.PEDATPER.Where(q => q.Rh_Mail == email && q.RH_EstLab == "A").ToList();
+                    //var func = context.PEDATPER.Where(q => q.Rh_Mail == email && q.RH_EstLab == "A").ToList();
 
                     var funcionario = context.PEDATPER.FirstOrDefault(q => q.Rh_Mail == email && q.RH_EstLab == "A");
                     if (funcionario != null)
@@ -160,6 +161,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "ECONOMIA";
+
                         return sigper;
                     }
                 }
@@ -209,6 +212,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "TURISMO";
+
                         return sigper;
                     }
                 }
@@ -220,7 +225,6 @@ namespace App.Infrastructure.SIGPER
 
             return sigper;
         }
-
         public Model.SIGPER.SIGPER GetUserByRut(int rut)
         {
             var sigper = new Model.SIGPER.SIGPER()
@@ -229,7 +233,8 @@ namespace App.Infrastructure.SIGPER
                 Jefatura = null,
                 Secretaria = null,
                 Unidad = null,
-                FunDatosLaborales = null
+                FunDatosLaborales = null,
+                SubSecretaria = null
             };
 
             try
@@ -272,6 +277,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "ECONOMIA";
+
                         return sigper;
                     }
                 }
@@ -314,6 +321,8 @@ namespace App.Infrastructure.SIGPER
                             }
                         }
 
+                        sigper.SubSecretaria = "TURISMO";
+
                         return sigper;
                     }
                 }
@@ -329,17 +338,31 @@ namespace App.Infrastructure.SIGPER
         public List<PLUNILAB> GetUnidades()
         {
             var returnValue = new List<PLUNILAB>();
+            var criterioExclusion = "COMISIONADO";
 
             try
             {
                 using (var context = new AppContextEconomia())
                 {
-                    returnValue.AddRange(context.PLUNILAB.ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" }));
-
+                    //excluir las unidades sin funcionarios
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" });
+                    foreach (var item in unidades)
+                    {
+                        var rE = GetUserByUnidad(item.Pl_UndCod);
+                        if (rE != null && rE.Any())
+                            returnValue.Add(item);
+                    }
                 }
                 using (var context = new AppContextTurismo())
                 {
-                    returnValue.AddRange(context.PLUNILAB.ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" }));
+                    //excluir las unidades sin funcionarios
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" });
+                    foreach (var item in unidades)
+                    {
+                        var rT = GetUserByUnidad(item.Pl_UndCod);
+                        if (rT != null && rT.Any())
+                            returnValue.Add(item);
+                    }
                 }
             }
             catch (Exception)
@@ -349,7 +372,6 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
         }
-
         public List<PEDATPER> GetUserByUnidad(int codigoUnidad)
         {
             var returnValue = new List<PEDATPER>();
@@ -404,7 +426,6 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
-
         public List<PEDATPER> GetAllUsers()
         {
             var returnValue = new List<PEDATPER>();
@@ -449,7 +470,6 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
-
         public List<PEDATPER> GetUserByTerm(string term)
         {
             var returnValue = new List<PEDATPER>();
@@ -573,20 +593,6 @@ namespace App.Infrastructure.SIGPER
                 throw;
             }
         }
-        //public List<DGPAISES> GetDGPAISESs()
-        //{
-        //    try
-        //    {
-        //        using (var context = new AppContextEconomia())
-        //        {
-        //            return context.DGPAISES.ToList();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
         public List<DGESCALAFONES> GetGESCALAFONEs()
         {
             try

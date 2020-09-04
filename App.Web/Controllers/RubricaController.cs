@@ -1,8 +1,6 @@
 ﻿using App.Model.Core;
 using App.Core.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using App.Core.UseCases;
@@ -15,8 +13,6 @@ namespace App.Web.Controllers
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
-        protected readonly IHSM _hsm;
-
         public class FileUpload
         {
             public FileUpload()
@@ -39,15 +35,12 @@ namespace App.Web.Controllers
 
             [Display(Name = "Habilitado para firmar")]
             public bool HabilitadoFirma { get; set; }
-
-
         }
 
-        public RubricaController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm)
+        public RubricaController(IGestionProcesos repository, ISIGPER sigper)
         {
             _repository = repository;
             _sigper = sigper;
-            _hsm = hsm;
         }
 
         public ActionResult Index()
@@ -64,8 +57,6 @@ namespace App.Web.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.IdentificadorFirma = new SelectList(_hsm.GetSigners().OrderBy(q=>q), "", "");
-
             return View();
         }        
 
@@ -85,8 +76,6 @@ namespace App.Web.Controllers
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-            ViewBag.IdentificadorFirma = new SelectList(_hsm.GetSigners().OrderBy(q => q), "", "", model.IdentificadorFirma);
-
 
             return View(model);
         }
@@ -94,7 +83,6 @@ namespace App.Web.Controllers
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<Rubrica>(id);
-            ViewBag.IdentificadorFirma = new SelectList(_hsm.GetSigners().OrderBy(q => q), "", "", model.IdentificadorFirma);
 
             return View(model);
         }
@@ -138,6 +126,5 @@ namespace App.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
     }
 }

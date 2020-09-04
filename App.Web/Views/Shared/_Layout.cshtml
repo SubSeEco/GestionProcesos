@@ -10,9 +10,10 @@
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <link href="~/Content/custom.css" rel="stylesheet">
+
 </head>
 <body>
-
     <style>
         nav {
             box-shadow: none;
@@ -22,7 +23,6 @@
             margin-left: 140px;
         }
     </style>
-
 
     <div class="navbar-fixed valign-wrapper">
         <nav class="white ">
@@ -42,21 +42,21 @@
             </div>
         </nav>
     </div>
+
     @RenderBody()
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('.modal').modal();
             $('.tooltipped').tooltip();
-        });
 
-        $(document).on('submit', 'form', function () {
-            var buttons = $(this).find('[type="submit"]');
-            buttons.each(function (btn) {
-                $(buttons[btn]).prop('disabled', true);
+            $(document).on('submit', 'form', function () {
+                var buttons = $(this).find('[type="submit"]');
+                buttons.each(function (btn) {
+                    $(buttons[btn]).prop('disabled', true);
+                });
             });
         });
-
     </script>
 </body>
 </html>

@@ -2,6 +2,21 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            @if (Model.Destinos.Any())
+            {
+                <p>
+                    Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+                </p>
+            }
+            else
+            {
+                <p>No existen destinos asociados al cometido</p>
+            }
+        </div>
+    </div>
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
@@ -39,20 +54,22 @@
                 @Html.HiddenFor(q => Model.TipoVehiculoId)
                 @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)
                 @Html.HiddenFor(q => Model.PlacaVehiculo)
+                @Html.HiddenFor(q => Model.IdEscalafon)
+                @Html.HiddenFor(q => Model.EscalafonDescripcion)
 
                 <div class="card">
                     <div class="card-content">
                         @*<span class="card-title">Cometidos</span>*@
                         <div class="row">
-                            <div class="input-field col s12 m10 l4">
+                            <div class="input-field col s12 m6 l6">
                                 <strong>
-                                    @Html.LabelFor(m => Model.FechaSolicitud)
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
                                 </strong>
                                 @Html.DisplayFor(m => Model.FechaSolicitud)
 
                             </div>
-                            <div class="input-field col s12 m10 l4">
-                                <strong>@Html.LabelFor(m => Model.CometidoId)</strong>
+                            <div class="input-field col s12 m10 l6">
+                                <strong>@Html.DisplayNameFor(m => Model.CometidoId)</strong>
                                 @Html.DisplayFor(m => Model.CometidoId)
                             </div>
                         </div>
@@ -60,43 +77,43 @@
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
-                                    <strong>@Html.LabelFor(m => Model.UnidadDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.UnidadDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.UnidadDescripcion)
                                 </div>
                                 <div class="input-field col s12 m10 l10">
-                                    <strong>@Html.LabelFor(m => Model.Nombre)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
                                     @Html.DisplayFor(m => Model.Nombre)
                                 </div>
                                 <div class="input-field col s12 m6 l8">
-                                    <strong>@Html.LabelFor(m => Model.Rut)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.Rut)</strong>
                                     @Html.DisplayFor(m => Model.Rut)
                                 </div>
                                 <div class="input-field col s12 m6 l4">
-                                    <strong>@Html.LabelFor(m => Model.DV)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.DV)</strong>
                                     @Html.DisplayFor(m => Model.DV)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.CargoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.CargoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.CargoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.CalidadDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.CalidadDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.CalidadDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.GradoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.GradoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.GradoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.EstamentoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.EstamentoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.EstamentoDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.ProgramaDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.ProgramaDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.ProgramaDescripcion)
                                 </div>
                                 <div class="input-field col s12 m6 l3">
-                                    <strong>@Html.LabelFor(m => Model.ConglomeradoDescripcion)</strong>
+                                    <strong>@Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)</strong>
                                     @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
                                 </div>
                             </div>
@@ -105,7 +122,9 @@
                             <div class="row">
                                 <div class="input-field col s12 m8 l12">
                                     <div class="row">
-                                        <span>@Html.LabelFor(m => Model.FinanciaOrganismo)</span><br />
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span><br />
+                                        </strong>
                                         <label>
                                             @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
                                             <span>SI</span>
@@ -116,6 +135,7 @@
                                         </label>
                                     </div>
                                 </div>
+                                <p></p>
                                 <div id="Financia" class="input-field col s12 m4 l10">
                                     <div class="input-field col s12 m8 l12">
                                         <label style="color:green">
@@ -147,7 +167,11 @@
                                 <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                        <span>@Html.LabelFor(m => Model.SolicitaViatico)</span>
+                                        <span>
+                                            <strong>
+                                                @Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })
+                                            </strong>
+                                        </span>
                                     </label>
                                     <div class="section"></div>
                                 </div>
@@ -165,35 +189,54 @@
                                     </label>
                                     <div class="section"></div>
                                 </div>
-                                <div class="input-field col s12 m4 l3">
+                                <div id="terrestre">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <label style="color:green">
+                                                “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                            </label>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
                                     <label>
                                         @Html.CheckBoxFor(m => Model.Vehiculo)
                                         <span>@Html.LabelFor(m => Model.Vehiculo)</span>
                                     </label>
                                     <div class="section"></div>
                                 </div>
-                                <div class="input-field col s12 m6 l10">
-                                    @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
-                                    @Html.LabelFor(m => Model.TipoVehiculoId)
-                                    @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m2 l10">
-                                    @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                    @Html.LabelFor(m => Model.PlacaVehiculo)
-                                    @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                <div id="auto">
+                                    <div class="input-field col s12 m6 l10">
+                                        @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.TipoVehiculoId)
+                                        @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                        @Html.LabelFor(m => Model.PlacaVehiculo)
+                                        @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m2 l10">
+                                        @Html.EditorFor(m => Model.VehiculoObservaciones)
+                                        @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                    </div>
                                 </div>
                             </div>
 
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.NombreCometido)
+                                    </strong>
                                     @Html.EditorFor(m => Model.NombreCometido)
-                                    @Html.LabelFor(m => Model.NombreCometido)
                                     @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                    </strong>
                                     @Html.EditorFor(m => Model.CometidoDescripcion)
-                                    @Html.LabelFor(m => Model.CometidoDescripcion)
                                     @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                                 </div>
                                 <div class="input-field col s12 m10 l10">
@@ -442,9 +485,11 @@
             if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
+                $("#VehiculoObservaciones").attr('disabled', false);
             }
             else {
                 $("#IdTipoVehiculo").attr('disabled', true);
+                $("#VehiculoObservaciones").attr('disabled', true);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
         });
@@ -458,21 +503,68 @@
             $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
         }
+
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+
+            }
+        });
+
+        /*Muestra texto de pasaje terrestre*/
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+        };
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
     });
 
     /**************************************************************************************************/
+    /*Habilita tipo vehiculo*/
+    $('input:checkbox[name="Vehiculo"]').change(function () {
+        if (document.getElementById("Vehiculo").checked == false) {
+            $('#auto').hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
+        }
+        else {
+            $("#PlacaVehiculo").attr('disabled', false);
+            $('#auto').show();
 
-    $(function () {
-        $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
-        });
+        }
+    });
+
+    /*Muestra texto de pasaje terrestre*/
+    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+            $('#terrestre').hide(100);
+        }
+        else {
+            $('#terrestre').show();
+
+        }
     });
 
     $(function () {
         $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: true
+            collapsible: true, heightStyle: "auto"
         });
     });
+
+    //$(function () {
+    //    $("#jQuery_accordion").accordion({
+    //        collapsible: true, heightStyle: true
+    //    });
+    //});
 
     /*funcion que bloquea pasajes*/
     $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
@@ -498,3 +590,8 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

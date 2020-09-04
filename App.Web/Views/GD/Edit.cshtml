@@ -6,8 +6,8 @@
     @Html.Partial("_Message")
 
     <div class="row">
-        <div class="col s12 m6 l6">
-            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        <div class="col s12 m6 l5">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(q => Model.WorkflowId)
@@ -18,7 +18,13 @@
                     <div class="card-content">
                         <span class="card-title">Información del ingreso</span>
                         <div class="section"></div>
+                        <div class="section"></div>
                         <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaIngreso)
+                                @Html.LabelFor(m => Model.FechaIngreso)
+                                @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
+                            </div>
                             <div class="input-field col s12 m12 l12">
                                 @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
                                 @Html.LabelFor(m => Model.Materia)
@@ -34,51 +40,38 @@
                                 @Html.LabelFor(m => Model.Observacion)
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
-                            @*<div class="input-field col s12 m12 l12">
-                            <label>
-                                @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                <span>@Html.LabelFor(m => Model.RequiereFirmaElectronica)</span>
-                            </label>
-                            <br />
-                            <br />
-
-                            <div class="switch">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
-                                    <span class="lever"></span>
-                                    Requiere firma electrónica?
-                                </label>
+                            <div class="input-field col s12 m12 l12">
+                                <div class="switch">
+                                    <label>
+                                        @Html.CheckBoxFor(m => Model.EsReservado)
+                                        <span class="lever"></span>
+                                        Documentación reservada?
+                                    </label>
+                                </div>
                             </div>
-                            <br />
-                        </div>*@
-                            @*<div class="input-field col s12 m12 l12" id="divRequiereFirmaUnidad">
-                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Pl_UndCod)
-                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
-                        </div>
-
-                        @Html.HiddenFor(q => q.Pl_UndDes)
-
-                        <div class="input-field col s12 m12 l12" id="divRequiereFirmaUsuario">
-                            @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.UsuarioFirmante)
-                            @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
-                        </div>*@
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                 </div>
             }
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-
         </div>
-        <div class="col s12 m6 l6">
+        <div class="col s12 m6 l7">
+            @Html.Action("FEADocumentos", "GD", new { ProcesoId = Model.ProcesoId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
 </div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+
+
+<div id="modalUpload" class="modal">
+    <div class="modal-content" style="background-color:white">
+        <h4>Adjuntar documento</h4>
+        @Html.Action("FEAUpload", new { Model.ProcesoId, Model.WorkflowId })
+    </div>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -89,41 +82,5 @@
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());
         });
-
-        var isChecked = $("#RequiereFirmaElectronica").is(':checked');
-        $('#divRequiereFirmaUnidad').toggle(isChecked);
-        $('#divRequiereFirmaUsuario').toggle(isChecked);
     });
-
-    //Al cambiar unidad traer funcionarios
-    $("#Pl_UndCod").change(function () {
-        var Pl_UndCod = $(this).val();
-        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
-            function (classesData) {
-                var select = $("#UsuarioFirmante");
-                select.empty();
-                select.append($('<option/>', {
-                    value: "",
-                    text: "Seleccione..."
-                }));
-                $.each(classesData, function (index, itemData) {
-                    select.append($('<option/>', {
-                        value: itemData.Email,
-                        text: itemData.Nombre
-                    }));
-                });
-                $('#UsuarioFirmante').formSelect();
-            });
-    });
-
-    //si requiere firma electrónica, mostrar destino
-    $(function () {
-        $('#RequiereFirmaElectronica').change(function () {
-            var isChecked = $(this).is(':checked');
-            $('#divRequiereFirmaUnidad').toggle(isChecked);
-            $('#divRequiereFirmaUsuario').toggle(isChecked);
-        });
-    });
-
 </script>
-

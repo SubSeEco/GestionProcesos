@@ -20,7 +20,6 @@ namespace App.Core.UseCases
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
-
         public UseCaseCore(IGestionProcesos repositoryGestionProcesos, IHSM hsm)
         {
             _repository = repositoryGestionProcesos;
@@ -45,6 +44,15 @@ namespace App.Core.UseCases
             _repository = repository;
             _email = email;
             _sigper = sigper;
+        }
+        public UseCaseCore(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        {
+            _repository = repository;
+            _sigper = sigper;
+            _file = file;
+            _folio = folio;
+            _hsm = hsm;
+            _email = email;
         }
 
         public ResponseMessage DefinicionProcesoInsert(DefinicionProceso obj)
@@ -444,55 +452,99 @@ namespace App.Core.UseCases
                 var obj = _repository.GetById<Proceso>(id);
                 if (response.IsValid)
                 {
-                    //terminar todas las tareas pendientes
-                    foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
-                    {
-                        workflow.FechaTermino = DateTime.Now;
-                        workflow.Terminada = true;
-                        workflow.Anulada = true;
-                    }
-
                     /*Si el proceso corresponde a cometido se deja como falso*/
                     if (obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometido)
                     {
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == obj.ProcesoId).FirstOrDefault();
                         if (cometido != null)
                         {
-                            var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
-                            var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
-
-                            var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
-                            if (destino != null)
+                            /*se valida que la tarea en que se encuentre el cometido permita la anulacion*/
+                            if (cometido.ReqPasajeAereo == true && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 5)
                             {
-                                foreach (var d in destino)
-                                {
-                                    _UseCaseResponseMessage = _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
-                                }
+                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido posee pasaje aereo el cual ya fue tramitado");
                             }
-
-                            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-                            if (cdp != null)
+                            else if (cometido.ReqPasajeAereo == false && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 13)
                             {
-                                foreach (var c in cdp)
+                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada");
+                            }
+                            else
+                            {
+                                var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
+                                var _UseCaseResponseMessage = _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
+
+                                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
+                                if (destino != null)
                                 {
-                                    _UseCaseResponseMessage = _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);
+                                    foreach (var d in destino)
+                                    {
+                                        _UseCaseResponseMessage = _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
+                                    }
                                 }
+
+                                var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
+                                if (cdp != null)
+                                {
+                                    foreach (var c in cdp)
+                                    {
+                                        _UseCaseResponseMessage = _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);
+                                    }
+                                }
+
+
+                                //terminar todas las tareas pendientes
+                                foreach (var _workflow in obj.Workflows.Where(q => !q.Terminada))
+                                {
+                                    _workflow.FechaTermino = DateTime.Now;
+                                    _workflow.Terminada = true;
+                                    _workflow.Anulada = true;
+                                }
+
+                                //terminar proceso
+                                obj.FechaTermino = DateTime.Now;
+                                obj.Terminada = true;
+                                obj.Anulada = true;
+                                obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                                _repository.Save();
+
+                                //notificar a todos los que participaron en el proceso
+                                var workflow = obj.Workflows.FirstOrDefault();
+                                var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                                var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
+                                List<string> emailMsg = new List<string>();
+                                emailMsg.Add(solicitante.Trim()); //solicitante
+                                emailMsg.Add(QuienViaja);//quien viaja
+
+                                _email.NotificacionesCometido(workflow,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnulacionCometido),
+                                "Se ha anulado el cometido N°: " + cometido.CometidoId.ToString(),
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+
                             }
                         }
                     }
+                    else 
+                    {
+                        //terminar todas las tareas pendientes
+                        foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
+                        {
+                            workflow.FechaTermino = DateTime.Now;
+                            workflow.Terminada = true;
+                            workflow.Anulada = true;
+                        }
 
-                    //terminar proceso
-                    obj.FechaTermino = DateTime.Now;
-                    obj.Terminada = true;
-                    obj.Anulada = true;
-                    obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
-                    _repository.Save();
+                        //terminar proceso
+                        obj.FechaTermino = DateTime.Now;
+                        obj.Terminada = true;
+                        obj.Anulada = true;
+                        obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                        _repository.Save();
 
-                    //notificar al dueño del proceso
-                    _email.NotificarAnulacionProceso(obj,
-                    _repository.GetFirst<Configuracion>(q=>q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_anulacion_proceso)),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
-
+                        //notificar al dueño del proceso
+                        _email.NotificarAnulacionProceso(obj,
+                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_anulacion_proceso)),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    }
                 }
             }
             catch (Exception ex)
@@ -616,11 +668,12 @@ namespace App.Core.UseCases
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
-
-                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                 else
-                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+
+                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                    else
+                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
 
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
@@ -846,14 +899,14 @@ namespace App.Core.UseCases
                 workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
                 workflow.Proceso.Terminada = true;
                 workflow.Proceso.FechaTermino = DateTime.Now;
+                workflow.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
 
                 _repository.Save();
 
-                //notificar por email
-                if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                    _email.NotificarNuevoWorkflow(workflow,
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoArchivoTarea),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                //notificar al dueño del proceso
+                _email.NotificarFinProceso(workflow.Proceso,
+                _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
+                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
             }
             catch (Exception ex)
             {
@@ -984,6 +1037,9 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            if (_repository.GetExists<Rubrica>(q=>q.Email == obj.Email && q.IdentificadorFirma == obj.IdentificadorFirma))
+                response.Errors.Add("El email e identificador de firma ya está registrado");
+
             try
             {
                 if (response.IsValid)
@@ -1002,6 +1058,10 @@ namespace App.Core.UseCases
         public ResponseMessage RubricaUpdate(Rubrica obj)
         {
             var response = new ResponseMessage();
+
+            var rubrica = _repository.GetById<Usuario>(obj.RubricaId);
+            if (rubrica == null)
+                response.Errors.Add("Dato no encontrado");
 
             try
             {
@@ -1074,7 +1134,7 @@ namespace App.Core.UseCases
         }
 
         //Sobrecarga de firma multiple con tabla de verificacion
-        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
             var response = new ResponseMessage();
 
@@ -1093,18 +1153,26 @@ namespace App.Core.UseCases
             if (!emailsFirmantes.Any())
                 response.Errors.Add("Debe especificar al menos un firmante");
             if (emailsFirmantes.Any())
-                foreach (var firmante in emailsFirmantes)
-                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
+                foreach (var email in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
+
+            var _personaResponse = _sigper.GetUserByEmail(firmante);
+            if (_personaResponse == null)
+                response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+            if (_personaResponse != null && string.IsNullOrWhiteSpace(_personaResponse.SubSecretaria))
+                response.Errors.Add("No se encontró la subsecretaría del firmante");
+
 
             if (!response.IsValid)
                 return response;
 
             //listado de id de firmantes
             var idsFirma = new List<string>();
-            foreach (var firmante in emailsFirmantes)
+            foreach (var email in emailsFirmantes)
             {
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
                 if (rubrica != null)
                     idsFirma.Add(rubrica.IdentificadorFirma);
             }
@@ -1112,7 +1180,7 @@ namespace App.Core.UseCases
             //si el documento ya tiene folio no solicitarlo nuevamente
             if (string.IsNullOrWhiteSpace(documento.Folio))
             {
-                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma);
+                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma, _personaResponse.SubSecretaria);
                 if (_folioResponse == null)
                     response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -1129,10 +1197,10 @@ namespace App.Core.UseCases
                 return response;
 
             //generar código QR
-            var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+            var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
             //firmar documento
-            var _hsmResponse = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
+            var _hsmResponse = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _qrResponse);
 
             //actualizar documento con contenido firmado
             documento.File = _hsmResponse;

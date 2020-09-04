@@ -9,6 +9,7 @@ using System.Linq;
 using App.Util;
 using System.IO;
 using OfficeOpenXml;
+using System.Collections.Generic;
 
 namespace App.Web.Controllers
 {
@@ -16,6 +17,7 @@ namespace App.Web.Controllers
     {
         public DTOInformeHSA()
         {
+            DTOArchivos = new List<DTOArchivo>();
         }
 
         public int InformHSAId { get; set; }
@@ -46,13 +48,27 @@ namespace App.Web.Controllers
 
         public DateTime FechaBoleta { get; set; }
 
-        public byte[] Boleta { get; set; }
-        public string BoletaString { get; set; }
-        public string BoletaFilename { get; set; }
-        public string BoletaFiletype { get; set; }
+        //public byte[] Boleta { get; set; }
+        //public string BoletaString { get; set; }
+        //public string BoletaFilename { get; set; }
+        //public string BoletaFiletype { get; set; }
+
         public string Email { get; set; }
 
         public string Estado { get; set; }
+
+        public List<DTOArchivo> DTOArchivos { get; set; }
+    }
+
+    public class DTOArchivo
+    {
+        public DTOArchivo()
+        {
+        }
+
+        public string FileString { get; set; }
+        public string Filename { get; set; }
+        public string Filetype { get; set; }
     }
 
     [Audit]
@@ -219,8 +235,8 @@ namespace App.Web.Controllers
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar las funciones" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.Actividades))
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar las actividades" }, JsonRequestBehavior.AllowGet);
-            if (string.IsNullOrEmpty(model.BoletaString) || string.IsNullOrEmpty(model.BoletaFilename))
-                return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe adjuntar el archivo con la boleta de honorarios" }, JsonRequestBehavior.AllowGet);
+            if (!model.DTOArchivos.Any())
+                return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe adjuntar archivos" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.NumeroBoleta))
                 return Json(new { ok = false, id = 0, error = "Problemas al crear proceso: debe indicar el número de boleta" }, JsonRequestBehavior.AllowGet);
             if (string.IsNullOrEmpty(model.Email))
@@ -251,16 +267,18 @@ namespace App.Web.Controllers
                 return Json(new { ok = false, id = 0, error = "Problemas al obtener el workflow inicial" }, JsonRequestBehavior.AllowGet);
 
             //asociar boleta
-            workflow.Documentos.Add(new Documento
+            foreach (var file in model.DTOArchivos)
             {
-                WorkflowId = workflow.WorkflowId,
-                ProcesoId = workflow.ProcesoId,
-                FileName = model.BoletaFilename,
-                Type = model.BoletaFiletype,
-                //File = System.Text.Encoding.Default.GetBytes(model.BoletaString),
-                File = System.Convert.FromBase64String(model.BoletaString),
-                Email = model.Email
-            });
+                workflow.Documentos.Add(new Documento
+                {
+                    WorkflowId = workflow.WorkflowId,
+                    ProcesoId = workflow.ProcesoId,
+                    FileName = file.Filename,
+                    Type = file.Filetype,
+                    File = System.Convert.FromBase64String(file.FileString),
+                    Email = model.Email
+                });
+            }
 
             //crear informe hsa
             var _UseCaseDocumentoResponseMessage = _useCaseInformHSA.Insert(new InformeHSA

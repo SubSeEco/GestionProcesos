@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/App.Web/App_Start/AuditAttribute.cs
+/App.Web/App_Start/AuthenticationService.cs
+/App.Web/App_Start/UserExtended.cs

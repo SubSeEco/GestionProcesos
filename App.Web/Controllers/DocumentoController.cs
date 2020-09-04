@@ -11,8 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Core.UseCases;
-using com.sun.xml.@internal.txw2;
-using org.bouncycastle.cert.dane;
+using App.Infrastructure.Folio;
 
 namespace App.Web.Controllers
 {
@@ -33,13 +32,9 @@ namespace App.Web.Controllers
         public string Folio { get; set; }
     }
 
-
     [Authorize]
     public class DocumentoController : Controller
     {
-        protected readonly IFile _file;
-        protected readonly IHSM _IHSM;
-
         public class DTOFilter
         {
             public DTOFilter()
@@ -73,7 +68,6 @@ namespace App.Web.Controllers
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Archivo")]
             [DataType(DataType.Upload)]
-            //public HttpPostedFileBase File { get; set; }
             public HttpPostedFileBase[] File { get; set; }
 
             public int ProcesoId { get; set; }
@@ -81,12 +75,20 @@ namespace App.Web.Controllers
         }
 
         protected readonly IGestionProcesos _repository;
+        protected readonly ISIGPER _sigper;
+        protected readonly IFile _file;
+        protected readonly IFolio _folio;
+        protected readonly IHSM _hsm;
+        protected readonly IEmail _email;
 
-        public DocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm)
+        public DocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
-            _file = pdf;
-            _IHSM = hsm;
+            _sigper = sigper;
+            _file = file;
+            _folio = folio;
+            _hsm = hsm;
+            _email = email;
         }
 
         public ActionResult Index()
@@ -160,8 +162,6 @@ namespace App.Web.Controllers
                     var target = new MemoryStream();
                     file.InputStream.CopyTo(target);
 
-                    var data = _file.BynaryToText(target.ToArray());
-
                     var doc = new Documento();
                     doc.Fecha = DateTime.Now;
                     doc.Email = email;
@@ -170,11 +170,17 @@ namespace App.Web.Controllers
                     doc.ProcesoId = model.ProcesoId;
                     doc.WorkflowId = model.WorkflowId;
                     doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
+                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                     doc.TipoDocumentoId = 6; /*Por default el tipo de documento es "Otros"*/
+
+                    //obtener metadata del documento
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        doc.Texto = metadata.Text;
+                        doc.Metadata = metadata.Metadata;
+                        doc.Type = metadata.Type;
+                    }
 
                     /*Se define el tipo de documento de acuerdo a la tarea dentro del proceso de cometido*/
                     var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
@@ -185,14 +191,17 @@ namespace App.Web.Controllers
                             if (workflowActual.DefinicionWorkflow.Secuencia == 16)/*analista contabilidad*/
                             {
                                 doc.TipoDocumentoId = 4;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                             else if (workflowActual.DefinicionWorkflow.Secuencia == 18)/*analista tesoreria*/
                             {
                                 doc.TipoDocumentoId = 5;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                             else if (workflowActual.DefinicionWorkflow.Secuencia == 9)/*jefatura ppto*/
                             {
                                 doc.TipoDocumentoId = 7;
+                                doc.TipoDocumentoFirma = "OTRO";
                             }
                         }
                     }
@@ -201,29 +210,6 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-
-                //var file = Request.Files[0];
-                //var target = new MemoryStream();
-                //file.InputStream.CopyTo(target);
-
-                //var data = _file.BynaryToText(target.ToArray());
-
-                //var doc = new Documento();
-                //doc.Fecha = DateTime.Now;
-                //doc.Email = email;
-                //doc.FileName = file.FileName;
-                //doc.File = target.ToArray();
-                //doc.ProcesoId = model.ProcesoId;
-                //doc.WorkflowId = model.WorkflowId;
-                //doc.Signed = false;
-                //doc.Texto = data.Text;
-                //doc.Metadata = data.Metadata;
-                //doc.Type = data.Type;
-                //doc.TipoPrivacidadId = 1;
-
-                //_repository.Create(doc);
-                //_repository.Save();
-
                 TempData["Success"] = "Operación terminada correctamente.";
                 return Redirect(Request.UrlReferrer.PathAndQuery);
             }
@@ -231,53 +217,25 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Sign(int DocumentoId)
-        {
-            var model = _repository.GetById<Documento>(DocumentoId);
-            return View(model);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sign(Documento model, int? DocumentoId)
+        public ActionResult Sign(int id)
         {
-            /*Se debe volver a generar el documento si corresponde a cometido para agregar los campos que se han actualizado*/
-            /*Se verifica que corresponde a un proceso de cometido*/
-            //var doc = _repository.GetById<Documento>(model.DocumentoId);
-            //var DefinicionProceso = _repository.GetAll<Proceso>().Where(p => p.ProcesoId == doc.ProcesoId).FirstOrDefault().DefinicionProcesoId;
-            //if(DefinicionProceso == 10)
-            //{
-            //    var IdCom = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == doc.ProcesoId).FirstOrDefault().CometidoId;
-            //    GeneraDocumento(IdCom);
-            //}
-
-
             var email = UserExtended.Email(User);
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseCore(_repository, _IHSM);
-                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
-
-                if (_UseCaseResponseMessage.Warnings.Count > 0)
-                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
-
-                if (_UseCaseResponseMessage.IsValid)
-                {
+                var _useCaseInteractor = new UseCaseCore(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.Sign(id, new List<string> { email }, email);
+                if (_UseCaseResponseMessage.IsValid) {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
                 }
-
-                foreach (var item in _UseCaseResponseMessage.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item);
+                else {
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
                 }
-                //TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-
-            return View(model);
+            return Redirect(Request.UrlReferrer.ToString());
         }
-
 
         public FileResult Download(int id)
         {
@@ -288,6 +246,7 @@ namespace App.Web.Controllers
             else
                 return File(model.File, model.Type, model.FileName);
         }
+
         public FileResult Show(int id)
         {
             var model = _repository.GetById<Documento>(id);
@@ -323,7 +282,7 @@ namespace App.Web.Controllers
 
             /*se busca si existe una resolucion asociada al proceso*/
             int IdDocto = 0;
-            var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+            var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
             if (resolucion != null)
             {
                 IdDocto = resolucion.FirstOrDefault().DocumentoId;
@@ -344,7 +303,7 @@ namespace App.Web.Controllers
                 doc.Texto = data.Text;
                 doc.Metadata = data.Metadata;
                 doc.Type = data.Type;
-                doc.TipoPrivacidadId = 1;
+                doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                 doc.TipoDocumentoId = 1;
 
                 _repository.Create(doc);
@@ -362,37 +321,8 @@ namespace App.Web.Controllers
             //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
-        //private DTOFileMetadata GetBynary(byte[] pdf)
-        //{
-        //    var data = new App.Model.DTO.DTOFileMetadata();
-        //    var textExtractor = new TextExtractor();
-        //    var extract = textExtractor.Extract(pdf);
-
-        //    data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;
-        //    data.Metadata = extract.Metadata.Any() ? string.Join(";", extract.Metadata) : null;
-        //    data.Type = extract.ContentType;
-
-        //    return data;
-        //}
-
-
-        //public ActionResult GetBarCode(string Pl_UndCod, string GDTipoIngresoId)
-        //{
-        //    byte[] imagebyte;
-
-        //    var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-        //    var image = barcode39.Draw(string.Concat(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,Pl_UndCod, GDTipoIngresoId), 80);
-
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-        //        imagebyte = ms.ToArray();
-        //    }
-
-        //    return File(imagebyte, "image/png"); 
-        //}
-
-
+        //metodo para verificación de documento
+        //el documento debe ser pdf y publico
         [AllowAnonymous]
         public JsonResult GetById(string id)
         {
@@ -414,9 +344,8 @@ namespace App.Web.Controllers
             if (documento != null && !documento.FileName.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
 
-            //validacion documento firmado...
-            //if (documento != null && !documento.firma.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
-            //    return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
+            if (documento != null && documento.TipoPrivacidadId == (int)App.Util.Enum.Privacidad.Privado)
+                return Json(new DTODocumento { OK = false, Error = "Error: documento no es público" }, JsonRequestBehavior.AllowGet);
 
             var model = new DTODocumento() {
                 OK = true,

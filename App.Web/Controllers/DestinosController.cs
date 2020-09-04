@@ -132,18 +132,18 @@ namespace App.Web.Controllers
 
                 {
                     case "A":
-                        total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(viatico.Rango1.Value);
-                        total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(viatico.Rango1.Value) * porcentaje60;
-                        total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(viatico.Rango1.Value) * porcentaje40;
-                        total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(viatico.Rango1.Value) * porcentaje50;
+                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango1.Value),0);
+                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje60,0);
+                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje40,0);
+                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje50,0);
                         total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                         break;
                     case "B":
                     case "C":
-                        total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(viatico.Rango2.Value);
-                        total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(viatico.Rango2.Value) * porcentaje60;
-                        total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(viatico.Rango2.Value) * porcentaje40;
-                        total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(viatico.Rango2.Value) * porcentaje50;
+                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango2.Value),0);
+                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje60,0);
+                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje40,0);
+                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje50,0);
                         total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                         break;
                     default:
@@ -151,30 +151,30 @@ namespace App.Web.Controllers
                         var numeroRangoEus = Convert.ToInt32(grado);
                         if (numeroRangoEus >= 2 && numeroRangoEus <= 4) //(grado == "10") Vna_EstamentoRango3
                         {                            
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(viatico.Rango3.Value);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(viatico.Rango3.Value) * porcentaje60;
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(viatico.Rango3.Value) * porcentaje40;
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(viatico.Rango3.Value) * porcentaje50;
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango3.Value),0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje60,0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje40,0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje50,0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }
                         //tecnicos
                         if (numeroRangoEus >= 5 && numeroRangoEus <= 10) // --> Vna_EstamentoRango4
                         {
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(viatico.Rango4.Value);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(viatico.Rango4.Value) * porcentaje60;
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(viatico.Rango4.Value) * porcentaje40;
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(viatico.Rango4.Value)* porcentaje50;
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango4.Value),0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje60,0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje40,0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango4.Value)* porcentaje50,0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }
                         //administrativos
                         if (numeroRangoEus >= 11 && numeroRangoEus <= 31) // Vna_EstamentoRango5,Vna_EstamentoRango6
                         {
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(viatico.Rango5.Value);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(viatico.Rango5.Value) * porcentaje60;
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(viatico.Rango5.Value) * porcentaje40;
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(viatico.Rango5.Value) * porcentaje50;
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango5.Value),0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje60,0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje40,0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje50,0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }

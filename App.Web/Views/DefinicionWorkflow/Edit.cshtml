@@ -156,6 +156,12 @@
                             </div>
                             <div class="input-field col s12 m10 l10">
                                 <label>
+                                    @Html.CheckBoxFor(m => m.PermitirAdjuntarDocumentosConFirmaElectronica)
+                                    <span>@Html.LabelFor(m => Model.PermitirAdjuntarDocumentosConFirmaElectronica)</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
                                     @Html.CheckBoxFor(m => m.RequireDocumentacion)
                                     <span>@Html.LabelFor(m => Model.RequireDocumentacion)</span>
                                 </label>
@@ -178,6 +184,13 @@
                                     <span>@Html.LabelFor(m => Model.PermitirReenvioGrupoEspecial)</span>
                                 </label>
                             </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.PermitirFinalizarProceso)
+                                    <span>@Html.LabelFor(m => Model.PermitirFinalizarProceso)</span>
+                                </label>
+                            </div>
+
                             <div class="input-field col s12 m10 l10">
                                 <label>
                                     @Html.CheckBoxFor(m => m.PermitirTerminar)
