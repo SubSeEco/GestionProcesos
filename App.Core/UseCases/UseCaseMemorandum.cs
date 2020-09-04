@@ -138,7 +138,7 @@ namespace App.Core.UseCases
             {
                 try
                 {
-                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), "8" /*memo.TipoDocumentoCodigo*/);
+                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), "8", null /*memo.TipoDocumentoCodigo*/);
                     if (_folioResponse == null)
                         response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -1518,7 +1518,7 @@ namespace App.Core.UseCases
                             //    emailMsg.Add(memo.EmailSecre.Trim()); // interesado
 
                             _email.NotificacionesMemorandum(workflow,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaMemoFirmado), "Envio Memo", emailMsg, memo.MemorandumId, doc);
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.Plantilla_Memo_Firmado), "Envio Memo", emailMsg, memo.MemorandumId, doc);
 
                         }
                     }
