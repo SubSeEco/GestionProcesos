@@ -337,7 +337,7 @@
 
                             if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre != "24")
                             {
-                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                 if (Model.SolicitaViatico == true)
                                 {
                                     @Html.Raw(", al Subtítulo")
@@ -377,7 +377,7 @@
                             }
                             if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre == "24")
                             {
-                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                 @Html.Raw(", al Subtítulo ")
                                 @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                                 @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
@@ -408,7 +408,7 @@
                 {
                     <p align="justify" style="margin-right:30px">
                         3.<strong>IMPÚTESE</strong>,
-                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                         @Html.Raw(",y al Subtítulo 22 ")
                         @Html.Raw(" por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
                         @Html.DisplayFor(m => Model.Anno)

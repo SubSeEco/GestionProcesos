@@ -394,6 +394,13 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult SignOther(int id)
+        {
+            var model = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == id);
+            return View(model);
+        }
+        
+
         public ActionResult Create(int? WorkFlowId, int? ProcesoId)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
@@ -1327,7 +1334,7 @@ namespace App.Web.Controllers
             model.FechaResolucion = DateTime.Now;
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
-            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
+            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().Total.ToString());            
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();

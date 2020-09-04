@@ -1,8 +1,9 @@
-﻿@model App.Model.Core.Workflow
+﻿@model App.Model.Cometido.Cometido
 @{
     Layout = null;
 }
 @Html.Partial("_Message")
+
 
 <div class="card">
     <div class="card-content ">
@@ -11,7 +12,7 @@
         @foreach (var item in Model.Proceso.Documentos)
         {
 
-            if (Model.DefinicionWorkflow.Secuencia == 9)
+            if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
             {
                 if (item.TipoDocumentoId == 7) //(item.TipoDocumentoId == 2)
                 {
@@ -62,7 +63,7 @@
                     </div>
                 }
             }
-            else if (Model.DefinicionWorkflow.Secuencia == 20)
+            else if (Model.Workflow.DefinicionWorkflow.Secuencia == 20)
             {
                 if (item.TipoDocumentoId == 5 || item.TipoDocumentoId == 4)
                 {
@@ -91,8 +92,8 @@
 
                         <!-- Button trigger modal -->
                         @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@String.Concat("#modal", item.DocumentoId)" >
-                            Launch demo modal
-                        </button>*@
+                                Launch demo modal
+                            </button>*@
 
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                     }
@@ -106,24 +107,24 @@
                     /*MODAL*/
                     <!-- Modal -->
                     @*<div class="modal fade" id="@String.Concat("#modal", item.DocumentoId)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>*@
+                        </div>*@
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
@@ -143,7 +144,7 @@
                     </div>
                 }
             }
-            else if (Model.DefinicionWorkflow.Secuencia == 17)
+            else if (Model.Workflow.DefinicionWorkflow.Secuencia == 17)
             {
                 if (item.TipoDocumentoId == 4)
                 {
@@ -168,20 +169,20 @@
                     if (!item.Signed)
                     {
                         <div class="section"></div>
-                        <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
+                        <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar docto conta @item.DocumentoId  </a>
                     }
                     else
                     {
                         <i class="material-icons large secondary-content green-text">check</i>
                     }
                     <div class="section"></div>
-                    <div class="divider"></div>            
+                    <div class="divider"></div>
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                         <div class="modal-content">
-                            <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))                            
+                            <h4>Confirma Operacion de Firma --> @item.DocumentoId</h4>
+                            @using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => item.DocumentoId)
@@ -195,7 +196,7 @@
                     </div>
                 }
             }
-            else if (Model.DefinicionWorkflow.Secuencia == 19)
+            else if (Model.Workflow.DefinicionWorkflow.Secuencia == 19)
             {
                 if (item.TipoDocumentoId == 5)
                 {
@@ -219,13 +220,6 @@
                     if (!item.Signed)
                     {
                         <div class="section"></div>
-                        @*<a class="waves-effect waves-light btn modal-trigger blue" href="@String.Concat("#modal", item.DocumentoId)">Firmar documento</a>*@
-
-                        <!-- Button trigger modal -->
-                        @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@String.Concat("#modal", item.DocumentoId)" >
-                            Launch demo modal
-                        </button>*@
-
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                     }
                     else
@@ -234,28 +228,6 @@
                     }
                     <div class="section"></div>
                     <div class="divider"></div>
-
-                    /*MODAL*/
-                    <!-- Modal -->
-                    @*<div class="modal fade" id="@String.Concat("#modal", item.DocumentoId)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
@@ -275,7 +247,7 @@
                     </div>
                 }
             }
-            else if (Model.DefinicionWorkflow.Secuencia == 8 || Model.DefinicionWorkflow.Secuencia == 13 || Model.DefinicionWorkflow.Secuencia == 14 || Model.DefinicionWorkflow.Secuencia == 15)
+            else if (Model.Workflow.DefinicionWorkflow.Secuencia == 8 || Model.Workflow.DefinicionWorkflow.Secuencia == 13 || Model.Workflow.DefinicionWorkflow.Secuencia == 14 || Model.Workflow.DefinicionWorkflow.Secuencia == 15)
             {
                 if (item.TipoDocumentoId == 1)
                 {
@@ -299,13 +271,6 @@
                     if (!item.Signed)
                     {
                         <div class="section"></div>
-                        @*<a class="waves-effect waves-light btn modal-trigger blue" href="@String.Concat("#modal", item.DocumentoId)">Firmar documento</a>*@
-
-                        <!-- Button trigger modal -->
-                        @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@String.Concat("#modal", item.DocumentoId)" >
-                            Launch demo modal
-                        </button>*@
-
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                     }
                     else
@@ -314,28 +279,6 @@
                     }
                     <div class="section"></div>
                     <div class="divider"></div>
-
-                    /*MODAL*/
-                    <!-- Modal -->
-                    @*<div class="modal fade" id="@String.Concat("#modal", item.DocumentoId)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
@@ -359,7 +302,7 @@
         }
     </div>
 
-    @if (Model.DefinicionWorkflow.Secuencia == 13 || Model.DefinicionWorkflow.Secuencia == 14 || Model.DefinicionWorkflow.Secuencia == 15)
+    @if (Model.Workflow.DefinicionWorkflow.Secuencia == 13 || Model.Workflow.DefinicionWorkflow.Secuencia == 14 || Model.Workflow.DefinicionWorkflow.Secuencia == 15)
     {
         <div class="section"></div>
         <p>
@@ -369,15 +312,3 @@
 
 
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.modal').modal();
-        $('select').formSelect();
-    });
-</script>
-
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

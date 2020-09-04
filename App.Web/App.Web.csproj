@@ -713,6 +713,7 @@
     <Content Include="Views\GD\View.cshtml" />
     <Content Include="Views\GD\FEAUpload.cshtml" />
     <Content Include="Views\GD\FEADocumentos.cshtml" />
+    <Content Include="Views\Cometido\SignOther.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
