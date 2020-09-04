@@ -397,6 +397,7 @@
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProgramacionHorasExtraordinariasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
@@ -679,6 +680,8 @@
     <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -707,6 +710,7 @@
       <Name>App.Util</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

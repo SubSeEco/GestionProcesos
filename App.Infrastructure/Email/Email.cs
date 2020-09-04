@@ -18,8 +18,8 @@ namespace App.Infrastructure.Email
                 if (message != null)
                 {
                     //temporalmente para efectos de monitoreo de envío de correos
-                    message.Bcc.Add("vsilva@economia.cl");
-                    smtpClient.Send(message);
+                    //message.Bcc.Add("vsilva@economia.cl");
+                    //smtpClient.Send(message);
                 }
             }
             catch (Exception)

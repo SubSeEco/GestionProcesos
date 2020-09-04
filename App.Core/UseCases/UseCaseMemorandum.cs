@@ -6,116 +6,34 @@ using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
+using App.Util;
+//using App.Infrastructure.Extensions;
 
 namespace App.Core.UseCases
 {
     public class UseCaseMemorandum
     {
         protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
         protected readonly IHSM _hsm;
         protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
+        protected readonly IEmail _email;
         protected readonly IFolio _folio;
+        protected readonly IFile _file;
 
-        public UseCaseMemorandum(IGestionProcesos repositoryGestionProcesos)
+        public UseCaseMemorandum(IGestionProcesos repository)
         {
-            _repository = repositoryGestionProcesos;
+            _repository = repository;
         }
-        public UseCaseMemorandum(IGestionProcesos repository, ISIGPER sigper)
+        public UseCaseMemorandum(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
-        }
-        public UseCaseMemorandum(IGestionProcesos repositoryGestionProcesos, IHSM hsm)
-        {
-            _repository = repositoryGestionProcesos;
+            _file = file;
+            _folio = folio;
             _hsm = hsm;
-        }
-        public UseCaseMemorandum(IGestionProcesos repository, IEmail email, ISIGPER sigper)
-        {
-            _repository = repository;
             _email = email;
-            _sigper = sigper;
         }
 
-        //public ResponseMessage DocumentoSign(Documento obj, string email)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var documento = _repository.GetById<Documento>(obj.DocumentoId);
-        //        if (documento == null)
-        //            response.Errors.Add("Documento no encontrado");
-
-        //        if (obj.Signed == true)
-        //            response.Errors.Add("Documento ya se encuentra firmado");
-
-        //        var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
-        //        //var rubrica = _repository.Get<Rubrica>(q => q.Email == email && q.HabilitadoFirma == true);
-        //        //string IdentificadorFirma = string.Empty;
-        //        //bool habilitado = false;
-        //        //foreach (var fir in rubrica)
-        //        //{
-        //        //if (fir == null)
-        //        //    response.Errors.Add("Usuario sin información de firma electrónica");
-        //        //if (fir != null && string.IsNullOrWhiteSpace(fir.IdentificadorFirma))
-        //        //    response.Errors.Add("Usuario no tiene identificador de firma electrónica");
-
-        //        //if (documento.Proceso.DefinicionProcesoId == int.Parse(fir.IdProceso))
-        //        //{
-        //        //habilitado = true;
-        //        //IdentificadorFirma = fir.IdentificadorFirma;
-        //        //}
-
-        //        //if (fir.HabilitadoFirma != true)
-        //        //    response.Errors.Add("Usuario no se encuentra habilitado para firmar");
-        //        //}
-
-        //        if (rubrica == null)
-        //            response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
-
-        //        var HSMUser = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMUser);
-        //        if (HSMUser == null)
-        //            response.Errors.Add("No se encontró la configuración de usuario de HSM.");
-        //        if (HSMUser != null && string.IsNullOrWhiteSpace(HSMUser.Valor))
-        //            response.Errors.Add("La configuración de usuario de HSM es inválida.");
-
-        //        var HSMPassword = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMPassword);
-        //        if (HSMPassword == null)
-        //            response.Errors.Add("No se encontró la configuración de usuario de HSM.");
-        //        if (HSMPassword != null && string.IsNullOrWhiteSpace(HSMPassword.Valor))
-        //            response.Errors.Add("La configuración de password de HSM es inválida.");
-
-        //        if (response.IsValid)
-        //        {
-        //            //documento.File = _hsm.Sign(documento, rubrica, HSMUser, HSMPassword);
-        //            //documento.File = _hsm.Sign(documento);
-        //            //documento.Signed = true;
-
-        //            //_repository.Update(documento);
-        //            //_repository.Save();
-
-        //            var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
-        //            documento.File = doc;
-        //            documento.Signed = true;
-
-        //            _repository.Update(documento);
-        //            _repository.Save();
-
-        //            /*se notifica por correo la firma de la resolucion*/
-        //            //_email.
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-     
         public ResponseMessage MemorandumInsert(Memorandum obj)
         {
             var response = new ResponseMessage();
@@ -178,1359 +96,121 @@ namespace App.Core.UseCases
             return response;
         }
 
-       
-        //public ResponseMessage GeneracionCDPInsert(GeneracionCDP obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage GeneracionCDPUpdate(GeneracionCDP obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage GeneracionCDPDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<GeneracionCDP>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage GeneracionCDPAnular(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<GeneracionCDP>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-        //        else
-        //            obj.GeneracionCDPActivo = false;
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParrafosInsert(Parrafos obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParrafosUpdate(Parrafos obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParrafosDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<Parrafos>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage PasajeInsert(Pasaje obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            if (obj.NombreId.HasValue)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.Nombre))
-        //                {
-        //                    var nombre = _sigper.GetUserByRut(obj.NombreId.Value).Funcionario.PeDatPerChq;
-        //                    obj.Nombre = nombre.Trim();
-        //                }
-        //            }
-
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //            response.EntityId = obj.PasajeId;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage PasajeUpdate(Pasaje obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        /*se buscan los destinos asociados al pasaje*/
-        //        var ListaDestinos = _repository.Get<DestinosPasajes>(c => c.PasajeId == obj.PasajeId).ToList();
-        //        /*se valida que pasaje tenga un destino asociado*/
-        //        if (ListaDestinos.Count == 0)
-        //        {
-        //            response.Errors.Add("Se debe agregar por lo menos un destino al pasaje");
-        //        }
-        //        //else
-        //        //{
-        //        //    ///*validacion de fechas */
-        //        //    //if (ListaDestinos.LastOrDefault().FechaVuelta < ListaDestinos.FirstOrDefault().FechaIda)
-        //        //    //{
-        //        //    //    response.Errors.Add("La fecha de termino no pueder ser mayor a la fecha de inicio");
-        //        //    //}
-        //        //}
-
-        //        //if (obj.TipoDestino == true)
-        //        //   {
-        //        //       if (obj.IdComunaOrigen != null)
-        //        //       {
-        //        //           if(string.IsNullOrEmpty(obj.OrigenComunaDescripcion))
-        //        //           {
-        //        //               var comuna = _sigper.GetDGCOMUNAs().FirstOrDefault(c => c.Pl_CodCom == obj.IdComunaOrigen.ToString()).Pl_DesCom.Trim();
-        //        //               obj.OrigenComunaDescripcion = comuna;
-        //        //           }                        
-        //        //       }
-        //        //       else
-        //        //       {
-        //        //           response.Errors.Add("Se debe señalar la comuna de origen");
-        //        //       }
-
-        //        //       if (obj.IdRegionOrigen != null)
-        //        //       {
-        //        //           if(string.IsNullOrEmpty(obj.OrigenRegionDescripcion))
-        //        //           {
-        //        //               var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegionOrigen.ToString()).Pl_DesReg.Trim();
-        //        //               obj.OrigenRegionDescripcion = region;
-        //        //           }                        
-        //        //       }
-        //        //       else
-        //        //       {
-        //        //           response.Errors.Add("Se debe señalar la region de origen");
-        //        //       }
-        //        //   }
-        //        //   else
-        //        //   {
-        //        //       if (obj.IdCiudadOrigen != null)
-        //        //       {
-        //        //           if (string.IsNullOrEmpty(obj.OrigenCiudadDescripcion))
-        //        //           {
-        //        //               var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudadOrigen)).CiudadNombre.Trim();
-        //        //               obj.OrigenCiudadDescripcion = ciudad;
-        //        //           }                        
-        //        //       }
-        //        //       else
-        //        //       {
-        //        //           response.Errors.Add("Se debe señalar la ciudad de origen");
-        //        //       }
-
-        //        //       if (obj.IdPaisOrigen != null)
-        //        //       {
-        //        //           if(string.IsNullOrEmpty(obj.OrigenPaisDescripcion))
-        //        //           {
-        //        //               var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPaisOrigen)).PaisNombre.Trim();
-        //        //               obj.OrigenPaisDescripcion = pais;
-        //        //           }                        
-        //        //       }
-        //        //       else
-        //        //       {
-        //        //           response.Errors.Add("Se debe señalar el pais de origen");
-        //        //       }
-        //        //   }
-
-        //        if (response.IsValid)
-        //        {
-        //            if (obj.NombreId.HasValue)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.Nombre))
-        //                {
-        //                    //var nombre = _sigper.GetUserByRut(obj.NombreId.Value).Funcionario.PeDatPerChq;
-        //                    //obj.Nombre = nombre.Trim();
-        //                }
-        //                obj.PasajeOk = true;
-        //            }
-
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage PasajeDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<Pasaje>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage ComisionesInsert(Comisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        /*validaciones*/
-        //        if (obj.Vehiculo == true && obj.TipoVehiculoId == 0)
-        //        {
-        //            response.Errors.Add("Se ha selecionado la opcion de vehiculo, por lo tanto debe señalar el tipo de vehiculo");
-        //        }
-
-        //        if (_repository.Get<DestinosComision>().Count() > 0)
-        //        {
-        //            /*validacion de cantidad de dias al 100% dentro del mes*/
-        //            if (_repository.Get<DestinosComision>(c => c.Comisiones.NombreId == obj.NombreId && c.Comisiones.FechaSolicitud.Month == DateTime.Now.Month).Sum(d => d.Dias100) > 10)
-        //            {
-        //                response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el mes señalado");
-        //            }
-        //            /*validacion de cantidad de dias al 100% dentro del año*/
-        //            if (_repository.Get<DestinosComision>(c => c.Comisiones.NombreId == obj.NombreId && c.Comisiones.FechaSolicitud.Year == DateTime.Now.Year).Sum(d => d.Dias100) > 90)
-        //            {
-        //                response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el año señalado");
-        //            }
-        //        }
-
-        //        if (string.IsNullOrEmpty(obj.ComisionDescripcion))
-        //        {
-        //            response.Errors.Add("Debe ingresar la descripción de la comision.");
-        //        }
-
-        //        if (obj.Vehiculo == true && obj.TipoVehiculoId == 0)
-        //        {
-        //            response.Errors.Add("Se ha selecionado la opcion de vehiculo, por lo tanto debe señalar el tipo de vehiculo");
-        //        }
-
-        //        if (string.IsNullOrEmpty(obj.ConglomeradoDescripcion))
-        //            obj.IdConglomerado = Convert.ToInt32(obj.ConglomeradoDescripcion);
-
-        //        if (!string.IsNullOrEmpty(obj.ProgramaDescripcion))
-        //        {
-        //            var pro = _sigper.GetREPYTs().Where(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim()).FirstOrDefault().RePytCod;
-        //            obj.IdPrograma = int.Parse(pro.ToString());
-        //        }
-
-        //        if (obj.IdGrado == "0" && !string.IsNullOrEmpty(obj.GradoDescripcion))
-        //        {
-        //            obj.IdGrado = obj.GradoDescripcion;
-        //        }
-
-
-        //        if (obj.Vehiculo == true)
-        //        {
-        //            if (obj.TipoVehiculoId.HasValue)
-        //            {
-        //                var vehiculo = _repository.Get<SIGPERTipoVehiculo>().Where(q => q.SIGPERTipoVehiculoId == obj.TipoVehiculoId).FirstOrDefault().Vehiculo.Trim();
-        //                if (!string.IsNullOrEmpty(vehiculo))
-        //                    obj.TipoVehiculoDescripcion = vehiculo.Trim();
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el tipo de vehiculo.");
-        //            }
-
-        //            if (string.IsNullOrEmpty(obj.PlacaVehiculo))
-        //                response.Errors.Add("Se debe señalar la placa patente del vehiculo.");
-        //        }
-
-
-        //        if (response.IsValid)
-        //        {
-        //            if (obj.NombreId.HasValue)
-        //            {
-        //                var nombre = _sigper.GetUserByRut(obj.NombreId.Value).Funcionario.PeDatPerChq;
-        //                obj.Nombre = nombre.Trim();
-        //                obj.FechaSolicitud = DateTime.Now;
-        //            }
-
-        //            obj.ComisionesOk = false;
-
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ComisionesUpdate(Comisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (_repository.Get<DestinosComision>(c => c.Comisiones.NombreId == obj.NombreId && c.Comisiones.FechaSolicitud.Month == DateTime.Now.Month).Sum(d => d.Dias100) > 10)
-        //        {
-        //            response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el mes señalado");
-        //        }
-
-        //        if (_repository.Get<DestinosComision>(c => c.Comisiones.NombreId == obj.NombreId && c.Comisiones.FechaSolicitud.Year == DateTime.Now.Year).Sum(d => d.Dias100) > 90)
-        //        {
-        //            response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el año señalado");
-        //        }
-
-        //        /*se buscan los destinos asociados al cometido*/
-        //        var destinosCometido = _repository.Get<DestinosComision>(c => c.ComisionesId == obj.ComisionesId).ToList();
-        //        /*se valida que cometido tenga un destino asociado*/
-        //        if (destinosCometido.Count == 0)
-        //        {
-        //            response.Errors.Add("Se debe agregar por lo menos un destino al cometido");
-        //        }
-        //        else
-        //        {
-        //            /*validacion de fechas */
-        //            if (destinosCometido.LastOrDefault().FechaHasta < destinosCometido.FirstOrDefault().FechaInicio)
-        //            {
-        //                response.Errors.Add("La fecha de termino no pueder ser mayor a la fecha de inicio");
-        //            }
-        //            /*se valida que si existe mas de un destino solo se asigna un viatico*/
-        //            if (destinosCometido.Count > 1)
-        //            {
-        //                //response.Errors.Add("Usted ha ingresado más de un destino para el cometido, pero solo se le asignara un viático");
-        //                response.Warnings.Add("Usted ha ingresado más de un destino para la comision, pero solo se le asignara un viático");
-        //            }
-        //            /*valida ingreso de solicitud*/
-        //            //if ((int)Util.Enum.Cometidos.DiasAnticipacionIngreso > (ListaDestinos.FirstOrDefault().FechaInicio.Date - DateTime.Now.Date).Days)
-        //            //{
-        //            //    response.Errors.Add("La solicitud de cometido se debe realizar con una anticipacion de:" + (int)Util.Enum.Cometidos.DiasAnticipacionIngreso + " " + "dias.");                        
-        //            //}
-
-        //            /*se valida que los rangos de fecha no se topen con otros destrinos*/
-        //            //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
-        //            foreach (var otrosDestinos in _repository.Get<DestinosComision>())
-        //            {
-        //                if (otrosDestinos.FechaInicio == destinosCometido.FirstOrDefault().FechaInicio && otrosDestinos.ComisionesId != destinosCometido.FirstOrDefault().ComisionesId)
-        //                {
-        //                    //response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
-        //                    response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos de comisión {0}, inicio {1}, término {2}", otrosDestinos.ComisionesId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-        //                }
-        //            }
-        //        }
-
-        //        if (string.IsNullOrEmpty(obj.ConglomeradoDescripcion))
-        //            obj.IdConglomerado = Convert.ToInt32(obj.ConglomeradoDescripcion);
-
-        //        if (!string.IsNullOrEmpty(obj.ProgramaDescripcion) && obj.IdPrograma == null)
-        //        {
-        //            var prog = _sigper.GetREPYTs().Where(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim()).FirstOrDefault();
-        //            if (prog != null)
-        //                obj.IdPrograma = int.Parse(prog.RePytCod.ToString());
-        //        }
-
-        //        if (obj.Vehiculo == true)
-        //        {
-        //            if (obj.TipoVehiculoId.HasValue)
-        //            {
-        //                var vehiculo = _repository.Get<SIGPERTipoVehiculo>().Where(q => q.SIGPERTipoVehiculoId == obj.TipoVehiculoId).FirstOrDefault().Vehiculo.Trim();
-        //                if (string.IsNullOrEmpty(vehiculo))
-        //                    obj.TipoVehiculoDescripcion = vehiculo.Trim();
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el tipo de vehiculo.");
-        //            }
-        //        }
-
-        //        if (obj.IdGrado == "0" && !string.IsNullOrEmpty(obj.GradoDescripcion))
-        //        {
-        //            obj.IdGrado = obj.GradoDescripcion;
-        //        }
-
-
-        //        if (response.IsValid)
-        //        {
-        //            obj.ComisionesOk = true;
-
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ComisionesDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<Comisiones>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage DestinosComisionInsert(DestinosComision obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var comision = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault();
-        //        //reglas de negocio
-        //        /*validacion de fechas*/
-        //        if (obj.FechaInicio == null)
-        //        {
-        //            response.Errors.Add("La fecha de inicio no es válida.");
-        //        }
-        //        if (obj.FechaHasta == null)
-        //        {
-        //            response.Errors.Add("La fecha de término no es válida.");
-        //        }
-
-        //        /*se valida que la fecha de inicio no se superior que la de termino*/
-        //        if (obj.FechaHasta < obj.FechaInicio)
-        //        {
-        //            response.Errors.Add("La fecha de inicio no puede ser superior o igual a la de término");
-        //        }
-
-        //        if (obj.IdPais != null)
-        //            obj.PaisDescripcion = _repository.Get<Pais>().Where(c => c.PaisId.ToString() == obj.IdPais).FirstOrDefault().PaisNombre;
-
-        //        if (obj.IdCiudad != null)
-        //            obj.CiudadDescripcion = _repository.Get<Ciudad>().Where(c => c.CiudadId.ToString() == obj.IdCiudad).FirstOrDefault().CiudadNombre;
-
-        //        /*Se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
-        //        if (obj.Dias100 > 0)
-        //        {
-        //            int Totaldias100Mes = 0;
-        //            int Totaldias100Ano = 0;
-        //            var mes = DateTime.Now.Month;
-        //            var year = DateTime.Now.Year;
-        //            foreach (var destinos in _repository.Get<DestinosComision>(d => d.ComisionesId != null))
-        //            {
-        //                var solicitanteDestino = _repository.Get<Comisiones>(c => c.ComisionesId == destinos.ComisionesId).FirstOrDefault().NombreId;
-        //                var solicitante = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault().NombreId;
-
-        //                if (solicitanteDestino == solicitante)
-        //                {
-        //                    if (destinos.FechaInicio.Month == mes && destinos.Dias100 != 0 && destinos.Dias100 != null)
-        //                    {
-        //                        Totaldias100Mes += destinos.Dias100.Value;
-        //                    }
-        //                    if (destinos.FechaInicio.Year == year && destinos.Dias100 != 0 && destinos.Dias100 != null)
-        //                    {
-        //                        Totaldias100Ano += destinos.Dias100.Value;
-        //                    }
-        //                }
-        //            }
-        //            if (Totaldias100Mes + obj.Dias100 > 10)
-        //            {
-        //                response.Errors.Add("Se ha excedido en: " + (Totaldias100Mes + obj.Dias100.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes");
-        //            }
-        //            if (Totaldias100Ano + obj.Dias100 > 90)
-        //            {
-        //                response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
-        //            }
-        //        }
-
-        //        /*se valida que los rangos de fecha no se topen con otros destinos*/
-        //        //var ListaDestinos = _repository.Get<Destinos>(c => c.CometidoId == obj.CometidoId).ToList();
-        //        foreach (var destinos in _repository.Get<DestinosComision>(d => d.ComisionesId != null))
-        //        {
-        //            var solicitanteDestino = _repository.Get<Comisiones>(c => c.ComisionesId == destinos.ComisionesId).FirstOrDefault().NombreId;
-        //            var solicitante = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault().NombreId;
-
-        //            if (solicitanteDestino == solicitante)
-        //            {
-        //                if (destinos.FechaInicio.Date == obj.FechaInicio.Date)
-        //                {
-        //                    response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
-        //                }
-        //            }
-        //        }
-
-        //        if (comision.SolicitaViatico == false)
-        //        {
-        //            response.Warnings.Add("No se ha solicitado viatico para la comision");
-        //            obj.Dias100 = 0;
-        //            obj.Dias60 = 0;
-        //            obj.Dias40 = 0;
-        //            obj.Dias100Aprobados = 0;
-        //            obj.Dias60Aprobados = 0;
-        //            obj.Dias40Aprobados = 0;
-        //            obj.Dias100Monto = 0;
-        //            obj.Dias60Monto = 0;
-        //            obj.Dias40Monto = 0;
-        //            obj.TotalViatico = 0;
-        //            obj.Total = 0;
-        //        }
-        //        if (obj.IdCiudad != null)
-        //        {
-        //            var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudad)).CiudadNombre.Trim();
-        //            obj.CiudadDescripcion = ciudad;
-        //        }
-        //        else
-        //        {
-        //            response.Errors.Add("Se debe señalar la ciudad de destino");
-        //        }
-
-        //        if (obj.IdPais != null)
-        //        {
-        //            var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPais)).PaisNombre.Trim();
-        //            obj.PaisDescripcion = pais;
-        //        }
-        //        else
-        //        {
-        //            response.Errors.Add("Se debe señalar el pais de destino");
-        //        }
-        //        if (obj.Dias00 == null)
-        //            obj.Dias00 = 0;
-        //        if (obj.Dias50 == null)
-        //            obj.Dias50 = 0;
-
-        //        /*Se dejan los mismo valores de los solicitados como aprobados en la creacion del destino*/
-        //        obj.Dias100Aprobados = obj.Dias100;
-        //        obj.Dias60Aprobados = obj.Dias60;
-        //        obj.Dias40Aprobados = obj.Dias40;
-        //        obj.Dias50Aprobados = obj.Dias50;
-        //        obj.Dias00Aprobados = obj.Dias00;
-
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage DestinosComisionUpdate(DestinosComision obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        //reglas de negocio
-        //        /*validacion de fechas*/
-        //        if (obj.FechaInicio == null)
-        //        {
-        //            response.Errors.Add("La fecha de inicio no es válida.");
-        //        }
-        //        if (obj.FechaHasta == null)
-        //        {
-        //            response.Errors.Add("La fecha de término no es válida.");
-        //        }
-
-        //        //if (obj.IdPais != null)
-        //        //    obj.PaisDescripcion = _repository.Get<Pais>().Where(c => c.PaisId.ToString() == obj.IdPais).FirstOrDefault().PaisNombre;
-
-        //        //if (obj.IdCiudad != null)
-        //        //    obj.CiudadDescripcion = _repository.Get<Ciudad>().Where(c => c.CiudadId.ToString() == obj.IdCiudad).FirstOrDefault().CiudadNombre;
-
-        //        /*se valida que la cantidad de dias sea igual que lo solicitado por cada destino ingresado*/
-        //        var dias = (obj.FechaHasta - obj.FechaInicio).Days + 1;
-        //        var cant = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
-        //        if (dias != cant)
-        //        {
-        //            response.Errors.Add("la cantidad de dias no coincide con los viaticos solicitados");
-        //        }
-        //        /*se valida que la fecha de inicio no se superior que la de termino*/
-        //        if (obj.FechaHasta < obj.FechaInicio)
-        //        {
-        //            response.Errors.Add("La fecha de inicio no puede ser superior o igual a la de término");
-        //        }
-
-        //        var comision = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault();
-        //        if (comision.SolicitaViatico == false)
-        //        {
-        //            response.Warnings.Add("Este cometido tendrá un viático de $0");
-        //            obj.Dias100 = 0;
-        //            obj.Dias60 = 0;
-        //            obj.Dias40 = 0;
-        //            obj.Dias100Aprobados = 0;
-        //            obj.Dias60Aprobados = 0;
-        //            obj.Dias40Aprobados = 0;
-        //            obj.Dias100Monto = 0;
-        //            obj.Dias60Monto = 0;
-        //            obj.Dias40Monto = 0;
-        //            obj.TotalViatico = 0;
-        //            obj.Total = 0;
-        //        }
-
-        //        if (obj.IdCiudad != null)
-        //        {
-        //            var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudad)).CiudadNombre.Trim();
-        //            obj.CiudadDescripcion = ciudad;
-        //        }
-        //        else
-        //        {
-        //            response.Errors.Add("Se debe señalar la ciudad de destino");
-        //        }
-
-        //        if (obj.IdPais != null)
-        //        {
-        //            var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPais)).PaisNombre.Trim();
-        //            obj.PaisDescripcion = pais;
-        //        }
-        //        else
-        //        {
-        //            response.Errors.Add("Se debe señalar el pais de destino");
-        //        }
-        //        if (obj.Dias00 == null)
-        //            obj.Dias00 = 0;
-        //        if (obj.Dias50 == null)
-        //            obj.Dias50 = 0;
-
-
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage DestinosComisionDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<DestinosComision>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage DestinosPasajesInsert(DestinosPasajes obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        /*se valida que la fecha de inicio no se superior que la de termino*/
-        //        //if (obj.FechaVuelta < obj.FechaIda)
-        //        //{
-        //        //    response.Errors.Add("La fecha de ida no puede ser superior a la fecha de salida");
-        //        //}
-
-        //        var pasaje = _repository.GetById<Pasaje>(obj.PasajeId);
-        //        if (pasaje.TipoDestino == true)
-        //        {
-        //            //if (obj.IdComuna != null)
-        //            //{
-        //            //    var comuna = _sigper.GetDGCOMUNAs().FirstOrDefault(c => c.Pl_CodCom == obj.IdComuna.ToString()).Pl_DesCom.Trim();
-        //            //    obj.ComunaDescripcion = comuna;
-        //            //}
-        //            //else
-        //            //{
-        //            //    response.Errors.Add("Se debe señalar la comuna de destino");
-        //            //}
-
-        //            if (obj.IdRegionOrigen != null)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.OrigenRegionDescripcion))
-        //                {
-        //                    var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegionOrigen.ToString()).Pl_DesReg.Trim();
-        //                    obj.OrigenRegionDescripcion = region;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar la region de destino");
-        //            }
-
-        //            if (obj.IdRegion != null)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.RegionDescripcion))
-        //                {
-        //                    var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegion.ToString()).Pl_DesReg.Trim();
-        //                    obj.RegionDescripcion = region;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar la region de destino");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            //if (obj.IdCiudad != null)
-        //            //{
-        //            //    var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudad)).CiudadNombre.Trim();
-        //            //    obj.CiudadDescripcion = ciudad;
-        //            //}
-        //            //else
-        //            //{
-        //            //    response.Errors.Add("Se debe señalar la ciudad de destino");
-        //            //}
-
-        //            if (obj.IdPaisOrigen != null)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.OrigenPaisDescripcion))
-        //                {
-        //                    var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPaisOrigen)).PaisNombre.Trim();
-        //                    obj.OrigenPaisDescripcion = pais;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el pais de destino");
-        //            }
-
-
-        //            if (obj.IdPais != null)
-        //            {
-        //                if (string.IsNullOrEmpty(obj.PaisDescripcion))
-        //                {
-        //                    var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPais)).PaisNombre.Trim();
-        //                    obj.PaisDescripcion = pais;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el pais de destino");
-        //            }
-        //        }
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage DestinosPasajesUpdate(DestinosPasajes obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var pasaje = _repository.GetById<Pasaje>(obj.PasajeId);
-        //        if (pasaje.TipoDestino == true)
-        //        {
-        //            if (obj.IdRegionOrigen != null)
-        //            {
-        //                var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegionOrigen.ToString()).Pl_DesReg.Trim();
-        //                obj.OrigenRegionDescripcion = region;
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar la region de destino");
-        //            }
-
-        //            if (obj.IdRegion != null)
-        //            {
-        //                var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegion.ToString()).Pl_DesReg.Trim();
-        //                obj.RegionDescripcion = region;
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar la region de destino");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (obj.IdPaisOrigen != null)
-        //            {
-        //                var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPaisOrigen)).PaisNombre.Trim();
-        //                obj.OrigenPaisDescripcion = pais;
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el pais de destino");
-        //            }
-
-
-        //            if (obj.IdPais != null)
-        //            {
-        //                var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPais)).PaisNombre.Trim();
-        //                obj.PaisDescripcion = pais;
-        //            }
-        //            else
-        //            {
-        //                response.Errors.Add("Se debe señalar el pais de destino");
-        //            }
-        //        }
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage DestinosPasajesDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<DestinosPasajes>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage GeneracionCDPComisionInsert(GeneracionCDPComision obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage GeneracionCDPComisionUpdate(GeneracionCDPComision obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage GeneracionCDPComisionDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<GeneracionCDPComision>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage ParametrosComisionesInsert(ParametrosComisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParametrosComisionesUpdate(ParametrosComisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParametrosComisionesDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<ParametrosComisiones>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage ParrafoComisionesInsert(ParrafoComisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParrafoComisionesUpdate(ParrafoComisiones obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ParrafoComisionesDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<ParrafoComisiones>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage ViaticoInternacionalInsert(ViaticoInternacional obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (obj.PaisId != null)
-        //            obj.PaisNombre = _repository.Get<Pais>().Where(c => c.PaisId == obj.PaisId.Value).FirstOrDefault().PaisNombre;
-
-        //        if (obj.CiudadId != null)
-        //            obj.CiudadNombre = _repository.Get<Ciudad>().Where(c => c.CiudadId == obj.CiudadId.Value).FirstOrDefault().CiudadNombre;
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ViaticoInternacionalUpdate(ViaticoInternacional obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (obj.PaisId != null)
-        //            obj.PaisNombre = _repository.Get<Pais>().Where(c => c.PaisId == obj.PaisId.Value).FirstOrDefault().PaisNombre;
-
-        //        if (obj.CiudadId != null)
-        //            obj.CiudadNombre = _repository.Get<Ciudad>().Where(c => c.CiudadId == obj.CiudadId.Value).FirstOrDefault().CiudadNombre;
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage ViaticoInternacionalDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<ViaticoInternacional>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage FirmaDocumentoInsert(FirmaDocumento obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones
-
-        //    if (response.IsValid)
-        //    {
-        //        _repository.Create(obj);
-        //        _repository.Save();
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage FirmaDocumentoEdit(FirmaDocumento obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones
-
-        //    if (response.IsValid)
-        //    {
-        //        var ingreso = _repository.GetFirst<FirmaDocumento>(q => q.FirmaDocumentoId == obj.FirmaDocumentoId);
-        //        if (ingreso != null)
-        //        {
-        //            ingreso.TipoDocumentoCodigo = obj.TipoDocumentoCodigo;
-        //            ingreso.DocumentoSinFirma = obj.DocumentoSinFirma;
-        //            ingreso.DocumentoSinFirmaFilename = obj.DocumentoSinFirmaFilename;
-        //            ingreso.Firmado = false;
-
-        //            _repository.Update(ingreso);
-        //            _repository.Save();
-        //        }
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage FirmaDocumentoFirmar(int id, string firmante)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones...
-        //    if (id == 0)
-        //        response.Errors.Add("Documento a firmar no encontrado");
-        //    if (string.IsNullOrWhiteSpace(firmante))
-        //        response.Errors.Add("No se especificó el firmante");
-        //    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-        //        response.Errors.Add("No se encontró rúbrica habilitada para el firmante");
-
-        //    var documento = _repository.GetById<FirmaDocumento>(id);
-        //    if (documento == null)
-        //        response.Errors.Add("Documento a firmar no encontrado");
-        //    //if (documento != null && documento.Firmado)
-        //    //    response.Errors.Add("Documento ya está firmado");
-
-        //    if (response.IsValid)
-        //    {
-        //        //si el documento ya tiene folio no solicitarlo nuevamente
-        //        if (string.IsNullOrWhiteSpace(documento.Folio))
-        //        {
-        //            try
-        //            {
-        //                var _folioResponse = _folio.GetFolio(firmante, documento.TipoDocumentoCodigo);
-        //                if (_folioResponse == null)
-        //                    throw new Exception("Servicio no entregó respuesta");
-
-        //                if (_folioResponse != null && _folioResponse.status == "ERROR")
-        //                    throw new Exception(_folioResponse.status);
-
-        //                documento.Folio = _folioResponse.folio;
-
-        //                _repository.Update(documento);
-        //                _repository.Save();
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                response.Errors.Add("Error al obtener folio del documento:" + ex.Message);
-        //            }
-        //        }
-        //    }
-
-        //    //firmar documento
-        //    if (response.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
-        //            var _hsmResponse = _hsm.Sign(documento.DocumentoSinFirma, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, documento.Folio);
-
-        //            documento.DocumentoConFirma = _hsmResponse;
-        //            documento.DocumentoConFirmaFilename = "FIRMADO - " + documento.DocumentoSinFirmaFilename;
-        //            documento.Firmante = firmante;
-        //            documento.Firmado = true;
-        //            documento.FechaFirma = DateTime.Now;
-
-        //            _repository.Update(documento);
-        //            _repository.Create(new Documento()
-        //            {
-        //                Proceso = documento.Proceso,
-        //                Workflow = documento.Workflow,
-        //                Fecha = DateTime.Now,
-        //                Email = documento.Autor,
-        //                FileName = documento.DocumentoConFirmaFilename,
-        //                File = documento.DocumentoConFirma,
-        //                Signed = true,
-        //                Type = "application/pdf",
-        //                TipoPrivacidadId = 1,
-        //                TipoDocumentoId = 6
-        //            });
-
-        //            _repository.Save();
-        //            //asociar el documento firmado al proceso
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            response.Errors.Add("Error al obtener folio del documento:" + ex.Message);
-        //        }
-        //    }
-
-        //    return response;
-        //}
-
-        //metodos migrados desde usecase core
+        public ResponseMessage Sign(int id, List<string> emailsFirmantes)
+        {
+            var response = new ResponseMessage();
+
+            if (id == 0)
+                response.Errors.Add("Documento a firmar no encontrado");
+            var memo = _repository.GetById<Memorandum>(id);
+            if (memo == null)
+                response.Errors.Add("Documento a firmar no encontrado");
+            //if (memo != null && memo.DocumentoSinFirma == null)
+            //    response.Errors.Add("Documento a firmar no encontrado");
+
+            var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.url_tramites_en_linea.ToString());
+            if (url_tramites_en_linea == null)
+                response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+            if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())
+                response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+
+            if (!emailsFirmantes.Any())
+                response.Errors.Add("Debe especificar al menos un firmante");
+            if (emailsFirmantes.Any())
+                foreach (var firmante in emailsFirmantes)
+                    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
+                        response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + firmante);
+
+            if (!response.IsValid)
+                return response;
+
+            //listado de id de firmantes
+            var idsFirma = new List<string>();
+            foreach (var firmante in emailsFirmantes)
+            {
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+                if (rubrica != null)
+                    idsFirma.Add(rubrica.IdentificadorFirma);
+            }
+
+            //si el documento ya tiene folio no solicitarlo nuevamente
+            if (string.IsNullOrWhiteSpace(memo.Folio))
+            {
+                try
+                {
+                    var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), "8" /*memo.TipoDocumentoCodigo*/);
+                    if (_folioResponse == null)
+                        response.Errors.Add("Servicio de folio no entregó respuesta");
+
+                    if (_folioResponse != null && _folioResponse.status == "ERROR")
+                        response.Errors.Add(_folioResponse.error);
+
+                    memo.Folio = _folioResponse.folio;
+
+                    _repository.Update(memo);
+                    _repository.Save();
+                }
+                catch (Exception ex)
+                {
+                    response.Errors.Add(ex.Message);
+                }
+            }
+
+            if (!response.IsValid)
+                return response;
+
+            ////crear nuevo documento
+            //var documento = new Documento() {
+            //    Proceso = memo.Proceso,
+            //    Workflow = memo.Workflow,
+            //    Fecha = DateTime.Now,
+            //    //Email = memo.Autor,
+            //    Email = memo.EmailRem.Trim(),
+            //    Signed = false,
+            //    Type = "application/pdf",
+            //    TipoPrivacidadId = 1,
+            //    TipoDocumentoId = 6,
+            //    Folio = memo.Folio
+            //};
+            //_repository.Create(documento);
+            //_repository.Save();
+
+            var doc = _repository.Get<Documento>(c => c.ProcesoId == memo.ProcesoId).FirstOrDefault();
+
+            //generar código QR
+            var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", doc.DocumentoId));
+
+
+            //firmar documento
+            var _hsmResponse = _hsm.Sign(doc.File, idsFirma, doc.DocumentoId, doc.Folio, url_tramites_en_linea.Valor, qr);
+
+            //byte[] _hsmResponse = null;
+            //foreach (var item in idsFirma)
+            //{
+            //     _hsmResponse = _hsm.Sign(doc.File, item, null, doc.Folio, "");
+
+            //}
+
+            //actualizar firma documento
+            doc.File = _hsmResponse;
+            //memo.DocumentoConFirmaFilename = memo.DocumentoSinFirmaFilename;
+            //memo.Firmante = string.Join(", ", idsFirma);
+            doc.Signed = true;
+            //memo.FechaFirma = DateTime.Now;
+            //memo.DocumentoId = documento.DocumentoId;
+            _repository.Update(doc);
+
+            ////actualizar documento con contenido firmado
+            //documento.File = _hsmResponse;
+            //documento.FileName = memo.DocumentoConFirmaFilename;
+            //documento.Signed = true;
+            //_repository.Update(doc);
+
+            //guardar cambios
+            _repository.Save();
+
+            return response;
+        }
 
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
@@ -1584,6 +264,52 @@ namespace App.Core.UseCases
                     //    throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
                     //}                                         
                 }
+                //else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                //else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum)
+                //{
+                //    if (workflowActual.DefinicionWorkflow.Secuencia == 3)
+                //    {
+                //        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //        {
+                //            //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
+                //            var Pasaje = new Pasaje();
+                //            Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                //            if (Pasaje != null)
+                //            {
+                //                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
+                //                if (cotizacion != null)
+                //                {
+                //                    if (Pasaje.TipoDestino == true)
+                //                    {
+                //                        if (cotizacion.CotizacionDocumento.Count < 1)
+                //                        {
+                //                            throw new Exception("Debe adjuntar a los menos una cotizaciones.");
+                //                        }
+                //                    }
+                //                    else
+                //                    {
+                //                        if (cotizacion.CotizacionDocumento.Count < 3)
+                //                        {
+                //                            throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
+                //                        }
+                //                    }
+                //                }
+                //                else
+                //                    throw new Exception("No se ha ingresado cotización.");
+                //            }
+                //        }
+                //    }
+                //    else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
+                //    {
+                //        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 4 && c.TipoDocumentoId != null))
+                //            throw new Exception("Debe adjuntar documentos en la tarea de analista de contabilidad.");
+                //    }
+                //    else if (workflowActual.DefinicionWorkflow.Secuencia == 18)
+                //    {
+                //        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
+                //            throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
+                //    }
+                //}
                 else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                 {
                     //if (workflowActual.DefinicionWorkflow.Secuencia == 3)
@@ -1657,8 +383,770 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
 
+                if (workflowActual.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
+                {
+                    //Se toma valor de cometidos para definir curso de accion del flujo
+                    var Memorandum = new Memorandum();
+                    Memorandum = _repository.Get<Memorandum>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                    if (Memorandum != null)
+                    {
+                        //determinar siguiente tarea desde el diseño de proceso
+                        if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                            //if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                            //{
+                            //    //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
+                            //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 == null)
+                            //    {
+                            //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 7);
+                            //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                            //    }
+                            //    else
+                            //    {
+                            //        /*buscar el objeto de negocio condsulta integridad*/
+                            //        var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                            //        var pro = con.ProcesoId;
 
+                            //        //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                            //        var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                            //        var correo = con.EmailVisa1;
+                            //        var unidaddes = con.UnidadDescripcionVisa1;
+                            //        var unidadcod = con.IdUnidadVisa1;
 
+                            //        //var correo = work.To;
+                            //        workflowActual.Email = correo;
+                            //        obj.To = correo;
+
+                            //        workflowActual.Pl_UndDes = unidaddes;
+                            //        obj.Pl_UndDes = unidaddes;
+
+                            //        workflowActual.Pl_UndCod = unidadcod;
+                            //        obj.Pl_UndCod = unidadcod;
+
+                            //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                            //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                            //    }
+                            //}
+                            if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                            {
+                                //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
+                                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 != null)
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa1;
+                                    var unidaddes = con.UnidadDescripcionVisa1;
+                                    var unidadcod = con.IdUnidadVisa1;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 2)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa2 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa2;
+                                    var unidaddes = con.UnidadDescripcionVisa2;
+                                    var unidadcod = con.IdUnidadVisa2;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 3)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa3 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa3;
+                                    var unidaddes = con.UnidadDescripcionVisa3;
+                                    var unidadcod = con.IdUnidadVisa3;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa4 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa4;
+                                    var unidaddes = con.UnidadDescripcionVisa4;
+                                    var unidadcod = con.IdUnidadVisa4;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 5)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa5 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa5;
+                                    var unidaddes = con.UnidadDescripcionVisa5;
+                                    var unidadcod = con.IdUnidadVisa5;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 6)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa6 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa6;
+                                    var unidaddes = con.UnidadDescripcionVisa6;
+                                    var unidadcod = con.IdUnidadVisa6;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 7)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa7 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa7;
+                                    var unidaddes = con.UnidadDescripcionVisa7;
+                                    var unidadcod = con.IdUnidadVisa7;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 8)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa8 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa8;
+                                    var unidaddes = con.UnidadDescripcionVisa8;
+                                    var unidadcod = con.IdUnidadVisa8;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 9)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa9 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa9;
+                                    var unidaddes = con.UnidadDescripcionVisa9;
+                                    var unidadcod = con.IdUnidadVisa9;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 10)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa10 == null)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 12);
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                }
+                                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailVisa10;
+                                    var unidaddes = con.UnidadDescripcionVisa10;
+                                    var unidadcod = con.IdUnidadVisa10;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 11)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailRem;
+                                    var unidaddes = con.UnidadDescripcion;
+                                    var unidadcod = con.IdUnidad;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 12)
+                            {
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo && workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailSecre;
+                                    var unidaddes = con.UnidadDescripcionSecre;
+                                    var unidadcod = con.IdUnidadSecre;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                            else if (workflowActual.DefinicionWorkflow.Secuencia == 13)
+                            {
+                                //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailDest;
+                                    var unidaddes = con.UnidadDescripcionDest;
+                                    var unidadcod = con.IdUnidadDest;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                                else
+                                {
+                                    /*buscar el objeto de negocio condsulta integridad*/
+                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var pro = con.ProcesoId;
+
+                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                                    var correo = con.EmailDest;
+                                    var unidaddes = con.UnidadDescripcionDest;
+                                    var unidadcod = con.IdUnidadDest;
+
+                                    //var correo = work.To;
+                                    workflowActual.Email = correo;
+                                    obj.To = correo;
+
+                                    workflowActual.Pl_UndDes = unidaddes;
+                                    obj.Pl_UndDes = unidaddes;
+
+                                    workflowActual.Pl_UndCod = unidadcod;
+                                    obj.Pl_UndCod = unidadcod;
+
+                                    //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                }
+                            }
+                        //else if (workflowActual.DefinicionWorkflow.Secuencia == 9)
+                        //{
+                        //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                        //    {
+                        //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 11);
+                        //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                        //    }
+                        //    else
+                        //    {
+                        //        ///*buscar el objeto de negocio condsulta integridad*/
+                        //        //var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                        //        //var pro = con.ProcesoId;
+
+                        //        ////var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                        //        //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
+                        //        //var correo = con.EmailAna;
+                        //        //var unidaddes = con.UnidadDescripcionAna;
+                        //        //var unidadcod = con.IdUnidadAna;
+
+                        //        ////var correo = work.To;
+                        //        //workflowActual.Email = correo;
+                        //        //obj.To = correo;
+
+                        //        //workflowActual.Pl_UndDes = unidaddes;
+                        //        //obj.Pl_UndDes = unidaddes;
+
+                        //        //workflowActual.Pl_UndCod = unidadcod;
+                        //        //obj.Pl_UndCod = unidadcod;
+
+                        //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                        //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                        //    }
+                        //}
+                    }
+                }
                 else
                 {
                     if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
@@ -1849,62 +1337,219 @@ namespace App.Core.UseCases
                     _repository.Create(workflow);
                     _repository.Save();
 
-                    //notificar actualización del estado al dueño
-                    if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
-                        _email.NotificarNuevoWorkflow(workflowActual,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    ////notificar actualización del estado al dueño
+                    //if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
+                    //    _email.NotificarCambioWorkflow(workflowActual,
+                    //    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
+                    //    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
 
-                    //notificar por email al ejecutor de proxima tarea
-                    if (workflow.DefinicionWorkflow.NotificarAsignacion)
-                        _email.NotificarNuevoWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    ////notificar por email al ejecutor de proxima tarea
+                    //if (workflow.DefinicionWorkflow.NotificarAsignacion)
+                    //    _email.NotificarCambioWorkflow(workflow,
+                    //    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoNotificacionTarea),
+                    //    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea));
 
                     /*Si el proceso corresponde a Cometidos y esta en la tarea de firma electronica se notifica con correo*/
-                    if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+                    if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
                     {
-                        if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
+                        if (workflowActual.DefinicionWorkflow.Secuencia == 12)
                         {
-                            List<string> emailMsg = new List<string>();
-                            emailMsg.Add("mmontoya@economia.cl");
-                            emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
-                            emailMsg.Add("scid@economia.cl"); //oficia de partes
-                            emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado
+                            Memorandum memo = _repository.Get<Memorandum>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
 
-                            _email.NotificarFirmaResolucionCometido(workflow,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFirmaResolucion),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
+                            Documento doc = memo.Proceso.Documentos.Where(d => d.ProcesoId == memo.ProcesoId && d.TipoDocumentoId == 8).FirstOrDefault();
+
+                            //Memorandum memo1 = new Memorandum();
+                            //var list1 = memo1.ListaChk1.Trim();
+
+                            List<string> emailMsg = new List<string>();
+                            //emailMsg.Add("ereyes@economia.cl");
+                            //emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
+                            //emailMsg.Add("scid@economia.cl"); //oficia de partes
+                            //emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado
+
+                            emailMsg.Add(memo.EmailRem.Trim()); // interesado
+                            emailMsg.Add(memo.EmailDest.Trim());
+
+                            if (string.IsNullOrEmpty(memo.EmailVisa1))
+                                emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk1))
+                                emailMsg.Add(memo.ListaChk1.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk2))
+                                emailMsg.Add(memo.ListaChk2.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk3))
+                                emailMsg.Add(memo.ListaChk3.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk4))
+                                emailMsg.Add(memo.ListaChk4.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk5))
+                                emailMsg.Add(memo.ListaChk5.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk6))
+                                emailMsg.Add(memo.ListaChk6.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk7))
+                                emailMsg.Add(memo.ListaChk7.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk8))
+                                emailMsg.Add(memo.ListaChk8.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk9))
+                                emailMsg.Add(memo.ListaChk9.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk10))
+                                emailMsg.Add(memo.ListaChk10.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk11))
+                                emailMsg.Add(memo.ListaChk11.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk12))
+                                emailMsg.Add(memo.ListaChk12.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk13))
+                                emailMsg.Add(memo.ListaChk13.Trim()); // 
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk14))
+                                emailMsg.Add(memo.ListaChk14.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk15))
+                                emailMsg.Add(memo.ListaChk15.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk16))
+                                emailMsg.Add(memo.ListaChk16.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk17))
+                                emailMsg.Add(memo.ListaChk17.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk18))
+                                emailMsg.Add(memo.ListaChk18.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk19))
+                                emailMsg.Add(memo.ListaChk19.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk20))
+                                emailMsg.Add(memo.ListaChk20.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk21))
+                                emailMsg.Add(memo.ListaChk21.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk22))
+                                emailMsg.Add(memo.ListaChk22.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk23))
+                                emailMsg.Add(memo.ListaChk23.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk24))
+                                emailMsg.Add(memo.ListaChk24.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk25))
+                                emailMsg.Add(memo.ListaChk25.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk26))
+                                emailMsg.Add(memo.ListaChk26.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk27))
+                                emailMsg.Add(memo.ListaChk27.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk28))
+                                emailMsg.Add(memo.ListaChk28.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk29))
+                                emailMsg.Add(memo.ListaChk29.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk30))
+                                emailMsg.Add(memo.ListaChk30.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk31))
+                                emailMsg.Add(memo.ListaChk31.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk32))
+                                emailMsg.Add(memo.ListaChk32.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk33))
+                                emailMsg.Add(memo.ListaChk33.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk34))
+                                emailMsg.Add(memo.ListaChk34.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk35))
+                                emailMsg.Add(memo.ListaChk35.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk36))
+                                emailMsg.Add(memo.ListaChk36.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk37))
+                                emailMsg.Add(memo.ListaChk37.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk38))
+                                emailMsg.Add(memo.ListaChk38.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk39))
+                                emailMsg.Add(memo.ListaChk39.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk40))
+                                emailMsg.Add(memo.ListaChk40.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk41))
+                                emailMsg.Add(memo.ListaChk41.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk42))
+                                emailMsg.Add(memo.ListaChk42.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk43))
+                                emailMsg.Add(memo.ListaChk43.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk44))
+                                emailMsg.Add(memo.ListaChk44.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk45))
+                                emailMsg.Add(memo.ListaChk45.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk46))
+                                emailMsg.Add(memo.ListaChk46.Trim()); // interesado
+
+                            if (!string.IsNullOrEmpty(memo.ListaChk47))
+                                emailMsg.Add(memo.ListaChk47.Trim()); // interesado
+
+                            //if (!string.IsNullOrEmpty(memo.EmailSecre))
+                            //    emailMsg.Add(memo.EmailSecre.Trim()); // interesado
+
+                            _email.NotificacionesMemorandum(workflow,
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaMemoFirmado), "Envio Memo", emailMsg, memo.MemorandumId, doc);
+
                         }
                     }
 
                     /*Si el proceso corresponde a Cometidos y esta en la tarea de pago tesoreria se notifica con correo a quien viaja*/
-                    if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
-                    {
-                        if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-                        {
-                            if (workflow.DefinicionWorkflow.Secuencia == 20)
-                            {
-                                List<string> emailMsg = new List<string>();
-                                emailMsg.Add("mmontoya@economia.cl");
-                                emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado quien viaja
+                    //if (workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+                    //{
+                    //    if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                    //    {
+                    //        if (workflow.DefinicionWorkflow.Secuencia == 20)
+                    //        {
+                    //            List<string> emailMsg = new List<string>();
+                    //            emailMsg.Add("mmontoya@economia.cl");
+                    //            emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado quien viaja
 
-                                _email.NotificarFirmaResolucionCometido(workflow,
-                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
-                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
-                            }
-                        }
-                        else if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
-                        {
-                            List<string> emailMsg = new List<string>();
-                            emailMsg.Add("mmontoya@economia.cl");
-                            emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado quien viaja
+                    //            _email.NotificarFirmaResolucionCometido(workflow,
+                    //            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
+                    //            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea), emailMsg);
+                    //        }
+                    //    }
+                    //    else if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
+                    //    {
+                    //        List<string> emailMsg = new List<string>();
+                    //        emailMsg.Add("mmontoya@economia.cl");
+                    //        emailMsg.Add(persona.Funcionario.Rh_Mail.Trim()); // interesado quien viaja
 
-                            _email.NotificarFirmaResolucionCometido(workflow,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion), emailMsg);
-                        }
-                    }
+                    //        _email.NotificarFirmaResolucionCometido(workflow,
+                    //        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNotificacionPago),
+                    //        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacionTarea), emailMsg);
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)
