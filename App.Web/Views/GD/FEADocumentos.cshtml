@@ -13,7 +13,7 @@
 
             <h6>
                 <i class="material-icons ">attach_file</i>
-                <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
+                <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a> (@item.TipoDocumentoFirma)
                 @if (@item.Signed)
                 {
                     <i class="material-icons medium secondary-content green-text">lock_outline</i>
@@ -42,6 +42,7 @@
             if (!@item.Proceso.Terminada && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
             {
                 <div class="section">
+                    <p class="grey-text ultra-small">Para firma de @item.FirmanteEmail</p>
                     <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumeto",@item.DocumentoId)">Firmar documento</a>
                     <div id="@string.Concat("modalFirmaDocumeto",@item.DocumentoId)" class="modal">
                         <div class="modal-content">
