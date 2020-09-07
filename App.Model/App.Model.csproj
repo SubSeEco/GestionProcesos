@@ -120,7 +120,9 @@
     <Compile Include="FirmaDocumento\DTOSolicitud.cs" />
     <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
     <Compile Include="FirmaDocumento\FirmaDocumento.cs" />
+    <Compile Include="GestionDocumental\GDOrigen.cs" />
     <Compile Include="GestionDocumental\GD.cs" />
+    <Compile Include="Helper\Validation.cs" />
     <Compile Include="ProgramacionHorasExtraordinarias\ProgramacionHorasExtraordinarias.cs" />
     <Compile Include="InformeHSA\InformeHSA.cs" />
     <Compile Include="Memorandum\Memorandum.cs" />

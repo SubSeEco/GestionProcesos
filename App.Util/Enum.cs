@@ -10,6 +10,7 @@
             Contrato,
             InformeHSA,
             GD,
+            GDExterno,
             SIACSolicitud,
             RadioTaxi,
             Cometido,

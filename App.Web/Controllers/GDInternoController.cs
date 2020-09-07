@@ -9,12 +9,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using App.Model.Helper;
 
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
-    public class GDController : Controller
+    public class GDInternoController : Controller
     {
         public class DTOFileUploadFEA
         {
@@ -60,7 +61,7 @@ namespace App.Web.Controllers
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
-        public GDController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio)
+        public GDInternoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio)
         {
             _repository = repository;
             _sigper = sigper;
@@ -96,6 +97,7 @@ namespace App.Web.Controllers
             {
                 WorkflowId = workflow.WorkflowId,
                 ProcesoId = workflow.ProcesoId,
+                IngresoExterno = false
             };
 
             return View(model);
@@ -223,7 +225,7 @@ namespace App.Web.Controllers
         {
             var email = UserExtended.Email(User);
 
-            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
+            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
             foreach (var item in model)
                 item.AutorizadoParaFirma = item.FirmanteEmail == email;
 

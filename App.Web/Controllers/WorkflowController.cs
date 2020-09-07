@@ -14,7 +14,7 @@ using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
-
+using App.Model.Helper;
 
 namespace App.Web.Controllers
 {
@@ -303,6 +303,19 @@ namespace App.Web.Controllers
                 {
                     workflow.EntityId = obj.GDId;
                     workflow.Entity = App.Util.Enum.Entidad.GD.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
+            {
+                var obj = _repository.GetFirst<GD>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.GDId;
+                    workflow.Entity = App.Util.Enum.Entidad.GDExterno.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
