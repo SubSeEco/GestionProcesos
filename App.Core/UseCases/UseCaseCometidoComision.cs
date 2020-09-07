@@ -761,27 +761,38 @@ namespace App.Core.UseCases
                     }
 
                     /*Se busca cometido para determinar tipo de documento*/
-                    var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
                     string TipoDocto;
-                    if (com.IdCalidad == 10)
+                    var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
+                    if(com != null)
                     {
-                        TipoDocto = "RAEX";/*"ORPA";*/
-                    }
-                    else
-                    {
-                        switch (com.IdGrado)
+                        if (com.IdCalidad == 10)
                         {
-                            case "B":/*Resolución Ministerial Exenta*/
-                                TipoDocto = "RMEX";
-                                break;
-                            case "C": /*Resolución Ministerial Exenta*/
-                                TipoDocto = "RMEX";
-                                break;
-                            default:
-                                TipoDocto = "RAEX";/*Resolución Administrativa Exenta*/
-                                break;
+                            TipoDocto = "RAEX";/*"ORPA";*/
                         }
-                    }                   
+                        else
+                        {
+                            switch (com.IdGrado)
+                            {
+                                case "B":/*Resolución Ministerial Exenta*/
+                                    TipoDocto = "RMEX";
+                                    break;
+                                case "C": /*Resolución Ministerial Exenta*/
+                                    TipoDocto = "RMEX";
+                                    break;
+                                default:
+                                    TipoDocto = "RAEX";/*Resolución Administrativa Exenta*/
+                                    break;
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
+                            TipoDocto = obj.TipoDocumentoFirma;
+                        else
+                            TipoDocto = "OTRO";
+                    }
+                    
 
                     //listado de id de firmantes
                     var idsFirma = new List<string>();
@@ -810,20 +821,21 @@ namespace App.Core.UseCases
                             _repository.Save();
 
                             /*Se agregan lo datos del folio al objeto cometido*/
-                            com.Folio = _folioResponse.folio;
-                            com.FechaResolucion = DateTime.Now;
-                            com.Firma = true;
-                            if (com.IdEscalafon == 1 && com.IdEscalafon != null)
-                                com.TipoActoAdministrativo = "Resolución Ministerial Exenta";
-                            else if (com.CalidadDescripcion.Contains("HONORARIOS"))
-                                com.TipoActoAdministrativo = "Orden de Pago";
-                            else
-                                com.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+                            if(com != null)
+                            {
+                                com.Folio = _folioResponse.folio;
+                                com.FechaResolucion = DateTime.Now;
+                                com.Firma = true;
+                                if (com.IdEscalafon == 1 && com.IdEscalafon != null)
+                                    com.TipoActoAdministrativo = "Resolución Ministerial Exenta";
+                                else if (com.CalidadDescripcion.Contains("HONORARIOS"))
+                                    com.TipoActoAdministrativo = "Orden de Pago";
+                                else
+                                    com.TipoActoAdministrativo = "Resolución Administrativa Exenta";
 
-                            _repository.Update(com);
-                            _repository.Save();
-
-
+                                _repository.Update(com);
+                                _repository.Save();
+                            }
                         }
                         catch (Exception ex)
                         {

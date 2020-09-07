@@ -26,7 +26,7 @@
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
                 @Html.HiddenFor(q => Model.CometidoId)
-                @*@Html.AntiForgeryToken()*@
+                @Html.AntiForgeryToken()
 
                 @Html.HiddenFor(q => Model.FechaSolicitud)
                 @Html.HiddenFor(q => Model.UnidadDescripcion)
@@ -587,8 +587,8 @@
                             {
                                 <h3><span style="font-weight: bold">VII. Firma Documento SIGFE</span></h3>
                                 <div class="row">
-                                    @*@Html.Action("SignOther", "Cometido", new {Model})*@
-                                    @Html.Action("Sign", "Workflow", new {Model})
+                                    @*@Html.Action("SignOther", "Cometido", new {Model.CometidoId})*@
+                                    @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
                                 </div>
                             }
                         </div>

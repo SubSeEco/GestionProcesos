@@ -394,12 +394,47 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        //public ActionResult SignOther(int id)
+        //{
+        //    var model = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == id);
+        //    return View(model);
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignOther(int id)
         {
-            var model = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == id);
+            var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == id).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
+                var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var user = User.Email();
+                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user, null);
+
+                //if (_UseCaseResponseMessage.Warnings.Count > 0)
+                //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                    .Where(y => y.Count > 0)
+                    .ToList();
+            }
             return View(model);
         }
-        
 
         public ActionResult Create(int? WorkFlowId, int? ProcesoId)
         {

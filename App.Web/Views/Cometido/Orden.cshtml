@@ -16,7 +16,7 @@
 </head>
 
 <body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
-    <table>
+    <table style="margin-top:768px">
         <tr>
             <td width="32%">
                 .<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
@@ -99,7 +99,7 @@
             @*<td></td>*@
             <td colspan="2">
                 <strong>
-                    CONSIDERANDO:
+                   <br /> CONSIDERANDO:
                 </strong>
                 @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
                 {
@@ -129,7 +129,7 @@
                     a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
                 </p>
                 <br />
-                <table border="1" width="100%">
+                <table border="1" width="100%" style="margin-right:30px">
                     <tr>
                         <td style="border-style: solid; border-width: 1px; border-color: #000000;">
                             COMUNA
@@ -175,13 +175,14 @@
             <td colspan="2">
                 @if (Model.SolicitaViatico == true)
                 {
-                    <p align="justify" style="margin-right:30px">
-                        <strong>ORDÉNESE EL PAGO:</strong>
-                        &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.TotalViatico).- pesos, (@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras))
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;por concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
-                    </p>
+                <p align="justify" style="margin-right:30px">
                     <br />
-                    <table border="1">
+                    <strong>ORDÉNESE EL PAGO</strong>
+                    &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.TotalViatico).- pesos, (@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras))<br />
+                    por concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
+                </p>
+                    <br />
+                    <table border="1" width="100%" style="margin-right:30px">
                         <tr>
                             <td>
                                 @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().ComunaDescripcion)
@@ -193,13 +194,16 @@
                                 @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().FechaHasta)
                             </td>
                             <td>
-                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)*@
+                                @Html.Raw("Dias 100%")
                             </td>
                             <td>
-                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)*@
+                                @Html.Raw("Dias 60%")
                             </td>
                             <td>
-                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
+                                @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
+                                @Html.Raw("Dias 40%")
                             </td>
                             @*<td>
                                     @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40Monto)
@@ -245,7 +249,7 @@
         <tr>
             @*<td></td>*@
             <td colspan="2">
-                2. <strong>DÉJASE CONSTANCIA:</strong>
+                <strong>DÉJASE CONSTANCIA:</strong>
                 @if (Model.Vehiculo == true)
                 {
                     <p>
@@ -313,12 +317,12 @@
                 @if (Model.GeneracionCDP.Count > 0)
                 {
                     <p align="justify" style="margin-right:30px">
-                        3. <strong>IMPÚTESE</strong>,<br />
+                        <strong>IMPÚTESE</strong>,
                         @if (Model.SolicitaViatico == true)
                         {
                             if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre != "24")
                             {
-                                @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
+                                @Html.Raw("<span> el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                 if (Model.SolicitaViatico == true)
                                 {
                                     @Html.Raw(", al Subtítulo ")
@@ -377,8 +381,8 @@
                 @if (Model.SolicitaViatico != true)
                 {
                     <p align="justify" style="margin-right:30px">
-                        3.<strong>IMPÚTESE</strong>,
-                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
+                        <strong>IMPÚTESE</strong>,
+                        @Html.Raw("<span> el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                         @Html.Raw(",y al Subtítulo 22 ")
                         @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
                         @Html.DisplayFor(m => Model.Anno)
@@ -401,7 +405,7 @@
                     <strong>
                         @Html.DisplayFor(m => Model.Orden)
                     </strong>
-                    <br />
+                    <br /><br /><br />
                 </p>
             </td>
         </tr>
@@ -412,7 +416,7 @@
                         @*@Html.DisplayFor(m => Model.Firmante)*@
                         <br />
                         @Html.DisplayFor(m => Model.CargoFirmante)
-                        <br /><br />
+                        <br />
                         @Html.DisplayFor(m => Model.Subscretaria)
                     </p>
                 </strong>

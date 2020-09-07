@@ -10,7 +10,6 @@
 
         @foreach (var item in Model.Proceso.Documentos)
         {
-
             if (Model.DefinicionWorkflow.Secuencia == 9)
             {
                 if (item.TipoDocumentoId == 7) //(item.TipoDocumentoId == 2)
@@ -181,9 +180,10 @@
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))                            
+                            @*@using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))*@                            
+                            @using (Html.BeginForm("SignOther", "Cometido", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.ProcesoId, enctype = "multipart/form-data" }))                            
                             {
-                                @Html.AntiForgeryToken()
+                                @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)
                                 <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
                             }
