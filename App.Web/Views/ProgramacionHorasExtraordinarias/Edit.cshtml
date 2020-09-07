@@ -1,0 +1,60 @@
+﻿@model App.Model.ProgramacionHorasExtraordinarias.ProgramacionHorasExtraordinarias
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                @Html.HiddenFor(q => Model.ProgramacionHorasExtraordinariasId)
+
+
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Formulario Horas Compensatorias</span>
+                        @*@Html.ValidationMessageFor(m => Model.Comuna, "", new { @class = "red-text" })*@
+                    <div class="row">
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Proceso : </strong>
+                        </div>
+                        @*<div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.Fecha)
+                            @Html.DisplayFor(m => Model.Fecha)
+                            @Html.ValidationMessageFor(m => Model.Fecha, "", new { @class = "red-text" })
+                        </div><br />
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.To)
+                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                        </div>*@
+                    </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+
+

@@ -18,6 +18,7 @@
             CometidoPasaje,
             FirmaDocumento,
             Memorandum,
+            ProgramacionHorasExtraordinarias,
         }
 
         public enum Grupo
@@ -152,6 +153,7 @@
             Memorandum = 15,
             SolicitudCometido = 10,
             InformeHSA = 1,
+            ProgramacionHorasExtraordinarias = 16,
         }
 
      

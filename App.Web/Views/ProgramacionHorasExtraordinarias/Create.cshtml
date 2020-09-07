@@ -1,0 +1,124 @@
+﻿@model App.Model.ProgramacionHorasExtraordinarias.ProgramacionHorasExtraordinarias
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                @Html.HiddenFor(q => Model.ProgramacionHorasExtraordinariasId)
+
+
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Formulario Horas Compensatorias</span>
+                        @*@Html.ValidationMessageFor(m => Model.Comuna, "", new { @class = "red-text" })*@
+                    <div class="row">
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Proceso : </strong>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.Fecha)
+                            @Html.DisplayFor(m => Model.Fecha)
+                            @Html.ValidationMessageFor(m => Model.Fecha, "", new { @class = "red-text" })
+                        </div><br />
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos de la jefatura : </strong>
+                        </div>
+                        @*<div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.To)
+                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                        </div>*@
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Funcionario 1 : </strong>
+                        </div>
+                        @*<div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => m.Pl_UndCodFunc1, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCodFunc1)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCodFunc1, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(model => model.ToFunc1, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.ToFunc1)
+                            @Html.ValidationMessageFor(m => Model.ToFunc1, "", new { @class = "red-text" })
+                        </div>*@
+                    </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $("#Pl_UndCod").change(function () {
+            var Pl_UndCod = $(this).val();
+            $.getJSON("/ProgramacionHorasExtraordinarias/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+                function (classesData) {
+                    var select = $("#To");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: "",
+                        text: "Seleccione..."
+                    }));
+                    $.each(classesData, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Email,
+                            text: itemData.Nombre
+                        }));
+                    });
+                    $('#To').formSelect();
+                });
+        });
+    });
+
+    $(document).ready(function () {
+        $('select').formSelect();
+        $("#Pl_UndCodFunc1").change(function () {
+            var Pl_UndCodFunc1 = $(this).val();
+            $.getJSON("/ProgramacionHorasExtraordinarias/GetUserByUnidadFunc1", { Pl_UndCodFunc1: Pl_UndCodFunc1 },
+                function (classesData) {
+                    var select = $("#ToFunc1");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: "",
+                        text: "Seleccione..."
+                    }));
+                    $.each(classesData, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Email,
+                            text: itemData.Nombre
+                        }));
+                    });
+                    $('#To').formSelect();
+                });
+        });
+    });
+</script>
+
+
+

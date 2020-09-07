@@ -422,6 +422,7 @@
     <Compile Include="Controllers\ProcesoConsultorController.cs" />
     <Compile Include="Controllers\ProcesoPersonalController.cs" />
     <Compile Include="Controllers\ProcesoController.cs" />
+    <Compile Include="Controllers\ProgramacionHorasExtraordinariasController.cs" />
     <Compile Include="Controllers\ProgramaController.cs" />
     <Compile Include="Controllers\EmpresaAerolineaController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
@@ -714,6 +715,8 @@
     <Content Include="Views\GD\FEAUpload.cshtml" />
     <Content Include="Views\GD\FEADocumentos.cshtml" />
     <Content Include="Views\Cometido\SignOther.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

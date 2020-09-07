@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
-using App.Model.Memorandum;
+using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
@@ -30,15 +30,15 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
-    public class MemorandumController : Controller
+    public class ProgramacionHorasExtraordinariasController : Controller
     {
-        public class DTOFilterMemorandum
+        public class DTOFilterProgramacionHorasExtraordinarias
         {
-            public DTOFilterMemorandum()
+            public DTOFilterProgramacionHorasExtraordinarias()
             {
                 TextSearch = string.Empty;
                 Select = new HashSet<DTOSelect>();
-                Result = new HashSet<Memorandum>();
+                Result = new HashSet<ProgramacionHorasExtraordinarias>();
             }
 
             [Display(Name = "Texto de búsqueda")]
@@ -89,7 +89,7 @@ namespace App.Web.Controllers
             public int DiasDiferencia { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
-            public IEnumerable<Memorandum> Result { get; set; }
+            public IEnumerable<ProgramacionHorasExtraordinarias> Result { get; set; }
         }
 
         public class Chart
@@ -121,7 +121,7 @@ namespace App.Web.Controllers
         private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         //public static List<Destinos> ListDestino = new List<Destinos>();
 
-        public MemorandumController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public ProgramacionHorasExtraordinariasController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -145,6 +145,26 @@ namespace App.Web.Controllers
                .Select(c => new { id = c.Email, value = string.Format("{0} ({1})", c.User, c.Email) })
                .OrderBy(q => q.value)
                .ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUserByUnidad(int Pl_UndCod)
+        {
+            var result = _sigper.GetUserByUnidad(Pl_UndCod)
+               .Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq })
+               .OrderBy(q => q.Nombre)
+               .ToList().Distinct();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUserByUnidadFunc1(int Pl_UndCodFunc1)
+        {
+            var result = _sigper.GetUserByUnidad(Pl_UndCodFunc1)
+               .Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq })
+               .OrderBy(q => q.Nombre)
+               .ToList().Distinct();
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -1085,7 +1105,7 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
-            var model = _repository.GetAll<Memorandum>();
+            var model = _repository.GetAll<ProgramacionHorasExtraordinarias>();
             return View(model);
         }
 
@@ -1098,7 +1118,7 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             return View(model);
         }
@@ -1127,11 +1147,11 @@ namespace App.Web.Controllers
             ViewBag.NombreIdAutorizaFirma2 = usuarios;
             ViewBag.NombreIdAutorizaFirma3 = usuarios;
 
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             if (ModelState.IsValid)
             {
-                model.FechaSolicitud = DateTime.Now;
+                model.Fecha = DateTime.Now;
 
                 //model.IdUnidad = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
@@ -1243,14 +1263,14 @@ namespace App.Web.Controllers
 
         public ActionResult Validate(int id)
         {
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
             return View(model);
         }
 
         public ActionResult Create(int WorkFlowId)
         {
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
-            var model = new Memorandum()
+            var model = new ProgramacionHorasExtraordinarias()
             {
                 WorkflowId = workflow.WorkflowId,
                 ProcesoId = workflow.ProcesoId,
@@ -1285,320 +1305,333 @@ namespace App.Web.Controllers
             if (persona.Jefatura == null)
                 ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
 
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            if (model.Pl_UndCod.HasValue)
+                //ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre");
+
+            ViewBag.Pl_UndCodFunc1 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            if (model.Pl_UndCodFunc1.HasValue)
+                //ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+                ViewBag.ToFunc1 = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCodFunc1.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre");
+
+
             if (ModelState.IsValid)
             {
-                model.FechaSolicitud = DateTime.Now;
+                model.Fecha = DateTime.Now;
 
-                model.IdUnidad = persona.Unidad.Pl_UndCod;
-                model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
-                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DV = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreId = null;
-                //model.NombreId = persona.Funcionario.RH_NumInte;
-                //model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
-                model.Nombre = null;
-                model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
-                model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidad = persona.Unidad.Pl_UndCod;
+                //model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
+                //model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DV = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreId = null;
+                ////model.NombreId = persona.Funcionario.RH_NumInte;
+                ////model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
+                //model.Nombre = null;
+                //model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
+                //model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                model.IdUnidadDest = persona.Unidad.Pl_UndCod;
-                model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
-                model.RutDest = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVDest = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdDest = null;
-                //model.NombreId = persona.Funcionario.RH_NumInte;
-                //model.NombreDest = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreDest = null;
-                model.IdCargoDest = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                model.EmailDest = persona.Funcionario.Rh_Mail.Trim();
-                model.NombreChqDest = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadDest = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadDest = persona.Unidad.Pl_UndCod;
+                //model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
+                //model.RutDest = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVDest = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdDest = null;
+                ////model.NombreId = persona.Funcionario.RH_NumInte;
+                ////model.NombreDest = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreDest = null;
+                //model.IdCargoDest = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailDest = persona.Funcionario.Rh_Mail.Trim();
+                //model.NombreChqDest = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadDest = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
-                model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
-                model.RutSecre = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVSecre = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdSecre = null;
-                //model.NombreIdSecre = persona.Funcionario.RH_NumInte;
-                //model.NombreSecre = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreSecre = null;
-                model.IdCargoSecre = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                model.EmailSecre = persona.Funcionario.Rh_Mail.Trim();
-                model.NombreChqSecre = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadSecre = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
+                //model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
+                //model.RutSecre = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVSecre = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdSecre = null;
+                ////model.NombreIdSecre = persona.Funcionario.RH_NumInte;
+                ////model.NombreSecre = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreSecre = null;
+                //model.IdCargoSecre = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailSecre = persona.Funcionario.Rh_Mail.Trim();
+                //model.NombreChqSecre = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadSecre = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa1 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa1 = null;
-                //model.UnidadDescripcionVisa1 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa1 = null;
-                model.RutVisa1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa1 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa1 = null;
-                //model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa1 = null;
-                model.IdCargoVisa1 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa1 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa1 = null;
-                model.NombreChqVisa1 = null;
-                //model.NombreChqVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa1 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa1 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa1 = null;
+                ////model.UnidadDescripcionVisa1 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa1 = null;
+                //model.RutVisa1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa1 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa1 = null;
+                ////model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa1 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa1 = null;
+                //model.IdCargoVisa1 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa1 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa1 = null;
+                //model.NombreChqVisa1 = null;
+                ////model.NombreChqVisa1 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa1 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa2 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa2 = null;
-                //model.UnidadDescripcionVisa2 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa2 = null;
-                model.RutVisa2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa2 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa2 = null;
-                //model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa2 = null;
-                model.IdCargoVisa2 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa2 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa2 = null;
-                model.NombreChqVisa2 = null;
-                //model.NombreChqVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa2 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa2 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa2 = null;
+                ////model.UnidadDescripcionVisa2 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa2 = null;
+                //model.RutVisa2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa2 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa2 = null;
+                ////model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa2 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa2 = null;
+                //model.IdCargoVisa2 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa2 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa2 = null;
+                //model.NombreChqVisa2 = null;
+                ////model.NombreChqVisa2 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa2 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa3 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa3 = null;
-                //model.UnidadDescripcionVisa3 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa3 = null;
-                model.RutVisa3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa3 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa3 = null;
-                //model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa3 = null;
-                model.IdCargoVisa3 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa3 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa3 = null;
-                model.NombreChqVisa3 = null;
-                //model.NombreChqVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa3 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa3 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa3 = null;
+                ////model.UnidadDescripcionVisa3 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa3 = null;
+                //model.RutVisa3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa3 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa3 = null;
+                ////model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa3 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa3 = null;
+                //model.IdCargoVisa3 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa3 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa3 = null;
+                //model.NombreChqVisa3 = null;
+                ////model.NombreChqVisa3 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa3 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa4 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa4 = null;
-                //model.UnidadDescripcionVisa4 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa4 = null;
-                model.RutVisa4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa4 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa4 = null;
-                //model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa4 = null;
-                model.IdCargoVisa4 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa4 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa4 = null;
-                model.NombreChqVisa4 = null;
-                //model.NombreChqVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa4 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa4 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa4 = null;
+                ////model.UnidadDescripcionVisa4 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa4 = null;
+                //model.RutVisa4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa4 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa4 = null;
+                ////model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa4 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa4 = null;
+                //model.IdCargoVisa4 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa4 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa4 = null;
+                //model.NombreChqVisa4 = null;
+                ////model.NombreChqVisa4 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa4 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa5 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa5 = null;
-                //model.UnidadDescripcionVisa5 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa5 = null;
-                model.RutVisa5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa5 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa5 = null;
-                //model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa5 = null;
-                model.IdCargoVisa5 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa5 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa5 = null;
-                model.NombreChqVisa5 = null;
-                //model.NombreChqVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa5 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa5 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa5 = null;
+                ////model.UnidadDescripcionVisa5 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa5 = null;
+                //model.RutVisa5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa5 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa5 = null;
+                ////model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa5 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa5 = null;
+                //model.IdCargoVisa5 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa5 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa5 = null;
+                //model.NombreChqVisa5 = null;
+                ////model.NombreChqVisa5 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa5 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa6 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa6 = null;
-                //model.UnidadDescripcionVisa6 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa6 = null;
-                model.RutVisa6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa6 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa6 = null;
-                //model.NombreIdVisa6 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa6 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa6 = null;
-                model.IdCargoVisa6 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa6 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa6 = null;
-                model.NombreChqVisa6 = null;
-                //model.NombreChqVisa6 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa6 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa6 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa6 = null;
+                ////model.UnidadDescripcionVisa6 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa6 = null;
+                //model.RutVisa6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa6 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa6 = null;
+                ////model.NombreIdVisa6 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa6 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa6 = null;
+                //model.IdCargoVisa6 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa6 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa6 = null;
+                //model.NombreChqVisa6 = null;
+                ////model.NombreChqVisa6 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa6 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa7 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa7 = null;
-                //model.UnidadDescripcionVisa7 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa7 = null;
-                model.RutVisa7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa7 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa7 = null;
-                //model.NombreIdVisa7 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa7 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa7 = null;
-                model.IdCargoVisa7 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa7 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa7 = null;
-                model.NombreChqVisa7 = null;
-                //model.NombreChqVisa7 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa7 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa7 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa7 = null;
+                ////model.UnidadDescripcionVisa7 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa7 = null;
+                //model.RutVisa7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa7 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa7 = null;
+                ////model.NombreIdVisa7 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa7 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa7 = null;
+                //model.IdCargoVisa7 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa7 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa7 = null;
+                //model.NombreChqVisa7 = null;
+                ////model.NombreChqVisa7 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa7 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa8 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa8 = null;
-                //model.UnidadDescripcionVisa8 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa8 = null;
-                model.RutVisa8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa8 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa8 = null;
-                //model.NombreIdVisa8 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa8 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa8 = null;
-                model.IdCargoVisa8 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa8 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa8 = null;
-                model.NombreChqVisa8 = null;
-                //model.NombreChqVisa8 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa8 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa8 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa8 = null;
+                ////model.UnidadDescripcionVisa8 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa8 = null;
+                //model.RutVisa8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa8 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa8 = null;
+                ////model.NombreIdVisa8 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa8 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa8 = null;
+                //model.IdCargoVisa8 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa8 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa8 = null;
+                //model.NombreChqVisa8 = null;
+                ////model.NombreChqVisa8 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa8 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa9 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa9 = null;
-                //model.UnidadDescripcionVisa9 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa9 = null;
-                model.RutVisa9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa9 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa9 = null;
-                //model.NombreIdVisa9 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa9 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa9 = null;
-                model.IdCargoVisa9 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa9 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa9 = null;
-                model.NombreChqVisa9 = null;
-                //model.NombreChqVisa9 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa9 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa9 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa9 = null;
+                ////model.UnidadDescripcionVisa9 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa9 = null;
+                //model.RutVisa9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa9 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa9 = null;
+                ////model.NombreIdVisa9 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa9 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa9 = null;
+                //model.IdCargoVisa9 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa9 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa9 = null;
+                //model.NombreChqVisa9 = null;
+                ////model.NombreChqVisa9 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa9 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadVisa10 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadVisa10 = null;
-                //model.UnidadDescripcionVisa10 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionVisa10 = null;
-                model.RutVisa10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVVisa10 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdVisa10 = null;
-                //model.NombreIdVisa10 = persona.Funcionario.RH_NumInte;
-                //model.NombreVisa10 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreVisa10 = null;
-                model.IdCargoVisa10 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailVisa10 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailVisa10 = null;
-                model.NombreChqVisa10 = null;
-                //model.NombreChqVisa10 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa10 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadVisa10 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadVisa10 = null;
+                ////model.UnidadDescripcionVisa10 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionVisa10 = null;
+                //model.RutVisa10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVVisa10 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdVisa10 = null;
+                ////model.NombreIdVisa10 = persona.Funcionario.RH_NumInte;
+                ////model.NombreVisa10 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreVisa10 = null;
+                //model.IdCargoVisa10 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailVisa10 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailVisa10 = null;
+                //model.NombreChqVisa10 = null;
+                ////model.NombreChqVisa10 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadVisa10 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadAna = persona.Unidad.Pl_UndCod;
-                model.IdUnidadAna = null;
-                //model.UnidadDescripcionAna = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionAna = null;
-                model.RutAna = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVAna = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdAna = null;
-                //model.NombreIdAna = persona.Funcionario.RH_NumInte;
-                //model.NombreAna = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreAna = null;
-                model.IdCargoAna = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAna = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailAna = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailAna = null;
-                model.NombreChqAna = null;
-                //model.NombreChqAna = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAna = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAna = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadAna = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadAna = null;
+                ////model.UnidadDescripcionAna = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionAna = null;
+                //model.RutAna = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVAna = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdAna = null;
+                ////model.NombreIdAna = persona.Funcionario.RH_NumInte;
+                ////model.NombreAna = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreAna = null;
+                //model.IdCargoAna = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionAna = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailAna = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailAna = null;
+                //model.NombreChqAna = null;
+                ////model.NombreChqAna = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadAna = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionAna = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadAutorizaFirma1 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadAutorizaFirma1 = null;
-                //model.UnidadDescripcionAutorizaFirma1 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionAutorizaFirma1 = null;
-                model.RutAutorizaFirma1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVAutorizaFirma1 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdAutorizaFirma1 = null;
-                //model.NombreIdAutorizaFirma1 = persona.Funcionario.RH_NumInte;
-                //model.NombreAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreAutorizaFirma1 = null;
-                model.IdCargoAutorizaFirma1 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailAutorizaFirma1 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailAutorizaFirma1 = null;
-                model.NombreChqAutorizaFirma1 = null;
-                //model.NombreChqAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma1 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadAutorizaFirma1 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadAutorizaFirma1 = null;
+                ////model.UnidadDescripcionAutorizaFirma1 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionAutorizaFirma1 = null;
+                //model.RutAutorizaFirma1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVAutorizaFirma1 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdAutorizaFirma1 = null;
+                ////model.NombreIdAutorizaFirma1 = persona.Funcionario.RH_NumInte;
+                ////model.NombreAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreAutorizaFirma1 = null;
+                //model.IdCargoAutorizaFirma1 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionAutorizaFirma1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailAutorizaFirma1 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailAutorizaFirma1 = null;
+                //model.NombreChqAutorizaFirma1 = null;
+                ////model.NombreChqAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadAutorizaFirma1 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionAutorizaFirma1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadAutorizaFirma2 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadAutorizaFirma2 = null;
-                //model.UnidadDescripcionAutorizaFirma2 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionAutorizaFirma2 = null;
-                model.RutAutorizaFirma2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVAutorizaFirma2 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdAutorizaFirma2 = null;
-                //model.NombreIdAutorizaFirma2 = persona.Funcionario.RH_NumInte;
-                //model.NombreAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreAutorizaFirma2 = null;
-                model.IdCargoAutorizaFirma2 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailAutorizaFirma2 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailAutorizaFirma2 = null;
-                model.NombreChqAutorizaFirma2 = null;
-                //model.NombreChqAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma2 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadAutorizaFirma2 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadAutorizaFirma2 = null;
+                ////model.UnidadDescripcionAutorizaFirma2 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionAutorizaFirma2 = null;
+                //model.RutAutorizaFirma2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVAutorizaFirma2 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdAutorizaFirma2 = null;
+                ////model.NombreIdAutorizaFirma2 = persona.Funcionario.RH_NumInte;
+                ////model.NombreAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreAutorizaFirma2 = null;
+                //model.IdCargoAutorizaFirma2 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionAutorizaFirma2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailAutorizaFirma2 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailAutorizaFirma2 = null;
+                //model.NombreChqAutorizaFirma2 = null;
+                ////model.NombreChqAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadAutorizaFirma2 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionAutorizaFirma2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadAutorizaFirma3 = persona.Unidad.Pl_UndCod;
-                model.IdUnidadAutorizaFirma3 = null;
-                //model.UnidadDescripcionAutorizaFirma3 = persona.Unidad.Pl_UndDes.Trim();
-                model.UnidadDescripcionAutorizaFirma3 = null;
-                model.RutAutorizaFirma3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                model.DVAutorizaFirma3 = persona.Funcionario.RH_DvNuInt.Trim();
-                model.NombreIdAutorizaFirma3 = null;
-                //model.NombreIdAutorizaFirma3 = persona.Funcionario.RH_NumInte;
-                //model.NombreAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.NombreAutorizaFirma3 = null;
-                model.IdCargoAutorizaFirma3 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailAutorizaFirma3 = persona.Funcionario.Rh_Mail.Trim();
-                model.EmailAutorizaFirma3 = null;
-                model.NombreChqAutorizaFirma3 = null;
-                //model.NombreChqAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma3 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                ////model.IdUnidadAutorizaFirma3 = persona.Unidad.Pl_UndCod;
+                //model.IdUnidadAutorizaFirma3 = null;
+                ////model.UnidadDescripcionAutorizaFirma3 = persona.Unidad.Pl_UndDes.Trim();
+                //model.UnidadDescripcionAutorizaFirma3 = null;
+                //model.RutAutorizaFirma3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                //model.DVAutorizaFirma3 = persona.Funcionario.RH_DvNuInt.Trim();
+                //model.NombreIdAutorizaFirma3 = null;
+                ////model.NombreIdAutorizaFirma3 = persona.Funcionario.RH_NumInte;
+                ////model.NombreAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.NombreAutorizaFirma3 = null;
+                //model.IdCargoAutorizaFirma3 = persona.FunDatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionAutorizaFirma3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                ////model.EmailAutorizaFirma3 = persona.Funcionario.Rh_Mail.Trim();
+                //model.EmailAutorizaFirma3 = null;
+                //model.NombreChqAutorizaFirma3 = null;
+                ////model.NombreChqAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
+                //model.IdCalidadAutorizaFirma3 = persona.FunDatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionAutorizaFirma3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
             }
 
             return View(model);
@@ -1606,17 +1639,17 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Memorandum model)
+        public ActionResult Create(ProgramacionHorasExtraordinarias model)
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.MemorandumInsert(model);
+                var _useCaseInteractor = new Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasInsert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    //return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-                    return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+                    return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
+                    //return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
                 }
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
@@ -1649,11 +1682,11 @@ namespace App.Web.Controllers
             ViewBag.NombreIdAutorizaFirma2 = usuarios;
             ViewBag.NombreIdAutorizaFirma3 = usuarios;
 
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             if (ModelState.IsValid)
             {
-                model.FechaSolicitud = DateTime.Now;
+                model.Fecha = DateTime.Now;
             }
 
             return View(model);
@@ -1661,78 +1694,14 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Memorandum model)
+        public ActionResult Edit(ProgramacionHorasExtraordinarias model)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
-
-                if (_UseCaseResponseMessage.Warnings.Count > 0)
-                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
-
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    //return Redirect(Request.UrlReferrer.PathAndQuery);
-                    return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
-                }
-
-                foreach (var item in _UseCaseResponseMessage.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item);
-                }
-            }
-
-            return View(model);
-        }
-
-        public ActionResult EditAna(int id)
-        {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
-            var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
-
-            ViewBag.NombreId = usuarios;
-            ViewBag.NombreIdDest = usuarios;
-            ViewBag.NombreIdSecre = usuarios;
-            ViewBag.NombreIdVisa1 = usuarios;
-            ViewBag.NombreIdVisa2 = usuarios;
-            ViewBag.NombreIdVisa3 = usuarios;
-            ViewBag.NombreIdVisa4 = usuarios;
-            ViewBag.NombreIdVisa5 = usuarios;
-            ViewBag.NombreIdVisa6 = usuarios;
-            ViewBag.NombreIdVisa7 = usuarios;
-            ViewBag.NombreIdVisa8 = usuarios;
-            ViewBag.NombreIdVisa9 = usuarios;
-            ViewBag.NombreIdVisa10 = usuarios;
-            ViewBag.NombreIdAna = usuarios;
-            ViewBag.NombreIdAutorizaFirma1 = usuarios;
-            ViewBag.NombreIdAutorizaFirma2 = usuarios;
-            ViewBag.NombreIdAutorizaFirma3 = usuarios;
-
-            var model = _repository.GetById<Memorandum>(id);
-
-            if (ModelState.IsValid)
-            {
-                model.FechaSolicitud = DateTime.Now;
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditAna(Memorandum model)
-        {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
-            if (ModelState.IsValid)
-            {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -1741,6 +1710,7 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -1751,6 +1721,69 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+
+        //public ActionResult EditAna(int id)
+        //{
+        //    var persona = _sigper.GetUserByEmail(User.Email());
+
+        //    var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+
+        //    ViewBag.NombreId = usuarios;
+        //    ViewBag.NombreIdDest = usuarios;
+        //    ViewBag.NombreIdSecre = usuarios;
+        //    ViewBag.NombreIdVisa1 = usuarios;
+        //    ViewBag.NombreIdVisa2 = usuarios;
+        //    ViewBag.NombreIdVisa3 = usuarios;
+        //    ViewBag.NombreIdVisa4 = usuarios;
+        //    ViewBag.NombreIdVisa5 = usuarios;
+        //    ViewBag.NombreIdVisa6 = usuarios;
+        //    ViewBag.NombreIdVisa7 = usuarios;
+        //    ViewBag.NombreIdVisa8 = usuarios;
+        //    ViewBag.NombreIdVisa9 = usuarios;
+        //    ViewBag.NombreIdVisa10 = usuarios;
+        //    ViewBag.NombreIdAna = usuarios;
+        //    ViewBag.NombreIdAutorizaFirma1 = usuarios;
+        //    ViewBag.NombreIdAutorizaFirma2 = usuarios;
+        //    ViewBag.NombreIdAutorizaFirma3 = usuarios;
+
+        //    var model = _repository.GetById<Memorandum>(id);
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        model.FechaSolicitud = DateTime.Now;
+        //    }
+
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult EditAna(Memorandum model)
+        //{
+        //    var persona = _sigper.GetUserByEmail(User.Email());
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+        //        var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
+
+        //        if (_UseCaseResponseMessage.Warnings.Count > 0)
+        //            TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+        //        if (_UseCaseResponseMessage.IsValid)
+        //        {
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //            return Redirect(Request.UrlReferrer.PathAndQuery);
+        //        }
+
+        //        foreach (var item in _UseCaseResponseMessage.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, item);
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
 
         public ActionResult GeneraDocumento(int id)
         {
@@ -1765,17 +1798,17 @@ namespace App.Web.Controllers
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -1921,13 +1954,13 @@ namespace App.Web.Controllers
                 //}
 
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Memorandum" + ".pdf" };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Memorandum" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
@@ -1981,7 +2014,7 @@ namespace App.Web.Controllers
 
             }
 
-            return RedirectToAction("Edit", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+            return RedirectToAction("Edit", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
 
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
@@ -2000,17 +2033,17 @@ namespace App.Web.Controllers
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 //pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -2155,14 +2188,14 @@ namespace App.Web.Controllers
                 //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
                 //}
 
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Memorandum" + ".pdf" };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Memorandum" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
@@ -2213,7 +2246,7 @@ namespace App.Web.Controllers
 
             }
 
-            return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+            return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
 
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
@@ -2222,7 +2255,7 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult Pdf(int id)
         {
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
@@ -2240,8 +2273,8 @@ namespace App.Web.Controllers
                 //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
                 //model.Anno = DateTime.Now.Year.ToString();
                 //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                model.FechaSolicitud = DateTime.Now;
-                model.FechaFirma = DateTime.Now;
+                model.Fecha = DateTime.Now;
+                //model.FechaFirma = DateTime.Now;
 
                 //model.Firma = false;
                 //model.NumeroResolucion = model.CometidoId;
@@ -2281,80 +2314,81 @@ namespace App.Web.Controllers
                 var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
                 if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
                 {
-                    if (model.Folio == null)
-                    {
-                        #region Folio
-                        /*se va a buscar el folio de testing*/
-                        DTOFolio folio = new DTOFolio();
-                        folio.periodo = DateTime.Now.Year.ToString();
-                        folio.solicitante = "Gestion Procesos - Memorandum";/*Sistema que solicita el numero de Folio*/
-                        if (model.IdCalidad == 10)
-                        {
-                            folio.tipodocumento = "RAEX";/*"ORPA";*/
-                        }
-                        else
-                        {
-                            switch (model.IdGrado)
-                            {
-                                case "B":/*Resolución Ministerial Exenta*/
-                                    folio.tipodocumento = "RMEX";
-                                    break;
-                                case "C": /*Resolución Ministerial Exenta*/
-                                    folio.tipodocumento = "RMEX";
-                                    break;
-                                default:
-                                    folio.tipodocumento = "MEMO";/*Resolución Administrativa Exenta*/
-                                    break;
-                            }
-                        }
+                    //if (model.Folio == null)
+                    //{
+                    //    #region Folio
+                    //    /*se va a buscar el folio de testing*/
+                    //    DTOFolio folio = new DTOFolio();
+                    //    folio.periodo = DateTime.Now.Year.ToString();
+                    //    folio.solicitante = "Gestion Procesos - Memorandum";/*Sistema que solicita el numero de Folio*/
+                    //    if (model.IdCalidad == 10)
+                    //    {
+                    //        folio.tipodocumento = "RAEX";/*"ORPA";*/
+                    //    }
+                    //    else
+                    //    {
+                    //        switch (model.IdGrado)
+                    //        {
+                    //            case "B":/*Resolución Ministerial Exenta*/
+                    //                folio.tipodocumento = "RMEX";
+                    //                break;
+                    //            case "C": /*Resolución Ministerial Exenta*/
+                    //                folio.tipodocumento = "RMEX";
+                    //                break;
+                    //            default:
+                    //                folio.tipodocumento = "MEMO";/*Resolución Administrativa Exenta*/
+                    //                break;
+                    //        }
+                    //    }
 
-                        //definir url
-                        var url = "http://wsfolio.test.economia.cl/api/folio/";
+                    //    //definir url
+                    //    var url = "http://wsfolio.test.economia.cl/api/folio/";
 
-                        //definir cliente http
-                        var clientehttp = new WebClient();
-                        clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    //    //definir cliente http
+                    //    var clientehttp = new WebClient();
+                    //    clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
 
-                        //invocar metodo remoto
-                        string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
+                    //    //invocar metodo remoto
+                    //    string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
 
-                        //convertir resultado en objeto 
-                        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
+                    //    //convertir resultado en objeto 
+                    //    var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
 
-                        //verificar resultado
-                        if (obj.status == "OK")
-                        {
-                            model.Folio = obj.folio;
-                            model.FechaSolicitud = model.FechaFirma;
-                            //model.Firma = true;
-                            //model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+                    //    //verificar resultado
+                    //    if (obj.status == "OK")
+                    //    {
+                    //        model.Folio = obj.folio;
+                    //        model.FechaSolicitud = model.FechaFirma;
+                    //        //model.Firma = true;
+                    //        //model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
 
-                            _repository.Update(model);
-                            _repository.Save();
-                        }
-                        if (obj.status == "ERROR")
-                        {
-                            TempData["Error"] = obj.error;
-                            //return View(DTOFolio);
-                        }
-                        #endregion
-                    }
+                    //        _repository.Update(model);
+                    //        _repository.Save();
+                    //    }
+                    //    if (obj.status == "ERROR")
+                    //    {
+                    //        TempData["Error"] = obj.error;
+                    //        //return View(DTOFolio);
+                    //    }
+                    //    #endregion
+                    //}
                 }
 
 
                 //if (model.CalidadDescripcion.Contains("honorario"))
                 //if (model.IdGrado == "0")
-                if (model.GradoDescripcion == "0")
-                {
-                    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
-                    return View(model);
-                }
-                else
-                {
-                    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
-                    //return new ViewAsPdf("Resolucion", model);
-                    return View(model);
-                }
+                //if (model.GradoDescripcion == "0")
+                //{
+                //    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
+                //    return View(model);
+                //}
+                //else
+                //{
+                //    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
+                //    //return new ViewAsPdf("Resolucion", model);
+                //    return View(model);
+                //}
+                return View(model);
             }
         }
 
@@ -2373,70 +2407,73 @@ namespace App.Web.Controllers
         //Firma Vieja
         public ActionResult Sign(int id)
         {
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             /*Validar si existe un documento asociado y si se encuentra firmado*/
-            //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == 2933); // model.ProcesoId && c.TipoDocumentoId == 8);
-            //var doc = _repository.GetById<Documento>(773); // model.ProcesoId && c.TipoDocumentoId == 8);
-            var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8).FirstOrDefault();
+            var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8);
             if (doc != null)
             {
-                //if (doc.FirstOrDefault().Signed != true)
-                //    model.Proceso.Documentos = doc.ToList();
+                if (doc.FirstOrDefault().Signed != true)
+                    model.Proceso.Documentos = doc.ToList();
                 //else
-                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";lista
+                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
             }
 
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Sign(Memorandum model)
-        {
-            var firmante1 = _repository.GetAll<Memorandum>().Where(c => c.MemorandumId == model.MemorandumId).FirstOrDefault();
+        //public ActionResult Sign(int id)
+        //{
+        //    var firma = _repository.GetById<Memorandum>(id);
+        //    var email = UserExtended.Email(User);
 
-            var listafirmantes = new List<string>();
-            listafirmantes.Add(firmante1.EmailRem.ToString());
-            //listafirmantes.Add(!string.IsNullOrEmpty(firmante1.EmailSecre.ToString));
-            //listafirmantes.Add(firmante1.EmailDest);
-            //listafirmantes.Add(firmante1.EmailSecre);
+        //    var model = new Memorandum
+        //    {
+        //        MemorandumId = firma.MemorandumId,
+        //        ProcesoId = firma.ProcesoId,
+        //        WorkflowId = firma.WorkflowId,
+        //        //File = firma.DocumentoSinFirma,
+        //        //Comentario = firma.Observaciones,
+        //        //Firmante = email,
+        //        Firmante = firma.EmailRem,
+        //        //TieneFirma = _repository.GetExists<Rubrica>(q => q.Email == email),
+        //        //TipoDocumentoDescripcion = firma.TipoDocumentoDescripcion,
+        //        //FechaCreacion = firma.FechaCreacion,
+        //        //Autor = firma.Autor,
+        //        Folio = firma.Folio,
+        //        //URL = firma.URL
+        //    };
 
+        //    return View(model);
+        //}
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Sign(Memorandum model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        model.Firmante = UserExtended.Email(User);
 
+        //        var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+        //        var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.MemorandumId, new List<string> { model.Firmante });
+        //        if (_UseCaseResponseMessage.IsValid)
+        //        {
+        //            TempData["Success"] = "Operación terminada correctamente.";
+        //            return RedirectToAction("Sign", "Memorandum", new { id = model.MemorandumId });
+        //        }
 
-            //foreach (var item in listafirmantes)
-            //{
-            //    item.EmailRem = firmante1.EmailRem;
+        //        TempData["Error"] = _UseCaseResponseMessage.Errors;
+        //    }
 
-            //}
+        //    return RedirectToAction("Sign", "FirmaDocumento", new { id = model.MemorandumId });
+        //}
 
-            var email = UserExtended.Email(User);
-
-            if (ModelState.IsValid)
-            {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-                //var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.MemorandumId, listafirmantes);
-                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.MemorandumId, new List<string> { "ereyes@economia.cl", "mmontoya@economia.cl", "padiaz@economia.cl", "lcorrales@economia.cl" });
-
-                if (_UseCaseResponseMessage.Warnings.Count > 0)
-                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
-
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                }
-
-                foreach (var item in _UseCaseResponseMessage.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item);
-                }
-                //TempData["Error"] = _UseCaseResponseMessage.Errors;
-            }
-
-            return View(model);
-        }
+        //public FileResult ShowDocumentoSinFirma(int id)
+        //{
+        //    var model = _repository.GetById<Memorandum>(id);
+        //    return File(model.DocumentoSinFirma, "application/pdf");
+        //}
 
         public ActionResult DetailsGM(int id)
         {
@@ -2466,7 +2503,7 @@ namespace App.Web.Controllers
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
-            var model = _repository.GetById<Memorandum>(id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             //model.FechaFirma = DateTime.Now;
 
@@ -2474,12 +2511,12 @@ namespace App.Web.Controllers
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -2624,13 +2661,13 @@ namespace App.Web.Controllers
                 //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
                 //}
 
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
@@ -2682,12 +2719,12 @@ namespace App.Web.Controllers
             }
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
-            return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+            return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
         }
 
         public ActionResult SeguimientoMemo()
         {
-            var model = new DTOFilterMemorandum();
+            var model = new DTOFilterProgramacionHorasExtraordinarias();
 
             List<SelectListItem> Estado = new List<SelectListItem>
             {
@@ -2704,9 +2741,9 @@ namespace App.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SeguimientoMemo(DTOFilterMemorandum model)
+        public ActionResult SeguimientoMemo(DTOFilterProgramacionHorasExtraordinarias model)
         {
-            var predicate = PredicateBuilder.True<Memorandum>();
+            var predicate = PredicateBuilder.True<ProgramacionHorasExtraordinarias>();
 
             if (ModelState.IsValid)
             {
@@ -2720,11 +2757,11 @@ namespace App.Web.Controllers
                         predicate = predicate.And(q => q.Proceso.Terminada == true);
                 }
 
-                if (model.NombreId.HasValue)
-                    predicate = predicate.And(q => q.NombreId == model.NombreId);
+                //if (model.NombreId.HasValue)
+                //    predicate = predicate.And(q => q.NombreId == model.NombreId);
 
-                if (model.IdUnidad.HasValue)
-                    predicate = predicate.And(q => q.IdUnidad == model.IdUnidad);
+                //if (model.IdUnidad.HasValue)
+                //    predicate = predicate.And(q => q.IdUnidad == model.IdUnidad);
 
                 //if (model.Destino.HasValue)
                 //    predicate = predicate.And(q => q.Destinos.FirstOrDefault().IdRegion == model.Destino.Value.ToString());
@@ -2743,7 +2780,7 @@ namespace App.Web.Controllers
 
                 var MemorandumId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (MemorandumId.Any())
-                    predicate = predicate.And(q => MemorandumId.Contains(q.MemorandumId));
+                    predicate = predicate.And(q => MemorandumId.Contains(q.ProgramacionHorasExtraordinariasId));
 
                 model.Result = _repository.Get(predicate);
             }
@@ -2811,7 +2848,7 @@ namespace App.Web.Controllers
 
         public FileResult DownloadGP()
         {
-            var result = _repository.GetAll<Memorandum>();
+            var result = _repository.GetAll<ProgramacionHorasExtraordinarias>();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoMemo.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2826,18 +2863,18 @@ namespace App.Web.Controllers
 
                 //if (destino.Count > 0)
                 //{
-                    fila++;
-                    worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
-                    worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                    worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
-                    worksheet.Cells[fila, 4].Value = memorandum.NombreId;
-                    worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
-                    //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                    worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
-                    //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                    //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
-                    worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
-                    worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
+                fila++;
+                worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
+                //worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                //worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
+                //worksheet.Cells[fila, 4].Value = memorandum.NombreId;
+                //worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
+                //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
+                //worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
+                //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
+                worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
                 //}
             }
 

@@ -13,6 +13,7 @@ using App.Core.UseCases;
 using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.GestionDocumental;
+using App.Model.ProgramacionHorasExtraordinarias;
 
 
 namespace App.Web.Controllers
@@ -309,6 +310,20 @@ namespace App.Web.Controllers
                 }
             }
 
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+            {
+                var obj = _repository.GetFirst<ProgramacionHorasExtraordinarias>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.ProgramacionHorasExtraordinariasId;
+                    workflow.Entity = App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
@@ -377,7 +392,18 @@ namespace App.Web.Controllers
                 }
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper);
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("OK");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
                     var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                     if (_UseCaseResponseMessage.IsValid)
                     {

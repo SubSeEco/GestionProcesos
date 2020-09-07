@@ -2,41 +2,1454 @@
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-<div class="row">
-    <div class="col s12 m6 l3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Formulario Consulta</span>
-                <div class="row">
-                    <div class="input-field col s12 m10 l3">
-                        @Html.LabelFor(m => Model.FechaSolicitud)<br /><br />
-                        @Html.DisplayFor(m => Model.FechaSolicitud)
-                        @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                    </div>
-                    @*<div class="input-field col s12 m10 l3">
-                            @Html.LabelFor(m => Model.Rut)<br /><br />
-                            @Html.DisplayFor(m => Model.Rut)
-                            @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m10 l3">
-                            @Html.LabelFor(m => Model.DV)<br /><br />
-                            @Html.DisplayFor(m => Model.DV)
-                            @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m6 l6">
+                @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(q => Model.WorkflowId)
+                    @Html.HiddenFor(q => Model.ProcesoId)
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                    @Html.HiddenFor(q => Model.MemorandumId)
+
+                    @Html.HiddenFor(q => Model.IdUnidad)
+                    @Html.HiddenFor(q => Model.IdCargo)
+                    @Html.HiddenFor(q => Model.IdCalidad)
+                    @Html.HiddenFor(q => Model.IdGrado)
+                    @Html.HiddenFor(q => Model.Rut)
+                    @Html.HiddenFor(q => Model.DV)
+                    @Html.HiddenFor(q => Model.CalidadDescripcion)
+                    @Html.HiddenFor(q => Model.GradoDescripcion)
+                    @*@Html.HiddenFor(q => Model.CargoDescripcion)
+            @Html.HiddenFor(q => Model.UnidadDescripcion)*@
+                    @Html.HiddenFor(q => Model.EmailRem)
+                    @Html.HiddenFor(q => Model.NombreChqRem)
+
+                    @Html.HiddenFor(q => Model.IdUnidadDest)
+                    @Html.HiddenFor(q => Model.IdCargoDest)
+                    @Html.HiddenFor(q => Model.IdCalidadDest)
+                    @Html.HiddenFor(q => Model.IdGradoDest)
+                    @Html.HiddenFor(q => Model.RutDest)
+                    @Html.HiddenFor(q => Model.DVDest)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionDest)
+                    @Html.HiddenFor(q => Model.GradoDescripcionDest)
+                    @*@Html.HiddenFor(q => Model.CargoDescripcionDest)
+            @Html.HiddenFor(q => Model.UnidadDescripcionDest)*@
+                    @Html.HiddenFor(q => Model.EmailDest)
+                    @Html.HiddenFor(q => Model.NombreChqDest)
+
+                    @Html.HiddenFor(q => Model.IdUnidadSecre)
+                    @Html.HiddenFor(q => Model.IdCargoSecre)
+                    @Html.HiddenFor(q => Model.IdCalidadSecre)
+                    @Html.HiddenFor(q => Model.IdGradoSecre)
+                    @Html.HiddenFor(q => Model.RutSecre)
+                    @Html.HiddenFor(q => Model.DVSecre)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionSecre)
+                    @Html.HiddenFor(q => Model.GradoDescripcionSecre)
+                    @*@Html.HiddenFor(q => Model.CargoDescripcionSecre)
+            @Html.HiddenFor(q => Model.UnidadDescripcionSecre)*@
+                    @Html.HiddenFor(q => Model.EmailSecre)
+                    @Html.HiddenFor(q => Model.NombreChqSecre)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa1)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa1)
+                    @Html.HiddenFor(q => Model.IdGradoVisa1)
+                    @Html.HiddenFor(q => Model.RutVisa1)
+                    @Html.HiddenFor(q => Model.DVVisa1)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa1)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa1)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa1)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa1)
+                    @Html.HiddenFor(q => Model.EmailVisa1)
+                    @Html.HiddenFor(q => Model.NombreChqVisa1)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa2)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa2)
+                    @Html.HiddenFor(q => Model.IdGradoVisa2)
+                    @Html.HiddenFor(q => Model.RutVisa2)
+                    @Html.HiddenFor(q => Model.DVVisa2)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa2)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa2)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa2)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa2)
+                    @Html.HiddenFor(q => Model.EmailVisa2)
+                    @Html.HiddenFor(q => Model.NombreChqVisa2)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa3)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa3)
+                    @Html.HiddenFor(q => Model.IdGradoVisa3)
+                    @Html.HiddenFor(q => Model.RutVisa3)
+                    @Html.HiddenFor(q => Model.DVVisa3)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa3)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa3)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa3)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa3)
+                    @Html.HiddenFor(q => Model.EmailVisa3)
+                    @Html.HiddenFor(q => Model.NombreChqVisa3)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa4)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa4)
+                    @Html.HiddenFor(q => Model.IdGradoVisa4)
+                    @Html.HiddenFor(q => Model.RutVisa4)
+                    @Html.HiddenFor(q => Model.DVVisa4)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa4)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa4)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa4)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa4)
+                    @Html.HiddenFor(q => Model.EmailVisa4)
+                    @Html.HiddenFor(q => Model.NombreChqVisa4)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa5)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa5)
+                    @Html.HiddenFor(q => Model.IdGradoVisa5)
+                    @Html.HiddenFor(q => Model.RutVisa5)
+                    @Html.HiddenFor(q => Model.DVVisa5)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa5)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa5)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa5)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa5)
+                    @Html.HiddenFor(q => Model.EmailVisa5)
+                    @Html.HiddenFor(q => Model.NombreChqVisa5)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa6)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa6)
+                    @Html.HiddenFor(q => Model.IdGradoVisa6)
+                    @Html.HiddenFor(q => Model.RutVisa6)
+                    @Html.HiddenFor(q => Model.DVVisa6)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa6)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa6)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa6)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa6)
+                    @Html.HiddenFor(q => Model.EmailVisa6)
+                    @Html.HiddenFor(q => Model.NombreChqVisa6)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa7)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa7)
+                    @Html.HiddenFor(q => Model.IdGradoVisa7)
+                    @Html.HiddenFor(q => Model.RutVisa7)
+                    @Html.HiddenFor(q => Model.DVVisa7)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa7)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa7)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa7)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa7)
+                    @Html.HiddenFor(q => Model.EmailVisa7)
+                    @Html.HiddenFor(q => Model.NombreChqVisa7)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa8)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa8)
+                    @Html.HiddenFor(q => Model.IdGradoVisa8)
+                    @Html.HiddenFor(q => Model.RutVisa8)
+                    @Html.HiddenFor(q => Model.DVVisa8)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa8)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa8)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa8)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa8)
+                    @Html.HiddenFor(q => Model.EmailVisa8)
+                    @Html.HiddenFor(q => Model.NombreChqVisa8)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa9)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa9)
+                    @Html.HiddenFor(q => Model.IdGradoVisa9)
+                    @Html.HiddenFor(q => Model.RutVisa9)
+                    @Html.HiddenFor(q => Model.DVVisa9)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa9)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa9)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa9)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa9)
+                    @Html.HiddenFor(q => Model.EmailVisa9)
+                    @Html.HiddenFor(q => Model.NombreChqVisa9)
+
+                    @Html.HiddenFor(q => Model.IdUnidadVisa10)
+                    @Html.HiddenFor(q => Model.IdCalidadVisa10)
+                    @Html.HiddenFor(q => Model.IdGradoVisa10)
+                    @Html.HiddenFor(q => Model.RutVisa10)
+                    @Html.HiddenFor(q => Model.DVVisa10)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionVisa10)
+                    @Html.HiddenFor(q => Model.GradoDescripcionVisa10)
+                    @Html.HiddenFor(q => Model.CargoDescripcionVisa10)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionVisa10)
+                    @Html.HiddenFor(q => Model.EmailVisa10)
+                    @Html.HiddenFor(q => Model.NombreChqVisa10)
+
+                    @Html.HiddenFor(q => Model.IdUnidadAna)
+                    @Html.HiddenFor(q => Model.IdCalidadAna)
+                    @Html.HiddenFor(q => Model.IdGradoAna)
+                    @Html.HiddenFor(q => Model.RutAna)
+                    @Html.HiddenFor(q => Model.DVAna)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionAna)
+                    @Html.HiddenFor(q => Model.GradoDescripcionAna)
+                    @Html.HiddenFor(q => Model.CargoDescripcionAna)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionAna)
+                    @Html.HiddenFor(q => Model.EmailAna)
+                    @Html.HiddenFor(q => Model.NombreChqAna)
+
+                    @Html.HiddenFor(q => Model.IdUnidadAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.IdCalidadAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.IdGradoAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.RutAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.DVAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.GradoDescripcionAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.CargoDescripcionAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.EmailAutorizaFirma1)
+                    @Html.HiddenFor(q => Model.NombreChqAutorizaFirma1)
+
+                    @Html.HiddenFor(q => Model.IdUnidadAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.IdCalidadAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.IdGradoAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.RutAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.DVAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.GradoDescripcionAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.CargoDescripcionAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.EmailAutorizaFirma2)
+                    @Html.HiddenFor(q => Model.NombreChqAutorizaFirma2)
+
+                    @Html.HiddenFor(q => Model.IdUnidadAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.IdCalidadAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.IdGradoAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.RutAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.DVAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.CalidadDescripcionAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.GradoDescripcionAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.CargoDescripcionAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.UnidadDescripcionAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.EmailAutorizaFirma3)
+                    @Html.HiddenFor(q => Model.NombreChqAutorizaFirma3)
+
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Formulario Memorandum</span>
+                            <div class="row">
+                                <div class="col s12 m6 l12">
+                                    <div class="row">
+                                        <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+                                    </div>
+                                    @*<a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)">Firmar</a>*@
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Datos del Proceso : </strong>
+                                </div>
+                                <div class="input-field col s12 m10 l3">
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.Reservado)</span><br />
+
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.Reservado, true)
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.Reservado, false)
+                                            <span>NO</span>
+                                        </label>
+                                        @Html.ValidationMessageFor(m => Model.Reservado, "", new { @class = "red-text" })
+                                    </div>
+                                </div><br />
+                                <div class="input-field col s12 m10 l6">
+                                    @Html.LabelFor(m => Model.FechaSolicitud)<br /><br />
+                                    @Html.DisplayFor(m => Model.FechaSolicitud)
+                                    @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.LabelFor(m => Model.NumDocumento)
+                                    @Html.TextBoxFor(m => Model.NumDocumento)
+                                    @Html.ValidationMessageFor(m => Model.NumDocumento, "", new { @class = "red-text" })
+                                </div><br>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.LabelFor(m => Model.NumMemoRef)
+                                    @Html.TextBoxFor(m => Model.NumMemoRef)
+                                    @Html.ValidationMessageFor(m => Model.NumMemoRef, "", new { @class = "red-text" })
+                                </div><br />
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Información del Remitente :</strong>
+                                </div>
+                                @*<div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.IdUnidad)
+                            @Html.LabelFor(m => Model.IdUnidad)
+                            @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
                         </div>*@
-                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.TextBoxFor(m => Model.UnidadDescripcion)
+                                    @Html.LabelFor(m => Model.UnidadDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.NombreId)
+                                    @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.EditorFor(m => Model.CargoDescripcion)
+                                    @Html.LabelFor(m => Model.CargoDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                                </div>
+                                @*<div class="input-field col s12 m10 l10">
+                            @Html.EditorFor(m => Model.EmailRem)
+                            @Html.LabelFor(m => Model.EmailRem)
+                            @Html.ValidationMessageFor(m => Model.EmailRem, "", new { @class = "red-text" })
+                        </div>*@
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Información del Destinatario :</strong>
+                                </div>
+                                @*<div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.IdUnidad)
+                            @Html.LabelFor(m => Model.IdUnidad)
+                            @Html.ValidationMessageFor(m => Model.IdUnidad, "", new { @class = "red-text" })
+                        </div>*@
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.TextBoxFor(m => Model.UnidadDescripcionDest)
+                                    @Html.LabelFor(m => Model.UnidadDescripcionDest)
+                                    @Html.ValidationMessageFor(m => Model.UnidadDescripcionDest, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DropDownListFor(m => Model.NombreIdDest, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.NombreIdDest)
+                                    @Html.ValidationMessageFor(m => Model.NombreIdDest, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.EditorFor(m => Model.CargoDescripcionDest)
+                                    @Html.LabelFor(m => Model.CargoDescripcionDest)
+                                    @Html.ValidationMessageFor(m => Model.CargoDescripcionDest, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.DropDownListFor(m => Model.NombreIdSecre, null, "Seleccione...")
+                                    @Html.LabelFor(m => Model.NombreIdSecre)
+                                    @Html.ValidationMessageFor(m => Model.NombreIdSecre, "", new { @class = "red-text" })
+                                </div>
+                                @*<div class="input-field col s12 m10 l10">
+                            @Html.EditorFor(m => Model.EmailRem)
+                            @Html.LabelFor(m => Model.EmailRem)
+                            @Html.ValidationMessageFor(m => Model.EmailRem, "", new { @class = "red-text" })
+                        </div>*@
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Cuerpo del Documento : </strong>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.LabelFor(m => Model.Asunto)
+                                    @Html.TextBoxFor(m => Model.Asunto)
+                                    @Html.ValidationMessageFor(m => Model.Asunto, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.LabelFor(m => Model.Antecedentes)
+                                    @Html.TextAreaFor(m => Model.Antecedentes, new { @class = "materialize-textarea" })
+                                    @Html.ValidationMessageFor(m => Model.Antecedentes, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.LabelFor(m => Model.Materia)
+                                    @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                                    @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Información de Visadores :</strong>
+                                </div>
+                                @*<div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa1, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa1)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa1, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa2, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa2)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa2, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa3, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa3)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa3, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa4, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa4)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa4, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa5, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa5)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa5, "", new { @class = "red-text" })
+                        </div>*@
+                                <div id="vis1">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa1, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa1)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa1, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk1)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk1, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk1, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk1, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis2">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa2, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa2)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa2, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk2)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk2, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk2, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk2, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis3">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa3, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa3)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa3, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk3)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk3, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk3, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk3, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis4">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa4, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa4)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa4, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk4)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk4, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk4, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk4, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis5">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa5, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa5)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa5, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk5)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk5, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk5, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk5, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis6">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa6, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa6)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa6, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk6)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk6, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk6, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk6, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis7">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa7, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa7)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa7, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk7)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk7, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk7, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk7, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis8">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa8, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa8)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa8, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk8)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk8, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk8, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk8, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis9">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa9, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa9)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa9, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        <div class="row">
+                                            <span>@Html.LabelFor(m => Model.VisaChk9)</span><br />
+
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk9, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.VisaChk9, false)
+                                                <span>NO</span>
+                                            </label>
+                                            @Html.ValidationMessageFor(m => Model.VisaChk9, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vis10">
+                                    <div class="input-field col s12 m10 l8">
+                                        @Html.DropDownListFor(m => Model.NombreIdVisa10, null, "Seleccione...")
+                                        @Html.LabelFor(m => Model.NombreIdVisa10)
+                                        @Html.ValidationMessageFor(m => Model.NombreIdVisa10, "", new { @class = "red-text" })
+                                    </div>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <strong>Lista de Distribución :</strong>
+                                </div>
+                                <div class="input-field col s12 m8 l13" style="width: 250px; height: 100px; overflow-y: scroll; ">
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk1)</span><br />
+                                        <label>
+                                            @*@Html.RadioButtonFor(m => Model.ListaChk1, "oroman@economia.cl")*@
+                                            @Html.RadioButtonFor(m => Model.ListaChk1, "enrique.reyes@uniacc.edu")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk1, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk2)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk2, "imenendez@economia.cl")
+                                            @*@Html.RadioButtonFor(m => Model.ListaChk2, "mgonzalez@economia.cl")*@
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk2, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk3)</span><br />
+                                        <label>
+                                            @*@Html.RadioButtonFor(m => Model.ListaChk3, "mducci@cnp.gob.cl")*@
+                                            @Html.RadioButtonFor(m => Model.ListaChk3, "clucerot@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk3, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk4)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk4, "frojas@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk4, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk5)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk5, "gfigueroa@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk5, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk6)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk6, "jgonzalezm@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk6, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk7)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk7, "mnunez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk7, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk8)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk8, "krecuero@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk8, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk9)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk9, "rrivera@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk9, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk10)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk10, "xgonzalez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk10, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk11)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk11, "ppfuentes@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk11, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk12)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk12, "xgonzalez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk12, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk13)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk13, "yancan@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk13, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk14)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk14, "tcolicheo@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk14, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk15)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk15, "cagutierrez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk15, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk16)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk16, "jmenares@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk16, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk17)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk17, "rgarcia@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk17, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk18)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk18, "csaez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk18, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk19)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk19, "caraya@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk19, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk20)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk20, "ldonoso@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk20, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk21)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk21, "jnichol@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk21, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk22)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk22, "jrodriguezp@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk22, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk23)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk23, "gsoto@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk23, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk24)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk24, "jalday@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk24, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk25)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk25, "ihenriquez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk25, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk26)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk26, "rmoya@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk26, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk27)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk27, "cpaz@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk27, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk28)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk28, "valarcon@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk28, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk29)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk29, "mwarnken@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk29, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk30)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk30, "arozas@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk30, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk31)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk31, "cfuentes@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk31, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk32)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk32, "gperez@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk32, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk33)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk33, "tcolicheo@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk33, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk34)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk34, "pherrera@tdpi.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk34, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk35)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk35, "ebickell@subturismo.gob.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk35, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk36)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk36, "eponce@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk36, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk37)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk37, "lvargas@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk37, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk38)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk38, "mmancilla@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk38, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk39)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk39, "iosses@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk39, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk40)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk40, "iosses@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk40, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk41)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk41, "iosses@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk41, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk42)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk42, "iosses@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk42, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk43)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk43, "solguin@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk43, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk44)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk44, "fpalavecino@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk44, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk45)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk45, "eponce@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk45, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <span>@Html.LabelFor(m => Model.ListaChk46)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk46, "dortiz@economia.cl")
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.ListaChk46, "")
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    @*<div class="row">
+                                <span>@Html.LabelFor(m => Model.ListaChk47)</span><br />
+                                <label>
+                                    @Html.RadioButtonFor(m => Model.ListaChk47, "ebickell@subturismo.gob.cl")
+                                    <span>SI</span>
+                                </label>
+                                <label>
+                                    @Html.RadioButtonFor(m => Model.ListaChk47, "")
+                                    <span>No</span>
+                                </label>
+                            </div>*@
+                                </div>
+                            </div>
+                            <div class="section"></div>
+                            <p>
+                                <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col s12 m6 l6">
+                @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+                @Html.Action("History", "Workflow", new { Model.WorkflowId })
             </div>
         </div>
     </div>
-    <div class="col s12 m6 l3">
-        @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-        @Html.Action("History", "Workflow", new { Model.WorkflowId })
-    </div>
-</div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreId').on('change', function () {
+        var Rut = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuario", { Rut: Rut },
+            function (classesData) {
+                //alert(classesData["IdUnidad"]);
+                document.getElementById('Rut').value = classesData["Rut"];
+                document.getElementById('DV').value = classesData["DV"];
+                document.getElementById('EmailRem').value = classesData["EmailRem"];
+                document.getElementById('NombreChqRem').value = classesData["NombreChqRem"];
+                document.getElementById('IdCargo').value = classesData["IdCargo"];
+                document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                document.getElementById('IdCalidad').value = classesData["IdCalidad"];
+                document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                document.getElementById('IdUnidad').value = classesData["IdUnidad"];
+                document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdDest').on('change', function () {
+        var RutDest = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioDest", { RutDest: RutDest },
+            function (classesData) {
+                //alert(classesData["IdUnidadDest"]);
+                document.getElementById('RutDest').value = classesData["RutDest"];
+                document.getElementById('DVDest').value = classesData["DVDest"];
+                document.getElementById('EmailDest').value = classesData["EmailDest"];
+                document.getElementById('NombreChqDest').value = classesData["NombreChqDest"];
+                document.getElementById('IdCargoDest').value = classesData["IdCargoDest"];
+                document.getElementById('CargoDescripcionDest').value = classesData["CargoDest"];
+                document.getElementById('IdCalidadDest').value = classesData["IdCalidadDest"];
+                document.getElementById('CalidadDescripcionDest').value = classesData["CalidadJuridicaDest"];
+                document.getElementById('IdUnidadDest').value = classesData["IdUnidadDest"];
+                document.getElementById('UnidadDescripcionDest').value = classesData["UnidadDest"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdSecre').on('change', function () {
+        var RutSecre = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioSecre", { RutSecre: RutSecre },
+            function (classesData) {
+                //alert(classesData["IdUnidadSecre"]);
+                document.getElementById('RutSecre').value = classesData["RutSecre"];
+                document.getElementById('DVSecre').value = classesData["DVSecre"];
+                document.getElementById('EmailSecre').value = classesData["EmailSecre"];
+                document.getElementById('NombreChqSecre').value = classesData["NombreChqSecre"];
+                document.getElementById('IdCargoSecre').value = classesData["IdCargoSecre"];
+                document.getElementById('CargoDescripcionSecre').value = classesData["CargoSecre"];
+                document.getElementById('IdCalidadSecre').value = classesData["IdCalidadSecre"];
+                document.getElementById('CalidadDescripcionSecre').value = classesData["CalidadJuridicaSecre"];
+                document.getElementById('IdUnidadSecre').value = classesData["IdUnidadSecre"];
+                document.getElementById('UnidadDescripcionSecre').value = classesData["UnidadSecre"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa1').on('change', function () {
+        var RutVisa1 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa1", { RutVisa1: RutVisa1 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa1"]);
+                document.getElementById('RutVisa1').value = classesData["RutVisa1"];
+                document.getElementById('DVVisa1').value = classesData["DVVisa1"];
+                document.getElementById('EmailVisa1').value = classesData["EmailVisa1"];
+                document.getElementById('NombreChqVisa1').value = classesData["NombreChqVisa1"];
+                //document.getElementById('IdCargoVisa1').value = classesData["IdCargoVisa1"];
+                //document.getElementById('CargoDescripcionVisa1').value = classesData["CargoVisa1"];
+                //document.getElementById('IdCalidadVisa1').value = classesData["IdCalidadVisa1"];
+                //document.getElementById('CalidadDescripcionVisa1').value = classesData["CalidadJuridicaVisa1"];
+                document.getElementById('IdUnidadVisa1').value = classesData["IdUnidadVisa1"];
+                document.getElementById('UnidadDescripcionVisa1').value = classesData["UnidadVisa1"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa2').on('change', function () {
+        var RutVisa2 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa2", { RutVisa2: RutVisa2 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa2').value = classesData["RutVisa2"];
+                document.getElementById('DVVisa2').value = classesData["DVVisa2"];
+                document.getElementById('EmailVisa2').value = classesData["EmailVisa2"];
+                document.getElementById('NombreChqVisa2').value = classesData["NombreChqVisa2"];
+                //document.getElementById('IdCargoVisa2').value = classesData["IdCargoVisa2"];
+                //document.getElementById('CargoDescripcionVisa2').value = classesData["CargoVisa2"];
+                //document.getElementById('IdCalidadVisa2').value = classesData["IdCalidadVisa2"];
+                //document.getElementById('CalidadDescripcionVisa2').value = classesData["CalidadJuridicaVisa2"];
+                document.getElementById('IdUnidadVisa2').value = classesData["IdUnidadVisa2"];
+                document.getElementById('UnidadDescripcionVisa2').value = classesData["UnidadVisa2"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa3').on('change', function () {
+        var RutVisa3 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa3", { RutVisa3: RutVisa3 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa3').value = classesData["RutVisa3"];
+                document.getElementById('DVVisa3').value = classesData["DVVisa3"];
+                document.getElementById('EmailVisa3').value = classesData["EmailVisa3"];
+                document.getElementById('NombreChqVisa3').value = classesData["NombreChqVisa3"];
+                //document.getElementById('IdCargoVisa3').value = classesData["IdCargoVisa3"];
+                //document.getElementById('CargoDescripcionVisa3').value = classesData["CargoVisa3"];
+                //document.getElementById('IdCalidadVisa3').value = classesData["IdCalidadVisa3"];
+                //document.getElementById('CalidadDescripcionVisa3').value = classesData["CalidadJuridicaVisa3"];
+                document.getElementById('IdUnidadVisa3').value = classesData["IdUnidadVisa3"];
+                document.getElementById('UnidadDescripcionVisa3').value = classesData["UnidadVisa3"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa4').on('change', function () {
+        var RutVisa4 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa4", { RutVisa4: RutVisa4 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa4').value = classesData["RutVisa4"];
+                document.getElementById('DVVisa4').value = classesData["DVVisa4"];
+                document.getElementById('EmailVisa4').value = classesData["EmailVisa4"];
+                document.getElementById('NombreChqVisa4').value = classesData["NombreChqVisa4"];
+                //document.getElementById('IdCargoVisa4').value = classesData["IdCargoVisa4"];
+                //document.getElementById('CargoDescripcionVisa4').value = classesData["CargoVisa4"];
+                //document.getElementById('IdCalidadVisa4').value = classesData["IdCalidadVisa4"];
+                //document.getElementById('CalidadDescripcionVisa4').value = classesData["CalidadJuridicaVisa4"];
+                document.getElementById('IdUnidadVisa4').value = classesData["IdUnidadVisa4"];
+                document.getElementById('UnidadDescripcionVisa4').value = classesData["UnidadVisa4"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa5').on('change', function () {
+        var RutVisa5 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa5", { RutVisa5: RutVisa5 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa5').value = classesData["RutVisa5"];
+                document.getElementById('DVVisa5').value = classesData["DVVisa5"];
+                document.getElementById('EmailVisa5').value = classesData["EmailVisa5"];
+                document.getElementById('NombreChqVisa5').value = classesData["NombreChqVisa5"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa5').value = classesData["IdUnidadVisa5"];
+                document.getElementById('UnidadDescripcionVisa5').value = classesData["UnidadVisa5"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa6').on('change', function () {
+        var RutVisa6 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa6", { RutVisa6: RutVisa6 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa6').value = classesData["RutVisa6"];
+                document.getElementById('DVVisa6').value = classesData["DVVisa6"];
+                document.getElementById('EmailVisa6').value = classesData["EmailVisa6"];
+                document.getElementById('NombreChqVisa6').value = classesData["NombreChqVisa6"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa6').value = classesData["IdUnidadVisa6"];
+                document.getElementById('UnidadDescripcionVisa6').value = classesData["UnidadVisa6"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa7').on('change', function () {
+        var RutVisa7 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa7", { RutVisa7: RutVisa7 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa7').value = classesData["RutVisa7"];
+                document.getElementById('DVVisa7').value = classesData["DVVisa7"];
+                document.getElementById('EmailVisa7').value = classesData["EmailVisa7"];
+                document.getElementById('NombreChqVisa7').value = classesData["NombreChqVisa7"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa7').value = classesData["IdUnidadVisa7"];
+                document.getElementById('UnidadDescripcionVisa7').value = classesData["UnidadVisa7"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa8').on('change', function () {
+        var RutVisa8 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa8", { RutVisa8: RutVisa8 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa8').value = classesData["RutVisa8"];
+                document.getElementById('DVVisa8').value = classesData["DVVisa8"];
+                document.getElementById('EmailVisa8').value = classesData["EmailVisa8"];
+                document.getElementById('NombreChqVisa8').value = classesData["NombreChqVisa8"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa8').value = classesData["IdUnidadVisa8"];
+                document.getElementById('UnidadDescripcionVisa8').value = classesData["UnidadVisa8"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa9').on('change', function () {
+        var RutVisa9 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa9", { RutVisa9: RutVisa9 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa9').value = classesData["RutVisa9"];
+                document.getElementById('DVVisa9').value = classesData["DVVisa9"];
+                document.getElementById('EmailVisa9').value = classesData["EmailVisa9"];
+                document.getElementById('NombreChqVisa9').value = classesData["NombreChqVisa9"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa9').value = classesData["IdUnidadVisa9"];
+                document.getElementById('UnidadDescripcionVisa9').value = classesData["UnidadVisa9"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa10').on('change', function () {
+        var RutVisa10 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa10", { RutVisa10: RutVisa10 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa10').value = classesData["RutVisa10"];
+                document.getElementById('DVVisa10').value = classesData["DVVisa10"];
+                document.getElementById('EmailVisa10').value = classesData["EmailVisa10"];
+                document.getElementById('NombreChqVisa10').value = classesData["NombreChqVisa10"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa10').value = classesData["IdUnidadVisa10"];
+                document.getElementById('UnidadDescripcionVisa10').value = classesData["UnidadVisa10"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAna').on('change', function () {
+        var RutAna = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAna", { RutAna: RutAna },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutAna').value = classesData["RutAna"];
+                document.getElementById('DVAna').value = classesData["DVAna"];
+                document.getElementById('EmailAna').value = classesData["EmailAna"];
+                document.getElementById('NombreChqAna').value = classesData["NombreChqAna"];
+                //document.getElementById('IdCargoAna').value = classesData["IdCargoAna"];
+                //document.getElementById('CargoDescripcionAna').value = classesData["CargoAna"];
+                //document.getElementById('IdCalidadAna').value = classesData["IdCalidadAna"];
+                //document.getElementById('CalidadDescripcionAna').value = classesData["CalidadJuridicaAna"];
+                document.getElementById('IdUnidadAna').value = classesData["IdUnidadAna"];
+                document.getElementById('UnidadDescripcionAna').value = classesData["UnidadAna"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma1').on('change', function () {
+        var RutAutorizaFirma1 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma1", { RutAutorizaFirma1: RutAutorizaFirma1 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma1"]);
+                document.getElementById('RutAutorizaFirma1').value = classesData["RutAutorizaFirma1"];
+                document.getElementById('DVAutorizaFirma1').value = classesData["DVAutorizaFirma1"];
+                document.getElementById('EmailAutorizaFirma1').value = classesData["EmailAutorizaFirma1"];
+                document.getElementById('NombreChqAutorizaFirma1').value = classesData["NombreChqAutorizaFirma1"];
+                //document.getElementById('IdCargoAutorizaFirma1').value = classesData["IdCargoAutorizaFirma1"];
+                //document.getElementById('CargoDescripcionAutorizaFirma1').value = classesData["CargoAutorizaFirma1"];
+                //document.getElementById('IdCalidadAutorizaFirma1').value = classesData["IdCalidadAutorizaFirma1"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma1').value = classesData["CalidadJuridicaAutorizaFirma1"];
+                document.getElementById('IdUnidadAutorizaFirma1').value = classesData["IdUnidadAutorizaFirma1"];
+                document.getElementById('UnidadDescripcionAutorizaFirma1').value = classesData["UnidadAutorizaFirma1"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma2').on('change', function () {
+        var RutAutorizaFirma2 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma2", { RutAutorizaFirma2: RutAutorizaFirma2 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma2"]);
+                document.getElementById('RutAutorizaFirma2').value = classesData["RutAutorizaFirma2"];
+                document.getElementById('DVAutorizaFirma2').value = classesData["DVAutorizaFirma2"];
+                document.getElementById('EmailAutorizaFirma2').value = classesData["EmailAutorizaFirma2"];
+                document.getElementById('NombreChqAutorizaFirma2').value = classesData["NombreChqAutorizaFirma2"];
+                //document.getElementById('IdCargoAutorizaFirma2').value = classesData["IdCargoAutorizaFirma2"];
+                //document.getElementById('CargoDescripcionAutorizaFirma2').value = classesData["CargoAutorizaFirma2"];
+                //document.getElementById('IdCalidadAutorizaFirma2').value = classesData["IdCalidadAutorizaFirma2"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma2').value = classesData["CalidadJuridicaAutorizaFirma2"];
+                document.getElementById('IdUnidadAutorizaFirma2').value = classesData["IdUnidadAutorizaFirma2"];
+                document.getElementById('UnidadDescripcionAutorizaFirma2').value = classesData["UnidadAutorizaFirma2"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma3').on('change', function () {
+        var RutAutorizaFirma3 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma3", { RutAutorizaFirma3: RutAutorizaFirma3 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma3"]);
+                document.getElementById('RutAutorizaFirma3').value = classesData["RutAutorizaFirma3"];
+                document.getElementById('DVAutorizaFirma3').value = classesData["DVAutorizaFirma3"];
+                document.getElementById('EmailAutorizaFirma3').value = classesData["EmailAutorizaFirma3"];
+                document.getElementById('NombreChqAutorizaFirma3').value = classesData["NombreChqAutorizaFirma3"];
+                //document.getElementById('IdCargoAutorizaFirma3').value = classesData["IdCargoAutorizaFirma3"];
+                //document.getElementById('CargoDescripcionAutorizaFirma3').value = classesData["CargoAutorizaFirma3"];
+                //document.getElementById('IdCalidadAutorizaFirma3').value = classesData["IdCalidadAutorizaFirma3"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma3').value = classesData["CalidadJuridicaAutorizaFirma3"];
+                document.getElementById('IdUnidadAutorizaFirma3').value = classesData["IdUnidadAutorizaFirma3"];
+                document.getElementById('UnidadDescripcionAutorizaFirma3').value = classesData["UnidadAutorizaFirma3"];
+            });
+    });
+
+</script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-

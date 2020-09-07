@@ -10,6 +10,7 @@ using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.DTO;
 using App.Model.GestionDocumental;
+using App.Model.ProgramacionHorasExtraordinarias;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -82,6 +83,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<Memorandum> Memorandum { get; set; }
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
         public virtual DbSet<GD> GD { get; set; }
+        public virtual DbSet<ProgramacionHorasExtraordinarias> ProgramacionHorasExtraordinarias { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }

@@ -59,6 +59,7 @@
     <Compile Include="UseCases\UseCaseFirmaDocumento.cs" />
     <Compile Include="UseCases\UseCaseCometidoComision.cs" />
     <Compile Include="UseCases\UseCaseGD.cs" />
+    <Compile Include="UseCases\UseCaseProgramacionHorasExtraordinarias.cs" />
     <Compile Include="UseCases\UseCaseInformeHSA.cs" />
     <Compile Include="UseCases\UseCaseMemorandum.cs" />
   </ItemGroup>
