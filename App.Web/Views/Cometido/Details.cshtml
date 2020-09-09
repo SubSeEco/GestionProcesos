@@ -318,6 +318,14 @@
                                 @if (Model.SolicitaViatico == true || Model.SolicitaViatico != true)
                                 {
                                     <span class="card-title">Viáticos</span>
+                                    if(Model.Workflow.DefinicionWorkflow.Secuencia == 9)
+                                    {
+                                        <strong>
+                                            <label style="color:green">
+                                                “Recuerde que debe ingresar el Id de Comproniso.”
+                                            </label>
+                                        </strong>
+                                    }                                    
                                     <table class="table">
                                         <tr>
                                             <th>

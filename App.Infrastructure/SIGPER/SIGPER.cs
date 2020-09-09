@@ -152,8 +152,18 @@ namespace App.Infrastructure.SIGPER
                         {
                             PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
+                            var CodUnidad = (from u in context.PeDatLab
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
+
+
                             //unidad del funcionario
-                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
                             if (unidad != null)
                             {
                                 sigper.Unidad = unidad;
