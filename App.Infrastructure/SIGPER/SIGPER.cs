@@ -382,12 +382,10 @@ namespace App.Infrastructure.SIGPER
                 {
                     using (var dbE = new AppContextEconomia())
                     {
-                        //var rE = from PE in dbE.PEDATPER
                         var rE = from PE in dbE.PEDATPER
                                  join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
                                  where r.Re_ConPyt != 0
                                  where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-
                                  //where r.ReContraSed != 0
                                  where r.Re_ConCar != 21
                                  //where r.Re_ConTipHon != 1
@@ -401,7 +399,6 @@ namespace App.Infrastructure.SIGPER
                     }
                     using (var dbT = new AppContextTurismo())
                     {
-                        //var rT = from PE in dbT.PEDATPER
                         var rT = from PE in dbT.PEDATPER
                                  join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
                                  where r.Re_ConPyt != 0

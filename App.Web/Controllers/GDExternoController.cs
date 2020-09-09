@@ -57,7 +57,6 @@ namespace App.Web.Controllers
             public string Descripcion { get; set; }
         }
 
-
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
