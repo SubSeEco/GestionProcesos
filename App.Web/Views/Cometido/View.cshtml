@@ -263,8 +263,11 @@
                             }
                         </div>
                     </div>
-                    <div class="section"></div>                    
-                    <a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>
+                    <div class="section"></div>
+                    @if (Model.Proceso.Anulada != true || Model.Proceso.Terminada != true)
+                    {
+                        <a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>
+                    }
                 </div>
             </div>
         </div>

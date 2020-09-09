@@ -271,7 +271,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var _useCaseInteractor = new UseCaseCore(_repository, _email);
+            var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
             var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
 
             if (_UseCaseResponseMessage.IsValid)
