@@ -83,6 +83,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<Memorandum> Memorandum { get; set; }
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
         public virtual DbSet<GD> GD { get; set; }
+        public virtual DbSet<GDOrigen> GDOrigen { get; set; }
         public virtual DbSet<ProgramacionHorasExtraordinarias> ProgramacionHorasExtraordinarias { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }

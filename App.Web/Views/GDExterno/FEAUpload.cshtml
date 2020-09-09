@@ -1,0 +1,114 @@
+﻿@model App.Web.Controllers.GDExternoController.DTOFileUploadFEA
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("FEAUpload", "GDExterno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ProcesoId)
+    @Html.HiddenFor(model => model.WorkflowId)
+    @Html.HiddenFor(q => q.Pl_UndDes)
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label>
+                    @Html.CheckBoxFor(m => Model.EsOficial)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.EsOficial)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label>
+                    @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.RequiereFirmaElectronica)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
+            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
+            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.File)<br />
+            @Html.TextBoxFor(model => Model.File, "", new { @type = "file", @id = "FileInput", @accept = ".*" })<br />
+            @Html.ValidationMessageFor(model => Model.File, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <div id="divRequiereFEA">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                @Html.LabelFor(m => Model.Pl_UndCod)<br />
+                @Html.DropDownListFor(m => Model.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default" })
+                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12 l12">
+                @Html.LabelFor(m => Model.UsuarioFirmante)<br />
+                @Html.DropDownListFor(model => model.UsuarioFirmante, null, "Seleccione...", new { @class = "browser-default" })
+                @Html.ValidationMessageFor(m => Model.UsuarioFirmante, "", new { @class = "red-text" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.Descripcion)
+            @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea" })
+            @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#divRequiereFEA').toggle(false)
+    });
+
+    //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
+    $('#RequiereFirmaElectronica').change(function () {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#divRequiereFEA').toggle(true);
+            $('#FileInput').attr("accept", ".pdf");
+        }
+        else {
+            $('#divRequiereFEA').toggle(false);
+            $('#FileInput').attr("accept", ".*");
+        }
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#Pl_UndCod").change(function () {
+
+        var select = $("#UsuarioFirmante");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
+
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+</script>

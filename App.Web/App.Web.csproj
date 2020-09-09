@@ -408,7 +408,8 @@
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
-    <Compile Include="Controllers\GDController.cs" />
+    <Compile Include="Controllers\GDExternoController.cs" />
+    <Compile Include="Controllers\GDInternoController.cs" />
     <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
     <Compile Include="Controllers\GeneracionCDPController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
@@ -448,7 +449,6 @@
     <Compile Include="Helper\AuditAttribute.cs" />
     <Compile Include="Helper\AuthenticationService.cs" />
     <Compile Include="Helper\UserExtended.cs" />
-    <Compile Include="Helper\ValidationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -704,19 +704,21 @@
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
     <Content Include="Views\Workflow\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\GD\Create.cshtml" />
-    <Content Include="Views\GD\Details.cshtml" />
-    <Content Include="Views\GD\Documents.cshtml" />
-    <Content Include="Views\GD\Edit.cshtml" />
-    <Content Include="Views\GD\Index.cshtml" />
-    <Content Include="Views\GD\Sign.cshtml" />
-    <Content Include="Views\GD\Validate.cshtml" />
-    <Content Include="Views\GD\View.cshtml" />
-    <Content Include="Views\GD\FEAUpload.cshtml" />
-    <Content Include="Views\GD\FEADocumentos.cshtml" />
+    <Content Include="Views\GDInterno\Create.cshtml" />
+    <Content Include="Views\GDInterno\Details.cshtml" />
+    <Content Include="Views\GDInterno\Edit.cshtml" />
+    <Content Include="Views\GDInterno\View.cshtml" />
+    <Content Include="Views\GDInterno\FEAUpload.cshtml" />
+    <Content Include="Views\GDInterno\FEADocumentos.cshtml" />
     <Content Include="Views\Cometido\SignOther.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
+    <Content Include="Views\GDExterno\Create.cshtml" />
+    <Content Include="Views\GDExterno\Details.cshtml" />
+    <Content Include="Views\GDExterno\Edit.cshtml" />
+    <Content Include="Views\GDExterno\FEADocumentos.cshtml" />
+    <Content Include="Views\GDExterno\FEAUpload.cshtml" />
+    <Content Include="Views\GDExterno\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
