@@ -296,13 +296,13 @@ namespace App.Web.Controllers
             }
 
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GD.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
             {
                 var obj = _repository.GetFirst<GD>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.GDId;
-                    workflow.Entity = App.Util.Enum.Entidad.GD.ToString();
+                    workflow.Entity = App.Util.Enum.Entidad.GDInterno.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -501,7 +501,6 @@ namespace App.Web.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Stop(Workflow model)
@@ -529,6 +528,5 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-
     }
 }

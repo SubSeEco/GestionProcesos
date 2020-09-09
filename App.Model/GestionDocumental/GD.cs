@@ -11,7 +11,6 @@ namespace App.Model.GestionDocumental
         {
         }
 
-        //comun
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int GDId { get; set; }
@@ -21,9 +20,6 @@ namespace App.Model.GestionDocumental
         [DataType(DataType.Date)]
         public DateTime? Fecha { get; set; } = DateTime.Now;
 
-
-
-        //ingreso interno
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Fecha ingreso (requerido)")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -48,10 +44,10 @@ namespace App.Model.GestionDocumental
 
 
 
+        [Display(Name = "Ingreso externo?")]
+        public bool IngresoExterno { get; set; }
 
-        //externo
-        //[Display(Name = "Correlativo")]
-        //public string Correlativo { get; set; }
+
 
         [Display(Name = "Origen documentación")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
@@ -64,17 +60,23 @@ namespace App.Model.GestionDocumental
 
         [Display(Name = "Unidad destino")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
-        public string DestinoUnidad { get; set; }
+        public string DestinoUnidadCodigo { get; set; }
+
+        [Display(Name = "Unidad destino")]
+        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        public string DestinoUnidadDescripcion { get; set; }
 
         [Display(Name = "Usuario destino")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
-        public string DestinoEmail { get; set; }
+        public string DestinoFuncionarioEmail { get; set; }
+
+        [Display(Name = "Usuario destino")]
+        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        public string DestinoFuncionarioNombre { get; set; }
 
 
 
 
-
-        //proceso
         [Display(Name = "Proceso")]
         public int ProcesoId { get; set; }
         public virtual Core.Proceso Proceso { get; set; }
@@ -82,8 +84,5 @@ namespace App.Model.GestionDocumental
         [Display(Name = "Workflow")]
         public int WorkflowId { get; set; }
         public virtual Core.Workflow Workflow { get; set; }
-
-        [Display(Name = "Ingreso externo?")]
-        public bool IngresoExterno { get; set; }
     }
 }

@@ -116,5 +116,25 @@ namespace App.Model.Core
             }
         }
 
+        [Display(Name = "Validado por secretaria?")]
+        public bool OKSecretaria { get; set; }
+
+
+
+        [NotMapped]
+        [Display(Name = "Unidad origen")]
+        public string OrigenUnidad { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Usuario origen")]
+        public string OrigenUsuario { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Usuario origen")]
+        public string DestinoUnidad { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Usuario destino")]
+        public string DestinoUsuario { get; set; }
     }
 }
