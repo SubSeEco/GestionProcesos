@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using App.Model.SIGPER;
 using App.Core.Interfaces;
+using System.Security.Cryptography;
+using System.ServiceModel.Configuration;
 
 namespace App.Infrastructure.SIGPER
 {
@@ -116,8 +118,17 @@ namespace App.Infrastructure.SIGPER
                         var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
-                            //unidad del funcionario
-                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);
+                            var CodUnidad = (from u in context.PeDatLab
+                                          join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                          where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                          where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                          where u.PeDatLabAdDocCor == (from ud in context.PeDatLab 
+                                                                where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                select ud.PeDatLabAdDocCor).Max()
+                                         select u.RhConUniCod).FirstOrDefault();
+
+                            /*unidad del funcionario*/
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
                             if (unidad != null)
                             {
                                 sigper.Unidad = unidad;
@@ -382,37 +393,26 @@ namespace App.Infrastructure.SIGPER
                 {
                     using (var dbE = new AppContextEconomia())
                     {
-                        //var rE = from PE in dbE.PEDATPER
                         var rE = from PE in dbE.PEDATPER
-                                 join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                                 where r.Re_ConPyt != 0
-                                 where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-
-                                 //where r.ReContraSed != 0
-                                 where r.Re_ConCar != 21
-                                 //where r.Re_ConTipHon != 1
-                                 from PL in dbE.PLUNILAB
-                                 where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
-                                 where PL.Pl_UndCod == codigoUnidad
-                                 where PE.RH_EstLab.Equals("A")
+                                 join r in dbE.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                 where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                 where r.RhConUniCod == codigoUnidad
+                                 where r.PeDatLabAdDocCor == (from ud in dbE.PeDatLab
+                                                              where ud.RH_NumInte == PE.RH_NumInte
+                                                              select ud.PeDatLabAdDocCor).Max()
                                  select PE;
 
                         returnValue.AddRange(rE.ToList());
                     }
                     using (var dbT = new AppContextTurismo())
                     {
-                        //var rT = from PE in dbT.PEDATPER
                         var rT = from PE in dbT.PEDATPER
-                                 join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                                 where r.Re_ConPyt != 0
-                                 where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-                                 //where r.ReContraSed != 0
-                                 where r.Re_ConCar != 21
-                                 //where r.Re_ConTipHon != 1
-                                 from PL in dbT.PLUNILAB
-                                 where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
-                                 where PL.Pl_UndCod == codigoUnidad
-                                 where PE.RH_EstLab.Equals("A")
+                                 join r in dbT.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                 where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                 where r.RhConUniCod == codigoUnidad
+                                 where r.PeDatLabAdDocCor == (from ud in dbT.PeDatLab
+                                                              where ud.RH_NumInte == PE.RH_NumInte
+                                                              select ud.PeDatLabAdDocCor).Max()
                                  select PE;
                         returnValue.AddRange(rT.ToList());
                     }
@@ -706,6 +706,41 @@ namespace App.Infrastructure.SIGPER
             {
                 throw;
             }
+        }
+        public List<PEDATPER> GetAllUsersForCometido()
+        {
+            var returnValue = new List<PEDATPER>();
+
+            using (var dbE = new AppContextEconomia())
+            {
+                var rE = from PE in dbE.PEDATPER
+                         //join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
+                         //where r.Re_ConPyt != 0
+                         //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+                         //where r.Re_ConCar != 21
+                         //from PL in dbE.PLUNILAB
+                         //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+                         where PE.RH_EstLab.Equals("A")
+                         select PE;
+                returnValue.AddRange(rE.ToList());
+
+            }
+
+            using (var dbT = new AppContextTurismo())
+            {
+                var rT = from PE in dbT.PEDATPER
+                         //join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
+                         //where r.Re_ConPyt != 0
+                         //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+                         //where r.Re_ConCar != 21
+                         //from PL in dbT.PLUNILAB
+                         //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+                         where PE.RH_EstLab.Equals("A")
+                         select PE;
+                returnValue.AddRange(rT.ToList());
+            }
+
+            return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
     }
 }

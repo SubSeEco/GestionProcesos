@@ -1304,12 +1304,8 @@ namespace App.Core.UseCases
                 if (!string.IsNullOrEmpty(obj.ConglomeradoDescripcion))
                     obj.IdConglomerado = Convert.ToInt32(obj.ConglomeradoDescripcion);
 
-                if (!string.IsNullOrEmpty(obj.ProgramaDescripcion))
-                {
-                    var prog = _sigper.GetREPYTs().Where(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim()).FirstOrDefault();
-                    if (prog != null)
-                        obj.IdPrograma = int.Parse(prog.RePytCod.ToString());
-                }
+                if (obj.IdPrograma == 0)
+                    response.Errors.Add("No se ha señalado la fuente de financiamiento (Programa)");
 
 
                 if (obj.Vehiculo == true)

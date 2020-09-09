@@ -157,7 +157,6 @@ namespace App.Web.Controllers
 
         public JsonResult GetUsuario(int Rut)
         {
-
             var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
             var per = _sigper.GetUserByEmail(correo.Trim());
 
@@ -173,7 +172,7 @@ namespace App.Web.Controllers
             var estamento = per.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var IdEscalafon = int.Parse(per.FunDatosLaborales.RhConEsc.Trim());
             var Escalafon = per.FunDatosLaborales.RhConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == per.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim();
-            var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
+            var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt;// == 0 ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida" ;
@@ -204,7 +203,8 @@ namespace App.Web.Controllers
                 IdUnidad = per.Unidad.Pl_UndCod,
                 Jefatura = jefatura,
                 IdEscalafon = IdEscalafon,
-                Escalafon = Escalafon
+                Escalafon = Escalafon,
+                IdPrograma = ProgId
             }, JsonRequestBehavior.AllowGet);
 
 
@@ -394,22 +394,23 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //public ActionResult SignOther(int id)
-        //{
-        //    var model = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == id);
-        //    return View(model);
-        //}
+        public ActionResult SignOther()
+        {
+            //var model = _repository.GetAll<Cometido>().Where(c => c.CometidoId == id);
+            return View();
+        }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SignOther(int id)
+        //[ValidateAntiForgeryToken]
+        public ActionResult SignOther(int? DocumentoId)
         {
-            var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == id).FirstOrDefault();
+            //IdProceso = 2423;
+            //var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == IdProceso.Value).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
-                var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var doc = _repository.Get<Documento>(c => c.DocumentoId == DocumentoId).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user, null);
 
@@ -433,7 +434,8 @@ namespace App.Web.Controllers
                     .Where(y => y.Count > 0)
                     .ToList();
             }
-            return View(model);
+            //return View(model);
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         public ActionResult Create(int? WorkFlowId, int? ProcesoId)
@@ -445,7 +447,9 @@ namespace App.Web.Controllers
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().Where(q => q.Activo == true).OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers().Where(c =>c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers().Where(c =>c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsersForCometido().Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(100510), "RH_NumInte", "PeDatPerChq");
 
 
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
@@ -485,7 +489,7 @@ namespace App.Web.Controllers
                 model.SolicitaReembolso = true;
                 model.IdConglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed;
                 model.ConglomeradoDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed.ToString();
-                model.IdPrograma = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
+                model.IdPrograma = Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt); //_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
                 //model.ProgramaDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt.ToString();
                 model.ProgramaDescripcion = model.IdPrograma != null ? _sigper.GetREPYTs().Where(c => c.RePytCod == model.IdPrograma).FirstOrDefault().RePytDes : "S/A";
                 model.Jefatura = persona.Jefatura.PeDatPerChq;
@@ -502,7 +506,7 @@ namespace App.Web.Controllers
         public ActionResult Create(Cometido model)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsersForCometido().Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
 
             model.FechaSolicitud = DateTime.Now;

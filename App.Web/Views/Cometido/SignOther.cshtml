@@ -92,8 +92,8 @@
 
                         <!-- Button trigger modal -->
                         @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@String.Concat("#modal", item.DocumentoId)" >
-                                Launch demo modal
-                            </button>*@
+                            Launch demo modal
+                        </button>*@
 
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                     }
@@ -107,24 +107,24 @@
                     /*MODAL*/
                     <!-- Modal -->
                     @*<div class="modal fade" id="@String.Concat("#modal", item.DocumentoId)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                    </div>*@
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
@@ -169,7 +169,7 @@
                     if (!item.Signed)
                     {
                         <div class="section"></div>
-                        <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar docto conta @item.DocumentoId  </a>
+                        <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal17", item.DocumentoId)">Firmar</a>
                     }
                     else
                     {
@@ -179,12 +179,12 @@
                     <div class="divider"></div>
 
                     <!-- Modal Structure -->
-                    <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
+                    <div id="@String.Concat("#modal17", item.DocumentoId)" class="modal">
                         <div class="modal-content">
-                            <h4>Confirma Operacion de Firma --> @item.DocumentoId</h4>
-                            @using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))
+                            <h4>Confirma Operacion de Firma</h4>
+                            @using (Html.BeginForm("SignOther", "Cometido", new { DocumentoId = item.DocumentoId }, FormMethod.Post))
                             {
-                                @Html.AntiForgeryToken()
+                                @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)
                                 <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
                             }
@@ -233,7 +233,7 @@
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("Sign", "Documento", new { DocumentoId = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))
+                            @using (Html.BeginForm("SignOther", "Cometido", new { DocumentoId = item.DocumentoId }, FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => item.DocumentoId)

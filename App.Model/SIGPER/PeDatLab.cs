@@ -145,7 +145,7 @@ namespace App.Model.SIGPER
         //[StringLength(3)]
         //public string PeDatLabEd_DocTip { get; set; }
 
-        //public int? PeDatLabAdDocCor { get; set; }
+        public int? PeDatLabAdDocCor { get; set; }
 
         //public short? PeDatLabAdDocNomCor { get; set; }
 
