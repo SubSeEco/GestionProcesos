@@ -53,7 +53,7 @@ namespace App.Model.GestionDocumental
         //[Display(Name = "Correlativo")]
         //public string Correlativo { get; set; }
 
-        [Display(Name = "Origen")]
+        [Display(Name = "Origen documentación")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public int GDOrigenId { get; set; }
         public virtual GDOrigen GDOrigen { get; set; }

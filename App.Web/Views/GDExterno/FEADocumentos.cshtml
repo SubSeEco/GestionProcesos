@@ -5,7 +5,7 @@
 
 <div class="card">
     <div class="card-content">
-
+        
         <div class="row">
             <div class="col l9">
                 <span class="card-title">Documentos</span>
@@ -28,10 +28,12 @@
 
             <div class="row">
                 <div class="col s12 m12 l12">
+
                     @if (@item.Signed)
                     {
                         <i class="material-icons medium right green-text">lock_outline</i>
                     }
+
                     <h6>
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
@@ -40,22 +42,29 @@
                         Creado por @item.Email el @item.Fecha
                     </em>
                 </div>
-
                 <div class="col s12 m12 l12">
                     <br />
                     <label>Tipo documento:</label><br />
-                    @item.TipoDocumentoFirma<br />
-
+                    @item.TipoDocumentoFirma
+                </div>
+                <div class="col s12 m12 l12">
                     <label>Autor:</label><br />
-                    @item.Email<br />
-
+                    @item.Email
+                </div>
+                <div class="col s12 m12 l12">
                     @if (!string.IsNullOrWhiteSpace(item.Descripcion))
                     {
                         <label>Descripción:</label><br />
                         @item.Descripcion
                     }
                 </div>
-
+                <div class="col s12 m12 l12">
+                    @if (@item.RequiereFirmaElectronica)
+                    {
+                        <label>Para firma de:</label><br />
+                        @item.FirmanteEmail
+                    }
+                </div>
                 <div class="pdfPreview">
                     <div class="col s12 m12 l12">
                         <br />
@@ -65,16 +74,15 @@
                         }
                     </div>
                 </div>
-
                 <div class="col s12 m12 l12">
                     <br />
 
                     @if (!@item.Proceso.Terminada && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
                     {
                         @*<p class="grey-text ultra-small">Para firma de @item.FirmanteEmail</p>*@
-                        <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumento",@item.DocumentoId)">Firmar</a>
+                        <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumento", @item.DocumentoId)">Firmar</a>
 
-                        <div id="@string.Concat("modalFirmaDocumento",@item.DocumentoId)" class="modal">
+                        <div id="@string.Concat("modalFirmaDocumento", @item.DocumentoId)" class="modal">
                             <div class="modal-content">
                                 <h4>Confirmación</h4>
                                 <p>¿ Confirma la operación de firma electrónica del documento?</p>
@@ -90,8 +98,8 @@
                         </div>
                     }
 
-                    <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento",@item.DocumentoId)">Eliminar</a>
-                    <div id="@string.Concat("modalDeleteDocumento",@item.DocumentoId)" class="modal">
+                    <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
+                    <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirmación</h4>
                             <p>¿ Confirma la eliminación del documento?</p>

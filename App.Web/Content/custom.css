@@ -38,3 +38,6 @@ strong {
     max-height: 100%;
 }
 
+.switch label .lever {
+    margin: 0 4px;
+}
