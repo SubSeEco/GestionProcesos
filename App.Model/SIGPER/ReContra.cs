@@ -44,5 +44,8 @@ namespace App.Model.SIGPER
 
         [Display(Name = "RH_ContCod")]
         public Int16 RH_ContCod { get; set; }
+
+        [Display(Name = "ReContraLabCor")]
+        public Int16 ReContraLabCor { get; set; }
     }
 }

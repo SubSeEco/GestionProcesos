@@ -181,7 +181,7 @@
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
                             @*@using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))*@                            
-                            @using (Html.BeginForm("SignOther", "Cometido", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.ProcesoId, enctype = "multipart/form-data" }))                            
+                            @using (Html.BeginForm("SignOther", "Cometido",FormMethod.Post))
                             {
                                 @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)
