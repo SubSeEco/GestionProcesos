@@ -40,14 +40,14 @@ namespace App.Web.Controllers
 
             [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Unidad del firmante")]
-            public string Pl_UndCod { get; set; }
+            public string FirmanteUnidadCodigo { get; set; }
 
             [Display(Name = "Unidad del firmante")]
-            public string Pl_UndDes { get; set; }
+            public string FirmanteUnidadDescripcion { get; set; }
 
             [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Usuario firmante")]
-            public string UsuarioFirmante { get; set; }
+            public string FirmanteEmail { get; set; }
 
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Tipo documento")]
@@ -101,8 +101,8 @@ namespace App.Web.Controllers
             };
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
-            ViewBag.DestinoUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -125,9 +125,9 @@ namespace App.Web.Controllers
             }
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
-            ViewBag.DestinoUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            if (model.DestinoUnidad != null && model.DestinoUnidad.IsInt())
-                ViewBag.DestinoEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidad.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -137,9 +137,9 @@ namespace App.Web.Controllers
             var model = _repository.GetById<GD>(id);
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
-            ViewBag.DestinoUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            if (model.DestinoUnidad != null && model.DestinoUnidad.IsInt())
-                ViewBag.DestinoEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidad.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -162,9 +162,9 @@ namespace App.Web.Controllers
             }
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
-            ViewBag.DestinoUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.DestinoUnidad);
-            if (model.DestinoUnidad != null && model.DestinoUnidad.IsInt())
-                ViewBag.DestinoEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidad.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.DestinoUnidadCodigo);
+            if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -173,8 +173,8 @@ namespace App.Web.Controllers
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.FirmanteEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
 
@@ -186,8 +186,8 @@ namespace App.Web.Controllers
         public ActionResult FEAUpload(DTOFileUploadFEA model)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.UsuarioFirmante = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.FirmanteEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             var email = UserExtended.Email(User);
 
@@ -208,27 +208,27 @@ namespace App.Web.Controllers
                     documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
                     documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
                     documento.EsOficial = model.EsOficial;
-                    documento.FirmanteUnidad = model.Pl_UndCod;
-                    documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.UsuarioFirmante) ? model.UsuarioFirmante.Trim() : null;
+                    documento.FirmanteUnidad = model.FirmanteUnidadCodigo;
+                    documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.FirmanteEmail) ? model.FirmanteEmail.Trim() : null;
                     documento.Descripcion = model.Descripcion;
 
                     //contenido
                     var file = Request.Files[i];
-                    var target = new MemoryStream();
-                    if (target != null)
+                    if (file != null)
                     {
+                        var target = new MemoryStream();
                         file.InputStream.CopyTo(target);
                         documento.FileName = file.FileName;
                         documento.File = target.ToArray();
-                    }
 
-                    //metadata
-                    var metadata = _file.BynaryToText(target.ToArray());
-                    if (metadata != null)
-                    {
-                        documento.Texto = metadata.Text;
-                        documento.Metadata = metadata.Metadata;
-                        documento.Type = metadata.Type;
+                        //metadata
+                        var metadata = _file.BynaryToText(target.ToArray());
+                        if (metadata != null)
+                        {
+                            documento.Texto = metadata.Text;
+                            documento.Metadata = metadata.Metadata;
+                            documento.Type = metadata.Type;
+                        }
                     }
 
                     _repository.Create(documento);
@@ -245,7 +245,6 @@ namespace App.Web.Controllers
         public ActionResult FEADocumentos(int ProcesoId)
         {
             var email = UserExtended.Email(User);
-
             var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
             foreach (var item in model)
                 item.AutorizadoParaFirma = item.FirmanteEmail == email;

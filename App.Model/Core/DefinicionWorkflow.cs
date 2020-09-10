@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace App.Model.Core
 {
     [Table("CoreDefinicionWorkflow")]
-    public class DefinicionWorkflow 
+    public class DefinicionWorkflow
     {
         public DefinicionWorkflow()
         {
