@@ -596,11 +596,7 @@
                                     @Html.DisplayFor(m => Model.ObservacionesPagoSigfeTesoreria)
                                     @Html.LabelFor(m => Model.ObservacionesPagoSigfeTesoreria)
                                 </div>
-                            </div>
-                            <h3><span style="font-weight: bold">VIII. Firma Documento SIGFE</span></h3>
-                            <div class="row">
-                                @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
-                            </div>
+                            </div>                            
                         </div>
                         @*<div class="section"></div>
                             <p>
@@ -617,6 +613,15 @@
                 @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
                 @Html.Action("History", "Workflow", new { Model.WorkflowId })
             </div>*@
+    </div>
+
+    <div class="col s12 m10 l8">
+        <div id="jQuery_accordion2">
+            <h3><span style="font-weight: bold">Firma Documento SIGFE</span></h3>
+            <div class="row">
+                @Html.Partial("~/Views/Cometido/SignOther.cshtml")
+            </div>
+        </div>
     </div>
 </div>
 
@@ -651,6 +656,12 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
+            collapsible: true, heightStyle: true
+        });
+    });
+
+    $(function () {
+        $("#jQuery_accordion2").accordion({
             collapsible: true, heightStyle: true
         });
     });

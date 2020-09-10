@@ -20,5 +20,11 @@ namespace App.Model.Cometido
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Activo")]
         public bool ParrafoActivo { get; set; }
+
+        [Display(Name = "Definicion Proceso Id")]
+        public int DefinicionProcesoId { get; set; }
+
+        [Display(Name = "Documento")]
+        public string Documento { get; set; }
     }
 }

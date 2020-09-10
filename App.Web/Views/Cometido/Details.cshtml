@@ -318,14 +318,14 @@
                                 @if (Model.SolicitaViatico == true || Model.SolicitaViatico != true)
                                 {
                                     <span class="card-title">Viáticos</span>
-                                    if(Model.Workflow.DefinicionWorkflow.Secuencia == 9)
+                                    if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
                                     {
                                         <strong>
                                             <label style="color:green">
                                                 “Recuerde que debe ingresar el Id de Comproniso.”
                                             </label>
                                         </strong>
-                                    }                                    
+                                    }
                                     <table class="table">
                                         <tr>
                                             <th>
@@ -542,11 +542,14 @@
                                             @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
                                         </div>
 
-                                        <div class="row">
-                                            <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
-                                            @Html.Raw("<span>Subir archivo refrendación</span>")
-                                        </div>
-                                        @*@Html.ActionLink("Adjuntar", "Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId },null)*@
+                                        if (Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso != null)
+                                        {
+                                            <div class="row">
+                                                <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                                                @Html.Raw("<span>Subir archivo refrendación</span>")
+                                            </div>
+                                            @*@Html.ActionLink("Adjuntar", "Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId },null)*@
+                                        }
                                     }
                                     else
                                     {
