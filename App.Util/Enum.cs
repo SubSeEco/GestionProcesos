@@ -77,7 +77,8 @@
             EjecutaPorJefaturaDeQuienEjecutoTareaAnterior = 7,
 //            EjecutaDestinoGD = 8,
             EjecutaJefaturaDeFuncionarioQueViaja = 9,
-            EjecutaSecretariaMiUnidad = 10
+            EjecutaSecretariaUnidadOrigen = 10,
+            EjecutaSecretariaUnidadDestino = 11
 
         }
         public enum Configuracion

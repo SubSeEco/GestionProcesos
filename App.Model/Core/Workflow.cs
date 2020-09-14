@@ -121,20 +121,25 @@ namespace App.Model.Core
 
 
 
-        [NotMapped]
         [Display(Name = "Unidad origen")]
-        public string OrigenUnidad { get; set; }
+        public int? OrigenUnidad { get; set; }
 
-        [NotMapped]
         [Display(Name = "Usuario origen")]
         public string OrigenUsuario { get; set; }
 
-        [NotMapped]
         [Display(Name = "Usuario origen")]
-        public string DestinoUnidad { get; set; }
+        public int? DestinoUnidad { get; set; }
 
-        [NotMapped]
         [Display(Name = "Usuario destino")]
         public string DestinoUsuario { get; set; }
+
+
+
+        // en el caso de tareas de validacion forzada de secretarias
+        [Display(Name = "Usuario origen")]
+        public int? DestinoUnidadFinal { get; set; }
+
+        [Display(Name = "Usuario destino final")]
+        public string DestinoUsuarioFinal { get; set; }
     }
 }
