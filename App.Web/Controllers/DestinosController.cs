@@ -319,6 +319,7 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new List<SelectListItem>();
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(),model.IdComuna);
             model.Cometido = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
 
             model.Dias100Aprobados = 0;

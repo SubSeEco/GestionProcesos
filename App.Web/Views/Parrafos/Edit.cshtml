@@ -16,6 +16,14 @@
                         @Html.ValidationMessageFor(m => Model.ParrafoTexto, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.DefinicionProcesoId)
+                        @Html.LabelFor(m => Model.DefinicionProcesoId)                        
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        @Html.TextBoxFor(m => Model.Documento)
+                        @Html.LabelFor(m => Model.Documento)
+                    </div>
+                    <div class="input-field col s12 m10 l10">
                         <label>
                             @Html.CheckBoxFor(m => m.ParrafoActivo)
                             <span>@Html.LabelFor(m => Model.ParrafoActivo)</span>

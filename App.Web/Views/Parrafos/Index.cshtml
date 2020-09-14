@@ -14,31 +14,43 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ParrafoActivo)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DefinicionProcesoId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Documento)
+                    </th>
                     <th></th>
                 </tr>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ParrafosId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ParrafoTexto)
-                        </td>
-                        <td>
-                            @if (item.ParrafoActivo)
-                            {
-                                <p>True</p>
-                            }
-                            else
-                            {
-                                <p>False</p>
-                            }
-                        </td>
-                        <td>
-                            @Html.ActionLink("Detalles", "Details", new { id = item.ParrafosId })
-                        </td>
-                    </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParrafosId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParrafoTexto)
+                </td>
+                <td>
+                    @if (item.ParrafoActivo)
+                    {
+                        <p>True</p>
+                    }
+                    else
+                    {
+                        <p>False</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DefinicionProcesoId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Documento)
+                </td>
+                <td>
+                    @Html.ActionLink("Detalles", "Details", new { id = item.ParrafosId })
+                </td>
+            </tr>
                 }
             </table>
         </div>

@@ -56,128 +56,137 @@ namespace App.Web.Controllers
             ViewBag.PsjTipoSubAsignacionId = new SelectList(_repository.GetAll<TipoSubAsignacion>(), "TipoSubAsignacionId", "TsaNombre");
 
             /*Se obtiene los valores necesarios para generar los datos del cdp*/
-            int programa = com.IdPrograma.Value;
-            int Idsubtitulo = programa == 5 || programa == 7 || programa == 11 || programa == 12 || programa == 16 || programa == 17 || programa == 18 || programa == 19 || programa == 20 ? 3 : 1;
-            int Iditem;
-            int Idasignacion = 0;
-            int IdsubAsignacion = 3;
-
-            if (programa == 21)
+            if(com.IdPrograma.HasValue)
             {
-                Iditem = 2;
-                Idasignacion = 2; //004
-            }                
-            else if (programa == 22)
-            {
-                Iditem = 1;
-                Idasignacion = 2; //004
-            }                
-            else
-                Iditem = 3;
+                int programa = com.IdPrograma.Value;
+                int Idsubtitulo = programa == 5 || programa == 7 || programa == 11 || programa == 12 || programa == 16 || programa == 17 || programa == 18 || programa == 19 || programa == 20 ? 3 : 1;
+                int Iditem;
+                int Idasignacion = 0;
+                int IdsubAsignacion = 3;
 
-            switch (programa)
-            {
-                case 1:
-                    Idasignacion = 1;
-                    break;
-                case 2:
-                    Idasignacion = 1;
-                    break;
-                case 3:
-                    Idasignacion = 1;
-                    break;
-                case 4:
-                    Idasignacion = 1;
-                    break;
-                case 5:
-                    Idasignacion = 4;// 472;
-                    break;
-                case 7:
-                    Idasignacion = 12;// 477;
-                    break;
-                case 11:
-                    Idasignacion = 15; // 214.05.008;
-                    break;
-                case 12:
-                    Idasignacion = 1;// 001;
-                    break;
-                case 16:
-                    Idasignacion = 16;// 413;
-                    break;
-                case 17:
-                    Idasignacion = 17;// 611;
-                    break;
-                case 18:
-                    Idasignacion = 18;//612;
-                    break;
-                case 19:
-                    Idasignacion = 19;// 613;
-                    break;
-                case 20:
-                    Idasignacion = 20;// 614;
-                    break;
-                case 21:
-                    Idasignacion = 2;
-                    break;
-                case 22:
-                    Idasignacion = 2;
-                    break;
-            }
-
-
-            var model = new GeneracionCDP();
-            model.CometidoId = CometidoId;
-            model.Cometido = com;
-            
-            /*CDP Viaticos*/
-            model.VtcTipoCapituloId = model.Cometido.UnidadDescripcion.Contains("Turismo") ? 2 : 1;
-            model.VtcTipoPartidaId = 1;
-            model.VtcCentroCostoId = programa;
-            model.VtcTipoSubTituloId = Idsubtitulo;
-            model.VtcTipoItemId = Iditem;
-            model.VtcTipoAsignacionId = Idasignacion;
-            model.VtcTipoSubAsignacionId = IdsubAsignacion;
-            model.VtcIdCompromiso = "0";
-            model.VtcPptoTotal = "0";
-            model.VtcObligacionActual = "0";
-            model.VtcSaldo = "0";
-            model.VtcValorViatico = "0";
-            model.VtcCodCompromiso = "0";
-            model.VtcCompromisoAcumulado = "0";
-            model.PsjCompromisoAcumulado = "0";
-
-            /*CDP Pasajes*/
-            model.PsjTipoPartidaId = 1;
-            model.PsjVtcTipoCapituloId = model.Cometido.UnidadDescripcion.Contains("Turismo") ? 2 : 1;
-            model.PsjTipoPartidaId = 1;
-            model.PsjCentroCostoId = programa;
-            model.PsjTipoSubTituloId = Idsubtitulo;
-            model.PsjTipoItemId = Iditem;
-            model.PsjTipoAsignacionId = Idasignacion;
-            model.PsjTipoSubAsignacionId = IdsubAsignacion;
-            model.PsjIdCompromiso = "0";
-            model.PsjPptoTotal = "0";
-            model.PsjObligacionActual = "0";
-            model.PsjSaldo = "0";
-            model.PsjValorViatico = "0";
-            model.PsjCodCompromiso = "0";
-
-            /*Obtiene el monto el viatico desde los destinos */
-            if (destinos != null)
-            {
-                int total = 0;
-                foreach (var d in destinos)
+                if (programa == 21)
                 {
-                    if (d.Total != null)
-                        total += d.Total.Value;
-                    else
-                        total += 0;
+                    Iditem = 2;
+                    Idasignacion = 2; //004
                 }
-                model.VtcValorViatico = total.ToString();
-            }
-            model.VtcObligacionActual = model.VtcValorViatico;
+                else if (programa == 22)
+                {
+                    Iditem = 1;
+                    Idasignacion = 2; //004
+                }
+                else
+                    Iditem = 3;
 
-            return View(model);
+                switch (programa)
+                {
+                    case 1:
+                        Idasignacion = 1;
+                        break;
+                    case 2:
+                        Idasignacion = 1;
+                        break;
+                    case 3:
+                        Idasignacion = 1;
+                        break;
+                    case 4:
+                        Idasignacion = 1;
+                        break;
+                    case 5:
+                        Idasignacion = 4;// 472;
+                        break;
+                    case 7:
+                        Idasignacion = 12;// 477;
+                        break;
+                    case 11:
+                        Idasignacion = 15; // 214.05.008;
+                        break;
+                    case 12:
+                        Idasignacion = 1;// 001;
+                        break;
+                    case 16:
+                        Idasignacion = 16;// 413;
+                        break;
+                    case 17:
+                        Idasignacion = 17;// 611;
+                        break;
+                    case 18:
+                        Idasignacion = 18;//612;
+                        break;
+                    case 19:
+                        Idasignacion = 19;// 613;
+                        break;
+                    case 20:
+                        Idasignacion = 20;// 614;
+                        break;
+                    case 21:
+                        Idasignacion = 2;
+                        break;
+                    case 22:
+                        Idasignacion = 2;
+                        break;
+                }
+
+                var model = new GeneracionCDP();
+                model.CometidoId = CometidoId;
+                model.Cometido = com;
+
+                /*CDP Viaticos*/
+                model.VtcTipoCapituloId = model.Cometido.UnidadDescripcion.Contains("Turismo") ? 2 : 1;
+                model.VtcTipoPartidaId = 1;
+                model.VtcCentroCostoId = programa;
+                model.VtcTipoSubTituloId = Idsubtitulo;
+                model.VtcTipoItemId = Iditem;
+                model.VtcTipoAsignacionId = Idasignacion;
+                model.VtcTipoSubAsignacionId = IdsubAsignacion;
+                model.VtcIdCompromiso = "0";
+                model.VtcPptoTotal = "0";
+                model.VtcObligacionActual = "0";
+                model.VtcSaldo = "0";
+                model.VtcValorViatico = "0";
+                model.VtcCodCompromiso = "0";
+                model.VtcCompromisoAcumulado = "0";
+                model.PsjCompromisoAcumulado = "0";
+
+                /*CDP Pasajes*/
+                model.PsjTipoPartidaId = 1;
+                model.PsjVtcTipoCapituloId = model.Cometido.UnidadDescripcion.Contains("Turismo") ? 2 : 1;
+                model.PsjTipoPartidaId = 1;
+                model.PsjCentroCostoId = programa;
+                model.PsjTipoSubTituloId = Idsubtitulo;
+                model.PsjTipoItemId = Iditem;
+                model.PsjTipoAsignacionId = Idasignacion;
+                model.PsjTipoSubAsignacionId = IdsubAsignacion;
+                model.PsjIdCompromiso = "0";
+                model.PsjPptoTotal = "0";
+                model.PsjObligacionActual = "0";
+                model.PsjSaldo = "0";
+                model.PsjValorViatico = "0";
+                model.PsjCodCompromiso = "0";
+
+                /*Obtiene el monto el viatico desde los destinos */
+                if (destinos != null)
+                {
+                    int total = 0;
+                    foreach (var d in destinos)
+                    {
+                        if (d.Total != null)
+                            total += d.Total.Value;
+                        else
+                            total += 0;
+                    }
+                    model.VtcValorViatico = total.ToString();
+                }
+                model.VtcObligacionActual = model.VtcValorViatico;
+
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Cometido no posee fuente de Financiamiento");
+                return RedirectToAction("EditPpto", "Cometido", new { id = CometidoId });
+            }
+
+            //return View();
         }
 
         [HttpPost]

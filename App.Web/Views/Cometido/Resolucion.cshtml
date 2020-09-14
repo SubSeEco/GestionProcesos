@@ -16,7 +16,7 @@
 </head>
 
 <body style="font-family:Calibri;font-size:9;line-height:11px;text-align:justify;text-justify:auto">
-    <table>
+    <table border="0" style="margin-top:768px">
         <tr>
             <td width="32%">
                 <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
@@ -107,8 +107,8 @@
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td>
+            @*<td></td>*@
+            <td colspan="2">
                 <strong>
                     CONSIDERANDO:
                 </strong>
@@ -164,8 +164,8 @@
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td>
+            @*<td></td>*@
+            <td colspan="2">
                 <strong>RESUELVO:</strong>
                 <br />
                 <p align="justify" style="margin-right:30px">
@@ -200,8 +200,8 @@
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td>
+            @*<td></td>*@
+            <td colspan="2">
                 2. <strong>DÉJASE CONSTANCIA:</strong>
                 @if (Model.SolicitaViatico == true)
                 {
@@ -229,15 +229,15 @@
                                 @Html.Raw("Dias 60%")
                             </td>
                             @*<td>
-                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
-                    </td>*@
+                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                            </td>*@
                             <td>
                                 @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
                                 @Html.Raw("Dias 40%")
                             </td>
                             @*<td>
-                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
-                    </td>*@
+                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                            </td>*@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
@@ -258,14 +258,14 @@
                                     @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
                                 </td>
                                 @*<td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                        </td>*@
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
                                 </td>
                                 @*<td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
-                        </td>*@
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                </td>*@
                             </tr>
                         }
                     </table>
@@ -322,12 +322,12 @@
                     @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
                     ,de acuerdo a su naturaleza.
                 </p>
-            </td>            
+            </td>
         </tr>
         <tr><td></td><td></td></tr>
         <tr>
-            <td></td>
-            <td>                
+            @*<td></td>*@
+            <td colspan="2">
                 @if (Model.GeneracionCDP.Count > 0)
                 {
                     <p align="justify" style="margin-right:30px">
@@ -394,14 +394,14 @@
 
                         }
                         @*@if (Model.SolicitaViatico != true)
-                {
-                    @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                    @Html.Raw(",y al Subtítulo 22")
-                    @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
-                    @Html.DisplayFor(m => Model.Anno)
-                    @Html.Raw("de la ")
-                    @Html.DisplayFor(m => Model.Subscretaria)
-                }*@
+                        {
+                            @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                            @Html.Raw(",y al Subtítulo 22")
+                            @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
+                            @Html.DisplayFor(m => Model.Anno)
+                            @Html.Raw("de la ")
+                            @Html.DisplayFor(m => Model.Subscretaria)
+                        }*@
                     </p>
                 }
                 @if (Model.SolicitaViatico != true)

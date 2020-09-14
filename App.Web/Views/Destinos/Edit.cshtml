@@ -49,6 +49,8 @@
                 @Html.HiddenFor(q => Model.Dias40Monto)
                 @Html.HiddenFor(q => Model.Dias50Monto)
                 @Html.HiddenFor(q => Model.Dias00Monto)
+                @*@Html.HiddenFor(q => Model.FechaInicio)
+                @Html.HiddenFor(q => Model.FechaHasta)*@
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
                 <div class="card">
@@ -198,6 +200,7 @@
             //}
         });
 
+        //$("#IdComuna").attr('disabled', true);
         //$("#Dias50").attr('disabled', true);
         //$("#Dias00").attr('disabled', true);
         //$("#Total").attr('disabled', true);
@@ -252,6 +255,7 @@
                 });
                 $('select').formSelect();
             })
+        //$("#IdComuna").attr('disabled', false);
     });
 
     function CalculaViaticos() {

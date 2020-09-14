@@ -2443,5 +2443,61 @@ namespace App.Web.Controllers
             var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
             return fileStreamResult;
         }
+
+        public FileResult SeguimientoFinanzas()
+      {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoFinanzas.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackageSeguimientoUnidades = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
+            {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+
+                fila++;
+                worksheet.Cells[fila, 1].Value = cometido.CometidoId.ToString();
+                worksheet.Cells[fila, 2].Value = cometido.Nombre;
+                worksheet.Cells[fila, 3].Value = cometido.UnidadDescripcion;
+                worksheet.Cells[fila, 4].Value = cometido.FechaSolicitud.ToShortDateString();
+                worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
+                /*Datos desde destinos*/
+                if (destino.Count > 0)
+                {                    
+                    worksheet.Cells[fila, 6].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 7].Value = destino != null ? destino.LastOrDefault().Dias60Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 8].Value = destino != null ? destino.LastOrDefault().Dias100Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 9].Value = destino != null ? destino.LastOrDefault().Dias50Aprobados.ToString() : "S/A";
+                    worksheet.Cells[fila, 10].Value = destino != null ? destino.LastOrDefault().Dias00Aprobados.ToString() : "S/A";
+                    //fila++;
+                }
+                
+                worksheet.Cells[fila, 12].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagador) ? cometido.NombreFuncionarioPagador : "S/A";
+                worksheet.Cells[fila, 13].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
+                worksheet.Cells[fila, 14].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToShortDateString() : "S/A";
+                
+                worksheet.Cells[fila, 16].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagadorTesoreria) ? cometido.NombreFuncionarioPagadorTesoreria : "S/A";
+                worksheet.Cells[fila, 17].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria.ToString() : "S/A";
+                worksheet.Cells[fila, 18].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToShortDateString() : "S/A";
+
+                /*se busca la fecha de creacion de las tareas*/
+                foreach (var w in workflow)
+                {
+                    if(w.DefinicionWorkflowId == 82)
+                        worksheet.Cells[fila, 11].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A";
+
+                    if(w.DefinicionWorkflowId == 84)
+                        worksheet.Cells[fila, 15].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A";
+                }
+            }
+
+
+            return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoFinanzas_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
     }
 }

@@ -11,6 +11,14 @@
                 <strong>@Html.DisplayNameFor(m => Model.ParrafoTexto)</strong>
                 <p>@Html.DisplayFor(m => Model.ParrafoTexto)</p>
             </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.DefinicionProcesoId)</strong>
+                <p>@Html.DisplayFor(m => Model.DefinicionProcesoId)</p>
+            </div>
+            <div class="input-field col s12 m10">
+                <strong>@Html.DisplayNameFor(m => Model.Documento)</strong>
+                <p>@Html.DisplayFor(m => Model.Documento)</p>
+            </div>
             <div class="input-field col s12 m10 l10">
                 <label>
                     @Html.CheckBoxFor(m => m.ParrafoActivo, new { @disabled = "disabled" })

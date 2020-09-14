@@ -279,7 +279,13 @@ namespace App.Web.Controllers
             else
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
 
-            return RedirectToAction("Index");
+
+            var p = _repository.GetById<Proceso>(id).DefinicionProcesoId;
+            if(p == 13)
+                return RedirectToAction("SeguimientoGP","Cometido");
+            else
+                return RedirectToAction("Index");
+
         }
 
         public ActionResult Dashboard()
