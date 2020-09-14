@@ -350,6 +350,7 @@
     <Content Include="App_Data\ReportePresupuesto.xlsx" />
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <Content Include="App_Data\HSA.xlsx" />
+    <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />

@@ -647,8 +647,8 @@
             <div class="col s12 m10 l8">
                 <div class="card">
                     <div class="card-content">
-                        <div id="jQuery_accordion">
-                            <h3><span style="font-weight: bold">VII. Firma Documento SIGFE</span></h3>
+                        <div id="jQuery_accordion2">
+                            <h3><span style="font-weight: bold">Firma Documento SIGFE</span></h3>
                             <div class="row">
                                 @Html.Partial("~/Views/Cometido/SignOther.cshtml")
                             </div>
@@ -691,6 +691,12 @@
 
     $(function () {
         $("#jQuery_accordion").accordion({
+            collapsible: true, heightStyle: true
+        });
+    });
+
+    $(function () {
+        $("#jQuery_accordion2").accordion({
             collapsible: true, heightStyle: true
         });
     });
