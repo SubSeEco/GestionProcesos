@@ -285,8 +285,17 @@ namespace App.Infrastructure.SIGPER
                         {
                             sigper.FunDatosLaborales = PeDatLab;
 
+                            var CodUnidad = (from u in context.PeDatLab
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
+
                             //unidad del funcionario
-                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == PeDatLab.RhConUniCod);
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
                             if (unidad != null)
                             {
                                 sigper.Unidad = unidad;
