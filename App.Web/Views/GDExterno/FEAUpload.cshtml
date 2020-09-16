@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 @Html.LabelFor(m => Model.FirmanteUnidadCodigo)<br />
-                @Html.DropDownListFor(m => Model.FirmanteUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                @Html.DropDownListFor(m => Model.FirmanteUnidadCodigo, null, "Seleccione...", new { @class = "browser-default", @id = "ddlFirmanteUnidadCodigo" })
                 @Html.ValidationMessageFor(m => Model.FirmanteUnidadCodigo, "", new { @class = "red-text" })
             </div>
         </div>
@@ -91,7 +91,7 @@
     });
 
     //Al cambiar unidad traer funcionarios
-    $("#FirmanteUnidadCodigo").change(function () {
+    $("#ddlFirmanteUnidadCodigo").change(function () {
 
         var select = $("#FirmanteEmail");
         select.empty();

@@ -4,83 +4,89 @@
 
 <div class="container">
 
-    @if(Model.DefinicionWorkflow.DefinicionProcesoId == 13 && Model.DefinicionWorkflow.Secuencia == 4)
+    @if (Model.EsAprobacionCometidoCompraPasaje)
     {
-    <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-            <span class="card-title">Notas:</span>
-            <p>
-                <strong>
-                    Al APROBAR está autorizando simultáneamente el cometido y la compra de pasajes.
-                </strong>                
-            </p>
-            <p>
-                <strong>
-                    Recuerde que se debe seleccionar el pasaje más económico.
-                </strong>
-                 La Circular 02/19, obliga a solicitar el pasaje aéreo más económico, en el caso de no elegirlo, la jefatura debe justificar detalladamente el por qué y será responsable de esta selección en caso de auditoría o investigación sumaria.
-            </p>
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">Notas:</span>
+                <p>
+                    <strong>
+                        Al APROBAR está autorizando simultáneamente el cometido y la compra de pasajes.
+                    </strong>
+                </p>
+                <p>
+                    <strong>
+                        Recuerde que se debe seleccionar el pasaje más económico.
+                    </strong>
+                    La Circular 02/19, obliga a solicitar el pasaje aéreo más económico, en el caso de no elegirlo, la jefatura debe justificar detalladamente el por qué y será responsable de esta selección en caso de auditoría o investigación sumaria.
+                </p>
+            </div>
         </div>
-    </div>
     }
-
 
     @Html.Partial("_Message")
 
-    @if (Model.DefinicionWorkflow.PermitirTerminar)
+    @if (Model.PermitirTerminar)
     {
         using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(q => Model.WorkflowId)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
-            @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
+            @Html.HiddenFor(q => Model.RequiereAprobacionAlEnviar)
+            @Html.HiddenFor(q => Model.PermitirMultipleEvaluacion)
+            @Html.HiddenFor(q => Model.PermitirSeleccionarUnidadDestino)
+            @Html.HiddenFor(q => Model.PermitirSeleccionarPersonasMismaUnidad)
+            @Html.HiddenFor(q => Model.PermitirSeleccionarGrupoEspecialDestino)
+            @Html.HiddenFor(q => Model.PermitirTerminar)
 
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Enviar tarea</span>
-                    <div class="row">
-                        @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-                        {
-                            <div class="input-field col s12 m8 l10">
-                                @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "TipoAprobacionId" })
+                    @if (Model.RequiereAprobacionAlEnviar)
+                    {
+                        <div class="row">
+                            <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.TipoAprobacionId)
+                                @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
                             </div>
-                        }
-                        @if (Model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino)
+                        </div>
+                    }
+                    @if (Model.PermitirSeleccionarUnidadDestino)
+                    {
+                        if (!Model.PermitirSeleccionarPersonasMismaUnidad)
                         {
-                            if (!Model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad)
-                            {
-                                <div class="input-field col s12 m8 l10">
-                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            <div class="row">
+                                <div class="col s12 m12 l12">
                                     @Html.LabelFor(m => Model.Pl_UndCod)
+                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default" })
                                     @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
                                 </div>
-                            }
-                            <div class="input-field col s12 m8 l10">
-                                @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.To)
+                                @Html.DropDownListFor(model => model.To, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
                             </div>
-                        }
-                        @if (Model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino)
-                        {
-                            <div class="input-field col s12 m8 l10">
-                                @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                        </div>
+                    }
+                    @if (Model.PermitirSeleccionarGrupoEspecialDestino)
+                    {
+                        <div class="row">
+                            <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.GrupoId)
+                                @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
                                 @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
                             </div>
-                        }
+                        </div>
+                    }
 
-                        <div class="input-field col s12 m8 l10">
-                            @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    <div class="row">
+                        <div class="col s12 m12 l12">
                             @Html.LabelFor(m => Model.Observacion)
+                            @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
                             @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
 
                         </div>
@@ -92,7 +98,7 @@
     }
 
 
-    @if (Model.DefinicionWorkflow.PermitirFinalizarProceso)
+    @if (Model.PermitirFinalizarProceso)
     {
         using (Html.BeginForm("Stop", "Workflow", FormMethod.Post))
         {
@@ -124,7 +130,7 @@
 
 <script>
     $(document).ready(function () {
-        $('select').formSelect();
+        //$('select').formSelect();
         $("#Pl_UndCod").change(function () {
             var Pl_UndCod = $(this).val();
             $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
@@ -141,7 +147,7 @@
                             text: itemData.Nombre
                         }));
                     });
-                    $('#To').formSelect();
+                    //$('#To').formSelect();
                 });
         });
     });

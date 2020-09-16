@@ -1,4 +1,4 @@
-﻿using ExpressiveAnnotations.Attributes;
+﻿using App.Model.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace App.Model.Core
 {
     [Table("CoreWorkflow")]
-    public class Workflow 
+    public class Workflow
     {
         public Workflow()
         {
@@ -46,6 +46,7 @@ namespace App.Model.Core
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
+        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
 
@@ -55,18 +56,19 @@ namespace App.Model.Core
         [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
+        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
         [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
-        [RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Se debe señalar el motivo del rechazo para la tarea")]
         public string Observacion { get; set; }
 
         [Display(Name = "Observaciones")]
         [DataType(DataType.MultilineText)]
         public string Mensaje { get; set; }
 
+        [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Tipo aprobación")]
         public int? TipoAprobacionId { get; set; }
         public virtual TipoAprobacion TipoAprobacion { get; set; }
@@ -80,31 +82,50 @@ namespace App.Model.Core
         [Display(Name = "Tarea es personal?")]
         public bool TareaPersonal { get; set; } = false;
 
-        public int? WorkflowGrupoId { get; set; }
-        public string Entity { get; set; }
-        public int? EntityId { get; set; }
-
-        public virtual ICollection<Documento> Documentos { get; set; }
-
         [Display(Name = "Asunto")]
         public string Asunto { get; set; }
-
-        [Display(Name = "Firmante")]
-        public string Firmante { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Certificado electrónico")]
-        public string SerialNumber { get; set; }
 
         [Display(Name = "Nombre Funcionario")]
         public string NombreFuncionario { get; set; }
 
+        [Display(Name = "Entidad")]
+        public string Entity { get; set; }
+
+        [Display(Name = "Entidad Id")]
+        public int? EntityId { get; set; }
+
+        public virtual ICollection<Documento> Documentos { get; set; }
+
+
+
+
+
         [NotMapped]
-        [Display(Name = "Numero Proceso")]
-        public string NumeroProceso { get; set; }
+        public bool RequiereAprobacionAlEnviar { get; set; }
 
+        [NotMapped]
+        public bool PermitirMultipleEvaluacion { get; set; }
 
+        [NotMapped]
+        public bool PermitirSeleccionarUnidadDestino { get; set; }
 
+        [NotMapped]
+        public bool PermitirSeleccionarPersonasMismaUnidad { get; set; }
+
+        [NotMapped]
+        public bool PermitirSeleccionarGrupoEspecialDestino { get; set; }
+
+        [NotMapped]
+        public bool PermitirFinalizarProceso { get; set; }
+
+        [NotMapped]
+        public bool PermitirTerminar { get; set; }
+
+        [NotMapped]
+        public bool EsAprobacionCometidoCompraPasaje => 
+               this.DefinicionWorkflow != null 
+            && this.DefinicionWorkflow.DefinicionProcesoId == 13 
+            && this.DefinicionWorkflow.Secuencia == 4;
 
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
@@ -116,25 +137,5 @@ namespace App.Model.Core
             }
         }
 
-        [Display(Name = "Validado por secretaria?")]
-        public bool OKSecretaria { get; set; }
-
-
-
-        [NotMapped]
-        [Display(Name = "Unidad origen")]
-        public string OrigenUnidad { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Usuario origen")]
-        public string OrigenUsuario { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Usuario origen")]
-        public string DestinoUnidad { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Usuario destino")]
-        public string DestinoUsuario { get; set; }
     }
 }

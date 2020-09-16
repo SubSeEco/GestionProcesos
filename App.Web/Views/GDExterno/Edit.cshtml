@@ -58,11 +58,6 @@
                             @Html.LabelFor(m => Model.Referencia)
                             @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
                         </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Observacion)
-                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                        </div>
                         <div class="col s12 m12 l12">
                             @Html.LabelFor(m => Model.DestinoUnidadCodigo)
                             @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
@@ -74,10 +69,22 @@
                             @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
                         </div>
-
+                        <div class="input-field col s12 m12 l12">
+                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                            @Html.LabelFor(m => Model.Observacion)
+                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            <div class="switch">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.EsReservado)
+                                    <span class="lever"></span>
+                                    Documentación reservada?
+                                </label>
+                            </div>
+                        </div>
                         <div class="input-field col s12 m12 l12">
                         </div>
-
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                 </div>
@@ -112,9 +119,9 @@
     });
 
     //Al cambiar unidad traer funcionarios
-    $("#DestinoUnidad").change(function () {
+    $("#DestinoUnidadCodigo").change(function () {
 
-        var select = $("#DestinoEmail");
+        var select = $("#DestinoFuncionarioEmail");
         select.empty();
         select.append($('<option/>', {
             value: "",

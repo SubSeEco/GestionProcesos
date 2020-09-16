@@ -38,6 +38,10 @@
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
+                    @if (item.EsOficial)
+                    {
+                        <span class="new badge red" data-badge-caption="Oficial"></span>
+                    }
                     <em>
                         Creado por @item.Email el @item.Fecha
                     </em>

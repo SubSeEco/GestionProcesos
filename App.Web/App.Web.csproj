@@ -353,6 +353,7 @@
     <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Producción.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Properties\PublishProfiles\Testing.pubxml" />
     <Content Include="Scripts\expressive.annotations.validate.js" />

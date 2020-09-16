@@ -32,6 +32,16 @@
                             <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
                             @Html.DisplayFor(m => Model.Observacion)
                         </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.DestinoUnidadCodigo)</strong><br />
+                            @Html.DisplayFor(m => Model.DestinoUnidadCodigo)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
+                            @Html.DisplayFor(m => Model.DestinoFuncionarioEmail)
+                        </div>
+
+
                         <div class="input-field col s12 m12 l12">
                             <div class="switch">
                                 <label>
@@ -46,7 +56,7 @@
             </div>
         </div>
         <div class="col s12 m6 l7">
-            @Html.Action("FEADocumentos", "GD", new { ProcesoId = Model.ProcesoId })
+            @Html.Action("FEADocumentos", "GDExterno", new { ProcesoId = Model.ProcesoId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>

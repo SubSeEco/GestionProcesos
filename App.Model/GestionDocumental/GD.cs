@@ -54,7 +54,7 @@ namespace App.Model.GestionDocumental
         public int GDOrigenId { get; set; }
         public virtual GDOrigen GDOrigen { get; set; }
 
-        [Display(Name = "Número externo")]
+        [Display(Name = "Número externo (requerido)")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string NumeroExterno { get; set; }
 
@@ -63,7 +63,7 @@ namespace App.Model.GestionDocumental
         public string DestinoUnidadCodigo { get; set; }
 
         [Display(Name = "Unidad destino")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadDescripcion { get; set; }
 
         [Display(Name = "Usuario destino")]
@@ -71,7 +71,7 @@ namespace App.Model.GestionDocumental
         public string DestinoFuncionarioEmail { get; set; }
 
         [Display(Name = "Usuario destino")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioNombre { get; set; }
 
 

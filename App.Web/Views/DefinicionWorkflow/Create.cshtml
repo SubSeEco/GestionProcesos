@@ -67,11 +67,11 @@
                                 @Html.LabelFor(m => Model.DefinicionWorkflowRechazoId)
                                 @Html.ValidationMessageFor(m => Model.DefinicionWorkflowRechazoId, "", new { @class = "red-text" })
                             </div>
-                            <div class="input-field col s12 m10 l10">
+                            @*<div class="input-field col s12 m10 l10">
                                 @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...")
                                 @Html.LabelFor(m => Model.DefinicionWorkflowDependeDeId)
                                 @Html.ValidationMessageFor(m => Model.DefinicionWorkflowDependeDeId, "", new { @class = "red-text" })
-                            </div>
+                            </div>*@
                             <div class="input-field col s12 m10 l10">
                                 @Html.TextBoxFor(m => Model.DuracionDias, new { @type = "number" })
                                 @Html.LabelFor(m => Model.DuracionDias)

@@ -60,12 +60,15 @@ namespace App.Web.Controllers
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
-        public GDInternoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio)
+        protected readonly IEmail _email;
+
+        public GDInternoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
             _folio = folio;
+            _email = email;
         }
 
         public ActionResult Details(int id)
@@ -108,7 +111,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -134,7 +137,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {

@@ -45,21 +45,21 @@
                             @Html.LabelFor(m => Model.Referencia)
                             @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
                         </div>
+                        <div class="col s12 m12 l12">
+                            @Html.LabelFor(m => Model.DestinoUnidadCodigo)
+                            @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                            @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m12 l12">
+                            <br />
+                            @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
+                            @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
+                            @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
+                        </div>
                         <div class="input-field col s12 m12 l12">
                             @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
                             @Html.LabelFor(m => Model.Observacion)
                             @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12 m12 l12">
-                            @Html.LabelFor(m => Model.DestinoUnidad)
-                            @Html.DropDownListFor(m => Model.DestinoUnidad, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoUnidad, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12 m12 l12">
-                            <br />
-                            @Html.LabelFor(m => Model.DestinoEmail)
-                            @Html.DropDownListFor(model => model.DestinoEmail, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoEmail, "", new { @class = "red-text" })
                         </div>
                         <div class="input-field col s12 m12 l12">
                             <div class="switch">
@@ -72,7 +72,6 @@
                         </div>
                         <div class="input-field col s12 m12 l12">
                         </div>
-
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                     </div>
@@ -109,9 +108,9 @@
     });
 
     //Al cambiar unidad traer funcionarios
-    $("#DestinoUnidad").change(function () {
+    $("#DestinoUnidadCodigo").change(function () {
 
-        var select = $("#DestinoEmail");
+        var select = $("#DestinoFuncionarioEmail");
         select.empty();
         select.append($('<option/>', {
             value: "",

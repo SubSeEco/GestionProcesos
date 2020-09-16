@@ -22,7 +22,7 @@ namespace App.Infrastructure.Email
             }
             catch (Exception)
             {
-                throw;
+                return;
             }
         }
 
