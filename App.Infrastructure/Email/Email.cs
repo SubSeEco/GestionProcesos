@@ -12,8 +12,6 @@ namespace App.Infrastructure.Email
     {
         public void Send(MailMessage message)
         {
-            return;
-
             try
             {
                 var smtpClient = new SmtpClient();

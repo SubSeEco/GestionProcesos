@@ -32,8 +32,23 @@ namespace App.Core.UseCases
 
             try
             {
+                var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
+                if (persona == null)
+                    response.Errors.Add(string.Format("No se encontró el usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
+                if (persona != null && persona.Funcionario == null)
+                    response.Errors.Add(string.Format("No se encontró datos del funcionario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
+                if (persona != null && persona.Unidad == null)
+                    response.Errors.Add(string.Format("No se encontró la unidad del usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
                 if (response.IsValid)
                 {
+                    obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                    obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                    obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
+                    obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes; 
+
                     _repository.Create(obj);
                     _repository.Save();
                 }
@@ -49,10 +64,25 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
+            if (persona == null)
+                response.Errors.Add(string.Format("No se encontró el usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
+            if (persona != null && persona.Funcionario == null)
+                response.Errors.Add(string.Format("No se encontró datos del funcionario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
+            if (persona != null && persona.Unidad == null)
+                response.Errors.Add(string.Format("No se encontró la unidad del usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+
             try
             {
                 if (response.IsValid)
                 {
+                    obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                    obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                    obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
+                    obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes;
+
                     _repository.Update(obj);
                     _repository.Save();
                 }
