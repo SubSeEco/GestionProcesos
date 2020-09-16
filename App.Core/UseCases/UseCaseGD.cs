@@ -152,7 +152,6 @@ namespace App.Core.UseCases
 
                 //CodigoBarra(workflowActual.ProcesoId);
 
-
                 //traer informacion del ejecutor
                 var ejecutor = _sigper.GetUserByEmail(obj.Email);
                 if (ejecutor == null || ejecutor.Funcionario == null)
@@ -630,20 +629,23 @@ namespace App.Core.UseCases
 
         public void CodigoBarra(int procesoid)
         {
+            var cambios = false;
             var documentos = _repository.Get<Documento>(q => q.ProcesoId == procesoid);
             foreach (var doc in documentos)
             {
-              //if (doc.BarCode == null && doc.Type.Contains("pdf"))
-                if (doc.Type.Contains("pdf"))
+                if (doc.BarCode == null && doc.Type.Contains("pdf"))
                 {
                     // generar codigo de barras
                     doc.BarCode = _file.CreateBarCode(doc.ProcesoId.ToString());
+
                     //estampar código de barras
-                    doc.File = _file.EstamparCodigoBarra(doc.File, doc.BarCode);
+                    doc.File = _file.EstamparCodigoBarra(doc.File, doc.BarCode, doc.ProcesoId.ToString());
+                    cambios = true;
                 }
             }
 
-            _repository.Save();
+            if (cambios)
+                _repository.Save();
         }
     }
 }

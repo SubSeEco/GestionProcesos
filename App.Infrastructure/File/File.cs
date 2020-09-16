@@ -53,8 +53,8 @@ namespace App.Infrastructure.File
         {
             byte[] imagebyte;
 
-            var barcode39 = BarcodeDrawFactory.CodeEan13WithChecksum; //.Code39WithoutChecksum;
-            var image = barcode39.Draw(code, 30);
+            var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
+            var image = barcode39.Draw(code, 40);
 
             using (var ms = new MemoryStream())
             {
@@ -65,7 +65,7 @@ namespace App.Infrastructure.File
             return imagebyte;
         }
 
-        public byte[] EstamparCodigoBarra(byte[] documento, byte[] CodigoBarra)
+        public byte[] EstamparCodigoBarra(byte[] documento, byte[] CodigoBarra, string text)
         {
             byte[] returnValue;
 
@@ -84,8 +84,17 @@ namespace App.Infrastructure.File
                     var pagesize = reader.GetPageSize(1);
 
                     iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(CodigoBarra);
-                    image.SetAbsolutePosition((pagesize.Height / 2), pagesize.Top - 50);
+                    image.SetAbsolutePosition((pagesize.Width - image.ScaledHeight) / 2 , pagesize.Top - 60);
                     pdfContent.AddImage(image);
+
+                    ColumnText.ShowTextAligned(
+                        pdfContent, 
+                        iTextSharp.text.Element.ALIGN_MIDDLE,
+                        new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),
+                        (pagesize.Width  / 2) + 20, 
+                        pagesize.Top - 75,
+                        0);
+
                     stamper.Close();
                 }
                 catch (System.Exception ex)
