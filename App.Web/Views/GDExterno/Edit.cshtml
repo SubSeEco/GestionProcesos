@@ -17,73 +17,63 @@
 
                 <div class="card">
                     <div class="card-content">
-
                         <span class="card-title">Información del ingreso externo</span>
                         <h3>ID @Model.ProcesoId</h3>
-
-                        <div class="input-field col s12 m12 l12">
-                            <div class="switch">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.EsReservado)
-                                    <span class="lever"></span>
-                                    Documentación reservada?
-                                </label>
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.FechaIngreso)
+                                @Html.LabelFor(m => Model.FechaIngreso)
+                                @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
                             </div>
-                            <br />
-                        </div>
-
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.FechaIngreso)
-                            @Html.LabelFor(m => Model.FechaIngreso)
-                            @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12 m12 l12">
-                            @Html.LabelFor(m => Model.GDOrigenId)
-                            @Html.DropDownListFor(model => model.GDOrigenId, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.GDOrigenId, "", new { @class = "red-text" })
-                            <br />
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Materia)
-                            @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.EditorFor(m => Model.NumeroExterno)
-                            @Html.LabelFor(m => Model.NumeroExterno)
-                            @Html.ValidationMessageFor(m => Model.NumeroExterno, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Referencia)
-                            @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12 m12 l12">
-                            @Html.LabelFor(m => Model.DestinoUnidadCodigo)
-                            @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12 m12 l12">
-                            <br />
-                            @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
-                            @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                            @Html.LabelFor(m => Model.Observacion)
-                            @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field col s12 m12 l12">
-                            <div class="switch">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.EsReservado)
-                                    <span class="lever"></span>
-                                    Documentación reservada?
-                                </label>
+                            <div class="col s12 m12 l12">
+                                @Html.LabelFor(m => Model.GDOrigenId)
+                                @Html.DropDownListFor(model => model.GDOrigenId, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.GDOrigenId, "", new { @class = "red-text" })
+                                <br />
                             </div>
-                        </div>
-                        <div class="input-field col s12 m12 l12">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Materia)
+                                @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.NumeroExterno)
+                                @Html.LabelFor(m => Model.NumeroExterno)
+                                @Html.ValidationMessageFor(m => Model.NumeroExterno, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Referencia)
+                                @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
+                            </div>
+                            <div class="col s12 m12 l12">
+                                @Html.LabelFor(m => Model.DestinoUnidadCodigo)
+                                @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
+                            </div>
+                            <div class="col s12 m12 l12">
+                                <br />
+                                @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
+                                @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
+                                <br />
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Observacion)
+                                @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                <div class="switch">
+                                    <label>
+                                        @Html.CheckBoxFor(m => Model.EsReservado)
+                                        <span class="lever"></span>
+                                        Documentación reservada?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                            </div>
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>

@@ -171,7 +171,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
@@ -249,7 +248,10 @@ namespace App.Web.Controllers
             var email = UserExtended.Email(User);
             var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
             foreach (var item in model)
+            {
                 item.AutorizadoParaFirma = item.FirmanteEmail == email;
+                item.AutorizadoParaEliminar = item.Email == email;
+            }
 
             return View(model);
         }

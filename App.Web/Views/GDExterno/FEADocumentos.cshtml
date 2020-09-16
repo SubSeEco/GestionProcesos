@@ -111,22 +111,24 @@
                         </div>
                     }
 
-                    <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
-                    <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">
-                        <div class="modal-content">
-                            <h4>Confirmación</h4>
-                            <p>¿ Confirma la eliminación del documento?</p>
+                    @if (!@item.Proceso.Terminada && @item.Activo && @item.AutorizadoParaEliminar)
+                    {
+                        <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
+                        <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">
+                            <div class="modal-content">
+                                <h4>Confirmación</h4>
+                                <p>¿ Confirma la eliminación del documento?</p>
+                            </div>
+                            <div class="modal-footer m1">
+                                @using (Html.BeginForm("DeleteDocument", "GDExterno", new { id = item.DocumentoId }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button class="waves-effect waves-light btn red" type="submit">Confirmar</button>
+                                    <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
+                                }
+                            </div>
                         </div>
-                        <div class="modal-footer m1">
-                            @using (Html.BeginForm("DeleteDocument", "GDExterno", new { id = item.DocumentoId }, FormMethod.Post, null))
-                            {
-                                @Html.AntiForgeryToken()
-                                <button class="waves-effect waves-light btn red" type="submit">Confirmar</button>
-                                <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
-                            }
-                        </div>
-                    </div>
-
+                    }
 
                 </div>
             </div>
