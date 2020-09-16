@@ -1488,7 +1488,7 @@ namespace App.Web.Controllers
             model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
-            model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+            model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
             model.FechaResolucion = DateTime.Now;
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
