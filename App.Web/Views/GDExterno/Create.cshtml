@@ -51,15 +51,15 @@
                             @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                         </div>
                         <div class="col s12 m12 l12">
-                            @Html.LabelFor(m => Model.DestinoUnidad)
-                            @Html.DropDownListFor(m => Model.DestinoUnidad, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoUnidad, "", new { @class = "red-text" })
+                            @Html.LabelFor(m => Model.DestinoUnidadCodigo)
+                            @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                            @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
                         </div>
                         <div class="col s12 m12 l12">
                             <br />
-                            @Html.LabelFor(m => Model.DestinoEmail)
-                            @Html.DropDownListFor(model => model.DestinoEmail, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.DestinoEmail, "", new { @class = "red-text" })
+                            @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
+                            @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
+                            @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
                         </div>
                         <div class="input-field col s12 m12 l12">
                             <div class="switch">
@@ -109,9 +109,9 @@
     });
 
     //Al cambiar unidad traer funcionarios
-    $("#DestinoUnidad").change(function () {
+    $("#DestinoUnidadCodigo").change(function () {
 
-        var select = $("#DestinoEmail");
+        var select = $("#DestinoFuncionarioEmail");
         select.empty();
         select.append($('<option/>', {
             value: "",

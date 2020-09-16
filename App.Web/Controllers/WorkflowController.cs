@@ -22,37 +22,6 @@ namespace App.Web.Controllers
     [Authorize]
     public class WorkflowController : Controller
     {
-        public class DTOSend
-        {
-            public DTOSend()
-            {
-            }
-
-            public int WorkflowId { get; set; }
-            public bool RequiereAprobacionAlEnviar { get; set; }
-            public bool PermitirMultipleEvaluacion { get; set; }
-            public bool PermitirSeleccionarUnidadDestino { get; set; }
-            public bool PermitirSeleccionarPersonasMismaUnidad { get; set; }
-
-            [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Aprobación")]
-            public int TipoAprobacionId { get; set; }
-
-            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Unidad")]
-            public int? Unidad { get; set; }
-
-            [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Funcionario")]
-            public string Funcionario { get; set; }
-
-            [RequiredIf("TipoAprobacionId", Enum.TipoAprobacion.Rechazada, ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Observaciones")]
-            [DataType(DataType.MultilineText)]
-            public string Observaciones { get; set; }
-        }
-
-
         public class DTOUser
         {
             public string id { get; set; }
@@ -357,21 +326,43 @@ namespace App.Web.Controllers
 
         public ActionResult Send(int id)
         {
-            var model = _repository.GetById<Workflow>(id);
-
             ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
+            var model = _repository.GetById<Workflow>(id);
+            model.RequiereAprobacionAlEnviar = model.DefinicionWorkflow.RequiereAprobacionAlEnviar;
+            model.PermitirMultipleEvaluacion = model.DefinicionWorkflow.PermitirMultipleEvaluacion;
+            model.PermitirSeleccionarUnidadDestino = model.DefinicionWorkflow.PermitirSeleccionarUnidadDestino;
+            model.PermitirSeleccionarPersonasMismaUnidad = model.DefinicionWorkflow.PermitirSeleccionarPersonasMismaUnidad;
+            model.PermitirSeleccionarGrupoEspecialDestino = model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino;
+            model.PermitirFinalizarProceso = model.DefinicionWorkflow.PermitirFinalizarProceso;
+            model.PermitirTerminar = model.DefinicionWorkflow.PermitirTerminar;
+
+            if (!model.To.IsNullOrWhiteSpace())
+            {
+                var persona = _sigper.GetUserByEmail(model.To.Trim());
+                if (persona != null)
+                {
+                    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades().OrderBy(q => q.Pl_UndDes).Select(q => new SelectListItem { Value = q.Pl_UndCod.ToString(), Text = q.Pl_UndDes.Trim() }), "Value", "Text", persona.Unidad.Pl_UndCod);
+                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod).OrderBy(q => q.PeDatPerChq).Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }), "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
+
+                    model.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    model.To = persona.Funcionario.Rh_Mail.Trim();
+                }
+            }
+            else
+            {
+                ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+                ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+                if (model.Pl_UndCod.HasValue)
+                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+            }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Send(Workflow model, string action)
+        public ActionResult Send(Workflow model)
         {
             model.Email = UserExtended.Email(User);
 
@@ -425,6 +416,28 @@ namespace App.Web.Controllers
                     }
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateInterno(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("Index", "Workflow");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateExterno(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("Index", "Workflow");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
                 else
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseCore(_repository, _email, _sigper);
@@ -440,11 +453,27 @@ namespace App.Web.Controllers
             }
 
             ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+
+            if (!model.To.IsNullOrWhiteSpace())
+            {
+                var persona = _sigper.GetUserByEmail(model.To.Trim());
+                if (persona != null)
+                {
+                    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades().OrderBy(q => q.Pl_UndDes).Select(q => new SelectListItem { Value = q.Pl_UndCod.ToString(), Text = q.Pl_UndDes.Trim() }), "Value", "Text", persona.Unidad.Pl_UndCod);
+                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod).OrderBy(q => q.PeDatPerChq).Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }), "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
+
+                    model.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    model.To = persona.Funcionario.Rh_Mail.Trim();
+                }
+            }
+            else
+            {
+                ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+                ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+                if (model.Pl_UndCod.HasValue)
+                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+            }
 
             return View(model);
         }

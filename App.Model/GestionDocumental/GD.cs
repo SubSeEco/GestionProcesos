@@ -62,17 +62,17 @@ namespace App.Model.GestionDocumental
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadCodigo { get; set; }
 
-        [Display(Name = "Unidad destino")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
-        public string DestinoUnidadDescripcion { get; set; }
+        //[Display(Name = "Unidad destino")]
+        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        //public string DestinoUnidadDescripcion { get; set; }
 
         [Display(Name = "Usuario destino")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioEmail { get; set; }
 
-        [Display(Name = "Usuario destino")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
-        public string DestinoFuncionarioNombre { get; set; }
+        //[Display(Name = "Usuario destino")]
+        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        //public string DestinoFuncionarioNombre { get; set; }
 
 
 
