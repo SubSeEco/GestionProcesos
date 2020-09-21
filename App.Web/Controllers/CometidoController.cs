@@ -1209,7 +1209,7 @@ namespace App.Web.Controllers
                 model.DiasPlural = "(s)";
                 model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
                 model.Anno = DateTime.Now.Year.ToString();
-                model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+                model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
                 model.FechaResolucion = DateTime.Now;
                 model.Firma = false;
                 model.NumeroResolucion = model.CometidoId;
@@ -1369,7 +1369,7 @@ namespace App.Web.Controllers
             model.DiasPlural = "(s)";
             model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
             model.Anno = DateTime.Now.Year.ToString();
-            model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
+            model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
             model.FechaResolucion = DateTime.Now;
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
@@ -1381,7 +1381,16 @@ namespace App.Web.Controllers
             model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
             model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
             model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoOP).FirstOrDefault().ParrafoTexto;
-            model.DejaseConstancia = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DejaseConstancia).FirstOrDefault().ParrafoTexto;
+            
+            foreach(var p in parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DejaseConstancia))
+            {
+                if (p.ParrafoActivo == true)
+                    model.DejaseConstancia = parrafos.Where(xp => xp.ParrafosId == (int)App.Util.Enum.Firmas.DejaseConstancia).FirstOrDefault().ParrafoTexto;
+                else
+                    model.DejaseConstancia = string.Empty;
+            }
+
+            
 
             //switch (model.IdGrado)
             //{
