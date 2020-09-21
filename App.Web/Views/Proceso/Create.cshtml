@@ -24,9 +24,9 @@
                 <span class="card-title">Nuevo proceso</span>
 
                 <div class="row">
-                    <div class="input-field col s12 m10 l8">
-                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...")
+                    <div class="col s12 m10 l8">
                         @Html.LabelFor(m => Model.DefinicionProcesoId)
+                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...", new { @class = "browser-default" })
                         @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m10 l8">

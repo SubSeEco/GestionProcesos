@@ -54,7 +54,7 @@ namespace App.Infrastructure.File
             byte[] imagebyte;
 
             var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-            var image = barcode39.Draw(code, 40);
+            var image = barcode39.Draw(code, 35);
 
             using (var ms = new MemoryStream())
             {

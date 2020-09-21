@@ -39,12 +39,11 @@
                             @Html.LabelFor(m => Model.Hasta)
                             @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
                         </div>
-                        <div class="input-field">
-                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...")
+                        <div class="col s12">
                             @Html.LabelFor(m => Model.EstadoProcesoId)
+                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.ValidationMessageFor(m => Model.EstadoProcesoId, "", new { @class = "red-text" })
                         </div>
-
                     </div>
                     <div class="col s12 m6 l6">
                         @Html.LabelFor(m => Model.Select)<br /><br />

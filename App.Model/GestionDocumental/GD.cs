@@ -42,14 +42,10 @@ namespace App.Model.GestionDocumental
         [Display(Name = "Es documentación reservada?")]
         public bool EsReservado { get; set; } = false;
 
-
-
         [Display(Name = "Ingreso externo?")]
         public bool IngresoExterno { get; set; }
 
-
-
-        [Display(Name = "Origen documentación")]
+        [Display(Name = "Origen documentación (requerido)")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public int GDOrigenId { get; set; }
         public virtual GDOrigen GDOrigen { get; set; }
@@ -58,22 +54,19 @@ namespace App.Model.GestionDocumental
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string NumeroExterno { get; set; }
 
-        [Display(Name = "Unidad destino")]
+        [Display(Name = "Unidad destino (requerido)")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadCodigo { get; set; }
 
         [Display(Name = "Unidad destino")]
         public string DestinoUnidadDescripcion { get; set; }
 
-        [Display(Name = "Usuario destino")]
+        [Display(Name = "Usuario destino (requerido)")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioEmail { get; set; }
 
         [Display(Name = "Usuario destino")]
         public string DestinoFuncionarioNombre { get; set; }
-
-
-
 
         [Display(Name = "Proceso")]
         public int ProcesoId { get; set; }

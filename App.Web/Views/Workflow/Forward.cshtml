@@ -19,24 +19,24 @@
                 <div class="row">
                     @if (Model.DefinicionWorkflow.PermitirReenvioUnidad)
                     {
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                        <div class="col s12 m8 l10">
                             @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
                         </div>
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                        <div class="col s12 m8 l10">
                             @Html.LabelFor(m => Model.To)
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
                         </div>
                     }
                     @if (Model.DefinicionWorkflow.PermitirReenvioGrupoEspecial)
                     {
-                        <div class="input-field col s12 m8 l10">
-                            @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.GrupoId)
-                            @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
-                        </div>
+                <div class="col s12 m8 l10">
+                    @Html.LabelFor(m => Model.GrupoId)
+                    @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...", new { @class = "browser-default" })
+                    @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                </div>
                     }
 
                     <div class="input-field col s12 m8 l10">

@@ -92,7 +92,6 @@
 
                     @if (!@item.Proceso.Terminada && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
                     {
-                        @*<p class="grey-text ultra-small">Para firma de @item.FirmanteEmail</p>*@
                         <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumento", @item.DocumentoId)">Firmar</a>
 
                         <div id="@string.Concat("modalFirmaDocumento", @item.DocumentoId)" class="modal">

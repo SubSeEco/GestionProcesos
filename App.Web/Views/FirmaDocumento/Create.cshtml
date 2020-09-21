@@ -23,11 +23,10 @@
                         <span class="card-title">Ingreso de documento</span>
 
                         <div class="section"></div>
-                        <div class="input-field">
-                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...")
+                        <div class="col">
+                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.LabelFor(m => Model.TipoDocumentoCodigo)
                             @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
-                            @*<span class="helper-text">Indique el tipo de documento</span>*@
                         </div>
 
                         <div class="section"></div>
