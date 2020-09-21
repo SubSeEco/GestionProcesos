@@ -126,7 +126,7 @@
                     {
                         @Html.DisplayFor(m => Model.DiasPlural)
                     }
-                    a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
+                    a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
                 </p>
                 <br />
                 <table border="1" width="100%" style="margin-right:30px">

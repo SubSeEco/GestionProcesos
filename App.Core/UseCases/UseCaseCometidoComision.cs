@@ -4732,7 +4732,7 @@ namespace App.Core.UseCases
                         Cometido = _repository.Get<Cometido>(q => q.ProcesoId == Pasaje.ProcesoId).FirstOrDefault();
                     }
 
-                    //deterrminar siguiente tarea desde el diseño de proceso
+                    //DETERRMINAR SIGUIENTE TAREA DESDE EL DISEÑO DE PROCESO
                     if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                         if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                         {
@@ -4744,10 +4744,10 @@ namespace App.Core.UseCases
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 && Cometido.SolicitaViatico != true)/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 && (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0))/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
                                     {
-                                        //definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16 /*workflowActual.DefinicionWorkflow.Secuencia*/);
+                                        definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/ /*se vuelve a cambiar el sentido del flujo 21092020*/
+                                        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
                                     {
@@ -4966,9 +4966,9 @@ namespace App.Core.UseCases
                 {
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
-                    //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                    //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                    //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
+                    workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                    workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
                     _repository.Save();
                 }
 
