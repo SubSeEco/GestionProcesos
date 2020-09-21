@@ -5,21 +5,30 @@
 
 <div class="card">
     <div class="card-content">
-        
+
         <div class="row">
             <div class="col l9">
                 <span class="card-title">Documentos</span>
             </div>
-            <div class="col l3">
-                <div class="switch">
-                    <label>
-                        @Html.CheckBox("Preview", true)
-                        <span class="lever"></span>
-                        Previsualizar
-                    </label>
+
+            @if (Model.Any())
+            {
+                <div class="col l3">
+                    <div class="switch">
+                        <label>
+                            @Html.CheckBox("Preview", true)
+                            <span class="lever"></span>
+                            Previsualizar
+                        </label>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
+
+        @if (!Model.Any())
+        {
+            <p>No existen documentos</p>
+        }
 
         @foreach (var item in Model)
         {
@@ -102,22 +111,24 @@
                         </div>
                     }
 
-                    <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
-                    <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">
-                        <div class="modal-content">
-                            <h4>Confirmación</h4>
-                            <p>¿ Confirma la eliminación del documento?</p>
+                    @if (!@item.Proceso.Terminada && @item.Activo && @item.AutorizadoParaEliminar)
+                    {
+                        <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
+                        <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">
+                            <div class="modal-content">
+                                <h4>Confirmación</h4>
+                                <p>¿ Confirma la eliminación del documento?</p>
+                            </div>
+                            <div class="modal-footer m1">
+                                @using (Html.BeginForm("DeleteDocument", "GDExterno", new { id = item.DocumentoId }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button class="waves-effect waves-light btn red" type="submit">Confirmar</button>
+                                    <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
+                                }
+                            </div>
                         </div>
-                        <div class="modal-footer m1">
-                            @using (Html.BeginForm("DeleteDocument", "GDExterno", new { id = item.DocumentoId }, FormMethod.Post, null))
-                            {
-                                @Html.AntiForgeryToken()
-                                <button class="waves-effect waves-light btn red" type="submit">Confirmar</button>
-                                <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
-                            }
-                        </div>
-                    </div>
-
+                    }
 
                 </div>
             </div>

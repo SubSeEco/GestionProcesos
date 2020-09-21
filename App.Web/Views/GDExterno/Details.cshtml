@@ -9,8 +9,8 @@
         <div class="col s12 m6 l5">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Información del ingreso</span>
-                    <div class="section"></div>
+                    <span class="card-title">Información del ingreso externo</span>
+                    <h3>ID @Model.ProcesoId</h3>
                     <div class="row">
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Fecha)</strong><br />
@@ -21,8 +21,16 @@
                             @string.Format("{0:dd-MM-yyyy}", Model.FechaIngreso)
                         </div>
                         <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.GDOrigenId)</strong><br />
+                            @Html.DisplayFor(m => Model.GDOrigen.Descripcion)
+                        </div>
+                        <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Materia)</strong><br />
                             @Html.DisplayFor(m => Model.Materia)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NumeroExterno)</strong><br />
+                            @Html.DisplayFor(m => Model.NumeroExterno)
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Referencia)</strong><br />
@@ -34,18 +42,16 @@
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.DestinoUnidadCodigo)</strong><br />
-                            @Html.DisplayFor(m => Model.DestinoUnidadCodigo)
+                            @Html.DisplayFor(m => Model.DestinoUnidadDescripcion) (@Html.DisplayFor(m => Model.DestinoUnidadCodigo))
                         </div>
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
-                            @Html.DisplayFor(m => Model.DestinoFuncionarioEmail)
+                            @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) (@Html.DisplayFor(m => Model.DestinoFuncionarioEmail))
                         </div>
-
-
                         <div class="input-field col s12 m12 l12">
                             <div class="switch">
                                 <label>
-                                    @Html.CheckBoxFor(m => Model.EsReservado)
+                                    @Html.CheckBoxFor(m => Model.EsReservado, new { @disabled = "disabled" })
                                     <span class="lever"></span>
                                     Documentación reservada?
                                 </label>

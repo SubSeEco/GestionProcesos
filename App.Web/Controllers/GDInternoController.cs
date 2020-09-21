@@ -229,7 +229,10 @@ namespace App.Web.Controllers
 
             var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
             foreach (var item in model)
+            {
                 item.AutorizadoParaFirma = item.FirmanteEmail == email;
+                item.AutorizadoParaEliminar = item.Email == email;
+            }
 
             return View(model);
         }

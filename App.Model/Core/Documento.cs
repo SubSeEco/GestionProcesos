@@ -110,6 +110,10 @@ namespace App.Model.Core
         public bool AutorizadoParaFirma { get; set; }
 
         [NotMapped]
+        [Display(Name = "Autor del documento?")]
+        public bool AutorizadoParaEliminar { get; set; }
+
+        [NotMapped]
         public bool Selected { get; set; } = false;
 
         [NotMapped]

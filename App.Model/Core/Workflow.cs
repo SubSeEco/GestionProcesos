@@ -46,9 +46,14 @@ namespace App.Model.Core
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar el dato Unidad destino")]
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
+
+        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
+        [Display(Name = "Funcionario")]
+        public string To { get; set; }
+
 
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
@@ -56,9 +61,6 @@ namespace App.Model.Core
         [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar este dato")]
-        [Display(Name = "Funcionario")]
-        public string To { get; set; }
 
         [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
@@ -68,7 +70,7 @@ namespace App.Model.Core
         [DataType(DataType.MultilineText)]
         public string Mensaje { get; set; }
 
-        [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar el dato Aprobación")]
         [Display(Name = "Tipo aprobación")]
         public int? TipoAprobacionId { get; set; }
         public virtual TipoAprobacion TipoAprobacion { get; set; }

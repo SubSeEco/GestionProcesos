@@ -63,7 +63,6 @@ namespace App.Model.GestionDocumental
         public string DestinoUnidadCodigo { get; set; }
 
         [Display(Name = "Unidad destino")]
-        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadDescripcion { get; set; }
 
         [Display(Name = "Usuario destino")]
@@ -71,7 +70,6 @@ namespace App.Model.GestionDocumental
         public string DestinoFuncionarioEmail { get; set; }
 
         [Display(Name = "Usuario destino")]
-        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioNombre { get; set; }
 
 

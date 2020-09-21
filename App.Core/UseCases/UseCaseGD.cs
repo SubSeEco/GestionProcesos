@@ -6,6 +6,7 @@ using App.Model.SIGPER;
 using System.Linq;
 using App.Util;
 using System.Collections.Generic;
+using System.IO;
 
 namespace App.Core.UseCases
 {
@@ -32,23 +33,24 @@ namespace App.Core.UseCases
 
             try
             {
-                var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
-                if (persona == null)
-                    response.Errors.Add(string.Format("No se encontró el usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+                if (obj.IngresoExterno)
+                {
+                    var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
+                    if (persona != null && persona.Funcionario != null)
+                    {
+                        obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                        obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                    }
 
-                if (persona != null && persona.Funcionario == null)
-                    response.Errors.Add(string.Format("No se encontró datos del funcionario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
-
-                if (persona != null && persona.Unidad == null)
-                    response.Errors.Add(string.Format("No se encontró la unidad del usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
+                    if (persona != null && persona.Unidad != null)
+                    {
+                        obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
+                        obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes;
+                    }
+                }
 
                 if (response.IsValid)
                 {
-                    obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
-                    obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
-                    obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
-                    obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes; 
-
                     _repository.Create(obj);
                     _repository.Save();
                 }
@@ -64,25 +66,26 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
-            var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
-            if (persona == null)
-                response.Errors.Add(string.Format("No se encontró el usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
-
-            if (persona != null && persona.Funcionario == null)
-                response.Errors.Add(string.Format("No se encontró datos del funcionario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
-
-            if (persona != null && persona.Unidad == null)
-                response.Errors.Add(string.Format("No se encontró la unidad del usuario {0} en el sistema SIGPER", obj.DestinoFuncionarioEmail));
-
             try
             {
+                if (obj.IngresoExterno)
+                {
+                    var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
+                    if (persona != null && persona.Funcionario != null)
+                    {
+                        obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                        obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                    }
+
+                    if (persona != null && persona.Unidad != null)
+                    {
+                        obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
+                        obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes;
+                    }
+                }
+
                 if (response.IsValid)
                 {
-                    obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
-                    obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
-                    obj.DestinoUnidadCodigo = persona.Unidad.Pl_UndCod.ToString();
-                    obj.DestinoUnidadDescripcion = persona.Unidad.Pl_UndDes;
-
                     _repository.Update(obj);
                     _repository.Save();
                 }
@@ -117,7 +120,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage WorkflowUpdateInterno(Workflow obj)
         {
             var response = new ResponseMessage();
@@ -148,9 +150,11 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
+                //CodigoBarra(workflowActual.ProcesoId);
+
                 //traer informacion del ejecutor
-                var personaOrigen = _sigper.GetUserByEmail(obj.Email);
-                if (personaOrigen == null || personaOrigen.Funcionario == null)
+                var ejecutor = _sigper.GetUserByEmail(obj.Email);
+                if (ejecutor == null || ejecutor.Funcionario == null)
                     throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.Email));
 
                 //traer informacion del ejecutor
@@ -217,17 +221,17 @@ namespace App.Core.UseCases
                     workflow.To = workflowActual.To;
 
                     //es envío a otra unidad?
-                    if (personaOrigen.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
+                    if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
                     {
                         List<string> path = new List<string>();
 
                         //yo
-                        if (personaOrigen.Funcionario != null)
-                            path.Add(personaOrigen.Funcionario.Rh_Mail.Trim());
+                        if (ejecutor.Funcionario != null)
+                            path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
 
                         //secretaria mi unidad
-                        if (personaOrigen.Secretaria != null)
-                            path.Add(personaOrigen.Secretaria.Rh_Mail.Trim());
+                        if (ejecutor.Secretaria != null)
+                            path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
 
                         //secretaria unidad destino
                         if (personaDestino.Secretaria != null)
@@ -242,7 +246,7 @@ namespace App.Core.UseCases
                                 continue;
 
                             persona = _sigper.GetUserByEmail(item);
-                            if (personaOrigen == null || personaOrigen.Funcionario == null)
+                            if (ejecutor == null || ejecutor.Funcionario == null)
                                 throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
 
                             workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -282,7 +286,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage WorkflowUpdateExterno(Workflow obj)
         {
             var response = new ResponseMessage();
@@ -312,6 +315,8 @@ namespace App.Core.UseCases
 
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
+
+                //CodigoBarra(workflowActual.ProcesoId);
 
                 var ejecutor = _sigper.GetUserByEmail(obj.Email);
                 if (ejecutor == null || ejecutor.Funcionario == null)
@@ -622,5 +627,25 @@ namespace App.Core.UseCases
             return response;
         }
 
+        public void CodigoBarra(int procesoid)
+        {
+            var cambios = false;
+            var documentos = _repository.Get<Documento>(q => q.ProcesoId == procesoid);
+            foreach (var doc in documentos)
+            {
+                if (doc.BarCode == null && doc.Type.Contains("pdf"))
+                {
+                    // generar codigo de barras
+                    doc.BarCode = _file.CreateBarCode(doc.ProcesoId.ToString());
+
+                    //estampar código de barras
+                    doc.File = _file.EstamparCodigoBarra(doc.File, doc.BarCode, doc.ProcesoId.ToString());
+                    cambios = true;
+                }
+            }
+
+            if (cambios)
+                _repository.Save();
+        }
     }
 }

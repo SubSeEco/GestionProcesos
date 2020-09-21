@@ -85,7 +85,9 @@ namespace App.Web.Controllers
         public JsonResult GetUserByUnidad(int Pl_UndCod)
         {
             var result = _sigper.GetUserByUnidad(Pl_UndCod)
-               .Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq })
+               .Select(c => new { 
+                   Email = !string.IsNullOrWhiteSpace(c.Rh_Mail) ?  c.Rh_Mail.Trim() : string.Empty, 
+                   Nombre = !string.IsNullOrWhiteSpace(c.PeDatPerChq) ? c.PeDatPerChq.Trim() : string.Empty  })
                .OrderBy(q => q.Nombre)
                .ToList().Distinct();
 
