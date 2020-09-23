@@ -331,7 +331,7 @@
         <tr>
             @*<td></td>*@
             <td colspan="2">
-                @if (Model.GeneracionCDP.Count > 0)
+                @if (Model.GeneracionCDP.Count > 0 && Model.GeneracionCDP.FirstOrDefault().VtcValorViatico != "0")
                 {
                     <p align="justify" style="margin-right:30px">
                         3. <strong>IMPÚTESE</strong>,
@@ -373,7 +373,7 @@
                                         @Html.Raw(" y al subtítulo 22, ")
                                     }
                                 }
-                                @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones  con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
+                                @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones &nbsp;&nbsp; con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
                                 @Html.DisplayFor(m => Model.Anno)
                                 @Html.Raw(" de la ")
                                 @Html.DisplayFor(m => Model.Subscretaria)
@@ -389,7 +389,7 @@
                                 {
                                     @Html.DisplayFor(m => Model.UnidadDescripcion)
                                 }
-                                @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones  con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
+                                @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones &nbsp;&nbsp; con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
                                 @Html.DisplayFor(m => Model.Anno)
                                 @Html.Raw(" de la ")
                                 @Html.DisplayFor(m => Model.Subscretaria)

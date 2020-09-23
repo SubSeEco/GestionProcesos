@@ -149,7 +149,7 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
-                CodigoBarra(workflowActual.ProcesoId);
+                //CodigoBarra(workflowActual.ProcesoId);
 
                 //traer informacion del ejecutor
                 var ejecutor = _sigper.GetUserByEmail(obj.Email);
@@ -312,11 +312,13 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
-                CodigoBarra(workflowActual.ProcesoId);
-
                 var ejecutor = _sigper.GetUserByEmail(obj.Email);
                 if (ejecutor == null || ejecutor.Funcionario == null)
                     throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.Email));
+
+                //solo poner codigos de barra en oficina de partes
+                if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.Secuencia < 3)
+                    CodigoBarra(workflowActual.ProcesoId);
 
                 //terminar workflow actual
                 workflowActual.FechaTermino = DateTime.Now;

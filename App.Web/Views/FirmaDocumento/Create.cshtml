@@ -21,47 +21,41 @@
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Ingreso de documento</span>
-
                         <div class="section"></div>
-                        <div class="col">
-                            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
-                            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
-                        </div>
-
-                        <div class="section"></div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.URL)
-                            @Html.LabelFor(m => Model.URL)
-                            @Html.ValidationMessageFor(m => Model.URL, "", new { @class = "text-danger" })
-                        </div>
-
-
-                        <div class="section"></div>
-
-                        @Html.LabelFor(m => Model.FileUpload)
-                        <div class="file-field input-field">
-                            <div class="btn grey">
-                                <i class="material-icons">attach_file</i>
-                                @Html.TextBoxFor(m => Model.FileUpload, null, new { @type = "file", accept = ".pdf" })
+                        <div class="row">
+                            <div class="col">
+                                @Html.LabelFor(m => Model.TipoDocumentoCodigo)
+                                @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
                             </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate" type="text">
+                            <div class="input-field col s12 m12 l12">
                             </div>
-                            <span class="helper-text">Solo se permiten archivos con extensión .pdf</span>
-                            @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.URL)
+                                @Html.LabelFor(m => Model.URL)
+                                @Html.ValidationMessageFor(m => Model.URL, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(m => Model.FileUpload)
+                                <div class="file-field input-field">
+                                    <div class="btn grey">
+                                        <i class="material-icons">attach_file</i>
+                                        @Html.TextBoxFor(m => Model.FileUpload, null, new { @type = "file", accept = ".pdf" })
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                    <span class="helper-text">Solo se permiten archivos con extensión .pdf</span>
+                                    @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.Comentario)
+                                @Html.LabelFor(m => Model.Comentario)
+                                @Html.ValidationMessageFor(m => Model.Comentario, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-
-
-                        <div class="section"></div>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.Comentario)
-                            @Html.LabelFor(m => Model.Comentario)
-                            @Html.ValidationMessageFor(m => Model.Comentario, "", new { @class = "text-danger" })
-                        </div>
-                        <p>
-                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                        </p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                 </div>
             }
