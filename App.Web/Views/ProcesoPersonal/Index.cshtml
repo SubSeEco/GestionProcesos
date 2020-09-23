@@ -23,26 +23,36 @@
                 @Html.AntiForgeryToken()
 
                 <div class="row">
+
                     <div class="col s12 m6 l6">
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.TextSearch)
-                            @Html.LabelFor(m => Model.TextSearch)
-                            @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.TextSearch)
+                                @Html.LabelFor(m => Model.TextSearch)
+                                @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.Desde)
-                            @Html.LabelFor(m => Model.Desde)
-                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.Desde)
+                                @Html.LabelFor(m => Model.Desde)
+                                @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                @Html.EditorFor(m => Model.Hasta)
+                                @Html.LabelFor(m => Model.Hasta)
+                                @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.Hasta)
-                            @Html.LabelFor(m => Model.Hasta)
-                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
-                        </div>
-                        <div class="col s12">
-                            @Html.LabelFor(m => Model.EstadoProcesoId)
-                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...", new { @class = "browser-default" })
-                            @Html.ValidationMessageFor(m => Model.EstadoProcesoId, "", new { @class = "red-text" })
+
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                @Html.LabelFor(m => Model.EstadoProcesoId)
+                                @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.EstadoProcesoId, "", new { @class = "red-text" })
+                            </div>
                         </div>
                     </div>
                     <div class="col s12 m6 l6">

@@ -29,6 +29,8 @@
                         @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...", new { @class = "browser-default" })
                         @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
                     </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s12 m10 l8">
                         @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
                         @Html.LabelFor(m => Model.Observacion)
