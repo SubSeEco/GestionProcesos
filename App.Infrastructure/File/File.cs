@@ -54,7 +54,7 @@ namespace App.Infrastructure.File
             byte[] imagebyte;
 
             var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-            var image = barcode39.Draw(code, 40);
+            var image = barcode39.Draw(code, 35);
 
             using (var ms = new MemoryStream())
             {
@@ -84,14 +84,25 @@ namespace App.Infrastructure.File
                     var pagesize = reader.GetPageSize(1);
 
                     iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(CodigoBarra);
-                    image.SetAbsolutePosition((pagesize.Width - image.ScaledHeight) / 2 , pagesize.Top - 60);
+
+                    var x = ((pagesize.Width - image.ScaledHeight) / 2)-90;
+
+                    image.SetAbsolutePosition(x , pagesize.Top - 60);
+                    //image.SetAbsolutePosition((pagesize.Width - image.ScaledHeight) / 2 , pagesize.Top - 60);
                     pdfContent.AddImage(image);
 
+                    //ColumnText.ShowTextAligned(
+                    //    pdfContent, 
+                    //    iTextSharp.text.Element.ALIGN_MIDDLE,
+                    //    new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),
+                    //    (pagesize.Width  / 2) + 20, 
+                    //    pagesize.Top - 75,
+                    //    0);
                     ColumnText.ShowTextAligned(
                         pdfContent, 
                         iTextSharp.text.Element.ALIGN_MIDDLE,
                         new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),
-                        (pagesize.Width  / 2) + 20, 
+                        x, 
                         pagesize.Top - 75,
                         0);
 

@@ -40,8 +40,10 @@
                             @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
                         </div>
                         <div class="input-field">
-                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...")
+                        </div>
+                        <div class="col">
                             @Html.LabelFor(m => Model.EstadoProcesoId)
+                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...", new { @class = "browser-default" })
                             @Html.ValidationMessageFor(m => Model.EstadoProcesoId, "", new { @class = "red-text" })
                         </div>
                     </div>

@@ -37,17 +37,17 @@
                     @Html.ValidationMessageFor(m => Model.Accion, "", new { @class = "red-text" })
                 </div>
                 <div class="input-field col s12 m10 l10">
-                    @Html.DropDownListFor(m => Model.GrupoId, null, "Seleccione...")
+                    @Html.DropDownListFor(m => Model.GrupoId, null, "Seleccione...", new { @class = "browser-default" })
                     @Html.LabelFor(m => Model.GrupoId)
                     @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
                 </div>
                 <div class="input-field col s12 m10 l10">
-                    @Html.DropDownListFor(m => Model.DefinicionWorkflowRechazoId, null, "Seleccione...")
+                    @Html.DropDownListFor(m => Model.DefinicionWorkflowRechazoId, null, "Seleccione...", new { @class = "browser-default" })
                     @Html.LabelFor(m => Model.DefinicionWorkflowRechazoId)
                     @Html.ValidationMessageFor(m => Model.DefinicionWorkflowRechazoId, "", new { @class = "red-text" })
                 </div>
                 <div class="input-field col s12 m10 l10">
-                    @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...")
+                    @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...", new { @class = "browser-default" })
                     @Html.LabelFor(m => Model.DefinicionWorkflowDependeDeId)
                     @Html.ValidationMessageFor(m => Model.DefinicionWorkflowDependeDeId, "", new { @class = "red-text" })
                 </div>

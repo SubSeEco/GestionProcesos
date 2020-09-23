@@ -38,8 +38,10 @@
                         @Html.ValidationMessageFor(m => Model.DuracionHoras, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m10 l10">
-                        @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...")
+                    </div>
+                    <div class="col s12 m10 l10">
                         @Html.LabelFor(m => Model.EntidadId)
+                        @Html.DropDownListFor(m => Model.EntidadId, null, "Seleccione...", new { @class = "browser-default" })
                         @Html.ValidationMessageFor(m => Model.EntidadId, "", new { @class = "red-text" })
                     </div>
 

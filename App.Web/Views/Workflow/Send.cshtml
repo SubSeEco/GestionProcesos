@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="col s12 m12 l12">
                                     @Html.LabelFor(m => Model.Pl_UndCod)
-                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default" })
+                                    @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default", @id = "ddlPl_UndCod" })
                                     @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.GrupoId)
-                                @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                                @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
                             </div>
                         </div>
@@ -126,30 +126,28 @@
     </div>
 </div>
 
-
-
-
 <script>
     $(document).ready(function () {
         //$('select').formSelect();
-        $("#Pl_UndCod").change(function () {
-            var Pl_UndCod = $(this).val();
-            $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
-                function (classesData) {
-                    var select = $("#To");
-                    select.empty();
-                    select.append($('<option/>', {
-                        value: "",
-                        text: "Seleccione..."
-                    }));
-                    $.each(classesData, function (index, itemData) {
-                        select.append($('<option/>', {
-                            value: itemData.Email,
-                            text: itemData.Nombre
-                        }));
-                    });
-                    //$('#To').formSelect();
-                });
-        });
     });
+
+    $("#ddlPl_UndCod").change(function () {
+        var Pl_UndCod = $(this).val();
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+            function (classesData) {
+                var select = $("#To");
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
 </script>
