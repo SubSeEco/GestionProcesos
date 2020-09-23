@@ -122,7 +122,7 @@
                     </p>
                 }
                 <p align="justify" style="margin-right:30px">
-                    Que,
+                    2. Que,
                     @if (Model.Tiempo == "Pasado")
                     {
                         @Html.Raw("<span>correspondió </span>")
@@ -165,7 +165,7 @@
             @*<td></td>*@
             <td colspan="2">
                 <p align="justify">
-                    1. <strong>RESUELVO:</strong>
+                    <strong>RESUELVO:</strong>
                 </p>
                 <p align="justify" style="margin-right:30px">
                     @if (Model.Tiempo == "Pasado")
@@ -201,11 +201,11 @@
         <tr>
             @*<td></td>*@
             <td colspan="2">
-                2. <strong>DÉJASE CONSTANCIA:</strong>
+                <strong>DÉJASE CONSTANCIA:</strong>
                 @if (Model.SolicitaViatico == true)
                 {
                     <p align="justify" style="margin-right:30px">
-                        Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viático de acuerdo al siguiente esquema:
+                        1. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viático de acuerdo al siguiente esquema:
                         <br />
                     </p>
                     <table border="1" width="100%">
@@ -307,7 +307,7 @@
                 @if (Model.ReqPasajeAereo == true)
                 {
                     <p align="justify" style="margin-right:30px">
-                        Que, esta Subsecretaría pagará a <strong>@Html.DisplayFor(m => Model.Nombre), </strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
+                        2. Que, esta Subsecretaría pagará a <strong>@Html.DisplayFor(m => Model.Nombre), </strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
                     </p>
                 }
                 @if (Model.Tiempo == "Pasado")
@@ -317,7 +317,7 @@
                     </p>
                 }
                 <p align="justify" style="margin-right:30px">
-                    Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
+                    3. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
                     al ítem o los ítems y asignaciones correspondientes al subtítulo 22
                     @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")

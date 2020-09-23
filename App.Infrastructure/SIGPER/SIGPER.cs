@@ -466,7 +466,15 @@ namespace App.Infrastructure.SIGPER
                                     where r.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                     select r;
 
+                        var jefe = from p in dbE.PEDATPER
+                                   join j in dbE.PEFERJEFAJ on p.RH_NumInte equals j.FyPFunARut
+                                   where j.PeFerJerCod == unid.FirstOrDefault().PeFerJerCod
+                                   where j.PeFerJerAutEst == 1
+                                   select p;
+
+
                         returnValue.AddRange(users.ToList());
+                        returnValue.AddRange(jefe.ToList());
                     }
                 }
             }

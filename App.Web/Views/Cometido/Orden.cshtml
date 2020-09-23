@@ -107,27 +107,27 @@
                         Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
                     </p>
                 }
-                <p align="justify" style="margin-right:30px">
-                    Que, don/ña
-                    <strong>@Html.DisplayFor(m => Model.Nombre)</strong>
-                    @Html.Raw(",")&nbsp;&nbsp;&nbsp;Rut N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>, prestador(a) de servicios a honorarios suma alzada con desempeño en
-                    <strong>@Html.DisplayFor(m => Model.UnidadDescripcion)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    @if (Model.Tiempo == "Pasado")
-                    {
-                        @Html.Raw("<span>realizó</span>")
-                    }
-                    else
-                    {
-                        @Html.Raw("<span>realizará</span>")
-                    }
-                    labores específicas inherentes a los servicios establecidas en su contrato de prestación de servicios, por el plazo de
-                    @Html.DisplayFor(m => Model.Dias) día
-                    @if (Model.Dias.Value != 1)
-                    {
-                        @Html.DisplayFor(m => Model.DiasPlural)
-                    }
-                    a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
-                </p>
+            <p align="justify" style="margin-right:30px">
+                Que, don/ña
+                <strong>@Html.DisplayFor(m => Model.Nombre)</strong>
+                @Html.Raw(",")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rut N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>, prestador(a) de servicios a honorarios suma alzada con desempeño en
+                <strong>@Html.DisplayFor(m => Model.UnidadDescripcion)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @if (Model.Tiempo == "Pasado")
+                {
+                    @Html.Raw("<span>realizó</span>")
+                }
+                else
+                {
+                    @Html.Raw("<span>realizará</span>")
+                }
+                labores específicas inherentes a los servicios establecidas en su contrato de prestación de servicios, por el plazo de
+                @Html.DisplayFor(m => Model.Dias) día
+                @if (Model.Dias.Value != 1)
+                {
+                    @Html.DisplayFor(m => Model.DiasPlural)
+                }
+                a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
+            </p>
                 <br />
                 <table border="1" width="100%" style="margin-right:30px">
                     <tr>
@@ -253,7 +253,7 @@
                 @if (Model.Vehiculo == true)
                 {
                     <p>
-                        Que, don/ña
+                        1. Que, don/ña
                         <strong>@Html.DisplayFor(m => Model.Nombre)</strong>
 
                         @if (Model.Tiempo == "Pasado")
@@ -299,7 +299,7 @@
                     </p>
                 }
                 <p align="justify" style="margin-right:30px">
-                    Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
+                    2. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
                     siempre y cuando se encuentren debidamente justificados y documentados, de acuerdo a la normativa interna que regule esta materia y al contrato de prestaciones de servicios respectivo,
                     con cargo al ítem o los ítems y asignaciones correspondientes al subtítulo 22
                     @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
