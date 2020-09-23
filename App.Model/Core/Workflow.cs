@@ -130,6 +130,14 @@ namespace App.Model.Core
             && this.DefinicionWorkflow.Secuencia == 4;
 
         [NotMapped]
+        public bool EsFirmaDocumento => 
+               this.DefinicionWorkflow != null  
+            && this.DefinicionWorkflow.DefinicionProceso != null 
+            && this.DefinicionWorkflow.DefinicionProceso.Entidad != null 
+            && this.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString();
+
+
+        [NotMapped]
         [Display(Name = "Tiempo ejecución")]
         public TimeSpan Span
         {
