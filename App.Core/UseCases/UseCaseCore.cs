@@ -456,16 +456,17 @@ namespace App.Core.UseCases
                     if (obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometido)
                     {
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == obj.ProcesoId).FirstOrDefault();
+                        var doc = _repository.Get<Documento>(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                         if (cometido != null)
                         {
                             /*se valida que la tarea en que se encuentre el cometido permita la anulacion*/
-                            if (cometido.ReqPasajeAereo == true && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 5)
+                            if (cometido.ReqPasajeAereo == true && cometido.Workflow.DefinicionWorkflow.Secuencia >= 5)
                             {
                                 response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido posee pasaje aereo el cual ya fue tramitado");
                             }
-                            else if (cometido.ReqPasajeAereo == false && obj.Workflows.LastOrDefault().DefinicionWorkflow.Secuencia >= 13)
+                            else if (cometido.ReqPasajeAereo == false && (doc != null && doc.Signed == true )) //(cometido.Workflow.DefinicionWorkflow.Secuencia >= 13 || (doc != null && doc.Signed == true)))
                             {
-                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada");
+                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada y firmada");
                             }
                             else
                             {

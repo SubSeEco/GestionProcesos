@@ -9,6 +9,8 @@ using App.Util;
 using App.Core.UseCases;
 using System.IO;
 using OfficeOpenXml;
+using App.Model.Cometido;
+using System.Xml;
 
 namespace App.Web.Controllers
 {
@@ -275,17 +277,25 @@ namespace App.Web.Controllers
             var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
 
             if (_UseCaseResponseMessage.IsValid)
+            {
                 TempData["Success"] = "Operación terminada correctamente.";
+
+                var p = _repository.GetById<Proceso>(id).DefinicionProcesoId;
+                if (p == 13)
+                    return RedirectToAction("SeguimientoGP", "Cometido");
+                else
+                    return RedirectToAction("Index");
+            }
             else
+            {
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
 
-
-            var p = _repository.GetById<Proceso>(id).DefinicionProcesoId;
-            if(p == 13)
-                return RedirectToAction("SeguimientoGP","Cometido");
-            else
-                return RedirectToAction("Index");
-
+                var com = _repository.Get<Cometido>(c => c.ProcesoId == id).FirstOrDefault();
+                if(com != null)
+                    return RedirectToAction("View", "Cometido", new { id = com.CometidoId});
+                else
+                    return RedirectToAction("Index");
+            }
         }
 
         public ActionResult Dashboard()

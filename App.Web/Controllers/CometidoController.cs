@@ -449,6 +449,7 @@ namespace App.Web.Controllers
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers().Where(c =>c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsersForCometido().Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidadForFirma(20280854).Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(100510), "RH_NumInte", "PeDatPerChq");
 
 

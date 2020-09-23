@@ -4966,9 +4966,9 @@ namespace App.Core.UseCases
                 {
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
-                    workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                    workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                    workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
+                    //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                    //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
                     _repository.Save();
                 }
 

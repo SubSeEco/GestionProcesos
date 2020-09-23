@@ -445,6 +445,38 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
+
+        public List<PEDATPER> GetUserByUnidadForFirma(int Rut)
+        {
+            var returnValue = new List<PEDATPER>();
+
+            try
+            {
+                if(Rut != 0)
+                {
+                    using (var dbE = new AppContextEconomia())
+                    {
+                        var unid = from PE in dbE.PEFERJEFAF
+                                 where PE.FyPFunRut == Rut
+                                   select PE;
+
+                        var users = from r in dbE.PEDATPER
+                                    join PER in dbE.PEFERJEFAF on r.RH_NumInte equals PER.FyPFunRut
+                                    where PER.PeFerJerCod == unid.FirstOrDefault().PeFerJerCod
+                                    where r.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                    select r;
+
+                        returnValue.AddRange(users.ToList());
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            return returnValue;
+        }
+
         public List<PEDATPER> GetAllUsers()
         {
             var returnValue = new List<PEDATPER>();
@@ -745,19 +777,20 @@ namespace App.Infrastructure.SIGPER
 
             }
 
-            using (var dbT = new AppContextTurismo())
-            {
-                var rT = from PE in dbT.PEDATPER
-                         //join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                         //where r.Re_ConPyt != 0
-                         //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-                         //where r.Re_ConCar != 21
-                         //from PL in dbT.PLUNILAB
-                         //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
-                         where PE.RH_EstLab.Equals("A")
-                         select PE;
-                returnValue.AddRange(rT.ToList());
-            }
+            /*solo se dejan los funcionarios de economia, ya que algunos estan duplicados en turismo  22092020*/
+            //using (var dbT = new AppContextTurismo())
+            //{
+            //    var rT = from PE in dbT.PEDATPER
+            //             //join r in dbT.ReContra on PE.RH_NumInte equals r.RH_NumInte
+            //             //where r.Re_ConPyt != 0
+            //             //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+            //             //where r.Re_ConCar != 21
+            //             //from PL in dbT.PLUNILAB
+            //             //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+            //             where PE.RH_EstLab.Equals("A")
+            //             select PE;
+            //    returnValue.AddRange(rT.ToList());
+            //}
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
