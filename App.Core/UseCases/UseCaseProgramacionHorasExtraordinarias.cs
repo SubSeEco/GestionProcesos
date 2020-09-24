@@ -138,7 +138,9 @@ namespace App.Core.UseCases
             //{
             //    try
             //    {
-            //        var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), "8" /*memo.TipoDocumentoCodigo*/);
+            //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), "8" /*memo.TipoDocumentoCodigo*/);
+            //        var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), memo.TipoDocumentoCodigo, "");
+
             //        if (_folioResponse == null)
             //            response.Errors.Add("Servicio de folio no entregó respuesta");
 
@@ -208,6 +210,195 @@ namespace App.Core.UseCases
 
             //guardar cambios
             _repository.Save();
+
+            return response;
+        }
+
+
+        public ResponseMessage SignReso(Documento obj, string email, int? programacionHorasExtraordinariasId)
+        {
+            var response = new ResponseMessage();
+            var persona = new SIGPER();
+
+            try
+            {
+                var documento = _repository.GetById<Documento>(obj.DocumentoId);
+                if (documento == null)
+                    response.Errors.Add("Documento no encontrado");
+
+                if (obj.Signed == true)
+                    response.Errors.Add("Documento ya se encuentra firmado");
+
+                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
+                /*old firma*/
+                //var rubrica = _repository.Get<Rubrica>(q => q.Email == email && q.HabilitadoFirma == true);
+                //string IdentificadorFirma = string.Empty;
+                //bool habilitado = false;
+                //foreach (var fir in rubrica)
+                //{
+                //    if (fir == null)
+                //        response.Errors.Add("Usuario sin información de firma electrónica");
+                //    if (fir != null && string.IsNullOrWhiteSpace(fir.IdentificadorFirma))
+                //        response.Errors.Add("Usuario no tiene identificador de firma electrónica");
+
+                //    if (documento.Proceso.DefinicionProcesoId == int.Parse(fir.IdProceso))
+                //    {
+                //        habilitado = true;
+                //        IdentificadorFirma = fir.IdentificadorFirma;
+                //    }
+
+                //    if (fir.HabilitadoFirma != true)
+                //        response.Errors.Add("Usuario no se encuentra habilitado para firmar");
+                //}
+                /**/
+
+                if (rubrica == null)
+                    response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
+
+                var HSMUser = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMUser);
+                if (HSMUser == null)
+                    response.Errors.Add("No se encontró la configuración de usuario de HSM.");
+                if (HSMUser != null && string.IsNullOrWhiteSpace(HSMUser.Valor))
+                    response.Errors.Add("La configuración de usuario de HSM es inválida.");
+
+                var HSMPassword = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMPassword);
+                if (HSMPassword == null)
+                    response.Errors.Add("No se encontró la configuración de usuario de HSM.");
+                if (HSMPassword != null && string.IsNullOrWhiteSpace(HSMPassword.Valor))
+                    response.Errors.Add("La configuración de password de HSM es inválida.");
+
+                var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
+                if (url_tramites_en_linea == null)
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+                if (url_tramites_en_linea != null && url_tramites_en_linea.Valor.IsNullOrWhiteSpace())
+                    response.Errors.Add("No se encontró la configuración de la url de verificación de documentos");
+
+
+                if (response.IsValid)
+                {
+                    //documento.File = _hsm.Sign(documento, rubrica, HSMUser, HSMPassword);
+                    //documento.File = _hsm.Sign(documento);
+                    //documento.Signed = true;
+
+                    //_repository.Update(documento);
+                    //_repository.Save();
+
+                    /*se buscar la persona para determinar la subsecretaria*/
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        persona = _sigper.GetUserByEmail(email);
+                        if (persona == null)
+                            response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+
+                        if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
+                            response.Errors.Add("No se encontró la subsecretaría del firmante");
+                    }
+
+                    /*Se busca cometido para determinar tipo de documento*/
+                    string TipoDocto;
+                    var com = _repository.Get<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == programacionHorasExtraordinariasId.Value).FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
+                        TipoDocto = obj.TipoDocumentoFirma;
+                    else
+                        TipoDocto = "OTRO";
+
+                    //if (com != null)
+                    //{
+                    //    if (com.IdCalidad == 10)
+                    //    {
+                    //        TipoDocto = "RAEX";/*"ORPA";*/
+                    //    }
+                    //    else
+                    //    {
+                    //        switch (com.IdGrado)
+                    //        {
+                    //            case "B":/*Resolución Ministerial Exenta*/
+                    //                TipoDocto = "RMEX";
+                    //                break;
+                    //            case "C": /*Resolución Ministerial Exenta*/
+                    //                TipoDocto = "RMEX";
+                    //                break;
+                    //            default:
+                    //                TipoDocto = "RAEX";/*Resolución Administrativa Exenta*/
+                    //                break;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
+                    //        TipoDocto = obj.TipoDocumentoFirma;
+                    //    else
+                    //        TipoDocto = "OTRO";
+                    //}
+
+
+                    //listado de id de firmantes
+                    var idsFirma = new List<string>();
+                    idsFirma.Add(rubrica.IdentificadorFirma);
+
+                    //generar código QR
+                    byte[] QR = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+
+                    //si el documento ya tiene folio no solicitarlo nuevamente
+                    if (string.IsNullOrWhiteSpace(documento.Folio))
+                    {
+                        try
+                        {
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email),documento.TipoDocumentoId);
+                            //var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto);
+                            var _folioResponse = _folio.GetFolio(string.Join(", ", email), TipoDocto, persona.SubSecretaria);
+                            if (_folioResponse == null)
+                                response.Errors.Add("Servicio de folio no entregó respuesta");
+
+                            if (_folioResponse != null && _folioResponse.status == "ERROR")
+                                response.Errors.Add(_folioResponse.error);
+
+                            documento.Folio = _folioResponse.folio;
+
+                            _repository.Update(documento);
+                            _repository.Save();
+
+                            /*Se agregan lo datos del folio al objeto cometido*/
+                            if (com != null)
+                            {
+                                com.Folio = _folioResponse.folio;
+                                //com.FechaResolucion = DateTime.Now;
+                                com.Firma = "";
+                                //if (com.IdEscalafon == 1 && com.IdEscalafon != null)
+                                //    com.TipoActoAdministrativo = "Resolución Ministerial Exenta";
+                                //else if (com.CalidadDescripcion.Contains("HONORARIOS"))
+                                //    com.TipoActoAdministrativo = "Orden de Pago";
+                                //else
+                                //    com.TipoActoAdministrativo = "Resolución Administrativa Exenta";
+
+                                _repository.Update(com);
+                                _repository.Save();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            response.Errors.Add(ex.Message);
+                        }
+                    }
+
+                    //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
+                    var docto = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
+                    documento.File = docto;
+                    documento.Signed = true;
+
+                    _repository.Update(documento);
+                    _repository.Save();
+
+                    /*se notifica por correo la firma de la resolucion*/
+                    //_email.
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
 
             return response;
         }
