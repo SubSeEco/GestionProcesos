@@ -309,14 +309,16 @@ namespace App.Web.Controllers
             if (model.Workflow.DefinicionWorkflow.Secuencia == 5)
             {
                 var cotizacion = _repository.GetAll<Cotizacion>().Where(c => c.PasajeId == model.PasajeId).ToList();
+                if (cotizacion.Count > 1)
+                {
+                    var max = cotizacion.Max(c => c.ValorPasaje);
+                    var min = cotizacion.Min(c => c.ValorPasaje);
 
-                var max = cotizacion.Max(c =>c.ValorPasaje);
-                var min = cotizacion.Min(c => c.ValorPasaje);
+                    var seleccion = _repository.Get<Cotizacion>(c => c.ValorPasaje == min).FirstOrDefault().Seleccion;
 
-                var seleccion = _repository.Get<Cotizacion>(c => c.ValorPasaje == min).FirstOrDefault().Seleccion;
-
-                if(seleccion == false)
-                    ViewBag.MasBarato = "La cotizacion seleccionada no es la mas económica";
+                    if (seleccion == false)
+                        ViewBag.MasBarato = "La cotizacion seleccionada no es la mas económica";
+                }
             }
 
             return View(model);

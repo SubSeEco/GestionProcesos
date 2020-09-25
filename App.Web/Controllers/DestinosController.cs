@@ -6,6 +6,7 @@ using App.Model.Cometido;
 //using App.Model.Shared;
 using App.Core.Interfaces;
 using App.Core.UseCases;
+using App.Model.Core;
 
 namespace App.Web.Controllers
 {
@@ -303,7 +304,14 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId });
+
+                    /*se redireccina a la vista que llamo al metodo de borrar*/
+                    var com = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
+                    if (pro.Count() > 0)
+                        return RedirectToAction("EditGP", "Cometido", new { model.WorkflowId, id = model.CometidoId });
+                    else
+                        return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId });                    
                 }
                 else
                 {
@@ -357,7 +365,6 @@ namespace App.Web.Controllers
                     //ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
 
                     TempData["Success"] = "Operación terminada correctamente.";
-                    //return Redirect(Request.UrlReferrer.PathAndQuery);
                     return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId});
                 }
 
@@ -461,7 +468,14 @@ namespace App.Web.Controllers
             if (_UseCaseResponseMessage.IsValid)
             {
                 TempData["Success"] = "Operación terminada correctamente.";
-                return RedirectToAction("Edit", "Cometido", new {id = cometidoId });
+
+                /*se redireccina a la vista que llamo al metodo de borrar*/
+                var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId).FirstOrDefault();
+                var pro = _repository.Get<Workflow>(p =>p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
+                if(pro.Count() > 0)
+                    return RedirectToAction("EditGP", "Cometido", new { id = cometidoId });
+                else
+                    return RedirectToAction("Edit", "Cometido", new { id = cometidoId });
             }
                 
 

@@ -2078,16 +2078,16 @@ namespace App.Core.UseCases
                 /*se valida que la cantidad de dias sea igual que lo solicitado por cada destino ingresado*/
                 //var dias = (obj.FechaHasta - obj.FechaInicio).Days + 1;
                 var dias = (objController.FechaHasta - objController.FechaInicio).Days + 1;
-                var cant = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
-                var cant2 = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
+                var cantNew = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
+                var cantOld = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
                 if (objController.EditGP == true)
                 {
-                    if (dias != cant)
+                    if (dias != cantNew)
                         response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");                    
                 }
                 else
                 {
-                    if (dias != cant2)
+                    if (dias != cantOld)
                     {
                         if(objController.FechaInicio.Hour < 17)
                         {
@@ -2465,16 +2465,16 @@ namespace App.Core.UseCases
                 if (adyacente == false)
                 {
                     var diasAdyacencia = (objController.FechaHasta - objController.FechaInicio).Days + 1;
-                    var cantAdyacencia = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
-                    var cant2Adyacencia = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
+                    var cantAdyacenciaNew = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
+                    var cantAdyacenciaOld = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
                     if (objController.EditGP == true)
                     {
-                        if (diasAdyacencia != cantAdyacencia)
+                        if (diasAdyacencia != cantAdyacenciaNew)
                             response.Errors.Add("La cantidad de días solicitados debe(n) ser " + diasAdyacencia + " en total");                        
                     }
                     else
                     {
-                        if (diasAdyacencia != cant2Adyacencia)
+                        if (diasAdyacencia != cantAdyacenciaOld)
                         {
                             if (objController.FechaInicio.Hour < 17)
                             {
@@ -4673,6 +4673,30 @@ namespace App.Core.UseCases
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
                             throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
                     }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 17)
+                    {
+                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
+                        if (doc == false)
+                            throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
+                    {
+                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
+                        if (doc == false)
+                            throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
+                    {
+                        var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
+                        if(doc.Count() > 0 )
+                        {
+                            foreach(var d in doc)
+                            {
+                                if(d.Signed != true)
+                                    throw new Exception("Los documento cargados desde contabilidad y tesorería, deben estar firmado electronicamente por el encargado de finanzas");
+                            }
+                        } 
+                    }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
                     {
                         var com = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
@@ -4969,6 +4993,61 @@ namespace App.Core.UseCases
                     //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                     //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
                     //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
+
+                    #region ENVIO DE NOTIFICACION TERMINO PROCESO
+                    /*si no existen mas tareas se envia correo de notificacion*/
+                    var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
+                    var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                    var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
+                    List<string> emailMsg;
+
+                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    {
+                        if (cometido.ObservacionesPagoSigfeTesoreria == null)
+                        {
+                            /*Aprueba pago y notifica a interesado(a)*/
+                            emailMsg = new List<string>();
+                            emailMsg.Add(QuienViaja);//quien viaja
+                            emailMsg.Add(solicitante.Trim()); //solicitante
+
+                            _email.NotificacionesCometido(workflowActual,
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
+                            "Su cometido N°" + cometido.CometidoId.ToString() + " " + "ha sido pagado",
+                            emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                        }
+
+
+                        if (cometido.ObservacionesPagoSigfeTesoreria != null)
+                        {
+                            /*Aprueba pago con observaciones o sin pago y envía a interesado(a)*/
+                            emailMsg = new List<string>();
+                            emailMsg.Add(QuienViaja);//quien viaja
+                            emailMsg.Add(solicitante.Trim()); //solicitante
+
+                            _email.NotificacionesCometido(workflowActual,
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja2),
+                            "Su cometido N°" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES para el pago",
+                            emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                        }
+                    }
+
+                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                    {
+                        /*Rechaza pago y notifica a Encargado de Tesorería*/
+                        emailMsg = new List<string>();
+                        emailMsg.Add(workflowActual.DefinicionWorkflow.Secuencia == 19 && workflowActual.DefinicionWorkflow.Email != null ? workflowActual.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Tesoreria
+
+                        _email.NotificacionesCometido(workflowActual,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzasRechazo_EncargadoTesoreria),
+                        "El pago del cometido N° " + cometido.CometidoId.ToString() + "ha sido rechazado por el Encargado(a) de Finanzas",
+                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                    }
+
+                    #endregion
+
                     _repository.Save();
                 }
 

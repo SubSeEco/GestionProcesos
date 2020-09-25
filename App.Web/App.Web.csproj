@@ -721,6 +721,12 @@
     <Content Include="Views\GDExterno\FEADocumentos.cshtml" />
     <Content Include="Views\GDExterno\FEAUpload.cshtml" />
     <Content Include="Views\GDExterno\View.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Pdf.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Sign.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditAnalista.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
