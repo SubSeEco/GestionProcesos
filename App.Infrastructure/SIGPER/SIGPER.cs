@@ -384,12 +384,16 @@ namespace App.Infrastructure.SIGPER
             {
                 using (var context = new AppContextEconomia())
                 {
-                    //excluir las unidades sin funcionarios
                     var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" });
                     foreach (var item in unidades)
                     {
-                        var rE = GetUserByUnidad(item.Pl_UndCod);
-                        if (rE != null && rE.Any())
+                        //excluir las unidades sin funcionarios
+                        var funcionarios = from PEDATPER in context.PEDATPER
+                                 join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
+                                 where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                 where PeDatLab.RhConUniCod == item.Pl_UndCod select PEDATPER;
+
+                        if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
                 }
@@ -399,8 +403,14 @@ namespace App.Infrastructure.SIGPER
                     var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusion)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" });
                     foreach (var item in unidades)
                     {
-                        var rT = GetUserByUnidad(item.Pl_UndCod);
-                        if (rT != null && rT.Any())
+                        //excluir las unidades sin funcionarios
+                        var funcionarios = from PEDATPER in context.PEDATPER
+                                           join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
+                                           where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where PeDatLab.RhConUniCod == item.Pl_UndCod
+                                           select PEDATPER;
+                        
+                        if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
                 }
