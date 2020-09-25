@@ -148,26 +148,6 @@ namespace App.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUserByUnidad(int Pl_UndCod)
-        {
-            var result = _sigper.GetUserByUnidad(Pl_UndCod)
-               .Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq })
-               .OrderBy(q => q.Nombre)
-               .ToList().Distinct();
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUserByUnidadFunc1(int Pl_UndCodFunc1)
-        {
-            var result = _sigper.GetUserByUnidad(Pl_UndCodFunc1)
-               .Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq })
-               .OrderBy(q => q.Nombre)
-               .ToList().Distinct();
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         public JsonResult GetUsuario(int Rut)
         {
             var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
@@ -223,53 +203,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioDest(int RutDest)
+        public JsonResult GetUsuarioFunc1(int RutFunc1)
         {
-            var correodest = _sigper.GetUserByRut(RutDest).Funcionario.Rh_Mail.Trim();
-            var perdest = _sigper.GetUserByEmail(correodest);
-            var IdCargoDest = perdest.FunDatosLaborales.RhConCar.Value;
-            var cargodest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perdest.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadDest = perdest.FunDatosLaborales.RH_ContCod;
-            var calidaddest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perdest.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoDest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConGra.Trim()) ? "0" : perdest.FunDatosLaborales.RhConGra.Trim();
-            var gradodest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perdest.FunDatosLaborales.RhConGra.Trim();
-            var estamentodest = perdest.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perdest.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdDest = _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaDest = ProgIdDest != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdDest).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradodest = _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturadest = perdest.Jefatura != null ? perdest.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreodest = perdest.Funcionario != null ? perdest.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombredest = perdest.Funcionario != null ? perdest.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc1 = _sigper.GetUserByRut(RutFunc1).Funcionario.Rh_Mail.Trim();
+            var perfunc1 = _sigper.GetUserByEmail(correofunc1);
+            var IdCargoFunc1 = perfunc1.FunDatosLaborales.RhConCar.Value;
+            var cargofunc1 = string.IsNullOrEmpty(perfunc1.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc1.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc1 = perfunc1.FunDatosLaborales.RH_ContCod;
+            var calidadfunc1 = string.IsNullOrEmpty(perfunc1.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc1.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc1 = string.IsNullOrEmpty(perfunc1.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc1.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc1 = string.IsNullOrEmpty(perfunc1.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc1.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc1 = perfunc1.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc1.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc1 = ProgIdFunc1 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc1).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc1 = perfunc1.Jefatura != null ? perfunc1.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc1 = perfunc1.Funcionario != null ? perfunc1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc1 = perfunc1.Funcionario != null ? perfunc1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutdest;
-            if (perdest.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc1;
+            if (perfunc1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = perdest.Funcionario.RH_NumInte.ToString();
-                rutdest = string.Concat("0", t);
+                string t = perfunc1.Funcionario.RH_NumInte.ToString();
+                rutfunc1 = string.Concat("0", t);
             }
             else
             {
-                rutdest = perdest.Funcionario.RH_NumInte.ToString();
+                rutfunc1 = perfunc1.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutDest = rutdest,
-                DVDest = perdest.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoDest = IdCargoDest,
-                CargoDest = cargodest,
-                IdCalidadDest = IdCalidadDest,
-                CalidadJuridicaDest = calidaddest,
-                IdGradoDest = IdGradoDest,
-                GradoDest = gradodest,
-                EstamentoDest = estamentodest,
-                ProgramaDest = ProgramaDest.Trim(),
-                ConglomeradoDest = conglomeradodest,
-                IdUnidadDest = perdest.Unidad.Pl_UndCod,
-                UnidadDest = perdest.Unidad.Pl_UndDes.Trim(),
-                JefaturaDest = jefaturadest,
-                EmailDest = ecorreodest,
-                NombreChqDest = perdest.Funcionario.PeDatPerChq.Trim(),
+                RutFunc1 = rutfunc1,
+                DVFunc1 = perfunc1.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc1 = IdCargoFunc1,
+                CargoFunc1 = cargofunc1,
+                IdCalidadVisa1 = IdCalidadFunc1,
+                CalidadJuridicaFunc1 = calidadfunc1,
+                IdGradoFunc1 = IdGradoFunc1,
+                GradoFunc1 = gradofunc1,
+                EstamentoFunc1 = estamentofunc1,
+                ProgramaFunc1 = ProgramaFunc1.Trim(),
+                ConglomeradoFunc1 = conglomeradofunc1,
+                IdUnidadFunc1 = perfunc1.Unidad.Pl_UndCod,
+                UnidadFunc1 = perfunc1.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc1 = jefaturafunc1,
+                EmailFunc1 = ecorreofunc1,
+                NombreChqFunc1 = perfunc1.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -278,53 +258,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioSecre(int RutSecre)
+        public JsonResult GetUsuarioFunc2(int RutFunc2)
         {
-            var correosecre = _sigper.GetUserByRut(RutSecre).Funcionario.Rh_Mail.Trim();
-            var persecre = _sigper.GetUserByEmail(correosecre);
-            var IdCargoSecre = persecre.FunDatosLaborales.RhConCar.Value;
-            var cargosecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == persecre.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadSecre = persecre.FunDatosLaborales.RH_ContCod;
-            var calidadsecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == persecre.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoSecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConGra.Trim()) ? "0" : persecre.FunDatosLaborales.RhConGra.Trim();
-            var gradosecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : persecre.FunDatosLaborales.RhConGra.Trim();
-            var estamentosecre = persecre.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persecre.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdSecre = _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaSecre = ProgIdSecre != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdSecre).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradosecre = _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturasecre = persecre.Jefatura != null ? persecre.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreosecre = persecre.Funcionario != null ? persecre.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombresecre = persecre.Funcionario != null ? persecre.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc2 = _sigper.GetUserByRut(RutFunc2).Funcionario.Rh_Mail.Trim();
+            var perfunc2 = _sigper.GetUserByEmail(correofunc2);
+            var IdCargoFunc2= perfunc2.FunDatosLaborales.RhConCar.Value;
+            var cargofunc2 = string.IsNullOrEmpty(perfunc2.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc2.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc2 = perfunc2.FunDatosLaborales.RH_ContCod;
+            var calidadfunc2 = string.IsNullOrEmpty(perfunc2.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc2.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc2 = string.IsNullOrEmpty(perfunc2.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc2.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc2 = string.IsNullOrEmpty(perfunc2.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc2.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc2 = perfunc2.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc2.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc2 = ProgIdFunc2 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc2).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc2 = perfunc2.Jefatura != null ? perfunc2.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc2 = perfunc2.Funcionario != null ? perfunc2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc2 = perfunc2.Funcionario != null ? perfunc2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutsecre;
-            if (persecre.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc2;
+            if (perfunc2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = persecre.Funcionario.RH_NumInte.ToString();
-                rutsecre = string.Concat("0", t);
+                string t = perfunc2.Funcionario.RH_NumInte.ToString();
+                rutfunc2 = string.Concat("0", t);
             }
             else
             {
-                rutsecre = persecre.Funcionario.RH_NumInte.ToString();
+                rutfunc2 = perfunc2.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutSecre = rutsecre,
-                DVSecre = persecre.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoSecre = IdCargoSecre,
-                CargoSecre = cargosecre,
-                IdCalidadSecre = IdCalidadSecre,
-                CalidadJuridicaSecre = calidadsecre,
-                IdGradoSecre = IdGradoSecre,
-                GradoSecre = gradosecre,
-                EstamentoSecre = estamentosecre,
-                ProgramaSecre = ProgramaSecre.Trim(),
-                ConglomeradoSecre = conglomeradosecre,
-                IdUnidadSecre = persecre.Unidad.Pl_UndCod,
-                UnidadSecre = persecre.Unidad.Pl_UndDes.Trim(),
-                JefaturaSecre = jefaturasecre,
-                EmailSecre = ecorreosecre,
-                NombreChqSecre = persecre.Funcionario.PeDatPerChq.Trim(),
+                RutFunc2 = rutfunc2,
+                DVFunc2 = perfunc2.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc2 = IdCargoFunc2,
+                CargoFunc2 = cargofunc2,
+                IdCalidadVisa2 = IdCalidadFunc2,
+                CalidadJuridicaFunc2 = calidadfunc2,
+                IdGradoFunc2 = IdGradoFunc2,
+                GradoFunc2 = gradofunc2,
+                EstamentoFunc2 = estamentofunc2,
+                ProgramaFunc2 = ProgramaFunc2.Trim(),
+                ConglomeradoFunc2 = conglomeradofunc2,
+                IdUnidadFunc2 = perfunc2.Unidad.Pl_UndCod,
+                UnidadFunc2 = perfunc2.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc2 = jefaturafunc2,
+                EmailFunc2 = ecorreofunc2,
+                NombreChqFunc2 = perfunc2.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -333,53 +313,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa1(int RutVisa1)
+        public JsonResult GetUsuarioFunc3(int RutFunc3)
         {
-            var correovisa1 = _sigper.GetUserByRut(RutVisa1).Funcionario.Rh_Mail.Trim();
-            var pervisa1 = _sigper.GetUserByEmail(correovisa1);
-            var IdCargoVisa1 = pervisa1.FunDatosLaborales.RhConCar.Value;
-            var cargovisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa1.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa1 = pervisa1.FunDatosLaborales.RH_ContCod;
-            var calidadvisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa1.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa1.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa1.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa1 = pervisa1.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa1.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa1 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa1 = ProgIdVisa1 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa1).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa1 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa1 = pervisa1.Jefatura != null ? pervisa1.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa1 = pervisa1.Funcionario != null ? pervisa1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa1 = pervisa1.Funcionario != null ? pervisa1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc3 = _sigper.GetUserByRut(RutFunc3).Funcionario.Rh_Mail.Trim();
+            var perfunc3 = _sigper.GetUserByEmail(correofunc3);
+            var IdCargoFunc3 = perfunc3.FunDatosLaborales.RhConCar.Value;
+            var cargofunc3 = string.IsNullOrEmpty(perfunc3.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc3.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc3 = perfunc3.FunDatosLaborales.RH_ContCod;
+            var calidadfunc3 = string.IsNullOrEmpty(perfunc3.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc3.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc3 = string.IsNullOrEmpty(perfunc3.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc3.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc3 = string.IsNullOrEmpty(perfunc3.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc3.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc3 = perfunc3.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc3.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc3 = ProgIdFunc3 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc3).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc3 = perfunc3.Jefatura != null ? perfunc3.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc3 = perfunc3.Funcionario != null ? perfunc3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc3 = perfunc3.Funcionario != null ? perfunc3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa1;
-            if (pervisa1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc3;
+            if (perfunc3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa1.Funcionario.RH_NumInte.ToString();
-                rutvisa1 = string.Concat("0", t);
+                string t = perfunc3.Funcionario.RH_NumInte.ToString();
+                rutfunc3 = string.Concat("0", t);
             }
             else
             {
-                rutvisa1 = pervisa1.Funcionario.RH_NumInte.ToString();
+                rutfunc3 = perfunc3.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa1 = rutvisa1,
-                DVVisa1 = pervisa1.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa1 = IdCargoVisa1,
-                CargoVisa1 = cargovisa1,
-                IdCalidadVisa1 = IdCalidadVisa1,
-                CalidadJuridicaVisa1 = calidadvisa1,
-                IdGradoVisa1 = IdGradoVisa1,
-                GradoVisa1 = gradovisa1,
-                EstamentoVisa1 = estamentovisa1,
-                ProgramaVisa1 = ProgramaVisa1.Trim(),
-                ConglomeradoVisa1 = conglomeradovisa1,
-                IdUnidadVisa1 = pervisa1.Unidad.Pl_UndCod,
-                UnidadVisa1 = pervisa1.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa1 = jefaturavisa1,
-                EmailVisa1 = ecorreovisa1,
-                NombreChqVisa1 = pervisa1.Funcionario.PeDatPerChq.Trim(),
+                RutFunc3 = rutfunc3,
+                DVFunc3 = perfunc3.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc3 = IdCargoFunc3,
+                CargoFunc3 = cargofunc3,
+                IdCalidadVisa3 = IdCalidadFunc3,
+                CalidadJuridicaFunc3 = calidadfunc3,
+                IdGradoFunc3 = IdGradoFunc3,
+                GradoFunc3 = gradofunc3,
+                EstamentoFunc3 = estamentofunc3,
+                ProgramaFunc3 = ProgramaFunc3.Trim(),
+                ConglomeradoFunc3 = conglomeradofunc3,
+                IdUnidadFunc3 = perfunc3.Unidad.Pl_UndCod,
+                UnidadFunc3 = perfunc3.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc3 = jefaturafunc3,
+                EmailFunc3 = ecorreofunc3,
+                NombreChqFunc3 = perfunc3.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -388,53 +368,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa2(int RutVisa2)
+        public JsonResult GetUsuarioFunc4(int RutFunc4)
         {
-            var correovisa2 = _sigper.GetUserByRut(RutVisa2).Funcionario.Rh_Mail.Trim();
-            var pervisa2 = _sigper.GetUserByEmail(correovisa2);
-            var IdCargoVisa2 = pervisa2.FunDatosLaborales.RhConCar.Value;
-            var cargovisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa2.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa2 = pervisa2.FunDatosLaborales.RH_ContCod;
-            var calidadvisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa2.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa2.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa2.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa2 = pervisa2.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa2.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa2 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa2 = ProgIdVisa2 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa2).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa2 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa2 = pervisa2.Jefatura != null ? pervisa2.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa2 = pervisa2.Funcionario != null ? pervisa2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa2 = pervisa2.Funcionario != null ? pervisa2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc4 = _sigper.GetUserByRut(RutFunc4).Funcionario.Rh_Mail.Trim();
+            var perfunc4 = _sigper.GetUserByEmail(correofunc4);
+            var IdCargoFunc4 = perfunc4.FunDatosLaborales.RhConCar.Value;
+            var cargofunc4 = string.IsNullOrEmpty(perfunc4.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc4.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc4 = perfunc4.FunDatosLaborales.RH_ContCod;
+            var calidadfunc4 = string.IsNullOrEmpty(perfunc4.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc4.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc4 = string.IsNullOrEmpty(perfunc4.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc4.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc4 = string.IsNullOrEmpty(perfunc4.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc4.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc4 = perfunc4.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc4.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc4 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc4 = ProgIdFunc4 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc4).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc4 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc4 = perfunc4.Jefatura != null ? perfunc4.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc4 = perfunc4.Funcionario != null ? perfunc4.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc4 = perfunc4.Funcionario != null ? perfunc4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa2;
-            if (pervisa2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc4;
+            if (perfunc4.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa2.Funcionario.RH_NumInte.ToString();
-                rutvisa2 = string.Concat("0", t);
+                string t = perfunc4.Funcionario.RH_NumInte.ToString();
+                rutfunc4 = string.Concat("0", t);
             }
             else
             {
-                rutvisa2 = pervisa2.Funcionario.RH_NumInte.ToString();
+                rutfunc4 = perfunc4.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa2 = rutvisa2,
-                DVVisa2 = pervisa2.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa2 = IdCargoVisa2,
-                CargoVisa2 = cargovisa2,
-                IdCalidadVisa2 = IdCalidadVisa2,
-                CalidadJuridicaVisa2 = calidadvisa2,
-                IdGradoVisa2 = IdGradoVisa2,
-                GradoVisa2 = gradovisa2,
-                EstamentoVisa2 = estamentovisa2,
-                ProgramaVisa2 = ProgramaVisa2.Trim(),
-                ConglomeradoVisa2 = conglomeradovisa2,
-                IdUnidadVisa2 = pervisa2.Unidad.Pl_UndCod,
-                UnidadVisa2 = pervisa2.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa2 = jefaturavisa2,
-                EmailVisa2 = ecorreovisa2,
-                NombreChqVisa2 = pervisa2.Funcionario.PeDatPerChq.Trim(),
+                RutFunc4 = rutfunc4,
+                DVFunc4 = perfunc4.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc4 = IdCargoFunc4,
+                CargoFunc4 = cargofunc4,
+                IdCalidadVisa4 = IdCalidadFunc4,
+                CalidadJuridicaFunc4 = calidadfunc4,
+                IdGradoFunc4 = IdGradoFunc4,
+                GradoFunc4 = gradofunc4,
+                EstamentoFunc4 = estamentofunc4,
+                ProgramaFunc4 = ProgramaFunc4.Trim(),
+                ConglomeradoFunc4 = conglomeradofunc4,
+                IdUnidadFunc4 = perfunc4.Unidad.Pl_UndCod,
+                UnidadFunc4 = perfunc4.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc4 = jefaturafunc4,
+                EmailFunc4 = ecorreofunc4,
+                NombreChqFunc4 = perfunc4.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -443,53 +423,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa3(int RutVisa3)
+        public JsonResult GetUsuarioFunc5(int RutFunc5)
         {
-            var correovisa3 = _sigper.GetUserByRut(RutVisa3).Funcionario.Rh_Mail.Trim();
-            var pervisa3 = _sigper.GetUserByEmail(correovisa3);
-            var IdCargoVisa3 = pervisa3.FunDatosLaborales.RhConCar.Value;
-            var cargovisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa3.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa3 = pervisa3.FunDatosLaborales.RH_ContCod;
-            var calidadvisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa3.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa3.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa3.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa3 = pervisa3.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa3.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa3 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa3 = ProgIdVisa3 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa3).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa3 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa3 = pervisa3.Jefatura != null ? pervisa3.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa3 = pervisa3.Funcionario != null ? pervisa3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa3 = pervisa3.Funcionario != null ? pervisa3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc5 = _sigper.GetUserByRut(RutFunc5).Funcionario.Rh_Mail.Trim();
+            var perfunc5 = _sigper.GetUserByEmail(correofunc5);
+            var IdCargoFunc5 = perfunc5.FunDatosLaborales.RhConCar.Value;
+            var cargofunc5 = string.IsNullOrEmpty(perfunc5.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc5.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc5 = perfunc5.FunDatosLaborales.RH_ContCod;
+            var calidadfunc5 = string.IsNullOrEmpty(perfunc5.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc5.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc5 = string.IsNullOrEmpty(perfunc5.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc5.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc5 = string.IsNullOrEmpty(perfunc5.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc5.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc5 = perfunc5.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc5.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc5 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc5 = ProgIdFunc5 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc5).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc5 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc5 = perfunc5.Jefatura != null ? perfunc5.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc5 = perfunc5.Funcionario != null ? perfunc5.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc5 = perfunc5.Funcionario != null ? perfunc5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa3;
-            if (pervisa3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc5;
+            if (perfunc5.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa3.Funcionario.RH_NumInte.ToString();
-                rutvisa3 = string.Concat("0", t);
+                string t = perfunc5.Funcionario.RH_NumInte.ToString();
+                rutfunc5 = string.Concat("0", t);
             }
             else
             {
-                rutvisa3 = pervisa3.Funcionario.RH_NumInte.ToString();
+                rutfunc5 = perfunc5.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa3 = rutvisa3,
-                DVVisa3 = pervisa3.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa3 = IdCargoVisa3,
-                CargoVisa3 = cargovisa3,
-                IdCalidadVisa3 = IdCalidadVisa3,
-                CalidadJuridicaVisa3 = calidadvisa3,
-                IdGradoVisa3 = IdGradoVisa3,
-                GradoVisa3 = gradovisa3,
-                EstamentoVisa3 = estamentovisa3,
-                ProgramaVisa3 = ProgramaVisa3.Trim(),
-                ConglomeradoVisa3 = conglomeradovisa3,
-                IdUnidadVisa3 = pervisa3.Unidad.Pl_UndCod,
-                UnidadVisa3 = pervisa3.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa3 = jefaturavisa3,
-                EmailVisa3 = ecorreovisa3,
-                NombreChqVisa3 = pervisa3.Funcionario.PeDatPerChq.Trim(),
+                RutFunc5 = rutfunc5,
+                DVFunc5 = perfunc5.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc5 = IdCargoFunc5,
+                CargoFunc5 = cargofunc5,
+                IdCalidadVisa5 = IdCalidadFunc5,
+                CalidadJuridicaFunc5 = calidadfunc5,
+                IdGradoFunc5 = IdGradoFunc5,
+                GradoFunc5 = gradofunc5,
+                EstamentoFunc5 = estamentofunc5,
+                ProgramaFunc5 = ProgramaFunc5.Trim(),
+                ConglomeradoFunc5 = conglomeradofunc5,
+                IdUnidadFunc5 = perfunc5.Unidad.Pl_UndCod,
+                UnidadFunc5 = perfunc5.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc5 = jefaturafunc5,
+                EmailFunc5 = ecorreofunc5,
+                NombreChqFunc5 = perfunc5.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -498,53 +478,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa4(int RutVisa4)
+        public JsonResult GetUsuarioFunc6(int RutFunc6)
         {
-            var correovisa4 = _sigper.GetUserByRut(RutVisa4).Funcionario.Rh_Mail.Trim();
-            var pervisa4 = _sigper.GetUserByEmail(correovisa4);
-            var IdCargoVisa4 = pervisa4.FunDatosLaborales.RhConCar.Value;
-            var cargovisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa4.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa4 = pervisa4.FunDatosLaborales.RH_ContCod;
-            var calidadvisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa4.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa4.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa4.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa4 = pervisa4.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa4.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa4 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa4 = ProgIdVisa4 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa4).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa4 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa4 = pervisa4.Jefatura != null ? pervisa4.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa4 = pervisa4.Funcionario != null ? pervisa4.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa4 = pervisa4.Funcionario != null ? pervisa4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc6 = _sigper.GetUserByRut(RutFunc6).Funcionario.Rh_Mail.Trim();
+            var perfunc6 = _sigper.GetUserByEmail(correofunc6);
+            var IdCargoFunc6 = perfunc6.FunDatosLaborales.RhConCar.Value;
+            var cargofunc6 = string.IsNullOrEmpty(perfunc6.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc6.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc6 = perfunc6.FunDatosLaborales.RH_ContCod;
+            var calidadfunc6 = string.IsNullOrEmpty(perfunc6.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc6.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc6 = string.IsNullOrEmpty(perfunc6.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc6.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc6 = string.IsNullOrEmpty(perfunc6.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc6.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc6 = perfunc6.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc6.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc6 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc6 = ProgIdFunc6 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc6).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc6 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc6 = perfunc6.Jefatura != null ? perfunc6.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc6 = perfunc6.Funcionario != null ? perfunc6.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc6 = perfunc6.Funcionario != null ? perfunc6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa4;
-            if (pervisa4.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc6;
+            if (perfunc6.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa4.Funcionario.RH_NumInte.ToString();
-                rutvisa4 = string.Concat("0", t);
+                string t = perfunc6.Funcionario.RH_NumInte.ToString();
+                rutfunc6 = string.Concat("0", t);
             }
             else
             {
-                rutvisa4 = pervisa4.Funcionario.RH_NumInte.ToString();
+                rutfunc6 = perfunc6.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa4 = rutvisa4,
-                DVVisa4 = pervisa4.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa4 = IdCargoVisa4,
-                CargoVisa4 = cargovisa4,
-                IdCalidadVisa4 = IdCalidadVisa4,
-                CalidadJuridicaVisa4 = calidadvisa4,
-                IdGradoVisa4 = IdGradoVisa4,
-                GradoVisa4 = gradovisa4,
-                EstamentoVisa4 = estamentovisa4,
-                ProgramaVisa4 = ProgramaVisa4.Trim(),
-                ConglomeradoVisa4 = conglomeradovisa4,
-                IdUnidadVisa4 = pervisa4.Unidad.Pl_UndCod,
-                UnidadVisa4 = pervisa4.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa4 = jefaturavisa4,
-                EmailVisa4 = ecorreovisa4,
-                NombreChqVisa4 = pervisa4.Funcionario.PeDatPerChq.Trim(),
+                RutFunc6 = rutfunc6,
+                DVFunc6 = perfunc6.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc6 = IdCargoFunc6,
+                CargoFunc6 = cargofunc6,
+                IdCalidadVisa6 = IdCalidadFunc6,
+                CalidadJuridicaFunc6 = calidadfunc6,
+                IdGradoFunc6 = IdGradoFunc6,
+                GradoFunc6 = gradofunc6,
+                EstamentoFunc6 = estamentofunc6,
+                ProgramaFunc6 = ProgramaFunc6.Trim(),
+                ConglomeradoFunc6 = conglomeradofunc6,
+                IdUnidadFunc6 = perfunc6.Unidad.Pl_UndCod,
+                UnidadFunc6 = perfunc6.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc6 = jefaturafunc6,
+                EmailFunc6 = ecorreofunc6,
+                NombreChqFunc6 = perfunc6.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -553,53 +533,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa5(int RutVisa5)
+        public JsonResult GetUsuarioFunc7(int RutFunc7)
         {
-            var correovisa5 = _sigper.GetUserByRut(RutVisa5).Funcionario.Rh_Mail.Trim();
-            var pervisa5 = _sigper.GetUserByEmail(correovisa5);
-            var IdCargoVisa5 = pervisa5.FunDatosLaborales.RhConCar.Value;
-            var cargovisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa5.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa5 = pervisa5.FunDatosLaborales.RH_ContCod;
-            var calidadvisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa5.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa5.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa5.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa5 = pervisa5.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa5.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa5 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa5 = ProgIdVisa5 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa5).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa5 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa5 = pervisa5.Jefatura != null ? pervisa5.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa5 = pervisa5.Funcionario != null ? pervisa5.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa5 = pervisa5.Funcionario != null ? pervisa5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc7 = _sigper.GetUserByRut(RutFunc7).Funcionario.Rh_Mail.Trim();
+            var perfunc7 = _sigper.GetUserByEmail(correofunc7);
+            var IdCargoFunc7 = perfunc7.FunDatosLaborales.RhConCar.Value;
+            var cargofunc7 = string.IsNullOrEmpty(perfunc7.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc7.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc7 = perfunc7.FunDatosLaborales.RH_ContCod;
+            var calidadfunc7 = string.IsNullOrEmpty(perfunc7.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc7.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc7 = string.IsNullOrEmpty(perfunc7.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc7.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc7 = string.IsNullOrEmpty(perfunc7.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc7.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc7 = perfunc7.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc7.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc7 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc7 = ProgIdFunc7 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc7).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc7 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc7 = perfunc7.Jefatura != null ? perfunc7.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc7 = perfunc7.Funcionario != null ? perfunc7.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc7 = perfunc7.Funcionario != null ? perfunc7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa5;
-            if (pervisa5.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc7;
+            if (perfunc7.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa5.Funcionario.RH_NumInte.ToString();
-                rutvisa5 = string.Concat("0", t);
+                string t = perfunc7.Funcionario.RH_NumInte.ToString();
+                rutfunc7 = string.Concat("0", t);
             }
             else
             {
-                rutvisa5 = pervisa5.Funcionario.RH_NumInte.ToString();
+                rutfunc7 = perfunc7.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa5 = rutvisa5,
-                DVVisa5 = pervisa5.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa5 = IdCargoVisa5,
-                CargoVisa5 = cargovisa5,
-                IdCalidadVisa5 = IdCalidadVisa5,
-                CalidadJuridicaVisa5 = calidadvisa5,
-                IdGradoVisa5 = IdGradoVisa5,
-                GradoVisa5 = gradovisa5,
-                EstamentoVisa5 = estamentovisa5,
-                ProgramaVisa5 = ProgramaVisa5.Trim(),
-                ConglomeradoVisa5 = conglomeradovisa5,
-                IdUnidadVisa5 = pervisa5.Unidad.Pl_UndCod,
-                UnidadVisa5 = pervisa5.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa5 = jefaturavisa5,
-                EmailVisa5 = ecorreovisa5,
-                NombreChqVisa5 = pervisa5.Funcionario.PeDatPerChq.Trim(),
+                RutFunc7 = rutfunc7,
+                DVFunc7 = perfunc7.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc7 = IdCargoFunc7,
+                CargoFunc7 = cargofunc7,
+                IdCalidadVisa7 = IdCalidadFunc7,
+                CalidadJuridicaFunc7 = calidadfunc7,
+                IdGradoFunc7 = IdGradoFunc7,
+                GradoFunc7 = gradofunc7,
+                EstamentoFunc7 = estamentofunc7,
+                ProgramaFunc7 = ProgramaFunc7.Trim(),
+                ConglomeradoFunc7 = conglomeradofunc7,
+                IdUnidadFunc7 = perfunc7.Unidad.Pl_UndCod,
+                UnidadFunc7 = perfunc7.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc7 = jefaturafunc7,
+                EmailFunc7 = ecorreofunc7,
+                NombreChqFunc7 = perfunc7.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -608,53 +588,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa6(int RutVisa6)
+        public JsonResult GetUsuarioFunc8(int RutFunc8)
         {
-            var correovisa6 = _sigper.GetUserByRut(RutVisa6).Funcionario.Rh_Mail.Trim();
-            var pervisa6 = _sigper.GetUserByEmail(correovisa6);
-            var IdCargoVisa6 = pervisa6.FunDatosLaborales.RhConCar.Value;
-            var cargovisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa6.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa6 = pervisa6.FunDatosLaborales.RH_ContCod;
-            var calidadvisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa6.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa6.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa6.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa6 = pervisa6.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa6.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa6 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa6 = ProgIdVisa6 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa6).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa6 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa6 = pervisa6.Jefatura != null ? pervisa6.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa6 = pervisa6.Funcionario != null ? pervisa6.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa6 = pervisa6.Funcionario != null ? pervisa6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc8 = _sigper.GetUserByRut(RutFunc8).Funcionario.Rh_Mail.Trim();
+            var perfunc8 = _sigper.GetUserByEmail(correofunc8);
+            var IdCargoFunc8 = perfunc8.FunDatosLaborales.RhConCar.Value;
+            var cargofunc8 = string.IsNullOrEmpty(perfunc8.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc8.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc8 = perfunc8.FunDatosLaborales.RH_ContCod;
+            var calidadfunc8 = string.IsNullOrEmpty(perfunc8.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc8.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc8 = string.IsNullOrEmpty(perfunc8.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc8.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc8 = string.IsNullOrEmpty(perfunc8.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc8.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc8 = perfunc8.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc8.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc8 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc8 = ProgIdFunc8 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc8).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc8 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc8 = perfunc8.Jefatura != null ? perfunc8.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc8 = perfunc8.Funcionario != null ? perfunc8.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc8 = perfunc8.Funcionario != null ? perfunc8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa6;
-            if (pervisa6.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc8;
+            if (perfunc8.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa6.Funcionario.RH_NumInte.ToString();
-                rutvisa6 = string.Concat("0", t);
+                string t = perfunc8.Funcionario.RH_NumInte.ToString();
+                rutfunc8 = string.Concat("0", t);
             }
             else
             {
-                rutvisa6 = pervisa6.Funcionario.RH_NumInte.ToString();
+                rutfunc8 = perfunc8.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa6 = rutvisa6,
-                DVVisa6 = pervisa6.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa6 = IdCargoVisa6,
-                CargoVisa6 = cargovisa6,
-                IdCalidadVisa6 = IdCalidadVisa6,
-                CalidadJuridicaVisa6 = calidadvisa6,
-                IdGradoVisa6 = IdGradoVisa6,
-                GradoVisa6 = gradovisa6,
-                EstamentoVisa6 = estamentovisa6,
-                ProgramaVisa6 = ProgramaVisa6.Trim(),
-                ConglomeradoVisa6 = conglomeradovisa6,
-                IdUnidadVisa6 = pervisa6.Unidad.Pl_UndCod,
-                UnidadVisa6 = pervisa6.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa6 = jefaturavisa6,
-                EmailVisa6 = ecorreovisa6,
-                NombreChqVisa6 = pervisa6.Funcionario.PeDatPerChq.Trim(),
+                RutFunc8 = rutfunc8,
+                DVFunc8 = perfunc8.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc8 = IdCargoFunc8,
+                CargoFunc8 = cargofunc8,
+                IdCalidadVisa8 = IdCalidadFunc8,
+                CalidadJuridicaFunc8 = calidadfunc8,
+                IdGradoFunc8 = IdGradoFunc8,
+                GradoFunc8 = gradofunc8,
+                EstamentoFunc8 = estamentofunc8,
+                ProgramaFunc8 = ProgramaFunc8.Trim(),
+                ConglomeradoFunc8 = conglomeradofunc8,
+                IdUnidadFunc8 = perfunc8.Unidad.Pl_UndCod,
+                UnidadFunc8 = perfunc8.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc8 = jefaturafunc8,
+                EmailFunc8 = ecorreofunc8,
+                NombreChqFunc8 = perfunc8.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -663,53 +643,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa7(int RutVisa7)
+        public JsonResult GetUsuarioFunc9(int RutFunc9)
         {
-            var correovisa7 = _sigper.GetUserByRut(RutVisa7).Funcionario.Rh_Mail.Trim();
-            var pervisa7 = _sigper.GetUserByEmail(correovisa7);
-            var IdCargoVisa7 = pervisa7.FunDatosLaborales.RhConCar.Value;
-            var cargovisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa7.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa7 = pervisa7.FunDatosLaborales.RH_ContCod;
-            var calidadvisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa7.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa7.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa7.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa7 = pervisa7.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa7.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa7 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa7 = ProgIdVisa7 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa7).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa7 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa7 = pervisa7.Jefatura != null ? pervisa7.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa7 = pervisa7.Funcionario != null ? pervisa7.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa7 = pervisa7.Funcionario != null ? pervisa7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc9 = _sigper.GetUserByRut(RutFunc9).Funcionario.Rh_Mail.Trim();
+            var perfunc9 = _sigper.GetUserByEmail(correofunc9);
+            var IdCargoFunc9 = perfunc9.FunDatosLaborales.RhConCar.Value;
+            var cargofunc9 = string.IsNullOrEmpty(perfunc9.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc9.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc9 = perfunc9.FunDatosLaborales.RH_ContCod;
+            var calidadfunc9 = string.IsNullOrEmpty(perfunc9.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc9.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc9 = string.IsNullOrEmpty(perfunc9.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc9.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc9 = string.IsNullOrEmpty(perfunc9.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc9.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc9 = perfunc9.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc9.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc9 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc9 = ProgIdFunc9 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc9).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc9 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc9 = perfunc9.Jefatura != null ? perfunc9.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc9 = perfunc9.Funcionario != null ? perfunc9.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc9 = perfunc9.Funcionario != null ? perfunc9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa7;
-            if (pervisa7.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc9;
+            if (perfunc9.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa7.Funcionario.RH_NumInte.ToString();
-                rutvisa7 = string.Concat("0", t);
+                string t = perfunc9.Funcionario.RH_NumInte.ToString();
+                rutfunc9 = string.Concat("0", t);
             }
             else
             {
-                rutvisa7 = pervisa7.Funcionario.RH_NumInte.ToString();
+                rutfunc9 = perfunc9.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa7 = rutvisa7,
-                DVVisa7 = pervisa7.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa7 = IdCargoVisa7,
-                CargoVisa7 = cargovisa7,
-                IdCalidadVisa7 = IdCalidadVisa7,
-                CalidadJuridicaVisa7 = calidadvisa7,
-                IdGradoVisa7 = IdGradoVisa7,
-                GradoVisa7 = gradovisa7,
-                EstamentoVisa7 = estamentovisa7,
-                ProgramaVisa7 = ProgramaVisa7.Trim(),
-                ConglomeradoVisa7 = conglomeradovisa7,
-                IdUnidadVisa7 = pervisa7.Unidad.Pl_UndCod,
-                UnidadVisa7 = pervisa7.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa7 = jefaturavisa7,
-                EmailVisa7 = ecorreovisa7,
-                NombreChqVisa7 = pervisa7.Funcionario.PeDatPerChq.Trim(),
+                RutFunc9 = rutfunc9,
+                DVFunc9 = perfunc9.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc9 = IdCargoFunc9,
+                CargoFunc9 = cargofunc9,
+                IdCalidadVisa9 = IdCalidadFunc9,
+                CalidadJuridicaFunc9 = calidadfunc9,
+                IdGradoFunc9 = IdGradoFunc9,
+                GradoFunc9 = gradofunc9,
+                EstamentoFunc9 = estamentofunc9,
+                ProgramaFunc9 = ProgramaFunc9.Trim(),
+                ConglomeradoFunc9 = conglomeradofunc9,
+                IdUnidadFunc9 = perfunc9.Unidad.Pl_UndCod,
+                UnidadFunc9 = perfunc9.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc9 = jefaturafunc9,
+                EmailFunc9 = ecorreofunc9,
+                NombreChqFunc9 = perfunc9.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -718,383 +698,53 @@ namespace App.Web.Controllers
             //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsuarioVisa8(int RutVisa8)
+        public JsonResult GetUsuarioFunc10(int RutFunc10)
         {
-            var correovisa8 = _sigper.GetUserByRut(RutVisa8).Funcionario.Rh_Mail.Trim();
-            var pervisa8 = _sigper.GetUserByEmail(correovisa8);
-            var IdCargoVisa8 = pervisa8.FunDatosLaborales.RhConCar.Value;
-            var cargovisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa8.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa8 = pervisa8.FunDatosLaborales.RH_ContCod;
-            var calidadvisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa8.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa8.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa8.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa8 = pervisa8.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa8.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa8 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa8 = ProgIdVisa8 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa8).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa8 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa8 = pervisa8.Jefatura != null ? pervisa8.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa8 = pervisa8.Funcionario != null ? pervisa8.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa8 = pervisa8.Funcionario != null ? pervisa8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            var correofunc10 = _sigper.GetUserByRut(RutFunc10).Funcionario.Rh_Mail.Trim();
+            var perfunc10 = _sigper.GetUserByEmail(correofunc10);
+            var IdCargoFunc10 = perfunc10.FunDatosLaborales.RhConCar.Value;
+            var cargofunc10 = string.IsNullOrEmpty(perfunc10.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc10.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadFunc10 = perfunc10.FunDatosLaborales.RH_ContCod;
+            var calidadfunc10 = string.IsNullOrEmpty(perfunc10.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc10.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoFunc10 = string.IsNullOrEmpty(perfunc10.FunDatosLaborales.RhConGra.Trim()) ? "0" : perfunc10.FunDatosLaborales.RhConGra.Trim();
+            var gradofunc10 = string.IsNullOrEmpty(perfunc10.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perfunc10.FunDatosLaborales.RhConGra.Trim();
+            var estamentofunc10 = perfunc10.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perfunc10.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var ProgIdFunc10 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            var ProgramaFunc10 = ProgIdFunc10 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdFunc10).FirstOrDefault().RePytDes : "S/A";
+            var conglomeradofunc10 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).ReContraSed;
+            var jefaturafunc10 = perfunc10.Jefatura != null ? perfunc10.Jefatura.PeDatPerChq : "Sin jefatura definida";
+            var ecorreofunc10 = perfunc10.Funcionario != null ? perfunc10.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
+            var nombrefunc10 = perfunc10.Funcionario != null ? perfunc10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
-            string rutvisa8;
-            if (pervisa8.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            string rutfunc10;
+            if (perfunc10.Funcionario.RH_NumInte.ToString().Length < 8 == true)
             {
-                string t = pervisa8.Funcionario.RH_NumInte.ToString();
-                rutvisa8 = string.Concat("0", t);
+                string t = perfunc10.Funcionario.RH_NumInte.ToString();
+                rutfunc10 = string.Concat("0", t);
             }
             else
             {
-                rutvisa8 = pervisa8.Funcionario.RH_NumInte.ToString();
+                rutfunc10 = perfunc10.Funcionario.RH_NumInte.ToString();
             }
 
             return Json(new
             {
-                RutVisa8 = rutvisa8,
-                DVVisa8 = pervisa8.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa8 = IdCargoVisa8,
-                CargoVisa8 = cargovisa8,
-                IdCalidadVisa8 = IdCalidadVisa8,
-                CalidadJuridicaVisa8 = calidadvisa8,
-                IdGradoVisa8 = IdGradoVisa8,
-                GradoVisa8 = gradovisa8,
-                EstamentoVisa8 = estamentovisa8,
-                ProgramaVisa8 = ProgramaVisa8.Trim(),
-                ConglomeradoVisa8 = conglomeradovisa8,
-                IdUnidadVisa8 = pervisa8.Unidad.Pl_UndCod,
-                UnidadVisa8 = pervisa8.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa8 = jefaturavisa8,
-                EmailVisa8 = ecorreovisa8,
-                NombreChqVisa8 = pervisa8.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioVisa9(int RutVisa9)
-        {
-            var correovisa9 = _sigper.GetUserByRut(RutVisa9).Funcionario.Rh_Mail.Trim();
-            var pervisa9 = _sigper.GetUserByEmail(correovisa9);
-            var IdCargoVisa9 = pervisa9.FunDatosLaborales.RhConCar.Value;
-            var cargovisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa9.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa9 = pervisa9.FunDatosLaborales.RH_ContCod;
-            var calidadvisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa9.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa9.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa9.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa9 = pervisa9.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa9.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa9 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa9 = ProgIdVisa9 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa9).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa9 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa9 = pervisa9.Jefatura != null ? pervisa9.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa9 = pervisa9.Funcionario != null ? pervisa9.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa9 = pervisa9.Funcionario != null ? pervisa9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutvisa9;
-            if (pervisa9.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = pervisa9.Funcionario.RH_NumInte.ToString();
-                rutvisa9 = string.Concat("0", t);
-            }
-            else
-            {
-                rutvisa9 = pervisa9.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutVisa9 = rutvisa9,
-                DVVisa9 = pervisa9.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa9 = IdCargoVisa9,
-                CargoVisa9 = cargovisa9,
-                IdCalidadVisa9 = IdCalidadVisa9,
-                CalidadJuridicaVisa9 = calidadvisa9,
-                IdGradoVisa9 = IdGradoVisa9,
-                GradoVisa9 = gradovisa9,
-                EstamentoVisa9 = estamentovisa9,
-                ProgramaVisa9 = ProgramaVisa9.Trim(),
-                ConglomeradoVisa9 = conglomeradovisa9,
-                IdUnidadVisa9 = pervisa9.Unidad.Pl_UndCod,
-                UnidadVisa9 = pervisa9.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa9 = jefaturavisa9,
-                EmailVisa9 = ecorreovisa9,
-                NombreChqVisa9 = pervisa9.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioVisa10(int RutVisa10)
-        {
-            var correovisa10 = _sigper.GetUserByRut(RutVisa10).Funcionario.Rh_Mail.Trim();
-            var pervisa10 = _sigper.GetUserByEmail(correovisa10);
-            var IdCargoVisa10 = pervisa10.FunDatosLaborales.RhConCar.Value;
-            var cargovisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa10.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa10 = pervisa10.FunDatosLaborales.RH_ContCod;
-            var calidadvisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa10.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa10.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa10.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa10 = pervisa10.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa10.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdVisa10 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaVisa10 = ProgIdVisa10 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa10).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradovisa10 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturavisa10 = pervisa10.Jefatura != null ? pervisa10.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreovisa10 = pervisa10.Funcionario != null ? pervisa10.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa10 = pervisa10.Funcionario != null ? pervisa10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutvisa10;
-            if (pervisa10.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = pervisa10.Funcionario.RH_NumInte.ToString();
-                rutvisa10 = string.Concat("0", t);
-            }
-            else
-            {
-                rutvisa10 = pervisa10.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutVisa10 = rutvisa10,
-                DVVisa10 = pervisa10.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa10 = IdCargoVisa10,
-                CargoVisa10 = cargovisa10,
-                IdCalidadVisa10 = IdCalidadVisa10,
-                CalidadJuridicaVisa10 = calidadvisa10,
-                IdGradoVisa10 = IdGradoVisa10,
-                GradoVisa10 = gradovisa10,
-                EstamentoVisa10 = estamentovisa10,
-                ProgramaVisa10 = ProgramaVisa10.Trim(),
-                ConglomeradoVisa10 = conglomeradovisa10,
-                IdUnidadVisa10 = pervisa10.Unidad.Pl_UndCod,
-                UnidadVisa10 = pervisa10.Unidad.Pl_UndDes.Trim(),
-                JefaturaVisa10 = jefaturavisa10,
-                EmailVisa10 = ecorreovisa10,
-                NombreChqVisa10 = pervisa10.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioAna(int RutAna)
-        {
-            var correoana = _sigper.GetUserByRut(RutAna).Funcionario.Rh_Mail.Trim();
-            var perana = _sigper.GetUserByEmail(correoana);
-            var IdCargoAna = perana.FunDatosLaborales.RhConCar.Value;
-            var cargoana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perana.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAna = perana.FunDatosLaborales.RH_ContCod;
-            var calidadana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perana.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAna = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConGra.Trim()) ? "0" : perana.FunDatosLaborales.RhConGra.Trim();
-            var gradoana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perana.FunDatosLaborales.RhConGra.Trim();
-            var estamentoana = perana.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perana.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdAna = _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaAna = ProgIdAna != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAna).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradoana = _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturaana = perana.Jefatura != null ? perana.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreoana = perana.Funcionario != null ? perana.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreana = perana.Funcionario != null ? perana.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutana;
-            if (perana.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = perana.Funcionario.RH_NumInte.ToString();
-                rutana = string.Concat("0", t);
-            }
-            else
-            {
-                rutana = perana.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutAna = rutana,
-                DVAna = perana.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAna = IdCargoAna,
-                CargoAna = cargoana,
-                IdCalidadAna = IdCalidadAna,
-                CalidadJuridicaAna = calidadana,
-                IdGradoAna = IdGradoAna,
-                GradoAna = gradoana,
-                EstamentoAna = estamentoana,
-                ProgramaAna = ProgramaAna.Trim(),
-                ConglomeradoAna = conglomeradoana,
-                IdUnidadAna = perana.Unidad.Pl_UndCod,
-                UnidadAna = perana.Unidad.Pl_UndDes.Trim(),
-                JefaturaAna = jefaturaana,
-                EmailAna = ecorreoana,
-                NombreChqAna = perana.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioAutorizaFirma1(int RutAutorizaFirma1)
-        {
-            var correoautorizafirma1 = _sigper.GetUserByRut(RutAutorizaFirma1).Funcionario.Rh_Mail.Trim();
-            var perautorizafirma1 = _sigper.GetUserByEmail(correoautorizafirma1);
-            var IdCargoAutorizaFirma1 = perautorizafirma1.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma1.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma1 = perautorizafirma1.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma1.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma1.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma1.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma1 = perautorizafirma1.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma1.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdAutorizaFirma1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaAutorizaFirma1 = ProgIdAutorizaFirma1 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma1).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradoautorizafirma1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturaautorizafirma1 = perautorizafirma1.Jefatura != null ? perautorizafirma1.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreoautorizafirma1 = perautorizafirma1.Funcionario != null ? perautorizafirma1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma1 = perautorizafirma1.Funcionario != null ? perautorizafirma1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutautorizafirma1;
-            if (perautorizafirma1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = perautorizafirma1.Funcionario.RH_NumInte.ToString();
-                rutautorizafirma1 = string.Concat("0", t);
-            }
-            else
-            {
-                rutautorizafirma1 = perautorizafirma1.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutAutorizaFirma1 = rutautorizafirma1,
-                DVAutorizaFirma1 = perautorizafirma1.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma1 = IdCargoAutorizaFirma1,
-                CargoAutorizaFirma1 = cargoautorizafirma1,
-                IdCalidadautorizaFirma1 = IdCalidadAutorizaFirma1,
-                CalidadJuridicaAutorizaFirma1 = calidadautorizafirma1,
-                IdGradoautorizaFirma1 = IdGradoAutorizaFirma1,
-                GradoautorizaFirma1 = gradoautorizafirma1,
-                EstamentoautorizaFirma1 = estamentoautorizafirma1,
-                ProgramaAutorizaFirma1 = ProgramaAutorizaFirma1.Trim(),
-                ConglomeradoAutorizaFirma1 = conglomeradoautorizafirma1,
-                IdUnidadAutorizaFirma1 = perautorizafirma1.Unidad.Pl_UndCod,
-                UnidadAutorizaFirma1 = perautorizafirma1.Unidad.Pl_UndDes.Trim(),
-                JefaturaAutorizaFirma1 = jefaturaautorizafirma1,
-                EmailAutorizaFirma1 = ecorreoautorizafirma1,
-                NombreChqAutorizaFirma1 = perautorizafirma1.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioAutorizaFirma2(int RutAutorizaFirma2)
-        {
-            var correoautorizafirma2 = _sigper.GetUserByRut(RutAutorizaFirma2).Funcionario.Rh_Mail.Trim();
-            var perautorizafirma2 = _sigper.GetUserByEmail(correoautorizafirma2);
-            var IdCargoAutorizaFirma2 = perautorizafirma2.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma2.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma2 = perautorizafirma2.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma2.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma2.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma2.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma2 = perautorizafirma2.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma2.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdAutorizaFirma2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaAutorizaFirma2 = ProgIdAutorizaFirma2 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma2).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradoautorizafirma2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturaautorizafirma2 = perautorizafirma2.Jefatura != null ? perautorizafirma2.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreoautorizafirma2 = perautorizafirma2.Funcionario != null ? perautorizafirma2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma2 = perautorizafirma2.Funcionario != null ? perautorizafirma2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutautorizafirma2;
-            if (perautorizafirma2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = perautorizafirma2.Funcionario.RH_NumInte.ToString();
-                rutautorizafirma2 = string.Concat("0", t);
-            }
-            else
-            {
-                rutautorizafirma2 = perautorizafirma2.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutAutorizaFirma2 = rutautorizafirma2,
-                DVAutorizaFirma2 = perautorizafirma2.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma2 = IdCargoAutorizaFirma2,
-                CargoAutorizaFirma2 = cargoautorizafirma2,
-                IdCalidadautorizaFirma2 = IdCalidadAutorizaFirma2,
-                CalidadJuridicaAutorizaFirma2 = calidadautorizafirma2,
-                IdGradoautorizaFirma2 = IdGradoAutorizaFirma2,
-                GradoautorizaFirma2 = gradoautorizafirma2,
-                EstamentoautorizaFirma2 = estamentoautorizafirma2,
-                ProgramaAutorizaFirma2 = ProgramaAutorizaFirma2.Trim(),
-                ConglomeradoAutorizaFirma2 = conglomeradoautorizafirma2,
-                IdUnidadAutorizaFirma2 = perautorizafirma2.Unidad.Pl_UndCod,
-                UnidadAutorizaFirma2 = perautorizafirma2.Unidad.Pl_UndDes.Trim(),
-                JefaturaAutorizaFirma2 = jefaturaautorizafirma2,
-                EmailAutorizaFirma2 = ecorreoautorizafirma2,
-                NombreChqAutorizaFirma2 = perautorizafirma2.Funcionario.PeDatPerChq.Trim(),
-
-            }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUsuarioAutorizaFirma3(int RutAutorizaFirma3)
-        {
-            var correoautorizafirma3 = _sigper.GetUserByRut(RutAutorizaFirma3).Funcionario.Rh_Mail.Trim();
-            var perautorizafirma3 = _sigper.GetUserByEmail(correoautorizafirma3);
-            var IdCargoAutorizaFirma3 = perautorizafirma3.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma3.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma3 = perautorizafirma3.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma3.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma3.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma3.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma3 = perautorizafirma3.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma3.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
-            var ProgIdAutorizaFirma3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var ProgramaAutorizaFirma3 = ProgIdAutorizaFirma3 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma3).FirstOrDefault().RePytDes : "S/A";
-            var conglomeradoautorizafirma3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).ReContraSed;
-            var jefaturaautorizafirma3 = perautorizafirma3.Jefatura != null ? perautorizafirma3.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var ecorreoautorizafirma3 = perautorizafirma3.Funcionario != null ? perautorizafirma3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma3 = perautorizafirma3.Funcionario != null ? perautorizafirma3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
-
-            string rutautorizafirma3;
-            if (perautorizafirma3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
-            {
-                string t = perautorizafirma3.Funcionario.RH_NumInte.ToString();
-                rutautorizafirma3 = string.Concat("0", t);
-            }
-            else
-            {
-                rutautorizafirma3 = perautorizafirma3.Funcionario.RH_NumInte.ToString();
-            }
-
-            return Json(new
-            {
-                RutAutorizaFirma3 = rutautorizafirma3,
-                DVAutorizaFirma3 = perautorizafirma3.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma3 = IdCargoAutorizaFirma3,
-                CargoAutorizaFirma3 = cargoautorizafirma3,
-                IdCalidadautorizaFirma3 = IdCalidadAutorizaFirma3,
-                CalidadJuridicaAutorizaFirma3 = calidadautorizafirma3,
-                IdGradoautorizaFirma3 = IdGradoAutorizaFirma3,
-                GradoautorizaFirma3 = gradoautorizafirma3,
-                EstamentoautorizaFirma3 = estamentoautorizafirma3,
-                ProgramaAutorizaFirma3 = ProgramaAutorizaFirma3.Trim(),
-                ConglomeradoAutorizaFirma3 = conglomeradoautorizafirma3,
-                IdUnidadAutorizaFirma3 = perautorizafirma3.Unidad.Pl_UndCod,
-                UnidadAutorizaFirma3 = perautorizafirma3.Unidad.Pl_UndDes.Trim(),
-                JefaturaAutorizaFirma3 = jefaturaautorizafirma3,
-                EmailAutorizaFirma3 = ecorreoautorizafirma3,
-                NombreChqAutorizaFirma3 = perautorizafirma3.Funcionario.PeDatPerChq.Trim(),
+                RutFunc10 = rutfunc10,
+                DVFunc10 = perfunc10.Funcionario.RH_DvNuInt.ToString(),
+                IdCargoFunc10 = IdCargoFunc10,
+                CargoFunc10 = cargofunc10,
+                IdCalidadVisa10 = IdCalidadFunc10,
+                CalidadJuridicaFunc10 = calidadfunc10,
+                IdGradoFunc10 = IdGradoFunc10,
+                GradoFunc10 = gradofunc10,
+                EstamentoFunc10 = estamentofunc10,
+                ProgramaFunc10 = ProgramaFunc10.Trim(),
+                ConglomeradoFunc10 = conglomeradofunc10,
+                IdUnidadFunc10 = perfunc10.Unidad.Pl_UndCod,
+                UnidadFunc10 = perfunc10.Unidad.Pl_UndDes.Trim(),
+                JefaturaFunc10 = jefaturafunc10,
+                EmailFunc10 = ecorreofunc10,
+                NombreChqFunc10 = perfunc10.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
 
@@ -1151,7 +801,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                model.Fecha = DateTime.Now;
+                //model.Fecha = DateTime.Now;
 
                 //model.IdUnidad = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
@@ -1279,359 +929,226 @@ namespace App.Web.Controllers
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
             ViewBag.NombreId = usuarios;
-            ViewBag.NombreIdDest = usuarios;
-            ViewBag.NombreIdSecre = usuarios;
-            ViewBag.NombreIdVisa1 = usuarios;
-            ViewBag.NombreIdVisa2 = usuarios;
-            ViewBag.NombreIdVisa3 = usuarios;
-            ViewBag.NombreIdVisa4 = usuarios;
-            ViewBag.NombreIdVisa5 = usuarios;
-            ViewBag.NombreIdVisa6 = usuarios;
-            ViewBag.NombreIdVisa7 = usuarios;
-            ViewBag.NombreIdVisa8 = usuarios;
-            ViewBag.NombreIdVisa9 = usuarios;
-            ViewBag.NombreIdVisa10 = usuarios;
-            ViewBag.NombreIdAna = usuarios;
-            ViewBag.NombreIdAutorizaFirma1 = usuarios;
-            ViewBag.NombreIdAutorizaFirma2 = usuarios;
-            ViewBag.NombreIdAutorizaFirma3 = usuarios;
-
+            ViewBag.NombreIdFunc1 = usuarios;
+            ViewBag.NombreIdFunc2 = usuarios;
+            ViewBag.NombreIdFunc3 = usuarios;
+            ViewBag.NombreIdFunc4 = usuarios;
+            ViewBag.NombreIdFunc5 = usuarios;
+            ViewBag.NombreIdFunc6 = usuarios;
+            ViewBag.NombreIdFunc7 = usuarios;
+            ViewBag.NombreIdFunc8 = usuarios;
+            ViewBag.NombreIdFunc9 = usuarios;
+            ViewBag.NombreIdFunc10 = usuarios;
 
             var persona = _sigper.GetUserByEmail(User.Email());
-            if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
-            if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
-            if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
-
-            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCod.HasValue)
-                //ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-                ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre");
-
-            ViewBag.Pl_UndCodFunc1 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            if (model.Pl_UndCodFunc1.HasValue)
-                //ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-                ViewBag.ToFunc1 = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCodFunc1.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre");
 
 
             if (ModelState.IsValid)
             {
-                model.Fecha = DateTime.Now;
+                model.IdUnidad = persona.Unidad.Pl_UndCod;
+                model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
+                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DV = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreId = null;
+                //model.NombreId = persona.Funcionario.RH_NumInte;
+                //model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
+                model.Nombre = null;
+                model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
+                model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidad = persona.Unidad.Pl_UndCod;
-                //model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
-                //model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DV = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreId = null;
-                ////model.NombreId = persona.Funcionario.RH_NumInte;
-                ////model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.Nombre = null;
-                //model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
-                //model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc1 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc1 = null;
+                //model.UnidadDescripcionFunc1 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc1 = null;
+                model.RutFunc1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc1 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc1 = null;
+                //model.NombreIdFunc1 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc1 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc1 = null;
+                model.IdCargoFunc1 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc1 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc1 = null;
+                model.NombreChqFunc1 = null;
+                //model.NombreChqFunc1 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc1 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadDest = persona.Unidad.Pl_UndCod;
-                //model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
-                //model.RutDest = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVDest = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdDest = null;
-                ////model.NombreId = persona.Funcionario.RH_NumInte;
-                ////model.NombreDest = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreDest = null;
-                //model.IdCargoDest = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailDest = persona.Funcionario.Rh_Mail.Trim();
-                //model.NombreChqDest = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadDest = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc2 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc2 = null;
+                //model.UnidadDescripcionFunc2 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc2 = null;
+                model.RutFunc2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc2 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc2 = null;
+                //model.NombreIdFunc2 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc2 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc2 = null;
+                model.IdCargoFunc2 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc2 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc2 = null;
+                model.NombreChqFunc2 = null;
+                //model.NombreChqFunc2 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc2 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                //model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
-                //model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
-                //model.RutSecre = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVSecre = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdSecre = null;
-                ////model.NombreIdSecre = persona.Funcionario.RH_NumInte;
-                ////model.NombreSecre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreSecre = null;
-                //model.IdCargoSecre = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                //model.EmailSecre = persona.Funcionario.Rh_Mail.Trim();
-                //model.NombreChqSecre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadSecre = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc3 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc3 = null;
+                //model.UnidadDescripcionFunc3 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc3 = null;
+                model.RutFunc3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc3 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc3 = null;
+                //model.NombreIdFunc3 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc3 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc3 = null;
+                model.IdCargoFunc3 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc3 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc3 = null;
+                model.NombreChqFunc3 = null;
+                //model.NombreChqFunc3 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc3 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa1 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa1 = null;
-                ////model.UnidadDescripcionVisa1 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa1 = null;
-                //model.RutVisa1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa1 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa1 = null;
-                ////model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa1 = null;
-                //model.IdCargoVisa1 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa1 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa1 = null;
-                //model.NombreChqVisa1 = null;
-                ////model.NombreChqVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa1 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc4 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc4 = null;
+                //model.UnidadDescripcionFunc4 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc4 = null;
+                model.RutFunc4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc4 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc4 = null;
+                //model.NombreIdFunc4 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc4 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc4 = null;
+                model.IdCargoFunc4 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc4 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc4 = null;
+                model.NombreChqFunc4 = null;
+                //model.NombreChqFunc4 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc4 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa2 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa2 = null;
-                ////model.UnidadDescripcionVisa2 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa2 = null;
-                //model.RutVisa2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa2 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa2 = null;
-                ////model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa2 = null;
-                //model.IdCargoVisa2 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa2 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa2 = null;
-                //model.NombreChqVisa2 = null;
-                ////model.NombreChqVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa2 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc5 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc5 = null;
+                //model.UnidadDescripcionFunc5 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc5 = null;
+                model.RutFunc5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc5 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc5 = null;
+                //model.NombreIdFunc5 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc5 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc5 = null;
+                model.IdCargoFunc5 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc5 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc5 = null;
+                model.NombreChqFunc5 = null;
+                //model.NombreChqFunc5 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc5 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa3 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa3 = null;
-                ////model.UnidadDescripcionVisa3 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa3 = null;
-                //model.RutVisa3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa3 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa3 = null;
-                ////model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa3 = null;
-                //model.IdCargoVisa3 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa3 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa3 = null;
-                //model.NombreChqVisa3 = null;
-                ////model.NombreChqVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa3 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc6 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc6 = null;
+                //model.UnidadDescripcionFunc6 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc6 = null;
+                model.RutFunc6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc6 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc6 = null;
+                //model.NombreIdFunc6 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc6 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc6 = null;
+                model.IdCargoFunc6 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc6 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc6 = null;
+                model.NombreChqFunc6 = null;
+                //model.NombreChqFunc6 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc6 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa4 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa4 = null;
-                ////model.UnidadDescripcionVisa4 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa4 = null;
-                //model.RutVisa4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa4 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa4 = null;
-                ////model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa4 = null;
-                //model.IdCargoVisa4 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa4 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa4 = null;
-                //model.NombreChqVisa4 = null;
-                ////model.NombreChqVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa4 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc7 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc7 = null;
+                //model.UnidadDescripcionFunc7 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc7 = null;
+                model.RutFunc7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc7 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc7 = null;
+                //model.NombreIdFunc7 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc7 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc7 = null;
+                model.IdCargoFunc7 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc7 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc7 = null;
+                model.NombreChqFunc7 = null;
+                //model.NombreChqFunc7 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc7 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa5 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa5 = null;
-                ////model.UnidadDescripcionVisa5 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa5 = null;
-                //model.RutVisa5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa5 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa5 = null;
-                ////model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa5 = null;
-                //model.IdCargoVisa5 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa5 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa5 = null;
-                //model.NombreChqVisa5 = null;
-                ////model.NombreChqVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa5 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc8 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc8 = null;
+                //model.UnidadDescripcionFunc8 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc8 = null;
+                model.RutFunc8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc8 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc8 = null;
+                //model.NombreIdFunc8 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc8 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc8 = null;
+                model.IdCargoFunc8 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc8 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc8 = null;
+                model.NombreChqFunc8 = null;
+                //model.NombreChqFunc8 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc8 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa6 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa6 = null;
-                ////model.UnidadDescripcionVisa6 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa6 = null;
-                //model.RutVisa6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa6 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa6 = null;
-                ////model.NombreIdVisa6 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa6 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa6 = null;
-                //model.IdCargoVisa6 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa6 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa6 = null;
-                //model.NombreChqVisa6 = null;
-                ////model.NombreChqVisa6 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa6 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc9 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc9 = null;
+                //model.UnidadDescripcionFunc9 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc9 = null;
+                model.RutFunc9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc9 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc9 = null;
+                //model.NombreIdFunc9 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc9 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc9 = null;
+                model.IdCargoFunc9 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc9 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc9 = null;
+                model.NombreChqFunc9 = null;
+                //model.NombreChqFunc9 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc9 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
-                ////model.IdUnidadVisa7 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa7 = null;
-                ////model.UnidadDescripcionVisa7 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa7 = null;
-                //model.RutVisa7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa7 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa7 = null;
-                ////model.NombreIdVisa7 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa7 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa7 = null;
-                //model.IdCargoVisa7 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa7 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa7 = null;
-                //model.NombreChqVisa7 = null;
-                ////model.NombreChqVisa7 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa7 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadVisa8 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa8 = null;
-                ////model.UnidadDescripcionVisa8 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa8 = null;
-                //model.RutVisa8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa8 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa8 = null;
-                ////model.NombreIdVisa8 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa8 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa8 = null;
-                //model.IdCargoVisa8 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa8 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa8 = null;
-                //model.NombreChqVisa8 = null;
-                ////model.NombreChqVisa8 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa8 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadVisa9 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa9 = null;
-                ////model.UnidadDescripcionVisa9 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa9 = null;
-                //model.RutVisa9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa9 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa9 = null;
-                ////model.NombreIdVisa9 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa9 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa9 = null;
-                //model.IdCargoVisa9 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa9 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa9 = null;
-                //model.NombreChqVisa9 = null;
-                ////model.NombreChqVisa9 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa9 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadVisa10 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadVisa10 = null;
-                ////model.UnidadDescripcionVisa10 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionVisa10 = null;
-                //model.RutVisa10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVVisa10 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdVisa10 = null;
-                ////model.NombreIdVisa10 = persona.Funcionario.RH_NumInte;
-                ////model.NombreVisa10 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreVisa10 = null;
-                //model.IdCargoVisa10 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailVisa10 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailVisa10 = null;
-                //model.NombreChqVisa10 = null;
-                ////model.NombreChqVisa10 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa10 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadAna = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadAna = null;
-                ////model.UnidadDescripcionAna = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionAna = null;
-                //model.RutAna = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVAna = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdAna = null;
-                ////model.NombreIdAna = persona.Funcionario.RH_NumInte;
-                ////model.NombreAna = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreAna = null;
-                //model.IdCargoAna = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionAna = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailAna = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailAna = null;
-                //model.NombreChqAna = null;
-                ////model.NombreChqAna = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadAna = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionAna = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadAutorizaFirma1 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadAutorizaFirma1 = null;
-                ////model.UnidadDescripcionAutorizaFirma1 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionAutorizaFirma1 = null;
-                //model.RutAutorizaFirma1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVAutorizaFirma1 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdAutorizaFirma1 = null;
-                ////model.NombreIdAutorizaFirma1 = persona.Funcionario.RH_NumInte;
-                ////model.NombreAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreAutorizaFirma1 = null;
-                //model.IdCargoAutorizaFirma1 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionAutorizaFirma1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailAutorizaFirma1 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailAutorizaFirma1 = null;
-                //model.NombreChqAutorizaFirma1 = null;
-                ////model.NombreChqAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadAutorizaFirma1 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionAutorizaFirma1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadAutorizaFirma2 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadAutorizaFirma2 = null;
-                ////model.UnidadDescripcionAutorizaFirma2 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionAutorizaFirma2 = null;
-                //model.RutAutorizaFirma2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVAutorizaFirma2 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdAutorizaFirma2 = null;
-                ////model.NombreIdAutorizaFirma2 = persona.Funcionario.RH_NumInte;
-                ////model.NombreAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreAutorizaFirma2 = null;
-                //model.IdCargoAutorizaFirma2 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionAutorizaFirma2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailAutorizaFirma2 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailAutorizaFirma2 = null;
-                //model.NombreChqAutorizaFirma2 = null;
-                ////model.NombreChqAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadAutorizaFirma2 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionAutorizaFirma2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-
-                ////model.IdUnidadAutorizaFirma3 = persona.Unidad.Pl_UndCod;
-                //model.IdUnidadAutorizaFirma3 = null;
-                ////model.UnidadDescripcionAutorizaFirma3 = persona.Unidad.Pl_UndDes.Trim();
-                //model.UnidadDescripcionAutorizaFirma3 = null;
-                //model.RutAutorizaFirma3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
-                //model.DVAutorizaFirma3 = persona.Funcionario.RH_DvNuInt.Trim();
-                //model.NombreIdAutorizaFirma3 = null;
-                ////model.NombreIdAutorizaFirma3 = persona.Funcionario.RH_NumInte;
-                ////model.NombreAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.NombreAutorizaFirma3 = null;
-                //model.IdCargoAutorizaFirma3 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionAutorizaFirma3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
-                ////model.EmailAutorizaFirma3 = persona.Funcionario.Rh_Mail.Trim();
-                //model.EmailAutorizaFirma3 = null;
-                //model.NombreChqAutorizaFirma3 = null;
-                ////model.NombreChqAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadAutorizaFirma3 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionAutorizaFirma3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdUnidadFunc10 = persona.Unidad.Pl_UndCod;
+                model.IdUnidadFunc10 = null;
+                //model.UnidadDescripcionFunc10 = persona.Unidad.Pl_UndDes.Trim();
+                model.UnidadDescripcionFunc10 = null;
+                model.RutFunc10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.DVFunc10 = persona.Funcionario.RH_DvNuInt.Trim();
+                model.NombreIdFunc10 = null;
+                //model.NombreIdFunc10 = persona.Funcionario.RH_NumInte;
+                //model.NombreFunc10 = persona.Funcionario.PeDatPerChq.Trim();
+                model.NombreFunc10 = null;
+                model.IdCargoFunc10 = persona.FunDatosLaborales.RhConCar.Value;
+                model.CargoDescripcionFunc10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.EmailFunc10 = persona.Funcionario.Rh_Mail.Trim();
+                model.EmailFunc10 = null;
+                model.NombreChqFunc10 = null;
+                //model.NombreChqFunc10 = persona.Funcionario.PeDatPerChq.Trim();
+                model.IdCalidadFunc10 = persona.FunDatosLaborales.RH_ContCod;
+                model.CalidadDescripcionFunc10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
             }
 
             return View(model);
@@ -1648,8 +1165,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-                    //return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+                    //return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
+                    return RedirectToAction("GeneraDocumento", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
                 }
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
@@ -1665,28 +1182,14 @@ namespace App.Web.Controllers
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
             ViewBag.NombreId = usuarios;
-            ViewBag.NombreIdDest = usuarios;
-            ViewBag.NombreIdSecre = usuarios;
-            ViewBag.NombreIdVisa1 = usuarios;
-            ViewBag.NombreIdVisa2 = usuarios;
-            ViewBag.NombreIdVisa3 = usuarios;
-            ViewBag.NombreIdVisa4 = usuarios;
-            ViewBag.NombreIdVisa5 = usuarios;
-            ViewBag.NombreIdVisa6 = usuarios;
-            ViewBag.NombreIdVisa7 = usuarios;
-            ViewBag.NombreIdVisa8 = usuarios;
-            ViewBag.NombreIdVisa9 = usuarios;
-            ViewBag.NombreIdVisa10 = usuarios;
-            ViewBag.NombreIdAna = usuarios;
-            ViewBag.NombreIdAutorizaFirma1 = usuarios;
-            ViewBag.NombreIdAutorizaFirma2 = usuarios;
-            ViewBag.NombreIdAutorizaFirma3 = usuarios;
+            ViewBag.NombreIdFunc1 = usuarios;
+            ViewBag.NombreIdFunc2 = usuarios;
 
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             if (ModelState.IsValid)
             {
-                model.Fecha = DateTime.Now;
+                //model.Fecha = DateTime.Now;
             }
 
             return View(model);
@@ -1709,8 +1212,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //return RedirectToAction("GeneraDocumento", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
+                    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                    return RedirectToAction("GeneraDocumento", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -1722,77 +1225,138 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //public ActionResult EditAna(int id)
-        //{
-        //    var persona = _sigper.GetUserByEmail(User.Email());
+        public ActionResult EditAnalista(int id)
+        {
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-        //    var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
-        //    ViewBag.NombreId = usuarios;
-        //    ViewBag.NombreIdDest = usuarios;
-        //    ViewBag.NombreIdSecre = usuarios;
-        //    ViewBag.NombreIdVisa1 = usuarios;
-        //    ViewBag.NombreIdVisa2 = usuarios;
-        //    ViewBag.NombreIdVisa3 = usuarios;
-        //    ViewBag.NombreIdVisa4 = usuarios;
-        //    ViewBag.NombreIdVisa5 = usuarios;
-        //    ViewBag.NombreIdVisa6 = usuarios;
-        //    ViewBag.NombreIdVisa7 = usuarios;
-        //    ViewBag.NombreIdVisa8 = usuarios;
-        //    ViewBag.NombreIdVisa9 = usuarios;
-        //    ViewBag.NombreIdVisa10 = usuarios;
-        //    ViewBag.NombreIdAna = usuarios;
-        //    ViewBag.NombreIdAutorizaFirma1 = usuarios;
-        //    ViewBag.NombreIdAutorizaFirma2 = usuarios;
-        //    ViewBag.NombreIdAutorizaFirma3 = usuarios;
+            if (ModelState.IsValid)
+            {
+                //model.Fecha = DateTime.Now;
+            }
 
-        //    var model = _repository.GetById<Memorandum>(id);
+            return View(model);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        model.FechaSolicitud = DateTime.Now;
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAnalista(ProgramacionHorasExtraordinarias model)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
 
-        //    return View(model);
-        //}
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EditAna(Memorandum model)
-        //{
-        //    var persona = _sigper.GetUserByEmail(User.Email());
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.MemorandumUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return RedirectToAction("GeneraDocumento", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+                }
 
-        //        if (_UseCaseResponseMessage.Warnings.Count > 0)
-        //            TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
 
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return Redirect(Request.UrlReferrer.PathAndQuery);
-        //        }
+            return View(model);
+        }
 
-        //        foreach (var item in _UseCaseResponseMessage.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, item);
-        //        }
-        //    }
+        public ActionResult EditVisador(int id)
+        {
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-        //    return View(model);
-        //}
+            ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+
+            if (ModelState.IsValid)
+            {
+                //model.Fecha = DateTime.Now;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditVisador(ProgramacionHorasExtraordinarias model)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return RedirectToAction("GeneraDocumento", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            return View(model);
+        }
 
         public ActionResult GeneraDocumento(int id)
         {
-            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            //foreach (var key in Request.Cookies.AllKeys)
-            //{
-            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            //}
-
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
@@ -1854,120 +1418,24 @@ namespace App.Web.Controllers
                     _repository.Update(docOld);
                     _repository.Save();
                 }
-
-
-
-                /*Se genera certificado de pasaje si es que existe*/
-                //if (model.ReqPasajeAereo == true)
-                //{
-                //    Rotativa.ActionAsPdf resultPdfPasaje = new Rotativa.ActionAsPdf("CDPPasajes", new { id = model.CometidoId }) { FileName = "CDP_Pasajes" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdfPasaje.BuildFile(ControllerContext);
-                //    data = GetBynary(pdf);
-                //    tipoDoc = 3;
-                //    Name = "CDP Pasaje Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                //    int idDoctoPasaje = 0;
-
-                //    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //    var CdpPasaje = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //    if (CdpPasaje != null)
-                //    {
-                //        foreach (var res in CdpPasaje)
-                //        {
-                //            if (res.TipoDocumentoId == 3)
-                //                idDoctoPasaje = res.DocumentoId;
-                //        }
-                //    }
-
-                //    if(idDoctoPasaje == 0)
-                //    {
-                //        /*se guarda certificado de pasaje*/
-                //        var email = UserExtended.Email(User);
-                //        var docPasaje = new Documento();
-                //        docPasaje.Fecha = DateTime.Now;
-                //        docPasaje.Email = email;
-                //        docPasaje.FileName = Name;
-                //        docPasaje.File = pdf;
-                //        docPasaje.ProcesoId = model.ProcesoId.Value;
-                //        docPasaje.WorkflowId = model.WorkflowId.Value;
-                //        docPasaje.Signed = false;
-                //        docPasaje.Texto = data.Text;
-                //        docPasaje.Metadata = data.Metadata;
-                //        docPasaje.Type = data.Type;
-                //        docPasaje.TipoPrivacidadId = 1;
-                //        docPasaje.TipoDocumentoId = tipoDoc;
-
-                //        _repository.Create(docPasaje);
-                //        _repository.Save();
-                //    }
-                //    else
-                //    {
-                //        var docOld = _repository.GetById<Documento>(idDoctoPasaje);
-                //        docOld.File = pdf;
-                //        docOld.Signed = false;
-                //        docOld.Texto = data.Text;
-                //        docOld.Metadata = data.Metadata;
-                //        docOld.Type = data.Type;
-                //        _repository.Update(docOld);
-                //        _repository.Save();
-                //    }
-                //}
             }
             else
             {
-                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                //{
-                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                //    //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //    //}
-                //    //else
-                //    //{
-                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //    //}
-                //}
-                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-                //    tipoDoc = 8;
-                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-                //else
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Memorandum" + ".pdf" };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Programacion Horas Extraordinarias" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
-                tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                tipoDoc = 9;
+                Name = "Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var memorandum = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 8).FirstOrDefault();
-                if (memorandum != null)
+                var programacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
+                if (programacion != null)
                 {
-                    IdDocto = memorandum.DocumentoId;
+                    IdDocto = programacion.DocumentoId;
 
                     //foreach (var res in memorandum)
                     //{
@@ -2014,20 +1482,15 @@ namespace App.Web.Controllers
 
             }
 
-            return RedirectToAction("Edit", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
 
+            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         public ActionResult GeneraDocumento2(int id)
         {
-            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            //foreach (var key in Request.Cookies.AllKeys)
-            //{
-            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            //}
-
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
@@ -2038,8 +1501,8 @@ namespace App.Web.Controllers
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //pdf = resultPdf.BuildFile(ControllerContext);
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
@@ -2089,123 +1552,30 @@ namespace App.Web.Controllers
                     _repository.Update(docOld);
                     _repository.Save();
                 }
-
-
-
-                /*Se genera certificado de pasaje si es que existe*/
-                //if (model.ReqPasajeAereo == true)
-                //{
-                //    Rotativa.ActionAsPdf resultPdfPasaje = new Rotativa.ActionAsPdf("CDPPasajes", new { id = model.CometidoId }) { FileName = "CDP_Pasajes" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdfPasaje.BuildFile(ControllerContext);
-                //    data = GetBynary(pdf);
-                //    tipoDoc = 3;
-                //    Name = "CDP Pasaje Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                //    int idDoctoPasaje = 0;
-
-                //    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //    var CdpPasaje = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //    if (CdpPasaje != null)
-                //    {
-                //        foreach (var res in CdpPasaje)
-                //        {
-                //            if (res.TipoDocumentoId == 3)
-                //                idDoctoPasaje = res.DocumentoId;
-                //        }
-                //    }
-
-                //    if(idDoctoPasaje == 0)
-                //    {
-                //        /*se guarda certificado de pasaje*/
-                //        var email = UserExtended.Email(User);
-                //        var docPasaje = new Documento();
-                //        docPasaje.Fecha = DateTime.Now;
-                //        docPasaje.Email = email;
-                //        docPasaje.FileName = Name;
-                //        docPasaje.File = pdf;
-                //        docPasaje.ProcesoId = model.ProcesoId.Value;
-                //        docPasaje.WorkflowId = model.WorkflowId.Value;
-                //        docPasaje.Signed = false;
-                //        docPasaje.Texto = data.Text;
-                //        docPasaje.Metadata = data.Metadata;
-                //        docPasaje.Type = data.Type;
-                //        docPasaje.TipoPrivacidadId = 1;
-                //        docPasaje.TipoDocumentoId = tipoDoc;
-
-                //        _repository.Create(docPasaje);
-                //        _repository.Save();
-                //    }
-                //    else
-                //    {
-                //        var docOld = _repository.GetById<Documento>(idDoctoPasaje);
-                //        docOld.File = pdf;
-                //        docOld.Signed = false;
-                //        docOld.Texto = data.Text;
-                //        docOld.Metadata = data.Metadata;
-                //        docOld.Type = data.Type;
-                //        _repository.Update(docOld);
-                //        _repository.Save();
-                //    }
-                //}
             }
             else
             {
-                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                //{
-                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                //    //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //    //}
-                //    //else
-                //    //{
-                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //    //}
-                //}
-                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-                //    tipoDoc = 8;
-                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-                //else
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Memorandum" + ".pdf" };
+                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionProgramacion", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolución Programacion Horas Extraordinarias" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
-                tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                tipoDoc = 10;
+                Name = "Resolución Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                if (resolucion != null)
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucionprogramacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 10).FirstOrDefault();
+                if (resolucionprogramacion != null)
                 {
-                    foreach (var res in resolucion)
-                    {
-                        if (res.TipoDocumentoId == 8)
-                            IdDocto = res.DocumentoId;
-                    }
+                    IdDocto = resolucionprogramacion.DocumentoId;
+
+                    //foreach (var res in memorandum)
+                    //{
+                    //    if (res.TipoDocumentoId == 1)
+                    //        IdDocto = res.DocumentoId;
+                    //}
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
@@ -2246,8 +1616,9 @@ namespace App.Web.Controllers
 
             }
 
-            return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
 
+            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
@@ -2273,7 +1644,7 @@ namespace App.Web.Controllers
                 //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
                 //model.Anno = DateTime.Now.Year.ToString();
                 //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                model.Fecha = DateTime.Now;
+                //model.Fecha = DateTime.Now;
                 //model.FechaFirma = DateTime.Now;
 
                 //model.Firma = false;
@@ -2392,88 +1763,67 @@ namespace App.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
+        public ActionResult ResolucionProgramacion(int id)
+        {
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
+
+            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            {
+                return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
+            }
+            else
+            {
+                //model.Fecha = DateTime.Now;
+
+                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
+                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
+                {
+
+                }
+
+                return View(model);
+            }
+        }
+
         public ActionResult Anular(int id)
         {
             var model = _repository.GetById<Workflow>(id);
             return View(model);
         }
 
-        //public FileResult ShowDocumentoSinFirma(int id)
-        //{
-        //    var model = _repository.GetById<Memorandum>(id);
-        //    return File(model.DocumentoSinFirma, "application/pdf");
-        //}
-
         //Firma Vieja
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            /*Validar si existe un documento asociado y si se encuentra firmado*/
-            var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8);
-            if (doc != null)
-            {
-                if (doc.FirstOrDefault().Signed != true)
-                    model.Proceso.Documentos = doc.ToList();
-                //else
-                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
-            }
-
             return View(model);
         }
 
-        //public ActionResult Sign(int id)
-        //{
-        //    var firma = _repository.GetById<Memorandum>(id);
-        //    var email = UserExtended.Email(User);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Sign(ProgramacionHorasExtraordinarias model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Firmante = UserExtended.Email(User);
 
-        //    var model = new Memorandum
-        //    {
-        //        MemorandumId = firma.MemorandumId,
-        //        ProcesoId = firma.ProcesoId,
-        //        WorkflowId = firma.WorkflowId,
-        //        //File = firma.DocumentoSinFirma,
-        //        //Comentario = firma.Observaciones,
-        //        //Firmante = email,
-        //        Firmante = firma.EmailRem,
-        //        //TieneFirma = _repository.GetExists<Rubrica>(q => q.Email == email),
-        //        //TipoDocumentoDescripcion = firma.TipoDocumentoDescripcion,
-        //        //FechaCreacion = firma.FechaCreacion,
-        //        //Autor = firma.Autor,
-        //        Folio = firma.Folio,
-        //        //URL = firma.URL
-        //    };
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.ProgramacionHorasExtraordinariasId, new List<string> { model.Firmante });
+                //var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.ProgramacionHorasExtraordinariasId, new List<string> { model.Firmante }, model.Firmante);
 
-        //    return View(model);
-        //}
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Sign", "ProgramacionHorasExtraordinarias", new { id = model.ProgramacionHorasExtraordinariasId });
+                }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Sign(Memorandum model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        model.Firmante = UserExtended.Email(User);
+                TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
 
-        //        var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.MemorandumId, new List<string> { model.Firmante });
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return RedirectToAction("Sign", "Memorandum", new { id = model.MemorandumId });
-        //        }
-
-        //        TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    return RedirectToAction("Sign", "FirmaDocumento", new { id = model.MemorandumId });
-        //}
-
-        //public FileResult ShowDocumentoSinFirma(int id)
-        //{
-        //    var model = _repository.GetById<Memorandum>(id);
-        //    return File(model.DocumentoSinFirma, "application/pdf");
-        //}
+            return RedirectToAction("Sign", "FirmaDocumento", new { id = model.ProgramacionHorasExtraordinariasId });
+        }
 
         public ActionResult DetailsGM(int id)
         {
@@ -2720,6 +2070,51 @@ namespace App.Web.Controllers
 
             //return Redirect(Request.UrlReferrer.PathAndQuery);
             return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+        }
+
+        public ActionResult SignResolucion(int id)
+        {
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);//.Where(c => c.ProgramacionHorasExtraordinariasId == id);
+            return View(model);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult SignResolucion(int? DocumentoId)
+        {
+            //IdProceso = 2423;
+            //var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == IdProceso.Value).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var obj = _repository.Get<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == DocumentoId).FirstOrDefault();
+                var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 10).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var user = User.Email();
+                var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);
+
+                //if (_UseCaseResponseMessage.Warnings.Count > 0)
+                //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                    .Where(y => y.Count > 0)
+                    .ToList();
+            }
+            //return View(model);
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         public ActionResult SeguimientoMemo()
