@@ -5,6 +5,7 @@ using App.Model.Core;
 using App.Core.Interfaces;
 using System.Linq;
 using App.Util;
+using com.sun.beans.editors;
 
 namespace App.Web.Controllers
 {
@@ -70,7 +71,8 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    predicate = predicate.And(q => q.ProcesoId.ToString().Contains(model.TextSearch) || q.Observacion.Contains(model.TextSearch) || q.Email.Contains(model.TextSearch));
+                    foreach (var item in model.TextSearch.Split())
+                        predicate = predicate.And(q => q.Tags.Contains(item));
 
                 if (model.Desde.HasValue)
                     predicate = predicate.And(q =>

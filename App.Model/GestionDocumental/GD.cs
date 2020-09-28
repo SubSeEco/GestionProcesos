@@ -1,4 +1,5 @@
 ﻿using App.Model.Helper;
+using App.Util;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -75,5 +76,10 @@ namespace App.Model.GestionDocumental
         [Display(Name = "Workflow")]
         public int WorkflowId { get; set; }
         public virtual Core.Workflow Workflow { get; set; }
+
+        public string GetTags()
+        {
+            return string.Concat(Materia.TrimOrEmpty(), " ", Referencia.TrimOrEmpty(), " ", Observacion.TrimOrEmpty(), " ", NumeroExterno.TrimOrEmpty());
+        }
     }
 }

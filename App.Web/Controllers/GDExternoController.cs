@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using App.Model.Helper;
 using App.Util;
+using OfficeOpenXml;
+using System.Windows;
 
 namespace App.Web.Controllers
 {
@@ -268,6 +270,64 @@ namespace App.Web.Controllers
             }
 
             return Redirect(Request.UrlReferrer.PathAndQuery);
+        }
+
+        public FileResult Report()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GD.xlsx")));
+
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
+            {
+                var resumen = (from GD in context.GD
+                               join Proceso in context.Proceso on GD.ProcesoId equals Proceso.ProcesoId
+                               where !Proceso.Anulada
+                               orderby Proceso.ProcesoId
+                               select GD)
+                           .Select(item => new
+                           {
+                               item.ProcesoId,
+                               item.Proceso.DefinicionProceso.Nombre,
+                               item.Proceso.Email,
+                               item.Proceso.EstadoProceso.Descripcion,
+                               item.Fecha,
+                               item.FechaIngreso,
+                               item.Materia,
+                               item.Referencia,
+                               item.Observacion,
+                               item.NumeroExterno,
+                               Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
+                               item.DestinoFuncionarioNombre,
+                               item.DestinoUnidadDescripcion,
+                               Reservado = item.EsReservado ? "RESERVADO" : string.Empty
+                           });
+
+                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
+
+                var detalle = (from GD in context.GD
+                               join Proceso in context.Proceso on GD.ProcesoId equals Proceso.ProcesoId
+                               join Workflow in context.Workflow on Proceso.ProcesoId equals Workflow.ProcesoId
+                               where !Proceso.Anulada
+                               orderby Workflow.ProcesoId, Workflow.WorkflowId
+                               select Workflow)
+                           .Select(item => new
+                           {
+                               item.ProcesoId,
+                               Proceso = item.Proceso.DefinicionProceso.Nombre,
+                               Workflow = item.DefinicionWorkflow.Nombre,
+                               item.TipoAprobacion.Nombre,
+                               item.FechaCreacion,
+                               item.FechaTermino,
+                               item.NombreFuncionario,
+                               item.Pl_UndDes,
+                               item.Observacion,
+                           });
+                
+                excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
+            }
+
+
+            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
     }
 }

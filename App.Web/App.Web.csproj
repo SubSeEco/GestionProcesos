@@ -351,6 +351,7 @@
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <Content Include="App_Data\HSA.xlsx" />
     <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
+    <Content Include="App_Data\GD.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Producción.pubxml" />
@@ -408,6 +409,7 @@
     <Compile Include="Controllers\DefinicionProcesoController.cs" />
     <Compile Include="Controllers\DefinicionWorkflowController.cs" />
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
+    <Compile Include="Controllers\DocumentoBusquedaController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
     <Compile Include="Controllers\GDExternoController.cs" />
@@ -727,6 +729,8 @@
     <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
+    <Content Include="Views\DocumentoBusqueda\Details.cshtml" />
+    <Content Include="Views\DocumentoBusqueda\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

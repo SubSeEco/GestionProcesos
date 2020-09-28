@@ -1,8 +1,8 @@
-﻿@model App.Web.Controllers.ProcesoConsultorController.DTOFilter
+﻿@model App.Web.Controllers.DocumentoController.DTOFilter
 
 @{
-    ViewBag.Title = "Búsqueda de procesos";
-    ViewBag.SubTitle = "Búsqueda de procesos";
+    ViewBag.Title = "Búsqueda de documentos";
+    ViewBag.SubTitle = "Búsqueda de documentos";
 }
 
 <div class="grey lighten-3 section">
@@ -63,12 +63,7 @@
         </div>
     </div>
 
-
-    @if (!Model.Result.Any())
-    {
-        <p>No existen resultados</p>
-    }
-    else 
+    @if (Model.Result.Any())
     {
         <div class="card">
             <div class="card-content">
