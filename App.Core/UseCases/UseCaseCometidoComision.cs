@@ -397,6 +397,8 @@ namespace App.Core.UseCases
 
                 if (response.IsValid)
                 {
+                    obj.Pasaje = _repository.GetById<Pasaje>(obj.PasajeId.Value);
+
                     _repository.Update(obj);
                     _repository.Save();
                 }

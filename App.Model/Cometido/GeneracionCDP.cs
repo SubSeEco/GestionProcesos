@@ -61,7 +61,7 @@ namespace App.Model.Cometido
         public string VtcCodCompromiso { get; set; }
 
         [Display(Name = "Presupuesto Total")]
-        [DisplayFormat(DataFormatString = "{0:n}")]
+        //[DisplayFormat(DataFormatString = "{0:C0}")]
         public string VtcPptoTotal { get; set; }
 
         [Display(Name = "Compromiso Acumulado")]

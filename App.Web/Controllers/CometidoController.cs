@@ -1986,16 +1986,20 @@ namespace App.Web.Controllers
                                 if ((pas % 2) == 0)
                                 {
                                     worksheet.Cells[fila, 8].Value = p.RegionDescripcion.Trim(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";
-                                    worksheet.Cells[fila, 15].Value = p.FechaIda.ToShortDateString(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                                    worksheet.Cells[fila, 16].Value = p.FechaVuelta.ToShortDateString();// com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A";
-                                    worksheet.Cells[fila, 20].Value = ((com.FechaSolicitud - p.FechaIda).Days + 1).ToString();
+                                    worksheet.Cells[fila, 18].Value = "N/A"; /*fecha del vuelo*/
+                                    worksheet.Cells[fila, 19].Value = "N/A"; /*Id orden de compra*/
+                                    worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";/*fecha ida*/
+                                    worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();// com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A"; /*fecha vuelta*/
+                                    worksheet.Cells[fila, 25].Value = ((com.FechaSolicitud - p.FechaIda).Days + 1).ToString(); /*dias de antelacion*/
                                 }
                                 else
                                 {
                                     worksheet.Cells[fila, 8].Value = p.OrigenRegionDescripcion.Trim();
-                                    worksheet.Cells[fila, 15].Value = p.FechaIda.ToShortDateString();
-                                    worksheet.Cells[fila, 16].Value = p.FechaVuelta.ToShortDateString();
-                                    worksheet.Cells[fila, 20].Value = "0";
+                                    worksheet.Cells[fila, 18].Value = "N/A"; /*fecha del vuelo*/
+                                    worksheet.Cells[fila, 19].Value = "N/A"; /*Id orden de compra*/
+                                    worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString();/*fecha ida*/
+                                    worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();/*fecha vuelta*/
+                                    worksheet.Cells[fila, 25].Value = "0"; /*dias de antelacion*/
                                 }
                             }
                         }
@@ -2003,32 +2007,36 @@ namespace App.Web.Controllers
                         worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                         worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
                         worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
-                        worksheet.Cells[fila, 12].Value = "N/A";
+                        worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
                         worksheet.Cells[fila, 13].Value = "N/A";
+                        worksheet.Cells[fila, 14].Value = "N/A";
+                        worksheet.Cells[fila, 15].Value = "N/A"; /*forma de adquision del pasaje*/
                         if (pasaje.Count() > 0)
                         {
-                            worksheet.Cells[fila, 14].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
-                            worksheet.Cells[fila, 17].Value = cotizacion.Count() > 0 ? cotizacion.FirstOrDefault().ValorPasaje.ToString() : "S/A";
+                            worksheet.Cells[fila, 16].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
+                            worksheet.Cells[fila, 17].Value = pasaje.FirstOrDefault().FechaSolicitud != null ? pasaje.FirstOrDefault().FechaSolicitud.ToShortDateString() : "S/A";/*fecha adquisicion*/
+                            worksheet.Cells[fila, 20].Value = cotizacion.Count() > 0 ? cotizacion.FirstOrDefault().ValorPasaje.ToString() : "S/A";
                         }
                         else
                         {
-                            worksheet.Cells[fila, 14].Value = "N/A";
-                            worksheet.Cells[fila, 17].Value = "0";
+                            worksheet.Cells[fila, 16].Value = "N/A";
+                            worksheet.Cells[fila, 17].Value = "N/A";/*fecha adquisicion*/
+                            worksheet.Cells[fila, 20].Value = "0";
                         }                        
 
-                        worksheet.Cells[fila, 18].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
-                        worksheet.Cells[fila, 19].Value = com.FechaSolicitud.ToShortDateString();
-                        worksheet.Cells[fila, 21].Value = com.CometidoDescripcion;
+                        worksheet.Cells[fila, 21].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
+                        worksheet.Cells[fila, 24].Value = com.FechaSolicitud.ToShortDateString();
+                        worksheet.Cells[fila, 26].Value = com.CometidoDescripcion;
 
                         var tarea = workflow.LastOrDefault().DefinicionWorkflow;
                         if (tarea.Secuencia < 9)
-                            worksheet.Cells[fila, 22].Value = "Solicitado";
+                            worksheet.Cells[fila, 27].Value = "Solicitado";
                         else if (tarea.Secuencia >= 9 && tarea.Secuencia < 17)
-                            worksheet.Cells[fila, 22].Value = "Comprometido";
+                            worksheet.Cells[fila, 27].Value = "Comprometido";
                         else if (tarea.Secuencia >= 17 && tarea.Secuencia < 20)
-                            worksheet.Cells[fila, 22].Value = "Devengado";
+                            worksheet.Cells[fila, 27].Value = "Devengado";
                         else if (tarea.Secuencia >= 19)
-                            worksheet.Cells[fila, 22].Value = "Pagado";
+                            worksheet.Cells[fila, 27].Value = "Pagado";
                     }
                 }
                 else 
@@ -2047,28 +2055,33 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                     worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
                     worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
-                    worksheet.Cells[fila, 12].Value = "N/A";
+                    worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
                     worksheet.Cells[fila, 13].Value = "N/A";
-
                     worksheet.Cells[fila, 14].Value = "N/A";
+
                     worksheet.Cells[fila, 15].Value = "N/A";
                     worksheet.Cells[fila, 16].Value = "N/A";
-                    worksheet.Cells[fila, 17].Value = "0";
-
-                    worksheet.Cells[fila, 18].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
-                    worksheet.Cells[fila, 19].Value = com.FechaSolicitud.ToShortDateString();
+                    worksheet.Cells[fila, 17].Value = "N/A";/*fecha adquisicion*/
+                    worksheet.Cells[fila, 18].Value = "N/A";/*fecha del vuelo*/
+                    worksheet.Cells[fila, 19].Value = "N/A";/*Id orden de compra*/
 
                     worksheet.Cells[fila, 20].Value = "0";
+                    worksheet.Cells[fila, 21].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
+                    worksheet.Cells[fila, 22].Value = "N/A";/*fecha ida*/
+                    worksheet.Cells[fila, 23].Value = "N/A";/*fecha vuelta*/
+                    worksheet.Cells[fila, 24].Value = com.FechaSolicitud.ToShortDateString();
+                    worksheet.Cells[fila, 25].Value = "0"; /*dias de antelacion*/
+                    worksheet.Cells[fila, 26].Value = com.CometidoDescripcion;
 
                     var tarea = workflow.LastOrDefault().DefinicionWorkflow;
                     if (tarea.Secuencia < 9)
-                        worksheet.Cells[fila, 22].Value = "Solicitado";
+                        worksheet.Cells[fila, 27].Value = "Solicitado";
                     else if (tarea.Secuencia >= 9 && tarea.Secuencia < 17)
-                        worksheet.Cells[fila, 22].Value = "Comprometido";
+                        worksheet.Cells[fila, 27].Value = "Comprometido";
                     else if (tarea.Secuencia >= 17 && tarea.Secuencia < 20)
-                        worksheet.Cells[fila, 22].Value = "Devengado";
+                        worksheet.Cells[fila, 27].Value = "Devengado";
                     else if (tarea.Secuencia >= 19)
-                        worksheet.Cells[fila, 22].Value = "Pagado";
+                        worksheet.Cells[fila, 27].Value = "Pagado";
                 }
             }
 

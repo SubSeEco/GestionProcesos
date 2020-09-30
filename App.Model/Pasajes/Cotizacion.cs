@@ -52,5 +52,8 @@ namespace App.Model.Pasajes
 
         [Display(Name = "Seleccion Cotización")]
         public bool Seleccion { get; set; } = false;
+
+        [Display(Name = "Numero Orden de Compra")]
+        public string NumeroOrdenCompra { get; set; } 
     }
 }

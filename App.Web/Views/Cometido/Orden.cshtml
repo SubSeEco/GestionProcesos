@@ -80,7 +80,7 @@
                         </td>
                         <td>
                             <h6>
-                                @Html.DisplayFor(m => Model.TotalViatico)
+                                @String.Format("{0:C0}", Model.TotalViatico)
                             </h6>
                         </td>
                     </tr>
@@ -104,11 +104,11 @@
                 @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
                 {
                     <p align="justify" style="margin-right:30px">
-                        Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
+                        1. Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
                     </p>
                 }
             <p align="justify" style="margin-right:30px">
-                Que, don/ña
+                2. Que, don/ña
                 <strong>@Html.DisplayFor(m => Model.Nombre)</strong>
                 @Html.Raw(",")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rut N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>, prestador(a) de servicios a honorarios suma alzada con desempeño en
                 <strong>@Html.DisplayFor(m => Model.UnidadDescripcion)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -268,12 +268,28 @@
                     </p>
                 }
                 <p align="justify"></p>
+                @if (Model.Tiempo == "Pasado")
+                {
+                    <p align="justify" style="margin-right:30px">
+                        2. Que, por razones impostergables de buen servicio, no fue necesario esperar la total tramitación de esta orden de pago para iniciarla.
+                    </p>
+                }
+                <p align="justify" style="margin-right:30px">
+                    3. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
+                    siempre y cuando se encuentren debidamente justificados y documentados, de acuerdo a la normativa interna que regule esta materia y al contrato de prestaciones de servicios respectivo,
+                    con cargo al ítem o los ítems y asignaciones correspondientes al subtítulo 22
+                    @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
+                    @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
+                    @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
+                    de acuerdo a su naturaleza.
+                </p>
+                <p align="justify"></p>
                 @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
                 {
                     @Html.DisplayFor(m => Model.DejaseConstancia)
 
                     <p align="justify" style="margin-right:30px">
-                        Que, la presente orden de pago no
+                        4. Que, la presente orden de pago no
                         @if (Model.Tiempo == "Pasado")
                         {
                             @Html.Raw("<span>irrogó</span>")
@@ -285,30 +301,15 @@
                         gastos de honorario adicional para la Subsecretaría de Economía y Empresas de Menor Tamaño.
                     </p>
                 }
+                <p align="justify"></p>
                 @if (Model.ReqPasajeAereo == true)
                 {
                     <p align="justify" style="margin-right:30px">
-                        Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre)</strong>, los gastos de pasajes aéreos.
+                        4. Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre)</strong>, los gastos de pasajes aéreos.
                     </p>
                 }
-                <p align="justify"></p>
-                @if (Model.Tiempo == "Pasado")
-                {
-                    <p align="justify" style="margin-right:30px">
-                        Que, por razones impostergables de buen servicio, no fue necesario esperar la total tramitación de esta orden de pago para iniciarla.
-                    </p>
-                }
-                <p align="justify" style="margin-right:30px">
-                    2. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
-                    siempre y cuando se encuentren debidamente justificados y documentados, de acuerdo a la normativa interna que regule esta materia y al contrato de prestaciones de servicios respectivo,
-                    con cargo al ítem o los ítems y asignaciones correspondientes al subtítulo 22
-                    @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
-                        @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
-                        @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
-                    de acuerdo a su naturaleza.
-                </p>
                 <p class="breakhere"></p>
-                </tdcols>
+            </td>
         </tr>
         <tr><td></td><td></td></tr>
         <tr>

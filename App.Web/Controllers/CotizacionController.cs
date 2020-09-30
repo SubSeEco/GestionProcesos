@@ -11,6 +11,7 @@ using App.Model.Pasajes;
 using App.Core.Interfaces;
 using Newtonsoft.Json;
 using App.Core.UseCases;
+using App.Model.Core;
 
 namespace App.Web.Controllers
 {
@@ -239,10 +240,16 @@ namespace App.Web.Controllers
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
 
                 if (_UseCaseResponseMessage.IsValid)
-                {
-                    
+                {                    
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("EditAbast", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
+                    /*se devuelve a la tarea que llamo el metodo*/
+                    var pas = _repository.Get<Pasaje>(c => c.PasajeId == model.PasajeId).FirstOrDefault();
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == pas.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 5);
+                    if(pro.Count() > 0)
+                        return RedirectToAction("EditSeleccion", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
+                    else
+                        return RedirectToAction("EditAbast", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
+
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
