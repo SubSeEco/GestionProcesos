@@ -79,7 +79,7 @@
 
                     @if (!string.IsNullOrWhiteSpace(item.Asunto))
                     {
-                        @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId }) 
+                        @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
                         <br />
                         @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
                     }
@@ -126,6 +126,10 @@
                         }
 
                     </p>
+
+                    @if (item.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.Contains("GD")){
+                        @Html.Action("Row", "GDExterno", new { item.ProcesoId })
+                    }                    
 
                     @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
                     {

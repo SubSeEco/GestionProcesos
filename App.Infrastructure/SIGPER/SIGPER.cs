@@ -388,11 +388,14 @@ namespace App.Infrastructure.SIGPER
                     foreach (var item in unidades)
                     {
                         //excluir las unidades sin funcionarios
-                        var funcionarios = from PEDATPER in context.PEDATPER
-                                 join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                 where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                 where PeDatLab.RhConUniCod == item.Pl_UndCod select PEDATPER;
-
+                        var funcionarios = from PE in context.PEDATPER
+                                 join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                 where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                 where r.RhConUniCod == item.Pl_UndCod
+                                 where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                              where ud.RH_NumInte == PE.RH_NumInte
+                                                              select ud.PeDatLabAdDocCor).Max()
+                                 select PE;
                         if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
@@ -404,12 +407,15 @@ namespace App.Infrastructure.SIGPER
                     foreach (var item in unidades)
                     {
                         //excluir las unidades sin funcionarios
-                        var funcionarios = from PEDATPER in context.PEDATPER
-                                           join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                           where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                           where PeDatLab.RhConUniCod == item.Pl_UndCod
-                                           select PEDATPER;
-                        
+                        var funcionarios = from PE in context.PEDATPER
+                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where r.RhConUniCod == item.Pl_UndCod
+                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                        where ud.RH_NumInte == PE.RH_NumInte
+                                                                        select ud.PeDatLabAdDocCor).Max()
+                                           select PE;
+
                         if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }

@@ -73,6 +73,18 @@ namespace App.Web.Controllers
 
         public ActionResult Details(int id)
         {
+            //es autoridad
+            var email = UserExtended.Email(User);
+            var autoridades = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.autoridades.ToString());
+            if (autoridades != null && !string.IsNullOrWhiteSpace(autoridades.Valor) && autoridades.Valor.Contains(email))
+                return RedirectToAction("DetailsAutoridad", new { id });
+
+            var model = _repository.GetById<GD>(id);
+            return View(model);
+        }
+
+        public ActionResult DetailsAutoridad(int id)
+        {
             var model = _repository.GetById<GD>(id);
             return View(model);
         }

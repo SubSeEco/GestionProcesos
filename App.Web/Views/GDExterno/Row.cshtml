@@ -1,0 +1,36 @@
+﻿@model App.Model.GestionDocumental.GD
+
+@if (Model != null)
+{
+    <br />
+
+    if (Model.GDOrigen != null)
+    {
+        <p>@Html.DisplayNameFor(m => Model.GDOrigenId): @Model.GDOrigen.Descripcion</p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.Materia))
+    {
+        <p>@Html.DisplayNameFor(q => Model.Materia): @Model.Materia</p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.NumeroExterno))
+    {
+        <p>@Html.DisplayNameFor(q => Model.NumeroExterno): @Model.NumeroExterno</p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.Referencia))
+    {
+        <p>@Html.DisplayNameFor(q => Model.Referencia): @Model.Referencia</p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.Observacion))
+    {
+        <p>@Html.DisplayNameFor(q => Model.Observacion): @Model.Observacion</p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
+    {
+        <p>@Html.DisplayNameFor(q => Model.DestinoFuncionarioNombre): @Model.DestinoFuncionarioNombre - @Model.DestinoUnidadDescripcion </p>
+    }
+    if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
+    {
+        <p>@Html.DisplayNameFor(q => Model.DestinoFuncionarioNombre2): @Model.DestinoFuncionarioNombre2 - @Model.DestinoUnidadDescripcion2 </p>
+    }
+}
+

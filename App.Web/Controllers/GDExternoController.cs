@@ -75,6 +75,18 @@ namespace App.Web.Controllers
 
         public ActionResult Details(int id)
         {
+            //es autoridad
+            var email = UserExtended.Email(User);
+            var autoridades = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.autoridades.ToString());
+            if (autoridades != null && !string.IsNullOrWhiteSpace(autoridades.Valor) && autoridades.Valor.Contains(email))
+                return RedirectToAction("DetailsAutoridad", new { id });
+
+            var model = _repository.GetById<GD>(id);
+            return View(model);
+        }
+
+        public ActionResult DetailsAutoridad(int id)
+        {
             var model = _repository.GetById<GD>(id);
             return View(model);
         }
@@ -107,6 +119,8 @@ namespace App.Web.Controllers
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -133,17 +147,24 @@ namespace App.Web.Controllers
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
+            ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+
             return View(model);
         }
 
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<GD>(id);
-
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+
+            ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -169,6 +190,9 @@ namespace App.Web.Controllers
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.DestinoUnidadCodigo);
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.DestinoUnidadCodigo);
+            if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
+                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -328,6 +352,12 @@ namespace App.Web.Controllers
 
 
             return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public PartialViewResult Row(int ProcesoId)
+        {
+            var model = _repository.GetFirst<GD>(q=>q.ProcesoId== ProcesoId);
+            return PartialView(model);
         }
     }
 }
