@@ -9,6 +9,10 @@
                 @Html.HiddenFor(q => Model.CotizacionId)
                 @Html.HiddenFor(q => Model.PasajeId)
                 @Html.HiddenFor(q => Model.TipoCambio)
+                @Html.HiddenFor(q => Model.FechaTipoCambio)
+                @Html.HiddenFor(q => Model.Pasaje.TipoDestino)
+                @Html.HiddenFor(q => Model.Pasaje.DV)
+                @Html.HiddenFor(q => Model.Pasaje.PasajeDescripcion)
 
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
@@ -38,6 +42,9 @@
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(m => Model.VencimientoCotizacion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.NumeroOrdenCompra)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(m => Model.CotizacionDocumento.FirstOrDefault().FileName)
@@ -72,6 +79,11 @@
                                     <td>
                                         @Html.TextBoxFor(m => Model.VencimientoCotizacion)
                                         @Html.ValidationMessageFor(model => model.VencimientoCotizacion, "", new { @class = "red-text" })
+
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.NumeroOrdenCompra)
+                                        @Html.ValidationMessageFor(model => model.NumeroOrdenCompra, "", new { @class = "red-text" })
 
                                     </td>
                                     <td>

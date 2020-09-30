@@ -343,7 +343,8 @@
                                                 @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
                                             </th>
                                             <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
+                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
                                             </th>
                                         </tr>
                                         <tr>
@@ -357,7 +358,8 @@
                                                 @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
                                             </th>
                                             <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
+                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
+                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
                                             </th>
                                         </tr>
                                         <tr>
@@ -371,7 +373,8 @@
                                                 @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
                                             </th>
                                             <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
+                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
                                             </th>
                                         </tr>
                                         <tr>
@@ -385,7 +388,8 @@
                                                 @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
                                             </th>
                                             <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
+                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
+                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
                                             </th>
                                         </tr>
                                     </table>

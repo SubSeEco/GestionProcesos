@@ -81,7 +81,7 @@
                         </td>
                         <td>
                             <h6>
-                                @Html.DisplayFor(m => Model.TotalViatico)
+                                @String.Format("{0:C0}", Model.TotalViatico)
                             </h6>
                         </td>
                     </tr>
@@ -114,13 +114,6 @@
                     1.	Que, los funcionarios públicos pueden cumplir cometidos funcionarios que los obliguen a   desplazarse dentro o fuera de su lugar de desempeño habitual para
                     realizar labores especificas inherentes al cargo que sirven.
                 </p>
-                @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
-                {
-                    <p align="justify" style="margin-right:30px">
-                        Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar
-                        este cometido de forma extemporánea.
-                    </p>
-                }
                 <p align="justify" style="margin-right:30px">
                     2. Que,
                     @if (Model.Tiempo == "Pasado")
@@ -132,7 +125,7 @@
                         @Html.Raw("<span>corresponde</span>")
                     }
                     designar en cometido funcionario a don/ña
-                    <strong> @Html.DisplayFor(m => Model.Nombre)</strong>&nbsp;&nbsp;&nbsp;&nbsp;,funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
+                    <strong> @Html.DisplayFor(m => Model.Nombre)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                 </p>
 
                 <table border="1" width="100%">
@@ -159,6 +152,14 @@
                         </tr>
                     }
                 </table>
+                <p align="justify"></p>
+                @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
+                {
+                    <p align="justify" style="margin-right:30px">
+                        3. Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar
+                        este cometido de forma extemporánea.
+                    </p>
+                }
             </td>
         </tr>
         <tr>
@@ -269,10 +270,26 @@
                         }
                     </table>
                 }
+                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
+                {
+                    <p align="justify">
+                        1. Que, la presente Resolución no
+                        @if (Model.Tiempo == "Pasado")
+                        {
+                            @Html.Raw("<span>irrogó</span>")
+                        }
+                        else
+                        {
+                            @Html.Raw("<span>irroga</span>")
+                        }
+                        gasto de viático para la Subsecretaría de Economía y Empresas de Menor Tamaño.
+                    </p>
+
+                }
                 @if (Model.Vehiculo == true)
                 {
                     <p>
-                        Que, el funcionario
+                        2. Que, el funcionario
 
                         @if (Model.Tiempo == "Pasado")
                         {
@@ -288,32 +305,10 @@
                 <p align="justify" style="margin-right:30px">
                     @Html.DisplayFor(m => Model.ViaticodeVuelta) <!--Que no se pagara viático por el día xxx de xxxx de xxx, por motivo de encontrarse en viaje de regreso.-->
                 </p>
-                @if ((Model.SolicitaViatico == false && Model.ReqPasajeAereo == false) && Model.TotalViatico == 0)
-                {
-                    <p align="justify">
-                        Que, la presente Resolución no
-                        @if (Model.Tiempo == "Pasado")
-                        {
-                            @Html.Raw("<span>irrogó</span>")
-                        }
-                        else
-                        {
-                            @Html.Raw("<span>irroga</span>")
-                        }
-                        gasto de viático para la Subsecretaría de Economía y Empresas de Menor Tamaño.
-                    </p>
-
-                }
                 @if (Model.ReqPasajeAereo == true)
                 {
                     <p align="justify" style="margin-right:30px">
                         2. Que, esta Subsecretaría pagará a <strong>@Html.DisplayFor(m => Model.Nombre), </strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
-                    </p>
-                }
-                @if (Model.Tiempo == "Pasado")
-                {
-                    <p align="justify" style="margin-right:30px">
-                        Que, por razones impostergables de buen servicio no ha resultado necesario esperar la total tramitación de esta resolución para iniciarla.
                     </p>
                 }
                 <p align="justify" style="margin-right:30px">
@@ -324,6 +319,12 @@
                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
                     ,de acuerdo a su naturaleza.
                 </p>
+                @if (Model.Tiempo == "Pasado")
+                {
+                    <p align="justify" style="margin-right:30px">
+                        4. Que, por razones impostergables de buen servicio no ha resultado necesario esperar la total tramitación de esta resolución para iniciarla.
+                    </p>
+                }
                 <p class="breakhere"></p>
             </td>
         </tr>
@@ -334,7 +335,7 @@
                 @if (Model.GeneracionCDP.Count > 0 && Model.GeneracionCDP.FirstOrDefault().VtcValorViatico != "0")
                 {
                     <p align="justify" style="margin-right:30px">
-                        3. <strong>IMPÚTESE</strong>,
+                        <strong>IMPÚTESE</strong>,
                         @if (Model.SolicitaViatico == true)
                         {
 
@@ -398,7 +399,7 @@
                         }
                         @*@if (Model.SolicitaViatico != true)
                             {
-                                @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                @Html.Raw("<span>el gasto que demande esta Resolución  al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
                                 @Html.Raw(",y al Subtítulo 22")
                                 @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
                                 @Html.DisplayFor(m => Model.Anno)
@@ -410,8 +411,8 @@
                 @if (Model.SolicitaViatico != true)
                 {
                     <p align="justify" style="margin-right:30px">
-                        3.<strong>IMPÚTESE</strong>,
-                        @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
+                        <strong>IMPÚTESE</strong>,
+                        @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                         @Html.Raw(",y al Subtítulo 22 ")
                         @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
                         @Html.DisplayFor(m => Model.Anno)
