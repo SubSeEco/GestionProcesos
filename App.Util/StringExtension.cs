@@ -283,6 +283,12 @@ namespace App.Util
             return Num2Text;
 
         }
-
+        public static string TrimOrEmpty(this string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return string.Empty;
+            else
+                return texto.Trim();
+        }
     }
 }

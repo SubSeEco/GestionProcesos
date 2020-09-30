@@ -33,6 +33,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<DefinicionProceso> DefinicionProceso { get; set; }
         public virtual DbSet<DefinicionWorkflow> DefinicionWorkflow { get; set; }
         public virtual DbSet<Proceso> Proceso { get; set; }
+        public virtual DbSet<Workflow> Workflow { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Region> Region { get; set; }
         public virtual DbSet<Genero> Genero { get; set; }

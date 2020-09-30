@@ -309,7 +309,7 @@ namespace App.Web.Controllers
             return View();
         }
 
-        public FileResult Download()
+        public FileResult Report()
         {
             var result = _repository.GetAll<Proceso>();
 

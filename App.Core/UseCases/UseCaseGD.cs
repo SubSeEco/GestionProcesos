@@ -149,7 +149,13 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
-                //CodigoBarra(workflowActual.ProcesoId);
+                //generar tags de proceso
+                workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
+
+                //generar tags de negocio
+                var gd = _repository.GetFirst<GD>(q => q.WorkflowId == workflowActual.WorkflowId);
+                if (gd != null)
+                    workflowActual.Proceso.Tags += gd.GetTags();
 
                 //traer informacion del ejecutor
                 var ejecutor = _sigper.GetUserByEmail(obj.Email);
@@ -329,10 +335,20 @@ namespace App.Core.UseCases
                 workflowActual.Email = ejecutor.Funcionario.Rh_Mail.Trim();
                 workflowActual.NombreFuncionario = ejecutor.Funcionario.PeDatPerChq.Trim();
 
+
+                //generar tags de proceso
+                workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
+
                 // si la tarea no tiene destino, asignarlo desde ingreso gd
                 var gd = _repository.GetFirst<GD>(q => q.WorkflowId == workflowActual.WorkflowId);
                 if (gd != null)
+                {
                     workflowActual.To = gd.DestinoFuncionarioEmail.Trim();
+                    workflowActual.Proceso.Tags += gd.GetTags();
+                }
+
+                //actualiazar tags
+                workflowActual.Proceso.Tags = string.Concat(workflowActual.Proceso.GetTags()," ",gd.GetTags());
 
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
