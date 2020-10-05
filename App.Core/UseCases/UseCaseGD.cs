@@ -39,7 +39,7 @@ namespace App.Core.UseCases
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo.ToInt());
                         obj.DestinoUnidadCodigo = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion = unidad.Pl_UndDes;
+                        obj.DestinoUnidadDescripcion = unidad.Pl_UndDes.Trim();
                     }
                     //si hay usuario destino 1
                     if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail))
@@ -54,7 +54,7 @@ namespace App.Core.UseCases
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo2.ToInt());
                         obj.DestinoUnidadCodigo2 = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes;
+                        obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes.Trim();
                     }
                     //si hay usuario destino 2
                     if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail2))
@@ -85,6 +85,11 @@ namespace App.Core.UseCases
             {
                 if (obj.IngresoExterno)
                 {
+                    obj.DestinoUnidadCodigo = string.Empty;
+                    obj.DestinoUnidadDescripcion = string.Empty;
+                    obj.DestinoFuncionarioEmail = string.Empty;
+                    obj.DestinoFuncionarioNombre = string.Empty;
+
                     //si hay unidad destino 1
                     if (string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo) && obj.DestinoUnidadCodigo.IsInt())
                     {
@@ -369,6 +374,7 @@ namespace App.Core.UseCases
                 workflowActual.Observacion = obj.Observacion;
                 workflowActual.Terminada = true;
                 workflowActual.Pl_UndCod = ejecutor.Unidad.Pl_UndCod;
+                workflowActual.Pl_UndDes = ejecutor.Unidad.Pl_UndDes.Trim();
                 workflowActual.GrupoId = obj.GrupoId;
                 workflowActual.Email = ejecutor.Funcionario.Rh_Mail.Trim();
                 workflowActual.NombreFuncionario = ejecutor.Funcionario.PeDatPerChq.Trim();

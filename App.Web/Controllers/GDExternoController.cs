@@ -40,6 +40,9 @@ namespace App.Web.Controllers
             [Display(Name = "Es documento oficial?")]
             public bool EsOficial { get; set; } = false;
 
+            [Display(Name = "Tiene firma electrónica?")]
+            public bool TieneFirmaElectronica { get; set; }
+
             [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Unidad del firmante")]
             public string FirmanteUnidadCodigo { get; set; }
@@ -144,10 +147,12 @@ namespace App.Web.Controllers
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
@@ -158,11 +163,14 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<GD>(id);
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
+
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre", model.DestinoFuncionarioEmail).OrderBy(q => q.Text);
 
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo2.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre",model.DestinoFuncionarioEmail2).OrderBy(q => q.Text);
 
@@ -230,11 +238,11 @@ namespace App.Web.Controllers
                     documento.Email = email;
                     documento.ProcesoId = model.ProcesoId;
                     documento.WorkflowId = model.WorkflowId;
-                    documento.Signed = false;
                     documento.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                     documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
-                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
                     documento.EsOficial = model.EsOficial;
+                    documento.Signed = model.TieneFirmaElectronica;
+                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
                     documento.FirmanteUnidad = model.FirmanteUnidadCodigo;
                     documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.FirmanteEmail) ? model.FirmanteEmail.Trim() : null;
                     documento.Descripcion = model.Descripcion;
@@ -370,6 +378,12 @@ namespace App.Web.Controllers
         {
             var model = _repository.Get<Documento>(q=>q.ProcesoId == ProcesoId);
             return View(model);
+        }
+
+        public PartialViewResult WorkflowAutoridad(int ProcesoId)
+        {
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);
+            return PartialView(model);
         }
     }
 }

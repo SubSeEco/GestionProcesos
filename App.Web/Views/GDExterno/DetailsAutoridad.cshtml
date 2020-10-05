@@ -37,18 +37,24 @@
                             <strong>@Html.DisplayNameFor(m => Model.NumeroExterno)</strong><br />
                             @Html.DisplayFor(m => Model.NumeroExterno)
                         </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Referencia))
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.Referencia)</strong><br />
+                                @Html.DisplayFor(m => Model.Referencia)
+                            </div>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
+                                @Html.DisplayFor(m => Model.Observacion)
+                            </div>
+                        }
                         <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.Referencia)</strong><br />
-                            @Html.DisplayFor(m => Model.Referencia)
-                        </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
-                            @Html.DisplayFor(m => Model.Observacion)
-                        </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
                             {
+                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
                                 @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) <br />
                             }
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion))
@@ -57,9 +63,9 @@
                             }
                         </div>
                         <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail2)</strong><br />
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioEmail2))
                             {
+                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail2)</strong><br />
                                 @Html.DisplayFor(m => Model.DestinoFuncionarioEmail2) <br />
                             }
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))
@@ -67,15 +73,6 @@
                                 @Html.DisplayFor(m => Model.DestinoUnidadDescripcion2) <br />
                             }
                         </div>
-                        @*<div class="input-field col s12 m12 l12">
-                            <div class="switch">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.EsReservado, new { @disabled = "disabled" })
-                                    <span class="lever"></span>
-                                    Documentación reservada?
-                                </label>
-                            </div>
-                        </div>*@
                     </div>
                 </div>
             </div>
@@ -84,7 +81,7 @@
             @Html.Action("FEADocumentos", "GDExterno", new { ProcesoId = Model.ProcesoId })
         </div>
         <div class="col s12 m12 l12">
-            @Html.Action("Workflow", "GDExterno", new { Model.ProcesoId })
+            @Html.Action("WorkflowAutoridad", "GDExterno", new { Model.ProcesoId })
         </div>
     </div>
 </div>

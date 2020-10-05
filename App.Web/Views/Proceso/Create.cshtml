@@ -41,7 +41,8 @@
                 <div class="row">
                     <div class="input-field col s12 m10 l8">
                         <div class="switch">
-                            <label>
+                            <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si desea ocultar los detalles de su proceso a los demás usuarios del sistema">
+
                                 @Html.CheckBoxFor(m => Model.Reservado)
                                 <span class="lever"></span>
                                 El proceso es reservado?
@@ -49,7 +50,7 @@
                         </div>
                     </div>
                     <div class="input-field col s12 m10 l8">
-                        <em>El proceso reservado oculta los detalles a todos los usuarios, excepto a quien lo inicia</em>
+                        <em class="grey-text">El proceso reservado oculta los detalles a todos los usuarios, excepto a quien lo inicia</em>
                     </div>
 
                 </div>

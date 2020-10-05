@@ -20,21 +20,11 @@
                         <span class="card-title">Información del ingreso externo</span>
                         <h3>ID @Model.ProcesoId</h3>
                         <div class="row">
-                            <div class="input-field col s6 m6 l6">
+                            <div class="input-field col s12 m12 l12">
                                 @Html.EditorFor(m => Model.FechaIngreso)
                                 @Html.LabelFor(m => Model.FechaIngreso)
                                 @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
                             </div>
-                            @*<div class="input-field col s6 m6 l6">
-                                <div class="switch">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.EsReservado)
-                                        <span class="lever"></span>
-                                        Documentación reservada?
-                                    </label>
-                                </div>
-                            </div>*@
-
                             <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.GDOrigenId)
                                 @Html.DropDownListFor(model => model.GDOrigenId, null, "Seleccione...", new { @class = "browser-default" })
@@ -74,20 +64,22 @@
                                 @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
                                 @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
+                                <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
                             </div>
                             <div class="input-field col s12 m12 l12">
                             </div>
 
                             <div class="input-field col s6 m6 l6">
                                 <div class="switch">
-                                    <label>
+                                    <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
                                         @Html.CheckBoxFor(m => Model.SegundoDestino)
                                         <span class="lever"></span>
                                         @Html.LabelFor(m => Model.SegundoDestino)
                                     </label>
                                 </div>
                             </div>
-
+                            <div class="input-field col s12 m12 l12">
+                            </div>
                             <div id="divSegundoDestino">
                                 <div class="col s12 m12 l12">
                                     @Html.LabelFor(m => Model.DestinoUnidadCodigo2)
@@ -100,6 +92,7 @@
                                     @Html.LabelFor(m => Model.DestinoFuncionarioEmail2)
                                     @Html.DropDownListFor(model => model.DestinoFuncionarioEmail2, null, "Seleccione...", new { @class = "browser-default" })
                                     @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail2, "", new { @class = "red-text" })
+                                    <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
                                 </div>
                             </div>
 
@@ -135,7 +128,7 @@
         $('.modal').modal();
         $('select').formSelect();
         $('.tooltipped').tooltip();
-        //$("#divSegundoDestino").hide();
+        $("#divSegundoDestino").hide();
 
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());

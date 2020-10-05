@@ -736,6 +736,8 @@
     <Content Include="Views\GDInterno\Workflow.cshtml" />
     <Content Include="Views\GDExterno\Documents.cshtml" />
     <Content Include="Views\GDInterno\Documents.cshtml" />
+    <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
+    <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
