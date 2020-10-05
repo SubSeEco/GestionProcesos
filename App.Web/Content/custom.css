@@ -4,20 +4,24 @@
     font-smoothing: antialiased;
 }
 
-#container {
-    padding-left: 300px;
+.container {
+     width: 80%; 
 }
 
-#content {
+/*#container {
+    padding-left: 300px;
+}*/
+
+/*#content {
     padding: 20px;
 }
-
-@media only screen and (max-width : 992px) {
+*/
+/*@media only screen and (max-width : 992px) {
     #container {
         padding-left: 0px;
     }
 }
-
+*/
 strong {
     font-weight: 600;
 }
@@ -43,4 +47,9 @@ strong {
 .browser-default {
     border: none;
     border-bottom: 1px solid #9e9e9e;
+}
+
+.input-field {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }

@@ -334,7 +334,7 @@ namespace App.Core.UseCases
 
                 //traer informacion del ejecutor
                 var persona = new SIGPER();
-                persona = _sigper.GetUserByEmail(obj.Email);
+                persona = _sigper.GetUserByEmail(obj.Email.Trim());
 
                 //nuevo proceso
                 var proceso = new Proceso();
@@ -343,9 +343,11 @@ namespace App.Core.UseCases
                 proceso.FechaCreacion = DateTime.Now;
                 proceso.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionProceso.DuracionHoras);
                 proceso.FechaTermino = null;
-                proceso.Email = obj.Email;
+                proceso.Email = obj.Email.Trim();
                 proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
+                proceso.Reservado = obj.Reservado;
+                proceso.Tags = obj.GetTags();
 
                 //nuevo workflow
                 var workflow = new Workflow();
@@ -893,21 +895,28 @@ namespace App.Core.UseCases
                 if (string.IsNullOrWhiteSpace(obj.Email))
                     throw new Exception("No se encontró el usuario que ejecutó el workflow.");
 
+                //si es la ultima tarea, terminar proceso
+                if (workflow.Proceso.Workflows.Count(q=>!q.Terminada) <= 1)
+                {
+                    workflow.Proceso.Terminada = true;
+                    workflow.Proceso.FechaTermino = DateTime.Now;
+                    workflow.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
+                }
+
+                //terminar tarea
                 workflow.FechaTermino = DateTime.Now;
                 workflow.Observacion = obj.Observacion;
                 workflow.Email = obj.Email;
                 workflow.Terminada = true;
                 workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
-                workflow.Proceso.Terminada = true;
-                workflow.Proceso.FechaTermino = DateTime.Now;
-                workflow.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
 
                 _repository.Save();
 
-                //notificar al dueño del proceso
-                _email.NotificarFinProceso(workflow.Proceso,
-                _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
-                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                if (workflow.Proceso.Terminada)
+                    //notificar al dueño del proceso
+                    _email.NotificarFinProceso(workflow.Proceso,
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
+                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
             }
             catch (Exception ex)
             {

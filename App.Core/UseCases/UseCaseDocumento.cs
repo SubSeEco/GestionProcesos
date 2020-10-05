@@ -2,9 +2,6 @@
 using App.Model.Core;
 using App.Model.GestionDocumental;
 using App.Core.Interfaces;
-using App.Model.SIGPER;
-using System.Linq;
-using App.Util;
 
 namespace App.Core.UseCases
 {

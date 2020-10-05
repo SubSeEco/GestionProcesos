@@ -332,6 +332,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 6].Value = proceso.Email;
                 worksheet.Cells[fila, 7].Value = proceso.EstadoProceso.Descripcion;
                 worksheet.Cells[fila, 8].Value = proceso.Observacion;
+                worksheet.Cells[fila, 9].Value = proceso.Reservado ? "SI" : "NO";
             }
 
             fila = 1;

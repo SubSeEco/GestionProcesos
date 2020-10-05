@@ -248,5 +248,17 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+
+        public PartialViewResult Workflow(int ProcesoId)
+        {
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId);
+            return PartialView(model);
+        }
+
+        public ActionResult Documents(int ProcesoId)
+        {
+            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
+            return View(model);
+        }
     }
 }

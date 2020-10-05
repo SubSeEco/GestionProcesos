@@ -2,35 +2,76 @@
 
 @if (Model != null)
 {
-    <br />
-
-    if (Model.GDOrigen != null)
-    {
-        <p>@Html.DisplayNameFor(m => Model.GDOrigenId): @Model.GDOrigen.Descripcion</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.Materia))
-    {
-        <p>@Html.DisplayNameFor(q => Model.Materia): @Model.Materia</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.NumeroExterno))
-    {
-        <p>@Html.DisplayNameFor(q => Model.NumeroExterno): @Model.NumeroExterno</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.Referencia))
-    {
-        <p>@Html.DisplayNameFor(q => Model.Referencia): @Model.Referencia</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.Observacion))
-    {
-        <p>@Html.DisplayNameFor(q => Model.Observacion): @Model.Observacion</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
-    {
-        <p>@Html.DisplayNameFor(q => Model.DestinoFuncionarioNombre): @Model.DestinoFuncionarioNombre - @Model.DestinoUnidadDescripcion </p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
-    {
-        <p>@Html.DisplayNameFor(q => Model.DestinoFuncionarioNombre2): @Model.DestinoFuncionarioNombre2 - @Model.DestinoUnidadDescripcion2 </p>
-    }
+    <table class="striped">
+        <tbody>
+            @if (Model.FechaIngreso.HasValue)
+            {
+                <tr>
+                    <td width="200">Fecha creación:</td>
+                    <td>@Model.Fecha</td>
+                </tr>
+            }
+            @if (Model.GDOrigen != null)
+            {
+                <tr>
+                    <td width="200">Origen:</td>
+                    <td>@Model.GDOrigen.Descripcion</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Materia))
+            {
+                <tr>
+                    <td width="200">Materia:</td>
+                    <td>@Model.Materia</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.NumeroExterno))
+            {
+                <tr>
+                    <td width="200">Número externo:</td>
+                    <td>@Model.NumeroExterno</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Referencia))
+            {
+                <tr>
+                    <td width="200">Referencia:</td>
+                    <td>@Model.Referencia</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+            {
+                <tr>
+                    <td width="200">Observación:</td>
+                    <td>@Model.Observacion</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion))
+            {
+                <tr>
+                    <td width="200">Destino 1:</td>
+                    <td>
+                        @Model.DestinoUnidadDescripcion
+                        @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
+                        {
+                            <text>-</text> @Model.DestinoFuncionarioNombre
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))
+            {
+                <tr>
+                    <td width="200">Destino 2:</td>
+                    <td>
+                        @Model.DestinoUnidadDescripcion2
+                        @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
+                        {
+                            <text>-</text> @Model.DestinoFuncionarioNombre2
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-

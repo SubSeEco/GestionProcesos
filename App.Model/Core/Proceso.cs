@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text;
 
 namespace App.Model.Core
 {
@@ -87,18 +88,30 @@ namespace App.Model.Core
         [Display(Name = "Anulada?")]
         public bool Anulada { get; set; } = false;
 
+        [Display(Name = "Reservado?")]
+        public bool Reservado { get; set; } = false;
+
+        [NotMapped]
+        [Display(Name = "Es autor?")]
+        public bool EsAutor { get; set; } = false;
+
 
         [Display(Name = "Tags")]
         public string Tags { get; set; }
 
         public string GetTags()
         {
-            return string.Concat(
-            string.Concat(ProcesoId.ToString().TrimOrEmpty(), " ", Observacion.TrimOrEmpty(), " ", Email.TrimOrEmpty(), " ", NombreFuncionario.TrimOrEmpty()), " ",
-            string.Join(" ", this.Documentos.Select(q => q.Texto)), " ",
-            string.Join(" ", this.Documentos.Select(q => q.Folio)), " ",
-            string.Join(" ", this.Documentos.Select(q => q.FileName)), " ",
-            string.Join(" ", this.Workflows.Select(q => q.Observacion)));
+            StringBuilder tag = new StringBuilder();
+            tag.Append(ProcesoId.ToString().TrimOrEmpty() + " ");
+            tag.Append(Observacion.TrimOrEmpty() + " ");
+            tag.Append(Email.TrimOrEmpty() + " ");
+            tag.Append(NombreFuncionario.TrimOrEmpty() + " ");
+            tag.Append(string.Join(" ", this.Documentos.Select(q => q.Texto)) + " ");
+            tag.Append(string.Join(" ", this.Documentos.Select(q => q.Folio)) + " ");
+            tag.Append(string.Join(" ", this.Documentos.Select(q => q.FileName)) + " ");
+            tag.Append(string.Join(" ", this.Workflows.Select(q => q.Observacion)));
+
+            return tag.ToString();
         }
     }
 }

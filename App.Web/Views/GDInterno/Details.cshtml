@@ -32,7 +32,7 @@
                             <strong>@Html.DisplayNameFor(m => Model.Observacion)</strong><br />
                             @Html.DisplayFor(m => Model.Observacion)
                         </div>
-                        <div class="input-field col s12 m12 l12">
+                        @*<div class="input-field col s12 m12 l12">
                             <div class="switch">
                                 <label>
                                     @Html.CheckBoxFor(m => Model.EsReservado, new { @disabled = "disabled" })
@@ -40,15 +40,18 @@
                                     Documentación reservada?
                                 </label>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
         </div>
         <div class="col s12 m6 l7">
             @Html.Action("FEADocumentos", "GDInterno", new { ProcesoId = Model.ProcesoId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
+        <div class="col s12 m12 l12">
+            @Html.Action("Workflow", "GDInterno", new { Model.ProcesoId })
+        </div>
+
     </div>
 </div>
 

@@ -17,7 +17,7 @@ namespace App.Infrastructure.Email
                 var smtpClient = new SmtpClient();
                 if (message != null)
                 {
-                    smtpClient.Send(message);
+                    //smtpClient.Send(message);
                 }
             }
             catch (Exception)

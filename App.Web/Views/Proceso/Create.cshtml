@@ -38,6 +38,24 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="input-field col s12 m10 l8">
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => Model.Reservado)
+                                <span class="lever"></span>
+                                El proceso es reservado?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-field col s12 m10 l8">
+                        <em>El proceso reservado oculta los detalles a todos los usuarios, excepto a quien lo inicia</em>
+                    </div>
+
+                </div>
+                <div class="row">
+                </div>
+
                 <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
             </div>
         </div>
@@ -46,7 +64,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('select').formSelect();
+        //$('select').formSelect();
+        $("input[type='hidden']").each(function (index, element) {
+            $(this).appendTo($(element).parent());
+        });
     });
 </script>
 

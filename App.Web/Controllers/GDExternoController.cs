@@ -160,11 +160,11 @@ namespace App.Web.Controllers
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
-                ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+                ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre", model.DestinoFuncionarioEmail).OrderBy(q => q.Text);
 
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
-                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo2.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre",model.DestinoFuncionarioEmail2).OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -323,7 +323,7 @@ namespace App.Web.Controllers
                                Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
                                item.DestinoFuncionarioNombre,
                                item.DestinoUnidadDescripcion,
-                               Reservado = item.EsReservado ? "RESERVADO" : string.Empty
+                               Reservado = item.Proceso.Reservado ? "RESERVADO" : string.Empty
                            });
 
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
@@ -358,6 +358,18 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetFirst<GD>(q=>q.ProcesoId== ProcesoId);
             return PartialView(model);
+        }
+
+        public PartialViewResult Workflow(int ProcesoId)
+        {
+            var model = _repository.Get<Workflow>(q=>q.ProcesoId == ProcesoId);
+            return PartialView(model);
+        }
+
+        public ActionResult Documents(int ProcesoId)
+        {
+            var model = _repository.Get<Documento>(q=>q.ProcesoId == ProcesoId);
+            return View(model);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@model App.Model.GestionDocumental.GD
 
-@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
+
 <div class="container">
 
     @Html.Partial("_Message")
@@ -12,6 +13,11 @@
                     <span class="card-title">Información del ingreso externo</span>
                     <h3>ID @Model.ProcesoId</h3>
                     <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Proceso.NombreFuncionario)</strong><br />
+                            @Html.DisplayFor(m => Model.Proceso.NombreFuncionario) @Html.DisplayFor(m => Model.Proceso.Email)
+                        </div>
+
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Fecha)</strong><br />
                             @string.Format("{0:dd-MM-yyyy HH:mm:ss}", Model.Fecha)
@@ -41,14 +47,12 @@
                             @Html.DisplayFor(m => Model.Observacion)
                         </div>
                         <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoUnidadCodigo)</strong><br />
+                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
+                            @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) (@Html.DisplayFor(m => Model.DestinoFuncionarioEmail))<br />
                             @Html.DisplayFor(m => Model.DestinoUnidadDescripcion) (@Html.DisplayFor(m => Model.DestinoUnidadCodigo))
                         </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
-                            @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) (@Html.DisplayFor(m => Model.DestinoFuncionarioEmail))
-                        </div>
-                        <div class="input-field col s12 m12 l12">
+
+                        @*<div class="input-field col s12 m12 l12">
                             <div class="switch">
                                 <label>
                                     @Html.CheckBoxFor(m => Model.EsReservado, new { @disabled = "disabled" })
@@ -56,35 +60,16 @@
                                     Documentación reservada?
                                 </label>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
         </div>
         <div class="col s12 m6 l7">
-            @Html.Action("FEADocumentos", "GDExterno", new { ProcesoId = Model.ProcesoId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            @Html.Action("Documents", "GDExterno", new { Model.ProcesoId })
+        </div>
+        <div class="col s12 m12 l12">
+            @Html.Action("Workflow", "GDExterno", new { Model.ProcesoId })
         </div>
     </div>
 </div>
-
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
-
-<div id="modalUpload" class="modal">
-    <div class="modal-content" style="background-color:white">
-        <h4>Adjuntar documento</h4>
-        @Html.Action("FEAUpload", new { Model.ProcesoId, Model.WorkflowId })
-    </div>
-</div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.modal').modal();
-        $('select').formSelect();
-        $('.tooltipped').tooltip();
-
-        $("input[type='hidden']").each(function (index, element) {
-            $(this).appendTo($(element).parent());
-        });
-    });
-</script>
