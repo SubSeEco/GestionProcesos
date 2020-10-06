@@ -75,7 +75,7 @@ namespace App.Model.GestionDocumental
 
 
         //destino 2
-        [Display(Name = "Habilitar segundo destino")]
+        [Display(Name = "Agregar destino")]
         public bool SegundoDestino { get; set; } = false;
 
         [Display(Name = "Unidad destino")]

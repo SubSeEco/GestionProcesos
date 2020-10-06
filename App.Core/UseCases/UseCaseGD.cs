@@ -38,30 +38,42 @@ namespace App.Core.UseCases
                     if (!string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo) && obj.DestinoUnidadCodigo.IsInt())
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo.ToInt());
-                        obj.DestinoUnidadCodigo = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion = unidad.Pl_UndDes.Trim();
+                        if (unidad != null)
+                        {
+                            obj.DestinoUnidadCodigo = unidad.Pl_UndCod.ToString();
+                            obj.DestinoUnidadDescripcion = unidad.Pl_UndDes;
+                        }
                     }
                     //si hay usuario destino 1
                     if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail))
                     {
-                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
-                        obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
-                        obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail.Trim());
+                        if (persona != null && persona.Funcionario != null)
+                        {
+                            obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                            obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                        }
                     }
 
                     //si hay unidad destino 2
                     if (!string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo2) && obj.DestinoUnidadCodigo2.IsInt())
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo2.ToInt());
-                        obj.DestinoUnidadCodigo2 = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes.Trim();
+                        if (unidad != null)
+                        {
+                            obj.DestinoUnidadCodigo2 = unidad.Pl_UndCod.ToString();
+                            obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes;
+                        }
                     }
                     //si hay usuario destino 2
                     if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail2))
                     {
-                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail2);
-                        obj.DestinoFuncionarioEmail2 = persona.Funcionario.Rh_Mail.Trim();
-                        obj.DestinoFuncionarioNombre2 = persona.Funcionario.PeDatPerChq.Trim();
+                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail2.Trim());
+                        if (persona != null && persona.Funcionario != null)
+                        {
+                            obj.DestinoFuncionarioEmail2 = persona.Funcionario.Rh_Mail.Trim();
+                            obj.DestinoFuncionarioNombre2 = persona.Funcionario.PeDatPerChq.Trim();
+                        }
                     }
                 }
 
@@ -85,39 +97,46 @@ namespace App.Core.UseCases
             {
                 if (obj.IngresoExterno)
                 {
-                    obj.DestinoUnidadCodigo = string.Empty;
-                    obj.DestinoUnidadDescripcion = string.Empty;
-                    obj.DestinoFuncionarioEmail = string.Empty;
-                    obj.DestinoFuncionarioNombre = string.Empty;
-
                     //si hay unidad destino 1
-                    if (string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo) && obj.DestinoUnidadCodigo.IsInt())
+                    if (!string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo) && obj.DestinoUnidadCodigo.IsInt())
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo.ToInt());
-                        obj.DestinoUnidadCodigo = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion = unidad.Pl_UndDes;
+                        if (unidad != null)
+                        {
+                            obj.DestinoUnidadCodigo = unidad.Pl_UndCod.ToString();
+                            obj.DestinoUnidadDescripcion = unidad.Pl_UndDes;
+                        }
                     }
                     //si hay usuario destino 1
-                    if (string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail))
+                    if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail))
                     {
-                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
-                        obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
-                        obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail.Trim());
+                        if (persona != null && persona.Funcionario != null)
+                        {
+                            obj.DestinoFuncionarioEmail = persona.Funcionario.Rh_Mail.Trim();
+                            obj.DestinoFuncionarioNombre = persona.Funcionario.PeDatPerChq.Trim();
+                        }
                     }
 
                     //si hay unidad destino 2
-                    if (string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo2) && obj.DestinoUnidadCodigo2.IsInt())
+                    if (!string.IsNullOrWhiteSpace(obj.DestinoUnidadCodigo2) && obj.DestinoUnidadCodigo2.IsInt())
                     {
                         var unidad = _sigper.GetUnidad(obj.DestinoUnidadCodigo2.ToInt());
-                        obj.DestinoUnidadCodigo2 = unidad.Pl_UndCod.ToString();
-                        obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes;
+                        if (unidad != null)
+                        {
+                            obj.DestinoUnidadCodigo2 = unidad.Pl_UndCod.ToString();
+                            obj.DestinoUnidadDescripcion2 = unidad.Pl_UndDes;
+                        }
                     }
                     //si hay usuario destino 2
-                    if (string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail2))
+                    if (!string.IsNullOrWhiteSpace(obj.DestinoFuncionarioEmail2))
                     {
-                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail);
-                        obj.DestinoFuncionarioEmail2 = persona.Funcionario.Rh_Mail.Trim();
-                        obj.DestinoFuncionarioNombre2 = persona.Funcionario.PeDatPerChq.Trim();
+                        var persona = _sigper.GetUserByEmail(obj.DestinoFuncionarioEmail2.Trim());
+                        if (persona != null && persona.Funcionario != null)
+                        {
+                            obj.DestinoFuncionarioEmail2 = persona.Funcionario.Rh_Mail.Trim();
+                            obj.DestinoFuncionarioNombre2 = persona.Funcionario.PeDatPerChq.Trim();
+                        }
                     }
                 }
 

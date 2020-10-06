@@ -33,10 +33,13 @@
                             <strong>@Html.DisplayNameFor(m => Model.Materia)</strong><br />
                             @Html.DisplayFor(m => Model.Materia)
                         </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.NumeroExterno)</strong><br />
-                            @Html.DisplayFor(m => Model.NumeroExterno)
-                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.NumeroExterno))
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.NumeroExterno)</strong><br />
+                                @Html.DisplayFor(m => Model.NumeroExterno)
+                            </div>
+                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Referencia))
                         {
                             <div class="input-field col s12 m10">
@@ -54,7 +57,7 @@
                         <div class="input-field col s12 m10">
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
                             {
-                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
+                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioNombre)</strong><br />
                                 @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) <br />
                             }
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion))
@@ -63,10 +66,10 @@
                             }
                         </div>
                         <div class="input-field col s12 m10">
-                            @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioEmail2))
+                            @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
                             {
-                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail2)</strong><br />
-                                @Html.DisplayFor(m => Model.DestinoFuncionarioEmail2) <br />
+                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioNombre2)</strong><br />
+                                @Html.DisplayFor(m => Model.DestinoFuncionarioNombre2) <br />
                             }
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))
                             {

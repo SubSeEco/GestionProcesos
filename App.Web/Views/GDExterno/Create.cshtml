@@ -64,15 +64,15 @@
                             <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
                                 @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
-                                @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
                                 <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
+                                @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m12 l12">
                             </div>
 
                             <div class="input-field col s6 m6 l6">
                                 <div class="switch">
-                                    <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
+                                    <label class="tooltipped" data-position="top" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
                                         @Html.CheckBoxFor(m => Model.SegundoDestino)
                                         <span class="lever"></span>
                                         @Html.LabelFor(m => Model.SegundoDestino)
@@ -92,13 +92,13 @@
                                 <div class="col s12 m12 l12">
                                     @Html.LabelFor(m => Model.DestinoFuncionarioEmail2)
                                     @Html.DropDownListFor(model => model.DestinoFuncionarioEmail2, null, "Seleccione...", new { @class = "browser-default" })
-                                    @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail2, "", new { @class = "red-text" })
                                     <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
+                                    @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail2, "", new { @class = "red-text" })
                                 </div>
                             </div>
 
-                            <div class="input-field col s12 m12 l12">
-                            </div>
+                            @*<div class="input-field col s12 m12 l12">
+                            </div>*@
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
