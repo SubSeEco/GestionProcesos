@@ -65,14 +65,12 @@ namespace App.Infrastructure.File
             return imagebyte;
         }
 
-        public byte[] EstamparCodigoBarra(byte[] documento, byte[] CodigoBarra, string text)
+        public byte[] EstamparCodigoEnDocumento(byte[] documento, string text)
         {
             byte[] returnValue;
 
             if (documento == null)
                 throw new System.Exception("Debe especificar el documento");
-            if (CodigoBarra == null)
-                throw new System.Exception("Debe especificar el código de barras");
 
             using (MemoryStream ms = new MemoryStream())
             using (var reader = new PdfReader(documento))
@@ -82,35 +80,12 @@ namespace App.Infrastructure.File
                 {
                     var pdfContent = stamper.GetOverContent(1);
                     var pagesize = reader.GetPageSize(1);
-
-                    iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(CodigoBarra);
-
-                    var x = ((pagesize.Width - image.ScaledHeight) / 2)-90;
-
-                    image.SetAbsolutePosition(x , pagesize.Top - 60);
-                    //image.SetAbsolutePosition((pagesize.Width - image.ScaledHeight) / 2 , pagesize.Top - 60);
-                    pdfContent.AddImage(image);
-
-                    //ColumnText.ShowTextAligned(
-                    //    pdfContent, 
-                    //    iTextSharp.text.Element.ALIGN_MIDDLE,
-                    //    new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),
-                    //    (pagesize.Width  / 2) + 20, 
-                    //    pagesize.Top - 75,
-                    //    0);
-                    ColumnText.ShowTextAligned(
-                        pdfContent, 
-                        iTextSharp.text.Element.ALIGN_MIDDLE,
-                        new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),
-                        x, 
-                        pagesize.Top - 75,
-                        0);
-
+                    ColumnText.ShowTextAligned(pdfContent, iTextSharp.text.Element.ALIGN_MIDDLE,new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),pagesize.Width - 10, pagesize.Height / 2, 0);
                     stamper.Close();
                 }
                 catch (System.Exception ex)
                 {
-                    throw new System.Exception("Error al insertar código de barras en el documento:" + ex.Message);
+                    throw new System.Exception("Error al insertar código en documento:" + ex.Message);
                 }
 
                 stamper.Close();
