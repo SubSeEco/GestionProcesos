@@ -7,9 +7,18 @@
             <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
             @if (Model.Destinos.Any())
             {
-                <p>
-                    Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
-                </p>
+                if ((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days < 0)
+                {
+                    <p>
+                        El cometido se realizó hace @((DateTime.Now - Model.Destinos.FirstOrDefault().FechaInicio).Days) dias.
+                    </p>
+                }
+                else
+                {
+                    <p>
+                        Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days + 1) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+                    </p>
+                }
             }
             else
             {
@@ -17,6 +26,7 @@
             }
         </div>
     </div>
+
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")

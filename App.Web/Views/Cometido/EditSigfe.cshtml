@@ -7,9 +7,18 @@
             <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
             @if (Model.Destinos.Any())
             {
-                <p>
-                    Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
-                </p>
+                if ((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days < 0)
+                {
+                    <p>
+                        El cometido se realizó hace @((DateTime.Now - Model.Destinos.FirstOrDefault().FechaInicio).Days) dias.
+                    </p>
+                }
+                else
+                {
+                    <p>
+                        Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days + 1) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+                    </p>
+                }
             }
             else
             {
@@ -19,6 +28,19 @@
     </div>
 
     <div class="row">
+        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 17)
+        {
+            <div class="col s12 m10 l12">
+                <div id="jQuery_accordion2">
+                    <h3><span style="font-weight: bold">Firma Documento SIGFE</span></h3>
+                    <div class="row">
+                        @Html.Partial("~/Views/Cometido/SignOther.cshtml")
+                    </div>
+                </div>
+            </div>
+        }
+
+
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
             @using (Html.BeginForm("EditSigfe", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -313,19 +335,19 @@
                                                     @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
@@ -609,17 +631,7 @@
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
         </div>
-        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 17)
-        {
-            <div class="col s12 m10 l8">
-                <div id="jQuery_accordion2">
-                    <h3><span style="font-weight: bold">Firma Documento SIGFE</span></h3>
-                    <div class="row">
-                        @Html.Partial("~/Views/Cometido/SignOther.cshtml")
-                    </div>
-                </div>
-            </div>
-        }
+
     </div>
     
 </div>

@@ -2139,6 +2139,43 @@ namespace App.Core.UseCases
                     
                 }
 
+                /*En la tarea de analista gestion personas, se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
+                if (obj.Dias100Aprobados > 0)
+                {
+                    int Totaldias100MesAprobados = 0;
+                    int Totaldias100AnoAprobados = 0;
+                    var mes = obj.FechaInicio.Month; //DateTime.Now.Month;
+                    var year = obj.FechaInicio.Year; //DateTime.Now.Year;                                           
+                    foreach (var destinos in des)
+                    {
+                        var solicitanteDestino = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
+                        var solicitante = _repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
+
+                        if (solicitanteDestino == solicitante)
+                        {
+                            if (destinos.FechaInicio.Month == mes && destinos.Dias100Aprobados != 0 && destinos.Dias100Aprobados != null)
+                                Totaldias100MesAprobados += destinos.Dias100Aprobados.Value;
+
+                            if (destinos.FechaInicio.Year == year && destinos.Dias100Aprobados != 0 && destinos.Dias100Aprobados != null)
+                                Totaldias100AnoAprobados += destinos.Dias100Aprobados.Value;
+                        }
+                    }
+                    if (Totaldias100MesAprobados + obj.Dias100Aprobados > 10)
+                    {
+                        obj.Dias50 = obj.Dias100Aprobados;
+                        obj.Dias100Aprobados = 0;
+                        obj.TotalViatico = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
+                        obj.Total = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
+                        obj.Dias50Monto = obj.Dias100Monto / 2;
+
+                        response.Warnings.Add("Se ha excedido en: " + (Totaldias100MesAprobados + obj.Dias100Aprobados.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
+                    }
+                    if (Totaldias100AnoAprobados + obj.Dias100 > 90)
+                        response.Errors.Add("Se ha excedido en :" + (Totaldias100AnoAprobados + obj.Dias100Aprobados - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
+
+                }
+
+
                 /*	Cualquier cometido con duración menor a 4 horas no se le asigna viático*/
                 if ((objController.FechaHasta - objController.FechaInicio).TotalHours < 4)
                 {
@@ -5297,6 +5334,7 @@ namespace App.Core.UseCases
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
                         var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
+                        var jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
                         List<string> emailMsg;
 
                         switch (workflowActual.DefinicionWorkflow.Secuencia)
@@ -5341,7 +5379,7 @@ namespace App.Core.UseCases
 
                                     /*A jefatura*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(persona.Jefatura.Rh_Mail.Trim());//jafatura
+                                    emailMsg.Add(jefe);//jafatura
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEnvíoSolicitudCometidoJefatura),
@@ -5367,7 +5405,7 @@ namespace App.Core.UseCases
 
                                     /*Aprobación a jefatura */
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(persona.Jefatura.Rh_Mail.Trim());//jefatura
+                                    emailMsg.Add(jefe);//jefatura
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobaciónRechazoCometidoJefatura_Jefatura),
@@ -5400,7 +5438,7 @@ namespace App.Core.UseCases
 
                                     /*Rechazo a jefatura */
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(persona.Jefatura.Rh_Mail.Trim());//jafatura
+                                    emailMsg.Add(jefe);//jafatura
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaRechazoCometidoJefatura_Jefatura),
@@ -5413,7 +5451,7 @@ namespace App.Core.UseCases
                             case 3:/*Notifica para selección de pasajes*/
                                 /*A jefatura para selección de cotización de pasajes*/
                                 emailMsg = new List<string>();
-                                emailMsg.Add(persona.Jefatura.Rh_Mail.Trim());//jefatura
+                                emailMsg.Add(jefe);//jefatura
 
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaSeleccionPasaje_Jefatura),
@@ -5438,7 +5476,7 @@ namespace App.Core.UseCases
                                     /*Confirmación de aprobación de cotización y cometido*/
                                     /*A Jefatura*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(persona.Jefatura.Rh_Mail.Trim());//jafatura
+                                    emailMsg.Add(jefe);//jafatura
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobacionPasaje_Jefatura),
