@@ -19,7 +19,7 @@
     @if (Model.IsAdmin)
     {
         <div class="col s12 m6 l4">
-            <div class="card hoverable" style="height:280px">
+            <div class="card hoverable" style="height:300px">
                 <div class="card-content">
                     <span class="card-title">Administración</span>
                 </div>
@@ -38,7 +38,7 @@
     @if (Model.IsCometido)
     {
         <div class="col s12 m6 l4">
-            <div class="card hoverable" style="height:280px">
+            <div class="card hoverable" style="height:300px">
                 <div class="card-content">
                     <span class="card-title">Reportes</span>
                 </div>
@@ -51,7 +51,7 @@
     }
 
     <div class="col s12 m6 l4">
-        <div class="card hoverable" style="height: 280px">
+        <div class="card hoverable" style="height: 300px">
             <div class="card-content">
                 <span class="card-title">Operaciones</span>
             </div>
@@ -73,15 +73,19 @@
 
 
     <div class="col s12 m6 l4">
-        <div class="card hoverable" style="height:280px">
+        <div class="card hoverable" style="height:300px">
             <div class="card-content">
                 <span class="card-title">Reportes</span>
             </div>
             <div class="card-action">
-                <a href='@Url.Action("Report", "Proceso")' class="waves-effect waves-light blue-text">Reporte de procesos (excel)</a><br />
-                <a href='@Url.Action("Report", "InformeHSA")' class="waves-effect waves-light blue-text">Reporte de informes HSA (excel)</a><br />
+                <a href='@Url.Action("Report", "Proceso")' class="waves-effect waves-light blue-text">Reporte de procesos</a><br />
+                <a href='@Url.Action("Report", "InformeHSA")' class="waves-effect waves-light blue-text">Reporte de informes HSA</a><br />
                 <a href='@Url.Action("SeguimientoGP", "Cometido")' class="waves-effect waves-light blue-text">Cometidos</a><br />
-                <a href='@Url.Action("Report", "GDExterno")' class="waves-effect waves-light blue-text">Reporte de gestión documental (excel)</a><br />
+                <a href='@Url.Action("Report", "GDExterno")' class="waves-effect waves-light blue-text">Gestión documental</a><br />
+
+                @*<a href='@Url.Action("ReportGenerico", "GDExterno")' class="waves-effect waves-light blue-text">Generico gestión documental</a><br />
+                <a href='@Url.Action("ReportMinutaDocumentos", "GDExterno")' class="waves-effect waves-light blue-text">Minuta de documentos</a><br />
+                <a href='@Url.Action("ReportPermanencia", "GDExterno")' class="waves-effect waves-light blue-text">Permanencia de documentos</a><br />*@
             </div>
         </div>
     </div>

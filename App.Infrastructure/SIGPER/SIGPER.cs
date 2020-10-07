@@ -471,7 +471,6 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
-
         public List<PEDATPER> GetUserByUnidadForFirma(int Rut)
         {
             var returnValue = new List<PEDATPER>();
@@ -510,7 +509,6 @@ namespace App.Infrastructure.SIGPER
             }
             return returnValue;
         }
-
         public List<PEDATPER> GetAllUsers()
         {
             var returnValue = new List<PEDATPER>();

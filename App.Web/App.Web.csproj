@@ -351,7 +351,8 @@
     <Content Include="App_Data\SolicitudTransparencia.xlsx" />
     <Content Include="App_Data\HSA.xlsx" />
     <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
-    <Content Include="App_Data\GD.xlsx" />
+    <Content Include="App_Data\GDGenerico.xlsx" />
+    <Content Include="App_Data\GDMinuta.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Producción.pubxml" />
@@ -738,6 +739,7 @@
     <Content Include="Views\GDInterno\Documents.cshtml" />
     <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
     <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
+    <Content Include="Views\GDExterno\Report.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

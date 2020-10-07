@@ -789,7 +789,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public void CodigoBarra(int procesoid)
         {
             try

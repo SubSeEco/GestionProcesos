@@ -1,0 +1,72 @@
+﻿@model App.Web.Controllers.GDExternoController.DTOMinutaDespacho
+
+@{
+    ViewBag.Title = "Reportes gestión documental";
+    ViewBag.SubTitle = "Reportes gestión documental";
+}
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+
+<div class="container">
+    @Html.Partial("_Message")
+
+
+    @using (Html.BeginForm("ReportGenerico", null))
+    {
+        @Html.AntiForgeryToken()
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte genérico de ingresos</span>
+                <div class="section"></div>
+                <button class="waves-effect waves-light btn blue">Aceptar</button>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("ReportMinutaDocumentos", null))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Minuta de documentos despachados</span>
+                <div class="section"></div>
+                <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                        @Html.EditorFor(m => Model.Dia)
+                        @Html.LabelFor(m => Model.Dia)
+                        @Html.ValidationMessageFor(m => Model.Dia, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Aceptar</button>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("ReportPermanencia", null))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte de permanencia en unidades</span>
+                <div class="section"></div>
+                <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                        @Html.EditorFor(m => Model.Dia)
+                        @Html.LabelFor(m => Model.Dia)
+                        @Html.ValidationMessageFor(m => Model.Dia, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Aceptar</button>
+            </div>
+        </div>
+    }
+</div>
