@@ -388,11 +388,14 @@ namespace App.Infrastructure.SIGPER
                     foreach (var item in unidades)
                     {
                         //excluir las unidades sin funcionarios
-                        var funcionarios = from PEDATPER in context.PEDATPER
-                                 join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                 where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                 where PeDatLab.RhConUniCod == item.Pl_UndCod select PEDATPER;
-
+                        var funcionarios = from PE in context.PEDATPER
+                                 join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                 where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                 where r.RhConUniCod == item.Pl_UndCod
+                                 where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                              where ud.RH_NumInte == PE.RH_NumInte
+                                                              select ud.PeDatLabAdDocCor).Max()
+                                 select PE;
                         if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
@@ -404,12 +407,15 @@ namespace App.Infrastructure.SIGPER
                     foreach (var item in unidades)
                     {
                         //excluir las unidades sin funcionarios
-                        var funcionarios = from PEDATPER in context.PEDATPER
-                                           join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                           where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                           where PeDatLab.RhConUniCod == item.Pl_UndCod
-                                           select PEDATPER;
-                        
+                        var funcionarios = from PE in context.PEDATPER
+                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where r.RhConUniCod == item.Pl_UndCod
+                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                        where ud.RH_NumInte == PE.RH_NumInte
+                                                                        select ud.PeDatLabAdDocCor).Max()
+                                           select PE;
+
                         if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
@@ -573,41 +579,55 @@ namespace App.Infrastructure.SIGPER
         }
         public Model.SIGPER.SIGPER GetJefaturaByUnidad(int codigo)
         {
-            var sigper = new Model.SIGPER.SIGPER()
-            {
-                Funcionario = null,
-                Jefatura = null,
-                Secretaria = null,
-                Unidad = null
-            };
-
             try
             {
                 using (var context = new AppContextEconomia())
                 {
-                    //unidad del funcionario
-                    var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
-                    sigper.Unidad = unidad;
+                    //traer los usuarios de la unidad
+                    var users = from PEDATPER in context.PEDATPER
+                             join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                             where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                             where r.RhConUniCod == codigo
+                             where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                          where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                          select ud.PeDatLabAdDocCor).Max()
+                             select PEDATPER;
 
-                    //jefatura del funcionario
-                    var jef = context.PEFERJEFAJ.FirstOrDefault(q => q.PeFerJerCod == codigo);
-                    var funcionario = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.RH_NumInte == jef.FyPFunARut);
+                    //iterar cada usuariode la unidad
+                    foreach (var item in users)
+                    {
+                        // tarer los datos del usuario
+                        var data = GetUserByRut(item.RH_NumInte);
 
-                    sigper.Jefatura = funcionario;
+                        //si el usuario tiene jefatura => retornar los detalles del jefe
+                        if (data.Funcionario != null && data.Jefatura != null)
+                            return GetUserByRut(data.Jefatura.RH_NumInte);
+
+                    }
                 }
-
-
                 using (var context = new AppContextTurismo())
                 {
-                    //unidad del funcionario
-                    var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
-                    sigper.Unidad = unidad;
+                    //traer los usuarios de la unidad
+                    var users = from PEDATPER in context.PEDATPER
+                                join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                                where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                where r.RhConUniCod == codigo
+                                where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                             where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                             select ud.PeDatLabAdDocCor).Max()
+                                select PEDATPER;
 
-                    //jefatura del funcionario
-                    var jef = context.PEFERJEFAJ.FirstOrDefault(q => q.PeFerJerCod == codigo);
-                    var funcionario = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.RH_NumInte == jef.FyPFunARut);
+                    //iterar cada usuariode la unidad
+                    foreach (var item in users)
+                    {
+                        // tarer los datos del usuario
+                        var data = GetUserByRut(item.RH_NumInte);
 
-                    sigper.Jefatura = funcionario;
+                        //si el usuario tiene jefatura => retornar los detalles del jefe
+                        if (data.Funcionario != null && data.Jefatura != null)
+                            return GetUserByRut(data.Jefatura.RH_NumInte);
+
+                    }
                 }
 
             }
@@ -616,24 +636,59 @@ namespace App.Infrastructure.SIGPER
                 throw;
             }
 
-            return sigper;
+            return null;
         }
         public Model.SIGPER.SIGPER GetSecretariaByUnidad(int codigo)
         {
-            var sigper = new Model.SIGPER.SIGPER()
-            {
-                Funcionario = null,
-                Jefatura = null,
-                Secretaria = null,
-                Unidad = null
-            };
             try
             {
                 using (var context = new AppContextEconomia())
                 {
-                    sigper.Unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == codigo);
-                    if (sigper.Unidad != null)
-                        sigper.Secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.PeDatPerChq == sigper.Unidad.Pl_UndNomSec);
+                    //traer los usuarios de la unidad
+                    var users = from PEDATPER in context.PEDATPER
+                             join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                             where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                             where r.RhConUniCod == codigo
+                             where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                          where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                          select ud.PeDatLabAdDocCor).Max()
+                             select PEDATPER;
+
+                    //iterar cada usuario de la unidad
+                    foreach (var item in users)
+                    {
+                        // tarer los datos del usuario
+                        var data = GetUserByRut(item.RH_NumInte);
+
+                        //si el usuario tiene seretaria => retornar los detalles de la secretaria
+                        if (data.Funcionario != null && data.Secretaria != null)
+                            return GetUserByRut(data.Secretaria.RH_NumInte);
+
+                    }
+                }
+                using (var context = new AppContextTurismo())
+                {
+                    //traer los usuarios de la unidad
+                    var users = from PEDATPER in context.PEDATPER
+                                join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                                where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                where r.RhConUniCod == codigo
+                                where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                             where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                             select ud.PeDatLabAdDocCor).Max()
+                                select PEDATPER;
+
+                    //iterar cada usuario de la unidad
+                    foreach (var item in users)
+                    {
+                        // tarer los datos del usuario
+                        var data = GetUserByRut(item.RH_NumInte);
+
+                        //si el usuario tiene seretaria => retornar los detalles de la secretaria
+                        if (data.Funcionario != null && data.Secretaria != null)
+                            return GetUserByRut(data.Secretaria.RH_NumInte);
+
+                    }
                 }
 
             }
@@ -642,7 +697,7 @@ namespace App.Infrastructure.SIGPER
                 throw;
             }
 
-            return sigper;
+            return null;
         }
         public List<DGREGIONES> GetRegion()
         {

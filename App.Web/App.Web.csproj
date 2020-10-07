@@ -475,7 +475,6 @@
     <Content Include="Views\Proceso\Delete.cshtml" />
     <Content Include="Views\Proceso\Details.cshtml" />
     <Content Include="Views\Proceso\Index.cshtml" />
-    <Content Include="Views\Workflow\Index_old.cshtml" />
     <Content Include="Views\Workflow\Send.cshtml" />
     <Content Include="Views\Configuracion\Details.cshtml" />
     <Content Include="Views\Configuracion\Edit.cshtml" />
@@ -685,7 +684,6 @@
     <Content Include="Views\ViaticoInternacional\Edit.cshtml" />
     <Content Include="Views\ViaticoInternacional\Index.cshtml" />
     <Content Include="Views\Cometido\Anular.cshtml" />
-    <Content Include="Views\ProcesoConsultor\Details.cshtml" />
     <Content Include="Views\Shared\_Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
@@ -731,6 +729,15 @@
     <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
     <Content Include="Views\DocumentoBusqueda\Details.cshtml" />
     <Content Include="Views\DocumentoBusqueda\Index.cshtml" />
+    <Content Include="Views\GDExterno\Row.cshtml" />
+    <Content Include="Views\GDExterno\DetailsAutoridad.cshtml" />
+    <Content Include="Views\GDInterno\DetailsAutoridad.cshtml" />
+    <Content Include="Views\GDExterno\Workflow.cshtml" />
+    <Content Include="Views\GDInterno\Workflow.cshtml" />
+    <Content Include="Views\GDExterno\Documents.cshtml" />
+    <Content Include="Views\GDInterno\Documents.cshtml" />
+    <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
+    <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,8 +1,8 @@
 ﻿@model App.Web.Controllers.ProcesoConsultorController.DTOFilter
 
 @{
-    ViewBag.Title = "Búsqueda de procesos";
-    ViewBag.SubTitle = "Búsqueda de procesos";
+    ViewBag.Title = "Consulta de procesos";
+    ViewBag.SubTitle = "Consulta de procesos";
 }
 
 <div class="grey lighten-3 section">
@@ -17,8 +17,6 @@
 <div class="container">
     <div class="card">
         <div class="card-content">
-            <span class="card-title">Filtros</span>
-
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
@@ -59,90 +57,54 @@
                 </div>
                 <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
             }
-
         </div>
     </div>
-
 
     @if (!Model.Result.Any())
     {
         <p>No existen resultados</p>
     }
-    else 
+    else
     {
-        <div class="card">
-            <div class="card-content">
-                @*<span class="card-title">Procesos</span>*@
-                <table class="table table-responsive bordered" id="dt">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+        <ul class="collection">
+            @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+            {
+                <li class="collection-item">
+                    @if (item.Reservado && !item.EsAutor)
+                    {
+                        <span class="new badge red" data-badge-caption="Proceso reservado"></span>
+                        @item.ProcesoId <text>-</text> @item.DefinicionProceso.Nombre<br />
+                        <text>Creado por </text> @item.NombreFuncionario <text> el </text>@item.FechaCreacion<br />
+                        <text>Estado: </text> @item.EstadoProceso.Descripcion
+                    }
+                    else
+                    {
+                        if (item.Reservado && item.EsAutor)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ProcesoId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FechaCreacion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
-                                </td>
-                                @if (!string.IsNullOrEmpty(item.Observacion) && item.Observacion.Contains(" "))
-                                {
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Observacion)
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td style="max-width:250px;" class="truncate">
-                                        @Html.DisplayFor(modelItem => item.Observacion)
-                                    </td>
-                                }
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Detalles", "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)
-                                </td>
-                            </tr>
+                            <span class="new badge red" data-badge-caption="Proceso reservado"></span>
                         }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
+                        @Html.ActionLink(string.Concat(item.ProcesoId, " - ", item.DefinicionProceso.Nombre), "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)<br />
+                        <text>Creado por </text> @item.NombreFuncionario <text> el </text>@item.FechaCreacion<br />
+                        <text>Estado: </text> @item.EstadoProceso.Descripcion<br />
+
+                        if (!string.IsNullOrWhiteSpace(item.Observacion))
+                        {
+                            <p>@Html.DisplayFor(modelItem => item.Observacion)</p>
+                        }
+
+                        if (!item.Reservado && item.DefinicionProceso.Entidad.Codigo.Contains("GD"))
+                        {
+                            <p>@Html.Action("Row", "GDExterno", new { item.ProcesoId })</p>
+                        }
+                    }
+                </li>
+            }
+        </ul>
     }
 </div>
 <script>
     $(document).ready(function () {
-        $('select').formSelect();
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });

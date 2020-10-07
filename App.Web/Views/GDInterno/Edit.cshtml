@@ -41,15 +41,6 @@
                                 @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m12 l12">
-                                <div class="switch">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.EsReservado)
-                                        <span class="lever"></span>
-                                        Documentación reservada?
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="input-field col s12 m12 l12">
                             </div>
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
@@ -59,8 +50,11 @@
         </div>
         <div class="col s12 m6 l7">
             @Html.Action("FEADocumentos", "GDInterno", new { ProcesoId = Model.ProcesoId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
+        <div class="col s12 m12 l12">
+            @Html.Action("Workflow", "GDInterno", new { Model.ProcesoId })
+        </div>
+
     </div>
 </div>
 

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<App.Model.Core.Workflow>
+
+@{ Layout = null;}
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Historial</span>
+
+        <table class="table table-responsive bordered" id="dt">
+            <thead>
+                <tr>
+                    <th>
+                        Tarea
+                    </th>
+                    <th>
+                        Inicio
+                    </th>
+                    <th>
+                        Término
+                    </th>
+                    <th>
+                        Funcionario
+                    </th>
+                    <th>
+                        Estado
+                    </th>
+                    <th>
+                        Observación
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DefinicionWorkflow.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaTermino)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreFuncionario) <br /> @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

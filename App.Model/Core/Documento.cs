@@ -104,6 +104,9 @@ namespace App.Model.Core
         [Display(Name = "Descripción")]
         public string Descripcion  { get; set; }
 
+        [Display(Name = "Código estampado?")]
+        public bool CodigoEstampado { get; set; } = false;
+
 
         [NotMapped]
         [Display(Name = "Autorizado para firmar documentos?")]

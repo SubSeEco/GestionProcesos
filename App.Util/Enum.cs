@@ -87,6 +87,7 @@
             plantilla_nuevo_proceso,
             plantilla_fin_proceso,
             plantilla_anulacion_proceso,
+            autoridades,
 
             PlantillaNuevaTarea = 1,
             AsuntoCorreoNotificacion = 2,

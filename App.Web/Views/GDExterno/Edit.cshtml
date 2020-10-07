@@ -6,7 +6,7 @@
     @Html.Partial("_Message")
 
     <div class="row">
-        <div class="col s12 m6 l5">
+        <div class="col s12 m6 l6">
             @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
@@ -47,6 +47,12 @@
                                 @Html.LabelFor(m => Model.Referencia)
                                 @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
                             </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Observacion)
+                                @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                            </div>
+
                             <div class="col s12 m12 l12">
                                 @Html.LabelFor(m => Model.DestinoUnidadCodigo)
                                 @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
@@ -58,24 +64,36 @@
                                 @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
                                 @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
+                                <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
                             </div>
                             <div class="input-field col s12 m12 l12">
                             </div>
-                            <div class="input-field col s12 m12 l12">
-                                @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
-                                @Html.LabelFor(m => Model.Observacion)
-                                @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12">
+
+                            <div class="input-field col s6 m6 l6">
                                 <div class="switch">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.EsReservado)
+                                    <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
+                                        @Html.CheckBoxFor(m => Model.SegundoDestino)
                                         <span class="lever"></span>
-                                        Documentación reservada?
+                                        @Html.LabelFor(m => Model.SegundoDestino)
                                     </label>
                                 </div>
                             </div>
                             <div class="input-field col s12 m12 l12">
+                            </div>
+                            <div id="divSegundoDestino">
+                                <div class="col s12 m12 l12">
+                                    @Html.LabelFor(m => Model.DestinoUnidadCodigo2)
+                                    @Html.DropDownListFor(m => Model.DestinoUnidadCodigo2, null, "Seleccione...", new { @class = "browser-default" })
+                                    @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo2, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12">
+                                </div>
+                                <div class="col s12 m12 l12">
+                                    @Html.LabelFor(m => Model.DestinoFuncionarioEmail2)
+                                    @Html.DropDownListFor(model => model.DestinoFuncionarioEmail2, null, "Seleccione...", new { @class = "browser-default" })
+                                    @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail2, "", new { @class = "red-text" })
+                                    <em class="grey-text">Si no conoce el funcionario de destino, solo seleccione la unidad</em>
+                                </div>
                             </div>
                         </div>
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
@@ -83,9 +101,11 @@
                 </div>
             }
         </div>
-        <div class="col s12 m6 l7">
+        <div class="col s12 m6 l6">
             @Html.Action("FEADocumentos", "GDExterno", new { ProcesoId = Model.ProcesoId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+        <div class="col s12 m12 l12">
+            @Html.Action("Workflow", "GDExterno", new { Model.ProcesoId })
         </div>
     </div>
 </div>
@@ -105,6 +125,7 @@
         $('.modal').modal();
         $('select').formSelect();
         $('.tooltipped').tooltip();
+        //$("#divSegundoDestino").hide();
 
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());
@@ -130,5 +151,37 @@
                     }));
                 });
             });
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#DestinoUnidadCodigo2").change(function () {
+
+        var select = $("#DestinoFuncionarioEmail2");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
+
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+
+    $('#SegundoDestino').change(function () {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $("#divSegundoDestino").show();
+        }
+        else {
+            $("#divSegundoDestino").hide();
+        }
     });
 </script>

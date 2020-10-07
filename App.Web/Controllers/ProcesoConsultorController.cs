@@ -94,15 +94,14 @@ namespace App.Web.Controllers
                     predicate = predicate.And(q => q.EstadoProcesoId == model.EstadoProcesoId);
 
                 model.Result = _repository.Get(predicate);
+
+                var email = UserExtended.Email(User);
+                foreach (var item in model.Result.Where(q=>q.Reservado))
+                    item.EsAutor = item.Email.Trim() == email.Trim();
             }
+
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion", model.EstadoProcesoId);
 
-            return View(model);
-        }
-
-        public ActionResult Details(int id)
-        {
-            var model = _repository.GetById<Proceso>(id);
             return View(model);
         }
     }

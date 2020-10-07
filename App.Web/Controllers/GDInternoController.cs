@@ -31,11 +31,14 @@ namespace App.Web.Controllers
             [DataType(DataType.Upload)]
             public HttpPostedFileBase[] File { get; set; }
 
-            [Display(Name = "Requiere firma electrónica?")]
-            public bool RequiereFirmaElectronica { get; set; } = false;
-
             [Display(Name = "Es documento oficial?")]
             public bool EsOficial { get; set; } = false;
+
+            [Display(Name = "Tiene firma electrónica?")]
+            public bool TieneFirmaElectronica { get; set; }
+
+            [Display(Name = "Requiere firma electrónica?")]
+            public bool RequiereFirmaElectronica { get; set; }
 
             [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Unidad del firmante")]
@@ -72,6 +75,18 @@ namespace App.Web.Controllers
         }
 
         public ActionResult Details(int id)
+        {
+            //es autoridad
+            var email = UserExtended.Email(User);
+            var autoridades = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.autoridades.ToString());
+            if (autoridades != null && !string.IsNullOrWhiteSpace(autoridades.Valor) && autoridades.Valor.Contains(email))
+                return RedirectToAction("DetailsAutoridad", new { id });
+
+            var model = _repository.GetById<GD>(id);
+            return View(model);
+        }
+
+        public ActionResult DetailsAutoridad(int id)
         {
             var model = _repository.GetById<GD>(id);
             return View(model);
@@ -184,11 +199,11 @@ namespace App.Web.Controllers
                     documento.Email = email;
                     documento.ProcesoId = model.ProcesoId;
                     documento.WorkflowId = model.WorkflowId;
-                    documento.Signed = false;
                     documento.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
                     documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
-                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
                     documento.EsOficial = model.EsOficial;
+                    documento.Signed = model.TieneFirmaElectronica;
+                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
                     documento.FirmanteUnidad = model.FirmanteUnidadCodigo;
                     documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.FirmanteEmail) ? model.FirmanteEmail.Trim() : null;
                     documento.Descripcion = model.Descripcion;
@@ -235,6 +250,23 @@ namespace App.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public PartialViewResult Workflow(int ProcesoId)
+        {
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId);
+            return PartialView(model);
+        }
+
+        public ActionResult Documents(int ProcesoId)
+        {
+            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
+            return View(model);
+        }
+        public PartialViewResult WorkflowAutoridad(int ProcesoId)
+        {
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);
+            return PartialView(model);
         }
     }
 }

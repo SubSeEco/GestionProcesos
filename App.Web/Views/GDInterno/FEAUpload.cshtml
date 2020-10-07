@@ -24,7 +24,18 @@
     <div class="row">
         <div class="col s12 m12 l12">
             <div class="switch">
-                <label>
+                <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si el documento ya viene con firma electrónica">
+                    @Html.CheckBoxFor(m => Model.TieneFirmaElectronica)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.TieneFirmaElectronica)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="RequiereFirmaElectronicaDivCheck">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si el documento será firmado electrónicamente. Solo se pueden firmar archivos pdf">
                     @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
                     <span class="lever"></span>
                     @Html.LabelFor(m => Model.RequiereFirmaElectronica)
@@ -46,7 +57,7 @@
             @Html.ValidationMessageFor(model => Model.File, "", new { @class = "red-text" })
         </div>
     </div>
-    <div id="divRequiereFEA">
+    <div id="RequiereFirmaElectronicaDivUser">
         <div class="row">
             <div class="col s12 m12 l12">
                 @Html.LabelFor(m => Model.FirmanteUnidadCodigo)<br />
@@ -74,25 +85,39 @@
 
 <script>
     $(document).ready(function () {
-        $('#divRequiereFEA').toggle(false)
+        $('#RequiereFirmaElectronicaDivUser').toggle(false)
+    });
+
+    //si el documento ya tiene firma, desactivar
+    $('#TieneFirmaElectronica').change(function () {
+
+        $('#RequiereFirmaElectronicaDivUser').toggle(false);
+
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#RequiereFirmaElectronicaDivCheck').toggle(false);
+            $("#RequiereFirmaElectronica").prop("checked", false);
+        }
+        else {
+            $('#RequiereFirmaElectronicaDivCheck').show();
+        }
     });
 
     //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
     $('#RequiereFirmaElectronica').change(function () {
         var isChecked = $(this).is(':checked');
         if (isChecked) {
-            $('#divRequiereFEA').toggle(true);
+            $('#RequiereFirmaElectronicaDivUser').toggle(true);
             $('#FileInput').attr("accept", ".pdf");
         }
         else {
-            $('#divRequiereFEA').toggle(false);
+            $('#RequiereFirmaElectronicaDivUser').toggle(false);
             $('#FileInput').attr("accept", ".*");
         }
     });
 
     //Al cambiar unidad traer funcionarios
     $("#ddlFirmanteUnidadCodigo").change(function () {
-
         var select = $("#FirmanteEmail");
         select.empty();
         select.append($('<option/>', {
