@@ -101,7 +101,7 @@ namespace App.Model.GestionDocumental
                 tag.Append(Materia + " ");
             if (!string.IsNullOrWhiteSpace(Referencia))
                 tag.Append(Referencia + " ");
-            if (string.IsNullOrWhiteSpace(Observacion))
+            if (!string.IsNullOrWhiteSpace(Observacion))
                 tag.Append(Observacion + " ");
             if (GDOrigen != null)
                 tag.Append(GDOrigen.Descripcion + " ");
