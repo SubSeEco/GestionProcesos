@@ -366,8 +366,6 @@ namespace App.Web.Controllers
             return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
-
-
         public ActionResult Header(int id)
         {
             var model = _repository.GetById<Proceso>(id);

@@ -1,5 +1,4 @@
 ﻿using App.Model.Helper;
-using App.Util;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,9 +40,6 @@ namespace App.Model.GestionDocumental
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
 
-        //[Display(Name = "Es documentación reservada?")]
-        //public bool EsReservado { get; set; } = false;
-
         [Display(Name = "Ingreso externo?")]
         public bool IngresoExterno { get; set; }
 
@@ -57,7 +53,6 @@ namespace App.Model.GestionDocumental
         public string NumeroExterno { get; set; }
 
         
-        
         //destino 1
         [Display(Name = "Unidad destino")]
         [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
@@ -67,7 +62,6 @@ namespace App.Model.GestionDocumental
         public string DestinoUnidadDescripcion { get; set; }
 
         [Display(Name = "Usuario destino")]
-        //[RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioEmail { get; set; }
 
         [Display(Name = "Usuario destino")]
@@ -86,15 +80,10 @@ namespace App.Model.GestionDocumental
         public string DestinoUnidadDescripcion2 { get; set; }
 
         [Display(Name = "Usuario destino")]
-        //[RequiredIf("SegundoDestino", true, ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoFuncionarioEmail2 { get; set; }
 
         [Display(Name = "Usuario destino")]
         public string DestinoFuncionarioNombre2 { get; set; }
-
-
-
-
 
         [Display(Name = "Proceso")]
         public int ProcesoId { get; set; }
@@ -112,7 +101,7 @@ namespace App.Model.GestionDocumental
                 tag.Append(Materia + " ");
             if (!string.IsNullOrWhiteSpace(Referencia))
                 tag.Append(Referencia + " ");
-            if (string.IsNullOrWhiteSpace(Observacion))
+            if (!string.IsNullOrWhiteSpace(Observacion))
                 tag.Append(Observacion + " ");
             if (GDOrigen != null)
                 tag.Append(GDOrigen.Descripcion + " ");

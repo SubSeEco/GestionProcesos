@@ -12,7 +12,6 @@ using System.IO;
 using App.Model.Helper;
 using App.Util;
 using OfficeOpenXml;
-using System.Windows;
 
 namespace App.Web.Controllers
 {
@@ -20,6 +19,18 @@ namespace App.Web.Controllers
     [Authorize]
     public class GDExternoController : Controller
     {
+        public class DTOMinutaDespacho
+        {
+            public DTOMinutaDespacho()
+            {
+            }
+
+            [Display(Name = "Desde")]
+            [DataType(DataType.Date)]
+            public DateTime? Dia { get; set; }
+        }
+
+
         public class DTOFileUploadFEA
         {
             public DTOFileUploadFEA()
@@ -121,9 +132,9 @@ namespace App.Web.Controllers
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -147,12 +158,12 @@ namespace App.Web.Controllers
 
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
@@ -165,14 +176,14 @@ namespace App.Web.Controllers
             ViewBag.GDOrigenId = new SelectList(_repository.GetAll<GDOrigen>(), "GDorigenId", "Descripcion");
 
             ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.DestinoFuncionarioEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo != null && model.DestinoUnidadCodigo.IsInt())
                 ViewBag.DestinoFuncionarioEmail = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre", model.DestinoFuncionarioEmail).OrderBy(q => q.Text);
 
             ViewBag.DestinoUnidadCodigo2 = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.DestinoFuncionarioEmail2 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.DestinoUnidadCodigo2 != null && model.DestinoUnidadCodigo.IsInt())
-                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo2.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre",model.DestinoFuncionarioEmail2).OrderBy(q => q.Text);
+                ViewBag.DestinoFuncionarioEmail2 = new SelectList(_sigper.GetUserByUnidad(model.DestinoUnidadCodigo2.ToInt()).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre", model.DestinoFuncionarioEmail2).OrderBy(q => q.Text);
 
             return View(model);
         }
@@ -209,7 +220,7 @@ namespace App.Web.Controllers
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
             ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.FirmanteEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
 
@@ -222,7 +233,7 @@ namespace App.Web.Controllers
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
             ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.FirmanteEmail = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var email = UserExtended.Email(User);
 
@@ -304,79 +315,21 @@ namespace App.Web.Controllers
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
-        public FileResult Report()
-        {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GD.xlsx")));
-
-            using (var context = new Infrastructure.GestionProcesos.AppContext())
-            {
-                var resumen = (from GD in context.GD
-                               join Proceso in context.Proceso on GD.ProcesoId equals Proceso.ProcesoId
-                               where !Proceso.Anulada
-                               orderby Proceso.ProcesoId
-                               select GD)
-                           .Select(item => new
-                           {
-                               item.ProcesoId,
-                               item.Proceso.DefinicionProceso.Nombre,
-                               item.Proceso.Email,
-                               item.Proceso.EstadoProceso.Descripcion,
-                               item.Fecha,
-                               item.FechaIngreso,
-                               item.Materia,
-                               item.Referencia,
-                               item.Observacion,
-                               item.NumeroExterno,
-                               Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
-                               item.DestinoFuncionarioNombre,
-                               item.DestinoUnidadDescripcion,
-                               Reservado = item.Proceso.Reservado ? "RESERVADO" : string.Empty
-                           });
-
-                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
-
-                var detalle = (from GD in context.GD
-                               join Proceso in context.Proceso on GD.ProcesoId equals Proceso.ProcesoId
-                               join Workflow in context.Workflow on Proceso.ProcesoId equals Workflow.ProcesoId
-                               where !Proceso.Anulada
-                               orderby Workflow.ProcesoId, Workflow.WorkflowId
-                               select Workflow)
-                           .Select(item => new
-                           {
-                               item.ProcesoId,
-                               Proceso = item.Proceso.DefinicionProceso.Nombre,
-                               Workflow = item.DefinicionWorkflow.Nombre,
-                               item.TipoAprobacion.Nombre,
-                               item.FechaCreacion,
-                               item.FechaTermino,
-                               item.NombreFuncionario,
-                               item.Pl_UndDes,
-                               item.Observacion,
-                           });
-                
-                excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
-            }
-
-
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        }
-
         public PartialViewResult Row(int ProcesoId)
         {
-            var model = _repository.GetFirst<GD>(q=>q.ProcesoId== ProcesoId);
+            var model = _repository.GetFirst<GD>(q => q.ProcesoId == ProcesoId);
             return PartialView(model);
         }
 
         public PartialViewResult Workflow(int ProcesoId)
         {
-            var model = _repository.Get<Workflow>(q=>q.ProcesoId == ProcesoId);
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId);
             return PartialView(model);
         }
 
         public ActionResult Documents(int ProcesoId)
         {
-            var model = _repository.Get<Documento>(q=>q.ProcesoId == ProcesoId);
+            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
             return View(model);
         }
 
@@ -384,6 +337,100 @@ namespace App.Web.Controllers
         {
             var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);
             return PartialView(model);
+        }
+
+        [HttpGet]
+        public ActionResult Report()
+        {
+            return View(new DTOMinutaDespacho() { Dia = DateTime.Now });
+        }
+
+        public FileResult ReportGenerico()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDGenerico.xlsx")));
+
+            var resumen =
+                _repository
+                .Get<GD>(q => !q.Proceso.Anulada)
+                .OrderBy(q => q.ProcesoId)
+                .Select(item => new
+                {
+                    item.ProcesoId,
+                    item.Proceso.DefinicionProceso.Nombre,
+                    item.Proceso.Email,
+                    item.Proceso.EstadoProceso.Descripcion,
+                    item.Fecha,
+                    item.FechaIngreso,
+                    item.Materia,
+                    item.Referencia,
+                    item.Observacion,
+                    item.NumeroExterno,
+                    Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
+                    item.DestinoFuncionarioNombre,
+                    item.DestinoUnidadDescripcion,
+                    Reservado = item.Proceso.Reservado ? "RESERVADO" : string.Empty
+                }).ToList();
+
+            var idsProcesos =
+                resumen.Select(q => q.ProcesoId).Distinct();
+
+            var detalle =
+                _repository
+                .Get<Workflow>(q => !q.Proceso.Anulada && idsProcesos.Contains(q.ProcesoId))
+                .OrderBy(q => q.ProcesoId)
+                .ThenBy(q => q.WorkflowId)
+                .Select(item => new
+                {
+                    item.ProcesoId,
+                    Proceso = item.Proceso.DefinicionProceso.Nombre,
+                    Workflow = item.DefinicionWorkflow.Nombre,
+                    TipoAprobacion = item.TipoAprobacion != null ? item.TipoAprobacion.Nombre : string.Empty,
+                    item.FechaCreacion,
+                    item.FechaTermino,
+                    item.NombreFuncionario,
+                    item.Pl_UndDes,
+                    item.Observacion,
+                });
+
+            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
+            excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
+
+            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public FileResult ReportMinutaDocumentos(DTOMinutaDespacho model)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDminuta.xlsx")));
+
+            //documentos desde oficina de partes hacia las unidades
+            var docs = _repository
+                .Get<GD>(q =>
+                    q.Fecha.Value.Year == model.Dia.Value.Year &&
+                    q.Fecha.Value.Month == model.Dia.Value.Month &&
+                    q.Fecha.Value.Day == model.Dia.Value.Day &&
+                    !q.Proceso.Anulada &&
+                    q.IngresoExterno)
+                .OrderBy(q => q.DestinoUnidadDescripcion)
+                .ThenBy(q => q.GDId)
+                .Select(item => new
+                {
+                    item.DestinoUnidadDescripcion,
+                    item.DestinoFuncionarioNombre,
+                    item.NumeroExterno,
+                    item.Fecha,
+                    item.FechaIngreso,
+                    item.ProcesoId,
+                    Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
+                    item.Materia,
+                    item.Referencia,
+                    item.Observacion,
+                });
+
+            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(docs);
+
+            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
     }
 }
