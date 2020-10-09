@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using ExpressiveAnnotations.Attributes;
+using System.Text;
+using System.Linq;
 
 namespace App.Model.Cometido
 {
@@ -310,6 +312,24 @@ namespace App.Model.Cometido
         /*Datos Acto Administrativo*/
         [Display(Name = "Tipo Acto Administrativo")]
         public string TipoActoAdministrativo { get; set; }
+
+        public string GetTags()
+        {
+            StringBuilder tag = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(CometidoId.ToString()))
+                tag.Append(CometidoId + " ");
+            if (!string.IsNullOrWhiteSpace(NombreCometido))
+                tag.Append(NombreCometido + " ");
+            if (string.IsNullOrWhiteSpace(Nombre))
+                tag.Append(Nombre + " ");
+            if (string.IsNullOrWhiteSpace(Destinos.FirstOrDefault().ComunaDescripcion))
+                tag.Append(Destinos.FirstOrDefault().ComunaDescripcion + " ");
+            if (!string.IsNullOrWhiteSpace(UnidadDescripcion))
+                tag.Append(UnidadDescripcion);
+
+            return tag.ToString();
+        }
 
     }
 }

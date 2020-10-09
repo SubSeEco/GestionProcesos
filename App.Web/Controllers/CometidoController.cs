@@ -1375,7 +1375,7 @@ namespace App.Web.Controllers
             model.FechaResolucion = DateTime.Now;
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
-            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().Total.ToString());            
+            model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.TotalViatico.ToString());//.Destinos.FirstOrDefault().Total.ToString());            
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();

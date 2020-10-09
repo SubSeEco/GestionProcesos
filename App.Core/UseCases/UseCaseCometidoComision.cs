@@ -4634,6 +4634,15 @@ namespace App.Core.UseCases
                 //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
                 //}
 
+                //generar tags de proceso
+                workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
+
+                //generar tags de negocio
+                var comet = _repository.GetFirst<Cometido>(q => q.WorkflowId == workflowActual.WorkflowId);
+                if (comet != null)
+                    workflowActual.Proceso.Tags += comet.GetTags();
+
+
                 /*Valida la carga de adjuntos segun el tipo de proceso*/ /*27082020 --> se agrega validacion en firma dr acto administrativo, que el documento debe ser firmado*/
                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                 {
@@ -4851,7 +4860,7 @@ namespace App.Core.UseCases
                                         //    var res = DestinosPasajesInsert(_destino);
                                         //}
                                     }
-                                    /*Si cometido corresponde al ministro se va directamente a analista de gestion personas*/
+                                    /*Si cometido corresponde al ministro se va directamente a analista de gestion personas, esto cuando no se solicita con pasaje*/
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
@@ -4886,7 +4895,15 @@ namespace App.Core.UseCases
                                     }
                                     else
                                     {
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                        if (workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == true)
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                            definicionWorkflow.Email = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.JefeGabineteMinistro).Valor.ToString();
+                                        }
+                                        else
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                                        }
                                     }
                                 }
                                 else
@@ -5231,13 +5248,27 @@ namespace App.Core.UseCases
                         if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                         {
                             var com = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId);
-                            persona = _sigper.GetUserByRut(com.FirstOrDefault().Rut);
-                            if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
-                            workflow.Email = persona.Jefatura.Rh_Mail.Trim();
-                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                            workflow.TareaPersonal = true;
+                            if (workflowActual.DefinicionWorkflow.Secuencia == 3 && com.FirstOrDefault().IdEscalafon == 1 && com.FirstOrDefault().GradoDescripcion == "B" && com.FirstOrDefault().ReqPasajeAereo == true)
+                            {
+                                var rut = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.JefeGabineteMinistro).Valor;
+                                persona = _sigper.GetUserByRut(int.Parse(rut));
+                                if (persona == null)
+                                    throw new Exception("No se encontró el usuario en SIGPER.");
+                                workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                                workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                                workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                                workflow.TareaPersonal = true;
+                            }
+                            else
+                            {
+                                persona = _sigper.GetUserByRut(com.FirstOrDefault().Rut);
+                                if (persona == null)
+                                    throw new Exception("No se encontró el usuario en SIGPER.");
+                                workflow.Email = persona.Jefatura.Rh_Mail.Trim();
+                                workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                                workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                                workflow.TareaPersonal = true;
+                            }
                         }
                     }
 

@@ -147,6 +147,7 @@
             PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
             Plantilla_Memo_Firmado = 61,
             PlantillaAnulacionCometido = 63,//60
+            JefeGabineteMinistro = 65,
         }
 
         public enum DefinicionProceso
