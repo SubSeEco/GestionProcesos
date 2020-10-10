@@ -1,4 +1,4 @@
-﻿@model App.Web.Controllers.GDExternoController.DTOMinutaDespacho
+﻿@model App.Web.Controllers.GDExternoController.DTOReport
 
 @{
     ViewBag.Title = "Reportes gestión documental";
@@ -17,7 +17,6 @@
 <div class="container">
     @Html.Partial("_Message")
 
-
     @using (Html.BeginForm("ReportGenerico", null))
     {
         @Html.AntiForgeryToken()
@@ -25,27 +24,31 @@
             <div class="card-content">
                 <span class="card-title">Reporte genérico de ingresos</span>
                 <div class="section"></div>
-                <button class="waves-effect waves-light btn blue">Aceptar</button>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
             </div>
         </div>
     }
 
-    @using (Html.BeginForm("ReportMinutaDocumentos", null))
+    @using (Html.BeginForm("ReportMinutaDocumentosOP", null))
     {
         @Html.AntiForgeryToken()
 
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Minuta de documentos despachados</span>
-                <div class="section"></div>
+                <span class="card-title">Minuta de documentos oficina de partes</span>
                 <div class="row">
-                    <div class="input-field col s12 m3 l3">
-                        @Html.EditorFor(m => Model.Dia)
-                        @Html.LabelFor(m => Model.Dia)
-                        @Html.ValidationMessageFor(m => Model.Dia, "", new { @class = "red-text" })
+                    <div class="col s12 m2 l2">
+                        @Html.LabelFor(m => Model.Desde)
+                        @Html.EditorFor(m => Model.Desde)
+                        @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                    </div>
+                    <div class="col s12 m6 l6">
+                        @Html.LabelFor(m => Model.DestinoUnidadCodigo)
+                        @Html.DropDownListFor(model => model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                        @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
                     </div>
                 </div>
-                <button class="waves-effect waves-light btn blue">Aceptar</button>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
             </div>
         </div>
     }
@@ -56,16 +59,20 @@
 
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Reporte de permanencia en unidades</span>
-                <div class="section"></div>
+                <span class="card-title">Reporte de permanencia</span>
                 <div class="row">
+                    <div class="input-field col s12 m2 l2">
+                        @Html.EditorFor(m => Model.Desde)
+                        @Html.LabelFor(m => Model.Desde)
+                        @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                    </div>
                     <div class="input-field col s12 m3 l3">
-                        @Html.EditorFor(m => Model.Dia)
-                        @Html.LabelFor(m => Model.Dia)
-                        @Html.ValidationMessageFor(m => Model.Dia, "", new { @class = "red-text" })
+                        @Html.EditorFor(m => Model.Hasta)
+                        @Html.LabelFor(m => Model.Hasta)
+                        @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
                     </div>
                 </div>
-                <button class="waves-effect waves-light btn blue">Aceptar</button>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
             </div>
         </div>
     }

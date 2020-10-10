@@ -46,15 +46,18 @@ namespace App.Model.Core
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
 
-
         [Display(Name = "Email autor")]
         public string Email { get; set; }
 
         [Display(Name = "Nombre autor")]
         public string NombreFuncionario { get; set; }
 
-        //[Display(Name = "RUT")]
-        //public int? RUT { get; set; }
+        [Display(Name = "Unidad")]
+        public int? Pl_UndCod { get; set; }
+
+        [Display(Name = "Unidad")]
+        public string Pl_UndDes { get; set; }
+
 
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
