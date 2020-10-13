@@ -352,7 +352,8 @@
     <Content Include="App_Data\HSA.xlsx" />
     <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
     <Content Include="App_Data\GDGenerico.xlsx" />
-    <Content Include="App_Data\GDMinuta.xlsx" />
+    <Content Include="App_Data\GDMinutaDocumentosOP.xlsx" />
+    <Content Include="App_Data\GDPermanencia.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Producción.pubxml" />

@@ -12,6 +12,7 @@ using System.IO;
 using App.Model.Helper;
 using App.Util;
 using OfficeOpenXml;
+using System.Data.Entity;
 
 namespace App.Web.Controllers
 {
@@ -19,17 +20,25 @@ namespace App.Web.Controllers
     [Authorize]
     public class GDExternoController : Controller
     {
-        public class DTOMinutaDespacho
+        public class DTOReport
         {
-            public DTOMinutaDespacho()
+            public DTOReport()
             {
             }
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public DateTime? Dia { get; set; }
-        }
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            public DateTime? Desde { get; set; }
 
+            [Display(Name = "Desde")]
+            [DataType(DataType.Date)]
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            public DateTime? Hasta { get; set; }
+
+            [Display(Name = "Unidad")]
+            public string DestinoUnidadCodigo { get; set; }
+        }
 
         public class DTOFileUploadFEA
         {
@@ -342,7 +351,8 @@ namespace App.Web.Controllers
         [HttpGet]
         public ActionResult Report()
         {
-            return View(new DTOMinutaDespacho() { Dia = DateTime.Now });
+            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            return View(new DTOReport() { Desde = DateTime.Now });
         }
 
         public FileResult ReportGenerico()
@@ -359,6 +369,7 @@ namespace App.Web.Controllers
                     item.ProcesoId,
                     item.Proceso.DefinicionProceso.Nombre,
                     item.Proceso.Email,
+                    item.Proceso.Pl_UndDes,
                     item.Proceso.EstadoProceso.Descripcion,
                     item.Fecha,
                     item.FechaIngreso,
@@ -383,6 +394,7 @@ namespace App.Web.Controllers
                 .Select(item => new
                 {
                     item.ProcesoId,
+                    item.WorkflowId,
                     Proceso = item.Proceso.DefinicionProceso.Nombre,
                     Workflow = item.DefinicionWorkflow.Nombre,
                     TipoAprobacion = item.TipoAprobacion != null ? item.TipoAprobacion.Nombre : string.Empty,
@@ -399,19 +411,23 @@ namespace App.Web.Controllers
             return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
-        public FileResult ReportMinutaDocumentos(DTOMinutaDespacho model)
+        public FileResult ReportMinutaDocumentosOP(DTOReport model)
         {
+            var predicate = PredicateBuilder.True<GD>();
+
+            predicate = predicate.And(q => q.Fecha.Value.Year == model.Desde.Value.Year && q.Fecha.Value.Month == model.Desde.Value.Month && q.Fecha.Value.Day == model.Desde.Value.Day);
+            predicate = predicate.And(q => !q.Proceso.Anulada);
+            predicate = predicate.And(q => q.IngresoExterno);
+
+            if (!string.IsNullOrWhiteSpace(model.DestinoUnidadCodigo))
+                predicate = predicate.And(q => q.DestinoUnidadCodigo == model.DestinoUnidadCodigo);
+
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDminuta.xlsx")));
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDMinutaDocumentosOP.xlsx")));
 
             //documentos desde oficina de partes hacia las unidades
             var docs = _repository
-                .Get<GD>(q =>
-                    q.Fecha.Value.Year == model.Dia.Value.Year &&
-                    q.Fecha.Value.Month == model.Dia.Value.Month &&
-                    q.Fecha.Value.Day == model.Dia.Value.Day &&
-                    !q.Proceso.Anulada &&
-                    q.IngresoExterno)
+                .Get(predicate)
                 .OrderBy(q => q.DestinoUnidadDescripcion)
                 .ThenBy(q => q.GDId)
                 .Select(item => new
@@ -429,6 +445,53 @@ namespace App.Web.Controllers
                 });
 
             excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(docs);
+
+            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public FileResult ReportPermanencia(DTOReport model)
+        {
+            var output = _repository
+                .Get<Proceso>(q => 
+                !q.Anulada &&
+                q.DefinicionProceso.Entidad.Codigo.Contains("GD") &&
+                q.FechaTermino.HasValue && 
+                q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day &&
+                q.FechaCreacion.Year <= model.Hasta.Value.Year && q.FechaCreacion.Month <= model.Hasta.Value.Month && q.FechaCreacion.Day <= model.Hasta.Value.Day
+                ).Select(q => new
+                {
+                    unidadCodigo = q.Pl_UndCod,
+                    unidadDescripcion = q.Pl_UndDes,
+                    id = q.ProcesoId,
+                    inicio = q.FechaCreacion,
+                    termino = q.FechaTermino,
+                    duracion = (q.FechaTermino - q.FechaCreacion).Value.TotalDays,
+                })
+                .GroupBy(q => new {
+                    q.unidadCodigo,
+                    q.unidadDescripcion
+                })
+                .Select(unidad => new
+                {
+                    unidad.Key.unidadCodigo,
+                    unidad.Key.unidadDescripcion,
+                    info = unidad.ToList()
+                })
+                .Select(unidad => new 
+                {
+                    unidadCodigo = unidad.unidadCodigo.ToString(),
+                    unidadDescripcion = unidad.unidadDescripcion.ToString(),
+                    documentosCreados = unidad.info.GroupBy(q => q.id).Distinct().Count(),
+                    promedioDocumentosCreadosAlDia = unidad.info
+                        .GroupBy(q => q.inicio.Date)
+                        .Select(grupo => new { dia = grupo.Key, ingresos = grupo.Count()})
+                        .Average(a => a.ingresos),
+                    promedioDemoraEnDias = unidad.info.Average(q => q.duracion)
+                });
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDPermanencia.xlsx")));
+            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(output);
 
             return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
