@@ -62,19 +62,19 @@
                 {
                     <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+                        <p class="right truncate grey-text ultra-small">Tarea creada @item.FechaCreacion</p>
 
                         @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso fuera de plazo"></i>
+                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.Proceso.FechaVencimiento)"></i>
                         }
                         @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso pronto a vencer"></i>
+                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.Proceso.FechaVencimiento)"></i>
                         }
                         @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
                         {
-                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso dentro de plazo"></i>
+                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.Proceso.FechaVencimiento)"></i>
                         }
 
                         @if (!string.IsNullOrWhiteSpace(item.Asunto))

@@ -20,12 +20,12 @@
                         <span class="card-title">Información del ingreso externo</span>
                         <h3>ID @Model.ProcesoId</h3>
                         <div class="row">
-                            <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.FechaIngreso)
+                            <div class="col s12 m6 l4">
                                 @Html.LabelFor(m => Model.FechaIngreso)
+                                @Html.EditorFor(m => Model.FechaIngreso)
                                 @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
                             </div>
-                            <div class="col s12 m12 l12">
+                            <div class="col s12 m6 l8">
                                 @Html.LabelFor(m => Model.GDOrigenId)
                                 @Html.DropDownListFor(model => model.GDOrigenId, null, "Seleccione...", new { @class = "browser-default" })
                                 @Html.ValidationMessageFor(m => Model.GDOrigenId, "", new { @class = "red-text" })

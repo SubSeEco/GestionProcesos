@@ -30,7 +30,7 @@ namespace App.Web.Controllers
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             public DateTime? Desde { get; set; }
 
-            [Display(Name = "Desde")]
+            [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             public DateTime? Hasta { get; set; }
@@ -370,6 +370,8 @@ namespace App.Web.Controllers
                     item.Proceso.Email,
                     item.Proceso.Pl_UndDes,
                     item.Proceso.EstadoProceso.Descripcion,
+                    item.Proceso.FechaCreacion,
+                    item.Proceso.FechaTermino,
                     item.Fecha,
                     item.FechaIngreso,
                     item.Materia,
@@ -479,7 +481,7 @@ namespace App.Web.Controllers
                 .Select(unidad => new 
                 {
                     unidadCodigo = unidad.unidadCodigo.ToString(),
-                    unidadDescripcion = unidad.unidadDescripcion.ToString(),
+                    unidadDescripcion = unidad.unidadDescripcion != null ? unidad.unidadDescripcion.ToString() : string.Empty,
                     documentosCreados = unidad.info.GroupBy(q => q.id).Distinct().Count(),
                     promedioDocumentosCreadosAlDia = unidad.info
                         .GroupBy(q => q.inicio.Date)

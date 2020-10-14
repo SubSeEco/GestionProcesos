@@ -333,6 +333,7 @@ namespace App.Web.Controllers
             model.PermitirSeleccionarGrupoEspecialDestino = model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino;
             model.PermitirFinalizarProceso = model.DefinicionWorkflow.PermitirFinalizarProceso;
             model.PermitirTerminar = model.DefinicionWorkflow.PermitirTerminar;
+            model.Mensaje = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(model.To))
             {
@@ -552,6 +553,8 @@ namespace App.Web.Controllers
         public ActionResult Stop(Workflow model)
         {
             model.Email = UserExtended.Email(User);
+            model.Observacion = model.Mensaje;
+            model.Mensaje = string.Empty;
 
             if (ModelState.IsValid)
             {

@@ -110,12 +110,13 @@
                             <span class="card-title">Finalizar tarea</span>
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(q => Model.WorkflowId)
+                            @Html.HiddenFor(q => Model.TipoAprobacionId)
 
                             <div class="row">
                                 <div class="col s12 m8 l10">
-                                    @Html.LabelFor(m => Model.Observacion)
-                                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
-                                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                                    @Html.LabelFor(m => Model.Mensaje)
+                                    @Html.TextAreaFor(m => Model.Mensaje, new { @type = "textarea ", @class = "materialize-textarea" })
+                                    @Html.ValidationMessageFor(m => Model.Mensaje, "", new { @class = "red-text" })
                                 </div>
                             </div>
                             <button class="waves-effect waves-light btn blue" type="submit">Finalizar</button>

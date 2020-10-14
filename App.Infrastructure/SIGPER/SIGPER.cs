@@ -952,7 +952,5 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
-
-
     }
 }

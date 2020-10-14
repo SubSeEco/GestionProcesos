@@ -61,7 +61,7 @@ namespace App.Model.Core
         [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
-        [RequiredIf("RequiereAprobacionAlEnviar && TipoAprobacionId == 3", ErrorMessage = "Es necesario especificar este dato")]
+        //[RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }

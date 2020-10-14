@@ -18,6 +18,22 @@ namespace App.Web.Controllers
     [Authorize]
     public class ProcesoController : Controller
     {
+        public class DTODelete
+        {
+            public DTODelete()
+            {
+
+            }
+
+            public int ProcesoId { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Justificación")]
+            [DataType(DataType.MultilineText)]
+            public string JustificacionAnulacion { get; set; }
+        }
+
         public class DTOFilter
         {
             public DTOFilter()
@@ -163,7 +179,7 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
             return View(model);
@@ -266,36 +282,29 @@ namespace App.Web.Controllers
         public ActionResult Delete(int id)
         {
             var model = _repository.GetById<Proceso>(id);
-            return View(model);
+            return View(new DTODelete { ProcesoId = model.ProcesoId });
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(DTODelete model)
         {
             var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
-
+            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(model.ProcesoId, model.JustificacionAnulacion);
             if (_UseCaseResponseMessage.IsValid)
-            {
                 TempData["Success"] = "Operación terminada correctamente.";
-
-                var p = _repository.GetById<Proceso>(id).DefinicionProcesoId;
-                if (p == 13)
-                    return RedirectToAction("SeguimientoGP", "Cometido");
-                else
-                    return RedirectToAction("Index");
-            }
             else
-            {
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
 
-                var com = _repository.Get<Cometido>(c => c.ProcesoId == id).FirstOrDefault();
-                if(com != null)
-                    return RedirectToAction("View", "Cometido", new { id = com.CometidoId});
-                else
-                    return RedirectToAction("Index");
-            }
+            var p = _repository.GetById<Proceso>(model.ProcesoId).DefinicionProcesoId;
+            if (p == 13)
+                return RedirectToAction("SeguimientoGP", "Cometido");
+
+            var com = _repository.GetFirst<Cometido>(c => c.ProcesoId == model.ProcesoId);
+            if (com != null)
+                return RedirectToAction("View", "Cometido", new { id = com.CometidoId });
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Dashboard()

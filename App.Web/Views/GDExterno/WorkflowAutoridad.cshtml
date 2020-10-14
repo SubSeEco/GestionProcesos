@@ -44,7 +44,8 @@
                             @Html.DisplayFor(modelItem => item.FechaTermino)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.NombreFuncionario) <br /> @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                            @Html.DisplayFor(modelItem => item.NombreFuncionario) <br />
+                            <span class="grey-text">@Html.DisplayFor(modelItem => item.Pl_UndDes)</span><br />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)

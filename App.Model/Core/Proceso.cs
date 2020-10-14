@@ -82,6 +82,9 @@ namespace App.Model.Core
         public int EstadoProcesoId { get; set; }
         public virtual EstadoProceso EstadoProceso { get; set; }
 
+        [Display(Name = "Justificación anulación")]
+        [DataType(DataType.MultilineText)]
+        public string JustificacionAnulacion { get; set; }
 
 
         //deprecado
