@@ -131,7 +131,7 @@
                                 @Html.Raw("<span>corresponde</span>")
                             }
                             designar en cometido funcionario a don/ña
-                            <strong> @Html.DisplayFor(m => Model.Nombre),</strong>funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
+                            <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                         </p>
                     </li>
                     <br />
@@ -181,11 +181,11 @@
                     <p align="justify" style="margin-right:30px">
                         @if (Model.Tiempo == "Pasado")
                         {
-                            @Html.Raw("<span>1. Reconócese</span>")
+                            @Html.Raw("<span>Reconócese</span>")
                         }
                         else
                         {
-                            @Html.Raw("<span>1. Desígnese</span>")
+                            @Html.Raw("<span>Desígnese</span>")
                         }
                         en cometido funcionario, a don/ña <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;RUN N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>,
                         <strong>@Html.DisplayFor(m => Model.UnidadDescripcion),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayFor(m => Model.CalidadDescripcion), @Html.DisplayFor(m => Model.CargoDescripcion), grado &nbsp;&nbsp; @Html.DisplayFor(m => Model.GradoDescripcion)&nbsp;&nbsp; de la E.U.S.
