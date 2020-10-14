@@ -9,10 +9,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using App.Model.Helper;
 using App.Util;
 using OfficeOpenXml;
-using System.Data.Entity;
+using ExpressiveAnnotations.Attributes;
 
 namespace App.Web.Controllers
 {
@@ -63,14 +62,14 @@ namespace App.Web.Controllers
             [Display(Name = "Tiene firma electrónica?")]
             public bool TieneFirmaElectronica { get; set; }
 
-            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
+            [RequiredIf("RequiereFirmaElectronica", ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Unidad del firmante")]
             public string FirmanteUnidadCodigo { get; set; }
 
             [Display(Name = "Unidad del firmante")]
             public string FirmanteUnidadDescripcion { get; set; }
 
-            [RequiredIf("RequiereFirmaElectronica", true, ErrorMessage = "Es necesario especificar este dato")]
+            [RequiredIf("RequiereFirmaElectronica", ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Usuario firmante")]
             public string FirmanteEmail { get; set; }
 
@@ -228,7 +227,7 @@ namespace App.Web.Controllers
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q=>q.HabilitadoFirma).Select(q=>q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
             ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
@@ -241,7 +240,7 @@ namespace App.Web.Controllers
         public ActionResult FEAUpload(DTOFileUploadFEA model)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
             ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var email = UserExtended.Email(User);

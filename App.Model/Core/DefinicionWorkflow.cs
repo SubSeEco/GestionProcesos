@@ -60,7 +60,7 @@ namespace App.Model.Core
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
 
-        [RequiredIf("TipoEjecucionId == 6",ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("TipoEjecucionId == 6", ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Ejecutado por")]
         public string Email { get; set; }
 

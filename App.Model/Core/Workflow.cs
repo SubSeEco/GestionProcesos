@@ -1,4 +1,4 @@
-﻿using App.Model.Helper;
+﻿using ExpressiveAnnotations.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -46,11 +46,11 @@ namespace App.Model.Core
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar el dato Unidad destino")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", true, ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
@@ -61,7 +61,7 @@ namespace App.Model.Core
         [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
-
+        [RequiredIf("RequiereAprobacionAlEnviar && TipoAprobacionId == 3", ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
@@ -70,7 +70,7 @@ namespace App.Model.Core
         [DataType(DataType.MultilineText)]
         public string Mensaje { get; set; }
 
-        [RequiredIf("RequiereAprobacionAlEnviar", true, ErrorMessage = "Es necesario especificar el dato Aprobación")]
+        [RequiredIf("RequiereAprobacionAlEnviar", ErrorMessage = "Es necesario especificar el dato Aprobación")]
         [Display(Name = "Tipo aprobación")]
         public int? TipoAprobacionId { get; set; }
         public virtual TipoAprobacion TipoAprobacion { get; set; }
@@ -135,7 +135,6 @@ namespace App.Model.Core
             && this.DefinicionWorkflow.DefinicionProceso != null 
             && this.DefinicionWorkflow.DefinicionProceso.Entidad != null 
             && this.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString();
-
 
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
