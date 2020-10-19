@@ -22,13 +22,13 @@
                 @Html.AntiForgeryToken()
 
                 <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        @Html.TextBoxFor(m => Model.TextSearch)
+                        @Html.LabelFor(m => Model.TextSearch)
+                        @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                    </div>
                     <div class="col s12 m6 l6">
                         <div class="row">
-                            <div class="input-field col s12 m12 l12">
-                                @Html.TextBoxFor(m => Model.TextSearch)
-                                @Html.LabelFor(m => Model.TextSearch)
-                                @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
-                            </div>
                             <div class="input-field col s12 m6 l6">
                                 @Html.EditorFor(m => Model.Desde)
                                 @Html.LabelFor(m => Model.Desde)
@@ -62,7 +62,7 @@
 
     @if (!Model.Result.Any())
     {
-        <p>No existen resultados</p>
+        <p>Información no encontrada</p>
     }
     else
     {
@@ -73,9 +73,9 @@
                     @if (item.Reservado && !item.EsAutor)
                     {
                         <span class="new badge red" data-badge-caption="Proceso reservado"></span>
-                        @item.ProcesoId <text>-</text> @item.DefinicionProceso.Nombre<br />
+                        @item.ProcesoId <text>-</text> @item.Definicion<br />
                         <text>Creado por </text> @item.NombreFuncionario <text> el </text>@item.FechaCreacion<br />
-                        <text>Estado: </text> @item.EstadoProceso.Descripcion
+                        <text>Estado: </text> @item.Estado
                     }
                     else
                     {
@@ -84,16 +84,16 @@
                             <span class="new badge red" data-badge-caption="Proceso reservado"></span>
                         }
 
-                        @Html.ActionLink(string.Concat(item.ProcesoId, " - ", item.DefinicionProceso.Nombre), "View", item.DefinicionProceso.Entidad.Codigo, new { id = item.ProcesoId }, null)<br />
+                        @Html.ActionLink(string.Concat(item.ProcesoId, " - ", item.Definicion), "View", item.Entidad, new { id = item.ProcesoId }, null)<br />
                         <text>Creado por </text> @item.NombreFuncionario <text> el </text>@item.FechaCreacion<br />
-                        <text>Estado: </text> @item.EstadoProceso.Descripcion<br />
+                        <text>Estado: </text> @item.Estado<br />
 
                         if (!string.IsNullOrWhiteSpace(item.Observacion))
                         {
                             <p>@Html.DisplayFor(modelItem => item.Observacion)</p>
                         }
 
-                        if (!item.Reservado && item.DefinicionProceso.Entidad.Codigo.Contains("GD"))
+                        if (!item.Reservado && item.Entidad.Contains("GD"))
                         {
                             <p>@Html.Action("Row", "GDExterno", new { item.ProcesoId })</p>
                         }

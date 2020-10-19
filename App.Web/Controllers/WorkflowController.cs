@@ -14,6 +14,7 @@ using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
+using System;
 
 namespace App.Web.Controllers
 {
@@ -21,6 +22,37 @@ namespace App.Web.Controllers
     [Authorize]
     public class WorkflowController : Controller
     {
+        protected readonly IGestionProcesos _repository;
+        protected readonly IEmail _email;
+        protected readonly ISIGPER _sigper;
+        protected readonly IFolio _folio;
+        protected readonly IFile _file;
+        protected readonly IHSM _hsm;
+
+        public class DTOWorkflow
+        {
+            public DTOWorkflow()
+            {
+            }
+
+            public int WorkflowId { get; set; }
+            public DateTime FechaCreacion { get; set; }
+            public string Asunto { get; set; }
+            public string Definicion { get; set; }
+            public bool TareaPersonal { get; set; }
+            public string NombreFuncionario { get; set; }
+            public string Pl_UndDes { get; set; }
+            public string Grupo { get; set; }
+            public string Mensaje { get; set; }
+
+            public int ProcesoId { get; set; }
+            public DateTime? ProcesoFechaVencimiento { get; set; }
+            public string ProcesoDefinicion { get; set; }
+            public string ProcesoNombreFuncionario { get; set; }
+            public string ProcesoEmail { get; set; }
+            public string ProcesoEntidad { get; set; }
+        }
+
         public class DTOUser
         {
             public string id { get; set; }
@@ -33,8 +65,8 @@ namespace App.Web.Controllers
             {
                 TextSearch = string.Empty;
                 Select = new List<App.Model.DTO.DTOSelect>();
-                TareasGrupales = new List<Workflow>();
-                TareasPersonales = new List<Workflow>();
+                TareasGrupales = new List<DTOWorkflow>();
+                TareasPersonales = new List<DTOWorkflow>();
             }
 
             [Display(Name = "Texto de búsqueda")]
@@ -51,16 +83,11 @@ namespace App.Web.Controllers
             public System.DateTime? Hasta { get; set; }
 
             public List<App.Model.DTO.DTOSelect> Select { get; set; }
-            public List<Workflow> TareasPersonales { get; set; }
-            public List<Workflow> TareasGrupales { get; set; }
+            //public List<Workflow> TareasPersonales { get; set; }
+            //public List<Workflow> TareasGrupales { get; set; }            
+            public List<DTOWorkflow> TareasPersonales { get; set; }
+            public List<DTOWorkflow> TareasGrupales { get; set; }
         }
-
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
-        protected readonly IHSM _hsm;
 
         public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
         {
@@ -81,6 +108,7 @@ namespace App.Web.Controllers
                .ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetUserByUnidad(int Pl_UndCod)
         {
             var result = _sigper.GetUserByUnidad(Pl_UndCod)
@@ -94,9 +122,10 @@ namespace App.Web.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetUserFirmanteByUnidad(int Pl_UndCod)
         {
-            var result = _sigper.GetUserFirmanteByUnidad(Pl_UndCod, _repository.Get<Rubrica>(q=>q.HabilitadoFirma).Select(q=> q.Email.Trim()).ToList())
+            var result = _sigper.GetUserFirmanteByUnidad(Pl_UndCod, _repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList())
                .Select(c => new
                {
                    Email = !string.IsNullOrWhiteSpace(c.Rh_Mail) ? c.Rh_Mail.Trim() : string.Empty,
@@ -116,25 +145,107 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter();
 
-            if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
                 //usuario administrador
-                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
-                var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
+                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+                {
+                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto ,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                }
 
-                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
-                model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
-            }
-            else
-            {
                 //usuario normal
-                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.Email == email);
-                var predicateUnidad = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod);
-                var predicateGruposEspeciales = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value));
-
-                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
-                model.TareasGrupales.AddRange(_repository.Get(predicateUnidad));
-                model.TareasGrupales.AddRange(_repository.Get(predicateGruposEspeciales));
+                else
+                {
+                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales.AddRange(context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value)).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList());
+                }
             }
 
             return View(model);
@@ -345,7 +456,7 @@ namespace App.Web.Controllers
                         _sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod)
                         .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .OrderBy(q => q.PeDatPerChq)
-                        .Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }), 
+                        .Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }),
                         "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
 
                     model.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -362,7 +473,7 @@ namespace App.Web.Controllers
                         _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
                         .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
-                        .OrderBy(q => q.Nombre).Distinct().ToList(), 
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
                         "Email", "Nombre", model.Email);
 
                 //fix para solucionar problemas de fvidal
