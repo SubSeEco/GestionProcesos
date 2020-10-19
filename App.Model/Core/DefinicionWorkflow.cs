@@ -148,8 +148,6 @@ namespace App.Model.Core
         [Display(Name = "Permitir seleccionar grupo especial de destino?")]
         public bool PermitirSeleccionarGrupoEspecialDestino { get; set; } = false;
 
-
-
         [Display(Name = "Permitir multiples evaluaciones de la misma tarea?")]
         public bool PermitirMultipleEvaluacion { get; set; } = false;
 
@@ -164,5 +162,8 @@ namespace App.Model.Core
 
         [Display(Name = "Permitir finalizar proceso?")]
         public bool PermitirFinalizarProceso { get; set; } = false;
+
+        [Display(Name = "Desactivar destino en el rechazo?")]
+        public bool DesactivarDestinoEnRechazo { get; set; } = false;
     }
 }

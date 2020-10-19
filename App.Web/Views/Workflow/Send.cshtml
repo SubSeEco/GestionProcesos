@@ -41,6 +41,7 @@
                     @Html.HiddenFor(q => Model.PermitirSeleccionarGrupoEspecialDestino)
                     @Html.HiddenFor(q => Model.PermitirTerminar)
                     @Html.HiddenFor(q => Model.Pl_UndCod)
+                    @Html.HiddenFor(q => Model.DesactivarDestinoEnRechazo)
 
                     <div class="card">
                         <div class="card-content">
@@ -50,28 +51,35 @@
                                 <div class="row">
                                     <div class="col s12 m12 l12">
                                         @Html.LabelFor(m => Model.TipoAprobacionId)
-                                        @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @class = "browser-default" })
+                                        @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @class = "browser-default", @id = "dllTipoAprobacionId" })
                                         @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
                                     </div>
                                 </div>
                             }
+                            else
+                            {
+                                @Html.HiddenFor(q => Model.TipoAprobacionId)
+                            }
+
                             @if (Model.PermitirSeleccionarUnidadDestino)
                             {
-                                if (!Model.PermitirSeleccionarPersonasMismaUnidad)
-                                {
+                                <div id="divDestino">
+                                    @if (!Model.PermitirSeleccionarPersonasMismaUnidad)
+                                    {
+                                        <div class="row">
+                                            <div class="col s12 m12 l12">
+                                                @Html.LabelFor(m => Model.Pl_UndCod)
+                                                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default", @id = "ddlPl_UndCod" })
+                                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                            </div>
+                                        </div>
+                                    }
                                     <div class="row">
                                         <div class="col s12 m12 l12">
-                                            @Html.LabelFor(m => Model.Pl_UndCod)
-                                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default", @id = "ddlPl_UndCod" })
-                                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                            @Html.LabelFor(m => Model.To)
+                                            @Html.DropDownListFor(model => model.To, null, "Seleccione...", new { @class = "browser-default" })
+                                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
                                         </div>
-                                    </div>
-                                }
-                                <div class="row">
-                                    <div class="col s12 m12 l12">
-                                        @Html.LabelFor(m => Model.To)
-                                        @Html.DropDownListFor(model => model.To, null, "Seleccione...", new { @class = "browser-default" })
-                                        @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
                                     </div>
                                 </div>
                             }
@@ -150,4 +158,19 @@
                 });
             });
     });
+
+    $("#dllTipoAprobacionId").change(function () {
+
+        var DesactivarDestinoEnRechazo = $("#DesactivarDestinoEnRechazo").val();;
+        if (DesactivarDestinoEnRechazo) {
+            var TipoAprobacionId = $(this).val();
+            if (TipoAprobacionId == 3) {
+                $('#divDestino').toggle(false);
+            }
+            else {
+                $('#divDestino').toggle(true);
+            }
+        }
+    });
+
 </script>

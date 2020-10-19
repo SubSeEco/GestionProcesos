@@ -208,6 +208,12 @@
                                 </div>
                                 <div class="input-field col s12 m10 l10">
                                     <label>
+                                        @Html.CheckBoxFor(m => m.DesactivarDestinoEnRechazo)
+                                        <span>@Html.LabelFor(m => Model.DesactivarDestinoEnRechazo)</span>
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
                                         @Html.CheckBoxFor(m => m.PermitirSeleccionarUnidadDestino)
                                         <span>@Html.LabelFor(m => Model.PermitirSeleccionarUnidadDestino)</span>
                                     </label>

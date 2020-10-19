@@ -444,6 +444,7 @@ namespace App.Web.Controllers
             model.PermitirSeleccionarGrupoEspecialDestino = model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino;
             model.PermitirFinalizarProceso = model.DefinicionWorkflow.PermitirFinalizarProceso;
             model.PermitirTerminar = model.DefinicionWorkflow.PermitirTerminar;
+            model.DesactivarDestinoEnRechazo = model.DefinicionWorkflow.DesactivarDestinoEnRechazo;
             model.Mensaje = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(model.To))

@@ -46,11 +46,11 @@ namespace App.Model.Core
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
@@ -61,7 +61,7 @@ namespace App.Model.Core
         [Display(Name = "Email funcionario")]
         public string Email { get; set; }
 
-        //[RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("TipoAprobacionId == 3", ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Observaciones de la tarea")]
         [DataType(DataType.MultilineText)]
         public string Observacion { get; set; }
@@ -146,5 +146,7 @@ namespace App.Model.Core
             }
         }
 
+        [NotMapped]
+        public bool DesactivarDestinoEnRechazo { get; set; } = false;
     }
 }

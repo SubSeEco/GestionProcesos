@@ -401,6 +401,7 @@ namespace App.Core.UseCases
                 //actualiazar tags
                 workflowActual.Proceso.Tags = string.Concat(workflowActual.Proceso.GetTags(), " ", gd.GetTags());
 
+                //ver estado de aprobación de la tarea
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
 
@@ -410,13 +411,18 @@ namespace App.Core.UseCases
                 //determinar siguiente tarea en base a estado y definicion de proceso
                 DefinicionWorkflow definicionWorkflow = null;
 
-                //si permite multiple evaluacion generar la misma tarea
-                if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
-                    definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
-
-                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //en el caso de aprobacion
+                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                {
+                    //asignar siguiente tarea segun flujo
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
 
+                    //si permite multiple evaluacion => sgenerar la misma tarea
+                    if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                        definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
+                }
+
+                //en el caso de rechazo => buscar tarea condigurada
                 else
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
 
@@ -637,10 +643,7 @@ namespace App.Core.UseCases
                                 {
                                     workflowSiguiente.Pl_UndCod = gd.DestinoUnidadCodigo.ToInt();
                                     workflowSiguiente.Pl_UndDes = gd.DestinoUnidadDescripcion;
-                                    //workflowSiguiente.Email = jefatura.Secretaria.Rh_Mail.Trim();
-                                    //workflowSiguiente.NombreFuncionario = jefatura.Secretaria.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = false;
-                                    //workflowSiguiente.To = gd.DestinoUnidadCodigo;
                                 }
                             }
 
@@ -710,10 +713,7 @@ namespace App.Core.UseCases
                                 {
                                     workflowSiguiente.Pl_UndCod = gd.DestinoUnidadCodigo2.ToInt();
                                     workflowSiguiente.Pl_UndDes = gd.DestinoUnidadDescripcion2;
-                                    //workflowSiguiente.Email = jefatura.Secretaria.Rh_Mail.Trim();
-                                    //workflowSiguiente.NombreFuncionario = jefatura.Secretaria.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = false;
-                                    //workflowSiguiente.To = gd.DestinoUnidadCodigo2;
                                 }
                             }
 

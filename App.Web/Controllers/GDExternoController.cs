@@ -361,7 +361,7 @@ namespace App.Web.Controllers
 
             var resumen =
                 _repository
-                .Get<GD>(q => !q.Proceso.Anulada)
+                .GetAll<GD>()
                 .OrderBy(q => q.ProcesoId)
                 .Select(item => new
                 {

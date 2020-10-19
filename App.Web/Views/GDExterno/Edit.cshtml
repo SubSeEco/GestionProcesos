@@ -19,6 +19,7 @@
                     <div class="card-content">
                         <span class="card-title">Información del ingreso externo</span>
                         <h3>ID @Model.ProcesoId</h3>
+
                         <div class="row">
                             <div class="col s12 m6 l4">
                                 @Html.LabelFor(m => Model.FechaIngreso)
@@ -68,7 +69,6 @@
                             </div>
                             <div class="input-field col s12 m12 l12">
                             </div>
-
                             <div class="input-field col s6 m6 l6">
                                 <div class="switch">
                                     <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
@@ -96,6 +96,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                     </div>
                 </div>
@@ -125,11 +126,18 @@
         $('.modal').modal();
         $('select').formSelect();
         $('.tooltipped').tooltip();
-        //$("#divSegundoDestino").hide();
 
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());
         });
+
+        var isChecked = $("#SegundoDestino").is(':checked');
+        if (isChecked) {
+            $("#divSegundoDestino").show();
+        }
+        else {
+            $("#divSegundoDestino").hide();
+        }
     });
 
     //Al cambiar unidad traer funcionarios
@@ -173,7 +181,6 @@
                 });
             });
     });
-
 
     $('#SegundoDestino').change(function () {
         var isChecked = $(this).is(':checked');
