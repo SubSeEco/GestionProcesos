@@ -294,6 +294,7 @@ namespace App.Core.UseCases
                     //es envío a otra unidad?
                     if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
                     {
+                        //Construir lista de destinos
                         List<string> path = new List<string>();
 
                         //yo
@@ -852,8 +853,10 @@ namespace App.Core.UseCases
                     && !q.CodigoEstampado
                     && !q.Signed);
 
-                foreach (var doc in documentos)
-                    doc.File = _file.EstamparCodigoEnDocumento(doc.File, doc.ProcesoId.ToString());
+                //si existen documentos procesarlos
+                if (documentos.Any())
+                    foreach (var doc in documentos)
+                        doc.File = _file.EstamparCodigoEnDocumento(doc.File, doc.ProcesoId.ToString());
 
                 _repository.Save();
             }

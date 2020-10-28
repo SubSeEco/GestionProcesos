@@ -45,7 +45,7 @@
 
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Enviar tarea</span>
+                            <span class="card-title">Enviar proceso</span>
                             @if (Model.RequiereAprobacionAlEnviar)
                             {
                                 <div class="row">
@@ -115,7 +115,7 @@
                 {
                     <div class="card">
                         <div class="card-content">
-                            <span class="card-title">Finalizar tarea</span>
+                            <span class="card-title">Finalizar proceso</span>
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(q => Model.WorkflowId)
                             @Html.HiddenFor(q => Model.TipoAprobacionId)
@@ -127,7 +127,7 @@
                                     @Html.ValidationMessageFor(m => Model.Mensaje, "", new { @class = "red-text" })
                                 </div>
                             </div>
-                            <button class="waves-effect waves-light btn blue" type="submit">Finalizar</button>
+                            <button class="waves-effect waves-light btn red" type="submit">Finalizar</button>
                         </div>
                     </div>
                 }

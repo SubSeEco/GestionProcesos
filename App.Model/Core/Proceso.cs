@@ -116,6 +116,7 @@ namespace App.Model.Core
             tag.Append(string.Join(" ", this.Documentos.Select(q => q.Folio)) + " ");
             tag.Append(string.Join(" ", this.Documentos.Select(q => q.FileName)) + " ");
             tag.Append(string.Join(" ", this.Workflows.Select(q => q.Observacion)));
+            tag.Append(string.Join(" ", this.Workflows.Select(q => q.Mensaje)));
 
             return tag.ToString();
         }
