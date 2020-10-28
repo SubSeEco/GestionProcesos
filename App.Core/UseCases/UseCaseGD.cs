@@ -276,55 +276,67 @@ namespace App.Core.UseCases
                 workflow.DefinicionWorkflow = definicionWorkflow;
                 workflow.ProcesoId = workflowActual.ProcesoId;
                 workflow.Mensaje = obj.Observacion;
-                //workflow.Firmante = obj.Firmante;
                 workflow.TareaPersonal = true;
                 workflow.To = workflowActual.To;
 
-                //es envío a otra unidad?
-                if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
-                {
-                    List<string> path = new List<string>();
-
-                    //yo
-                    if (ejecutor.Funcionario != null)
-                        path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
-
-                    //secretaria mi unidad
-                    if (ejecutor.Secretaria != null)
-                        path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
-
-                    //secretaria unidad destino
-                    if (personaDestino.Secretaria != null)
-                        path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
-
-                    //destino final
-                    path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
-
-                    foreach (var item in path)
-                    {
-                        if (workflowActual.Email.Trim() == item.Trim())
-                            continue;
-
-                        persona = _sigper.GetUserByEmail(item);
-                        if (ejecutor == null || ejecutor.Funcionario == null)
-                            throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
-
-                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-
-                        break;
-                    }
-                }
-
-                // no, es envío dentro de mi unidad
-                else
+                // si el proceso es reservado => enviar directamente al destino
+                if (workflowActual.Proceso.Reservado)
                 {
                     workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
                     workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
                     workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
                     workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                }
+
+                // si el proceso no es reservado => destino normal
+                else
+                {
+                    //es envío a otra unidad?
+                    if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
+                    {
+                        List<string> path = new List<string>();
+
+                        //yo
+                        if (ejecutor.Funcionario != null)
+                            path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
+
+                        //secretaria mi unidad
+                        if (ejecutor.Secretaria != null)
+                            path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
+
+                        //secretaria unidad destino
+                        if (personaDestino.Secretaria != null)
+                            path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
+
+                        //destino final
+                        path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
+
+                        foreach (var item in path)
+                        {
+                            if (workflowActual.Email.Trim() == item.Trim())
+                                continue;
+
+                            persona = _sigper.GetUserByEmail(item);
+                            if (ejecutor == null || ejecutor.Funcionario == null)
+                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
+
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+
+                            break;
+                        }
+                    }
+
+                    // no, es envío dentro de mi unidad
+                    else
+                    {
+                        workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
+                        workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                    }
                 }
 
                 //guardar información
@@ -833,7 +845,13 @@ namespace App.Core.UseCases
         {
             try
             {
-                var documentos = _repository.Get<Documento>(q => q.ProcesoId == procesoid && !q.CodigoEstampado && q.Type.Contains("pdf"));
+                //solo se estampan documentos del proceso, de tipo pdf, no foliados previamente y sin firma electrónica
+                var documentos = _repository.Get<Documento>(q =>
+                    q.ProcesoId == procesoid
+                    && q.Type.Contains("pdf")
+                    && !q.CodigoEstampado
+                    && !q.Signed);
+
                 foreach (var doc in documentos)
                     doc.File = _file.EstamparCodigoEnDocumento(doc.File, doc.ProcesoId.ToString());
 

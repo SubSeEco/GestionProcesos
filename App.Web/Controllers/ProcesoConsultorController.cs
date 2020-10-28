@@ -67,7 +67,6 @@ namespace App.Web.Controllers
             _email = email;
         }
 
-
         public ActionResult Index()
         {
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
