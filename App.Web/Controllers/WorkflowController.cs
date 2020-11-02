@@ -15,6 +15,7 @@ using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using System;
+using App.Model.HorasExtras;
 
 namespace App.Web.Controllers
 {
@@ -411,11 +412,42 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+            {
+                var obj = _repository.GetFirst<HorasExtras>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.HorasExtrasId;
+                    workflow.Entity = App.Util.Enum.Entidad.HorasExtras.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
+            {
+                var obj = _repository.GetFirst<GeneracionResolucion>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.GeneracionResolucionId;
+                    workflow.Entity = App.Util.Enum.Entidad.GeneraResolucion.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
+
+                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
-            if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
+                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
+                    workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
+                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para eliminar");
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Details" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para ver");
@@ -565,6 +597,28 @@ namespace App.Web.Controllers
                     {
                         TempData["Success"] = "Operación terminada correctamente.";
                         return RedirectToAction("Index", "Workflow");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("OK");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                }
+                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
+                {
+                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("OK");
                     }
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }

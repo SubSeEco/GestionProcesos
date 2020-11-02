@@ -5322,6 +5322,11 @@ namespace App.Core.UseCases
                         workflow.GrupoId = definicionWorkflow.GrupoId;
                         workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                         workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+
+                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
+                        if (emails.Any())
+                            workflow.Email = string.Join(";", emails);
                     }
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
