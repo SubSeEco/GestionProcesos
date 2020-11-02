@@ -32,19 +32,6 @@ namespace App.Web.Controllers
 
         public ActionResult Index() {
 
-            //var sec = _sigper.GetSecretariaByUnidad(200410);
-
-            //foreach (var item in _repository.Get<Proceso>())
-            //{
-            //    var unidad = _sigper.GetUserByEmail(item.Email);
-            //    if (unidad != null && unidad.Unidad != null)
-            //    {
-            //        item.Pl_UndCod = unidad.Unidad.Pl_UndCod;
-            //        item.Pl_UndDes = unidad.Unidad.Pl_UndDes;
-            //    }
-            //}
-            //_repository.Save();
-
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {

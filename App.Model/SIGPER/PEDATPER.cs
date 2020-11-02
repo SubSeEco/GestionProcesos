@@ -387,29 +387,29 @@ namespace App.Model.SIGPER
 
         //public short? Rh_TipSisSalCod { get; set; }
 
-        [StringLength(2)]
-        public string Rh_TipTraDisCod { get; set; }
+        //[StringLength(2)]
+        //public string Rh_TipTraDisCod { get; set; }
 
-        [StringLength(2)]
-        public string Rh_ConImpCod { get; set; }
+        //[StringLength(2)]
+        //public string Rh_ConImpCod { get; set; }
 
-        [StringLength(2)]
-        public string Rh_ResTraCod { get; set; }
+        //[StringLength(2)]
+        //public string Rh_ResTraCod { get; set; }
 
-        [StringLength(2)]
-        public string Rh_ConDisCod { get; set; }
+        //[StringLength(2)]
+        //public string Rh_ConDisCod { get; set; }
 
-        [StringLength(1)]
-        public string Rh_TipTraCod { get; set; }
+        //[StringLength(1)]
+        //public string Rh_TipTraCod { get; set; }
 
-        [StringLength(3)]
-        public string UbiFunIns { get; set; }
+        //[StringLength(3)]
+        //public string UbiFunIns { get; set; }
 
         //public short? UbiFunIde { get; set; }
 
         //public DateTime? Rh_FchRes { get; set; }
 
-        [StringLength(7)]
-        public string Rh_NroPriRes { get; set; }
+        //[StringLength(7)]
+        //public string Rh_NroPriRes { get; set; }
     }
 }
