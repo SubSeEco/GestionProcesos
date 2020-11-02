@@ -549,7 +549,7 @@ namespace App.Core.UseCases
                         obj.Terminada = true;
                         obj.Anulada = true;
                         obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
-                        obj.JustificacionAnulacion = obj.JustificacionAnulacion;
+                        obj.JustificacionAnulacion = JustificacionAnulacion;
                         _repository.Save();
 
                         //notificar al dueño del proceso
