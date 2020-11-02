@@ -400,6 +400,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CentroCostoController.cs" />
+    <Compile Include="Controllers\ColaboradorController.cs" />
     <Compile Include="Controllers\CometidoComisionController.cs" />
     <Compile Include="Controllers\ComisionController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
@@ -418,9 +419,11 @@
     <Compile Include="Controllers\GDInternoController.cs" />
     <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
     <Compile Include="Controllers\GeneracionCDPController.cs" />
+    <Compile Include="Controllers\GeneraResolucionController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
@@ -741,6 +744,21 @@
     <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
     <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
     <Content Include="Views\GDExterno\Report.cshtml" />
+    <Content Include="Views\HorasExtras\Create.cshtml" />
+    <Content Include="Views\Colaborador\Create.cshtml" />
+    <Content Include="Views\HorasExtras\Edit.cshtml" />
+    <Content Include="Views\Colaborador\Delete.cshtml" />
+    <Content Include="Views\Colaborador\Edit.cshtml" />
+    <Content Include="Views\HorasExtras\Details.cshtml" />
+    <Content Include="Views\HorasExtras\SignResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionServicio.cshtml" />
+    <Content Include="Views\HorasExtras\GeneraResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\FirmaDocumento.cshtml" />
+    <Content Include="Views\GeneraResolucion\FirmaDocumento.cshtml" />
+    <Content Include="Views\GeneraResolucion\GeneraResolucion.cshtml" />
+    <Content Include="Views\GeneraResolucion\ResolucionServicio.cshtml" />
+    <Content Include="Views\Cometido\Finalizados.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -769,6 +787,7 @@
       <Name>App.Util</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

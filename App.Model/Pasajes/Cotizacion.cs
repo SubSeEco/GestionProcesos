@@ -53,7 +53,28 @@ namespace App.Model.Pasajes
         [Display(Name = "Seleccion Cotización")]
         public bool Seleccion { get; set; } = false;
 
+        /*Nuevos requerimientos 27102020*/
         [Display(Name = "Numero Orden de Compra")]
-        public string NumeroOrdenCompra { get; set; } 
+        public string NumeroOrdenCompra { get; set; }
+
+        [Display(Name = "Clase de Pasaje")]
+        public string ClasePasaje { get; set; }
+
+        [Display(Name = "Forma de Adquisicion del Pasaje")]
+        public string FormaAdquisicion { get; set; }
+
+        [Display(Name = "Fecha de Adquisicion")]
+        [DisplayFormat(DataFormatString = "{0:G}", ApplyFormatInEditMode = true)]
+        public DateTime FechaAdquisicion { get; set; } = DateTime.Now;
+
+        [Display(Name = "Fecha del Vuelo")]
+        [DisplayFormat(DataFormatString = "{0:G}", ApplyFormatInEditMode = true)]
+        public DateTime FechaVuelo { get; set; } = DateTime.Now;
+
+        [Display(Name = "Monto Viatico")]
+        //[DataType(DataType.Currency)]
+        public int MontoViatico { get; set; } = 0;
+
+
     }
 }

@@ -445,7 +445,7 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().Where(q => q.Activo == true).OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
-            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(202001), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(201110), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers().Where(c =>c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsersForCometido().Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
@@ -1951,6 +1951,7 @@ namespace App.Web.Controllers
         public FileResult Caigg()
         {
             var cometido = _repository.GetAll<Cometido>();
+            //var cometido = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == 130).ToList();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CAIGG.xlsx");
             var fileInfo = new FileInfo(file);
@@ -1962,14 +1963,26 @@ namespace App.Web.Controllers
             foreach (var com in cometido.OrderByDescending(r => r.CometidoId).ToList())
             {
                 var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == com.ProcesoId);
-                var pasaje = _repository.Get<Pasaje>().Where(p => p.ProcesoId == com.ProcesoId).ToList();
-                var cotizacion = _repository.GetAll<Cotizacion>().Where(p =>p.PasajeId == pasaje.FirstOrDefault().PasajeId);
+                var pasaje = _repository.Get<Pasaje>().Where(p => p.ProcesoId == com.ProcesoId).ToList();               
 
                 if(pasaje.Count > 0)
                 {
+                    /*se extraen los datos asociados al pasaje*/
                     for (var pas = 0; pas < pasaje.Count + 1 ; pas++)//foreach (var pas in pasaje)
                     {
                         fila++;
+
+                        /*se extraen los datos asociados a las cotizaciones*/
+                        var cotizacion = _repository.GetAll<Cotizacion>().Where(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
+                        if (cotizacion.Count > 0)
+                        {
+                            worksheet.Cells[fila, 18].Value = cotizacion.FirstOrDefault().FechaVuelo.ToShortDateString(); /*fecha del vuelo*/
+                            worksheet.Cells[fila, 19].Value = cotizacion.FirstOrDefault().NumeroOrdenCompra; /*Id orden de compra*/
+                            worksheet.Cells[fila, 12].Value = cotizacion.FirstOrDefault().ClasePasaje; /*clase de pasaje*/
+                            worksheet.Cells[fila, 15].Value = cotizacion.FirstOrDefault().FormaAdquisicion; /*forma de adquision del pasaje*/
+                            worksheet.Cells[fila, 17].Value = cotizacion.FirstOrDefault().FechaAdquisicion.ToShortDateString();/*fecha adquisicion*/
+                        }
+                        
                         worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                         worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
                         worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
@@ -1985,9 +1998,7 @@ namespace App.Web.Controllers
                             {
                                 if ((pas % 2) == 0)
                                 {
-                                    worksheet.Cells[fila, 8].Value = p.RegionDescripcion.Trim(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";
-                                    worksheet.Cells[fila, 18].Value = "N/A"; /*fecha del vuelo*/
-                                    worksheet.Cells[fila, 19].Value = "N/A"; /*Id orden de compra*/
+                                    worksheet.Cells[fila, 8].Value = p.RegionDescripcion.Trim(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";                                    
                                     worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";/*fecha ida*/
                                     worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();// com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A"; /*fecha vuelta*/
                                     worksheet.Cells[fila, 25].Value = ((com.FechaSolicitud - p.FechaIda).Days + 1).ToString(); /*dias de antelacion*/
@@ -1995,8 +2006,6 @@ namespace App.Web.Controllers
                                 else
                                 {
                                     worksheet.Cells[fila, 8].Value = p.OrigenRegionDescripcion.Trim();
-                                    worksheet.Cells[fila, 18].Value = "N/A"; /*fecha del vuelo*/
-                                    worksheet.Cells[fila, 19].Value = "N/A"; /*Id orden de compra*/
                                     worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString();/*fecha ida*/
                                     worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();/*fecha vuelta*/
                                     worksheet.Cells[fila, 25].Value = "0"; /*dias de antelacion*/
@@ -2006,11 +2015,10 @@ namespace App.Web.Controllers
                         
                         worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                         worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
-                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
-                        worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
+                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";                        
                         worksheet.Cells[fila, 13].Value = "N/A";
                         worksheet.Cells[fila, 14].Value = "N/A";
-                        worksheet.Cells[fila, 15].Value = "N/A"; /*forma de adquision del pasaje*/
+                        
                         if (pasaje.Count() > 0)
                         {
                             worksheet.Cells[fila, 16].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
@@ -2020,7 +2028,7 @@ namespace App.Web.Controllers
                         else
                         {
                             worksheet.Cells[fila, 16].Value = "N/A";
-                            worksheet.Cells[fila, 17].Value = "N/A";/*fecha adquisicion*/
+                            
                             worksheet.Cells[fila, 20].Value = "0";
                         }                        
 
@@ -2055,15 +2063,15 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                     worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
                     worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
-                    worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
+                    //worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
                     worksheet.Cells[fila, 13].Value = "N/A";
                     worksheet.Cells[fila, 14].Value = "N/A";
 
                     worksheet.Cells[fila, 15].Value = "N/A";
                     worksheet.Cells[fila, 16].Value = "N/A";
-                    worksheet.Cells[fila, 17].Value = "N/A";/*fecha adquisicion*/
-                    worksheet.Cells[fila, 18].Value = "N/A";/*fecha del vuelo*/
-                    worksheet.Cells[fila, 19].Value = "N/A";/*Id orden de compra*/
+                    //worksheet.Cells[fila, 17].Value = "N/A";/*fecha adquisicion*/
+                    //worksheet.Cells[fila, 18].Value = "N/A";/*fecha del vuelo*/
+                    //worksheet.Cells[fila, 19].Value = "N/A";/*Id orden de compra*/
 
                     worksheet.Cells[fila, 20].Value = "0";
                     worksheet.Cells[fila, 21].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
@@ -2143,21 +2151,6 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
             }
-
-            //foreach (var res in model.Result)//.Where(p => p.DefinicionProcesoId == 13))
-            //{
-            //    var work = _repository.Get<Workflow>(c => c.ProcesoId == model.Result.FirstOrDefault().ProcesoId.Value).ToList();
-            //    if(work != null)
-            //    {
-            //        foreach(var w in work)
-            //        {
-            //            res.Workflow.Pl_UndDes = _sigper.GetUserByEmail(w.Email).Unidad.Pl_UndDes.Trim();
-            //        }
-            //    }
-            //}
-
-            
-
 
             ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             return View(model);
@@ -2522,6 +2515,25 @@ namespace App.Web.Controllers
 
 
             return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoFinanzas_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        public ActionResult Finalizados()
+        {
+            var predicate = PredicateBuilder.True<Cometido>();
+            var model = new DTOFilterCometido();
+
+            if (ModelState.IsValid)
+            {
+                predicate = predicate.And(q => q.Proceso.Terminada == true && q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+
+                var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+                if (CometidoId.Any())
+                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+
+                model.Result = _repository.Get(predicate);
+            }
+            
+            return View(model);
         }
     }
 }

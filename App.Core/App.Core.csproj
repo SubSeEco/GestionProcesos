@@ -60,6 +60,8 @@
     <Compile Include="UseCases\UseCaseCometidoComision.cs" />
     <Compile Include="UseCases\UseCaseDocumento.cs" />
     <Compile Include="UseCases\UseCaseGD.cs" />
+    <Compile Include="UseCases\UseCaseGeneraResolucion.cs" />
+    <Compile Include="UseCases\UseCaseHorasExtras.cs" />
     <Compile Include="UseCases\UseCaseProgramacionHorasExtraordinarias.cs" />
     <Compile Include="UseCases\UseCaseInformeHSA.cs" />
     <Compile Include="UseCases\UseCaseMemorandum.cs" />

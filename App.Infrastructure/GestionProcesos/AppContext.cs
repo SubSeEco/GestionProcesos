@@ -11,6 +11,7 @@ using App.Model.Memorandum;
 using App.Model.DTO;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
+using App.Model.HorasExtras;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -86,6 +87,8 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<GD> GD { get; set; }
         public virtual DbSet<GDOrigen> GDOrigen { get; set; }
         public virtual DbSet<ProgramacionHorasExtraordinarias> ProgramacionHorasExtraordinarias { get; set; }
+        public virtual DbSet<HorasExtras> HorasExtras { get; set; }
+        public virtual DbSet<GeneracionResolucion> GeneracionResolucion { get; set; }
 
         //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
         //public virtual DbSet<CuentaRed> Indice { get; set; }

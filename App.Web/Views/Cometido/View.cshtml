@@ -264,9 +264,17 @@
                         </div>
                     </div>
                     <div class="section"></div>
-                    @if (Model.Proceso.Anulada != true || Model.Proceso.Terminada != true)
+                    @if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.Terminada != true)
                     {
                         <a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>
+                    }
+                    else if (Model.Proceso.Terminada == true && Model.Proceso.EstadoProcesoId == 3)
+                    {
+                        @*<a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn blue-gradient-button">Adjuntar Archivo</a>*@
+                        <div class="row">
+                            <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                            @Html.Raw("<span>Adjuntar Archivo</span>")
+                        </div>
                     }
                 </div>
             </div>

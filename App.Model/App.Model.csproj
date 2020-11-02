@@ -123,6 +123,9 @@
     <Compile Include="GestionDocumental\GDOrigen.cs" />
     <Compile Include="GestionDocumental\GD.cs" />
     <Compile Include="Helper\Validation.cs" />
+    <Compile Include="HorasExtras\Colaborador.cs" />
+    <Compile Include="HorasExtras\GeneracionResolucion.cs" />
+    <Compile Include="HorasExtras\HorasExtras.cs" />
     <Compile Include="ProgramacionHorasExtraordinarias\ProgramacionHorasExtraordinarias.cs" />
     <Compile Include="InformeHSA\InformeHSA.cs" />
     <Compile Include="Memorandum\Memorandum.cs" />
