@@ -32,6 +32,8 @@ namespace App.Web.Controllers
 
         public ActionResult Index() {
 
+            //var sec = _sigper.GetSecretariaByUnidad(200410);
+
             //foreach (var item in _repository.Get<Proceso>())
             //{
             //    var unidad = _sigper.GetUserByEmail(item.Email);
