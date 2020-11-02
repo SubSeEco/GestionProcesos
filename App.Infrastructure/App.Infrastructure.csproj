@@ -292,6 +292,10 @@
       <Project>{3325f871-6960-4787-b291-a1408a337c8d}</Project>
       <Name>App.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\App.Model\App.Model.csproj">
+      <Project>{f007fee7-ee3c-4a51-a77a-2260956b7477}</Project>
+      <Name>App.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\App.Util\App.Util.csproj">
       <Project>{ab0a6e1a-d5e3-4957-b4bb-9fb4f750f66e}</Project>
       <Name>App.Util</Name>
