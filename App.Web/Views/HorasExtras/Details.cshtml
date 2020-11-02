@@ -1,0 +1,163 @@
+﻿@model App.Model.HorasExtras.HorasExtras
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+@Html.HiddenFor(q => q.HorasExtrasId)
+<div class="container">
+    <div class="row">
+        <div class="col s12 m10 l8">
+            <div class="card">
+                <div class="card-content">
+                    @Html.Partial("_Message")   
+                    <div class="row">
+                        <div class="input-field col s12 m10 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.HorasExtrasId)
+                            </strong>
+                            @Html.DisplayFor(m => Model.HorasExtrasId)
+
+                        </div>
+                    </div>
+                    <div id="jQuery_accordion">
+                        <h3><span style="font-weight: bold">Datos del Ingreso: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m5 l5">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                                </strong>
+                                @Html.DisplayFor(m => Model.FechaSolicitud)
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Annio)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Annio)
+                            </div>
+                            <div class="input-field col s12 m5 l5">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Mes)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Mes)
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Nombre)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Nombre)
+                            </div>
+                            <div class="input-field col s12 m5 l5">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.NombreJefatura)
+                                </strong>
+                                @Html.DisplayFor(m => Model.NombreJefatura)
+                            </div>
+                            <div class="input-field col s12 m5 l5">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Unidad)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Unidad)
+                            </div>
+                        </div>
+
+                        <h3><span style="font-weight: bold">Datos de las horas solicitadas: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                <span class="card-title">Solicitudes</span>
+                            </div>
+                            @if (Model.Colaborador.Count > 0)
+                            {
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
+                                </th>
+                                <th></th>
+                            </tr>
+                            @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                            }
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });        
+
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
+
+    });
+
+    $(function () {
+        $("#jQuery_accordion").accordion({
+            collapsible: true, heightStyle: true
+        });
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

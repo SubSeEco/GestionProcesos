@@ -396,7 +396,10 @@ else
                                                             @Html.HiddenFor(m => CotizacionDocumento.ToArray()[i].Selected)
                                                             <span></span>
                                                         </label>
-                                                        <a href='@Url.Action("Edit", "Cotizacion", new { id = CotizacionDocumento.ToArray()[i].CotizacionId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        @if (CotizacionDocumento.ToArray()[i].Selected == true)
+                                                        {
+                                                            <a href='@Url.Action("Edit", "Cotizacion", new { id = CotizacionDocumento.ToArray()[i].CotizacionId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        }
                                                     </td>
                                                 </tr>
                                             }

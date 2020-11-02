@@ -282,11 +282,11 @@
                                 @Html.LabelFor(m => Model.UnidadDescripcionFunc3)
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc3, "", new { @class = "red-text" })
                             </div>
-                            <div class="input-field col s12 m10 l8">
+                            @*<div class="input-field col s12 m10 l8">
                                 @Html.DropDownListFor(m => Model.NombreIdFunc3, null, "Seleccione...")
                                 @Html.LabelFor(m => Model.NombreIdFunc3)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc3, "", new { @class = "red-text" })
-                            </div>
+                            </div>*@
                             <div class="input-field col s12 m10 l3">
                                 @Html.LabelFor(m => Model.HorasFunc3)
                                 @Html.TextBoxFor(m => Model.HorasFunc3)
@@ -315,7 +315,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc4, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc4, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc4, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc4)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc4, "", new { @class = "red-text" })
                             </div>
@@ -347,7 +347,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc5, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc5, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc5, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc5)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc5, "", new { @class = "red-text" })
                             </div>
@@ -379,7 +379,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc6, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc6, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc6, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc6)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc6, "", new { @class = "red-text" })
                             </div>
@@ -411,7 +411,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc7, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc7, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc7, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc7)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc7, "", new { @class = "red-text" })
                             </div>
@@ -443,7 +443,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc8, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc8, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc8, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc8)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc8, "", new { @class = "red-text" })
                             </div>
@@ -475,7 +475,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc9, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc9, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc9, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc9)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc9, "", new { @class = "red-text" })
                             </div>
@@ -507,7 +507,7 @@
                                 @Html.ValidationMessageFor(m => Model.UnidadDescripcionFunc10, "", new { @class = "red-text" })
                             </div>
                             <div class="input-field col s12 m10 l8">
-                                @Html.DropDownListFor(m => Model.NombreIdFunc10, null, "Seleccione...")
+                                @*@Html.DropDownListFor(m => Model.NombreIdFunc10, null, "Seleccione...")*@
                                 @Html.LabelFor(m => Model.NombreIdFunc10)
                                 @Html.ValidationMessageFor(m => Model.NombreIdFunc10, "", new { @class = "red-text" })
                             </div>
@@ -543,6 +543,8 @@
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
+
+        @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
     </div>
 </div>
 

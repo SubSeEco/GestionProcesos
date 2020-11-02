@@ -1405,14 +1405,17 @@ namespace App.Core.UseCases
 
                     /*se valida que los rangos de fecha no se topen con otros destinos*/
                     //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
-                    foreach (var otrosDestinos in _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true))
+                    var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year);
+                    foreach (var otrosDestinos in other)
                     {
                         foreach (var destinoCometido in listaDestinosCometido)
                         {
-                            if (otrosDestinos.FechaInicio == destinoCometido.FechaInicio && otrosDestinos.CometidoId != destinoCometido.CometidoId)
+                            if (otrosDestinos.FechaInicio.Date == destinoCometido.FechaInicio.Date && otrosDestinos.CometidoId != destinoCometido.CometidoId)
                             {
                                 //response.Errors.Add("El rango de fechas señalados esta en conflicto con los destinos del cometido " + otrosDestinos.CometidoId + "(" +  otrosDestinos.FechaInicio  + ")");
                                 response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
+                                /*se elimina el destino que topa con otro destino*/
+                                DestinosDelete(destinoCometido.DestinoId);
                             }
                         }
                     }
@@ -2126,13 +2129,14 @@ namespace App.Core.UseCases
                     }
                     if (Totaldias100Mes + obj.Dias100 > 10)
                     {
+                        response.Warnings.Add("Se ha excedido en: " + (Totaldias100Mes + obj.Dias100.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
+
                         obj.Dias50 = obj.Dias100;
                         obj.Dias100 = 0;
                         obj.TotalViatico = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
                         obj.Total = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
                         obj.Dias50Monto = obj.Dias100Monto / 2;
-
-                        response.Warnings.Add("Se ha excedido en: " + (Totaldias100Mes + obj.Dias100.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
+                        obj.Dias100 = 0;
                     }
                     if (Totaldias100Ano + obj.Dias100 > 90)
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
@@ -2162,13 +2166,14 @@ namespace App.Core.UseCases
                     }
                     if (Totaldias100MesAprobados + obj.Dias100Aprobados > 10)
                     {
-                        obj.Dias50 = obj.Dias100Aprobados;
+                        response.Warnings.Add("Se ha excedido en: " + ((Totaldias100MesAprobados + obj.Dias100Aprobados.Value) - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
+
+                        obj.Dias50Aprobados = obj.Dias100Aprobados;
                         obj.Dias100Aprobados = 0;
                         obj.TotalViatico = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
                         obj.Total = (obj.Dias100Monto / 2) + obj.Dias60Monto + obj.Dias40Monto;
                         obj.Dias50Monto = obj.Dias100Monto / 2;
-
-                        response.Warnings.Add("Se ha excedido en: " + (Totaldias100MesAprobados + obj.Dias100Aprobados.Value - 10).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro del Mes, por lo tanto se pagaran al 50%");
+                        obj.Dias100Monto = 0;
                     }
                     if (Totaldias100AnoAprobados + obj.Dias100 > 90)
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100AnoAprobados + obj.Dias100Aprobados - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
@@ -4618,10 +4623,10 @@ namespace App.Core.UseCases
             {
                 if (obj == null)
                     throw new Exception("Debe especificar un workflow.");
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == obj.WorkflowId) ?? null;
+                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == obj.WorkflowId) ?? null; //var workflowActual = _repository.Get<Workflow>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();                
                 if (workflowActual == null)
                     throw new Exception("No se encontró el workflow.");
-                var definicionworkflowlist = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == workflowActual.Proceso.DefinicionProcesoId).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId) ?? null;
+                var definicionworkflowlist = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == 13 /*workflowActual.Proceso.DefinicionProcesoId*/).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId) ?? null;
                 if (!definicionworkflowlist.Any())
                     throw new Exception("No se encontró la definición de tarea del proceso asociado al workflow.");
                 if (string.IsNullOrWhiteSpace(obj.Email))
@@ -4629,15 +4634,15 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0))
                     workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
                 /*Si la tarea es rechazada se valida que se ingrese una observacion - en el proceso cometido*/
-                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                //{
-                //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
-                //}
+                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                {
+                    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
+                }
 
-                //generar tags de proceso
+                /*generar tags de proceso*/
                 workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
 
-                //generar tags de negocio
+                /*generar tags de negocio*/
                 var comet = _repository.GetFirst<Cometido>(q => q.WorkflowId == workflowActual.WorkflowId);
                 if (comet != null)
                     workflowActual.Proceso.Tags += comet.GetTags();
@@ -4707,9 +4712,12 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
                     {
-                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
-                        if (doc == false)
-                            throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        {
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
+                            if (doc == false)
+                                throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
+                        }                            
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
                     {
@@ -4723,27 +4731,61 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 17)
                     {
-                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
-                        if (doc == false)
-                            throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        {
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
+                            if (doc == false)
+                                throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
+                        }                            
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
                     {
-                        var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
-                        if (doc == false)
-                            throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        {
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
+                            if (doc == false)
+                                throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
+                        }                            
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
                     {
-                        var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
-                        if(doc.Count() > 0 )
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                         {
-                            foreach(var d in doc)
+                            var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
+                            if (doc.Count() > 0)
                             {
-                                if(d.Signed != true)
-                                    throw new Exception("Los documento cargados desde contabilidad y tesorería, deben estar firmado electronicamente por el encargado de finanzas");
+                                foreach (var d in doc)
+                                {
+                                    if (d.Signed != true)
+                                        throw new Exception("Los documento cargados desde contabilidad y tesorería, deben estar firmado electronicamente por el encargado de finanzas");
+                                }
                             }
-                        } 
+                        }                         
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
+                    {
+                        if (workflowActual.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                        {
+                            //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
+                            bool cotiza = false;
+                            var Pasaje = new Pasaje();
+                            Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                            if (Pasaje != null)
+                            {
+                                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
+                                if (cotizacion != null)
+                                {
+                                    foreach(var d in cotizacion.CotizacionDocumento)
+                                    {
+                                        if (d.Selected == true)
+                                            cotiza = true;
+                                    }
+                                }
+                            }
+
+                            if(cotiza == false)
+                                throw new Exception("Se debe seleccionar una cotizacion para los pasajes solicitados.");
+                        }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
                     {
@@ -4758,7 +4800,7 @@ namespace App.Core.UseCases
                         throw new Exception("Debe adjuntar documentos.");
                 }
 
-                //terminar workflow actual
+                /*terminar workflow actual*/
                 var personaEjecutor = _sigper.GetUserByEmail(userLoged);
 
                 workflowActual.FechaTermino = DateTime.Now;
@@ -5044,6 +5086,8 @@ namespace App.Core.UseCases
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
+                    /*se cierra y cambia estado del proceso.*/
+                    workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
                     workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
@@ -5787,7 +5831,7 @@ namespace App.Core.UseCases
                                     "Tiene el cometido N°:" + cometido.CometidoId.ToString() + " " + "CON OBSERVACIONES para aprobación",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
-                                }                                
+                                }
 
                                 break;
                             case 17: /*Encargado(a) de Contabilidad revisa devengo*/

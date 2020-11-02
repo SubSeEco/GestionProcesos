@@ -219,7 +219,7 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                1. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>viático de acuerdo al siguiente esquema:
+                                Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>viático de acuerdo al siguiente esquema:
                                 <br />
                             </p>
                         </li>
@@ -288,7 +288,7 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                1. Que, la presente Resolución no
+                                Que, la presente Resolución no
                                 @if (Model.Tiempo == "Pasado")
                                 {
                                     @Html.Raw("<span>irrogó</span>")
@@ -305,7 +305,7 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                2. Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
+                                Que, esta Subsecretaría pagará a <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;los gastos de pasajes aéreos.
                             </p>
                         </li>
                     }
@@ -314,7 +314,7 @@
                     {
                         <li>
                             <p>
-                                2. Que, el funcionario
+                                Que, el funcionario
 
                                 @if (Model.Tiempo == "Pasado")
                                 {
@@ -332,17 +332,17 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                4. Que, por razones impostergables de buen servicio, se dio inicio al presente cometido funcionario, en la fecha antes señalada, sin esperar la total tramitación de esta resolución.
+                               Que, por razones impostergables de buen servicio, se dio inicio al presente cometido funcionario, en la fecha antes señalada, sin esperar la total tramitación de esta resolución.
                             </p>
                         </li>
                     }
                     <li>
                         <p align="justify" style="margin-right:30px">
-                            3. Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
-                            al ítem o los ítems y asignaciones correspondientes al subtítulo
-                            @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
+                            Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
+                            al ítem o los ítems y asignaciones correspondientes al subtítulo 22
+                            @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                             @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
-                            @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                            @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
                             ,de acuerdo a su naturaleza.
                         </p>
                     </li>

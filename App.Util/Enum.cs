@@ -20,6 +20,9 @@
             FirmaDocumento,
             Memorandum,
             ProgramacionHorasExtraordinarias,
+            HorasExtras,
+            GeneraResolucion,
+
         }
 
         public enum Grupo
@@ -159,6 +162,8 @@
             SolicitudCometido = 10,
             InformeHSA = 1,
             ProgramacionHorasExtraordinarias = 16,
+            HorasExtras = 19,
+            GeneraResolucionHE = 20,
         }
 
      
