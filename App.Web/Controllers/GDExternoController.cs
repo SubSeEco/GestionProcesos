@@ -368,20 +368,20 @@ namespace App.Web.Controllers
                     item.ProcesoId,
                     item.Proceso.DefinicionProceso.Nombre,
                     item.Proceso.Email,
-                    item.Proceso.Pl_UndDes,
+                    Pl_UndDes = item.Proceso.Reservado ? string.Empty : item.Proceso.Pl_UndDes,
                     item.Proceso.EstadoProceso.Descripcion,
                     item.Proceso.FechaCreacion,
                     item.Proceso.FechaTermino,
                     item.Fecha,
                     item.FechaIngreso,
-                    item.Materia,
-                    item.Referencia,
-                    item.Observacion,
-                    item.NumeroExterno,
-                    Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
-                    item.DestinoFuncionarioNombre,
-                    item.DestinoUnidadDescripcion,
-                    Reservado = item.Proceso.Reservado ? "RESERVADO" : string.Empty
+                    Materia  = item.Proceso.Reservado ? string.Empty : item.Materia,
+                    Referencia = item.Proceso.Reservado ? string.Empty : item.Referencia,
+                    Observacion = item.Proceso.Reservado ? string.Empty : item.Observacion,
+                    NumeroExterno = item.Proceso.Reservado ? string.Empty : item.NumeroExterno,
+                    Origen = item.GDOrigen != null && !item.Proceso.Reservado ? item.GDOrigen.Descripcion : string.Empty,
+                    DestinoFuncionarioNombre = item.Proceso.Reservado ? string.Empty : item.DestinoFuncionarioNombre,
+                    DestinoUnidadDescripcion = item.Proceso.Reservado ? string.Empty : item.DestinoUnidadDescripcion,
+                    Reservado = item.Proceso.Reservado ? string.Empty : string.Empty
                 }).ToList();
 
             var idsProcesos =

@@ -348,7 +348,6 @@ namespace App.Core.UseCases
                 proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
                 proceso.Reservado = obj.Reservado;
-                proceso.Tags = obj.GetTags();
                 if (persona.Unidad != null)
                 {
                     proceso.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -427,6 +426,9 @@ namespace App.Core.UseCases
                 //guardar información
                 proceso.Workflows.Add(workflow);
                 _repository.Create(proceso);
+                _repository.Save();
+
+                proceso.Tags = proceso.GetTags();
                 _repository.Save();
 
                 //notificar al dueño del proceso

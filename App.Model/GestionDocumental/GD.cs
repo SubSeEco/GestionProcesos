@@ -97,16 +97,20 @@ namespace App.Model.GestionDocumental
         {
             StringBuilder tag = new StringBuilder();
 
-            if (!string.IsNullOrWhiteSpace(Materia))
-                tag.Append(Materia + " ");
-            if (!string.IsNullOrWhiteSpace(Referencia))
-                tag.Append(Referencia + " ");
-            if (!string.IsNullOrWhiteSpace(Observacion))
-                tag.Append(Observacion + " ");
-            if (GDOrigen != null)
-                tag.Append(GDOrigen.Descripcion + " ");
-            if (!string.IsNullOrWhiteSpace(NumeroExterno))
-                tag.Append(NumeroExterno);
+            //solo generar tags de procesos no reservados
+            if (this.Proceso != null && !this.Proceso.Reservado)
+            {
+                if (!string.IsNullOrWhiteSpace(Materia))
+                    tag.Append(Materia + " ");
+                if (!string.IsNullOrWhiteSpace(Referencia))
+                    tag.Append(Referencia + " ");
+                if (!string.IsNullOrWhiteSpace(Observacion))
+                    tag.Append(Observacion + " ");
+                if (GDOrigen != null)
+                    tag.Append(GDOrigen.Descripcion + " ");
+                if (!string.IsNullOrWhiteSpace(NumeroExterno))
+                    tag.Append(NumeroExterno);
+            }
 
             return tag.ToString();
         }
