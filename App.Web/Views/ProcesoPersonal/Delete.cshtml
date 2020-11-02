@@ -1,4 +1,4 @@
-﻿@model App.Model.Core.Proceso
+﻿@model App.Web.Controllers.ProcesoPersonalController.DTODelete
 
 @{
     ViewBag.Title = "Anular proceso";
@@ -17,9 +17,18 @@
 
     @using (Html.BeginForm())
     {
-        @*<p>¿Confirma la anulación del proceso?</p>*@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(q => Model.ProcesoId)
+
+        <div class="row">
+            <div class="input-field col s12 m12 l12">
+                @Html.TextAreaFor(m => Model.JustificacionAnulacion, new { @class = "materialize-textarea" })
+                @Html.LabelFor(m => Model.JustificacionAnulacion)
+                @Html.ValidationMessageFor(m => Model.JustificacionAnulacion, "", new { @class = "red-text" })
+
+            </div>
+        </div>
+
         <button class="waves-effect waves-light btn red" type="submit">Confirmar anulación</button>
     }
 </div>
@@ -27,12 +36,3 @@
 <div class="fixed-action-btn">
     <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
 </div>
-
-<script>
-    $(function () {
-        $('.stepper').activateStepper();
-        $('.collapsible').collapsible();
-    });
-</script>
-
-

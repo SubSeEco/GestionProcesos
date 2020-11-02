@@ -13,6 +13,23 @@ namespace App.Web.Controllers
     [Authorize]
     public class ProcesoPersonalController : Controller
     {
+        public class DTODelete
+        {
+            public DTODelete()
+            {
+                    
+            }
+
+            public int ProcesoId { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Justificación")]
+            [DataType(DataType.MultilineText)]
+            public string JustificacionAnulacion { get; set; }
+        }
+
+
         public class DTOFilter
         {
             public DTOFilter()
@@ -115,15 +132,15 @@ namespace App.Web.Controllers
         public ActionResult Delete(int id)
         {
             var model = _repository.GetById<Proceso>(id);
-            return View(model);
+            return View(new DTODelete {ProcesoId = model.ProcesoId });
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(DTODelete model)
         {
             var _useCaseInteractor = new UseCaseCore(_repository, _email);
-            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
+            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(model.ProcesoId, model.JustificacionAnulacion);
 
             if (_UseCaseResponseMessage.IsValid)
                 TempData["Success"] = "Operación terminada correctamente.";

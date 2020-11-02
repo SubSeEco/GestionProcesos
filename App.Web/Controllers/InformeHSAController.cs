@@ -341,29 +341,33 @@ namespace App.Web.Controllers
 
         public FileResult Report()
         {
-            var result = _repository.Get<InformeHSA>(q => !q.Proceso.Anulada).Select(hsa => new {
-                hsa.ProcesoId,
-                Terminada = hsa.Proceso.Terminada ? "Terminado" : "Pendiente",
-                hsa.FechaSolicitud,
-                hsa.FechaDesde,
-                hsa.FechaHasta,
-                hsa.RUT,
-                hsa.Nombre,
-                hsa.Unidad,
-                hsa.NombreJefatura,
-                hsa.ConJornada,
-                hsa.Funciones,
-                hsa.Actividades,
-                hsa.Observaciones,
-                hsa.FechaBoleta,
-                hsa.NumeroBoleta,
-            });
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                var result = context.InformeHSA.Where(q => !q.Proceso.Anulada).Select(hsa => new
+                {
+                    hsa.ProcesoId,
+                    hsa.Proceso.EstadoProceso.Descripcion,
+                    hsa.FechaSolicitud,
+                    hsa.FechaDesde,
+                    hsa.FechaHasta,
+                    hsa.RUT,
+                    hsa.Nombre,
+                    hsa.Unidad,
+                    hsa.NombreJefatura,
+                    ConJornada = hsa.ConJornada ? "SI" : "NO",
+                    hsa.Funciones,
+                    hsa.Actividades,
+                    hsa.Observaciones,
+                    hsa.FechaBoleta,
+                    hsa.NumeroBoleta,
+                });
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
-            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
+                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
 
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            }
         }
     }
 }

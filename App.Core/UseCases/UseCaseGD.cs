@@ -276,55 +276,68 @@ namespace App.Core.UseCases
                 workflow.DefinicionWorkflow = definicionWorkflow;
                 workflow.ProcesoId = workflowActual.ProcesoId;
                 workflow.Mensaje = obj.Observacion;
-                //workflow.Firmante = obj.Firmante;
                 workflow.TareaPersonal = true;
                 workflow.To = workflowActual.To;
 
-                //es envío a otra unidad?
-                if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
-                {
-                    List<string> path = new List<string>();
-
-                    //yo
-                    if (ejecutor.Funcionario != null)
-                        path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
-
-                    //secretaria mi unidad
-                    if (ejecutor.Secretaria != null)
-                        path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
-
-                    //secretaria unidad destino
-                    if (personaDestino.Secretaria != null)
-                        path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
-
-                    //destino final
-                    path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
-
-                    foreach (var item in path)
-                    {
-                        if (workflowActual.Email.Trim() == item.Trim())
-                            continue;
-
-                        persona = _sigper.GetUserByEmail(item);
-                        if (ejecutor == null || ejecutor.Funcionario == null)
-                            throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
-
-                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-
-                        break;
-                    }
-                }
-
-                // no, es envío dentro de mi unidad
-                else
+                // si el proceso es reservado => enviar directamente al destino
+                if (workflowActual.Proceso.Reservado)
                 {
                     workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
                     workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
                     workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
                     workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                }
+
+                // si el proceso no es reservado => destino normal
+                else
+                {
+                    //es envío a otra unidad?
+                    if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
+                    {
+                        //Construir lista de destinos
+                        List<string> path = new List<string>();
+
+                        //yo
+                        if (ejecutor.Funcionario != null)
+                            path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
+
+                        //secretaria mi unidad
+                        if (ejecutor.Secretaria != null)
+                            path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
+
+                        //secretaria unidad destino
+                        if (personaDestino.Secretaria != null)
+                            path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
+
+                        //destino final
+                        path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
+
+                        foreach (var item in path)
+                        {
+                            if (workflowActual.Email.Trim() == item.Trim())
+                                continue;
+
+                            persona = _sigper.GetUserByEmail(item);
+                            if (ejecutor == null || ejecutor.Funcionario == null)
+                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
+
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+
+                            break;
+                        }
+                    }
+
+                    // no, es envío dentro de mi unidad
+                    else
+                    {
+                        workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
+                        workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                    }
                 }
 
                 //guardar información
@@ -401,6 +414,7 @@ namespace App.Core.UseCases
                 //actualiazar tags
                 workflowActual.Proceso.Tags = string.Concat(workflowActual.Proceso.GetTags(), " ", gd.GetTags());
 
+                //ver estado de aprobación de la tarea
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
 
@@ -410,13 +424,18 @@ namespace App.Core.UseCases
                 //determinar siguiente tarea en base a estado y definicion de proceso
                 DefinicionWorkflow definicionWorkflow = null;
 
-                //si permite multiple evaluacion generar la misma tarea
-                if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
-                    definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
-
-                else if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //en el caso de aprobacion
+                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                {
+                    //asignar siguiente tarea segun flujo
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
 
+                    //si permite multiple evaluacion => sgenerar la misma tarea
+                    if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                        definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
+                }
+
+                //en el caso de rechazo => buscar tarea condigurada
                 else
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
 
@@ -637,10 +656,7 @@ namespace App.Core.UseCases
                                 {
                                     workflowSiguiente.Pl_UndCod = gd.DestinoUnidadCodigo.ToInt();
                                     workflowSiguiente.Pl_UndDes = gd.DestinoUnidadDescripcion;
-                                    //workflowSiguiente.Email = jefatura.Secretaria.Rh_Mail.Trim();
-                                    //workflowSiguiente.NombreFuncionario = jefatura.Secretaria.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = false;
-                                    //workflowSiguiente.To = gd.DestinoUnidadCodigo;
                                 }
                             }
 
@@ -710,10 +726,7 @@ namespace App.Core.UseCases
                                 {
                                     workflowSiguiente.Pl_UndCod = gd.DestinoUnidadCodigo2.ToInt();
                                     workflowSiguiente.Pl_UndDes = gd.DestinoUnidadDescripcion2;
-                                    //workflowSiguiente.Email = jefatura.Secretaria.Rh_Mail.Trim();
-                                    //workflowSiguiente.NombreFuncionario = jefatura.Secretaria.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = false;
-                                    //workflowSiguiente.To = gd.DestinoUnidadCodigo2;
                                 }
                             }
 
@@ -833,9 +846,17 @@ namespace App.Core.UseCases
         {
             try
             {
-                var documentos = _repository.Get<Documento>(q => q.ProcesoId == procesoid && !q.CodigoEstampado && q.Type.Contains("pdf"));
-                foreach (var doc in documentos)
-                    doc.File = _file.EstamparCodigoEnDocumento(doc.File, doc.ProcesoId.ToString());
+                //solo se estampan documentos del proceso, de tipo pdf, no foliados previamente y sin firma electrónica
+                var documentos = _repository.Get<Documento>(q =>
+                    q.ProcesoId == procesoid
+                    && q.Type.Contains("pdf")
+                    && !q.CodigoEstampado
+                    && !q.Signed);
+
+                //si existen documentos procesarlos
+                if (documentos.Any())
+                    foreach (var doc in documentos)
+                        doc.File = _file.EstamparCodigoEnDocumento(doc.File, doc.ProcesoId.ToString());
 
                 _repository.Save();
             }

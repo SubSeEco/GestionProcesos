@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using App.Core.Interfaces;
-using App.Model.Helper;
+using ExpressiveAnnotations.MvcUnobtrusive.Providers;
 using SimpleInjector;
 using SimpleInjector.Integration.Web;
 using SimpleInjector.Integration.Web.Mvc;
@@ -15,7 +16,12 @@ namespace App.Web
     {
         protected void Application_Start()
         {
-            DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(RequiredIfAttribute),typeof(RequiredAttributeAdapter));
+            //DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(RequiredIfAttribute),typeof(RequiredAttributeAdapter));
+            ModelValidatorProviders.Providers.Remove(
+                  ModelValidatorProviders.Providers
+                      .FirstOrDefault(x => x is DataAnnotationsModelValidatorProvider));
+            ModelValidatorProviders.Providers.Add(
+                new ExpressiveAnnotationsModelValidatorProvider());
 
             //AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -60,7 +60,7 @@ namespace App.Model.Core
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
 
-        [RequiredIf("TipoEjecucionId == 6",ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("TipoEjecucionId == 6", ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Ejecutado por")]
         public string Email { get; set; }
 
@@ -148,8 +148,6 @@ namespace App.Model.Core
         [Display(Name = "Permitir seleccionar grupo especial de destino?")]
         public bool PermitirSeleccionarGrupoEspecialDestino { get; set; } = false;
 
-
-
         [Display(Name = "Permitir multiples evaluaciones de la misma tarea?")]
         public bool PermitirMultipleEvaluacion { get; set; } = false;
 
@@ -164,5 +162,8 @@ namespace App.Model.Core
 
         [Display(Name = "Permitir finalizar proceso?")]
         public bool PermitirFinalizarProceso { get; set; } = false;
+
+        [Display(Name = "Desactivar destino en el rechazo?")]
+        public bool DesactivarDestinoEnRechazo { get; set; } = false;
     }
 }

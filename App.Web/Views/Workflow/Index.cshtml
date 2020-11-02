@@ -62,42 +62,42 @@
                 {
                     <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+                        <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
 
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso fuera de plazo"></i>
+                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso pronto a vencer"></i>
+                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
-                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
                         {
-                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Proceso dentro de plazo"></i>
+                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
 
                         @if (!string.IsNullOrWhiteSpace(item.Asunto))
                         {
                             @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
                             <br />
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
                         }
                         else
                         {
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
                         }
 
                         <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
+                            Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
 
-                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                            @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                                @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
                             }
                             else
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.Email)
+                                @Html.DisplayFor(modelItem => item.ProcesoEmail)
                             }
 
                         </p>
@@ -112,7 +112,7 @@
                                 }
                                 else
                                 {
-                                    @Html.DisplayFor(modelItem => item.Email)<text>, </text>
+                                    @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
                                 }
                             }
 
@@ -122,12 +122,12 @@
                             }
                             @if (item.Grupo != null)
                             {
-                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                                @Html.DisplayFor(modelItem => item.Grupo)
                             }
 
                         </p>
 
-                        @if (item.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.Contains("GD"))
+                        @if (item.ProcesoEntidad.Contains("GD"))
                         {
                             <br />
                             @Html.Action("Row", "GDExterno", new { item.ProcesoId })
@@ -136,7 +136,7 @@
                         @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
                         {
                             <div class="section">
-                                <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                                <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
                             </div>
                         }
 
@@ -157,42 +157,42 @@
                 {
                     <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">@item.FechaCreacion</p>
+                        <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
 
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date > item.Proceso.FechaVencimiento.Value.Date)
+                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle red large"></i>
+                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
-                        @if (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date == item.Proceso.FechaVencimiento.Value.Date)
+                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
                         {
-                            <i class="material-icons circle amber accent-4"></i>
+                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
-                        @if (item.Proceso.FechaVencimiento == null || (item.Proceso.FechaVencimiento.HasValue && DateTime.Now.Date < item.Proceso.FechaVencimiento.Value.Date))
+                        @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
                         {
-                            <i class="material-icons circle green"></i>
+                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
                         }
-
 
                         @if (!string.IsNullOrWhiteSpace(item.Asunto))
                         {
                             @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
+                            <br />
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
                         }
                         else
                         {
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.DefinicionWorkflow.Nombre, "Execute", new { id = item.WorkflowId })
+                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
                         }
 
-
                         <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.Proceso.ProcesoId): @Html.DisplayFor(modelItem => item.Proceso.DefinicionProceso.Nombre), iniciado por
+                            Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
 
-                            @if (!string.IsNullOrWhiteSpace(item.Proceso.NombreFuncionario))
+                            @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.NombreFuncionario)
+                                @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
                             }
                             else
                             {
-                                @Html.DisplayFor(modelItem => item.Proceso.Email)
+                                @Html.DisplayFor(modelItem => item.ProcesoEmail)
                             }
 
                         </p>
@@ -207,7 +207,7 @@
                                 }
                                 else
                                 {
-                                    @Html.DisplayFor(modelItem => item.Email)<text>, </text>
+                                    @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
                                 }
                             }
 
@@ -217,11 +217,12 @@
                             }
                             @if (item.Grupo != null)
                             {
-                                @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                                @Html.DisplayFor(modelItem => item.Grupo)
                             }
+
                         </p>
 
-                        @if (item.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo.Contains("GD"))
+                        @if (item.ProcesoEntidad.Contains("GD"))
                         {
                             <br />
                             @Html.Action("Row", "GDExterno", new { item.ProcesoId })
@@ -230,7 +231,7 @@
                         @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
                         {
                             <div class="section">
-                                <p class="truncate ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                                <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
                             </div>
                         }
 

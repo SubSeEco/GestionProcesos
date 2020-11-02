@@ -125,7 +125,7 @@
             text: "Seleccione..."
         }));
 
-        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+        $.getJSON("/Workflow/GetUserFirmanteByUnidad", { Pl_UndCod: $(this).val() },
             function (classesData) {
                 $.each(classesData, function (index, itemData) {
                     select.append($('<option/>', {

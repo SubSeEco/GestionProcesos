@@ -16,30 +16,27 @@ namespace App.Infrastructure.GestionProcesos
         public EntityFrameworkRepository(TContext context)
         {
             this.context = context;
+            System.Diagnostics.Debug.WriteLine("New EntityFrameworkRepository...");
         }
 
-        public virtual void Create<TEntity>(TEntity entity, string createdBy = null)
-    where TEntity : class
+        public virtual void Create<TEntity>(TEntity entity, string createdBy = null) where TEntity : class
         {
             context.Set<TEntity>().Add(entity);
         }
 
-        public virtual void Update<TEntity>(TEntity entity, string modifiedBy = null)
-            where TEntity : class
+        public virtual void Update<TEntity>(TEntity entity, string modifiedBy = null) where TEntity : class
         {
             context.Set<TEntity>().Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
         }
 
-        public virtual void Delete<TEntity>(object id)
-            where TEntity : class
+        public virtual void Delete<TEntity>(object id) where TEntity : class
         {
             TEntity entity = context.Set<TEntity>().Find(id);
             Delete(entity);
         }
 
-        public virtual void Delete<TEntity>(TEntity entity)
-            where TEntity : class
+        public virtual void Delete<TEntity>(TEntity entity) where TEntity : class
         {
             var dbSet = context.Set<TEntity>();
             if (context.Entry(entity).State == EntityState.Detached)
@@ -154,6 +151,9 @@ namespace App.Infrastructure.GestionProcesos
             int? take = null)
             where TEntity : class
         {
+
+
+
             return GetQueryable(filter, orderBy, includeProperties, skip, take).ToList();
         }
 

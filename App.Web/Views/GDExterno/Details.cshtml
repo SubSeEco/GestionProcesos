@@ -11,10 +11,11 @@
                 <div class="card-content">
                     <span class="card-title">Información del ingreso externo</span>
                     <h3>ID @Model.ProcesoId</h3>
+                    
                     <div class="row">
                         <div class="input-field col s12 m10">
                             <strong>@Html.DisplayNameFor(m => Model.Proceso.NombreFuncionario)</strong><br />
-                            @Html.DisplayFor(m => Model.Proceso.NombreFuncionario) @Html.DisplayFor(m => Model.Proceso.Email)
+                            @Html.DisplayFor(m => Model.Proceso.NombreFuncionario) <br />@Html.DisplayFor(m => Model.Proceso.Pl_UndDes)
                         </div>
 
                         <div class="input-field col s12 m10">
@@ -66,9 +67,9 @@
                             }
                         </div>
                         <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioNombre2)</strong><br />
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
                             {
+                                <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioNombre2)</strong><br />
                                 @Html.DisplayFor(m => Model.DestinoFuncionarioNombre2) <br />
                             }
                             @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))

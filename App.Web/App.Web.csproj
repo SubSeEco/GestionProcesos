@@ -412,7 +412,6 @@
     <Compile Include="Controllers\DefinicionProcesoController.cs" />
     <Compile Include="Controllers\DefinicionWorkflowController.cs" />
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
-    <Compile Include="Controllers\DocumentoBusquedaController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
     <Compile Include="Controllers\GDExternoController.cs" />
@@ -732,8 +731,6 @@
     <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
-    <Content Include="Views\DocumentoBusqueda\Details.cshtml" />
-    <Content Include="Views\DocumentoBusqueda\Index.cshtml" />
     <Content Include="Views\GDExterno\Row.cshtml" />
     <Content Include="Views\GDExterno\DetailsAutoridad.cshtml" />
     <Content Include="Views\GDInterno\DetailsAutoridad.cshtml" />

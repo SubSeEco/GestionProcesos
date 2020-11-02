@@ -120,13 +120,13 @@ namespace App.Infrastructure.SIGPER
                         if (PeDatLab != null)
                         {
                             var CodUnidad = (from u in context.PeDatLab
-                                          join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
-                                          where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                          where p.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                          where u.PeDatLabAdDocCor == (from ud in context.PeDatLab 
-                                                                where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                select ud.PeDatLabAdDocCor).Max()
-                                         select u.RhConUniCod).FirstOrDefault();
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
 
                             /*unidad del funcionario*/
                             var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
@@ -389,13 +389,13 @@ namespace App.Infrastructure.SIGPER
                     {
                         //excluir las unidades sin funcionarios
                         var funcionarios = from PE in context.PEDATPER
-                                 join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
-                                 where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                 where r.RhConUniCod == item.Pl_UndCod
-                                 where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                              where ud.RH_NumInte == PE.RH_NumInte
-                                                              select ud.PeDatLabAdDocCor).Max()
-                                 select PE;
+                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where r.RhConUniCod == item.Pl_UndCod
+                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                        where ud.RH_NumInte == PE.RH_NumInte
+                                                                        select ud.PeDatLabAdDocCor).Max()
+                                           select PE;
                         if (funcionarios != null && funcionarios.Any())
                             returnValue.Add(item);
                     }
@@ -477,12 +477,12 @@ namespace App.Infrastructure.SIGPER
 
             try
             {
-                if(Rut != 0)
+                if (Rut != 0)
                 {
                     using (var dbE = new AppContextEconomia())
                     {
                         var unid = from PE in dbE.PEFERJEFAF
-                                 where PE.FyPFunRut == Rut
+                                   where PE.FyPFunRut == Rut
                                    select PE;
 
                         var users = from r in dbE.PEDATPER
@@ -503,7 +503,7 @@ namespace App.Infrastructure.SIGPER
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -583,13 +583,13 @@ namespace App.Infrastructure.SIGPER
                 {
                     //traer los usuarios de la unidad
                     var users = from PEDATPER in context.PEDATPER
-                             join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
-                             where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                             where r.RhConUniCod == codigo
-                             where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                          where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                          select ud.PeDatLabAdDocCor).Max()
-                             select PEDATPER;
+                                join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                                where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                where r.RhConUniCod == codigo
+                                where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                             where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                             select ud.PeDatLabAdDocCor).Max()
+                                select PEDATPER;
 
                     //iterar cada usuariode la unidad
                     foreach (var item in users)
@@ -644,13 +644,13 @@ namespace App.Infrastructure.SIGPER
                 {
                     //traer los usuarios de la unidad
                     var users = from PEDATPER in context.PEDATPER
-                             join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
-                             where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                             where r.RhConUniCod == codigo
-                             where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                          where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                          select ud.PeDatLabAdDocCor).Max()
-                             select PEDATPER;
+                                join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
+                                where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                where r.RhConUniCod == codigo
+                                where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                             where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                             select ud.PeDatLabAdDocCor).Max()
+                                select PEDATPER;
 
                     //iterar cada usuario de la unidad
                     foreach (var item in users)
@@ -846,12 +846,12 @@ namespace App.Infrastructure.SIGPER
             using (var dbE = new AppContextEconomia())
             {
                 var rE = from PE in dbE.PEDATPER
-                         //join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
-                         //where r.Re_ConPyt != 0
-                         //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
-                         //where r.Re_ConCar != 21
-                         //from PL in dbE.PLUNILAB
-                         //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
+                             //join r in dbE.ReContra on PE.RH_NumInte equals r.RH_NumInte
+                             //where r.Re_ConPyt != 0
+                             //where r.Re_ConIni.Year >= DateTime.Now.Year || r.RH_ContCod == 1
+                             //where r.Re_ConCar != 21
+                             //from PL in dbE.PLUNILAB
+                             //where (PL.Pl_UndCod == PE.RhSegUnd01.Value || PL.Pl_UndCod == PE.RhSegUnd02.Value || PL.Pl_UndCod == PE.RhSegUnd03.Value)
                          where PE.RH_EstLab.Equals("A")
                          select PE;
                 returnValue.AddRange(rE.ToList());
@@ -874,6 +874,83 @@ namespace App.Infrastructure.SIGPER
             //}
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
+        }
+
+        public List<PLUNILAB> GetUnidadesFirmantes(List<string> listEmailFirmantes)
+        {
+            var returnValue = new List<PLUNILAB>();
+
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    foreach (var email in listEmailFirmantes)
+                    {
+                        var user = GetUserByEmail(email);
+                        if (user != null && user.Unidad != null && !returnValue.Any(q=>q.Pl_UndCod == user.Unidad.Pl_UndCod))
+                            returnValue.Add(GetUserByEmail(email).Unidad);
+                    }
+                }
+                using (var context = new AppContextTurismo())
+                {
+                    foreach (var email in listEmailFirmantes)
+                    {
+                        var user = GetUserByEmail(email);
+                        if (user != null && user.Unidad != null && !returnValue.Any(q => q.Pl_UndCod == user.Unidad.Pl_UndCod))
+                            returnValue.Add(GetUserByEmail(email).Unidad);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
+        }
+        public List<PEDATPER> GetUserFirmanteByUnidad(int codigoUnidad, List<string> listEmailFirmantes)
+        {
+            var returnValue = new List<PEDATPER>();
+
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    var datosPersonales = from PEDATPER in context.PEDATPER
+                                          join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
+                                          where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                          where PeDatLab.RhConUniCod == codigoUnidad
+                                          where listEmailFirmantes.Contains(PEDATPER.Rh_Mail)
+                                          where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                                              select ud.PeDatLabAdDocCor).Max()
+                                          select PEDATPER;
+
+                    returnValue.AddRange(datosPersonales.ToList());
+                }
+
+                using (var context = new AppContextTurismo())
+                {
+                    var datosPersonales = from PEDATPER in context.PEDATPER
+                                          join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
+                                          where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                          where PeDatLab.RhConUniCod == codigoUnidad
+                                          where listEmailFirmantes.Contains(PEDATPER.Rh_Mail)
+                                          where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
+                                                                              select ud.PeDatLabAdDocCor).Max()
+                                          select PEDATPER;
+
+                    returnValue.AddRange(datosPersonales.ToList());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return returnValue;
+
         }
     }
 }

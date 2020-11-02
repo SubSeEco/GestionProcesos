@@ -82,6 +82,9 @@ namespace App.Model.Core
         public int EstadoProcesoId { get; set; }
         public virtual EstadoProceso EstadoProceso { get; set; }
 
+        [Display(Name = "Justificación anulación")]
+        [DataType(DataType.MultilineText)]
+        public string JustificacionAnulacion { get; set; }
 
 
         //deprecado
@@ -113,6 +116,7 @@ namespace App.Model.Core
             tag.Append(string.Join(" ", this.Documentos.Select(q => q.Folio)) + " ");
             tag.Append(string.Join(" ", this.Documentos.Select(q => q.FileName)) + " ");
             tag.Append(string.Join(" ", this.Workflows.Select(q => q.Observacion)));
+            tag.Append(string.Join(" ", this.Workflows.Select(q => q.Mensaje)));
 
             return tag.ToString();
         }

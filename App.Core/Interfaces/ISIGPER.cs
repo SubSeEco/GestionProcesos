@@ -32,5 +32,8 @@ namespace App.Core.Interfaces
         List<REPYT> GetREPYTs();
         List<DGCONTRATOS> GetDGCONTRATOS();
         //Model.Cometido.Destinos GetMontoViaticos(int CometidoId, int Cantdias);
+
+        List<PLUNILAB> GetUnidadesFirmantes(List<string> listEmailFirmantes);
+        List<PEDATPER> GetUserFirmanteByUnidad(int codigoUnidad, List<string> listEmailFirmantes);
     }
 }

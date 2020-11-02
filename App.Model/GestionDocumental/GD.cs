@@ -1,4 +1,4 @@
-﻿using App.Model.Helper;
+﻿using ExpressiveAnnotations.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,18 +44,18 @@ namespace App.Model.GestionDocumental
         public bool IngresoExterno { get; set; }
 
         [Display(Name = "Origen documentación")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
-        public int GDOrigenId { get; set; }
+        [RequiredIf("IngresoExterno", ErrorMessage = "Es necesario especificar este dato")]
+        public int? GDOrigenId { get; set; }
         public virtual GDOrigen GDOrigen { get; set; }
 
         [Display(Name = "Número externo")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("IngresoExterno", ErrorMessage = "Es necesario especificar este dato")]
         public string NumeroExterno { get; set; }
 
         
         //destino 1
         [Display(Name = "Unidad destino")]
-        [RequiredIf("IngresoExterno", true, ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("IngresoExterno", ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadCodigo { get; set; }
 
         [Display(Name = "Unidad destino")]
@@ -73,7 +73,7 @@ namespace App.Model.GestionDocumental
         public bool SegundoDestino { get; set; } = false;
 
         [Display(Name = "Unidad destino")]
-        [RequiredIf("SegundoDestino", true, ErrorMessage = "Es necesario especificar este dato")]
+        [RequiredIf("SegundoDestino", ErrorMessage = "Es necesario especificar este dato")]
         public string DestinoUnidadCodigo2 { get; set; }
 
         [Display(Name = "Unidad destino")]

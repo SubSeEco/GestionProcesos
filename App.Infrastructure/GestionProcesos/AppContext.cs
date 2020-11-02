@@ -8,7 +8,6 @@ using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Model.InformeHSA;
 using App.Model.Memorandum;
-using App.Model.DTO;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.HorasExtras;
@@ -24,10 +23,9 @@ namespace App.Infrastructure.GestionProcesos
         // If you wish to target a different database and/or database provider, modify the 'App.Context' 
         // connection string in the application configuration file.
 
-        public AppContext() : 
-            base("name=GestionProcesos")
+        public AppContext() : base("name=GestionProcesos")
         {
-
+            System.Diagnostics.Debug.WriteLine("New AppContext...");
         }
 
         public virtual DbSet<Configuracion> Configuracion { get; set; }
@@ -90,25 +88,13 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<HorasExtras> HorasExtras { get; set; }
         public virtual DbSet<GeneracionResolucion> GeneracionResolucion { get; set; }
 
-        //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
-        //public virtual DbSet<CuentaRed> Indice { get; set; }
-        //public virtual DbSet<Contrato> Contrato { get; set; }
-        //public virtual DbSet<CDP> CDP { get; set; }
-        //public virtual DbSet<CDPBien> Bien { get; set; }
-        //public virtual DbSet<GDTipo> GDTipo { get; set; }
-        //public virtual DbSet<CDPTipoSolicitud> TipoSolicitud { get; set; }
-        //public virtual DbSet<SIACSolicitud> SIACSolicitud { get; set; }
-        //public virtual DbSet<SIACOcupacion> SIACOcupacion { get; set; }
-        //public virtual DbSet<SIACTema> SIACTema { get; set; }
-        //public virtual DbSet<SIACTipoSolicitud> SIACTipoSolicitud { get; set; }
-        //public virtual DbSet<RadioTaxi> RadioTaxi { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<AppContext>(null);
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            //var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+            
+            if (modelBuilder != null)
+                modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }
 }

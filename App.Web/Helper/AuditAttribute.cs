@@ -8,11 +8,11 @@ namespace App.Web
 {
     public class AuditAttribute : ActionFilterAttribute
     {
-        public IGestionProcesos _repository;
+        //public IGestionProcesos _repository;
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var request = filterContext.HttpContext.Request;
+            //var request = filterContext.HttpContext.Request;
 
             //var headers = string.Empty;
             //foreach (var key in request.Headers.AllKeys)
@@ -56,6 +56,9 @@ namespace App.Web
             //{
             //    System.Diagnostics.Debug.WriteLine(headers);
             //}
+
+
+            System.Diagnostics.Debug.WriteLine(filterContext.HttpContext.Request.RawUrl);
 
             base.OnActionExecuting(filterContext);
         }

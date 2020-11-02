@@ -333,8 +333,9 @@ namespace App.Core.UseCases
                     throw new ArgumentNullException("No se encontró la definición de tarea del proceso asociado al workflow.");
 
                 //traer informacion del ejecutor
-                var persona = new SIGPER();
-                persona = _sigper.GetUserByEmail(obj.Email.Trim());
+                var persona = _sigper.GetUserByEmail(obj.Email.Trim());
+                if (persona == null)
+                    throw new ArgumentNullException("No se encontró información del usuario que inició el proceso.");
 
                 //nuevo proceso
                 var proceso = new Proceso();
@@ -348,6 +349,11 @@ namespace App.Core.UseCases
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
                 proceso.Reservado = obj.Reservado;
                 proceso.Tags = obj.GetTags();
+                if (persona.Unidad != null)
+                {
+                    proceso.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                    proceso.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                }
 
                 //nuevo workflow
                 var workflow = new Workflow();
@@ -397,7 +403,7 @@ namespace App.Core.UseCases
                         workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
                         workflow.TareaPersonal = false;
 
-                        var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q=>q.Rh_Mail.Trim());
+                        var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
                         if (emails.Any())
                             workflow.Email = string.Join(";", emails);
 
@@ -426,7 +432,7 @@ namespace App.Core.UseCases
                 //notificar al dueño del proceso
                 if (workflow.DefinicionWorkflow.NotificarAlAutor)
                     _email.NotificarInicioProceso(proceso,
-                    _repository.GetFirst<Configuracion>(q=>q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_nuevo_proceso)),
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_nuevo_proceso)),
                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 //notificar por email al destinatario de la tarea
@@ -445,7 +451,7 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage ProcesoDelete(int id)
+        public ResponseMessage ProcesoDelete(int id, string JustificacionAnulacion)
         {
             var response = new ResponseMessage();
 
@@ -466,7 +472,7 @@ namespace App.Core.UseCases
                             {
                                 response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido posee pasaje aereo el cual ya fue tramitado");
                             }
-                            else if (cometido.ReqPasajeAereo == false && (doc != null && doc.Signed == true )) //(cometido.Workflow.DefinicionWorkflow.Secuencia >= 13 || (doc != null && doc.Signed == true)))
+                            else if (cometido.ReqPasajeAereo == false && (doc != null && doc.Signed == true)) //(cometido.Workflow.DefinicionWorkflow.Secuencia >= 13 || (doc != null && doc.Signed == true)))
                             {
                                 response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada y firmada");
                             }
@@ -526,7 +532,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         //terminar todas las tareas pendientes
                         foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
@@ -541,6 +547,7 @@ namespace App.Core.UseCases
                         obj.Terminada = true;
                         obj.Anulada = true;
                         obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
+                        obj.JustificacionAnulacion = obj.JustificacionAnulacion;
                         _repository.Save();
 
                         //notificar al dueño del proceso
@@ -674,9 +681,9 @@ namespace App.Core.UseCases
                 else
 
                     if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
-                    else
-                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                else
+                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
 
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
@@ -841,7 +848,7 @@ namespace App.Core.UseCases
                             workflow.Pl_UndCod = null;
                             workflow.Pl_UndDes = null;
                             workflow.TareaPersonal = false;
-                            var emails = grupo.Usuarios.Where(q=>q.Habilitado).Select(q => q.Email);
+                            var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
                             if (emails.Any())
                                 workflow.Email = string.Join(";", emails);
                         }
@@ -896,7 +903,7 @@ namespace App.Core.UseCases
                     throw new Exception("No se encontró el usuario que ejecutó el workflow.");
 
                 //si es la ultima tarea, terminar proceso
-                if (workflow.Proceso.Workflows.Count(q=>!q.Terminada) <= 1)
+                if (workflow.Proceso.Workflows.Count(q => !q.Terminada) <= 1)
                 {
                     workflow.Proceso.Terminada = true;
                     workflow.Proceso.FechaTermino = DateTime.Now;
@@ -1047,7 +1054,7 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
-            if (_repository.GetExists<Rubrica>(q=>q.Email == obj.Email && q.IdentificadorFirma == obj.IdentificadorFirma))
+            if (_repository.GetExists<Rubrica>(q => q.Email == obj.Email && q.IdentificadorFirma == obj.IdentificadorFirma))
                 response.Errors.Add("El email e identificador de firma ya está registrado");
 
             try

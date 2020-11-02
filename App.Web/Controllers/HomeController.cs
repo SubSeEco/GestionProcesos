@@ -43,8 +43,6 @@ namespace App.Web.Controllers
             //}
             //_repository.Save();
 
-
-
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {
@@ -79,18 +77,6 @@ namespace App.Web.Controllers
             }
 
             return View(model);
-        }
-
-        public PartialViewResult Menu()
-        {
-            var email = UserExtended.Email(User);
-            var model = new DTOUser()
-            {
-                IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())),
-                IsConsultor = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Consultor.ToString()))
-            };
-
-            return PartialView(model);
         }
     }
 }

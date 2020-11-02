@@ -18,6 +18,22 @@ namespace App.Web.Controllers
     [Authorize]
     public class ProcesoController : Controller
     {
+        public class DTODelete
+        {
+            public DTODelete()
+            {
+
+            }
+
+            public int ProcesoId { get; set; }
+
+
+            [Required(ErrorMessage = "Es necesario especificar este dato")]
+            [Display(Name = "Justificación")]
+            [DataType(DataType.MultilineText)]
+            public string JustificacionAnulacion { get; set; }
+        }
+
         public class DTOFilter
         {
             public DTOFilter()
@@ -163,7 +179,7 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q=>q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
             return View(model);
@@ -266,36 +282,29 @@ namespace App.Web.Controllers
         public ActionResult Delete(int id)
         {
             var model = _repository.GetById<Proceso>(id);
-            return View(model);
+            return View(new DTODelete { ProcesoId = model.ProcesoId });
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(DTODelete model)
         {
             var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
-            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(id);
-
+            var _UseCaseResponseMessage = _useCaseInteractor.ProcesoDelete(model.ProcesoId, model.JustificacionAnulacion);
             if (_UseCaseResponseMessage.IsValid)
-            {
                 TempData["Success"] = "Operación terminada correctamente.";
-
-                var p = _repository.GetById<Proceso>(id).DefinicionProcesoId;
-                if (p == 13)
-                    return RedirectToAction("SeguimientoGP", "Cometido");
-                else
-                    return RedirectToAction("Index");
-            }
             else
-            {
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
 
-                var com = _repository.Get<Cometido>(c => c.ProcesoId == id).FirstOrDefault();
-                if(com != null)
-                    return RedirectToAction("View", "Cometido", new { id = com.CometidoId});
-                else
-                    return RedirectToAction("Index");
-            }
+            var p = _repository.GetById<Proceso>(model.ProcesoId).DefinicionProcesoId;
+            if (p == 13)
+                return RedirectToAction("SeguimientoGP", "Cometido");
+
+            var com = _repository.GetFirst<Cometido>(c => c.ProcesoId == model.ProcesoId);
+            if (com != null)
+                return RedirectToAction("View", "Cometido", new { id = com.CometidoId });
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Dashboard()
@@ -311,59 +320,52 @@ namespace App.Web.Controllers
 
         public FileResult Report()
         {
-            var result = _repository.GetAll<Proceso>();
-
-            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
-            var fileInfo = new FileInfo(file);
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excelPackage = new ExcelPackage(fileInfo);
-
-
-            var fila = 1;
-            var worksheet = excelPackage.Workbook.Worksheets[0];
-            foreach (var proceso in result.ToList())
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
-                fila++;
-                worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
-                worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
-                worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
-                worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
-                worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
-                worksheet.Cells[fila, 6].Value = proceso.Email;
-                worksheet.Cells[fila, 7].Value = proceso.EstadoProceso.Descripcion;
-                worksheet.Cells[fila, 8].Value = proceso.Observacion;
-                worksheet.Cells[fila, 9].Value = proceso.Reservado ? "SI" : "NO";
-            }
-
-            fila = 1;
-            worksheet = excelPackage.Workbook.Worksheets[1];
-            foreach (var proceso in result.ToList())
-            {
-                foreach (var workflow in proceso.Workflows)
+                var procesos = context.Proceso.Select(proceso => new
                 {
-                    fila++;
-                    worksheet.Cells[fila, 1].Value = proceso.ProcesoId;
-                    worksheet.Cells[fila, 2].Value = proceso.DefinicionProceso != null ? proceso.DefinicionProceso.Nombre : string.Empty;
-                    worksheet.Cells[fila, 3].Value = proceso.FechaCreacion;
-                    worksheet.Cells[fila, 4].Value = proceso.FechaVencimiento;
-                    worksheet.Cells[fila, 5].Value = proceso.FechaTermino;
-                    worksheet.Cells[fila, 6].Value = proceso.Email;
-                    worksheet.Cells[fila, 7].Value = proceso.Terminada ? "SI" : "NO";
-                    worksheet.Cells[fila, 8].Value = proceso.Observacion;
-                    worksheet.Cells[fila, 9].Value = workflow.WorkflowId;
-                    worksheet.Cells[fila, 10].Value = workflow.DefinicionWorkflow.Nombre;
-                    worksheet.Cells[fila, 11].Value = workflow.Pl_UndDes;
-                    worksheet.Cells[fila, 12].Value = workflow.Email;
-                    worksheet.Cells[fila, 13].Value = workflow.FechaCreacion;
-                    worksheet.Cells[fila, 14].Value = workflow.FechaTermino;
-                    worksheet.Cells[fila, 15].Value = workflow.TipoAprobacion != null ? workflow.TipoAprobacion.Nombre : string.Empty;
-                    worksheet.Cells[fila, 16].Value = workflow.Observacion;
-                    worksheet.Cells[fila, 17].Value = workflow.Terminada ? "SI" : "NO";
-                }
+                    proceso.ProcesoId,
+                    proceso.DefinicionProceso.Nombre,
+                    proceso.FechaCreacion,
+                    proceso.FechaVencimiento,
+                    proceso.FechaTermino,
+                    proceso.Email,
+                    proceso.EstadoProceso.Descripcion,
+                    proceso.Observacion,
+                    Reservado = proceso.Reservado ? "SI" : "NO"
+                }).ToList();
+
+                var workflows = context.Workflow.Select(workflow => new
+                {
+                    workflow.Proceso.ProcesoId,
+                    workflow.Proceso.DefinicionProceso.Nombre,
+                    workflow.Proceso.FechaCreacion,
+                    workflow.Proceso.FechaVencimiento,
+                    workflow.Proceso.FechaTermino,
+                    workflow.Proceso.Email,
+                    workflow.Proceso.EstadoProceso.Descripcion,
+                    workflow.Proceso.Observacion,
+                    workflow.WorkflowId,
+                    WorkflowDefinicion = workflow.DefinicionWorkflow.Nombre,
+                    workflow.Pl_UndDes,
+                    WorkflowEmail = workflow.Email,
+                    WorkflowFechaCreacion = workflow.FechaCreacion,
+                    WorkflowFechaCreacionFechaTermino = workflow.FechaTermino,
+                    WorkflowTipoAprobacion = workflow.TipoAprobacion.Nombre,
+                    WorkflowObservacion = workflow.Observacion,
+                }).ToList();
+
+                var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
+                var fileInfo = new FileInfo(file);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var excel = new ExcelPackage(fileInfo);
+
+                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(procesos);
+                excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(workflows);
+
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+
             }
-
-
-            return File(excelPackage.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
         public ActionResult Header(int id)

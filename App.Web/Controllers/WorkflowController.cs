@@ -14,8 +14,7 @@ using App.Model.InformeHSA;
 using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
-using App.Model.Helper;
-using App.Model.HorasExtras;
+using System;
 
 namespace App.Web.Controllers
 {
@@ -23,6 +22,37 @@ namespace App.Web.Controllers
     [Authorize]
     public class WorkflowController : Controller
     {
+        protected readonly IGestionProcesos _repository;
+        protected readonly IEmail _email;
+        protected readonly ISIGPER _sigper;
+        protected readonly IFolio _folio;
+        protected readonly IFile _file;
+        protected readonly IHSM _hsm;
+
+        public class DTOWorkflow
+        {
+            public DTOWorkflow()
+            {
+            }
+
+            public int WorkflowId { get; set; }
+            public DateTime FechaCreacion { get; set; }
+            public string Asunto { get; set; }
+            public string Definicion { get; set; }
+            public bool TareaPersonal { get; set; }
+            public string NombreFuncionario { get; set; }
+            public string Pl_UndDes { get; set; }
+            public string Grupo { get; set; }
+            public string Mensaje { get; set; }
+
+            public int ProcesoId { get; set; }
+            public DateTime? ProcesoFechaVencimiento { get; set; }
+            public string ProcesoDefinicion { get; set; }
+            public string ProcesoNombreFuncionario { get; set; }
+            public string ProcesoEmail { get; set; }
+            public string ProcesoEntidad { get; set; }
+        }
+
         public class DTOUser
         {
             public string id { get; set; }
@@ -35,8 +65,8 @@ namespace App.Web.Controllers
             {
                 TextSearch = string.Empty;
                 Select = new List<App.Model.DTO.DTOSelect>();
-                TareasGrupales = new List<Workflow>();
-                TareasPersonales = new List<Workflow>();
+                TareasGrupales = new List<DTOWorkflow>();
+                TareasPersonales = new List<DTOWorkflow>();
             }
 
             [Display(Name = "Texto de búsqueda")]
@@ -53,16 +83,11 @@ namespace App.Web.Controllers
             public System.DateTime? Hasta { get; set; }
 
             public List<App.Model.DTO.DTOSelect> Select { get; set; }
-            public List<Workflow> TareasPersonales { get; set; }
-            public List<Workflow> TareasGrupales { get; set; }
+            //public List<Workflow> TareasPersonales { get; set; }
+            //public List<Workflow> TareasGrupales { get; set; }            
+            public List<DTOWorkflow> TareasPersonales { get; set; }
+            public List<DTOWorkflow> TareasGrupales { get; set; }
         }
-
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
-        protected readonly IHSM _hsm;
 
         public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
         {
@@ -83,12 +108,29 @@ namespace App.Web.Controllers
                .ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetUserByUnidad(int Pl_UndCod)
         {
             var result = _sigper.GetUserByUnidad(Pl_UndCod)
-               .Select(c => new { 
-                   Email = !string.IsNullOrWhiteSpace(c.Rh_Mail) ?  c.Rh_Mail.Trim() : string.Empty, 
-                   Nombre = !string.IsNullOrWhiteSpace(c.PeDatPerChq) ? c.PeDatPerChq.Trim() : string.Empty  })
+               .Select(c => new
+               {
+                   Email = !string.IsNullOrWhiteSpace(c.Rh_Mail) ? c.Rh_Mail.Trim() : string.Empty,
+                   Nombre = !string.IsNullOrWhiteSpace(c.PeDatPerChq) ? c.PeDatPerChq.Trim() : string.Empty
+               })
+               .OrderBy(q => q.Nombre)
+               .ToList().Distinct();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUserFirmanteByUnidad(int Pl_UndCod)
+        {
+            var result = _sigper.GetUserFirmanteByUnidad(Pl_UndCod, _repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList())
+               .Select(c => new
+               {
+                   Email = !string.IsNullOrWhiteSpace(c.Rh_Mail) ? c.Rh_Mail.Trim() : string.Empty,
+                   Nombre = !string.IsNullOrWhiteSpace(c.PeDatPerChq) ? c.PeDatPerChq.Trim() : string.Empty
+               })
                .OrderBy(q => q.Nombre)
                .ToList().Distinct();
 
@@ -103,25 +145,107 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter();
 
-            if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
                 //usuario administrador
-                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.TareaPersonal);
-                var predicateGrupal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal);
+                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+                {
+                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto ,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                }
 
-                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
-                model.TareasGrupales.AddRange(_repository.Get(predicateGrupal));
-            }
-            else
-            {
                 //usuario normal
-                var predicatePersonal = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && q.Email == email);
-                var predicateUnidad = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod);
-                var predicateGruposEspeciales = PredicateBuilder.True<Workflow>().And(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value));
-
-                model.TareasPersonales = _repository.Get(predicatePersonal).ToList();
-                model.TareasGrupales.AddRange(_repository.Get(predicateUnidad));
-                model.TareasGrupales.AddRange(_repository.Get(predicateGruposEspeciales));
+                else
+                {
+                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList();
+                    model.TareasGrupales.AddRange(context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value)).Select(q => new DTOWorkflow
+                    {
+                        WorkflowId = q.WorkflowId,
+                        FechaCreacion = q.FechaCreacion,
+                        Asunto = q.Asunto,
+                        Definicion = q.DefinicionWorkflow.Nombre,
+                        TareaPersonal = q.TareaPersonal,
+                        NombreFuncionario = q.NombreFuncionario,
+                        Pl_UndDes = q.Pl_UndDes,
+                        Grupo = q.Grupo != null ? q.Grupo.Nombre : string.Empty,
+                        Mensaje = q.Mensaje,
+                        ProcesoId = q.ProcesoId,
+                        ProcesoFechaVencimiento = q.Proceso.FechaVencimiento,
+                        ProcesoDefinicion = q.Proceso.DefinicionProceso.Nombre,
+                        ProcesoNombreFuncionario = q.Proceso.NombreFuncionario,
+                        ProcesoEmail = q.Proceso.Email,
+                        ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
+                    }).ToList());
+                }
             }
 
             return View(model);
@@ -150,28 +274,6 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Workflow>(workflowId);
             return View(model);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Sign(Workflow model)
-        //{
-        //    var email = UserExtended.Email(User);
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var _useCaseInteractor = new UseCaseInteractorCustom(_repository);
-        //        var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(model, email);
-        //        if (_UseCaseResponseMessage.IsValid)
-        //        {
-        //            TempData["Success"] = "Operación terminada correctamente.";
-        //            return Redirect(Request.UrlReferrer.PathAndQuery);
-        //        }
-
-        //        TempData["Error"] = _UseCaseResponseMessage.Errors;
-        //    }
-
-        //    return View(model);
-        //}
 
         public ActionResult Execute(int id)
         {
@@ -309,47 +411,17 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
-            {
-                var obj = _repository.GetFirst<HorasExtras>(q => q.ProcesoId == workflow.ProcesoId);
-                if (obj != null)
-                {
-                    workflow.EntityId = obj.HorasExtrasId;
-                    workflow.Entity = App.Util.Enum.Entidad.HorasExtras.ToString();
-                    obj.WorkflowId = workflow.WorkflowId;
-
-                    _repository.Update(obj);
-                    _repository.Save();
-                }
-            }
-
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
-            {
-                var obj = _repository.GetFirst<GeneracionResolucion>(q => q.ProcesoId == workflow.ProcesoId);
-                if (obj != null)
-                {
-                    workflow.EntityId = obj.GeneracionResolucionId;
-                    workflow.Entity = App.Util.Enum.Entidad.GeneraResolucion.ToString();
-                    obj.WorkflowId = workflow.WorkflowId;
-
-                    _repository.Update(obj);
-                    _repository.Save();
-                }
-            }
-
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
-            //if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
-            //    workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para eliminar");
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Details" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para ver");
 
             if (ModelState.IsValid)
-                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create" || workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion")
+                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create")
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
                 else
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { id = workflow.EntityId });
@@ -359,6 +431,8 @@ namespace App.Web.Controllers
 
         public ActionResult Send(int id)
         {
+            var email = UserExtended.Email(User);
+
             ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
 
@@ -370,14 +444,21 @@ namespace App.Web.Controllers
             model.PermitirSeleccionarGrupoEspecialDestino = model.DefinicionWorkflow.PermitirSeleccionarGrupoEspecialDestino;
             model.PermitirFinalizarProceso = model.DefinicionWorkflow.PermitirFinalizarProceso;
             model.PermitirTerminar = model.DefinicionWorkflow.PermitirTerminar;
+            model.DesactivarDestinoEnRechazo = model.DefinicionWorkflow.DesactivarDestinoEnRechazo;
+            model.Mensaje = string.Empty;
 
-            if (!model.To.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(model.To))
             {
                 var persona = _sigper.GetUserByEmail(model.To.Trim());
                 if (persona != null)
                 {
                     ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades().OrderBy(q => q.Pl_UndDes).Select(q => new SelectListItem { Value = q.Pl_UndCod.ToString(), Text = q.Pl_UndDes.Trim() }), "Value", "Text", persona.Unidad.Pl_UndCod);
-                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod).OrderBy(q => q.PeDatPerChq).Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }), "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
+                    ViewBag.To = new SelectList(
+                        _sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod)
+                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .OrderBy(q => q.PeDatPerChq)
+                        .Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }),
+                        "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
 
                     model.Pl_UndCod = persona.Unidad.Pl_UndCod;
                     model.To = persona.Funcionario.Rh_Mail.Trim();
@@ -389,7 +470,12 @@ namespace App.Web.Controllers
                 ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
                 if (model.Pl_UndCod.HasValue)
-                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+                    ViewBag.To = new SelectList(
+                        _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
+                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre", model.Email);
 
                 //fix para solucionar problemas de fvidal
                 if (model.Pl_UndCod.HasValue && model.EsFirmaDocumento && model.Pl_UndCod.Value == 200310)
@@ -400,6 +486,7 @@ namespace App.Web.Controllers
                 }
 
             }
+
             return View(model);
         }
 
@@ -448,42 +535,9 @@ namespace App.Web.Controllers
                     }
                     _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
                 }
-                //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
-                //{
-                //    var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                //    if (_UseCaseResponseMessage.IsValid)
-                //    {
-                //        TempData["Success"] = "Operación terminada correctamente.";
-                //        return RedirectToAction("OK");
-                //    }
-                //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                //}
                 else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
                 {
                     var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
                     var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                     if (_UseCaseResponseMessage.IsValid)
                     {
@@ -611,6 +665,8 @@ namespace App.Web.Controllers
         public ActionResult Stop(Workflow model)
         {
             model.Email = UserExtended.Email(User);
+            model.Observacion = model.Mensaje;
+            model.Mensaje = string.Empty;
 
             if (ModelState.IsValid)
             {
