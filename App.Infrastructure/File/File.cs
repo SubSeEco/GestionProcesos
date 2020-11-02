@@ -80,6 +80,7 @@ namespace App.Infrastructure.File
                 {
                     var pdfContent = stamper.GetOverContent(1);
                     var pagesize = reader.GetPageSize(1);
+                    ColumnText.ShowTextAligned(pdfContent, iTextSharp.text.Element.ALIGN_MIDDLE,new iTextSharp.text.Phrase("ID", new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 10, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),pagesize.Width - 35, (pagesize.Height / 2) + 15, 0);
                     ColumnText.ShowTextAligned(pdfContent, iTextSharp.text.Element.ALIGN_MIDDLE,new iTextSharp.text.Phrase(text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 10, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.DARK_GRAY)),pagesize.Width - 35, pagesize.Height / 2, 0);
                     stamper.Close();
                 }
