@@ -5097,6 +5097,8 @@ namespace App.Core.UseCases
                     #region ENVIO DE NOTIFICACION TERMINO PROCESO
                     /*si no existen mas tareas se envia correo de notificacion*/
                     var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
+                    /*se trae documento para adjuntar*/
+                    Documento doc = cometido.Proceso.Documentos.Where(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                     var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                     var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
                     List<string> emailMsg;
@@ -5114,7 +5116,7 @@ namespace App.Core.UseCases
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
                             "Su cometido N°" + cometido.CometidoId.ToString() + " " + "ha sido pagado",
                             emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                         }
 
 
@@ -5129,7 +5131,7 @@ namespace App.Core.UseCases
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja2),
                             "Su cometido N°" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES para el pago",
                             emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                         }
                     }
 
@@ -5143,7 +5145,7 @@ namespace App.Core.UseCases
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzasRechazo_EncargadoTesoreria),
                         "El pago del cometido N° " + cometido.CometidoId.ToString() + "ha sido rechazado por el Encargado(a) de Finanzas",
                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                     }
 
                     #endregion
@@ -5436,8 +5438,23 @@ namespace App.Core.UseCases
 
                                     /*Notifica a Analista de Unidad de Abastecimiento*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
-
+                                    if (workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
+                                    }
+                                    
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEnvioSolicitudAnalistaAbastecimiento),
                                     "Tiene una solicitud de cotización de pasajes para el cometido N°: " + cometido.CometidoId.ToString(),
@@ -5566,7 +5583,23 @@ namespace App.Core.UseCases
 
                                     /*A abastecimiento*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Jefatura Abastecimiento
+                                    if (workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Jefatura Abastecimiento
+                                    }
+                                    
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobacionPasaje_JefaturaAbastecimiento),
@@ -5578,8 +5611,23 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
-
+                                    if (workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
+                                    }
+                                    
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaRechazoPasaje_AnalistaAbastecimiento),
                                     "Tiene una cotización de pasajes rechazada para el cometido N° " + cometido.CometidoId.ToString(),
@@ -5661,8 +5709,23 @@ namespace App.Core.UseCases
                                 {
                                     /*Aprueba documento generado a Analista de Presupuesto*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista ppto
-
+                                    if (workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista ppto
+                                    }
+                                    
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
                                     "Tiene el cometido N°: " + cometido.CometidoId.ToString() + " " + "pendiente de compromiso",
@@ -5727,8 +5790,23 @@ namespace App.Core.UseCases
                                 {
                                     /*Encargado(a) de Presupuesto rechaza firma de CDP a Analista de Presupuesto --> Tarea Rechazada*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista PPto
-
+                                    if (workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista PPto
+                                    }
+                                    
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoPPto_AnalistaPpto),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
@@ -5769,7 +5847,22 @@ namespace App.Core.UseCases
 
                                     /*Aprueba y notifica a analista de contabilidad para devengo*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 16 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Contabilidad
+                                    if (workflow.DefinicionWorkflow.Secuencia == 16 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach (var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {                                        
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 16 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Contabilidad
+                                    }                                    
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_AnalistaConta),
@@ -5803,10 +5896,25 @@ namespace App.Core.UseCases
                                 break;
                             case 16: /*Analista contabilidad devenga*/
                                 /*Devenga y envía a aprobación de Encargado(a) de Contabilidad*/
-                                if (cometido.FechaPagoSigfe == null)
+                                if (cometido.ObservacionesPagoSigfe == null)
                                 {
                                     emailMsg = new List<string>();
-                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 17 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Contabilidad
+                                    if (workflow.DefinicionWorkflow.Secuencia == 17 && workflow.DefinicionWorkflow.GrupoId != null)
+                                    {
+                                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                        if (emails.Any())
+                                        {
+                                            foreach(var c in emails)
+                                            {
+                                                emailMsg.Add(c.Trim());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 17 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Contabilidad
+                                    }
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnalistaConta_JefeConta),
@@ -5826,7 +5934,7 @@ namespace App.Core.UseCases
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 /*Devengo con observaciones o sin devengo y notifica a Encargado(a) de Contabilidad*/
-                                if (cometido.FechaPagoSigfe != null)
+                                if (cometido.ObservacionesPagoSigfe != null)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 17 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Conta
@@ -5842,7 +5950,22 @@ namespace App.Core.UseCases
                             case 17: /*Encargado(a) de Contabilidad revisa devengo*/
                                 /*Aprueba devengo y envía a Analista de Tesorería*/
                                 emailMsg = new List<string>();
-                                emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 18 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Tesoreria
+                                if (workflow.DefinicionWorkflow.Secuencia == 18 && workflow.DefinicionWorkflow.GrupoId != null)
+                                {
+                                    var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                                    var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
+                                    if (emails.Any())
+                                    {
+                                        foreach (var c in emails)
+                                        {
+                                            emailMsg.Add(c.Trim());
+                                        }
+                                    }
+                                }
+                                else
+                                {                                    
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 18 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Tesoreria
+                                }                                
 
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoConta_AnalistaTesoreria),

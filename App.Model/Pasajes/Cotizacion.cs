@@ -54,7 +54,7 @@ namespace App.Model.Pasajes
         public bool Seleccion { get; set; } = false;
 
         /*Nuevos requerimientos 27102020*/
-        [Display(Name = "Numero Orden de Compra")]
+        [Display(Name = "ID Orden de Compra")]
         public string NumeroOrdenCompra { get; set; }
 
         [Display(Name = "Clase de Pasaje")]

@@ -230,15 +230,16 @@ namespace App.Infrastructure.Email
             switch (workflow.DefinicionWorkflow.TipoEjecucionId)
             {
                 case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
                 case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
                 case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
                     emailMsg.To.Add(workflow.Email);
                     break;
 
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+                //case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
-                    return;
+                    //return;
             }
 
             foreach (var correo in Mails)

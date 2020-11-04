@@ -470,7 +470,17 @@ namespace App.Web.Controllers
                 _repository.Save();
             }
 
-            return File(docOld.File, "application/pdf");
+            ///*Se genera registro de la generacin de la resolucion*/
+            //var genera = new GeneracionResolucion();
+            //genera.FechaCreacion = DateTime.Now;
+            //genera.Annio = annio;
+            //genera.Mes = mes;
+            //genera.ProcesoId = hrs.FirstOrDefault().ProcesoId.Value;
+            //genera.WorkflowId = hrs.FirstOrDefault().WorkflowId.Value;
+            //_repository.Create(genera);
+            //_repository.Save();
+
+            return File(docOld.File, "application/pdf");            
         }
 
         [AllowAnonymous]
