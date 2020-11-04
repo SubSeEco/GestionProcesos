@@ -11,6 +11,8 @@ namespace App.Infrastructure.SIGPER
     {
         public AppContextEconomia(): base("name=SIGPEREconomia")
         {
+            this.Configuration.AutoDetectChangesEnabled = false;
+            this.Configuration.ValidateOnSaveEnabled = false;
         }
         public virtual DbSet<PEDATPER> PEDATPER { get; set; }
         public virtual DbSet<PeDatLab> PeDatLab { get; set; }
@@ -33,10 +35,6 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<TipoSubAsignacion> TipoSubAsignacion { get; set; }
         public virtual DbSet<TipoSubTitulo> TipoSubTitulo { get; set; }
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
-
-        //public virtual DbSet<PEFERJEF> PEFERJEF { get; set; }
-        //public virtual DbSet<DGPAISES> DGPAISES { get; set; }
-        //public virtual DbSet<SIGPERTipoReembolso> SIGPERTipoReembolso { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

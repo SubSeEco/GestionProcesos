@@ -8,8 +8,9 @@ namespace App.Infrastructure.SIGPER
     {
         public AppContextTurismo(): base("name=SIGPERTurismo")
         {
+            this.Configuration.AutoDetectChangesEnabled = false;
+            this.Configuration.ValidateOnSaveEnabled = false;
         }
-
         public virtual DbSet<PEDATPER> PEDATPER { get; set; }
         public virtual DbSet<PeDatLab> PeDatLab { get; set; }
         public virtual DbSet<PLUNILAB> PLUNILAB { get; set; }
