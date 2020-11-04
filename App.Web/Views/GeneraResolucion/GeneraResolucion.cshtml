@@ -38,6 +38,7 @@
             </div>
         </div>
     </div>
+    @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
 </div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
@@ -55,5 +56,6 @@
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
+        $('.tooltipped').tooltip();
     });
 </script>

@@ -441,19 +441,19 @@ namespace App.Web.Controllers
             }
 
 
-                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
+            if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
-                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
-                    workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
-                if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
+            //if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
+            //    workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
+            if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para eliminar");
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Details" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para ver");
 
             if (ModelState.IsValid)
-                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create")
+                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create" || workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion")
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
                 else
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { id = workflow.EntityId });

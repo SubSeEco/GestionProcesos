@@ -1175,7 +1175,7 @@ namespace App.Web.Controllers
 
             }
 
-            return Redirect(Request.UrlReferrer.PathAndQuery);            
+            return Redirect(Request.UrlReferrer.PathAndQuery);
         }
         
         //private DTOFileMetadata GetBynary(byte[] pdf)

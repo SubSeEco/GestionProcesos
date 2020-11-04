@@ -215,6 +215,27 @@ namespace App.Web.Controllers
 
         public ActionResult Edit(int id)
         {
+            List<SelectListItem> ClasePasaje = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "Ejecutiva", Value = "Ejecutiva"},
+                new SelectListItem {Text = "Económica", Value = "Económica"},
+                new SelectListItem {Text = "Turista", Value = "Turista"},
+                new SelectListItem {Text = "Otro ", Value = "Otro "},
+            };
+
+            List<SelectListItem> MecanismoCompra = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "Convenio marco", Value = "Convenio marco"},
+                new SelectListItem {Text = "Licitación pública", Value = "Licitación pública"},
+                new SelectListItem {Text = "Trato directo", Value = "Trato directo"},
+                new SelectListItem {Text = "Otros gastos menores", Value = "Otros gastos menores"},
+                new SelectListItem {Text = "Otro (detallar)", Value = "Otro (detallar) "},
+            };
+
+            ViewBag.ClasePasaje = new SelectList(ClasePasaje, "Value", "Text");
+            ViewBag.FormaAdquisicion = new SelectList(MecanismoCompra, "Value", "Text");
+
+
             var model = _repository.GetById<Cotizacion>(id);
             ViewBag.EmpresaAerolineaId = new List<SelectListItem>();
             ViewBag.EmpresaAerolineaId = new SelectList(_repository.Get<EmpresaAerolinea>(), "EmpresaAerolineaId", "NombreEmpresa");

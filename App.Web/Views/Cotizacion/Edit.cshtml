@@ -79,7 +79,7 @@
                                             @Html.DisplayNameFor(m => Model.ClasePasaje)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(m => Model.FormaAdquisicion)
+                                            @Html.DisplayNameFor(m => Model.FechaAdquisicion)
                                         </th>
                                     </tr>
                                     <tr>
@@ -87,10 +87,10 @@
                                             @Html.TextBoxFor(m => Model.NumeroOrdenCompra)
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(m => Model.ClasePasaje)
+                                            @Html.DropDownListFor(m => Model.ClasePasaje, null, "Seleccione...")
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(m => Model.FormaAdquisicion)
+                                            @Html.DropDownListFor(m => Model.FormaAdquisicion, null, "Seleccione...")
                                         </td>
 
                                     </tr>
