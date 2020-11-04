@@ -40,7 +40,8 @@
                     @Html.HiddenFor(q => Model.PermitirSeleccionarPersonasMismaUnidad)
                     @Html.HiddenFor(q => Model.PermitirSeleccionarGrupoEspecialDestino)
                     @Html.HiddenFor(q => Model.PermitirTerminar)
-                    @Html.HiddenFor(q => Model.Pl_UndCod)
+                    @Html.HiddenFor(q => Model.Reservado)
+                    @*@Html.HiddenFor(q => Model.Pl_UndCod)*@
                     @Html.HiddenFor(q => Model.DesactivarDestinoEnRechazo)
 
                     <div class="card">
@@ -68,17 +69,17 @@
                                     {
                                         <div class="row">
                                             <div class="col s12 m12 l12">
-                                                @Html.LabelFor(m => Model.Pl_UndCod)
-                                                @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...", new { @class = "browser-default", @id = "ddlPl_UndCod" })
-                                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                                                @Html.LabelFor(m => Model.Unidad)
+                                                @Html.DropDownListFor(m => m.Unidad, null, "Seleccione...", new { @class = "browser-default", @id = "ddlUnidad" })
+                                                @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
                                             </div>
                                         </div>
                                     }
                                     <div class="row">
                                         <div class="col s12 m12 l12">
-                                            @Html.LabelFor(m => Model.To)
-                                            @Html.DropDownListFor(model => model.To, null, "Seleccione...", new { @class = "browser-default" })
-                                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                                            @Html.LabelFor(m => Model.Funcionario)
+                                            @Html.DropDownListFor(model => model.Funcionario, null, "Seleccione...", new { @class = "browser-default" })
+                                            @Html.ValidationMessageFor(m => Model.Funcionario, "", new { @class = "red-text" })
                                         </div>
                                     </div>
                                 </div>
@@ -140,11 +141,11 @@
 </div>
 
 <script>
-    $("#ddlPl_UndCod").change(function () {
+    $("#ddlUnidad").change(function () {
         var Pl_UndCod = $(this).val();
         $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
             function (classesData) {
-                var select = $("#To");
+                var select = $("#Funcionario");
                 select.empty();
                 select.append($('<option/>', {
                     value: "",

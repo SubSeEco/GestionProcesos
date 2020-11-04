@@ -219,11 +219,6 @@ namespace App.Core.UseCases
                 if (ejecutor == null || ejecutor.Funcionario == null)
                     throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.Email));
 
-                //traer informacion del ejecutor
-                var personaDestino = _sigper.GetUserByEmail(obj.To);
-                if (personaDestino == null || personaDestino.Funcionario == null)
-                    throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
-
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
 
@@ -250,7 +245,8 @@ namespace App.Core.UseCases
                 workflowActual.Pl_UndCod = obj.Pl_UndCod;
                 workflowActual.GrupoId = obj.GrupoId;
                 workflowActual.Email = obj.Email;
-                workflowActual.To = obj.To.Trim();
+                workflowActual.To = !string.IsNullOrWhiteSpace(obj.To) ? obj.To.Trim() : string.Empty;
+                workflowActual.ToPl_UndCod = obj.Pl_UndCod.HasValue ? obj.Pl_UndCod : null;
 
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
@@ -277,66 +273,217 @@ namespace App.Core.UseCases
                 workflow.ProcesoId = workflowActual.ProcesoId;
                 workflow.Mensaje = obj.Observacion;
                 workflow.TareaPersonal = true;
-                workflow.To = workflowActual.To;
+                workflow.To = !string.IsNullOrWhiteSpace(workflowActual.To) ? workflowActual.To.Trim() : string.Empty;
+                workflow.ToPl_UndCod = workflowActual.ToPl_UndCod.HasValue ? workflowActual.ToPl_UndCod : null;
 
-                // si el proceso es reservado => enviar directamente al destino
+                //si el proceso es reservado => enviar directamente al funcionario destino
+                //en el caso de los procesos reservados, el destino es obligatorio
                 if (workflowActual.Proceso.Reservado)
                 {
-                    workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
-                    workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
-                    workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
-                    workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                    if (string.IsNullOrWhiteSpace(obj.To))
+                        throw new Exception("Es necesario especificar un destinatario para los procesos reservados.");
+
+                    //traer informacion del funcionario destino
+                    var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                    if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                        throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                    workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                    workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                    workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                    workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
                 }
 
-                // si el proceso no es reservado => destino normal
-                else
+                //proceso no reservado
+                if (!workflowActual.Proceso.Reservado)
                 {
-                    //es envío a otra unidad?
-                    if (ejecutor.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
+                    //buscar unidad de destino
+                    var unidadDestino = _sigper.GetUnidad(obj.Pl_UndCod.Value);
+                    if (unidadDestino == null)
+                        throw new Exception(string.Format("No se encontró la unidad destino {0} en SIGPER.", obj.Pl_UndCod.Value));
+
+                    //si es envio dentro de la misma unidad => asignar directamente
+                    if (ejecutor.Unidad.Pl_UndCod == unidadDestino.Pl_UndCod)
                     {
-                        //Construir lista de destinos
-                        List<string> path = new List<string>();
-
-                        //yo
-                        if (ejecutor.Funcionario != null)
-                            path.Add(ejecutor.Funcionario.Rh_Mail.Trim());
-
-                        //secretaria mi unidad
-                        if (ejecutor.Secretaria != null)
-                            path.Add(ejecutor.Secretaria.Rh_Mail.Trim());
-
-                        //secretaria unidad destino
-                        if (personaDestino.Secretaria != null)
-                            path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
-
-                        //destino final
-                        path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
-
-                        foreach (var item in path)
+                        //si solo unidad => asignar a unidad
+                        if (obj.Pl_UndCod.HasValue && string.IsNullOrEmpty(obj.To))
                         {
-                            if (workflowActual.Email.Trim() == item.Trim())
-                                continue;
+                            workflow.Pl_UndCod = unidadDestino.Pl_UndCod;
+                            workflow.Pl_UndDes = unidadDestino.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+                        }
 
-                            persona = _sigper.GetUserByEmail(item);
-                            if (ejecutor == null || ejecutor.Funcionario == null)
-                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
+                        //si unidad y funcionario => asignar a funcionario
+                        if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
+                        {
+                            if (string.IsNullOrWhiteSpace(obj.To))
+                                throw new Exception("Debe especificar el funcionario destino.");
 
-                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            //traer informacion del funcionario destino
+                            var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                            if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                throw new Exception(string.Format("No se encontró el funcionario destino {0} en SIGPER.", obj.To));
 
-                            break;
+                            workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                            workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
                         }
                     }
 
-                    // no, es envío dentro de mi unidad
-                    else
+                    //si es envio fuera de la unidad => asignar a mi secretaria, seretaria destino, destino
+                    if (ejecutor.Unidad.Pl_UndCod != unidadDestino.Pl_UndCod)
                     {
-                        workflow.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
-                        workflow.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
-                        workflow.Email = personaDestino.Funcionario.Rh_Mail.Trim();
-                        workflow.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
+                        //buscar secretaria unidad de destino
+                        var secretariaUnidadDestino = _sigper.GetSecretariaByUnidad(unidadDestino.Pl_UndCod);
+
+                        //si va solo a unidad  => asignar a unidad
+                        if (string.IsNullOrEmpty(obj.To) && obj.Pl_UndCod.HasValue)
+                        {
+                            //lo tengo yo => enviar a mi secretaria
+                            if (workflowActual.Email.Trim() == ejecutor.Funcionario.Rh_Mail.Trim())
+                            {
+                                //si mi unidad tiene secretaria => asignar a la secretaria
+                                if (ejecutor.Secretaria != null && ejecutor.Secretaria.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                {
+                                    workflow.Pl_UndCod = ejecutor.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = ejecutor.Unidad.Pl_UndDes;
+                                    workflow.Email = ejecutor.Secretaria.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = ejecutor.Secretaria.PeDatPerChq.Trim();
+                                }
+                                //si mi unidad no tiene secretaria => asignar a la secretaria de la otra unidad
+                                else
+                                {
+                                    //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                    if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                    {
+                                        workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                        workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                        workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                        workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                    }
+                                    //si la unidad destino no tiene secretaria => asignar a la unidad
+                                    else 
+                                    {
+                                        workflow.Pl_UndCod = unidadDestino.Pl_UndCod;
+                                        workflow.Pl_UndDes = unidadDestino.Pl_UndDes;
+                                        workflow.TareaPersonal = false;
+                                    }
+                                }
+                            }
+
+                            //lo tiene mi secretaria => que lo envíe a la secretaria de unidad destino
+                            else if (workflowActual.Email.Trim() == ejecutor.Secretaria.Rh_Mail.Trim())
+                            {
+                                //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                {
+                                    workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                    workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                }
+                                //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                else
+                                {
+                                    //traer informacion del funcionario destino
+                                    var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                    if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                        throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                                    workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                    workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                }
+                            }
+
+                            //lo tiene la secretaria unidad destino => que lo envíe a la persona final
+                            else if (workflowActual.Email.Trim() == secretariaUnidadDestino.Funcionario.Rh_Mail.Trim())
+                            {
+                                //traer informacion del funcionario destino
+                                var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                    throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                                workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                            }
+                        }
+
+                        //si va a unidad y funcionario => asignar a funcionario
+                        if (!string.IsNullOrEmpty(obj.To) && obj.Pl_UndCod.HasValue)
+                        {
+                            //traer informacion del funcionario destino
+                            var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                            if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                            //lo tengo yo => enviar a mi secretaria
+                            if (workflowActual.Email.Trim() == ejecutor.Funcionario.Rh_Mail.Trim())
+                            {
+                                //si mi unidad tiene secretaria => asignar a mi secretaria
+                                if (ejecutor.Secretaria != null && ejecutor.Secretaria.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                {
+                                    workflow.Pl_UndCod = ejecutor.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = ejecutor.Unidad.Pl_UndDes;
+                                    workflow.Email = ejecutor.Secretaria.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = ejecutor.Secretaria.PeDatPerChq.Trim();
+                                }
+                                //si mi unidad no tiene secretaria => asignar a la secretaria de la otra unidad
+                                else
+                                {
+                                    //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                    if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null && secretariaUnidadDestino.Funcionario.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                    {
+                                        workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                        workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                        workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                        workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                    }
+                                    //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                    else
+                                    {
+                                        workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                        workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                        workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                        workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                    }
+                                }
+                            }
+
+                            //lo tiene mi secretaria => que lo envíe a la secretaria de unidad destino
+                            else if (workflowActual.Email.Trim() == ejecutor.Secretaria.Rh_Mail.Trim())
+                            {
+                                //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                {
+                                    workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                    workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                }
+                                //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                else
+                                {
+                                    workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                    workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                }
+                            }
+
+                            //lo tiene la secretaria unidad destino => que lo envíe a la persona final
+                            else if (workflowActual.Email.Trim() == secretariaUnidadDestino.Funcionario.Rh_Mail.Trim())
+                            {
+                                workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                            }
+                        }
                     }
                 }
 
@@ -410,6 +557,8 @@ namespace App.Core.UseCases
                 workflowActual.GrupoId = obj.GrupoId;
                 workflowActual.Email = ejecutor.Funcionario.Rh_Mail.Trim();
                 workflowActual.NombreFuncionario = ejecutor.Funcionario.PeDatPerChq.Trim();
+                workflowActual.To = !string.IsNullOrWhiteSpace(obj.To) ? obj.To.Trim() : string.Empty;
+                workflowActual.ToPl_UndCod = obj.Pl_UndCod.HasValue ? obj.Pl_UndCod : null;
 
                 //actualiazar tags
                 workflowActual.Proceso.Tags = string.Concat(workflowActual.Proceso.GetTags(), " ", gd.GetTags());
@@ -617,7 +766,11 @@ namespace App.Core.UseCases
                             if (gd.DestinoUnidadCodigo.IsInt() && !string.IsNullOrWhiteSpace(gd.DestinoFuncionarioEmail))
                             {
                                 var funcionario = _sigper.GetUserByEmail(gd.DestinoFuncionarioEmail);
-                                if (funcionario != null && funcionario.Secretaria != null)
+                                if (funcionario == null || funcionario.Funcionario == null)
+                                    throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", gd.DestinoFuncionarioEmail));
+
+                                //asignar a la secretaria
+                                if (funcionario.Secretaria != null)
                                 {
                                     workflowSiguiente.Pl_UndCod = funcionario.Unidad.Pl_UndCod;
                                     workflowSiguiente.Pl_UndDes = funcionario.Unidad.Pl_UndDes;
@@ -642,14 +795,14 @@ namespace App.Core.UseCases
                             else if (gd.DestinoUnidadCodigo.IsInt() && string.IsNullOrWhiteSpace(gd.DestinoFuncionarioEmail))
                             {
                                 var secretaria = _sigper.GetSecretariaByUnidad(gd.DestinoUnidadCodigo.ToInt());
-                                if (secretaria != null)
+                                if (secretaria != null && secretaria.Funcionario != null)
                                 {
                                     workflowSiguiente.Pl_UndCod = secretaria.Unidad.Pl_UndCod;
                                     workflowSiguiente.Pl_UndDes = secretaria.Unidad.Pl_UndDes;
-                                    workflowSiguiente.Email = secretaria.Secretaria.Rh_Mail.Trim();
-                                    workflowSiguiente.NombreFuncionario = secretaria.Secretaria.PeDatPerChq.Trim();
+                                    workflowSiguiente.Email = secretaria.Funcionario.Rh_Mail.Trim();
+                                    workflowSiguiente.NombreFuncionario = secretaria.Funcionario.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = true;
-                                    workflowSiguiente.To = secretaria.Secretaria.Rh_Mail.Trim();
+                                    workflowSiguiente.To = secretaria.Funcionario.Rh_Mail.Trim();
                                 }
                                 //si no se encontró secretaria => asignar al grupo
                                 else
@@ -687,7 +840,10 @@ namespace App.Core.UseCases
                             if (gd.DestinoUnidadCodigo2.IsInt() && !string.IsNullOrWhiteSpace(gd.DestinoFuncionarioEmail2))
                             {
                                 var funcionario = _sigper.GetUserByEmail(gd.DestinoFuncionarioEmail2);
-                                if (funcionario != null && funcionario.Secretaria != null)
+                                if (funcionario == null || funcionario.Funcionario == null)
+                                    throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", gd.DestinoFuncionarioEmail2));
+
+                                if (funcionario.Secretaria != null)
                                 {
                                     workflowSiguiente.Pl_UndCod = funcionario.Unidad.Pl_UndCod;
                                     workflowSiguiente.Pl_UndDes = funcionario.Unidad.Pl_UndDes;
@@ -712,14 +868,14 @@ namespace App.Core.UseCases
                             else if (gd.DestinoUnidadCodigo2.IsInt() && string.IsNullOrWhiteSpace(gd.DestinoFuncionarioEmail2))
                             {
                                 var secretaria = _sigper.GetSecretariaByUnidad(gd.DestinoUnidadCodigo2.ToInt());
-                                if (secretaria != null)
+                                if (secretaria != null && secretaria.Funcionario != null)
                                 {
                                     workflowSiguiente.Pl_UndCod = secretaria.Unidad.Pl_UndCod;
                                     workflowSiguiente.Pl_UndDes = secretaria.Unidad.Pl_UndDes;
-                                    workflowSiguiente.Email = secretaria.Secretaria.Rh_Mail.Trim();
-                                    workflowSiguiente.NombreFuncionario = secretaria.Secretaria.PeDatPerChq.Trim();
+                                    workflowSiguiente.Email = secretaria.Funcionario.Rh_Mail.Trim();
+                                    workflowSiguiente.NombreFuncionario = secretaria.Funcionario.PeDatPerChq.Trim();
                                     workflowSiguiente.TareaPersonal = true;
-                                    workflowSiguiente.To = secretaria.Secretaria.Rh_Mail.Trim();
+                                    workflowSiguiente.To = secretaria.Funcionario.Rh_Mail.Trim();
                                 }
                                 //si no se encontró secretaria => asignar al grupo
                                 else
@@ -747,89 +903,236 @@ namespace App.Core.UseCases
                     if (workflowActual.DefinicionWorkflow.Secuencia > 3)
                     {
                         //en el caso de existir mas tareas, crearla
-                        var workflowSiguiente = new Workflow();
-                        workflowSiguiente.FechaCreacion = DateTime.Now;
-                        workflowSiguiente.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
-                        workflowSiguiente.Terminada = false;
-                        workflowSiguiente.DefinicionWorkflow = definicionWorkflow;
-                        workflowSiguiente.ProcesoId = workflowActual.ProcesoId;
-                        workflowSiguiente.Mensaje = obj.Observacion;
+                        var workflow = new Workflow();
+                        workflow.FechaCreacion = DateTime.Now;
+                        workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
+                        workflow.Terminada = false;
+                        workflow.DefinicionWorkflow = definicionWorkflow;
+                        workflow.ProcesoId = workflowActual.ProcesoId;
+                        workflow.Mensaje = obj.Observacion;
+                        workflow.TareaPersonal = true;
+                        workflow.To = !string.IsNullOrWhiteSpace(workflowActual.To) ? workflowActual.To.Trim() : string.Empty;
+                        workflow.ToPl_UndCod = workflowActual.ToPl_UndCod.HasValue ? workflowActual.ToPl_UndCod : null;
 
-                        //si hay destino manual, guardarlo
-                        if (!workflowActual.To.IsNullOrWhiteSpace())
-                            workflowSiguiente.To = workflowActual.To.Trim();
-
-                        //si hay destino manual, guardarlo
-                        if (!obj.To.IsNullOrWhiteSpace())
-                            workflowSiguiente.To = obj.To.Trim();
-
-                        //traer informacion del origen
-                        var personaOrigen = _sigper.GetUserByEmail(workflowActual.Email);
-                        if (personaOrigen == null || personaOrigen.Funcionario == null)
-                            throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", workflowSiguiente.Email));
-
-                        //traer informacion del destino
-                        var personaDestino = _sigper.GetUserByEmail(workflowSiguiente.To);
-                        if (personaDestino == null || personaDestino.Funcionario == null)
-                            throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", workflowSiguiente.To));
-
-                        //es envío a otra unidad?
-                        if (personaOrigen.Unidad.Pl_UndCod != personaDestino.Unidad.Pl_UndCod)
+                        //si el proceso es reservado => enviar directamente al funcionario destino
+                        //en el caso de los procesos reservados, el destino es obligatorio
+                        if (workflowActual.Proceso.Reservado)
                         {
-                            List<string> path = new List<string>();
+                            if (string.IsNullOrWhiteSpace(obj.To))
+                                throw new Exception("Es necesario especificar un destinatario para los procesos reservados.");
 
-                            //yo
-                            if (personaOrigen.Funcionario != null)
-                                path.Add(personaOrigen.Funcionario.Rh_Mail.Trim());
+                            //traer informacion del funcionario destino
+                            var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                            if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
 
-                            //secretaria mi unidad
-                            if (personaOrigen.Secretaria != null && personaOrigen.Secretaria.Rh_Mail.Trim() != personaOrigen.Funcionario.Rh_Mail.Trim())
-                                path.Add(personaOrigen.Secretaria.Rh_Mail.Trim());
+                            workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                            workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                        }
 
-                            //secretaria unidad destino
-                            if (personaDestino.Secretaria != null)
-                                path.Add(personaDestino.Secretaria.Rh_Mail.Trim());
+                        //proceso no reservado
+                        if (!workflowActual.Proceso.Reservado)
+                        {
+                            //buscar unidad de destino
+                            var unidadDestino = _sigper.GetUnidad(obj.Pl_UndCod.Value);
+                            if (unidadDestino == null)
+                                throw new Exception(string.Format("No se encontró la unidad destino {0} en SIGPER.", obj.Pl_UndCod.Value));
 
-                            //destino final
-                            path.Add(personaDestino.Funcionario.Rh_Mail.Trim());
-
-                            foreach (var item in path)
+                            //si es envio dentro de la misma unidad => asignar directamente
+                            if (ejecutor.Unidad.Pl_UndCod == unidadDestino.Pl_UndCod)
                             {
-                                if (workflowActual.Email.Trim() == item.Trim())
-                                    continue;
+                                //si solo unidad => asignar a unidad
+                                if (obj.Pl_UndCod.HasValue && string.IsNullOrEmpty(obj.To))
+                                {
+                                    workflow.Pl_UndCod = unidadDestino.Pl_UndCod;
+                                    workflow.Pl_UndDes = unidadDestino.Pl_UndDes;
+                                    workflow.TareaPersonal = false;
+                                }
 
-                                persona = _sigper.GetUserByEmail(item);
-                                if (personaOrigen == null || personaOrigen.Funcionario == null)
-                                    throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", item));
+                                //si unidad y funcionario => asignar a funcionario
+                                if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
+                                {
+                                    if (string.IsNullOrWhiteSpace(obj.To))
+                                        throw new Exception("Debe especificar el funcionario destino.");
 
-                                workflowSiguiente.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                                workflowSiguiente.Pl_UndDes = persona.Unidad.Pl_UndDes;
-                                workflowSiguiente.Email = persona.Funcionario.Rh_Mail.Trim();
-                                workflowSiguiente.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-                                workflowSiguiente.TareaPersonal = true;
+                                    //traer informacion del funcionario destino
+                                    var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                    if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                        throw new Exception(string.Format("No se encontró el funcionario destino {0} en SIGPER.", obj.To));
 
-                                break;
+                                    workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                    workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                    workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                    workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                }
+                            }
+
+                            //si es envio fuera de la unidad => asignar a mi secretaria, seretaria destino, destino
+                            if (ejecutor.Unidad.Pl_UndCod != unidadDestino.Pl_UndCod)
+                            {
+                                //buscar secretaria unidad de destino
+                                var secretariaUnidadDestino = _sigper.GetSecretariaByUnidad(unidadDestino.Pl_UndCod);
+
+                                //si va solo a unidad  => asignar a unidad
+                                if (string.IsNullOrEmpty(obj.To) && obj.Pl_UndCod.HasValue)
+                                {
+                                    //lo tengo yo => enviar a mi secretaria
+                                    if (workflowActual.Email.Trim() == ejecutor.Funcionario.Rh_Mail.Trim())
+                                    {
+                                        //si mi unidad tiene secretaria => asignar a la secretaria
+                                        if (ejecutor.Secretaria != null && ejecutor.Secretaria.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                        {
+                                            workflow.Pl_UndCod = ejecutor.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = ejecutor.Unidad.Pl_UndDes;
+                                            workflow.Email = ejecutor.Secretaria.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = ejecutor.Secretaria.PeDatPerChq.Trim();
+                                        }
+                                        //si mi unidad no tiene secretaria => asignar a la secretaria de la otra unidad
+                                        else
+                                        {
+                                            //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                            if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                            {
+                                                workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                                workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                                workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                                workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                            }
+                                            //si la unidad destino no tiene secretaria => asignar a la unidad
+                                            else
+                                            {
+                                                workflow.Pl_UndCod = unidadDestino.Pl_UndCod;
+                                                workflow.Pl_UndDes = unidadDestino.Pl_UndDes;
+                                                workflow.TareaPersonal = false;
+                                            }
+                                        }
+                                    }
+
+                                    //lo tiene mi secretaria => que lo envíe a la secretaria de unidad destino
+                                    else if (workflowActual.Email.Trim() == ejecutor.Secretaria.Rh_Mail.Trim())
+                                    {
+                                        //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                        if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                        {
+                                            workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                            workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                        }
+                                        //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                        else
+                                        {
+                                            //traer informacion del funcionario destino
+                                            var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                            if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                                throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                                            workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                            workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                        }
+                                    }
+
+                                    //lo tiene la secretaria unidad destino => que lo envíe a la persona final
+                                    else if (workflowActual.Email.Trim() == secretariaUnidadDestino.Funcionario.Rh_Mail.Trim())
+                                    {
+                                        //traer informacion del funcionario destino
+                                        var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                        if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                            throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                                        workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                        workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                        workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                        workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                    }
+                                }
+
+                                //si va a unidad y funcionario => asignar a funcionario
+                                if (!string.IsNullOrEmpty(obj.To) && obj.Pl_UndCod.HasValue)
+                                {
+                                    //traer informacion del funcionario destino
+                                    var funcionarioDestino = _sigper.GetUserByEmail(obj.To);
+                                    if (funcionarioDestino == null || funcionarioDestino.Funcionario == null)
+                                        throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.To));
+
+                                    //lo tengo yo => enviar a mi secretaria
+                                    if (workflowActual.Email.Trim() == ejecutor.Funcionario.Rh_Mail.Trim())
+                                    {
+                                        //si mi unidad tiene secretaria => asignar a mi secretaria
+                                        if (ejecutor.Secretaria != null && ejecutor.Secretaria.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                        {
+                                            workflow.Pl_UndCod = ejecutor.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = ejecutor.Unidad.Pl_UndDes;
+                                            workflow.Email = ejecutor.Secretaria.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = ejecutor.Secretaria.PeDatPerChq.Trim();
+                                        }
+                                        //si mi unidad no tiene secretaria => asignar a la secretaria de la otra unidad
+                                        else
+                                        {
+                                            //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                            if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null && secretariaUnidadDestino.Funcionario.Rh_Mail.Trim() != workflowActual.Email.Trim())
+                                            {
+                                                workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                                workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                                workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                                workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                            }
+                                            //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                            else
+                                            {
+                                                workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                                workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                                workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                                workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                            }
+                                        }
+                                    }
+
+                                    //lo tiene mi secretaria => que lo envíe a la secretaria de unidad destino
+                                    else if (workflowActual.Email.Trim() == ejecutor.Secretaria.Rh_Mail.Trim())
+                                    {
+                                        //si la unidad destino tiene secretaria => asignar tarea a scretaria destino
+                                        if (secretariaUnidadDestino != null && secretariaUnidadDestino.Funcionario != null)
+                                        {
+                                            workflow.Pl_UndCod = secretariaUnidadDestino.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = secretariaUnidadDestino.Unidad.Pl_UndDes;
+                                            workflow.Email = secretariaUnidadDestino.Funcionario.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = secretariaUnidadDestino.Funcionario.PeDatPerChq.Trim();
+                                        }
+                                        //si la unidad destino no tiene secretaria => asignar al funcionario final
+                                        else
+                                        {
+                                            workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                            workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                            workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                            workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                        }
+                                    }
+
+                                    //lo tiene la secretaria unidad destino => que lo envíe a la persona final
+                                    else if (workflowActual.Email.Trim() == secretariaUnidadDestino.Funcionario.Rh_Mail.Trim())
+                                    {
+                                        workflow.Pl_UndCod = funcionarioDestino.Unidad.Pl_UndCod;
+                                        workflow.Pl_UndDes = funcionarioDestino.Unidad.Pl_UndDes;
+                                        workflow.Email = funcionarioDestino.Funcionario.Rh_Mail.Trim();
+                                        workflow.NombreFuncionario = funcionarioDestino.Funcionario.PeDatPerChq.Trim();
+                                    }
+                                }
                             }
                         }
 
-                        // no, es envío dentro de mi unidad
-                        else
-                        {
-                            workflowSiguiente.Pl_UndCod = personaDestino.Unidad.Pl_UndCod;
-                            workflowSiguiente.Pl_UndDes = personaDestino.Unidad.Pl_UndDes;
-                            workflowSiguiente.Email = personaDestino.Funcionario.Rh_Mail.Trim();
-                            workflowSiguiente.NombreFuncionario = personaDestino.Funcionario.PeDatPerChq.Trim();
-                            workflowSiguiente.TareaPersonal = true;
-                        }
-
                         //guardar información
-                        _repository.Create(workflowSiguiente);
+                        _repository.Create(workflow);
                         _repository.Save();
 
                         //notificar por email al ejecutor de proxima tarea
                         //se adjunta copia al autor
-                        if (workflowSiguiente.DefinicionWorkflow.NotificarAsignacion)
-                            _email.NotificarNuevoWorkflow(workflowSiguiente,
+                        if (workflow.DefinicionWorkflow.NotificarAsignacion)
+                            _email.NotificarNuevoWorkflow(workflow,
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                     }
