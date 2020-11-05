@@ -18,7 +18,28 @@
                             <table class="table">
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.NombreId)
+                                        @Html.DisplayNameFor(model => model.Nombre)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Descripcion)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Nombre)
+                                        @*@Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")*@
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Descripcion)
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="section"></div>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        @Html.Raw("<span> </span>")
                                     </th>
                                     <th style="width:80px">
                                         @Html.DisplayNameFor(model => model.HDPago)
@@ -32,14 +53,11 @@
                                     <th style="width:80px">
                                         @Html.DisplayNameFor(m => Model.HNCompensar)
                                     </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => Model.Descripcion)
-                                    </th>
                                     <th></th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                        @Html.Raw("Horas solicitados")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(m => Model.HDPago, new { style = "width:50px" })
@@ -53,8 +71,26 @@
                                     <td>
                                         @Html.TextBoxFor(m => Model.HNCompensar, new { style = "width:50px" })
                                     </td>
+                                </tr>
+                                <tr>
                                     <td>
-                                        @Html.TextBoxFor(m => Model.Descripcion)
+                                        @Html.Raw("Horas aprobadas")
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(m => Model.HDPagoAprobados)
+                                        @Html.ValidationMessageFor(m => Model.HDPagoAprobados, "", new { @class = "red-text" })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(m => Model.HDCompensarAprobados)
+                                        @Html.ValidationMessageFor(m => Model.HDCompensarAprobados, "", new { @class = "red-text" })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(m => Model.HNPagoAprobados)
+                                        @Html.ValidationMessageFor(m => Model.HNPagoAprobados, "", new { @class = "red-text" })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(m => Model.HNCompensarAprobados)
+                                        @Html.ValidationMessageFor(m => Model.HNCompensarAprobados, "", new { @class = "red-text" })
                                     </td>
                                 </tr>
                             </table>

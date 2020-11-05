@@ -107,7 +107,7 @@ namespace App.Infrastructure.SIGPER
                                         where f.FyPFunRut == funcionario.RH_NumInte
                                         where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                         where j.PeFerJerAutEst == 1
-                                        where p.Rh_MailPer == null
+                                        //where p.Rh_MailPer == null
                                         select p).FirstOrDefault();
 
                         if (jefatura != null)
@@ -956,6 +956,210 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue;
 
+        }
+
+        /*nuevo metodo para traer datos de los funcionarios desde SIGPER - 05112020*/
+        public Model.SIGPER.SIGPER NewGetUserByEmail(string email)
+        {
+            var sigper = new Model.SIGPER.SIGPER()
+            {
+                Funcionario = null,
+                Jefatura = null,
+                Secretaria = null,
+                Unidad = null,
+                FunDatosLaborales = null,
+                SubSecretaria = null,
+                datosLaborales = null
+            };
+
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    //var func = context.PEDATPER.Where(q => q.Rh_Mail == email && q.RH_EstLab == "A").ToList();
+
+                    var funcionario = context.PEDATPER.FirstOrDefault(q => q.Rh_Mail == email && q.RH_EstLab == "A");
+                    if (funcionario != null)
+                    {
+                        sigper.Funcionario = funcionario;
+
+                        //jefatura del funcionario
+                        var jefatura = (from f in context.PEFERJEFAF
+                                        join j in context.PEFERJEFAJ on f.PeFerJerCod equals j.PeFerJerCod
+                                        join p in context.PEDATPER on j.FyPFunARut equals p.RH_NumInte
+                                        where f.FyPFunRut == funcionario.RH_NumInte
+                                        where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                        where j.PeFerJerAutEst == 1
+                                        //where p.Rh_MailPer == null
+                                        select p).FirstOrDefault();
+
+                        if (jefatura != null)
+                            sigper.Jefatura = jefatura;
+
+                        //datos laborales del funcionario
+                        //var PeDatLab = dbEconomia.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && !q.RhConRol.Contains("ALU")).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        //var PeDatLab = dbEconomia.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        if (PeDatLab != null)
+                        {
+                            var CodUnidad = (from u in context.PeDatLab
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
+
+                            /*unidad del funcionario*/
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
+                            if (unidad != null)
+                            {
+                                sigper.Unidad = unidad;
+
+                                //secretaria del funcionario
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                if (secretaria != null)
+                                    sigper.Secretaria = secretaria;
+                            }
+
+                            /*datos laborales funcionario*/
+                            //var FunDatosLaborales = dbEconomia.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+
+                            if (FunDatosLaborales != null)
+                            {                                
+                                sigper.FunDatosLaborales = FunDatosLaborales;
+                            }
+
+                            /*se obtienen datos laborales desde tabla ReContra*/
+                            var datosLaborales = (from rc in context.ReContra
+                                                  join p in context.PEDATPER on rc.RH_NumInte equals p.RH_NumInte
+                                                  join pl in context.PLUNILAB on rc.Re_ConUni equals pl.Pl_UndCod
+                                                  join e in context.DGESCALAFONES on rc.Re_ConEsc equals e.Pl_CodEsc
+                                                  join co in context.DGCONTRATOS on rc.RH_ContCod equals co.RH_ContCod
+                                                  join pc in context.PECARGOS on rc.Re_ConCar equals pc.Pl_CodCar
+                                                  join es in context.DGESTAMENTOS on rc.ReContraEst equals es.DgEstCod
+                                                  where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                                  where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                  where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                                  where rc.Re_ConIni == (from ud in context.ReContra
+                                                                         where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                                select ud.Re_ConIni).Max()
+                                                  select rc).FirstOrDefault();
+                            
+                            if (datosLaborales != null)
+                            {
+                                sigper.datosLaborales = datosLaborales;
+                            }
+
+                        }
+                        else
+                        {
+                            PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+
+                            var CodUnidad = (from u in context.PeDatLab
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
+
+
+                            //unidad del funcionario
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
+                            if (unidad != null)
+                            {
+                                sigper.Unidad = unidad;
+
+                                //secretaria del funcionario
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase) && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                if (secretaria != null)
+                                    sigper.Secretaria = secretaria;
+                            }
+
+                            /*datos laborales funcionario*/
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            if (FunDatosLaborales != null)
+                            {
+                                sigper.FunDatosLaborales = FunDatosLaborales;
+                            }
+                        }
+
+                        sigper.SubSecretaria = "ECONOMIA";
+
+                        return sigper;
+                    }
+                }
+
+                using (var context = new AppContextTurismo())
+                {
+                    var funcionario = context.PEDATPER.FirstOrDefault(q => q.Rh_Mail == email);
+                    if (funcionario != null)
+                    {
+                        sigper.Funcionario = funcionario;
+
+                        //jefatura del funcionario
+                        var jefatura = (from f in context.PEFERJEFAF
+                                        join j in context.PEFERJEFAJ on f.PeFerJerCod equals j.PeFerJerCod
+                                        join p in context.PEDATPER on j.FyPFunARut equals p.RH_NumInte
+                                        where f.FyPFunRut == funcionario.RH_NumInte
+                                        where p.RH_EstLab.Equals("A")
+                                        where j.PeFerJerAutEst == 1
+                                        where p.Rh_MailPer == null
+                                        select p).FirstOrDefault();
+
+                        if (jefatura != null)
+                            sigper.Jefatura = jefatura;
+
+                        //datos laborales del funcionario
+                        //var PeDatLab = dbTurismo.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        if (PeDatLab != null)
+                        {
+                            var CodUnidad = (from u in context.PeDatLab
+                                             join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                                             where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                             where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                          select ud.PeDatLabAdDocCor).Max()
+                                             select u.RhConUniCod).FirstOrDefault();
+
+                            //unidad del funcionario
+                            var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
+                            if (unidad != null)
+                            {
+                                sigper.Unidad = unidad;
+
+                                //secretaria del funcionario
+                                var secretaria = context.PEDATPER.FirstOrDefault(q => q.RH_EstLab.Equals("A") && q.PeDatPerChq == unidad.Pl_UndNomSec);
+                                if (secretaria != null)
+                                    sigper.Secretaria = secretaria;
+                            }
+
+                            /*datos laborales funcionario*/
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            if (FunDatosLaborales != null)
+                            {
+                                sigper.FunDatosLaborales = FunDatosLaborales;
+                            }
+                        }
+
+                        sigper.SubSecretaria = "TURISMO";
+
+                        return sigper;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return sigper;
         }
     }
 }

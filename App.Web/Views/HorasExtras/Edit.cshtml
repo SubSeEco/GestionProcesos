@@ -137,7 +137,7 @@
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
                                                 </td>
                                                 <td>
-                                                    <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                    <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
                                                 </td>
                                                 <td>
                                                     <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>

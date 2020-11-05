@@ -35,5 +35,6 @@ namespace App.Core.Interfaces
 
         List<PLUNILAB> GetUnidadesFirmantes(List<string> listEmailFirmantes);
         List<PEDATPER> GetUserFirmanteByUnidad(int codigoUnidad, List<string> listEmailFirmantes);
+        SIGPER NewGetUserByEmail(string email);
     }
 }

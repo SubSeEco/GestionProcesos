@@ -47,5 +47,18 @@ namespace App.Model.SIGPER
 
         [Display(Name = "ReContraLabCor")]
         public Int16 ReContraLabCor { get; set; }
+
+        [Display(Name = "Re_ConUni")]
+        public Int32 Re_ConUni { get; set; }
+
+        [Display(Name = "Re_ConEsc")]
+        public string Re_ConEsc { get; set; }
+
+        [Display(Name = "ReContraEst")]
+        public Int16 ReContraEst { get; set; }
+
+        [Display(Name = "Re_ConGra")]
+        public string Re_ConGra { get; set; }
+        
     }
 }

@@ -272,5 +272,45 @@ namespace App.Web.Controllers
             }
             return View(model);
         }
+
+        public ActionResult EditGP(int id)
+        {
+            var model = _repository.GetById<Colaborador>(id);
+            var persona = _sigper.GetUserByEmail(User.Email());
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
+            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult EditGP(Colaborador model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(model);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Edit", "HorasExtras", new { id = model.HorasExtrasId });
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            var persona = _sigper.GetUserByEmail(User.Email());
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
+
+            return View(model);
+        }
     }
 }

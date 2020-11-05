@@ -34,19 +34,38 @@ namespace App.Model.HorasExtras
         public string DV { get; set; }
 
         [Display(Name = "Horas Diurnas a Pago")]
-        public int HDPago { get; set; }
+        public int HDPago { get; set; } = 0;
 
         [Display(Name = "Horas Diurnas a Compensar")]
-        public int HDCompensar { get; set; }
+        public int HDCompensar { get; set; } = 0;
 
         [Display(Name = "Horas Nocturnas a Pago")]
-        public int HNPago { get; set; }
+        public int HNPago { get; set; } = 0;
 
         [Display(Name = "Horas Nocturnas a Compensar")]
-        public int HNCompensar { get; set; }
+        public int HNCompensar { get; set; } = 0;
 
         [Required(ErrorMessage = "Se deben señalar las descripcion de las tareas")]
         [Display(Name = "Descripcion de tareas")]
+        [DataType(DataType.MultilineText)]
         public string Descripcion { get; set; }
+
+        /*Se agraga atributo de aprobados, para edicion de GP (04112020)*/
+        [Display(Name = "Horas Diurnas a Pago Aprobadas")]
+        [AssertThat("HDPagoAprobados >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        public int? HDPagoAprobados { get; set; } = 0;
+
+        [Display(Name = "Horas Diurnas a Compensar Aprobadas")]
+        [AssertThat("HDCompensarAprobados >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        public int? HDCompensarAprobados { get; set; } = 0;
+
+        [Display(Name = "Horas Nocturnas a Pago Aprobadas")]
+        [AssertThat("HNPagoAprobados >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        public int? HNPagoAprobados { get; set; } = 0;
+
+        [Display(Name = "Horas Nocturnas a Compensar Aprobadas")]
+        [AssertThat("HNCompensarAprobados >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        public int? HNCompensarAprobados { get; set; } = 0;
+
     }
 }
