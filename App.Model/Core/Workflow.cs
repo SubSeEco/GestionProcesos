@@ -50,10 +50,10 @@ namespace App.Model.Core
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
+        //[RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
+        [RequiredIf("Reservado", ErrorMessage = "Es necesario especificar el dato Funcionario Destino")]
         [Display(Name = "Funcionario")]
         public string To { get; set; }
-
 
         [Display(Name = "Unidad")]
         public string Pl_UndDes { get; set; }
@@ -96,6 +96,8 @@ namespace App.Model.Core
         [Display(Name = "Entidad Id")]
         public int? EntityId { get; set; }
 
+        public int? ToPl_UndCod { get; set; }
+
         public virtual ICollection<Documento> Documentos { get; set; }
 
 
@@ -122,6 +124,9 @@ namespace App.Model.Core
 
         [NotMapped]
         public bool PermitirTerminar { get; set; }
+        
+        [NotMapped]
+        public bool Reservado { get; set; }
 
         [NotMapped]
         public bool EsAprobacionCometidoCompraPasaje => 
@@ -148,5 +153,13 @@ namespace App.Model.Core
 
         [NotMapped]
         public bool DesactivarDestinoEnRechazo { get; set; } = false;
+
+
+        [NotMapped]
+        public int? Unidad { get; set; }
+
+        [NotMapped]
+        public string Funcionario { get; set; }
+
     }
 }

@@ -17,7 +17,6 @@ namespace App.Infrastructure.Email
                 var smtpClient = new SmtpClient();
                 if (message != null)
                 {
-                    message.Bcc.Add("vsilva@economia.cl"); // temporalmente para efectos de monitoreo de funcionalidad
                     smtpClient.Send(message);
                 }
             }

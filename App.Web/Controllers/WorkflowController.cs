@@ -155,7 +155,7 @@ namespace App.Web.Controllers
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,
-                        Asunto = q.Asunto ,
+                        Asunto = q.Asunto,
                         Definicion = q.DefinicionWorkflow.Nombre,
                         TareaPersonal = q.TareaPersonal,
                         NombreFuncionario = q.NombreFuncionario,
@@ -445,15 +445,15 @@ namespace App.Web.Controllers
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Edit" && !workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
-            //if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
-            //    workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
+            if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion" && !workflow.EntityId.HasValue)
+                workflow.DefinicionWorkflow.Accion.Codigo = "GeneraResolucion";
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Delete" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para eliminar");
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Details" && !workflow.EntityId.HasValue)
                 ModelState.AddModelError(string.Empty, "No se encontró información asociada al proceso para ver");
 
             if (ModelState.IsValid)
-                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create" || workflow.DefinicionWorkflow.Accion.Codigo == "GeneraResolucion")
+                if (workflow.DefinicionWorkflow.Accion.Codigo == "Create")
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
                 else
                     return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { id = workflow.EntityId });
@@ -477,46 +477,56 @@ namespace App.Web.Controllers
             model.PermitirFinalizarProceso = model.DefinicionWorkflow.PermitirFinalizarProceso;
             model.PermitirTerminar = model.DefinicionWorkflow.PermitirTerminar;
             model.DesactivarDestinoEnRechazo = model.DefinicionWorkflow.DesactivarDestinoEnRechazo;
+            model.Reservado = model.Proceso.Reservado;
             model.Mensaje = string.Empty;
 
-            if (!string.IsNullOrWhiteSpace(model.To))
+            //si va a otra unidad => preseleccionar unidad destino
+            if (model.ToPl_UndCod.HasValue)
             {
-                var persona = _sigper.GetUserByEmail(model.To.Trim());
-                if (persona != null)
-                {
-                    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades().OrderBy(q => q.Pl_UndDes).Select(q => new SelectListItem { Value = q.Pl_UndCod.ToString(), Text = q.Pl_UndDes.Trim() }), "Value", "Text", persona.Unidad.Pl_UndCod);
-                    ViewBag.To = new SelectList(
-                        _sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod)
+                ViewBag.Unidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.ToPl_UndCod);
+
+                if (!string.IsNullOrWhiteSpace(model.To))
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
                         .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
-                        .OrderBy(q => q.PeDatPerChq)
-                        .Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }),
-                        "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
-
-                    model.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                    model.To = persona.Funcionario.Rh_Mail.Trim();
-                }
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre", model.To);
+                else
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
+                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre");
             }
-            else
-            {
-                ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-                ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
-                if (model.Pl_UndCod.HasValue)
-                    ViewBag.To = new SelectList(
+            //si es unidad local => preseleccionar unidad local
+            if (!model.ToPl_UndCod.HasValue && model.Pl_UndCod.HasValue)
+            {
+                ViewBag.Unidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+
+                if (!string.IsNullOrWhiteSpace(model.To))
+                    ViewBag.Funcionario = new SelectList(
                         _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
                         .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
                         .OrderBy(q => q.Nombre).Distinct().ToList(),
-                        "Email", "Nombre", model.Email);
-
-                //fix para solucionar problemas de fvidal
-                if (model.Pl_UndCod.HasValue && model.EsFirmaDocumento && model.Pl_UndCod.Value == 200310)
-                {
-                    var funcionarios = _sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList();
-                    funcionarios.Add(new { Email = "fvial@economia.cl", Nombre = "FELIPE VIAL TAGLE" });
-                    ViewBag.To = new SelectList(funcionarios.OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
-                }
-
+                        "Email", "Nombre", model.To);
+                else
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
+                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre");
+            }
+            //fix para solucionar problemas de fvidal
+            if (model.Pl_UndCod.HasValue && model.EsFirmaDocumento && model.Pl_UndCod.Value == 200310)
+            {
+                var funcionarios = _sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList();
+                funcionarios.Add(new { Email = "fvial@economia.cl", Nombre = "FELIPE VIAL TAGLE" });
+                ViewBag.Funcionario = new SelectList(funcionarios.OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
             }
 
             return View(model);
@@ -524,116 +534,118 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Send(Workflow model)
+        public ActionResult Send(Workflow model, int? Unidad, string Funcionario)
         {
             model.Email = UserExtended.Email(User);
 
-            if (ModelState.IsValid)
+            if (Unidad.HasValue)
+                model.Pl_UndCod = Unidad;
+            if (!string.IsNullOrEmpty(Funcionario))
+                model.To = Funcionario;
+
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+
+            if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
             {
-                var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
 
-                if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
-                    }
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
 
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
                 {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
-                    }
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("OK");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("OK");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateInterno(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateExterno(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("OK");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("OK");
+                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseCore(_repository, _email, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
 
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateInterno(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateExterno(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("OK");
-                    }
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
-                else
-                {
-                    var _useCaseInteractor = new App.Core.UseCases.UseCaseCore(_repository, _email, _sigper);
-                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                    if (_UseCaseResponseMessage.IsValid)
-                    {
-                        TempData["Success"] = "Operación terminada correctamente.";
-                        return RedirectToAction("Index", "Workflow");
-                    }
-
-                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-                }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
 
             ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
