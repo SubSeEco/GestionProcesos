@@ -119,14 +119,22 @@ namespace App.Infrastructure.SIGPER
                         var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
-                            var CodUnidad = (from u in context.PeDatLab
+                            //var CodUnidad = (from u in context.PeDatLab
+                            //                 join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                            //                 where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                            //                 where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                 where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                            //                                              where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                                              select ud.PeDatLabAdDocCor).Max()
+                            //                 select u.RhConUniCod).FirstOrDefault();
+                            var CodUnidad = (from u in context.ReContra
                                              join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
                                              where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                              where p.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                             where u.Re_ConIni == (from ud in context.ReContra
                                                                           where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                          select ud.PeDatLabAdDocCor).Max()
-                                             select u.RhConUniCod).FirstOrDefault();
+                                                                          select ud.Re_ConIni).Max()
+                                             select u.Re_ConUni).FirstOrDefault();
 
                             /*unidad del funcionario*/
                             var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
@@ -153,14 +161,22 @@ namespace App.Infrastructure.SIGPER
                         {
                             PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
-                            var CodUnidad = (from u in context.PeDatLab
+                            //var CodUnidad = (from u in context.PeDatLab
+                            //                 join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                            //                 where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                            //                 where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                 where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                            //                                              where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                                              select ud.PeDatLabAdDocCor).Max()
+                            //                 select u.RhConUniCod).FirstOrDefault();
+                            var CodUnidad = (from u in context.ReContra
                                              join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
                                              where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                              where p.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                          select ud.PeDatLabAdDocCor).Max()
-                                             select u.RhConUniCod).FirstOrDefault();
+                                             where u.Re_ConIni == (from ud in context.ReContra
+                                                                   where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                   select ud.Re_ConIni).Max()
+                                             select u.Re_ConUni).FirstOrDefault();
 
 
                             //unidad del funcionario
@@ -214,14 +230,22 @@ namespace App.Infrastructure.SIGPER
                         var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
-                            var CodUnidad = (from u in context.PeDatLab
+                            //var CodUnidad = (from u in context.PeDatLab
+                            //                 join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
+                            //                 where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                            //                 where p.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                 where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                            //                                              where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                            //                                              select ud.PeDatLabAdDocCor).Max()
+                            //                 select u.RhConUniCod).FirstOrDefault();
+                            var CodUnidad = (from u in context.ReContra
                                              join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
                                              where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                              where p.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                             where u.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                          select ud.PeDatLabAdDocCor).Max()
-                                             select u.RhConUniCod).FirstOrDefault();
+                                             where u.Re_ConIni == (from ud in context.ReContra
+                                                                   where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                   select ud.Re_ConIni).Max()
+                                             select u.Re_ConUni).FirstOrDefault();
 
                             //unidad del funcionario
                             var unidad = context.PLUNILAB.FirstOrDefault(q => q.Pl_UndCod == CodUnidad);
