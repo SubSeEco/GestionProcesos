@@ -45,7 +45,7 @@
     </div>
     <div class="row">
         <div class="col s12 m12 l12">
-            @Html.LabelFor(m => Model.TipoDocumentoCodigo)
+            @*@Html.LabelFor(m => Model.TipoDocumentoCodigo)*@
             @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
             @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
         </div>
@@ -60,14 +60,14 @@
     <div id="RequiereFirmaElectronicaDivUser">
         <div class="row">
             <div class="col s12 m12 l12">
-                @Html.LabelFor(m => Model.FirmanteUnidadCodigo)<br />
+                @*@Html.LabelFor(m => Model.FirmanteUnidadCodigo)<br />*@
                 @Html.DropDownListFor(m => Model.FirmanteUnidadCodigo, null, "Seleccione...", new { @class = "browser-default", @id = "ddlFirmanteUnidadCodigo" })
                 @Html.ValidationMessageFor(m => Model.FirmanteUnidadCodigo, "", new { @class = "red-text" })
             </div>
         </div>
         <div class="row">
             <div class="col s12 m12 l12">
-                @Html.LabelFor(m => Model.FirmanteEmail)<br />
+                @*@Html.LabelFor(m => Model.FirmanteEmail)<br />*@
                 @Html.DropDownListFor(model => Model.FirmanteEmail, null, "Seleccione...", new { @class = "browser-default" })
                 @Html.ValidationMessageFor(m => Model.FirmanteEmail, "", new { @class = "red-text" })
             </div>
@@ -75,8 +75,8 @@
     </div>
     <div class="row">
         <div class="col s12 m12 l12">
-            @Html.LabelFor(m => Model.Descripcion)
-            @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea" })
+            @*@Html.LabelFor(m => Model.Descripcion)*@
+            @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea", @placeholder = "Ingrese descripción del documento" })
             @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
         </div>
     </div>
