@@ -488,14 +488,14 @@ namespace App.Web.Controllers
                 if (!string.IsNullOrWhiteSpace(model.To))
                     ViewBag.Funcionario = new SelectList(
                         _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
-                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
                         .OrderBy(q => q.Nombre).Distinct().ToList(),
                         "Email", "Nombre", model.To);
                 else
                     ViewBag.Funcionario = new SelectList(
                         _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
-                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
                         .OrderBy(q => q.Nombre).Distinct().ToList(),
                         "Email", "Nombre");
@@ -509,14 +509,14 @@ namespace App.Web.Controllers
                 if (!string.IsNullOrWhiteSpace(model.To))
                     ViewBag.Funcionario = new SelectList(
                         _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
-                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
                         .OrderBy(q => q.Nombre).Distinct().ToList(),
                         "Email", "Nombre", model.To);
                 else
                     ViewBag.Funcionario = new SelectList(
                         _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
-                        .Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
                         .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
                         .OrderBy(q => q.Nombre).Distinct().ToList(),
                         "Email", "Nombre");

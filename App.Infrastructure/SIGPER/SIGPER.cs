@@ -132,8 +132,8 @@ namespace App.Infrastructure.SIGPER
                                              where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                              where p.RH_NumInte == sigper.Funcionario.RH_NumInte
                                              where u.Re_ConIni == (from ud in context.ReContra
-                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                          select ud.Re_ConIni).Max()
+                                                                   where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
+                                                                   select ud.Re_ConIni).Max()
                                              select u.Re_ConUni).FirstOrDefault();
 
                             /*unidad del funcionario*/
@@ -463,14 +463,12 @@ namespace App.Infrastructure.SIGPER
                 {
                     if (context.PLUNILAB.Any(q => q.Pl_UndCod == codigoUnidad))
                     {
-                        var data = from PEDATPER in context.PEDATPER
-                                 join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                 where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                 where PeDatLab.RhConUniCod == codigoUnidad
-                                 where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                              select ud.PeDatLabAdDocCor).Max()
-                                 select PEDATPER;
+                        var data = (from ReContra in context.ReContra
+                                     join PEDATPER in context.PEDATPER on ReContra.RH_NumInte equals PEDATPER.RH_NumInte
+                                     where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                     where ReContra.Re_ConUni == codigoUnidad
+                                     where ReContra.Re_ConIni == (from ud in context.ReContra where ud.RH_NumInte == PEDATPER.RH_NumInte select ud.Re_ConIni).Max()
+                                     select PEDATPER);
 
                         returnValue.AddRange(data.ToList());
                     }
@@ -479,15 +477,13 @@ namespace App.Infrastructure.SIGPER
                 {
                     if (context.PLUNILAB.Any(q => q.Pl_UndCod == codigoUnidad))
                     {
+                        var data = (from ReContra in context.ReContra
+                                    join PEDATPER in context.PEDATPER on ReContra.RH_NumInte equals PEDATPER.RH_NumInte
+                                    where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                    where ReContra.Re_ConUni == codigoUnidad
+                                    where ReContra.Re_ConIni == (from ud in context.ReContra where ud.RH_NumInte == PEDATPER.RH_NumInte select ud.Re_ConIni).Max()
+                                    select PEDATPER);
 
-                        var data = from PEDATPER in context.PEDATPER
-                                 join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                 where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                 where PeDatLab.RhConUniCod == codigoUnidad
-                                 where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                              select ud.PeDatLabAdDocCor).Max()
-                                 select PEDATPER;
                         returnValue.AddRange(data.ToList());
                     }
                 }
@@ -904,35 +900,15 @@ namespace App.Infrastructure.SIGPER
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
-
         public List<PLUNILAB> GetUnidadesFirmantes(List<string> listEmailFirmantes)
         {
             var returnValue = new List<PLUNILAB>();
 
-            try
+            foreach (var email in listEmailFirmantes)
             {
-                using (var context = new AppContextEconomia())
-                {
-                    foreach (var email in listEmailFirmantes)
-                    {
-                        var user = GetUserByEmail(email);
-                        if (user != null && user.Unidad != null && !returnValue.Any(q => q.Pl_UndCod == user.Unidad.Pl_UndCod))
-                            returnValue.Add(GetUserByEmail(email).Unidad);
-                    }
-                }
-                using (var context = new AppContextTurismo())
-                {
-                    foreach (var email in listEmailFirmantes)
-                    {
-                        var user = GetUserByEmail(email);
-                        if (user != null && user.Unidad != null && !returnValue.Any(q => q.Pl_UndCod == user.Unidad.Pl_UndCod))
-                            returnValue.Add(GetUserByEmail(email).Unidad);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                var user = GetUserByEmail(email);
+                if (user != null && user.Unidad != null && !returnValue.Any(q => q.Pl_UndCod == user.Unidad.Pl_UndCod))
+                    returnValue.Add(GetUserByEmail(email).Unidad);
             }
 
             return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
@@ -941,47 +917,12 @@ namespace App.Infrastructure.SIGPER
         {
             var returnValue = new List<PEDATPER>();
 
-            try
-            {
-                using (var context = new AppContextEconomia())
-                {
-                    var datosPersonales = from PEDATPER in context.PEDATPER
-                                          join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                          where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                          where PeDatLab.RhConUniCod == codigoUnidad
-                                          where listEmailFirmantes.Contains(PEDATPER.Rh_Mail)
-                                          where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                                              select ud.PeDatLabAdDocCor).Max()
-                                          select PEDATPER;
-
-                    returnValue.AddRange(datosPersonales.ToList());
-                }
-
-                using (var context = new AppContextTurismo())
-                {
-                    var datosPersonales = from PEDATPER in context.PEDATPER
-                                          join PeDatLab in context.PeDatLab on PEDATPER.RH_NumInte equals PeDatLab.RH_NumInte
-                                          where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                          where PeDatLab.RhConUniCod == codigoUnidad
-                                          where listEmailFirmantes.Contains(PEDATPER.Rh_Mail)
-                                          where PeDatLab.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                              where ud.RH_NumInte == PEDATPER.RH_NumInte
-                                                                              select ud.PeDatLabAdDocCor).Max()
-                                          select PEDATPER;
-
-                    returnValue.AddRange(datosPersonales.ToList());
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var funcionarios = GetUserByUnidad(codigoUnidad);
+            foreach (var funcionario in funcionarios.Where(q => listEmailFirmantes.Contains(q.Rh_Mail.Trim())))
+                returnValue.Add(funcionario);
 
             return returnValue;
-
         }
-
         /*nuevo metodo para traer datos de los funcionarios desde SIGPER - 05112020*/
         public Model.SIGPER.SIGPER NewGetUserByEmail(string email)
         {
@@ -1052,7 +993,7 @@ namespace App.Infrastructure.SIGPER
                             var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
                             if (FunDatosLaborales != null)
-                            {                                
+                            {
                                 sigper.FunDatosLaborales = FunDatosLaborales;
                             }
 
@@ -1069,9 +1010,9 @@ namespace App.Infrastructure.SIGPER
                                                   where p.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
                                                   where rc.Re_ConIni == (from ud in context.ReContra
                                                                          where ud.RH_NumInte == sigper.Funcionario.RH_NumInte
-                                                                                select ud.Re_ConIni).Max()
+                                                                         select ud.Re_ConIni).Max()
                                                   select rc).FirstOrDefault();
-                            
+
                             if (datosLaborales != null)
                             {
                                 sigper.datosLaborales = datosLaborales;
