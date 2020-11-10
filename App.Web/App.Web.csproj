@@ -757,6 +757,7 @@
     <Content Include="Views\GeneraResolucion\ResolucionServicio.cshtml" />
     <Content Include="Views\Cometido\Finalizados.cshtml" />
     <Content Include="Views\Colaborador\EditGP.cshtml" />
+    <Content Include="Views\HorasExtras\EditGP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

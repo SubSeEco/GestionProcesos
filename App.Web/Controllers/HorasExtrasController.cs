@@ -551,5 +551,43 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult EditGP(int id)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
+            var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            var model = _repository.GetById<HorasExtras>(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditGP(HorasExtras model)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
+
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.HorasExtrasUpdate(model);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            return View(model);
+        }
     }
 }

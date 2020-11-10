@@ -18,6 +18,10 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<PEFERJEFAF> PEFERJEFAF { get; set; }
         public virtual DbSet<PEFERJEFAJ> PEFERJEFAJ { get; set; }
         public virtual DbSet<PECARGOS> PECARGOS { get; set; }
+        public virtual DbSet<DGESCALAFONES> DGESCALAFONES { get; set; }
+        public virtual DbSet<DGESTAMENTOS> DGESTAMENTOS { get; set; }        
+        public virtual DbSet<REPYT> REPYT { get; set; }
+        public virtual DbSet<DGCONTRATOS> DGCONTRATOS { get; set; }
 
         //public virtual DbSet<PEFERJEF> PEFERJEF { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

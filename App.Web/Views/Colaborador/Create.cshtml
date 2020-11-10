@@ -56,7 +56,7 @@
                                         @Html.TextBoxFor(m => Model.HNCompensar, new { style = "width:50px" })
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(m => Model.Descripcion)
+                                        @Html.EditorFor(m => Model.Descripcion)
                                         @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
                                     </td>
                                 </tr>
@@ -92,6 +92,7 @@
     strong {
         font-weight: bolder;
     }
+    textarea {
+        height: 10rem;
+    }
 </style>
-
-

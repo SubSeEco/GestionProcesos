@@ -68,52 +68,82 @@
                             </div>
                             @if (Model.Colaborador.Count > 0)
                             {
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
-                                </th>
-                                <th></th>
-                            </tr>
-                            @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
-                                    </td>
-                                </tr>
-                            }
-                        </table>
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
+                                        </th>
+
+                                        <th></th>
+                                    </tr>
+                                    @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+                                    {
+                                        if (Model.Workflow.DefinicionWorkflow.Secuencia <= 4)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                                                </td>
+
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    }
+                                </table>
 
                             }
                         </div>                        

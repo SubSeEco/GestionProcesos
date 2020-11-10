@@ -4812,7 +4812,7 @@ namespace App.Core.UseCases
                 workflowActual.Pl_UndCod = personaEjecutor.Unidad.Pl_UndCod;
                 workflowActual.Pl_UndDes = personaEjecutor.Unidad.Pl_UndDes.Trim();
                 workflowActual.Email = personaEjecutor.Funcionario.Rh_Mail.Trim();
-                workflowActual.NombreFuncionario = personaEjecutor.Funcionario.RH_NombFun.Trim();
+                workflowActual.NombreFuncionario = personaEjecutor.Funcionario.PeDatPerChq.Trim();
                 workflowActual.GrupoId = obj.GrupoId;
                 workflowActual.To = obj.To;
 
@@ -5179,7 +5179,42 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                     {
-                        if (obj.Pl_UndCod.HasValue)
+                        //if (obj.Pl_UndCod.HasValue)
+                        //{
+                        //    var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
+                        //    if (unidad == null)
+                        //        throw new Exception("No se encontró la unidad en SIGPER.");
+
+                        //    workflow.Pl_UndCod = unidad.Pl_UndCod;
+                        //    workflow.Pl_UndDes = unidad.Pl_UndDes;
+                        //}
+
+                        //if (!string.IsNullOrEmpty(obj.To))
+                        //{
+                        //    persona = _sigper.GetUserByEmail(obj.To);
+                        //    if (persona == null)
+                        //        throw new Exception("No se encontró el usuario en SIGPER.");
+
+                        //    workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        //    workflow.TareaPersonal = true;
+                        //}
+
+                        /* si seleccionó unidad y usuario... 09112020*/
+                        if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
+                        {
+                            persona = _sigper.GetUserByEmail(obj.To);
+                            if (persona == null)
+                                throw new Exception("No se encontró el usuario en SIGPER.");
+
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.TareaPersonal = true;
+                        }
+
+                        // si seleccionó solo unidad ...
+                        if (obj.Pl_UndCod.HasValue && string.IsNullOrEmpty(obj.To))
                         {
                             var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
                             if (unidad == null)
@@ -5187,17 +5222,14 @@ namespace App.Core.UseCases
 
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+
                         }
 
-                        if (!string.IsNullOrEmpty(obj.To))
-                        {
-                            persona = _sigper.GetUserByEmail(obj.To);
-                            if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
-
-                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                            workflow.TareaPersonal = true;
-                        }
                     }
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
@@ -5321,14 +5353,44 @@ namespace App.Core.UseCases
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                     {
 
-                        workflow.GrupoId = definicionWorkflow.GrupoId;
-                        workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
-                        workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+                        //workflow.GrupoId = definicionWorkflow.GrupoId;
+                        //workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
+                        //workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
 
-                        var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
-                        var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
-                        if (emails.Any())
-                            workflow.Email = string.Join(";", emails);
+                        //var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                        //var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
+                        //if (emails.Any())
+                        //    workflow.Email = string.Join(";", emails);
+
+                        /*09112020*/
+                        if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
+                            throw new Exception("No se especificó la unidad o grupo de destino.");
+
+                        if (definicionWorkflow.Pl_UndCod.HasValue)
+                        {
+                            var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
+                            if (unidad == null)
+                                throw new Exception("No se encontró la unidad destino en SIGPER.");
+                            workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
+                            workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(",", emails);
+                        }
+                        if (definicionWorkflow.GrupoId.HasValue)
+                        {
+                            var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                            if (grupo == null)
+                                throw new Exception("No se encontró el grupo de destino.");
+                            workflow.GrupoId = definicionWorkflow.GrupoId;
+                            workflow.Pl_UndCod = null;
+                            workflow.Pl_UndDes = null;
+                            workflow.TareaPersonal = false;
+                            var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
+                            if (emails.Any())
+                                workflow.Email = string.Join(",", emails);
+                        }
                     }
 
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
@@ -5340,6 +5402,7 @@ namespace App.Core.UseCases
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.TareaPersonal = true;
                     }
 

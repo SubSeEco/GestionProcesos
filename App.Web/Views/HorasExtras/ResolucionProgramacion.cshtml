@@ -79,11 +79,17 @@
                     @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HDPago)
                 </td>
                 <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HDCompensar)
+                </td>
+                <td>
                     @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNPago)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
                 </td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td align="center" colspan="2">
                     <b>
                         @Html.DisplayFor(modelItem => Model.Unidad)
                     </b>
@@ -92,20 +98,26 @@
 
             @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPago)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPago)
-                    </td>
-                </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
+            </td>
+        </tr>
             }
 
         </table>

@@ -102,7 +102,7 @@
             PlantillaNotificacionPago = 12,
 
 
-            /*PLANTILLAS DE CORREOP --> COMETIDOS*/
+            /*PLANTILLAS DE CORREO --> COMETIDOS*/
             PlantillaEnvíoSolicitudCometido = 13,
             AsuntoSolicitudCometido_Solicitante_QuienViaja = 14,
             PlantillaEnvíoSolicitudCometidoJefatura = 15,
@@ -137,20 +137,20 @@
             PlantillaFinanzas_Solicitante_QuienViaja = 44,
             PlantillaFinanzas_Solicitante_QuienViaja2 = 45,
             UrlSistema = 46,
-            PlantillaFinanzasRechazo_EncargadoTesoreria = 47,
-            PlantillaEnvíoSolicitudCometidoPasaje = 48,
-            PlantillaEnvioSolicitudAnalistaAbastecimiento = 49,
-            PlantillaSeleccionPasaje_Jefatura = 50,
-            PlantillaSeleccionPasaje_Solicitante = 51,
-            PlantillaAprobacionPasaje_Jefatura = 52,
-            PlantillaAprobacionPasaje_JefaturaAbastecimiento = 53,
-            PlantillaRechazoPasaje_AnalistaAbastecimiento = 54,
-            PlantillaCompraPasajes_AnalistaGP = 55,
-            PlantillaCompraPasajes_Solicitante_QuienViaja = 56,
-            PlantillaRechazoPasaje_Solicitante_QuienViaja = 57,
-            Plantilla_Memo_Firmado = 61,
-            PlantillaAnulacionCometido = 63,//60
-            JefeGabineteMinistro = 65,
+            PlantillaFinanzasRechazo_EncargadoTesoreria = 51,
+            PlantillaEnvíoSolicitudCometidoPasaje = 52,
+            PlantillaEnvioSolicitudAnalistaAbastecimiento = 53,
+            PlantillaSeleccionPasaje_Jefatura = 54,
+            PlantillaSeleccionPasaje_Solicitante = 55,
+            PlantillaAprobacionPasaje_Jefatura = 56,
+            PlantillaAprobacionPasaje_JefaturaAbastecimiento = 57,
+            PlantillaRechazoPasaje_AnalistaAbastecimiento = 58,
+            PlantillaCompraPasajes_AnalistaGP = 59,
+            PlantillaCompraPasajes_Solicitante_QuienViaja = 60,
+            PlantillaRechazoPasaje_Solicitante_QuienViaja = 61,
+            Plantilla_Memo_Firmado = 63,
+            PlantillaAnulacionCometido = 62,
+            JefeGabineteMinistro = 64,
         }
 
         public enum DefinicionProceso

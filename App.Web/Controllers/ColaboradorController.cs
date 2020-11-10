@@ -176,11 +176,11 @@ namespace App.Web.Controllers
 
                     /*se redireccina a la vista que llamo al metodo de borrar*/
                     var com = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
-                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 1);
-                    if (pro.Count() > 0)
+                    var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).OrderByDescending(c =>c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
+                    if (secuencia == 1)
                         return RedirectToAction("Edit", "HorasExtras", new {  id = com.HorasExtrasId});
                     else
-                        return RedirectToAction("Edit", "HorasExtras", new { id = com.HorasExtrasId });
+                        return RedirectToAction("EditGP", "HorasExtras", new { id = com.HorasExtrasId });
                 }
                 else
                 {
@@ -298,7 +298,14 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Edit", "HorasExtras", new { id = model.HorasExtrasId });
+                    /*se redireccina a la vista que llamo al metodo de borrar*/
+                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
+                    if (pro.Count() > 0)
+                        return RedirectToAction("EditGP", "HorasExtras", new { id = he.HorasExtrasId });
+                    else
+                        return RedirectToAction("Edit", "HorasExtras", new { id = he.HorasExtrasId });
+                    
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
