@@ -90,7 +90,7 @@
 
     //si el documento ya tiene firma, desactivar
     $('#TieneFirmaElectronica').change(function () {
-
+        $("#FileInput").val('');
         $('#RequiereFirmaElectronicaDivUser').toggle(false);
 
         var isChecked = $(this).is(':checked');
@@ -107,6 +107,7 @@
 
     //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
     $('#RequiereFirmaElectronica').change(function () {
+        $("#FileInput").val('');
         var isChecked = $(this).is(':checked');
         if (isChecked) {
             $('#RequiereFirmaElectronicaDivUser').toggle(true);
