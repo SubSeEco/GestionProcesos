@@ -4717,7 +4717,7 @@ namespace App.Core.UseCases
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
-                        }                            
+                        }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
                     {
@@ -4731,7 +4731,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 17)
                     {
-                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
@@ -4740,7 +4740,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
                     {
-                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
@@ -4749,7 +4749,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
                     {
-                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                         {
                             var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
                             if (doc.Count() > 0)
@@ -5094,6 +5094,8 @@ namespace App.Core.UseCases
                     //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
                     //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
 
+                    _repository.Save();
+
                     #region ENVIO DE NOTIFICACION TERMINO PROCESO
                     /*si no existen mas tareas se envia correo de notificacion*/
                     var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
@@ -5103,54 +5105,83 @@ namespace App.Core.UseCases
                     var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
                     List<string> emailMsg;
 
-                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    /*se si la ultima tarea fue la firma de resoucion*/
+                    if (workflowActual.DefinicionWorkflow.Secuencia == 13)
                     {
-                        if (cometido.ObservacionesPagoSigfeTesoreria == null)
-                        {
-                            /*Aprueba pago y notifica a interesado(a)*/
-                            emailMsg = new List<string>();
-                            emailMsg.Add(QuienViaja);//quien viaja
-                            emailMsg.Add(solicitante.Trim()); //solicitante
+                        /*Aprueba y notifica a Oficina de Partes*/
+                        emailMsg = new List<string>();
+                        emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
+                        emailMsg.Add("scid@economia.cl"); //oficia de partes
+                        emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
 
-                            _email.NotificacionesCometido(workflowActual,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
-                            "Su cometido N°" + cometido.CometidoId.ToString() + " " + "ha sido pagado",
-                            emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
+                        _email.NotificacionesCometido(workflowActual,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_OfPartes), /*notificacion a oficia de partes*/
+                        "Se ha tramitado un cometido nacional",
+                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,
+                        doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
+
+                        /*Aprueba y notifica a solicitante y quien viaja*/
+                        emailMsg = new List<string>();
+                        emailMsg.Add(QuienViaja);//quien viaja
+                        emailMsg.Add(solicitante.Trim()); //solicitante
+
+                        _email.NotificacionesCometido(workflowActual,
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_Solicitante_QuienViaja),
+                        "Se ha tramitado el cometido nacional solicitado",
+                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
+
+                    }
+                    else
+                    {
+
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        {
+                            if (cometido.ObservacionesPagoSigfeTesoreria == null)
+                            {
+                                /*Aprueba pago y notifica a interesado(a)*/
+                                emailMsg = new List<string>();
+                                emailMsg.Add(QuienViaja);//quien viaja
+                                emailMsg.Add(solicitante.Trim()); //solicitante
+
+                                _email.NotificacionesCometido(workflowActual,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
+                                "Su cometido N°" + cometido.CometidoId.ToString() + " " + "ha sido pagado",
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
+                            }
+
+
+                            if (cometido.ObservacionesPagoSigfeTesoreria != null)
+                            {
+                                /*Aprueba pago con observaciones o sin pago y envía a interesado(a)*/
+                                emailMsg = new List<string>();
+                                emailMsg.Add(QuienViaja);//quien viaja
+                                emailMsg.Add(solicitante.Trim()); //solicitante
+
+                                _email.NotificacionesCometido(workflowActual,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja2),
+                                "Su cometido N°" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES para el pago",
+                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
+                            }
                         }
 
-
-                        if (cometido.ObservacionesPagoSigfeTesoreria != null)
+                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            /*Aprueba pago con observaciones o sin pago y envía a interesado(a)*/
+                            /*Rechaza pago y notifica a Encargado de Tesorería*/
                             emailMsg = new List<string>();
-                            emailMsg.Add(QuienViaja);//quien viaja
-                            emailMsg.Add(solicitante.Trim()); //solicitante
+                            emailMsg.Add(workflowActual.DefinicionWorkflow.Secuencia == 19 && workflowActual.DefinicionWorkflow.Email != null ? workflowActual.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Tesoreria
 
                             _email.NotificacionesCometido(workflowActual,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja2),
-                            "Su cometido N°" + cometido.CometidoId.ToString() + " " + "tiene OBSERVACIONES para el pago",
+                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzasRechazo_EncargadoTesoreria),
+                            "El pago del cometido N° " + cometido.CometidoId.ToString() + "ha sido rechazado por el Encargado(a) de Finanzas",
                             emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                             _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                         }
                     }
-
-                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                    {
-                        /*Rechaza pago y notifica a Encargado de Tesorería*/
-                        emailMsg = new List<string>();
-                        emailMsg.Add(workflowActual.DefinicionWorkflow.Secuencia == 19 && workflowActual.DefinicionWorkflow.Email != null ? workflowActual.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Tesoreria
-
-                        _email.NotificacionesCometido(workflowActual,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaFinanzasRechazo_EncargadoTesoreria),
-                        "El pago del cometido N° " + cometido.CometidoId.ToString() + "ha sido rechazado por el Encargado(a) de Finanzas",
-                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
-                    }
-
-                    #endregion
-
-                    _repository.Save();
+                    #endregion                    
                 }
 
                 //en el caso de existir mas tareas, crearla

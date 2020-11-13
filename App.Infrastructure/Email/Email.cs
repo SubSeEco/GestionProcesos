@@ -198,24 +198,26 @@ namespace App.Infrastructure.Email
             if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto)))
                 throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[IdCometido]", IdCometido.ToString());
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Observaciones]", Observaciones);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Url]", Url);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Folio]", Folio);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaFirma]", FechaFirma);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
+            var Mail = plantillaCorreo;
+
+            Mail.Valor = Mail.Valor.Replace("[IdCometido]", IdCometido.ToString());
+            Mail.Valor = Mail.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
+            Mail.Valor = Mail.Valor.Replace("[Observaciones]", Observaciones);
+            Mail.Valor = Mail.Valor.Replace("[Url]", Url);
+            Mail.Valor = Mail.Valor.Replace("[Folio]", Folio);
+            Mail.Valor = Mail.Valor.Replace("[FechaFirma]", FechaFirma);
+            Mail.Valor = Mail.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
 
 
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                Mail.Valor = Mail.Valor.Replace("[Estado]", "Aprobado");
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                Mail.Valor = Mail.Valor.Replace("[Estado]", "Rechazado");
 
             SmtpClient smtpClient = new SmtpClient();
             MailMessage emailMsg = new MailMessage();
             emailMsg.IsBodyHtml = true;
-            emailMsg.Body = plantillaCorreo.Valor;
+            emailMsg.Body = Mail.Valor;
             emailMsg.Subject = asunto;
 
             if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)

@@ -346,7 +346,7 @@ namespace App.Web.Controllers
                 var obj = _repository.Get<HorasExtras>(c => c.HorasExtrasId == DocumentoId).FirstOrDefault();
                 var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 9).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
                 var user = User.Email();
-                var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);
+                var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, obj.HorasExtrasId);
 
                 //if (_UseCaseResponseMessage.Warnings.Count > 0)
                 //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;

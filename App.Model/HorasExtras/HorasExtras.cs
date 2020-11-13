@@ -60,5 +60,8 @@ namespace App.Model.HorasExtras
 
         [Display(Name = "UnidadId")]
         public int? UnidadId { get; set; }
+
+        [Display(Name = "Aprobado")]
+        public bool Aprobado { get; set; } = false;
     }
 }

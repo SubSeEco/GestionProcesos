@@ -79,9 +79,10 @@
                                             @Html.DisplayNameFor(m => Model.ClasePasaje)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(m => Model.FechaAdquisicion)
+                                            @Html.DisplayNameFor(m => Model.FormaAdquisicion)
                                         </th>
                                     </tr>
+
                                     <tr>
                                         <td>
                                             @Html.TextBoxFor(m => Model.NumeroOrdenCompra)
@@ -92,7 +93,24 @@
                                         <td>
                                             @Html.DropDownListFor(m => Model.FormaAdquisicion, null, "Seleccione...")
                                         </td>
-
+                                    </tr>
+                                    <tr id="other">
+                                        <th></th>
+                                        <th id="pas">
+                                            @Html.DisplayNameFor(m => Model.OtroPasaje)
+                                        </th>
+                                        <th id="mecan">
+                                            @Html.DisplayNameFor(m => Model.OtroMecanismo)
+                                        </th>
+                                    </tr>
+                                    <tr id="other2">
+                                        <td></td>
+                                        <td id="pas2">
+                                            @Html.TextBoxFor(m => Model.OtroPasaje)
+                                        </td>
+                                        <td id="mecan2">
+                                            @Html.TextBoxFor(m => Model.OtroMecanismo)
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>
@@ -176,9 +194,16 @@
         });
 
         $('select').formSelect();
-
+        $('#other').hide(100);
+        $('#other2').hide(100);
+        //$('#mecanismo').hide(100);
+        //$('#mecanismo2').hide(100);
+        $('#pas').hide(100);
+        $('#pas2').hide(100);
+        $('#mecan').hide(100);
+        $('#mecan2').hide(100);
     });
-
+/*****************************FIN FUNCTION*******************************************************************/
     /*funcion valida subida de archivo pdf*/
     $('input[type="file"]').on('change', function () {
         var ext = $(this).val().split('.').pop();
@@ -188,6 +213,96 @@
             $(this).val() = '';
         }
     });
+
+    $('#ClasePasaje').change(function () {
+        var e = document.getElementById("ClasePasaje");
+        var f = document.getElementById("FormaAdquisicion");
+        if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text != "Otro (detallar)") {
+            $('#other').show();
+            $('#other2').show();
+            $('#pas').show();
+            $('#pas2').show();
+            $('#mecan').hide(100);
+            $('#mecan2').hide(100);
+            //$('#mecan').show();
+            //$('#mecan2').show();
+        }
+        else if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text == "Otro (detallar)")
+        {
+            $('#other').show();
+            $('#other2').show();
+            $('#pas').show();
+            $('#pas2').show();
+            //$('#mecan').hide(100);
+            //$('#mecan2').hide(100);
+            $('#mecan').show();
+            $('#mecan2').show();
+        }
+        else if (e.options[e.selectedIndex].text != "Otro (detallar)" && f.options[f.selectedIndex].text == "Otro (detallar)") {
+            $('#other').show();
+            $('#other2').show();
+            //$('#pas').show();
+            //$('#pas2').show();
+            $('#pas').hide(100);
+            $('#pas2').hide(100);
+            $('#mecan').show();
+            $('#mecan2').show();
+        }
+        else {
+            $('#other').hide(100);
+            $('#other2').hide(100);
+            $('#pas').hide(100);
+            $('#pas2').hide(100);
+            $('#mecan').hide(100);
+            $('#mecan2').hide(100);
+       }
+    });
+
+    $('#FormaAdquisicion').change(function () {
+        var f = document.getElementById("FormaAdquisicion");
+        var e = document.getElementById("ClasePasaje");
+        if (f.options[f.selectedIndex].text == "Otro (detallar)" && e.options[e.selectedIndex].text != "Otro (detallar)") {
+            //$('#mecanismo').show();
+            //$('#mecanismo2').show();
+            $('#other').show();
+            $('#other2').show();
+            $('#pas').hide(100);
+            $('#pas2').hide(100);
+            $('#mecan').show();
+            $('#mecan2').show();
+        }
+        else if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text == "Otro (detallar)") {
+            $('#other').show();
+            $('#other2').show();
+            $('#pas').show();
+            $('#pas2').show();
+            //$('#mecan').hide(100);
+            //$('#mecan2').hide(100);
+            $('#mecan').show();
+            $('#mecan2').show();
+        }
+        else if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text != "Otro (detallar)") {
+            $('#other').show();
+            $('#other2').show();
+            $('#pas').show();
+            $('#pas2').show();
+            $('#mecan').hide(100);
+            $('#mecan2').hide(100);
+            //$('#mecan').show();
+            //$('#mecan2').show();
+        }
+        else {
+            //$('#mecanismo').hide(100);
+            //$('#mecanismo2').hide(100);
+            $('#other').hide(100);
+            $('#other2').hide(100);
+            $('#pas').hide(100);
+            $('#pas2').hide(100);
+            $('#mecan').hide(100);
+            $('#mecan2').hide(100);
+        }
+    });
+
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>

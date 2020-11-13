@@ -2579,5 +2579,18 @@ namespace App.Web.Controllers
             
             return View(model);
         }
+
+        public ActionResult Report()
+        {            
+            var user = User.Email();
+            var grupo = _repository.GetExists<Usuario>(c => c.Email == user && c.Habilitado == true)  ? _repository.Get<Usuario>(c => c.Email == user && c.Habilitado == true).FirstOrDefault().GrupoId.ToString() : string.Empty ;
+            if (string.IsNullOrWhiteSpace(grupo))
+                grupo = "0";
+         
+            ViewBag.User = User.Email();
+            ViewBag.Grupo = grupo;
+
+            return View();
+        }
     }
 }
