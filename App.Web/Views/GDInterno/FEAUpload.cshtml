@@ -90,21 +90,24 @@
 
     //si el documento ya tiene firma, desactivar
     $('#TieneFirmaElectronica').change(function () {
-
+        $("#FileInput").val('');
         $('#RequiereFirmaElectronicaDivUser').toggle(false);
 
         var isChecked = $(this).is(':checked');
         if (isChecked) {
             $('#RequiereFirmaElectronicaDivCheck').toggle(false);
             $("#RequiereFirmaElectronica").prop("checked", false);
+            $('#FileInput').attr("accept", ".pdf");
         }
         else {
             $('#RequiereFirmaElectronicaDivCheck').show();
+            $('#FileInput').attr("accept", ".*");
         }
     });
 
     //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
     $('#RequiereFirmaElectronica').change(function () {
+        $("#FileInput").val('');
         var isChecked = $(this).is(':checked');
         if (isChecked) {
             $('#RequiereFirmaElectronicaDivUser').toggle(true);
