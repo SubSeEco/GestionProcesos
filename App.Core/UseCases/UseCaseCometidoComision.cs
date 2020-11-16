@@ -1414,8 +1414,9 @@ namespace App.Core.UseCases
                             {
                                 //response.Errors.Add("El rango de fechas señalados esta en conflicto con los destinos del cometido " + otrosDestinos.CometidoId + "(" +  otrosDestinos.FechaInicio  + ")");
                                 response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-                                /*se elimina el destino que topa con otro destino*/
-                                DestinosDelete(destinoCometido.DestinoId);
+                                /*se elimina el destino que topa con otro destino que ya ha sido creado*/
+                                //DestinosDelete(destinoCometido.DestinoId);
+                                DestinosAnular(destinoCometido.DestinoId);
                             }
                         }
                     }
@@ -5505,12 +5506,16 @@ namespace App.Core.UseCases
                     /*Notificaciones de correo proceso cometidos*/
                     if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
                     {
-                        
 
+                        string jefe = string.Empty;
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
                         var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
-                        var jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
+                        if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
+                            jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
+                        else
+                            jefe = "mmontoya@economia.cl";
+
                         List<string> emailMsg;
 
                         switch (workflowActual.DefinicionWorkflow.Secuencia)
