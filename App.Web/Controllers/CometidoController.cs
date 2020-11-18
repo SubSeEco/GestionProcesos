@@ -187,7 +187,8 @@ namespace App.Web.Controllers
             var estamento = per.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var IdEscalafon = int.Parse(per.datosLaborales.Re_ConEsc.Trim());
             var Escalafon = per.datosLaborales.Re_ConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == per.datosLaborales.Re_ConEsc).FirstOrDefault().Pl_DesEsc.Trim();
-            var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt;// == 0 ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
+            //var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt;// == 0 ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
+            var ProgId = per.datosLaborales.Re_ConPyt != 0 ? per.datosLaborales.Re_ConPyt : 1 ;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida";
@@ -529,7 +530,7 @@ namespace App.Web.Controllers
                 model.EstamentoDescripcion = persona.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persona.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
                 model.IdConglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed;
                 model.ConglomeradoDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().ReContraSed.ToString();
-                model.IdPrograma = Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt); //_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
+                model.IdPrograma = persona.datosLaborales.Re_ConPyt != 0 ? Convert.ToInt32(persona.datosLaborales.Re_ConPyt) : 1; //Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt); //_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? 0 : Convert.ToInt32(_sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).OrderByDescending(c =>c.RE_ConCor).FirstOrDefault().Re_ConPyt);
                 //model.ProgramaDescripcion = _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persona.Funcionario.RH_NumInte) == null ? "0" : _sigper.GetReContra().Where(c => c.RH_NumInte == persona.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt.ToString();
                 model.ProgramaDescripcion = model.IdPrograma != null ? _sigper.GetREPYTs().Where(c => c.RePytCod == model.IdPrograma).FirstOrDefault().RePytDes : "S/A";
                 model.Jefatura = persona.Jefatura != null ? persona.Jefatura.PeDatPerChq : "Sin jefatura definida";
@@ -871,8 +872,6 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
 
-                //TempData["Success"] = "Operación terminada correctamente.";
-                //return Redirect(Request.UrlReferrer.PathAndQuery);
             }
             else
             {

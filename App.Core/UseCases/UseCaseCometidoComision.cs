@@ -1405,21 +1405,33 @@ namespace App.Core.UseCases
 
                     /*se valida que los rangos de fecha no se topen con otros destinos*/
                     //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
-                    var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year);
-                    foreach (var otrosDestinos in other)
+                    //var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year);
+                    //foreach (var otrosDestinos in other)
+                    //{
+                    //    foreach (var destinoCometido in listaDestinosCometido)
+                    //    {
+                    //        if (otrosDestinos.FechaInicio.Date == destinoCometido.FechaInicio.Date && otrosDestinos.CometidoId != destinoCometido.CometidoId)
+                    //        {
+                    //            //response.Errors.Add("El rango de fechas señalados esta en conflicto con los destinos del cometido " + otrosDestinos.CometidoId + "(" +  otrosDestinos.FechaInicio  + ")");
+                    //            response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
+                    //            /*se elimina el destino que topa con otro destino que ya ha sido creado*/
+                    //            //DestinosDelete(destinoCometido.DestinoId);
+                    //            DestinosAnular(destinoCometido.DestinoId);
+                    //        }
+                    //    }
+                    //}
+
+                    var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year).ToList();
+                    foreach (var destinoCometido in listaDestinosCometido)
                     {
-                        foreach (var destinoCometido in listaDestinosCometido)
+                        if(other.Exists(c => c.FechaInicio.Date == destinoCometido.FechaInicio.Date))
                         {
-                            if (otrosDestinos.FechaInicio.Date == destinoCometido.FechaInicio.Date && otrosDestinos.CometidoId != destinoCometido.CometidoId)
-                            {
-                                //response.Errors.Add("El rango de fechas señalados esta en conflicto con los destinos del cometido " + otrosDestinos.CometidoId + "(" +  otrosDestinos.FechaInicio  + ")");
-                                response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-                                /*se elimina el destino que topa con otro destino que ya ha sido creado*/
-                                //DestinosDelete(destinoCometido.DestinoId);
-                                DestinosAnular(destinoCometido.DestinoId);
-                            }
+                            response.Errors.Add(string.Format("La fecha {0}, ya se encuentra solicitada para otro cometido", destinoCometido.FechaInicio.Date.ToShortDateString()));
+                            //response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
+                            DestinosDelete(destinoCometido.DestinoId);
                         }
                     }
+                        
 
                     /*se suma el valor total del viatico*/
                     obj.TotalViatico = 0;
@@ -4773,13 +4785,16 @@ namespace App.Core.UseCases
                             Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
                             if (Pasaje != null)
                             {
-                                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
-                                if (cotizacion != null)
+                                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
+                                foreach (var c in cotizacion)
                                 {
-                                    foreach(var d in cotizacion.CotizacionDocumento)
+                                    if (c != null)
                                     {
-                                        if (d.Selected == true)
-                                            cotiza = true;
+                                        foreach (var d in c.CotizacionDocumento)
+                                        {
+                                            if (d.Selected == true)
+                                                cotiza = true;
+                                        }
                                     }
                                 }
                             }
@@ -4793,6 +4808,10 @@ namespace App.Core.UseCases
                         var com = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
                         if (!com.Destinos.Any())
                             throw new Exception("Se deben ingresar destinos al cometido.");
+
+                        /*validar q se debe ingresar un documento en la solicitud.*/
+                        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())
+                            throw new Exception("Debe adjuntar documentos a la solicitud que se esta generando.");
                     }
                 }
                 else
