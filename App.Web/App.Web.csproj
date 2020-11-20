@@ -759,6 +759,8 @@
     <Content Include="Views\Colaborador\EditGP.cshtml" />
     <Content Include="Views\HorasExtras\EditGP.cshtml" />
     <Content Include="Views\Cometido\Report.cshtml" />
+    <Content Include="Views\HorasExtras\EditConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionConfirmacion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

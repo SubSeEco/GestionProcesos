@@ -63,7 +63,7 @@ namespace App.Model.Pasajes
         [Display(Name = "Otra clase pasaje")]
         public string OtroPasaje { get; set; }
 
-        [Display(Name = "Forma de Adquisicion del Pasaje")]
+        [Display(Name = "Mecanismo de compra")]
         public string FormaAdquisicion { get; set; }
 
         [Display(Name = "Otro Mecanismo Compra")]

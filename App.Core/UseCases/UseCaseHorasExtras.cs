@@ -380,8 +380,12 @@ namespace App.Core.UseCases
                 if (!workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
 
-                //determinar siguiente tarea en base a estado y definicion de proceso
+                //DETERMINAR SIGUIENTE TAREA EN BASE A ESTADO Y DEFINICION DE PROCESO
                 DefinicionWorkflow definicionWorkflow = null;
+
+                /*Se toman los valores de la solicitud, para definir curso de las sgtes tareas*/
+                var Horas = new HorasExtras();
+                Horas = _repository.Get<HorasExtras>(h => h.WorkflowId == obj.WorkflowId).FirstOrDefault();
 
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
@@ -390,13 +394,18 @@ namespace App.Core.UseCases
                 {
                     if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                     {
-                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                        if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Horas.Aprobado != true) /*Si esta en la tarea de firma programacion y no se aprueba se termina la tramitacion*/
+                        {
+                            definicionWorkflow = null;
+                        }
+                        else
+                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                     }
                     else
                     {
                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
                     }
-                }                
+                }
 
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)

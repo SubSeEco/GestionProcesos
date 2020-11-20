@@ -120,7 +120,7 @@
                                             @Html.DisplayNameFor(m => Model.FechaVuelo)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(m => Model.MontoViatico)
+                                            @Html.DisplayNameFor(m => Model.CotizacionDocumento.FirstOrDefault().FileName)
                                         </th>
                                     </tr>
                                     <tr>
@@ -130,16 +130,6 @@
                                         <td>
                                             @Html.TextBoxFor(m => Model.FechaVuelo)
                                         </td>
-                                        <td>
-                                            @Html.TextBoxFor(m => Model.MontoViatico)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            @Html.DisplayNameFor(m => Model.CotizacionDocumento.FirstOrDefault().FileName)
-                                        </th>
-                                    </tr>
-                                    <tr>
                                         <td>
                                             @for (int i = 0; i < Model.CotizacionDocumento.ToArray().Length; i++)
                                             {
@@ -203,7 +193,7 @@
         $('#mecan').hide(100);
         $('#mecan2').hide(100);
     });
-/*****************************FIN FUNCTION*******************************************************************/
+    /*****************************FIN FUNCTION*******************************************************************/
     /*funcion valida subida de archivo pdf*/
     $('input[type="file"]').on('change', function () {
         var ext = $(this).val().split('.').pop();
@@ -227,8 +217,7 @@
             //$('#mecan').show();
             //$('#mecan2').show();
         }
-        else if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text == "Otro (detallar)")
-        {
+        else if (e.options[e.selectedIndex].text == "Otro (detallar)" && f.options[f.selectedIndex].text == "Otro (detallar)") {
             $('#other').show();
             $('#other2').show();
             $('#pas').show();
@@ -255,7 +244,7 @@
             $('#pas2').hide(100);
             $('#mecan').hide(100);
             $('#mecan2').hide(100);
-       }
+        }
     });
 
     $('#FormaAdquisicion').change(function () {

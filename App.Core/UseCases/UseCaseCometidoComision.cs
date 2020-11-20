@@ -1421,16 +1421,16 @@ namespace App.Core.UseCases
                     //    }
                     //}
 
-                    var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year).ToList();
-                    foreach (var destinoCometido in listaDestinosCometido)
-                    {
-                        if(other.Exists(c => c.FechaInicio.Date == destinoCometido.FechaInicio.Date))
-                        {
-                            response.Errors.Add(string.Format("La fecha {0}, ya se encuentra solicitada para otro cometido", destinoCometido.FechaInicio.Date.ToShortDateString()));
-                            //response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-                            DestinosDelete(destinoCometido.DestinoId);
-                        }
-                    }
+                    //var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year).ToList();
+                    //foreach (var destinoCometido in listaDestinosCometido)
+                    //{
+                    //    if(other.Exists(c => c.FechaInicio.Date == destinoCometido.FechaInicio.Date))
+                    //    {
+                    //        response.Errors.Add(string.Format("La fecha {0}, ya se encuentra solicitada para otro cometido", destinoCometido.FechaInicio.Date.ToShortDateString()));
+                    //        //response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
+                    //        DestinosDelete(destinoCometido.DestinoId);
+                    //    }
+                    //}
                         
 
                     /*se suma el valor total del viatico*/
