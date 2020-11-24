@@ -1474,6 +1474,9 @@ namespace App.Core.UseCases
                     obj.IdGrado = obj.GradoDescripcion;
                 }
 
+                if(string.IsNullOrEmpty(obj.Jefatura) || obj.Jefatura == "Sin jefatura definida")
+                    response.Errors.Add("No se ha definido la jefatura del funcionario.");
+
 
                 if (response.IsValid)
                 {

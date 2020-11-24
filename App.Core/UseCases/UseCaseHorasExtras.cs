@@ -158,7 +158,7 @@ namespace App.Core.UseCases
 
                         _repository.Update(obj);
                         _repository.Save();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)

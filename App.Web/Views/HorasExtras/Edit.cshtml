@@ -118,46 +118,52 @@
                                         </tr>
                                         @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
                                         {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
-                                        </td>
-
-                                        <td>
-                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
-                                            {
-                                                <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                            }
-                                            else
-                                            {
-                                                <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                            }
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                        </td>
-                                    </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                                                </td>
+                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10)
+                                                {
+                                                    <td>
+                                                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+                                                        {
+                                                            <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                    </td>
+                                                }
+                                            </tr>
                                         }
                                     </table>
 
                                 }
-                                <div class="section"></div>
-                                <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+
+                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10)
+                                {
+                                    <div class="section"></div>
+                                    <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+                                }
                             </div>
                         </div>
                         @if (Model.Workflow.DefinicionWorkflow.Secuencia == 4)
