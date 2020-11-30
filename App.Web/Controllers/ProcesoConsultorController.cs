@@ -6,6 +6,7 @@ using App.Core.Interfaces;
 using System.Linq;
 using App.Util;
 using System;
+using System.Text;
 
 namespace App.Web.Controllers
 {
@@ -82,40 +83,40 @@ namespace App.Web.Controllers
         [HttpPost]
         public ActionResult Index(DTOFilter model)
         {
-            var email = UserExtended.Email(User);
-            
-            ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion", model.EstadoProcesoId);
+            if (string.IsNullOrWhiteSpace(model.TextSearch)
+                && !model.Desde.HasValue
+                && !model.Desde.HasValue
+                && !model.Select.Any(q => q.Selected)
+                && !model.EstadoProcesoId.HasValue)
+                ModelState.AddModelError(string.Empty, "Debe especificar al menos un filtro de búsqueda");
 
             if (ModelState.IsValid)
             {
-                var predicate = PredicateBuilder.True<Proceso>();
-
-                if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    foreach (var item in model.TextSearch.Split())
-                        predicate = predicate.And(q => q.Tags.Contains(item));
-
-                if (model.Desde.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year >= model.Desde.Value.Year &&
-                        q.FechaCreacion.Month >= model.Desde.Value.Month &&
-                        q.FechaCreacion.Day >= model.Desde.Value.Day);
-
-                if (model.Hasta.HasValue)
-                    predicate = predicate.And(q =>
-                        q.FechaCreacion.Year <= model.Hasta.Value.Year &&
-                        q.FechaCreacion.Month <= model.Hasta.Value.Month &&
-                        q.FechaCreacion.Day <= model.Hasta.Value.Day);
-
-                var DefinicionProcesoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
-                if (DefinicionProcesoId.Any())
-                    predicate = predicate.And(q => DefinicionProcesoId.Contains(q.DefinicionProcesoId));
-
-                if (model.EstadoProcesoId.HasValue)
-                    predicate = predicate.And(q => q.EstadoProcesoId == model.EstadoProcesoId);
-
                 using (var context = new App.Infrastructure.GestionProcesos.AppContext())
                 {
-                    model.Result = context.Proceso.Where(predicate).Select(q => new DTOResult {
+                    StringBuilder query = new StringBuilder("SELECT * FROM CoreProceso WHERE 1=1");
+
+                    if (model.Desde.HasValue)
+                        query.Append(string.Format(" AND (DAY(FechaCreacion) >= {0} AND MONTH(FechaCreacion) >= {1} AND YEAR(FechaCreacion) >= {2})", model.Desde.Value.Day, model.Desde.Value.Month, model.Desde.Value.Year));
+
+                    if (model.Hasta.HasValue)
+                        query.Append(string.Format(" AND (DAY(FechaCreacion) <= {0} AND MONTH(FechaCreacion) <= {1} AND YEAR(FechaCreacion) <= {2})", model.Hasta.Value.Day, model.Hasta.Value.Month, model.Hasta.Value.Year));
+
+                    if (model.EstadoProcesoId.HasValue)
+                        query.Append(string.Format(" AND EstadoProcesoId = {0}", model.EstadoProcesoId.Value));
+
+                    var DefinicionProcesoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+                    if (DefinicionProcesoId.Any())
+                        query.Append(string.Format(" AND DefinicionProcesoId IN ({0})", string.Join(",", DefinicionProcesoId)));
+
+                    if (!string.IsNullOrWhiteSpace(model.TextSearch))
+                        for (int i = 0; i < model.TextSearch.Split().Count(); i++)
+                            query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i]));
+
+                    var email = UserExtended.Email(User);
+
+                    model.Result = context.Proceso.SqlQuery(query.ToString()).Select(q => new DTOResult
+                    {
                         ProcesoId = q.ProcesoId,
                         Reservado = q.Reservado,
                         EsAutor = q.Email.Trim() == email.Trim(),
@@ -129,6 +130,8 @@ namespace App.Web.Controllers
                     }).ToList();
                 }
             }
+
+            ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion", model.EstadoProcesoId);
 
             return View(model);
         }
