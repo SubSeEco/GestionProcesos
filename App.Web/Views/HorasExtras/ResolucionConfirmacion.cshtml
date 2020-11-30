@@ -1,0 +1,194 @@
+﻿@model App.Model.HorasExtras.HorasExtras
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style TYPE="text/css">
+    .breakhere {
+        page-break-after: always
+    }
+</style>
+<head>
+</head>
+<body style="font-family: Calibri;font-style:italic;margin-top:800px;
+        padding: 0px;
+        margin: 0px;
+        text-align: justify">
+    <div class="left">
+        <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="150px" /><br />
+        <b>DEPTO. ADMINISTRATIVO</b><br />
+        <b>UNIDAD DE GESTIÓN Y DESARROLLO</b><br />
+        <b>DE PERSONAS</b><br />
+        <b>ÁREA PERSONAS</b><br />
+        <b>MSF/PCM/BCJ</b><br />
+        <b>R.A.EX</b><br />
+    </div>
+    <center>
+        <b>AUTORIZA PAGO HORAS EXTRAORDINARIAS,  @Html.DisplayFor(m => Model.Mes).ToString().ToUpper()  DE @Html.DisplayFor(m => Model.Annio).</b><br />
+        <b style="text-decoration: underline;">SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO.</b>
+    </center>
+    <ol>
+        <p>
+            <b>VISTOS :</b>Lo dispuesto en la Ley Nº 21.192, de presupuestos del sector público para el año 2020; en el D.L. Nº 249 de 1974; artículo Nº 66 del D.F.L. Nº 29 de 2004 del Ministerio de Hacienda,
+            que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; en el artículo 9º de la Ley Nº 19.104 de 1991;  Resolución Nº 6, de 2019, de la Contraloría
+            General de la República;  Resolución Administrativa Exenta  N° 157, de 2020, sobre reconocimiento de programación de horas extraordinarias mes de febrero de 2020; Resolución
+            Exenta RA N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+        </p>
+    </ol>
+    <ol>
+        <p>
+
+            <b>CONSIDERANDO : </b><br />
+        <li>
+            Que, el Jefe Superior de la Institución, el Secretario Regional Ministerial o el Director Regional de servicios nacionales desconcentrados, según corresponda, podrá ordenar trabajos
+            extraordinarios a continuación de la jornada extraordinaria, de noche o en días sábados, domingos y festivos, cuando hayan de cumplirse tareas impostergables. Que, dichas labores se
+            compensarán con descanso complementario, y si ello no fuere posible, por razones de buen servicio, lo serán con un recargo en las remuneraciones.
+        </li>
+        </p>
+        <p>
+        <li>
+            Que, es necesario autorizar pago de las horas extraordinarias, compensadas con recargo en remuneraciones, realizadas en el mes
+            de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), de los funcionarios de la Subsecretaría de Economía y Empresas de Menor Tamaño.
+        </li>
+
+        </p>
+    </ol>
+    <ol>
+        <p>
+            <b>RESUELVO : </b><br />
+            <b>ARTÍCULO PRIMERO: AUTORÍCESE</b>,&nbsp;&nbsp;&nbsp;a los siguientes funcionarios de la Subsecretaría de Economía y Empresas de Menor Tamaño, los trabajos extraordinarios
+            realizados en el mes de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), los que serán compensados con incremento de sus remuneraciones de acuerdo a lo establecido
+            en el artículo 66° del D. F. L. N° 29 de 2004, que fija el texto refundido, coordinado y sistematizado del Estatuto Administrativo.
+        </p>
+    </ol>
+    <br />
+    <ol>
+        <table width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;border-color:#ddd;">
+            <tr>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Nombre)*@
+                    @Html.Raw("RUT")
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Nombre)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HDPago)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().ValorHorasDiurnas)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNPago)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().ValorHorasNocturnas)
+                </td>
+                <td>
+                    @*@Html.Raw("VALOR TOTAL PAGO")*@
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().ValorTotalPago)
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <b>
+                        @Html.DisplayFor(modelItem => Model.Unidad)
+                    </b>
+                </td>
+            </tr>
+
+            @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorTotalPago)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </ol>
+    <p class="breakhere"></p>
+    <ol>
+        <p>
+            <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total 
+            de $$$$$$$- (quinientos ochenta y unos mil setecientos cincuenta y nueve pesos), por concepto de trabajos extraordinarios, conforme al detalle descrito precedentemente.
+        </p>
+    </ol>
+    <ol>
+        <p>
+            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21.02.004 (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año 2020, 
+            de la Subsecretaría de Economía y Empresas de Menor Tamaño.
+        </p>
+    </ol>
+    <table align="center" border="0">
+        <tr>
+            <td>
+                <br />
+                <p align="center">
+                    <strong>
+                        ANÓTESE, PÁGUESE Y ARCHÍVESE
+                    </strong>
+                    <br />
+                    <strong>
+                        POR ORDEN DEL SUBSECRETARIO
+                    </strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>
+                    <p align="center">
+                        LISSY CORRALES REVILLA
+                        <br />
+                        ENCARGADA DEPARTAMENTO ADMINISTRATIVO
+                        <br />
+                        SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO
+                    </p>
+                </strong>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <br /><br />
+    <table border="0" align="left" width="25%">
+        <tr>
+            <td>DISTRIBUCIÓN</td>
+        </tr>
+        <tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
+        <tr><td>-	Departamento Administrativo</td></tr>
+        <tr><td>-	Finanzas</td></tr>
+        <tr><td>-	Oficina de Partes</td></tr>
+    </table>
+</body>
+</html>
+
+
+
+
+

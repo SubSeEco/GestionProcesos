@@ -192,11 +192,11 @@
                                 <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 11)
                         {
                             <div class="section"></div>
                             <div class="row">
-                                @Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraDocumento", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                                @Html.ActionLink("Generar Resolucion de Confrimacion de trabajos extraordinarios", "GeneraConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
                             </div>
                         }
 

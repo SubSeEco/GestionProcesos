@@ -23,15 +23,11 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<REPYT> REPYT { get; set; }
         public virtual DbSet<DGCONTRATOS> DGCONTRATOS { get; set; }
 
-        //public virtual DbSet<PEFERJEF> PEFERJEF { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<AppContextTurismo>(null);
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-            ////modelBuilder.Conventions.Remove<OneToOneConstraintIntroductionConvention>();
-
             var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
     }

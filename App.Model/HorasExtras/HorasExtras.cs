@@ -60,5 +60,13 @@ namespace App.Model.HorasExtras
 
         [Display(Name = "UnidadId")]
         public int? UnidadId { get; set; }
+
+        [Display(Name = "Aprobado")]
+        public bool Aprobado { get; set; } = false;
+
+        [Display(Name = "Valor Total Horas")]
+        [AssertThat("ValorTotalHoras >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        [DataType(DataType.Currency)]
+        public int? ValorTotalHoras { get; set; } = 0;
     }
 }

@@ -158,7 +158,7 @@ namespace App.Core.UseCases
 
                         _repository.Update(obj);
                         _repository.Save();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -273,7 +273,7 @@ namespace App.Core.UseCases
 
                     /*Se busca cometido para determinar tipo de documento*/
                     string TipoDocto;
-                    var com = _repository.Get<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == HorasExtrasId.Value).FirstOrDefault();
+                    var horas = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasExtrasId.Value).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
                         TipoDocto = obj.TipoDocumentoFirma;
@@ -305,6 +305,15 @@ namespace App.Core.UseCases
 
                             _repository.Update(documento);
                             _repository.Save();
+
+                            /*Se marca programacion de horas como aprobadas*/
+                            if (horas != null)
+                            {
+                                horas.Aprobado = true;
+
+                                _repository.Update(horas);
+                                _repository.Save();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -371,8 +380,12 @@ namespace App.Core.UseCases
                 if (!workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
 
-                //determinar siguiente tarea en base a estado y definicion de proceso
+                //DETERMINAR SIGUIENTE TAREA EN BASE A ESTADO Y DEFINICION DE PROCESO
                 DefinicionWorkflow definicionWorkflow = null;
+
+                /*Se toman los valores de la solicitud, para definir curso de las sgtes tareas*/
+                var Horas = new HorasExtras();
+                Horas = _repository.Get<HorasExtras>(h => h.WorkflowId == obj.WorkflowId).FirstOrDefault();
 
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
@@ -381,13 +394,18 @@ namespace App.Core.UseCases
                 {
                     if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                     {
-                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                        if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Horas.Aprobado != true) /*Si esta en la tarea de firma programacion y no se aprueba se termina la tramitacion*/
+                        {
+                            definicionWorkflow = null;
+                        }
+                        else
+                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                     }
                     else
                     {
                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
                     }
-                }                
+                }
 
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
@@ -397,10 +415,28 @@ namespace App.Core.UseCases
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
 
-                    //notificar al dueño del proceso y oficina de partes
-                    //_email.NotificarFinProceso(workflowActual.Proceso,
-                    //_repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
-                    //_repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    /*notificar al dueño del proceso y oficina de partes*/
+                    if (workflowActual.DefinicionWorkflow.Secuencia == 7)
+                    {
+                        /*si no existen mas tareas se envia correo de notificacion*/
+                        var hrs = _repository.Get<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
+                        /*se trae documento para adjuntar*/
+                        Documento doc = hrs.Proceso.Documentos.Where(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
+                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                        var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
+                        List<string> emailMsg;
+
+                        _email.NotificarFinProceso(workflowActual.Proceso,
+                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
+                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+
+                        //_email.NotificacionesCometido(workflowActual,
+                        //_repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_OfPartes), /*notificacion a oficia de partes*/
+                        //"Se ha tramitado un cometido nacional",
+                        //emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                        //_repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,
+                        //doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
+                    }
                 }
 
                 //en el caso de existir mas tareas, crearla

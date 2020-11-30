@@ -220,7 +220,7 @@ namespace App.Web.Controllers
                 new SelectListItem {Text = "Ejecutiva", Value = "Ejecutiva"},
                 new SelectListItem {Text = "Económica", Value = "Económica"},
                 new SelectListItem {Text = "Turista", Value = "Turista"},
-                new SelectListItem {Text = "Otro ", Value = "Otro "},
+                new SelectListItem {Text = "Otro (detallar)", Value = "Otro"},
             };
 
             List<SelectListItem> MecanismoCompra = new List<SelectListItem>
@@ -229,7 +229,7 @@ namespace App.Web.Controllers
                 new SelectListItem {Text = "Licitación pública", Value = "Licitación pública"},
                 new SelectListItem {Text = "Trato directo", Value = "Trato directo"},
                 new SelectListItem {Text = "Otros gastos menores", Value = "Otros gastos menores"},
-                new SelectListItem {Text = "Otro (detallar)", Value = "Otro (detallar) "},
+                new SelectListItem {Text = "Otro (detallar)", Value = "Otro"},
             };
 
             ViewBag.ClasePasaje = new SelectList(ClasePasaje, "Value", "Text");

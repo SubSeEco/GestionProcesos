@@ -60,8 +60,14 @@ namespace App.Model.Pasajes
         [Display(Name = "Clase de Pasaje")]
         public string ClasePasaje { get; set; }
 
-        [Display(Name = "Forma de Adquisicion del Pasaje")]
+        [Display(Name = "Otra clase pasaje")]
+        public string OtroPasaje { get; set; }
+
+        [Display(Name = "Mecanismo de compra")]
         public string FormaAdquisicion { get; set; }
+
+        [Display(Name = "Otro Mecanismo Compra")]
+        public string OtroMecanismo { get; set; }
 
         [Display(Name = "Fecha de Adquisicion")]
         [DisplayFormat(DataFormatString = "{0:G}", ApplyFormatInEditMode = true)]
