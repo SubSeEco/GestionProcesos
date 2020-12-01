@@ -2621,6 +2621,8 @@ namespace App.Core.UseCases
                     obj.IdRegion = objController.IdRegion;
                     obj.IdComuna = objController.IdComuna;
 
+                    obj.ObservacionesModificacion = objController.ObservacionesModificacion;
+
                     _repository.Update(obj);
                     _repository.Save();
                 }

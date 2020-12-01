@@ -22,6 +22,8 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using Rotativa;
 using App.Model.HorasExtras;
 using System.Globalization;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace App.Web.Controllers
 {
@@ -608,12 +610,17 @@ namespace App.Web.Controllers
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = new ResponseMessage();
 
+                if(_colaborador.Exists(c => c.ObservacionesConfirmacion == null))
+                {
+                    ModelState.AddModelError(string.Empty, "Se deben llenar todos los campos de observaciones");
+                    var hora = _repository.GetById<HorasExtras>(model.HorasExtrasId);
+                    return View(hora);
+                }
+
                 /*se guardan las observaciones de la confirmacion*/
                 foreach (var c in _colaborador)
                 {
                     _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(c);
-                    if( _UseCaseResponseMessage.Warnings.Count > 0)
-                        TempData["Warning"] = _UseCaseResponseMessage.Warnings;
                 }
 
                 if (_UseCaseResponseMessage.IsValid)
@@ -745,5 +752,135 @@ namespace App.Web.Controllers
             //return View(model);
             return Redirect(Request.UrlReferrer.ToString());
         }
+
+        public ActionResult EditRemuneraciones(int id)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
+            var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            var model = _repository.GetById<HorasExtras>(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRemuneraciones(HorasExtras model, List<Colaborador> _colaborador)
+        {            
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = new ResponseMessage();
+
+                foreach(var c in _colaborador)
+                {
+                    _useCaseInteractor.ColaboradorUpdate(c);
+                }
+
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            return View(model);
+        }
+
+
+        #region FIRMA SEGPRES
+        public class Token2
+        {
+            public string scope { get; set; }
+            public string token_type { get; set; }
+            public string expires_in { get; set; }
+            public string access_token { get; set; }
+            public string jti { get; set; }
+        }
+        public static String sha256_hash(String value)
+        {
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                return String.Concat(hash
+                  .ComputeHash(Encoding.UTF8.GetBytes(value))
+                  .Select(item => item.ToString("x2")));
+            }
+        }
+        public ActionResult FirmaSegpres(int? IdDocto)
+        {
+            if (ModelState.IsValid)
+            {
+                var vdoc = _repository.GetById<Documento>(IdDocto.Value);
+                var code = vdoc.File;
+                string docSHA = sha256_hash(vdoc.Texto);
+                string doc64 = Convert.ToBase64String(code);
+
+                /*Conexion at sign segpres */
+                string header = @"{'alg': 'HS256','typ': 'JWT'}";
+                var headerBytes = System.Text.Encoding.UTF8.GetBytes(header);
+                string PayLoad = @"{'entity': 'Subsecretaría de Economía y Empresas de Menor Tamaño', 'run':'13540749' , 'expiration':'2020-11-26T18:15:00', 'purpose':'Atendido'}";
+                var PayLoadBytes = System.Text.Encoding.UTF8.GetBytes(PayLoad);
+
+                string VerirySignature = Convert.ToBase64String(headerBytes) + '.' + Convert.ToBase64String(PayLoadBytes) + '.' + "00277fdbc55a4ee6b2228c7f89b15a30";
+                string VerirySignatureSHA256 = sha256_hash(VerirySignature);
+                //string tokenJson = JsonConvert.SerializeObject(token);
+
+                string headerSHA256 = sha256_hash(header);
+                string tokenSHA256 = sha256_hash(PayLoad);
+
+                string concat = headerSHA256 /*"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"*/ + '.' + tokenSHA256 + '.' + VerirySignatureSHA256;
+
+                string tokenJson = JsonConvert.SerializeObject(concat);
+
+                string api_token_key_json = JsonConvert.SerializeObject("5620e6ec-a7dc-4237-adf5-9080ae754536");
+
+                string json = @"[{'content-type': 'application/pdf','content':" + doc64 + "','description': 'envio archivo de prueba','checksum': " + docSHA + "};]";
+                string envio = JsonConvert.SerializeObject(json);
+
+                /*llamada al servcio rest*/
+
+                /*con httpwebrequest*/
+                var urltoken = "https://apis.digital.gob.cl/firma/v2/files/tickets";
+                //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12;
+                var request = (HttpWebRequest)WebRequest.Create(urltoken);
+                var postData = "grant_type=client_credentials";
+                var data = Encoding.ASCII.GetBytes(postData);
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.ContentLength = data.Length;
+                //request.Headers.Add("Authorization", "Basic YXBwX3Rlc3RfdG9rZW46YXBwX3Rlc3Rfc2VjcmV0"); //app_test_token:app_test_secret en Base64
+                //request.Headers.Add("Authorization", "Basic cmVwb3NpdG9yaW9fdGVzdF90b2tlbjpyZXBvc2l0b3Jpb190ZXN0X3NlY3JldA=="); //repositorio_test_token:repositorio_test_secret en base64
+                request.Headers.Add("token", tokenJson);
+                request.Headers.Add("api_token_key", api_token_key_json);
+                request.Headers.Add("files", envio);
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                Token2 t = JsonConvert.DeserializeObject<Token2>(responseString);
+                if (t.access_token != null) //obtención del token de respuesta
+                    ModelState.AddModelError(string.Empty, "Documento ha sido firmado electronicamnete");
+                else
+                    ModelState.AddModelError(string.Empty, "Error en la firma");
+            }
+
+            return View();
+        }
+
+        #endregion
+
+
     }
 }

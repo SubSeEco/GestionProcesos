@@ -147,5 +147,10 @@ namespace App.Model.Cometido
         [Display(Name = "Observaciones Destino")]
         public string ObsDestino { get; set; }
 
+        /*Modificaciones solicitadas 17112020*/
+        [Display(Name = "Observaciones por modificacion")]
+        [DataType(DataType.MultilineText)]
+        public string ObservacionesModificacion { get; set; }
+
     }
 }

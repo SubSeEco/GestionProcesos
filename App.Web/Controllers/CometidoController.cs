@@ -1991,10 +1991,31 @@ namespace App.Web.Controllers
             return File(excelPackageSeguimientoGP.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoGP_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
-        public FileResult Caigg()
+        public FileResult Caigg(DTOFilterCometido model)
         {
-            var cometido = _repository.GetAll<Cometido>();
-            //var cometido = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == 130).ToList();
+            var predicate = PredicateBuilder.True<Cometido>();
+         
+            if (model.Desde.HasValue)
+                predicate = predicate.And(q =>
+                    q.FechaSolicitud.Year >= model.Desde.Value.Year &&
+                    q.FechaSolicitud.Month >= model.Desde.Value.Month &&
+                    q.FechaSolicitud.Day >= model.Desde.Value.Day);
+
+            if (model.Hasta.HasValue)
+                predicate = predicate.And(q =>
+                    q.FechaSolicitud.Year <= model.Hasta.Value.Year &&
+                    q.FechaSolicitud.Month <= model.Hasta.Value.Month &&
+                    q.FechaSolicitud.Day <= model.Hasta.Value.Day);
+
+            var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            if (CometidoId.Any())
+                predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+
+            model.Result = _repository.Get(predicate);
+            
+
+            var cometido = model.Result;// _repository.Get<Cometido>(c => c.FechaSolicitud >= model.Desde && c.FechaSolicitud <= model.Hasta);
+            //var cometido = _repository.GetAll<Cometido>().Where(c => c.CometidoId == 364).ToList();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CAIGG.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2019,13 +2040,25 @@ namespace App.Web.Controllers
                         var cotizacion = _repository.GetAll<Cotizacion>().Where(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
                         if (cotizacion.Count > 0)
                         {
+                            worksheet.Cells[fila, 16].Value = cotizacion.Count() >= 2 ? "SI" : "NO";
                             worksheet.Cells[fila, 18].Value = cotizacion.FirstOrDefault().FechaVuelo.ToShortDateString(); /*fecha del vuelo*/
                             worksheet.Cells[fila, 19].Value = cotizacion.FirstOrDefault().NumeroOrdenCompra; /*Id orden de compra*/
                             worksheet.Cells[fila, 12].Value = cotizacion.FirstOrDefault().ClasePasaje; /*clase de pasaje*/
-                            worksheet.Cells[fila, 15].Value = cotizacion.FirstOrDefault().FormaAdquisicion; /*forma de adquision del pasaje*/
-                            worksheet.Cells[fila, 17].Value = cotizacion.FirstOrDefault().FechaAdquisicion.ToShortDateString();/*fecha adquisicion*/
+                            worksheet.Cells[fila, 15].Value = cotizacion.FirstOrDefault().FormaAdquisicion; /*forma de adquision del pasaje*/                            
+                            worksheet.Cells[fila, 17].Value = cotizacion.FirstOrDefault().FechaAdquisicion != null ? cotizacion.FirstOrDefault().FechaAdquisicion.ToShortDateString() : "S/A";/*fecha adquisicion*/
+                            
+                            if((pas % 2) == 0)
+                                worksheet.Cells[fila, 20].Value = cotizacion.FirstOrDefault().ValorPasaje.ToString(); /*valor total pasaje*/
+                            else
+                                worksheet.Cells[fila, 20].Value = "0";
+                            
                         }
-                        
+                        else
+                        {
+                            worksheet.Cells[fila, 16].Value = "S/A";
+                            worksheet.Cells[fila, 20].Value = "0";
+                        }
+
                         worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                         worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
                         worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
@@ -2044,13 +2077,13 @@ namespace App.Web.Controllers
                                     worksheet.Cells[fila, 8].Value = p.RegionDescripcion.Trim(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().ComunaDescripcion : "S/A";                                    
                                     worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString(); //com.Destinos.Any() ? com.Destinos.FirstOrDefault().FechaInicio.ToString() : "S/A";/*fecha ida*/
                                     worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();// com.Destinos.Any() ? com.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A"; /*fecha vuelta*/
-                                    worksheet.Cells[fila, 25].Value = ((com.FechaSolicitud - p.FechaIda).Days + 1).ToString(); /*dias de antelacion*/
+                                    worksheet.Cells[fila, 25].Value = ((p.FechaIda - com.FechaSolicitud).Days).ToString(); /*dias de antelacion*/
                                 }
                                 else
                                 {
                                     worksheet.Cells[fila, 8].Value = p.OrigenRegionDescripcion.Trim();
-                                    worksheet.Cells[fila, 22].Value = p.FechaIda.ToShortDateString();/*fecha ida*/
-                                    worksheet.Cells[fila, 23].Value = p.FechaVuelta.ToShortDateString();/*fecha vuelta*/
+                                    worksheet.Cells[fila, 22].Value = string.Empty; //p.FechaIda.ToShortDateString();/*fecha ida*/
+                                    worksheet.Cells[fila, 23].Value = string.Empty; //p.FechaVuelta.ToShortDateString();/*fecha vuelta*/
                                     worksheet.Cells[fila, 25].Value = "0"; /*dias de antelacion*/
                                 }
                             }
@@ -2062,19 +2095,6 @@ namespace App.Web.Controllers
                         worksheet.Cells[fila, 13].Value = "N/A";
                         worksheet.Cells[fila, 14].Value = "N/A";
                         
-                        if (pasaje.Count() > 0)
-                        {
-                            worksheet.Cells[fila, 16].Value = pasaje.FirstOrDefault().Cotizacion.Count() >= 2 ? "SI" : "NO";
-                            worksheet.Cells[fila, 17].Value = pasaje.FirstOrDefault().FechaSolicitud != null ? pasaje.FirstOrDefault().FechaSolicitud.ToShortDateString() : "S/A";/*fecha adquisicion*/
-                            worksheet.Cells[fila, 20].Value = cotizacion.Count() > 0 ? cotizacion.FirstOrDefault().ValorPasaje.ToString() : "S/A";
-                        }
-                        else
-                        {
-                            worksheet.Cells[fila, 16].Value = "N/A";
-                            
-                            worksheet.Cells[fila, 20].Value = "0";
-                        }                        
-
                         worksheet.Cells[fila, 21].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
                         worksheet.Cells[fila, 24].Value = com.FechaSolicitud.ToShortDateString();
                         worksheet.Cells[fila, 26].Value = com.CometidoDescripcion;

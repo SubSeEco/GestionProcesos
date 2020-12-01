@@ -169,6 +169,16 @@
                                 @Html.ValidationMessageFor(m => Model.Total, "", new { @class = "red-text" })
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="3">
+                                @Html.DisplayNameFor(m => Model.ObservacionesModificacion)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                @Html.EditorFor(m => Model.ObservacionesModificacion)
+                            </td>
+                        </tr>
                     </table>
                     <div class="section"></div>
                     <p>
@@ -333,9 +343,6 @@
                 document.getElementById('Total').value = Data.DiasTotal;
             })
     }
-
-
-
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -346,3 +353,8 @@
 
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    textarea {
+        height: 10em;
+    }
+</style>
