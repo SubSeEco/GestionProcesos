@@ -20,6 +20,7 @@
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
+                @Html.Partial("_Message")
 
                 <div class="row">
                     <div class="input-field col s12 m12 l12">
@@ -60,14 +61,12 @@
         </div>
     </div>
 
-    @if (!Model.Result.Any())
-    {
-        <p>Información no encontrada</p>
-    }
-    else
-    {
-        <ul class="collection">
-            @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+    <ul class="collection with-header">
+        @if (Model.Result.Any())
+        {
+            <li class="collection-header"><h5>Resultados: @Model.Result.Count()</h5></li>
+
+            foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
             {
                 <li class="collection-item">
                     @if (item.Reservado && !item.EsAutor)
@@ -84,13 +83,13 @@
                             <span class="new badge red" data-badge-caption="Proceso reservado"></span>
                         }
 
-                        @Html.ActionLink(string.Concat(item.ProcesoId, " - ", item.Definicion), "View", item.Entidad, new { id = item.ProcesoId }, null)<br />
+                        <h6>@Html.ActionLink(string.Concat(item.ProcesoId, " - ", item.Definicion), "View", item.Entidad, new { id = item.ProcesoId }, null)</h6>
                         <text>Creado por </text> @item.NombreFuncionario <text> el </text>@item.FechaCreacion<br />
                         <text>Estado: </text> @item.Estado<br />
 
                         if (!string.IsNullOrWhiteSpace(item.Observacion))
                         {
-                            <p>@Html.DisplayFor(modelItem => item.Observacion)</p>
+                            <text>Observación:</text> @Html.DisplayFor(modelItem => item.Observacion)
                         }
 
                         if (!item.Reservado && item.Entidad.Contains("GD"))
@@ -100,8 +99,13 @@
                     }
                 </li>
             }
-        </ul>
-    }
+        }
+        else
+        {
+            <li class="collection-header"><h5>Resultados: @Model.Result.Count()</h5></li>
+        }
+    </ul>
+
 </div>
 <script>
     $(document).ready(function () {
