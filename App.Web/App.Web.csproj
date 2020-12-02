@@ -762,6 +762,7 @@
     <Content Include="Views\HorasExtras\EditConfirmacion.cshtml" />
     <Content Include="Views\HorasExtras\ResolucionConfirmacion.cshtml" />
     <Content Include="Views\HorasExtras\SignConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\EditRemuneraciones.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
