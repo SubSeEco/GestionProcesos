@@ -84,8 +84,6 @@ namespace App.Web.Controllers
             public System.DateTime? Hasta { get; set; }
 
             public List<App.Model.DTO.DTOSelect> Select { get; set; }
-            //public List<Workflow> TareasPersonales { get; set; }
-            //public List<Workflow> TareasGrupales { get; set; }            
             public List<DTOWorkflow> TareasPersonales { get; set; }
             public List<DTOWorkflow> TareasGrupales { get; set; }
         }
@@ -151,7 +149,7 @@ namespace App.Web.Controllers
                 //usuario administrador
                 if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
                 {
-                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
+                    model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,
@@ -169,7 +167,7 @@ namespace App.Web.Controllers
                         ProcesoEmail = q.Proceso.Email,
                         ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
                     }).ToList();
-                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal).Select(q => new DTOWorkflow
+                    model.TareasGrupales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && !q.TareaPersonal).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,
@@ -192,7 +190,7 @@ namespace App.Web.Controllers
                 //usuario normal
                 else
                 {
-                    model.TareasPersonales = context.Workflow.Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
+                    model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,
@@ -210,7 +208,7 @@ namespace App.Web.Controllers
                         ProcesoEmail = q.Proceso.Email,
                         ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
                     }).ToList();
-                    model.TareasGrupales = context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod).Select(q => new DTOWorkflow
+                    model.TareasGrupales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && !q.TareaPersonal && q.Pl_UndCod == user.Unidad.Pl_UndCod).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,
@@ -228,7 +226,7 @@ namespace App.Web.Controllers
                         ProcesoEmail = q.Proceso.Email,
                         ProcesoEntidad = q.Proceso.DefinicionProceso.Entidad.Codigo
                     }).ToList();
-                    model.TareasGrupales.AddRange(context.Workflow.Where(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value)).Select(q => new DTOWorkflow
+                    model.TareasGrupales.AddRange(context.Workflow.AsNoTracking().Where(q => !q.Terminada && !q.TareaPersonal && gruposEspeciales.Contains(q.GrupoId.Value)).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
                         FechaCreacion = q.FechaCreacion,

@@ -161,5 +161,18 @@ namespace App.Model.Core
         [NotMapped]
         public string Funcionario { get; set; }
 
+        [NotMapped]
+        [Display(Name = "Días promedio de permanencia")]
+        public double? DiasPromedioPermanencia
+        {
+            get
+            {
+                if (!FechaTermino.HasValue)
+                    return null;
+
+                return (FechaTermino.Value - FechaCreacion).TotalDays;
+            }
+        }
+
     }
 }

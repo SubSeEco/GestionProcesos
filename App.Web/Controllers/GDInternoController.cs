@@ -94,7 +94,7 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var model = _repository.GetFirst<GD>(q => q.ProcesoId == id);
+            var model = _repository.GetById<GD>(id);
             if (model == null)
                 return RedirectToAction("View", "Proceso", new { id });
 
@@ -165,7 +165,6 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-
 
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
@@ -263,6 +262,7 @@ namespace App.Web.Controllers
             var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
             return View(model);
         }
+
         public PartialViewResult WorkflowAutoridad(int ProcesoId)
         {
             var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);
