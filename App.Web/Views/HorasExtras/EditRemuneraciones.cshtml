@@ -40,9 +40,9 @@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNPagoAprobados)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
                     @*@Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
-                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHD)*@
+                        @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHD)*@
                     @*@Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
-                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHN)*@
+                        @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHN)*@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorTotalPago)
                 }
 
@@ -159,17 +159,17 @@
                                                 <td>
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
                                                 </td>
-                                                <td class="data">
+                                                <td>
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
                                                 </td>
-                                                <td class="valor">
+                                                <td>
                                                     @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
                                                 </td>
-                                                <td class="button">
-                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
+                                                <td>
+                                                    @Html.TextBoxFor(model => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
                                                 </td>
-                                                <td class="pagado">
-                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ValorPagadoHD)
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ValorPagadoHD)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPagoAprobados)
@@ -178,34 +178,34 @@
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
+                                                    @Html.TextBoxFor(model => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
                                                 </td>
                                                 <td>
-                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ValorPagadoHN)
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ValorPagadoHN)
                                                 </td>
                                                 @*@if (Model.Workflow.DefinicionWorkflow.Secuencia != 10)
-                                            {
-                                                <td>
-                                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
                                                     {
-                                                        <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                                </td>
-                                            }*@
+                                                        <td>
+                                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+                                                            {
+                                                                <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                        </td>
+                                                    }*@
                                             </tr>
                                         }
                                     </table>
 
                                 }
 
-                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10)
+                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 11)
                                 {
                                     <div class="section"></div>
                                     <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
@@ -219,9 +219,6 @@
                                 @Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraDocumento", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
                             </div>
                         }
-
-                    <a href='@Url.Action("FirmaSegpres", "HorasExtras", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-
                         <div class="section"></div>
                         <p>
                             <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
@@ -263,6 +260,16 @@
             $(element).appendTo($(element).parent());
         });
 
+        //$('table tbody tr').on('change', function () {
+        //    var total = $(this).find("td:eq(2)").text() * $(this).find("td:eq(3)").text();
+        //    alert(total);
+        //    //var hd = $(this).find('input').eq(1).html();
+        //    var hd = $(this).find("td:eq(4)").html();
+        //    var hn = $(this).find("td:eq(3)").text();
+        //    var Dia = $(this).find("td:eq(2)").text();
+        //    var Noche = $(this).find("td:eq(6)").text();
+        //    CalculoHorasPagadas(hd, hn, Dia, Noche);
+        //});
     });
     /*******************TERMINO METODO FUNCTION*************************************************************************************/
     $(function () {
@@ -271,21 +278,55 @@
         });
     });
 
-    $(function () {
-        $('.button').change(function () {
-            var horas = $(this).parent().find('.data').text();
-            var valor = $(this).parent().find('.valor').text();
-            //alert($(this).parent().find('.data').text());
-            alert(horas * valor);
-            $(this).parent().find('.pagado').val() = (horas * valor);
-        });
-    });
-
+    ///*Calcular valor horas pagadas*/
     //$("table tbody tr").click(function () {
-    //    var total = $(this).find("td:eq(2)").text() * $(this).find("td:eq(3)").text();        
-    //    //$(this).find("td:eq(5)").text() = total;
-    //    alert(total);
+    //    var total = $(this).find("td:eq(2)").text() * $(this).find("td:eq(3)").text();
+    //    //CalculoHorasPagadas();
     //});
+
+    //$('table tbody tr').on('change', function () {
+    //    var total = $(this).find("td:eq(2)").text() * $(this).find("td:eq(3)").text();
+    //    alert(total);
+    //    var hd = $(this).find("td:eq(2)").text();
+    //    var hn = $(this).find("td:eq(3)").text();
+    //    var Dia = $(this).find("td:eq(2)").text();
+    //    var Noche = $(this).find("td:eq(6)").text();
+    //    CalculoHorasPagadas(hd, hn, Dia, Noche);
+    //});
+
+    //$("table tbody tr").change(function () {
+    //    var total = $(this).find("td:eq(2)").text() * $(this).find("td:eq(3)").text();
+    //    alert(total);
+    //    CalculoHorasPagadas();
+    //    //$(this).find("td:eq(5)").val() = total;
+    //});
+
+
+    //function CalculoHorasPagadas(ValorHD, ValorHN, Diurnas,Nocturnas) {
+    //    alert('hola');        
+    //        //var ValorHD = $(this).find("td:eq(2)").text();
+    //        //var ValorHN = $(this).find("td:eq(3)").text()
+    //        alert(ValorHD);
+    //        alert(ValorHN);
+    //    $.getJSON("/HorasExtras/CalculoHorasPagadas", { ValorHD: ValorHD, HorasDiurnas: Diurnas, ValorHN: ValorHN, HorasNocturnas: Nocturnas },
+    //            function (Data) {
+    //                document.getElementById("Total").value = Data.TotalValorPagado;
+
+    //                document.getElementById('Dias100Monto').value = Data.ValorPagadoHD;
+    //                document.getElementById('Dias60Monto').value = Data.ValorPagadoHN;
+    //            })
+        
+    //}
+
+    //$(function () {
+    //    $('.button').change(function () {
+    //        //var horas = $(this).parent().find('.data').text();
+    //        var horas = $(this).parent().find('.button').text();
+    //        var valor = $(this).parent().find('.valor').text();
+    //        //alert($(this).parent().find('.data').text());
+    //        alert(horas * valor);
+    //        $(this).parent().find('.pagado').val() = (horas * valor);
+    //    });
 
     ///*Calcular Valor pagado horas diurnas*/
     //$('#ValorHorasDiurnas').on('change', function () {
@@ -295,23 +336,26 @@
 
     //function CalculaPagoDiurno() {
     //    var ValorHora = $("#ValorHorasDiurnas").val();
-    //    var HDAprobadas = $("#HDPagoAprobados").val();       
+    //    var HDAprobadas = $("#HDPagoAprobados").val();
     //    alert(ValorHora);
     //    $("#ValorPagadoHD").val() = HDAprobadas * ValorHora;
     //}
 
 </script>
 
-    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
 <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+
 <style TYPE="text/css">
     strong {
         font-weight: bolder;
     }
+
     .button {
         cursor: pointer;
     }

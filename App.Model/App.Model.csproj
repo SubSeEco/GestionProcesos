@@ -151,6 +151,7 @@
     <Compile Include="SIGPER\DGESCALAFONES.cs" />
     <Compile Include="SIGPER\DGESTAMENTOS.cs" />
     <Compile Include="SIGPER\DGREGIONES.cs" />
+    <Compile Include="SIGPER\LREMREP1Level1.cs" />
     <Compile Include="SIGPER\PECARGOS.cs" />
     <Compile Include="SIGPER\PeDatLab.cs" />
     <Compile Include="SIGPER\PEDATPER.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="SIGPER\PEFERJEFAJ.cs" />
     <Compile Include="SIGPER\PLUNILAB.cs" />
     <Compile Include="SIGPER\ReContra.cs" />
+    <Compile Include="SIGPER\RePagHisDet.cs" />
     <Compile Include="SIGPER\REPYT.cs" />
     <Compile Include="SIGPER\SIGPER.cs" />
     <Compile Include="Comisiones\SIGPERTipoVehiculo.cs" />

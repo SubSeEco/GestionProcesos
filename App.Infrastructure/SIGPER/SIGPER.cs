@@ -252,7 +252,59 @@ namespace App.Infrastructure.SIGPER
 
             return sigper;
         }
-        public Model.SIGPER.SIGPER GetUserByRut(int rut)
+        public List<PLUNILAB> GetUnidades()
+        {
+            var returnValue = new List<PLUNILAB>();
+
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusionUnidad)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" });
+                    foreach (var item in unidades)
+                    {
+                        /*excluir las unidades sin funcionarios*/
+                        var funcionarios = from PE in context.PEDATPER
+                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where r.RhConUniCod == item.Pl_UndCod
+                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                        where ud.RH_NumInte == PE.RH_NumInte
+                                                                        select ud.PeDatLabAdDocCor).Max()
+                                           select PE;
+                        if (funcionarios != null && funcionarios.Any())
+                            returnValue.Add(item);
+                    }
+                }
+                using (var context = new AppContextTurismo())
+                {
+                    //excluir las unidades sin funcionarios
+                    //excluir unidad 1 de turismo
+                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusionUnidad) && q.Pl_UndCod != 1).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" });
+                    foreach (var item in unidades)
+                    {
+                        //excluir las unidades sin funcionarios
+                        var funcionarios = from PE in context.PEDATPER
+                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
+                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                           where r.RhConUniCod == item.Pl_UndCod
+                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
+                                                                        where ud.RH_NumInte == PE.RH_NumInte
+                                                                        select ud.PeDatLabAdDocCor).Max()
+                                           select PE;
+
+                        if (funcionarios != null && funcionarios.Any())
+                            returnValue.Add(item);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
+        }        public Model.SIGPER.SIGPER GetUserByRut(int rut)
         {
             var sigper = new Model.SIGPER.SIGPER()
             {
@@ -423,59 +475,7 @@ namespace App.Infrastructure.SIGPER
             return sigper;
 
         }
-        public List<PLUNILAB> GetUnidades()
-        {
-            var returnValue = new List<PLUNILAB>();
 
-            try
-            {
-                using (var context = new AppContextEconomia())
-                {
-                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusionUnidad)).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (ECONOMIA)" });
-                    foreach (var item in unidades)
-                    {
-                        /*excluir las unidades sin funcionarios*/
-                        var funcionarios = from PE in context.PEDATPER
-                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
-                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                           where r.RhConUniCod == item.Pl_UndCod
-                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                        where ud.RH_NumInte == PE.RH_NumInte
-                                                                        select ud.PeDatLabAdDocCor).Max()
-                                           select PE;
-                        if (funcionarios != null && funcionarios.Any())
-                            returnValue.Add(item);
-                    }
-                }
-                using (var context = new AppContextTurismo())
-                {
-                    //excluir las unidades sin funcionarios
-                    //excluir unidad 1 de turismo
-                    var unidades = context.PLUNILAB.Where(q => !q.Pl_UndDes.Contains(criterioExclusionUnidad) && q.Pl_UndCod != 1).ToList().Select(q => new PLUNILAB { Pl_UndCod = q.Pl_UndCod, Pl_UndDes = q.Pl_UndDes.Trim() + " (TURISMO)" });
-                    foreach (var item in unidades)
-                    {
-                        //excluir las unidades sin funcionarios
-                        var funcionarios = from PE in context.PEDATPER
-                                           join r in context.PeDatLab on PE.RH_NumInte equals r.RH_NumInte
-                                           where PE.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-                                           where r.RhConUniCod == item.Pl_UndCod
-                                           where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-                                                                        where ud.RH_NumInte == PE.RH_NumInte
-                                                                        select ud.PeDatLabAdDocCor).Max()
-                                           select PE;
-
-                        if (funcionarios != null && funcionarios.Any())
-                            returnValue.Add(item);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return returnValue.OrderBy(q => q.Pl_UndDes).ToList();
-        }
         public List<PEDATPER> GetUserByUnidad(int codigoUnidad)
         {
             var returnValue = new List<PEDATPER>();
@@ -1108,5 +1108,48 @@ namespace App.Infrastructure.SIGPER
 
             return sigper;
         }
+        public int GetBaseCalculoHorasExtras(int rut,int mes,int anno,int calidad)
+        {
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    Decimal monto = 0;
+                    if(calidad == 10)
+                    {
+                        /*honorarios*/
+                        monto = (from R in context.RePagHisDet
+                                 where R.RH_NumInte == rut
+                                 where R.Re_Hismm == mes
+                                 where R.Re_Hisyy == anno
+                                 where R.RehDetObjTip == "H"
+                                 //where results.Contains(R.RehDetObj)
+                                 select R.RehDetObjMon).Sum().Value;
+                    }
+                    else
+                    {
+                        /*plata y contrata*/
+                        var results = (from l in context.LREMREP1Level1
+                                       where l.lrem_codrep == 36
+                                       where l.lrem_tipo == 1
+                                       select l.lrem_reforcod).ToList();
+
+                        monto = (from R in context.RePagHisDet
+                                 where R.RH_NumInte == rut
+                                 where R.Re_Hismm == mes
+                                 where R.Re_Hisyy == anno
+                                 where results.Contains(R.RehDetObj)
+                                 select R.RehDetObjMon).Sum().Value;
+                    }
+
+                    return Convert.ToInt32(monto);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
+

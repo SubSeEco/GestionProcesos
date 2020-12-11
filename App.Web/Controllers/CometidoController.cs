@@ -2032,7 +2032,7 @@ namespace App.Web.Controllers
                 if(pasaje.Count > 0)
                 {
                     /*se extraen los datos asociados al pasaje*/
-                    for (var pas = 0; pas < pasaje.Count + 1 ; pas++)//foreach (var pas in pasaje)
+                    for (var pas = 0; pas < pasaje.Count + 1; pas++)//foreach (var pas in pasaje)
                     {
                         fila++;
 
@@ -2044,14 +2044,13 @@ namespace App.Web.Controllers
                             worksheet.Cells[fila, 18].Value = cotizacion.FirstOrDefault().FechaVuelo.ToShortDateString(); /*fecha del vuelo*/
                             worksheet.Cells[fila, 19].Value = cotizacion.FirstOrDefault().NumeroOrdenCompra; /*Id orden de compra*/
                             worksheet.Cells[fila, 12].Value = cotizacion.FirstOrDefault().ClasePasaje; /*clase de pasaje*/
-                            worksheet.Cells[fila, 15].Value = cotizacion.FirstOrDefault().FormaAdquisicion; /*forma de adquision del pasaje*/                            
+                            worksheet.Cells[fila, 15].Value = cotizacion.FirstOrDefault().FormaAdquisicion; /*forma de adquision del pasaje*/
                             worksheet.Cells[fila, 17].Value = cotizacion.FirstOrDefault().FechaAdquisicion != null ? cotizacion.FirstOrDefault().FechaAdquisicion.ToShortDateString() : "S/A";/*fecha adquisicion*/
-                            
-                            if((pas % 2) == 0)
+
+                            if ((pas % 2) == 0)
                                 worksheet.Cells[fila, 20].Value = cotizacion.FirstOrDefault().ValorPasaje.ToString(); /*valor total pasaje*/
-                            else
-                                worksheet.Cells[fila, 20].Value = "0";
-                            
+                            //else
+                            //    worksheet.Cells[fila, 20].Value = "0";                            
                         }
                         else
                         {
@@ -2059,18 +2058,11 @@ namespace App.Web.Controllers
                             worksheet.Cells[fila, 20].Value = "0";
                         }
 
-                        worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                        worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
-                        worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
-                        worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
-                        worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
-                        worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
-                        worksheet.Cells[fila, 7].Value = com.Nombre;
-
+                        /*se extraen los datos asociados a los destinos*/
                         var desPasaje = _repository.Get<DestinosPasajes>().Where(c => c.PasajeId == pasaje.FirstOrDefault().PasajeId).ToList();
                         if (desPasaje.Count > 0)
                         {
-                            foreach(var p in desPasaje)
+                            foreach (var p in desPasaje)
                             {
                                 if ((pas % 2) == 0)
                                 {
@@ -2088,13 +2080,21 @@ namespace App.Web.Controllers
                                 }
                             }
                         }
-                        
+
+                        worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                        worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
+                        worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
+                        worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
+                        worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
+                        worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
+                        worksheet.Cells[fila, 7].Value = com.Nombre;
+
                         worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                         worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
-                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";                        
+                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
                         worksheet.Cells[fila, 13].Value = "N/A";
                         worksheet.Cells[fila, 14].Value = "N/A";
-                        
+
                         worksheet.Cells[fila, 21].Value = com.TotalViatico != null ? com.TotalViatico.ToString() : "0";
                         worksheet.Cells[fila, 24].Value = com.FechaSolicitud.ToShortDateString();
                         worksheet.Cells[fila, 26].Value = com.CometidoDescripcion;
