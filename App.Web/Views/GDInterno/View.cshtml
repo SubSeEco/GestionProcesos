@@ -24,10 +24,13 @@
                             <strong>@Html.DisplayNameFor(m => Model.FechaIngreso)</strong><br />
                             @string.Format("{0:dd-MM-yyyy}", Model.FechaIngreso)
                         </div>
-                        <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.Materia)</strong><br />
-                            @Html.DisplayFor(m => Model.Materia)
-                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Materia))
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => Model.Materia)</strong><br />
+                                @Html.DisplayFor(m => Model.Materia)
+                            </div>
+                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Referencia))
                         {
                             <div class="input-field col s12 m10">

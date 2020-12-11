@@ -27,7 +27,7 @@
     }
 </style>
 
-<meta http-equiv="refresh" content="120">
+@*<meta http-equiv="refresh" content="120">*@
 
 <div class="grey lighten-3 section">
     <div class="container section">
@@ -60,87 +60,87 @@
             <ul class="collection">
                 @foreach (var item in Model.TareasPersonales.OrderByDescending(q => q.WorkflowId))
                 {
-                    <li class="collection-item avatar section">
+                <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
+                    <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
 
-                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
-                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
-                        @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
-                        {
-                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
+                    @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
+                    {
+                        <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
+                    @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
+                    {
+                        <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
+                    @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
+                    {
+                        <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
 
-                        @if (!string.IsNullOrWhiteSpace(item.Asunto))
+                    @if (!string.IsNullOrWhiteSpace(item.Asunto))
+                    {
+                        @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
+                        <br />
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                    }
+
+                    <p class="truncate ultra-small">
+                        Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
+
+                        @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
                         {
-                            @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
-                            <br />
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                            @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
                         }
                         else
                         {
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                            @Html.DisplayFor(modelItem => item.ProcesoEmail)
                         }
 
-                        <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
+                    </p>
+                    <p class="truncate ultra-small">
+                        Asignada a:
 
-                            @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
+                        @if (item.TareaPersonal)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
                             {
-                                @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
+                                @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
                             }
                             else
                             {
-                                @Html.DisplayFor(modelItem => item.ProcesoEmail)
+                                @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
                             }
-
-                        </p>
-                        <p class="truncate ultra-small">
-                            Asignada a:
-
-                            @if (item.TareaPersonal)
-                            {
-                                if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
-                                {
-                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
-                                }
-                                else
-                                {
-                                    @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
-                                }
-                            }
-
-                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
-                            {
-                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
-                            }
-                            @if (item.Grupo != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Grupo)
-                            }
-
-                        </p>
-
-                        @if (item.ProcesoEntidad.Contains("GD"))
-                        {
-                            <br />
-                            @Html.Action("Row", "GDExterno", new { item.ProcesoId })
                         }
 
-                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                        @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
                         {
-                            <div class="section">
-                                <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
-                            </div>
+                            @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                        }
+                        @if (item.Grupo != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Grupo)
                         }
 
-                    </li>
+                    </p>
+
+                    @if (item.ProcesoEntidad.Contains("GD"))
+                    {
+                        <br />
+                        @Html.Action("Row", "GDExterno", new { item.ProcesoId })
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                    {
+                        <div class="section">
+                            <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                        </div>
+                    }
+
+                </li>
                 }
             </ul>
         }
@@ -155,87 +155,87 @@
             <ul class="collection">
                 @foreach (var item in Model.TareasGrupales.OrderByDescending(q => q.WorkflowId))
                 {
-                    <li class="collection-item avatar section">
+                <li class="collection-item avatar section">
 
-                        <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
+                    <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
 
-                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
-                        @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
-                        {
-                            <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
-                        @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
-                        {
-                            <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
-                        }
+                    @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
+                    {
+                        <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
+                    @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
+                    {
+                        <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
+                    @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
+                    {
+                        <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+                    }
 
-                        @if (!string.IsNullOrWhiteSpace(item.Asunto))
+                    @if (!string.IsNullOrWhiteSpace(item.Asunto))
+                    {
+                        @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
+                        <br />
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                    }
+
+                    <p class="truncate ultra-small">
+                        Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
+
+                        @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
                         {
-                            @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
-                            <br />
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                            @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
                         }
                         else
                         {
-                            @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+                            @Html.DisplayFor(modelItem => item.ProcesoEmail)
                         }
 
-                        <p class="truncate ultra-small">
-                            Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
+                    </p>
+                    <p class="truncate ultra-small">
+                        Asignada a:
 
-                            @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
+                        @if (item.TareaPersonal)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
                             {
-                                @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
+                                @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
                             }
                             else
                             {
-                                @Html.DisplayFor(modelItem => item.ProcesoEmail)
+                                @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
                             }
-
-                        </p>
-                        <p class="truncate ultra-small">
-                            Asignada a:
-
-                            @if (item.TareaPersonal)
-                            {
-                                if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
-                                {
-                                    @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
-                                }
-                                else
-                                {
-                                    @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
-                                }
-                            }
-
-                            @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
-                            {
-                                @Html.DisplayFor(modelItem => item.Pl_UndDes)
-                            }
-                            @if (item.Grupo != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Grupo)
-                            }
-
-                        </p>
-
-                        @if (item.ProcesoEntidad.Contains("GD"))
-                        {
-                            <br />
-                            @Html.Action("Row", "GDExterno", new { item.ProcesoId })
                         }
 
-                        @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                        @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
                         {
-                            <div class="section">
-                                <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
-                            </div>
+                            @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                        }
+                        @if (item.Grupo != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Grupo)
                         }
 
-                    </li>
+                    </p>
+
+                    @if (item.ProcesoEntidad.Contains("GD"))
+                    {
+                        <br />
+                        @Html.Action("Row", "GDExterno", new { item.ProcesoId })
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+                    {
+                        <div class="section">
+                            <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                        </div>
+                    }
+
+                </li>
                 }
             </ul>
         }
