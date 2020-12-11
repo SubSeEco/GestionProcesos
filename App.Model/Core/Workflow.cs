@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace App.Model.Core
 {
@@ -124,21 +125,21 @@ namespace App.Model.Core
 
         [NotMapped]
         public bool PermitirTerminar { get; set; }
-        
+
         [NotMapped]
         public bool Reservado { get; set; }
 
         [NotMapped]
-        public bool EsAprobacionCometidoCompraPasaje => 
-               this.DefinicionWorkflow != null 
-            && this.DefinicionWorkflow.DefinicionProcesoId == 13 
+        public bool EsAprobacionCometidoCompraPasaje =>
+               this.DefinicionWorkflow != null
+            && this.DefinicionWorkflow.DefinicionProcesoId == 13
             && this.DefinicionWorkflow.Secuencia == 4;
 
         [NotMapped]
-        public bool EsFirmaDocumento => 
-               this.DefinicionWorkflow != null  
-            && this.DefinicionWorkflow.DefinicionProceso != null 
-            && this.DefinicionWorkflow.DefinicionProceso.Entidad != null 
+        public bool EsFirmaDocumento =>
+               this.DefinicionWorkflow != null
+            && this.DefinicionWorkflow.DefinicionProceso != null
+            && this.DefinicionWorkflow.DefinicionProceso.Entidad != null
             && this.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString();
 
         [NotMapped]
@@ -162,17 +163,34 @@ namespace App.Model.Core
         public string Funcionario { get; set; }
 
         [NotMapped]
-        [Display(Name = "Días promedio de permanencia")]
-        public double? DiasPromedioPermanencia
+        [Display(Name = "Minutos permanencia")]
+        public decimal? MinutosPermanencia
         {
             get
             {
                 if (!FechaTermino.HasValue)
                     return null;
 
-                return (FechaTermino.Value - FechaCreacion).TotalDays;
+                int minutes = 0;
+                for (var i = FechaCreacion; i <= FechaTermino.Value; i = i.AddMinutes(1))
+                    if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !feriados.Any(q => q.Date == i.Date))
+                        if (i.TimeOfDay.Hours >= 9 && i.TimeOfDay.Hours <= 18)
+                            minutes++;
+
+                return minutes;
             }
         }
 
+        private List<DateTime> feriados = new List<DateTime>() {
+        new DateTime(2020,09,18),
+        new DateTime(2020,09,19),
+        new DateTime(2020,10,12),
+        new DateTime(2020,10,25),
+        new DateTime(2020,10,31),
+        new DateTime(2020,11,01),
+        new DateTime(2020,11,29),
+        new DateTime(2020,12,08),
+        new DateTime(2020,12,25),
+        };
     }
 }

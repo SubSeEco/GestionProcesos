@@ -452,80 +452,50 @@ namespace App.Web.Controllers
 
         public FileResult ReportPermanencia(DTOReport model)
         {
-            //var resumen = _repository
-            //    .Get<Proceso>(q =>
-            //    !q.Anulada &&
-            //    q.DefinicionProceso.Entidad.Codigo.Contains("GD") &&
-            //    q.FechaTermino.HasValue &&
-            //    q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day &&
-            //    q.FechaCreacion.Year <= model.Hasta.Value.Year && q.FechaCreacion.Month <= model.Hasta.Value.Month && q.FechaCreacion.Day <= model.Hasta.Value.Day
-            //    )
-            //    .Select(q => new
-            //    {
-            //        unidadCodigo = q.Pl_UndCod,
-            //        unidadDescripcion = q.Pl_UndDes,
-            //        id = q.ProcesoId,
-            //        inicio = q.FechaCreacion,
-            //        termino = q.FechaTermino,
-            //        duracion = (q.FechaTermino - q.FechaCreacion).Value.TotalDays,
-            //    })
-            //    .GroupBy(q => new
-            //    {
-            //        q.unidadCodigo,
-            //        q.unidadDescripcion
-            //    })
-            //    .Select(unidad => new
-            //    {
-            //        unidad.Key.unidadCodigo,
-            //        unidad.Key.unidadDescripcion,
-            //        info = unidad.ToList()
-            //    })
-            //    .Select(unidad => new
-            //    {
-            //        unidadCodigo = unidad.unidadCodigo.ToString(),
-            //        unidadDescripcion = unidad.unidadDescripcion != null ? unidad.unidadDescripcion.ToString() : string.Empty,
-            //        documentosCreados = unidad.info.GroupBy(q => q.id).Distinct().Count(),
-            //        promedioDocumentosCreadosAlDia = unidad.info
-            //            .GroupBy(q => q.inicio.Date)
-            //            .Select(grupo => new { dia = grupo.Key, ingresos = grupo.Count() })
-            //            .Average(a => a.ingresos),
-            //        promedioDemoraEnDias = unidad.info.Average(q => q.duracion)
-            //    });
+            var unidad = _sigper.GetUnidad(model.UnidadCodigo.ToInt());
+            if (unidad == null)
+                throw new Exception("No se encontró la unidad en sigper.");
 
-            var unidad = model.UnidadCodigo.ToInt();
-
-            var desglose =
-                _repository
-                .Get<Workflow>(q =>
-                    q.Proceso.Pl_UndCod != unidad &&  //procesos originados fuera de mi unidad
-                    q.Pl_UndCod == unidad && // tareas atendidas por mi unidad
-                    q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD")) //solo procesos gd
-                .GroupBy(g => new
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                var desglose =
+                context.Workflow.Where(q =>
+                    q.Proceso.Pl_UndCod != unidad.Pl_UndCod &&  //procesos originados fuera de mi unidad
+                    q.Pl_UndCod == unidad.Pl_UndCod && // tareas atendidas por mi unidad
+                    q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
+                    q.Terminada && //solo tareas terminadas
+                    q.FechaTermino.HasValue). // solo tareas con fecha de termino
+                GroupBy(g => new
                 {
                     g.ProcesoId,
-                    g.Proceso.Pl_UndDes
-                })
-                .Select(grupo => new
+                    g.Proceso.Pl_UndDes,
+                }).
+                Select(grupo => new
                 {
                     grupo.Key.ProcesoId,
                     grupo.Key.Pl_UndDes,
                     workflows = grupo.ToList()
                 }).
+                ToList().
                 Select(proceso => new
                 {
-                    unidad = proceso.Pl_UndDes,
-                    documento = proceso.ProcesoId,
+                    proceso.Pl_UndDes,
+                    proceso.ProcesoId,
                     documentosCreados = proceso.workflows.Count(),
-                    tiempo = proceso.workflows.Sum(w => w.DiasPromedioPermanencia)
-                });
+                    minutosPermanencia = proceso.workflows.Sum(w => w.MinutosPermanencia)/1440,
+                }).ToList();
 
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDPermanencia.xlsx")));
-            //excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
-            excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(desglose);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDPermanencia.xlsx")));
 
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+                excel.Workbook.Worksheets[0].Cells[2, 2].Value = unidad.Pl_UndDes.Trim();
+                excel.Workbook.Worksheets[0].Cells[3, 2].Value = model.Desde;
+                excel.Workbook.Worksheets[0].Cells[4, 2].Value = model.Hasta;
+                excel.Workbook.Worksheets[0].Cells[7, 1].LoadFromCollection(desglose);
+
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            }
         }
     }
 }
