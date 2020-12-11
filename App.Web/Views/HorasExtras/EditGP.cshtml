@@ -93,110 +93,120 @@
 
                                 @if (Model.Colaborador.Count > 0)
                                 {
-                            <table class="table">
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
-                                {
-                                    @Html.HiddenFor(q => Model.Colaborador.ToArray()[i].ColaboradorId)
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
-                                        </td>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span></span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>Solicitados</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.Raw("<span>Aprobados</span>")
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPagoAprobados)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+                                        {
+                                            @Html.HiddenFor(q => Model.Colaborador.ToArray()[i].ColaboradorId)
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                                </td>
+                                                <td>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                @Html.Raw("<span></span>")
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                @Html.Raw("<span>Solicitados</span>")
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                @Html.Raw("<span>Aprobados</span>")
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
+                                                            </td>
+                                                        </tr>
+                                                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3)
                                                         {
-                                                            <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                            <tr>
+                                                                <td>
+                                                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 /*|| Model.Workflow.DefinicionWorkflow.Secuencia == 4*/)
+                                                                    {
+                                                                        <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                                </td>
+                                                            </tr>
                                                         }
-                                                        else
-                                                        {
-                                                            <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
 
                                 }
                                 <div class="section"></div>
                                 <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 11)
+                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 4)
                         {
                             <div class="section"></div>
                             <div class="row">
-                                @Html.ActionLink("Generar Resolucion de Confrimacion de trabajos extraordinarios", "GeneraConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                                @Html.ActionLink("Generar Resolucion de Programación de trabajos extraordinarios", "GeneraDocumento", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                            </div>
+                        }
+                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 12)
+                        {
+                            <div class="section"></div>
+                            <div class="row">
+                                @Html.ActionLink("Generar Resolucion de Confirmación de trabajos extraordinarios", "GeneraConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
                             </div>
                         }
 
