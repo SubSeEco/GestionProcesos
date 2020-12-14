@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Core.Interfaces;
 using System.Linq;
-using App.Util;
 using System;
 using System.Text;
 
@@ -19,7 +18,6 @@ namespace App.Web.Controllers
             public DTOResult()
             {
             }
-
             public int ProcesoId { get; set; }
             public bool Reservado { get; set; }
             public bool EsAutor { get; set; }
@@ -37,7 +35,7 @@ namespace App.Web.Controllers
             public DTOFilter()
             {
                 TextSearch = string.Empty;
-                Select = new HashSet<App.Model.DTO.DTOSelect>();
+                Select = new HashSet<Model.DTO.DTOSelect>();
                 Result = new HashSet<DTOResult>();
             }
 
@@ -46,11 +44,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Creado desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Creado hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "Incluir los siguientes tipos de procesos")]
             public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
@@ -72,8 +70,7 @@ namespace App.Web.Controllers
         {
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
 
-            var model = new DTOFilter()
-            {
+            var model = new DTOFilter() {
                 Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
             };
 
@@ -111,7 +108,8 @@ namespace App.Web.Controllers
 
                     if (!string.IsNullOrWhiteSpace(model.TextSearch))
                         for (int i = 0; i < model.TextSearch.Split().Count(); i++)
-                            query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i]));
+                            if (!string.IsNullOrWhiteSpace(model.TextSearch.Split()[i]))
+                                query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i].Trim()));
 
                     var email = UserExtended.Email(User);
 

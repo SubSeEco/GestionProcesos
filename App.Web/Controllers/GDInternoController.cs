@@ -94,7 +94,7 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var model = _repository.GetById<GD>(id);
+            var model = _repository.GetFirst<GD>(q => q.ProcesoId == id);
             if (model == null)
                 return RedirectToAction("View", "Proceso", new { id });
 

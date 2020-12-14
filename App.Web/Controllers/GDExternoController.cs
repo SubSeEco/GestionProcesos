@@ -482,7 +482,7 @@ namespace App.Web.Controllers
                     proceso.Pl_UndDes,
                     proceso.ProcesoId,
                     documentosCreados = proceso.workflows.Count(),
-                    minutosPermanencia = proceso.workflows.Sum(w => w.MinutosPermanencia)/1440,
+                    minutosPermanencia = proceso.workflows.Sum(w => w.MinutosPermanencia) / 1440,
                 }).ToList();
 
 
