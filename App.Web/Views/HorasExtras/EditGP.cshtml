@@ -191,8 +191,11 @@
                                     </table>
 
                                 }
-                                <div class="section"></div>
-                                <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3)
+                                {
+                                    <div class="section"></div>
+                                    <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
+                                }
                             </div>
                         </div>
                         @if (Model.Workflow.DefinicionWorkflow.Secuencia == 4)

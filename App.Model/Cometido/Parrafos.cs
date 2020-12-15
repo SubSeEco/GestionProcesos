@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using App.Model.Core;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Model.Cometido
 {
     [Table("Parrafos")]
-    public class Parrafos : Core.BaseEntity
+    public class Parrafos 
     {
         public Parrafos()
         { }
@@ -23,8 +24,13 @@ namespace App.Model.Cometido
 
         [Display(Name = "Definicion Proceso Id")]
         public int DefinicionProcesoId { get; set; }
+        public virtual DefinicionProceso DefinicionProceso { get; set; }
 
         [Display(Name = "Documento")]
         public string Documento { get; set; }
+
+        [Display(Name = "Tipo Documento Id")]
+        public int TipoDocumentoId { get; set; } = 0;
+        public virtual TipoDocumento TipoDocumento { get; set; }
     }
 }

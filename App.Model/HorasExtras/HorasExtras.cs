@@ -68,5 +68,12 @@ namespace App.Model.HorasExtras
         [AssertThat("ValorTotalHoras >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         [DataType(DataType.Currency)]
         public int? ValorTotalHoras { get; set; } = 0;
+
+        [NotMapped]
+        [Display(Name = "Valor Total Horas Palabras")]
+        public string ValorTotalHorasPalabras { get; set; }
+                
+        [Display(Name = "Mes Base Calculo")]
+        public int MesBaseCalculo { get; set; }
     }
 }

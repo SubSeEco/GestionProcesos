@@ -4654,7 +4654,7 @@ namespace App.Core.UseCases
                 /*Si la tarea es rechazada se valida que se ingrese una observacion - en el proceso cometido*/
                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                 {
-                    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
+                    throw new Exception("Se debe señalar el motivo del rechazo para la tarea.");
                 }
 
                 /*generar tags de proceso*/
