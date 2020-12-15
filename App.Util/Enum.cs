@@ -1,4 +1,7 @@
-﻿namespace App.Util
+﻿using System;
+using System.Collections.Generic;
+
+namespace App.Util
 {
     public static class Enum
     {
@@ -22,7 +25,7 @@
             ProgramacionHorasExtraordinarias,
             HorasExtras,
             GeneraResolucion,
-
+            FirmaDocumentoGenerico,
         }
 
         public enum Grupo

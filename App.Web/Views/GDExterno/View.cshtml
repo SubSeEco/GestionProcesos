@@ -56,9 +56,27 @@
                             </div>
                         }
                         <div class="input-field col s12 m10">
-                            <strong>@Html.DisplayNameFor(m => Model.DestinoFuncionarioEmail)</strong><br />
-                            @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) (@Html.DisplayFor(m => Model.DestinoFuncionarioEmail))<br />
-                            @Html.DisplayFor(m => Model.DestinoUnidadDescripcion) (@Html.DisplayFor(m => Model.DestinoUnidadCodigo))
+                            <strong>Destino 1</strong><br />
+                            @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
+                            {
+                                @Html.DisplayFor(m => Model.DestinoFuncionarioNombre) <br />
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion))
+                            {
+                                @Html.DisplayFor(m => Model.DestinoUnidadDescripcion) <br />
+                            }
+                        </div>
+
+                        <div class="input-field col s12 m10">
+                            <strong>Destino 2</strong><br />
+                            @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
+                            {
+                                @Html.DisplayFor(m => Model.DestinoFuncionarioNombre2) <br />
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))
+                            {
+                                @Html.DisplayFor(m => Model.DestinoUnidadDescripcion2) <br />
+                            }
                         </div>
                     </div>
                 </div>
