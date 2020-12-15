@@ -16,6 +16,7 @@ using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using System;
 using App.Model.HorasExtras;
+using App.Model.FirmaDocumentoGenerico;
 
 namespace App.Web.Controllers
 {
@@ -440,6 +441,20 @@ namespace App.Web.Controllers
                 }
             }
 
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+            {
+                var obj = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.FirmaDocumentoGenericoId;
+                    workflow.Entity = App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
 
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)
                 workflow.DefinicionWorkflow.Accion.Codigo = "Edit";
@@ -633,6 +648,18 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
                     return RedirectToAction("OK");
                 }
+                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            }
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+            {
+                var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return RedirectToAction("Index", "Workflow");
+                }
+
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
             else

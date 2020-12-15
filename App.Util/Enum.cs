@@ -22,7 +22,7 @@
             ProgramacionHorasExtraordinarias,
             HorasExtras,
             GeneraResolucion,
-
+            FirmaDocumentoGenerico,
         }
 
         public enum Grupo
