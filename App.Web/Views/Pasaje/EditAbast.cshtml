@@ -15,9 +15,25 @@
     <div id="card-alert" class="card blue-grey lighten-1">
         <div class="card-content white-text">
             <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
-            <p>
-                Faltan @((Model.DestinosPasajes.FirstOrDefault().FechaIda - DateTime.Now).Days) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
-            </p>
+            @if (Model.DestinosPasajes.Any())
+            {
+                if ((Model.DestinosPasajes.FirstOrDefault().FechaIda - DateTime.Now).Days < 0)
+                {
+                    <p>
+                        El cometido se realizó hace @((DateTime.Now - Model.DestinosPasajes.FirstOrDefault().FechaIda).Days) dias.
+                    </p>
+                }
+                else
+                {
+                    <p>
+                        Faltan  @((Model.DestinosPasajes.FirstOrDefault().FechaIda - DateTime.Now).Days + 1) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 20 días corridos previo a su inicio.
+                    </p>
+                }
+            }
+            else
+            {
+                <p>No existen destinos asociados al cometido</p>
+            }
         </div>
     </div>
 

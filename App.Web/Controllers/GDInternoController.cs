@@ -166,7 +166,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
@@ -263,6 +262,7 @@ namespace App.Web.Controllers
             var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId);
             return View(model);
         }
+
         public PartialViewResult WorkflowAutoridad(int ProcesoId)
         {
             var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);

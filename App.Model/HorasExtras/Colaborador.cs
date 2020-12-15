@@ -67,19 +67,33 @@ namespace App.Model.HorasExtras
         [AssertThat("HNCompensarAprobados >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         public int? HNCompensarAprobados { get; set; } = 0;
                 
-        [Display(Name = "Observaciones")]
+        [Display(Name = "Cumplimiento de tareas programadas")]
         [DataType(DataType.MultilineText)]
         public string ObservacionesConfirmacion { get; set; }
+
+        [Display(Name = "Observaciones")]
+        [DataType(DataType.MultilineText)]
+        public string ObservacionesJefatura { get; set; }
 
         [Display(Name = "Valor Horas Diurnas")]
         [AssertThat("ValorHorasDiurnas >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         [DataType(DataType.Currency)]
         public int? ValorHorasDiurnas { get; set; } = 0;
 
+        [Display(Name = "Valor Pagado Horas Diurnas")]
+        [AssertThat("ValorHorasDiurnas >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        [DataType(DataType.Currency)]
+        public int? ValorPagadoHD { get; set; } = 0;
+
         [Display(Name = "Valor Horas Nocturnas")]
         [AssertThat("ValorHorasNocturnas >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         [DataType(DataType.Currency)]
         public int? ValorHorasNocturnas { get; set; } = 0;
+
+        [Display(Name = "Valor Pagado Horas Nocturnas")]
+        [AssertThat("ValorHorasDiurnas >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
+        [DataType(DataType.Currency)]
+        public int? ValorPagadoHN { get; set; } = 0;
 
         [Display(Name = "Valor Total Pago")]
         [AssertThat("ValorTotalPago >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]

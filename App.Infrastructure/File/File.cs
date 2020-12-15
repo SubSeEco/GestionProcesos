@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using App.Core.Interfaces;
@@ -18,11 +19,18 @@ namespace App.Infrastructure.File
 
             var textExtractor = new TextExtractor();
             var data = new Model.DTO.DTOFileMetadata();
-            var extract = textExtractor.Extract(content);
 
-            data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;
-            data.Metadata = extract.Metadata.Any() ? string.Join(";", extract.Metadata) : null;
-            data.Type = extract.ContentType;
+            try
+            {
+                var extract = textExtractor.Extract(content);
+                data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;
+                data.Metadata = extract.Metadata.Any() ? string.Join(";", extract.Metadata) : null;
+                data.Type = extract.ContentType;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             return data;
         }

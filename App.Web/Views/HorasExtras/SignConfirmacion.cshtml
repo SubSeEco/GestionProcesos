@@ -12,62 +12,116 @@
                 @Html.DisplayNameFor(m => Model.HorasExtrasId)
             </strong>
             @Html.DisplayFor(m => Model.HorasExtrasId)
-
         </div>
     </div>
     <div class="row">
-        <div class="col s12 m6 l8">
-            <div class="row">
-                <h6>
-                    <i class="material-icons ">attach_file</i>
-                    <a href="@Url.Action("Download", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault().DocumentoId })">@Model.Proceso.Documentos.LastOrDefault().FileName</a>
-                </h6>
-                <p>
-                    Fecha creación: @Model.Proceso.Documentos.LastOrDefault().Fecha<br />
-                    Autor: @Model.Proceso.Documentos.LastOrDefault().Email<br />
-                    Tipo documento: @Model.Proceso.Documentos.LastOrDefault().TipoDocumento.Nombre<br />
-                    Proceso de origen: @Model.Proceso.Documentos.LastOrDefault().Proceso.DefinicionProceso.Nombre, Id @Model.Proceso.Documentos.LastOrDefault().ProcesoId<br />
-                    Tarea de origen: @Model.Proceso.Documentos.LastOrDefault().Workflow.DefinicionWorkflow.Nombre
-                </p>
-                <div class="section"></div>
-                <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault().DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 18)
+        {
+            <div class="col s12 m6 l8">
+                <div class="row">
+                    <h6>
+                        <i class="material-icons ">attach_file</i>
+                        <a href="@Url.Action("Download", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 13).DocumentoId })">@Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).FileName</a>
+                    </h6>
+                    <p>
+                        Fecha creación: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).Fecha<br />
+                        Autor: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).Email<br />
+                        Tipo documento: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).TipoDocumento.Nombre<br />
+                        Proceso de origen: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).Proceso.DefinicionProceso.Nombre, Id @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).ProcesoId<br />
+                        Tarea de origen: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).Workflow.DefinicionWorkflow.Nombre
+                    </p>
+                    <div class="section"></div>
+                    <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 13).DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
 
-            </div>
+                </div>
 
-            @if (!Model.Proceso.Documentos.LastOrDefault().Signed)
-            {
-            <div class="section"></div>
-            <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault().DocumentoId)">Firmar</a>
-            }
-            else
-            {
-            <i class="material-icons large secondary-content green-text">check</i>
-            }
-            
-        </div>
-
-        <div id="@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault().DocumentoId)" class="modal">
-            @*<div id="@String.Concat("#modal", 773)" class="modal">*@
-            <div class="modal-content">
-                <h4>Confirma firma de resolución de confirmación</h4>
-                @using (Html.BeginForm("SignConfirmacion", "HorasExtras", new { DocumentoId = Model.HorasExtrasId }, FormMethod.Post, new { id = Model.HorasExtrasId, enctype = "multipart/form-data" }))
+                @if (!Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 13).Signed)
                 {
-                    @Html.AntiForgeryToken()
-                    @*@Html.HiddenFor(model => Model.Proceso.Documentos.FirstOrDefault().DocumentoId)*@
-                    @Html.HiddenFor(model => Model.HorasExtrasId)
-                    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                    <div class="section"></div>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 13).DocumentoId)">Firmar</a>
                 }
+                else
+                {
+                    <i class="material-icons large secondary-content green-text">check</i>
+                }
+
             </div>
 
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            </div>
-        </div>
+            <div id="@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 13).DocumentoId)" class="modal">
+                <div class="modal-content">
+                    <h4>Confirma firma de resolución de confirmación</h4>
+                    @using (Html.BeginForm("SignConfirmacion", "HorasExtras", new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 13).FirstOrDefault().DocumentoId }, FormMethod.Post, new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 13).FirstOrDefault().DocumentoId, enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 13).FirstOrDefault().DocumentoId)
+                        <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                    }
+                </div>
 
-        <div class="col s12 m6 l4">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
-        </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                </div>
+            </div>
+
+            <div class="col s12 m6 l4">
+                @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+                @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            </div>
+        }
+        else if (Model.Workflow.DefinicionWorkflow.Secuencia == 15)
+        {
+            <div class="col s12 m6 l8">
+                <div class="row">
+                    <h6>
+                        <i class="material-icons ">attach_file</i>
+                        <a href="@Url.Action("Download", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 14).DocumentoId })">@Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).FileName</a>
+                    </h6>
+                    <p>
+                        Fecha creación: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).Fecha<br />
+                        Autor: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).Email<br />
+                        Tipo documento: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).TipoDocumento.Nombre<br />
+                        Proceso de origen: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).Proceso.DefinicionProceso.Nombre, Id @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).ProcesoId<br />
+                        Tarea de origen: @Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).Workflow.DefinicionWorkflow.Nombre
+                    </p>
+                    <div class="section"></div>
+                    <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 14).DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+
+                </div>
+
+                @if (!Model.Proceso.Documentos.LastOrDefault(c => c.TipoDocumentoId == 14).Signed)
+                {
+                    <div class="section"></div>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 14).DocumentoId)">Firmar</a>
+                }
+                else
+                {
+                    <i class="material-icons large secondary-content green-text">check</i>
+                }
+
+            </div>
+
+            <div id="@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault(c =>c.TipoDocumentoId == 14).DocumentoId)" class="modal">
+                @*<div id="@String.Concat("#modal", 773)" class="modal">*@
+                <div class="modal-content">
+                    <h4>Confirma firma de resolución de confirmación</h4>
+                    @using (Html.BeginForm("SignConfirmacion", "HorasExtras", new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId }, FormMethod.Post, new { HorasId = Model.Proceso.Documentos.Where(c =>c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId, enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId)
+                        <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                </div>
+            </div>
+
+            <div class="col s12 m6 l4">
+                @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+                @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            </div>
+        }
     </div>
 </div>
 

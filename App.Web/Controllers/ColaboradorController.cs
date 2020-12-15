@@ -162,6 +162,11 @@ namespace App.Web.Controllers
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
+            model.HDPagoAprobados = model.HDPago;
+            model.HDCompensarAprobados = model.HDCompensar;
+            model.HNPagoAprobados = model.HNPago;
+            model.HNCompensarAprobados = model.HNCompensar;
+
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper);
@@ -204,6 +209,11 @@ namespace App.Web.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Edit(Colaborador model)
         {
+            model.HDPagoAprobados = model.HDPago;
+            model.HDCompensarAprobados = model.HDCompensar;
+            model.HNPagoAprobados = model.HNPago;
+            model.HNCompensarAprobados = model.HNCompensar;
+
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper);

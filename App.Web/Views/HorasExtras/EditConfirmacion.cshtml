@@ -31,7 +31,19 @@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].NombreId)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].DV)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].Descripcion)
-                    @*@Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)*@
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HDCompensar)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNPago)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHD)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHN)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorTotalPago)
                 }
 
 
@@ -104,7 +116,6 @@
 
                                 @if (Model.Colaborador.Count > 0)
                                 {
-                                    //var Colaborador = Model.Colaborador.SelectMany(q => q.HorasExtrasId).ToList();
 
                                     <table class="table">
                                         <tr>
@@ -115,18 +126,17 @@
                                                 @Html.Raw("RUT")
                                             </th>
                                             <th>
-                                                @Html.Raw("Cumplimiento tarea encomendada")
+                                                @Html.Raw("Tareas programadas")
                                             </th>
                                             <th>
-                                                @Html.Raw("Observaciones")
+                                                @Html.Raw("Cumplimiento de tareas programadas")
                                             </th>
-                                            @*<th>
-                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
-                                        </th>*@
-
+                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9 || Model.Workflow.DefinicionWorkflow.Secuencia == 10)
+                                            {
+                                                <th>
+                                                    @Html.Raw("Observaciones")
+                                                </th>
+                                            }
                                             <th></th>
                                         </tr>
                                         @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
@@ -138,47 +148,49 @@
                                                 <td style="width:10%">
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(m => Model.Colaborador.ToArray()[i].DV)
                                                 </td>
-                                                <td>
+                                                <td style="width:35%">
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
                                                 </td>
-                                                <td>
-                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
-                                                    @Html.HiddenFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                                                <td style="width:35%">
+                                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 8)
+                                                    {
+                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                                                    }
                                                 </td>
-                                                @*<td>
-                                                @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
-                                            </td>*@
-
-                                                @*<td>
-                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 3 || Model.Workflow.DefinicionWorkflow.Secuencia == 4)
+                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
                                                 {
-                                                    <a href='@Url.Action("EditGP", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                    <td>
+                                                        @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                                                    </td>
                                                 }
-                                                else
+                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 10)
                                                 {
-                                                    <a href='@Url.Action("Edit", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                    <td>
+                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                                                    </td>
                                                 }
-                                            </td>
-                                            <td>
-                                                <a href='@Url.Action("Delete", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                            </td>*@
                                             </tr>
                                         }
                                     </table>
 
                                 }
                                 @*<div class="section"></div>
-                            <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>*@
+        <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>*@
                             </div>
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 11)
+                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 12)
                         {
                             <div class="section"></div>
                             <div class="row">
                                 @Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraResolucionConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                            </div>
+                            <div class="section"></div>
+                            <div class="row">
+                                @Html.ActionLink("Generar Resolucion descanso complementario", "GeneraResolucionDescanso", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
                             </div>
                         }
 
@@ -190,7 +202,7 @@
                 </div>
             }
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6 l12">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
@@ -201,28 +213,12 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        jQuery.datetimepicker.setLocale('es');
-        jQuery('#FechaSolicitud').datepicker({
-            i18n: {
-                es: {
-                    months: [
-                        'Enero', 'Febrero', 'Marzo', 'Abril',
-                        'Mayo', 'Junio', 'Julio', 'Agosto',
-                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
-                    ]
-                }
-            },
-            todayButton: true,
-            dayOfWeekStart: 1,
-        });
-
         $('.modal').modal();
         $('.tooltipped').tooltip();
         $('select').formSelect();
         $('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
         });
-
     });
     /*******************TERMINO METODO FUNCTION*************************************************************************************/
     $(function () {

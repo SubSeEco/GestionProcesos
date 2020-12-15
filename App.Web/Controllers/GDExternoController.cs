@@ -36,7 +36,7 @@ namespace App.Web.Controllers
             public DateTime? Hasta { get; set; }
 
             [Display(Name = "Unidad")]
-            public string DestinoUnidadCodigo { get; set; }
+            public string UnidadCodigo { get; set; }
         }
 
         public class DTOFileUploadFEA
@@ -227,7 +227,7 @@ namespace App.Web.Controllers
         public ActionResult FEAUpload(int ProcesoId, int WorkflowId)
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
-            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q=>q.HabilitadoFirma).Select(q=>q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
             ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
@@ -325,7 +325,7 @@ namespace App.Web.Controllers
 
         public PartialViewResult Row(int ProcesoId)
         {
-            var model = _repository.GetFirst<GD>(q => q.ProcesoId == ProcesoId);
+            var model = _repository.GetById<GD>(ProcesoId);
             return PartialView(model);
         }
 
@@ -350,7 +350,7 @@ namespace App.Web.Controllers
         [HttpGet]
         public ActionResult Report()
         {
-            ViewBag.DestinoUnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
+            ViewBag.UnidadCodigo = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
             return View(new DTOReport() { Desde = DateTime.Now });
         }
 
@@ -374,7 +374,7 @@ namespace App.Web.Controllers
                     item.Proceso.FechaTermino,
                     item.Fecha,
                     item.FechaIngreso,
-                    Materia  = item.Proceso.Reservado ? string.Empty : item.Materia,
+                    Materia = item.Proceso.Reservado ? string.Empty : item.Materia,
                     Referencia = item.Proceso.Reservado ? string.Empty : item.Referencia,
                     Observacion = item.Proceso.Reservado ? string.Empty : item.Observacion,
                     NumeroExterno = item.Proceso.Reservado ? string.Empty : item.NumeroExterno,
@@ -420,8 +420,8 @@ namespace App.Web.Controllers
             predicate = predicate.And(q => !q.Proceso.Anulada);
             predicate = predicate.And(q => q.IngresoExterno);
 
-            if (!string.IsNullOrWhiteSpace(model.DestinoUnidadCodigo))
-                predicate = predicate.And(q => q.DestinoUnidadCodigo == model.DestinoUnidadCodigo);
+            if (!string.IsNullOrWhiteSpace(model.UnidadCodigo))
+                predicate = predicate.And(q => q.DestinoUnidadCodigo == model.UnidadCodigo);
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDMinutaDocumentosOP.xlsx")));
@@ -452,49 +452,50 @@ namespace App.Web.Controllers
 
         public FileResult ReportPermanencia(DTOReport model)
         {
-            var output = _repository
-                .Get<Proceso>(q => 
-                !q.Anulada &&
-                q.DefinicionProceso.Entidad.Codigo.Contains("GD") &&
-                q.FechaTermino.HasValue && 
-                q.FechaCreacion.Year >= model.Desde.Value.Year && q.FechaCreacion.Month >= model.Desde.Value.Month && q.FechaCreacion.Day >= model.Desde.Value.Day &&
-                q.FechaCreacion.Year <= model.Hasta.Value.Year && q.FechaCreacion.Month <= model.Hasta.Value.Month && q.FechaCreacion.Day <= model.Hasta.Value.Day
-                ).Select(q => new
-                {
-                    unidadCodigo = q.Pl_UndCod,
-                    unidadDescripcion = q.Pl_UndDes,
-                    id = q.ProcesoId,
-                    inicio = q.FechaCreacion,
-                    termino = q.FechaTermino,
-                    duracion = (q.FechaTermino - q.FechaCreacion).Value.TotalDays,
-                })
-                .GroupBy(q => new {
-                    q.unidadCodigo,
-                    q.unidadDescripcion
-                })
-                .Select(unidad => new
-                {
-                    unidad.Key.unidadCodigo,
-                    unidad.Key.unidadDescripcion,
-                    info = unidad.ToList()
-                })
-                .Select(unidad => new 
-                {
-                    unidadCodigo = unidad.unidadCodigo.ToString(),
-                    unidadDescripcion = unidad.unidadDescripcion != null ? unidad.unidadDescripcion.ToString() : string.Empty,
-                    documentosCreados = unidad.info.GroupBy(q => q.id).Distinct().Count(),
-                    promedioDocumentosCreadosAlDia = unidad.info
-                        .GroupBy(q => q.inicio.Date)
-                        .Select(grupo => new { dia = grupo.Key, ingresos = grupo.Count()})
-                        .Average(a => a.ingresos),
-                    promedioDemoraEnDias = unidad.info.Average(q => q.duracion)
-                });
+            var unidad = _sigper.GetUnidad(model.UnidadCodigo.ToInt());
+            if (unidad == null)
+                throw new Exception("No se encontró la unidad en sigper.");
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDPermanencia.xlsx")));
-            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(output);
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                var desglose =
+                context.Workflow.Where(q =>
+                    q.Proceso.Pl_UndCod != unidad.Pl_UndCod &&  //procesos originados fuera de mi unidad
+                    q.Pl_UndCod == unidad.Pl_UndCod && // tareas atendidas por mi unidad
+                    q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
+                    q.Terminada && //solo tareas terminadas
+                    q.FechaTermino.HasValue). // solo tareas con fecha de termino
+                GroupBy(g => new
+                {
+                    g.ProcesoId,
+                    g.Proceso.Pl_UndDes,
+                }).
+                Select(grupo => new
+                {
+                    grupo.Key.ProcesoId,
+                    grupo.Key.Pl_UndDes,
+                    workflows = grupo.ToList()
+                }).
+                ToList().
+                Select(proceso => new
+                {
+                    proceso.Pl_UndDes,
+                    proceso.ProcesoId,
+                    documentosCreados = proceso.workflows.Count(),
+                    minutosPermanencia = proceso.workflows.Sum(w => w.MinutosPermanencia) / 1440,
+                }).ToList();
 
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDPermanencia.xlsx")));
+
+                excel.Workbook.Worksheets[0].Cells[2, 2].Value = unidad.Pl_UndDes.Trim();
+                excel.Workbook.Worksheets[0].Cells[3, 2].Value = model.Desde;
+                excel.Workbook.Worksheets[0].Cells[4, 2].Value = model.Hasta;
+                excel.Workbook.Worksheets[0].Cells[7, 1].LoadFromCollection(desglose);
+
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            }
         }
     }
 }

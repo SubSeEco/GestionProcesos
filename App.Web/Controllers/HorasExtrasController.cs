@@ -22,6 +22,8 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using Rotativa;
 using App.Model.HorasExtras;
 using System.Globalization;
+using System.Text;
+
 
 namespace App.Web.Controllers
 {
@@ -52,6 +54,23 @@ namespace App.Web.Controllers
 
             if (ActiveDirectoryUsers == null)
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
+        }
+
+        public class DtoHoras
+        {
+            public double? ValorPagadoHD { get; set; } = 0;
+            public double? ValorPagadoHN { get; set; } = 0;
+            public double? TotalValorPagado { get; set; } = 0;
+        }
+
+        public DtoHoras CalculoHorasPagadas(int ValorHD, int HorasDiurnas, int ValorHN, int HorasNocturnas)
+        {
+            DtoHoras total = new DtoHoras();
+            total.ValorPagadoHD = HorasDiurnas * ValorHD;
+            total.ValorPagadoHN = HorasNocturnas * ValorHN;
+            total.TotalValorPagado = total.ValorPagadoHD + total.ValorPagadoHN;
+
+            return total;
         }
         public ActionResult Index()
         {
@@ -608,12 +627,17 @@ namespace App.Web.Controllers
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = new ResponseMessage();
 
+                if(_colaborador.Exists(c => c.ObservacionesConfirmacion == null))
+                {
+                    ModelState.AddModelError(string.Empty, "Se deben llenar todos los campos de observaciones");
+                    var hora = _repository.GetById<HorasExtras>(model.HorasExtrasId);
+                    return View(hora);
+                }
+
                 /*se guardan las observaciones de la confirmacion*/
                 foreach (var c in _colaborador)
                 {
                     _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(c);
-                    if( _UseCaseResponseMessage.Warnings.Count > 0)
-                        TempData["Warning"] = _UseCaseResponseMessage.Warnings;
                 }
 
                 if (_UseCaseResponseMessage.IsValid)
@@ -642,7 +666,7 @@ namespace App.Web.Controllers
             var hrs = _repository.GetById<HorasExtras>(id);
 
             /*Se genera resolucuion de trabajos extraordinarios*/
-            Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionConfirmacion", new { id = hrs.HorasExtrasId }) { FileName = "ResolucionProgramacion" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+            Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionConfirmacion", new { id = hrs.HorasExtrasId }) { FileName = "ResolucionConfirmacion" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
             pdf = resultPdf.BuildFile(ControllerContext);
             data = _file.BynaryToText(pdf);
             tipoDoc = 13;
@@ -717,10 +741,11 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                var obj = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasId).FirstOrDefault();
-                var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 13).FirstOrDefault();
+                //var obj = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasId).FirstOrDefault();
+                //var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 13).FirstOrDefault();
+                var doc = _repository.GetById<Documento>(HorasId);
                 var user = User.Email();
-                var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, obj.HorasExtrasId);
+                var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -745,5 +770,136 @@ namespace App.Web.Controllers
             //return View(model);
             return Redirect(Request.UrlReferrer.ToString());
         }
+
+        public ActionResult EditRemuneraciones(int id)
+        {
+            var model = _repository.GetById<HorasExtras>(id);
+
+            foreach (var c in model.Colaborador)
+            {
+                /*Se toma base de calculo para valor horas extras*/
+                var CalidadJurid = _sigper.GetUserByRut(c.NombreId.Value).datosLaborales.RH_ContCod;
+                var anno = Convert.ToInt32(DateTime.Now.Year);
+                var mes = Convert.ToInt32(DateTime.Now.Month);
+                Int32 monto = _sigper.GetBaseCalculoHorasExtras(c.NombreId.Value,mes - 1,anno, CalidadJurid);
+                Int32 baseCalculo = monto / 190;//constante
+                
+                c.ValorHorasDiurnas = Convert.ToInt32(baseCalculo * 1.25);
+                c.ValorHorasNocturnas = Convert.ToInt32(baseCalculo * 1.5);
+            }
+            
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRemuneraciones(HorasExtras model, List<Colaborador> _colaborador)
+        {            
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _UseCaseResponseMessage = new ResponseMessage();
+
+                foreach(var c in _colaborador)
+                {
+                    c.ValorPagadoHD = c.HDPagoAprobados * c.ValorHorasDiurnas.Value;
+                    c.ValorPagadoHN = c.HNPagoAprobados * c.ValorHorasNocturnas.Value;
+                    c.ValorTotalPago = c.ValorPagadoHD + c.ValorPagadoHN;
+
+                    _useCaseInteractor.ColaboradorUpdate(c);
+                }
+
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            return View(model);
+        }
+
+        public ActionResult GeneraResolucionDescanso(int id)
+        {
+            byte[] pdf = null;
+            DTOFileMetadata data = new DTOFileMetadata();
+            int tipoDoc = 0;
+            int idDoctoHoras = 0;
+            string Name = string.Empty;
+            var hrs = _repository.GetById<HorasExtras>(id);
+
+            /*Se genera resolucuion de trabajos extraordinarios*/
+            Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionDescanso", new { id = hrs.HorasExtrasId }) { FileName = "ResolucionDescanso" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+            pdf = resultPdf.BuildFile(ControllerContext);
+            data = _file.BynaryToText(pdf);
+            tipoDoc = 14;
+            Name = "Resolución Confirmación Horas Extraordinarios Compensadas nro" + " " + hrs.HorasExtrasId.ToString() + ".pdf";
+
+            /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+            var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.ProcesoId);
+            if (docto != null)
+            {
+                foreach (var res in docto)
+                {
+                    if (res.TipoDocumentoId == 14)
+                        idDoctoHoras = res.DocumentoId;
+                }
+            }
+
+            if (idDoctoHoras == 0)
+            {
+                var email = UserExtended.Email(User);
+                var doc = new Documento();
+                doc.Fecha = DateTime.Now;
+                doc.Email = email;
+                doc.FileName = Name;
+                doc.File = pdf;
+                doc.ProcesoId = hrs.ProcesoId.Value;
+                doc.WorkflowId = hrs.WorkflowId.Value;
+                doc.Signed = false;
+                doc.Texto = data.Text;
+                doc.Metadata = data.Metadata;
+                doc.Type = data.Type;
+                doc.TipoPrivacidadId = 1;
+                doc.TipoDocumentoId = tipoDoc;
+
+                _repository.Create(doc);
+                _repository.Save();
+            }
+            else
+            {
+                var docOld = _repository.GetById<Documento>(idDoctoHoras);
+                docOld.File = pdf;
+                docOld.Signed = false;
+                docOld.Texto = data.Text;
+                docOld.Metadata = data.Metadata;
+                docOld.Type = data.Type;
+                _repository.Update(docOld);
+                _repository.Save();
+            }
+
+            return Redirect(Request.UrlReferrer.PathAndQuery);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResolucionDescanso(int id)
+        {
+            var model = _repository.GetById<HorasExtras>(id);
+            //model.Colaborador.FirstOrDefault().ValorTotalPago = 4521;
+            //model.ValorTotalHoras = 454554;
+
+            return View(model);
+        }
+
     }
 }

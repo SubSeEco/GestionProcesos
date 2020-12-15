@@ -1,0 +1,173 @@
+﻿@model App.Model.HorasExtras.HorasExtras
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style TYPE="text/css">
+    .breakhere {
+        page-break-after: always
+    }
+</style>
+<head>
+</head>
+<body style="font-family: Calibri;font-style:italic;margin-top:800px;
+        padding: 0px;
+        margin: 0px;
+        text-align: justify">
+    <div class="left">
+        <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="150px" /><br />
+        <b>DEPTO. ADMINISTRATIVO</b><br />
+        <b>UNIDAD DE GESTIÓN Y DESARROLLO</b><br />
+        <b>DE PERSONAS</b><br />
+        <b>ÁREA PERSONAS</b><br />
+        <b>PCM/BCJ</b><br />
+        <b>R.A.EX</b><br />
+    </div>
+    <center>
+        <b>RECONOCE DESCANSO COMPLEMENTARIO A FUNCIONARIOS (AS) Y PRESTADORES DE SERVICIOS, QUE INDICA.</b><br />
+        <b style="text-decoration: underline;">SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO.</b>
+    </center>
+    <ol>
+        <p>
+            <b>VISTOS :</b>Artículo N° 68 del D. F. L. N° 29/2004, de Hacienda, que fija el Texto Refundido, Coordinado y Sistematizado de la Ley N° 18.834, sobre Estatuto Administrativo; 
+            Resolución N° 6, de 2019,  dictamen N° 16.434 de 2015, de la Contraloría General de la República; Resolución Administrativa Exenta N°  202000187,  de 2020, sobre reconocimiento de
+            programación de horas extraordinarias mes de mayo de 2020; Resolución Exenta RA N° 29 de 2020,  todas de la Subsecretaría de Economía y Empresas de Menor Tamaño, y antecedentes que se acompañan.
+        </p>
+    </ol>
+    <ol>
+        <p>
+
+            <b>CONSIDERANDO : </b><br />
+        <li>
+            Que, a través de Resolución Administrativa Exenta N°  202000187,  de 2020, se reconoció la programación de horas extraordinarias para el mes de mayo de 2020, a funcionarios(as) y prestadores
+            de servicios, de la Subsecretaría de Economia y Empresas de Menor Tamaño.
+        </li>
+        </p>
+        <p>
+        <li>
+            Que, se debe reconocer el derecho a hacer uso de descanso complementario, por trabajos extraordinarios realizados durante el mes de mayo de 2020.
+        </li>
+        </p>
+        <p>
+        <li>
+            Que, los trabajos extraordinarios diurnos y nocturnos, se compensarán con descanso complementario, el cual será igual al tiempo trabajado más un aumento del veinticinco por ciento o cincuenta
+            por ciento, según corresponda, si ello no fuere posible por razones de buen servicio, aquéllos serán compensados con un recargo en las remuneraciones.
+        </li>
+        </p>
+    </ol>
+    <ol>
+        <p>
+
+            <b>RESUELVO : </b><br />
+        <li>
+            <b>RECONÓCESE</b>,descanso complementario a funcionarios(as) y  prestadores de servicios, de la Subsecretaría de Economía y Empresas de Menor Tamaño, por trabajos extraordinarios realizados
+            durante el mes de mayo de 2020, según el siguiente detalle:
+        </li>
+        </p>
+
+        <br />
+
+        <table width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;border-color:#ddd;">
+            <tr>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Nombre)*@
+                    @Html.Raw("RUT")
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Nombre)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HDCompensar)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <b>
+                        @Html.DisplayFor(modelItem => Model.Unidad)
+                    </b>
+                </td>
+            </tr>
+
+            @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
+                    </td>
+                    <td style="width:10%">
+                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <p class="breakhere"></p>
+
+        <p>
+        <li>
+            <b>Déjese constancia,</b>&nbsp;&nbsp;&nbsp;que se podrá hacer uso de este beneficio, a través del sistema Integrado de Gestión de Personas (Persomático), indicando las horas a usar,
+            previa autorización de su jefatura directa.
+        </li>
+        </p>
+    </ol>
+    <table align="center" border="0">
+        <tr>
+            <td>
+                <br />
+                <p align="center">
+                    <strong>
+                        ANÓTESE, COMUNÍQUESE Y ARCHÍVESE
+                    </strong>
+                    <br />
+                    <strong>
+                        POR ORDEN DEL SUBSECRETARIO
+                    </strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>
+                    <p align="center">
+                        MACARENA SÁNCHEZ FIERRO
+                        <br />
+                        ENCARGADA UNIDAD DE GESTIÓN Y DESARROLLO DE PERSONAS
+                        <br />
+                        SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO
+                    </p>
+                </strong>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <br /><br />
+    <table border="0" align="left" width="35%">
+        <tr>
+            <td>DISTRIBUCIÓN</td>
+        </tr>
+        <tr><td>-	Unidad de Gestión y Desarrollo de Personas </td></tr>        
+        <tr><td>-	Oficina de Partes</td></tr>
+    </table>
+</body>
+</html>
+
+
+
+
+
