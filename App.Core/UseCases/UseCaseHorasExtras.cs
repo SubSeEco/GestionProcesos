@@ -365,8 +365,27 @@ namespace App.Core.UseCases
                         throw new Exception("Debe adjuntar documentos.");
                 }
 
-                //terminar workflow actual
-                workflowActual.FechaTermino = DateTime.Now;
+                /*Valida la creacion de adjuntos segun el tipo de proceso*/
+                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.ProgramacionHorasExtraordinarias)
+                {
+                    if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    {
+                        if (workflowActual.DefinicionWorkflow.Secuencia == 12)
+                        {
+                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 13 && c.TipoDocumentoId.Value == 14  && c.TipoDocumentoId != null))
+                                throw new Exception("Se deben generar las resoluciones asociadas al proceso en ejecucion.");
+                        }
+                        else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
+                        {
+                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 9 && c.TipoDocumentoId != null))
+                                throw new Exception("Se debe generar la resolución correspondiente a la programación de horas extraordinarias.");
+                        }
+                    }
+                }
+
+
+                    //terminar workflow actual
+                    workflowActual.FechaTermino = DateTime.Now;
                 workflowActual.Observacion = obj.Observacion;
                 workflowActual.Terminada = true;
                 workflowActual.Pl_UndCod = obj.Pl_UndCod;

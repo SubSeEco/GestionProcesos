@@ -23,7 +23,8 @@ using Rotativa;
 using App.Model.HorasExtras;
 using System.Globalization;
 using System.Text;
-
+using App.Model.Cometido;
+using Enum = App.Util.Enum;
 
 namespace App.Web.Controllers
 {
@@ -295,7 +296,7 @@ namespace App.Web.Controllers
             data = _file.BynaryToText(pdf);
             tipoDoc = 9;
             Name = "Resolución Programación Trabajos Extraordinarios nro" + " " + hrs.HorasExtrasId.ToString() + ".pdf";
-            
+
             /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
             var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.ProcesoId);
             if (docto != null)
@@ -345,7 +346,14 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionProgramacion(int id)
         {
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
             var model = _repository.GetById<HorasExtras>(id);
+            model.OrdenHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHEProg).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHEProg).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHEProg).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHEProg).FirstOrDefault().ParrafoTexto.Replace(",",Environment.NewLine);
+            model.VistosHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHEProg).FirstOrDefault().ParrafoTexto;
+            
             return View(model);
         }
 
@@ -434,9 +442,9 @@ namespace App.Web.Controllers
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
-            int idDoctoHoras = 0; 
+            int idDoctoHoras = 0;
             string Name = string.Empty;
-            var hrs = _repository.GetAll<HorasExtras>().Where(c =>c.Mes == mes && c.Annio == annio);
+            var hrs = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
 
             /*Se genera resolucuion de trabajos extraordinarios*/
             Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionServicio", new { mes = hrs.FirstOrDefault().Mes, annio = hrs.FirstOrDefault().Annio }) { FileName = "ResolucionProgramacionServicio" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -499,7 +507,7 @@ namespace App.Web.Controllers
             //_repository.Create(genera);
             //_repository.Save();
 
-            return File(docOld.File, "application/pdf");            
+            return File(docOld.File, "application/pdf");
         }
 
         [AllowAnonymous]
@@ -614,7 +622,7 @@ namespace App.Web.Controllers
             //var persona = _sigper.GetUserByEmail(User.Email());
             //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             var model = _repository.GetById<HorasExtras>(id);
-            
+
             return View(model);
         }
 
@@ -627,7 +635,7 @@ namespace App.Web.Controllers
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = new ResponseMessage();
 
-                if(_colaborador.Exists(c => c.ObservacionesConfirmacion == null))
+                if (_colaborador.Exists(c => c.ObservacionesConfirmacion == null))
                 {
                     ModelState.AddModelError(string.Empty, "Se deben llenar todos los campos de observaciones");
                     var hora = _repository.GetById<HorasExtras>(model.HorasExtrasId);
@@ -721,9 +729,15 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionConfirmacion(int id)
         {
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
             var model = _repository.GetById<HorasExtras>(id);
             model.Colaborador.FirstOrDefault().ValorTotalPago = 4521;
-            model.ValorTotalHoras = 454554;
+            model.ValorTotalHorasPalabras = ExtensionesString.enletras(model.ValorTotalHoras.ToString());
+            model.OrdenHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHEPag).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHEPag).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHEPag).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHEPag).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
+            model.VistosHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHEPag).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }
@@ -775,19 +789,41 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<HorasExtras>(id);
 
+            List<SelectListItem> Meses = new List<SelectListItem>
+            {
+                //new SelectListItem {Text = "..Seleccione", Value = "0"},
+                new SelectListItem {Text = "Enero", Value = "1"},
+                new SelectListItem {Text = "Febrero", Value = "2"},
+                new SelectListItem {Text = "Marzo", Value = "3"},
+                new SelectListItem {Text = "Abril", Value = "4"},
+                new SelectListItem {Text = "Mayo", Value = "5"},
+                new SelectListItem {Text = "Junio", Value = "6"},
+                new SelectListItem {Text = "Julio", Value = "7"},
+                new SelectListItem {Text = "Agosto", Value = "8"},
+                new SelectListItem {Text = "Septiembre", Value = "9"},
+                new SelectListItem {Text = "Octubre", Value = "10"},
+                new SelectListItem {Text = "Noviembre", Value = "11"},
+                new SelectListItem {Text = "Diciembre", Value = "12"},
+            };
+
+            ViewBag.MesBaseCalculo = new SelectList(Meses, "Value", "Text");
+
             foreach (var c in model.Colaborador)
             {
                 /*Se toma base de calculo para valor horas extras*/
                 var CalidadJurid = _sigper.GetUserByRut(c.NombreId.Value).datosLaborales.RH_ContCod;
                 var anno = Convert.ToInt32(DateTime.Now.Year);
-                var mes = Convert.ToInt32(DateTime.Now.Month);
-                Int32 monto = _sigper.GetBaseCalculoHorasExtras(c.NombreId.Value,mes - 1,anno, CalidadJurid);
+                var mes = Convert.ToInt32(DateTime.Now.Month) - 1;
+                if (model.MesBaseCalculo != 0)
+                    mes = model.MesBaseCalculo;
+
+                Int32 monto = _sigper.GetBaseCalculoHorasExtras(c.NombreId.Value, mes, anno, CalidadJurid);
                 Int32 baseCalculo = monto / 190;//constante
-                
+
                 c.ValorHorasDiurnas = Convert.ToInt32(baseCalculo * 1.25);
                 c.ValorHorasNocturnas = Convert.ToInt32(baseCalculo * 1.5);
             }
-            
+
 
             return View(model);
         }
@@ -795,20 +831,23 @@ namespace App.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditRemuneraciones(HorasExtras model, List<Colaborador> _colaborador)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = new ResponseMessage();
 
-                foreach(var c in _colaborador)
+                foreach (var c in _colaborador)
                 {
                     c.ValorPagadoHD = c.HDPagoAprobados * c.ValorHorasDiurnas.Value;
                     c.ValorPagadoHN = c.HNPagoAprobados * c.ValorHorasNocturnas.Value;
                     c.ValorTotalPago = c.ValorPagadoHD + c.ValorPagadoHN;
+                    model.ValorTotalHoras += c.ValorTotalPago;
 
                     _useCaseInteractor.ColaboradorUpdate(c);
                 }
+
+                _useCaseInteractor.HorasExtrasUpdate(model);
 
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -895,8 +934,12 @@ namespace App.Web.Controllers
         public ActionResult ResolucionDescanso(int id)
         {
             var model = _repository.GetById<HorasExtras>(id);
-            //model.Colaborador.FirstOrDefault().ValorTotalPago = 4521;
-            //model.ValorTotalHoras = 454554;
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
+            model.OrdenHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHECom).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHECom).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHECom).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHECom).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
+            model.VistosHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHECom).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }

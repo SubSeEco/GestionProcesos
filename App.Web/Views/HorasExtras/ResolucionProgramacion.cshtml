@@ -35,9 +35,10 @@
     </center>
     <ol>
         <p>
-            <b>VISTOS :</b>Ley  Nº  21.192, de presupuestos del sector público correspondiente al año 2020; D. L. Nº 249 de 1974; artículo Nº 66 del D. F. L. N° 29/2004 del Ministerio de Hacienda, que fija el texto refundido,
-            coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; artículo 9º de la Ley Nº 19.104 de 1991; Resolución Nº 6, de 2019, de la Contraloría General de la República; Resolución
-            Administrativa Exenta N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+            <b>VISTOS :</b>@Html.DisplayFor(m => Model.VistosHEProg)
+            @*Ley  Nº  21.192, de presupuestos del sector público correspondiente al año 2020; D. L. Nº 249 de 1974; artículo Nº 66 del D. F. L. N° 29/2004 del Ministerio de Hacienda, que fija el texto refundido,
+        coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; artículo 9º de la Ley Nº 19.104 de 1991; Resolución Nº 6, de 2019, de la Contraloría General de la República; Resolución
+        Administrativa Exenta N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.*@
         </p>
     </ol>
     <ol>
@@ -52,7 +53,7 @@
         </p>
         <p>
         <li>
-            Que, se hace necesario programar las horas extraordinarias del mes de mayo de 2020, de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño.
+            Que, se hace necesario programar las horas extraordinarias del mes de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </li>
 
         </p>
@@ -60,7 +61,7 @@
     <ol>
         <p>
             <b>RESUELVO : </b><br />
-            <b>REGULARÍCESE</b>,&nbsp;&nbsp;&nbsp;programación de horas extraordinarias para el mes de mayo de 2020, de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño, que se
+            <b>REGULARÍCESE</b>,&nbsp;&nbsp;&nbsp;programación de horas extraordinarias para el mes de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño, que se
             detalla a continuación:
         </p>
     </ol>
@@ -134,7 +135,8 @@
                 <br />
                 <p align="center">
                     <strong>
-                        ANÓTESE, COMUNÍQUESE, NOTIFÍQUESE Y ARCHÍVESE.
+                        @Html.DisplayFor(m => Model.OrdenHEProg)
+                        @*ANÓTESE, COMUNÍQUESE, NOTIFÍQUESE Y ARCHÍVESE.*@
                     </strong>
                     <br />
                     <strong>
@@ -147,9 +149,11 @@
             <td>
                 <strong>
                     <p align="center">
-                        LISSY CORRALES REVILLA
+                        @Html.DisplayFor(m => Model.FirmanteHEProg)
+                        @*LISSY CORRALES REVILLA*@
                         <br />
-                        ENCARGADA DEPARTAMENTO ADMINISTRATIVO
+                        @Html.DisplayFor(m => Model.CargoFirmanteHEProg)
+                        @*ENCARGADA DEPARTAMENTO ADMINISTRATIVO*@
                         <br />
                         SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO
                     </p>
@@ -159,13 +163,18 @@
         </tr>
     </table>
     <br /><br />
-    <table border="0" align="left" width="35%">
+    <table border="0" align="left" width="75%">
         <tr>
             <td>DISTRIBUCIÓN</td>
         </tr>
-        <tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(m => Model.DistribucionHEProg)
+            </td>
+        </tr>
+        @*<tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
         <tr><td>-	Departamento Administrativo</td></tr>
-        <tr><td>-	Finanzas</td></tr>
+        <tr><td>-	Finanzas</td></tr>*@
     </table>
 </body>
 </html>

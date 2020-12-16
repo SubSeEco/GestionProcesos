@@ -99,6 +99,6 @@ namespace App.Model.HorasExtras
         [AssertThat("ValorTotalPago >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         [DataType(DataType.Currency)]
         public int? ValorTotalPago { get; set; } = 0;
-
+                
     }
 }

@@ -35,10 +35,11 @@
     </center>
     <ol>
         <p>
-            <b>VISTOS :</b>Lo dispuesto en la Ley Nº 21.192, de presupuestos del sector público para el año 2020; en el D.L. Nº 249 de 1974; artículo Nº 66 del D.F.L. Nº 29 de 2004 del Ministerio de Hacienda,
-            que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; en el artículo 9º de la Ley Nº 19.104 de 1991;  Resolución Nº 6, de 2019, de la Contraloría
-            General de la República;  Resolución Administrativa Exenta  N° 157, de 2020, sobre reconocimiento de programación de horas extraordinarias mes de febrero de 2020; Resolución
-            Exenta RA N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+            <b>VISTOS :</b>@Html.DisplayFor(m => Model.VistosHEPag)
+            @*Lo dispuesto en la Ley Nº 21.192, de presupuestos del sector público para el año 2020; en el D.L. Nº 249 de 1974; artículo Nº 66 del D.F.L. Nº 29 de 2004 del Ministerio de Hacienda,
+        que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; en el artículo 9º de la Ley Nº 19.104 de 1991;  Resolución Nº 6, de 2019, de la Contraloría
+        General de la República;  Resolución Administrativa Exenta  N° 157, de 2020, sobre reconocimiento de programación de horas extraordinarias mes de febrero de 2020; Resolución
+        Exenta RA N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.*@
         </p>
     </ol>
     <ol>
@@ -135,13 +136,13 @@
     <p class="breakhere"></p>
     <ol>
         <p>
-            <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total 
-            de $$$$$$$- (quinientos ochenta y unos mil setecientos cincuenta y nueve pesos), por concepto de trabajos extraordinarios, conforme al detalle descrito precedentemente.
+            <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total
+            de @Html.DisplayFor(m => Model.ValorTotalHoras) - (@Html.DisplayFor(m => Model.ValorTotalHorasPalabras)), por concepto de trabajos extraordinarios, conforme al detalle descrito precedentemente.
         </p>
     </ol>
     <ol>
         <p>
-            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21.02.004 (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año 2020, 
+            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21.02.004 (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
             de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </p>
     </ol>
@@ -151,7 +152,8 @@
                 <br />
                 <p align="center">
                     <strong>
-                        ANÓTESE, PÁGUESE Y ARCHÍVESE
+                        @Html.DisplayFor(m => Model.OrdenHEPag)
+                        @*ANÓTESE, PÁGUESE Y ARCHÍVESE*@
                     </strong>
                     <br />
                     <strong>
@@ -164,9 +166,11 @@
             <td>
                 <strong>
                     <p align="center">
-                        LISSY CORRALES REVILLA
+                        @Html.DisplayFor(m => Model.FirmanteHEPag)
+                        @*LISSY CORRALES REVILLA*@
                         <br />
-                        ENCARGADA DEPARTAMENTO ADMINISTRATIVO
+                        @Html.DisplayFor(m => Model.CargoFirmanteHEPag)
+                        @*ENCARGADA DEPARTAMENTO ADMINISTRATIVO*@
                         <br />
                         SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO
                     </p>
@@ -176,14 +180,17 @@
         </tr>
     </table>
     <br /><br />
-    <table border="0" align="left" width="35%">
+    <table border="0" align="left" width="75%">
         <tr>
             <td>DISTRIBUCIÓN</td>
         </tr>
-        <tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
+        <tr>
+            <td>@Html.DisplayFor(m => Model.DistribucionHEPag)</td>
+        </tr>
+        @*<tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
         <tr><td>-	Departamento Administrativo</td></tr>
         <tr><td>-	Finanzas</td></tr>
-        <tr><td>-	Oficina de Partes</td></tr>
+        <tr><td>-	Oficina de Partes</td></tr>*@
     </table>
 </body>
 </html>

@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col s12 m6 l12">
+        <div class="col s12 m6 l8">
             @Html.Partial("_Message")
             @using (Html.BeginForm("EditConfirmacion", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -44,6 +44,8 @@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHN)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorTotalPago)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
                 }
 
 
@@ -202,7 +204,7 @@
                 </div>
             }
         </div>
-        <div class="col s12 m6 l12">
+        <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>

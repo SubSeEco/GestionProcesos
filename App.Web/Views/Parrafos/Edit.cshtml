@@ -16,8 +16,12 @@
                         @Html.ValidationMessageFor(m => Model.ParrafoTexto, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m10 l10">
-                        @Html.TextBoxFor(m => Model.DefinicionProcesoId)
-                        @Html.LabelFor(m => Model.DefinicionProcesoId)                        
+                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.DefinicionProcesoId)
+                    </div>
+                    <div class="input-field col s12 m10 l10">
+                        @Html.DropDownListFor(m => Model.TipoDocumentoId, null, "Seleccione...")
+                        @Html.LabelFor(m => Model.TipoDocumentoId)
                     </div>
                     <div class="input-field col s12 m10 l10">
                         @Html.TextBoxFor(m => Model.Documento)
@@ -48,4 +52,5 @@
             $(element).appendTo($(element).parent());
         });
     });
+    $('select').formSelect();
 </script>

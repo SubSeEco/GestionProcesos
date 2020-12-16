@@ -2,6 +2,7 @@
 using App.Model.Cometido;
 using App.Core.Interfaces;
 using App.Core.UseCases;
+using App.Model.Core;
 
 namespace App.Web.Controllers
 {
@@ -30,6 +31,8 @@ namespace App.Web.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.DefinicionProcesoId = new SelectList(_repository.Get<DefinicionProceso>(), "DefinicionProcesoId", "Nombre");
+            ViewBag.TipoDocumentoId = new SelectList(_repository.Get<TipoDocumento>(), "TipoDocumentoId", "Nombre");
             return View();
         }
 
@@ -37,6 +40,9 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Parrafos model)
         {
+            ViewBag.DefinicionProcesoId = new SelectList(_repository.Get<DefinicionProceso>(), "DefinicionProcesoId", "Nombre");
+            ViewBag.TipoDocumentoId = new SelectList(_repository.Get<TipoDocumento>(), "TipoDocumentoId", "Nombre");
+
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository);
@@ -56,6 +62,8 @@ namespace App.Web.Controllers
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<Parrafos>(id);
+            ViewBag.DefinicionProcesoId = new SelectList(_repository.Get<DefinicionProceso>(), "DefinicionProcesoId", "Nombre",model.DefinicionProcesoId);
+            ViewBag.TipoDocumentoId = new SelectList(_repository.Get<TipoDocumento>(), "TipoDocumentoId", "Nombre",model.TipoDocumentoId);
             return View(model);
         }
 
@@ -63,6 +71,9 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Parrafos model)
         {
+            ViewBag.DefinicionProcesoId = new SelectList(_repository.Get<DefinicionProceso>(), "DefinicionProcesoId", "Nombre", model.DefinicionProcesoId);
+            ViewBag.TipoDocumentoId = new SelectList(_repository.Get<TipoDocumento>(), "TipoDocumentoId", "Nombre", model.TipoDocumentoId);
+
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository);
