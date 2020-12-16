@@ -147,8 +147,7 @@ namespace App.Web.Controllers
             using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
                 //usuario administrador
-                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
-                {
+                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()))) {
                     model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
@@ -188,8 +187,7 @@ namespace App.Web.Controllers
                 }
 
                 //usuario normal
-                else
-                {
+                else {
                     model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,

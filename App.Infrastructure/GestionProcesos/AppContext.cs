@@ -47,7 +47,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<Accion> Accion { get; set; }
         public virtual DbSet<Entidad> Entidad { get; set; }
         public virtual DbSet<Rubrica> Rubrica { get; set; }
-        public virtual DbSet<Log> Log { get; set; }
+        //public virtual DbSet<CoreLog> Log { get; set; }
         public virtual DbSet<TipoPrivacidad> TipoPrivacidad { get; set; }
         public virtual DbSet<Cometido> Cometido { get; set; }
         public virtual DbSet<Destinos> Destinos { get; set; }

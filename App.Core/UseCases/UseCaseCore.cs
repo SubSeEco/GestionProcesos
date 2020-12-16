@@ -1121,36 +1121,36 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage DocumentoSign(Documento obj, string firmante)
-        {
-            var response = new ResponseMessage();
+        //public ResponseMessage DocumentoSign(Documento obj, string firmante)
+        //{
+        //    var response = new ResponseMessage();
 
-            try
-            {
-                var documento = _repository.GetById<Documento>(obj.DocumentoId);
-                if (documento == null)
-                    response.Errors.Add("Documento no encontrado");
+        //    try
+        //    {
+        //        var documento = _repository.GetById<Documento>(obj.DocumentoId);
+        //        if (documento == null)
+        //            response.Errors.Add("Documento no encontrado");
 
-                var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
-                if (rubrica == null)
-                    response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
+        //        var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
+        //        if (rubrica == null)
+        //            response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
 
-                if (response.IsValid)
-                {
-                    documento.File = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
-                    documento.Signed = true;
+        //        if (response.IsValid)
+        //        {
+        //            documento.File = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
+        //            documento.Signed = true;
 
-                    _repository.Update(documento);
-                    _repository.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Errors.Add(ex.Message);
-            }
+        //            _repository.Update(documento);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
 
         //Sobrecarga de firma multiple con tabla de verificacion
         public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)

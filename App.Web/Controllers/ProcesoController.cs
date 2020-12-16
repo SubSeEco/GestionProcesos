@@ -230,9 +230,6 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-
-
-
             var model = _repository.GetById<Proceso>(id);
             return View(model);
         }
