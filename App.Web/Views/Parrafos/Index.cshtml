@@ -54,7 +54,10 @@
                     @Html.DisplayFor(modelItem => item.Documento)
                 </td>
                 <td>
-                    @Html.ActionLink("Detalles", "Details", new { id = item.ParrafosId })
+                    <a href='@Url.Action("Edit", "Parrafos", new { id = item.ParrafosId})'><img src="~/Content/images/icon-edit.png"></img></a>                    
+                </td>
+                <td>
+                    <a href='@Url.Action("Delete", "Parrafos", new { id = item.ParrafosId })'><img src="~/Content/images/icon-borrar.png"></img></a>
                 </td>
             </tr>
                 }

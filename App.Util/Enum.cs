@@ -65,6 +65,21 @@ namespace App.Util
             VistoOP = 13,
             DejaseConstancia = 14,
             ViaticodeVuelta = 15,
+            OrdenHEProg = 16,
+            FirmanteHEProg = 17,
+            CargoFirmanteHEProg = 18,
+            DistribucionHEProg = 19,
+            VistosHEProg = 20,
+            OrdenHEPag = 21,
+            FirmanteHEPag = 22,
+            CargoFirmanteHEPag = 23,
+            DistribucionHEPag = 24,
+            VistosHEPag = 25, 
+            OrdenHECom = 26,
+            FirmanteHECom = 27,
+            CargoFirmanteHECom = 28,
+            DistribucionHECom = 29,
+            VistosHECom = 30
         }
         public enum TipoAprobacion
         {

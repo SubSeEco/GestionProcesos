@@ -75,5 +75,69 @@ namespace App.Model.HorasExtras
                 
         [Display(Name = "Mes Base Calculo")]
         public int MesBaseCalculo { get; set; }
+
+        /*Pie de Pagina Resoluciones Programacion - 15122020*/
+        [NotMapped]
+        [Display(Name = "Orden")]
+        public string OrdenHEProg { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Firmante")]
+        public string FirmanteHEProg { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Cargo Firmante")]
+        public string CargoFirmanteHEProg { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Distribucion")]
+        public string DistribucionHEProg { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Vistos")]
+        public string VistosHEProg { get; set; }
+
+        
+        /*Pie de Pagina Resoluciones Confirmacion Pagadas - 16122020*/
+        [NotMapped]
+        [Display(Name = "Orden")]
+        public string OrdenHEPag { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Firmante")]
+        public string FirmanteHEPag { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Cargo Firmante")]
+        public string CargoFirmanteHEPag { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Distribucion")]
+        public string DistribucionHEPag { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Vistos")]
+        public string VistosHEPag { get; set; }
+
+        /*Pie de Pagina Resoluciones Confirmacion Compensadas - 16122020*/
+        [NotMapped]
+        [Display(Name = "Orden")]
+        public string OrdenHECom { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Firmante")]
+        public string FirmanteHECom { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Cargo Firmante")]
+        public string CargoFirmanteHECom { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Distribucion")]
+        public string DistribucionHECom { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Vistos")]
+        public string VistosHECom { get; set; }
     }
 }

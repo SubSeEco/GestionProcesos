@@ -23,7 +23,8 @@ using Rotativa;
 using App.Model.HorasExtras;
 using System.Globalization;
 using System.Text;
-
+using App.Model.Cometido;
+using Enum = App.Util.Enum;
 
 namespace App.Web.Controllers
 {
@@ -345,7 +346,14 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionProgramacion(int id)
         {
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
             var model = _repository.GetById<HorasExtras>(id);
+            model.OrdenHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHEProg).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHEProg).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHEProg).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHEProg).FirstOrDefault().ParrafoTexto.Replace(",",Environment.NewLine);
+            model.VistosHEProg = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHEProg).FirstOrDefault().ParrafoTexto;
+            
             return View(model);
         }
 
@@ -721,9 +729,15 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionConfirmacion(int id)
         {
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
             var model = _repository.GetById<HorasExtras>(id);
             model.Colaborador.FirstOrDefault().ValorTotalPago = 4521;
             model.ValorTotalHorasPalabras = ExtensionesString.enletras(model.ValorTotalHoras.ToString());
+            model.OrdenHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHEPag).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHEPag).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHEPag).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHEPag).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
+            model.VistosHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHEPag).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }
@@ -920,8 +934,12 @@ namespace App.Web.Controllers
         public ActionResult ResolucionDescanso(int id)
         {
             var model = _repository.GetById<HorasExtras>(id);
-            //model.Colaborador.FirstOrDefault().ValorTotalPago = 4521;
-            //model.ValorTotalHoras = 454554;
+            var parrafos = _repository.Get<Parrafos>(p => p.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias);
+            model.OrdenHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenHECom).FirstOrDefault().ParrafoTexto;
+            model.FirmanteHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteHECom).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmanteHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHECom).FirstOrDefault().ParrafoTexto;
+            model.DistribucionHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHECom).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
+            model.VistosHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHECom).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }
