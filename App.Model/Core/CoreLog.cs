@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Model.Core
 {
-    [Table("CoreLog")]
-    public class Log 
+    //[Table("CoreLog")]
+    public class CoreLog 
     {
         [Display(Name = "Id")]
         public Guid LogId { get; set; }

@@ -148,8 +148,7 @@ namespace App.Web.Controllers
             using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
                 //usuario administrador
-                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
-                {
+                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()))) {
                     model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.TareaPersonal).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
@@ -189,8 +188,7 @@ namespace App.Web.Controllers
                 }
 
                 //usuario normal
-                else
-                {
+                else {
                     model.TareasPersonales = context.Workflow.AsNoTracking().Where(q => !q.Terminada && q.Email == email).Select(q => new DTOWorkflow
                     {
                         WorkflowId = q.WorkflowId,
@@ -556,6 +554,9 @@ namespace App.Web.Controllers
             if (!string.IsNullOrEmpty(Funcionario))
                 model.To = Funcionario;
 
+            ModelState.Clear();
+            TryValidateModel(model);
+
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
 
             if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
@@ -673,29 +674,58 @@ namespace App.Web.Controllers
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
 
-            ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre", model.TipoAprobacionId);
-            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
+            ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
+            ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
 
-            if (!model.To.IsNullOrWhiteSpace())
+            //si va a otra unidad => preseleccionar unidad destino
+            if (model.ToPl_UndCod.HasValue)
             {
-                var persona = _sigper.GetUserByEmail(model.To.Trim());
-                if (persona != null)
-                {
-                    ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades().OrderBy(q => q.Pl_UndDes).Select(q => new SelectListItem { Value = q.Pl_UndCod.ToString(), Text = q.Pl_UndDes.Trim() }), "Value", "Text", persona.Unidad.Pl_UndCod);
-                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod).OrderBy(q => q.PeDatPerChq).Select(q => new SelectListItem { Value = q.Rh_Mail.Trim(), Text = q.PeDatPerChq.Trim() }), "Value", "Text", persona.Funcionario.Rh_Mail.Trim());
+                ViewBag.Unidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.ToPl_UndCod);
 
-                    model.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                    model.To = persona.Funcionario.Rh_Mail.Trim();
-                }
+                if (!string.IsNullOrWhiteSpace(model.To))
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre", model.To);
+                else
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.ToPl_UndCod.Value)
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre");
             }
-            else
+
+            //si es unidad local => preseleccionar unidad local
+            if (!model.ToPl_UndCod.HasValue && model.Pl_UndCod.HasValue)
             {
-                ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-                ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-                if (model.Pl_UndCod.HasValue)
-                    ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+                ViewBag.Unidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
+
+                if (!string.IsNullOrWhiteSpace(model.To))
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre", model.To);
+                else
+                    ViewBag.Funcionario = new SelectList(
+                        _sigper.GetUserByUnidad(model.Pl_UndCod.Value)
+                        //.Where(q => !q.Rh_Mail.Trim().Equals(email.Trim())) // excluir ejecutor de tarea
+                        .Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() })
+                        .OrderBy(q => q.Nombre).Distinct().ToList(),
+                        "Email", "Nombre");
             }
 
+            //fix para solucionar problemas de fvidal
+            if (model.Pl_UndCod.HasValue && model.EsFirmaDocumento && model.Pl_UndCod.Value == 200310)
+            {
+                var funcionarios = _sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList();
+                funcionarios.Add(new { Email = "fvial@economia.cl", Nombre = "FELIPE VIAL TAGLE" });
+                ViewBag.Funcionario = new SelectList(funcionarios.OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
+            }
             return View(model);
         }
 

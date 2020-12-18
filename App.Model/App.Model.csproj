@@ -117,7 +117,7 @@
     <Compile Include="Core\Entidad.cs" />
     <Compile Include="Core\Estado.cs" />
     <Compile Include="Core\Grupo.cs" />
-    <Compile Include="Core\Log.cs" />
+    <Compile Include="Core\CoreLog.cs" />
     <Compile Include="Core\Proceso.cs" />
     <Compile Include="Core\ResponseMessage.cs" />
     <Compile Include="Core\Rubrica.cs" />

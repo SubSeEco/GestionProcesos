@@ -1,8 +1,12 @@
 ﻿using App.Core.Interfaces;
 using System;
+using System.Configuration;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using DapperExtensions;
+using System.Data.SqlClient;
+using App.Model.Core;
 
 namespace App.Web
 {
@@ -29,37 +33,31 @@ namespace App.Web
                             content += key + " = " + parsed[key] + Environment.NewLine;
             }
 
+            var log = new CoreLog
+            {
+                LogId = Guid.NewGuid(),
+                LogUserName = (request.IsAuthenticated) ? filterContext.HttpContext.User.Identity.Name : "Anonymous",
+                LogIpAddress = request.UserHostAddress ?? request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.ServerVariables["REMOTE_ADDR"],
+                LogAreaAccessed = request.RawUrl,
+                LogTimeUtc = DateTime.UtcNow,
+                LogTimeLocal = DateTime.Now,
+                LogAgent = request.UserAgent,
+                LogHttpMethod = request.HttpMethod,
+                LogHeader = headers,
+                LogContent = content
+            };
+
             try
             {
-                using (var context = new Infrastructure.GestionProcesos.AppContext())
+                using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["GestionProcesos"].ToString()))
                 {
-                    context.Log.Add(new Model.Core.Log
-                    {
-                        LogId = Guid.NewGuid(),
-                        LogUserName = (request.IsAuthenticated) ? filterContext.HttpContext.User.Identity.Name : "Anonymous",
-                        LogIpAddress = request.UserHostAddress ?? request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? request.ServerVariables["REMOTE_ADDR"],
-                        LogAreaAccessed = request.RawUrl,
-                        LogTimeUtc = DateTime.UtcNow,
-                        LogTimeLocal = DateTime.Now,
-                        LogAgent = request.UserAgent,
-                        LogHttpMethod = request.HttpMethod,
-                        LogHeader = headers,
-                        LogContent = content
-                    });
-                    context.SaveChanges();
+                    connection.Insert(log);
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
-            finally
-            {
-                System.Diagnostics.Debug.WriteLine(headers);
-            }
-
-
-            System.Diagnostics.Debug.WriteLine(filterContext.HttpContext.Request.RawUrl);
 
             base.OnActionExecuting(filterContext);
         }
