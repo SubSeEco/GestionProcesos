@@ -1,0 +1,120 @@
+﻿@model App.Model.HorasExtras.Colaborador
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @Html.Partial("_Message")
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.ColaboradorId)
+                @Html.HiddenFor(q => Model.HorasExtrasId)
+                @Html.HiddenFor(q => Model.NombreId)
+                @Html.HiddenFor(q => Model.Descripcion)
+                @Html.HiddenFor(q => Model.HDPago)
+                @Html.HiddenFor(q => Model.HDCompensar)
+                @Html.HiddenFor(q => Model.HNPago)
+                @Html.HiddenFor(q => Model.HNCompensar)
+                @Html.HiddenFor(q => Model.HDPagoAprobados)
+                @Html.HiddenFor(q => Model.HDCompensarAprobados)
+                @Html.HiddenFor(q => Model.HNPagoAprobados)
+                @Html.HiddenFor(q => Model.HNCompensarAprobados)
+                @Html.HiddenFor(q => Model.ValorHorasDiurnas)
+                @Html.HiddenFor(q => Model.ValorHorasNocturnas)
+                @Html.HiddenFor(q => Model.ValorPagadoHD)
+                @Html.HiddenFor(q => Model.ValorPagadoHN)
+                @Html.HiddenFor(q => Model.ValorTotalPago)
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th style="width:40%">
+                                        @Html.DisplayNameFor(model => model.Nombre)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Descripcion)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.Descripcion)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="section"></div>
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th style="width:40%">
+                                        @Html.Raw("<span> </span>")
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.HDPago)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.HNPago)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(m => Model.TipoSubTituloId)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.TipoItemId)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(m => Model.TipoAsignacionId)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Raw("Horas aprobadas")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.HDPagoAprobados)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => Model.HNPagoAprobados)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.TipoSubTituloId, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.TipoItemId, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.TipoAsignacionId, null, "Seleccione...")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();        
+    });    
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script><link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

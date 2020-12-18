@@ -169,6 +169,9 @@ namespace App.Util
             Plantilla_Memo_Firmado = 63,
             PlantillaAnulacionCometido = 62,
             JefeGabineteMinistro = 64,
+
+            /*Plantillas de correo --> horas extras*/
+            PlantillaHorasExtras = 65,
         }
 
         public enum DefinicionProceso

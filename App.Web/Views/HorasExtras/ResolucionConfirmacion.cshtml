@@ -95,6 +95,9 @@
                     @*@Html.Raw("VALOR TOTAL PAGO")*@
                     @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().ValorTotalPago)
                 </td>
+                <td>
+                    @Html.Raw("Imputación")
+                </td>
             </tr>
             <tr>
                 <td align="center" colspan="2">
@@ -106,29 +109,32 @@
 
             @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
-                    </td>
-                    <td style="width:10%">
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPagoAprobados)
-                    </td>
-                    <td style="width:10%">
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
-                    </td>
-                    <td style="width:10%">
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPagoAprobados)
-                    </td>
-                    <td style="width:10%">
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
-                    </td>
-                    <td style="width:10%">
-                        @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorTotalPago)
-                    </td>
-                </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].DV)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].Nombre)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPagoAprobados)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPagoAprobados)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorTotalPago)
+            </td>
+            <td style="width:10%">
+                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoSubTitulo.TstNombre).@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoItem.TitNombre).@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoAsignacion.TasNombre)
+            </td>
+        </tr>
             }
 
         </table>
