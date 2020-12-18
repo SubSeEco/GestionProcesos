@@ -47,12 +47,13 @@ namespace App.Model.Core
         public int? GrupoId { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        [RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
+        //[RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
+        [RequiredIf("PermitirSeleccionarUnidadDestino", ErrorMessage = "Es necesario especificar el dato Unidad destino")]
         [Display(Name = "Unidad")]
         public int? Pl_UndCod { get; set; }
 
         //[RequiredIf("PermitirSeleccionarUnidadDestino && TipoAprobacionId != 3", ErrorMessage = "Es necesario especificar el dato Funcionario destino")]
-        [RequiredIf("Reservado", ErrorMessage = "Es necesario especificar el dato Funcionario Destino")]
+        [RequiredIf("Reservado", ErrorMessage = "Es necesario especificar el dato Funcionario Destino ya que es un proceso reservado")]
         [Display(Name = "Funcionario")]
         public string To { get; set; }
 
