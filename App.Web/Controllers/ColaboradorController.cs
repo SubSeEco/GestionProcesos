@@ -21,6 +21,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using Rotativa;
 using App.Model.HorasExtras;
+using App.Model.Cometido;
 
 namespace App.Web.Controllers
 {
@@ -35,7 +36,6 @@ namespace App.Web.Controllers
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
         private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
-
         public ColaboradorController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
@@ -50,6 +50,85 @@ namespace App.Web.Controllers
 
             if (ActiveDirectoryUsers == null)
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
+        }
+
+        public DTOImputacion Imputacion(int Rut)
+        {
+            var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
+            var per = _sigper.GetUserByEmail(correo);
+            DTOImputacion Imputacion = new DTOImputacion();
+
+            var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+            int Iditem;
+            int Idasignacion = 0;
+            int Idsubtitulo = ProgId == 5 || ProgId == 7 || ProgId == 11 || ProgId == 12 || ProgId == 16 || ProgId == 17 || ProgId == 18 || ProgId == 19 || ProgId == 20 ? 3 : 1;
+            if (ProgId == 21)
+            {
+                Iditem = 2;
+                Idasignacion = 2; //004
+            }
+            else if (ProgId == 22)
+            {
+                Iditem = 1;
+                Idasignacion = 2; //004
+            }
+            else
+                Iditem = 3;
+
+            switch (ProgId)
+            {
+                case 1:
+                    Idasignacion = 1;
+                    break;
+                case 2:
+                    Idasignacion = 1;
+                    break;
+                case 3:
+                    Idasignacion = 1;
+                    break;
+                case 4:
+                    Idasignacion = 1;
+                    break;
+                case 5:
+                    Idasignacion = 4;// 472;
+                    break;
+                case 7:
+                    Idasignacion = 12;// 477;
+                    break;
+                case 11:
+                    Idasignacion = 15; // 214.05.008;
+                    break;
+                case 12:
+                    Idasignacion = 1;// 001;
+                    break;
+                case 16:
+                    Idasignacion = 16;// 413;
+                    break;
+                case 17:
+                    Idasignacion = 17;// 611;
+                    break;
+                case 18:
+                    Idasignacion = 18;//612;
+                    break;
+                case 19:
+                    Idasignacion = 19;// 613;
+                    break;
+                case 20:
+                    Idasignacion = 20;// 614;
+                    break;
+                case 21:
+                    Idasignacion = 2;
+                    break;
+                case 22:
+                    Idasignacion = 2;
+                    break;
+            }
+
+            Imputacion.Item = Iditem;
+            Imputacion.Asignacion = Idasignacion;
+            Imputacion.Subtitulo = Idsubtitulo;
+
+            return Imputacion;
         }
         public JsonResult GetUser(string term)
         {
@@ -112,6 +191,87 @@ namespace App.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
             
         }
+
+        //public JsonResult GetImputacion(int Rut)
+        //{
+        //    var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
+        //    var per = _sigper.GetUserByEmail(correo);
+
+        //    var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
+        //    //var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
+        //    int Iditem;
+        //    int Idasignacion = 0;
+        //    int Idsubtitulo = ProgId == 5 || ProgId == 7 || ProgId == 11 || ProgId == 12 || ProgId == 16 || ProgId == 17 || ProgId == 18 || ProgId == 19 || ProgId == 20 ? 3 : 1;
+        //    if (ProgId == 21)
+        //    {
+        //        Iditem = 2;
+        //        Idasignacion = 2; //004
+        //    }
+        //    else if (ProgId == 22)
+        //    {
+        //        Iditem = 1;
+        //        Idasignacion = 2; //004
+        //    }
+        //    else
+        //        Iditem = 3;
+
+        //    switch (ProgId)
+        //    {
+        //        case 1:
+        //            Idasignacion = 1;
+        //            break;
+        //        case 2:
+        //            Idasignacion = 1;
+        //            break;
+        //        case 3:
+        //            Idasignacion = 1;
+        //            break;
+        //        case 4:
+        //            Idasignacion = 1;
+        //            break;
+        //        case 5:
+        //            Idasignacion = 4;// 472;
+        //            break;
+        //        case 7:
+        //            Idasignacion = 12;// 477;
+        //            break;
+        //        case 11:
+        //            Idasignacion = 15; // 214.05.008;
+        //            break;
+        //        case 12:
+        //            Idasignacion = 1;// 001;
+        //            break;
+        //        case 16:
+        //            Idasignacion = 16;// 413;
+        //            break;
+        //        case 17:
+        //            Idasignacion = 17;// 611;
+        //            break;
+        //        case 18:
+        //            Idasignacion = 18;//612;
+        //            break;
+        //        case 19:
+        //            Idasignacion = 19;// 613;
+        //            break;
+        //        case 20:
+        //            Idasignacion = 20;// 614;
+        //            break;
+        //        case 21:
+        //            Idasignacion = 2;
+        //            break;
+        //        case 22:
+        //            Idasignacion = 2;
+        //            break;
+        //    }
+
+        //    return Json(new
+        //    {
+        //        Iditem = Iditem,
+        //        Idasignacion = Idasignacion,
+        //        Idsubtitulo = Idsubtitulo,
+        //    }, JsonRequestBehavior.AllowGet);
+
+        //}
         public ActionResult Index()
         {
             return View();
@@ -159,13 +319,16 @@ namespace App.Web.Controllers
         public ActionResult Create(Colaborador model)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
+            var imp = Imputacion(model.NombreId.Value);
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
             model.HDPagoAprobados = model.HDPago;
             model.HDCompensarAprobados = model.HDCompensar;
             model.HNPagoAprobados = model.HNPago;
             model.HNCompensarAprobados = model.HNCompensar;
+            model.TipoSubTituloId = imp.Subtitulo;
+            model.TipoItemId = imp.Item;
+            model.TipoAsignacionId = imp.Asignacion;
 
             if (ModelState.IsValid)
             {
@@ -316,6 +479,55 @@ namespace App.Web.Controllers
                     else
                         return RedirectToAction("Edit", "HorasExtras", new { id = he.HorasExtrasId });
                     
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            var persona = _sigper.GetUserByEmail(User.Email());
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
+
+            return View(model);
+        }
+
+        public ActionResult EditPpto(int id)
+        {
+            var model = _repository.GetById<Colaborador>(id);
+            var persona = _sigper.GetUserByEmail(User.Email());
+
+            ViewBag.TipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre",model.TipoItemId);
+            ViewBag.TipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre", model.TipoAsignacionId);
+            ViewBag.TipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre", model.TipoSubTituloId);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult EditPpto(Colaborador model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper);
+                var _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(model);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    /*se redireccina a la vista que llamo al metodo de borrar*/
+                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
+                    if (pro.Count() > 0)
+                        return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });
+                    else
+                        return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });
+
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)

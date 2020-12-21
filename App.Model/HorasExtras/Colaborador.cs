@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using ExpressiveAnnotations.Attributes;
 using System.Web.Mvc;
+using App.Model.Cometido;
 
 namespace App.Model.HorasExtras
 {
@@ -99,6 +100,19 @@ namespace App.Model.HorasExtras
         [AssertThat("ValorTotalPago >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]
         [DataType(DataType.Currency)]
         public int? ValorTotalPago { get; set; } = 0;
-                
+
+        /*se agregan los datos necesarios para las imputaciones - 17122020*/
+        [Display(Name = "SubTitulo")]
+        public int? TipoSubTituloId { get; set; } = 0;
+        public virtual TipoSubTitulo TipoSubTitulo { get; set; }
+
+        [Display(Name = "Asignación")]
+        public int? TipoAsignacionId { get; set; } = 0;
+        public virtual TipoAsignacion TipoAsignacion { get; set; }
+
+        [Display(Name = "Item")]
+        public int? TipoItemId { get; set; } = 0;
+        public virtual TipoItem TipoItem { get; set; }
+
     }
 }

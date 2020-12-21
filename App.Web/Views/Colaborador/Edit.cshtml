@@ -10,6 +10,7 @@
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(q => Model.ColaboradorId)
                 @Html.HiddenFor(q => Model.HorasExtrasId)
+                @Html.HiddenFor(q => Model.NombreId)
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
                 <div class="card">
@@ -39,7 +40,8 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                        @Html.TextBoxFor(m => Model.Nombre)
+                                        @*@Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")*@
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(m => Model.HDPago, new { style = "width:50px" })
@@ -76,6 +78,7 @@
     $(document).ready(function () {
         $('select').formSelect();
     });
+    //$("#NombreId").attr('disabled', true);
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>

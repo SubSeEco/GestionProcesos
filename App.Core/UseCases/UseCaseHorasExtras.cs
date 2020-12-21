@@ -106,6 +106,7 @@ namespace App.Core.UseCases
 
 
         public ResponseMessage ColaboradorInsert(Colaborador obj)
+        
         {
             var response = new ResponseMessage();
 
@@ -372,12 +373,13 @@ namespace App.Core.UseCases
                     {
                         if (workflowActual.DefinicionWorkflow.Secuencia == 12)
                         {
-                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 13 && c.TipoDocumentoId.Value == 14  && c.TipoDocumentoId != null))
-                                throw new Exception("Se deben generar las resoluciones asociadas al proceso en ejecucion.");
+                            //if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.Proceso != null)
+                            //    if(workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 13) || workflowActual.Proceso.Documentos.Any(c =>c.TipoDocumentoId.Value == 14))
+                            //    throw new Exception("Se deben generar las resoluciones asociadas al proceso en ejecucion.");
                         }
                         else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
                         {
-                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 9 && c.TipoDocumentoId != null))
+                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 9 && c.TipoDocumentoId != null))
                                 throw new Exception("Se debe generar la resolución correspondiente a la programación de horas extraordinarias.");
                         }
                     }
@@ -385,7 +387,7 @@ namespace App.Core.UseCases
 
 
                     //terminar workflow actual
-                    workflowActual.FechaTermino = DateTime.Now;
+                workflowActual.FechaTermino = DateTime.Now;
                 workflowActual.Observacion = obj.Observacion;
                 workflowActual.Terminada = true;
                 workflowActual.Pl_UndCod = obj.Pl_UndCod;
@@ -648,6 +650,105 @@ namespace App.Core.UseCases
                         _email.NotificarNuevoWorkflow(workflow,
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
                         _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+
+                    #region NOTIFICACIONES DE CORREO PROCESO HORAS EXTRAS
+
+                    if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+                    {
+                        string jefe = string.Empty;
+                        var hrs = _repository.Get<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
+                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                        var QuienViaja = _sigper.GetUserByRut(hrs.NombreId.Value).Funcionario.Rh_Mail.Trim();
+                        if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
+                            jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
+                        else
+                            jefe = "mmontoya@economia.cl";
+
+                        List<string> emailMsg;
+                        switch (workflowActual.DefinicionWorkflow.Secuencia)
+                        {
+                            case 1: break;
+                            case 2: break;
+                            case 3: /*3.- Recepciona y Analiza Programación de Horas Extraordinarias (Jefatura Departamento Administrativo)*/
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 4 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Gestion Personas
+
+                                    _email.NotificacionesHorasExtras(workflow,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 4: /*4.- Recepción Programación de Horas Extraordinarias (Analista Área Personas)*/
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargada Area Personas
+
+                                    _email.NotificacionesHorasExtras(workflow,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 5:/*5.- Visar Resolución Programación de Horas Extraordinarias (Encargado(a) Área de Personas)*/
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 6 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Unidad GP
+
+                                    _email.NotificacionesHorasExtras(workflow,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 6: /*6.- Visar Resolución Programación de Horas Extraordinarias (Encargado(a) Unidad de Gestión y Desarrollo de Personas)*/
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 7 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Depto Administrativo
+
+                                    _email.NotificacionesHorasExtras(workflow,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 7: /*7.- Firma Resolución Programación de Horas Extraordinarias (Jefatura Departamento Administrativo)*/
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Secretaria
+
+                                    _email.NotificacionesHorasExtras(workflow,
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 8: break;
+                            case 9: break;
+                            case 10: break;
+                            case 11: break;
+                            case 12: break;
+                            case 13: break;
+                            case 14: break;
+                            case 15: break;
+                            case 16: break;
+                            case 17: break;
+                            case 18: break;
+                        }
+                    }
+
+                    #endregion
                 }
 
                 /*Si esta en la tarea 14, se crea una segunda tarea de firma resolucion horas compensadas para encargado de GP*/

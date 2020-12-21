@@ -130,6 +130,7 @@
     <Compile Include="DTO\DTODolar.cs" />
     <Compile Include="DTO\DTODomainUser.cs" />
     <Compile Include="DTO\DTOFolio.cs" />
+    <Compile Include="DTO\DTOImputacion.cs" />
     <Compile Include="DTO\DTOMetadata.cs" />
     <Compile Include="DTO\DTOSelect.cs" />
     <Compile Include="FirmaDocumentoGenerico\DTOSolicitud.cs" />

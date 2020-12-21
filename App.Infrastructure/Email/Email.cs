@@ -259,6 +259,73 @@ namespace App.Infrastructure.Email
             }
         }
 
+        public void NotificacionesHorasExtras(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdHorasExtras, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
+        {
+            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+                throw new Exception("No existe la plantilla de notificación de tareas");
+            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto)))
+                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+
+            var Mail = plantillaCorreo;
+
+            Mail.Valor = Mail.Valor.Replace("[IdHorasExtras]", IdHorasExtras.ToString());
+            Mail.Valor = Mail.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
+            Mail.Valor = Mail.Valor.Replace("[Observaciones]", Observaciones);
+            Mail.Valor = Mail.Valor.Replace("[Url]", Url);
+            Mail.Valor = Mail.Valor.Replace("[Folio]", Folio);
+            Mail.Valor = Mail.Valor.Replace("[FechaFirma]", FechaFirma);
+            Mail.Valor = Mail.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
+
+
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                Mail.Valor = Mail.Valor.Replace("[Estado]", "Aprobado");
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                Mail.Valor = Mail.Valor.Replace("[Estado]", "Rechazado");
+
+            SmtpClient smtpClient = new SmtpClient();
+            MailMessage emailMsg = new MailMessage();
+            emailMsg.IsBodyHtml = true;
+            emailMsg.Body = Mail.Valor;
+            emailMsg.Subject = asunto;
+
+            if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
+            {
+
+                MemoryStream ms = new MemoryStream(documento.File);
+                Attachment attach = new Attachment(ms, documento.FileName);
+                emailMsg.Attachments.Add(attach);
+            }
+
+
+            switch (workflow.DefinicionWorkflow.TipoEjecucionId)
+            {
+                case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+                case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+
+                    emailMsg.To.Add(workflow.Email);
+                    break;
+
+                    //case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+
+                    //return;
+            }
+
+            foreach (var correo in Mails)
+            {
+                emailMsg.To.Add(correo);
+            }
+
+            try
+            {
+                smtpClient.Send(emailMsg);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public void NotificacionesMemorandum(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int MemorandumId, Documento documento)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
