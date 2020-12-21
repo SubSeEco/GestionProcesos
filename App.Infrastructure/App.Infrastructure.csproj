@@ -260,7 +260,7 @@
     </Compile>
     <Compile Include="Folio\Folio.cs" />
     <Compile Include="GestionProcesos\AppContext.cs" />
-    <Compile Include="GestionProcesos\EntityFrameworkRepository.cs" />
+    <Compile Include="GestionProcesos\GestionProcesos.cs" />
     <Compile Include="SIGPER\AppContextTurismo.cs" />
     <Compile Include="Email\Email.cs" />
     <Compile Include="HSM\HSM.cs" />

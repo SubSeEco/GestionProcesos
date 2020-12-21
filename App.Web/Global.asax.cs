@@ -29,7 +29,7 @@ namespace App.Web
 
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
-            container.Register(typeof(IGestionProcesos), typeof(Infrastructure.GestionProcesos.EntityFrameworkRepository<Infrastructure.GestionProcesos.AppContext>));
+            container.Register(typeof(IGestionProcesos), typeof(Infrastructure.GestionProcesos.GestionProcesos));
             container.Register(typeof(IEmail), typeof(Infrastructure.Email.Email));
             container.Register(typeof(IHSM), typeof(Infrastructure.HSM.HSM));
             container.Register(typeof(ISIGPER), typeof(Infrastructure.SIGPER.SIGPER));
