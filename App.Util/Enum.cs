@@ -172,6 +172,7 @@ namespace App.Util
 
             /*Plantillas de correo --> horas extras*/
             PlantillaHorasExtras = 65,
+            CorreoOfPartes = 66,
         }
 
         public enum DefinicionProceso

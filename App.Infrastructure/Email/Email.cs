@@ -288,7 +288,7 @@ namespace App.Infrastructure.Email
             emailMsg.Body = Mail.Valor;
             emailMsg.Subject = asunto;
 
-            if (workflow.DefinicionWorkflow.Secuencia == 13 || workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
+            if (workflow.DefinicionWorkflow.Secuencia == 7) //|| workflow.DefinicionWorkflow.Secuencia == 14 || workflow.DefinicionWorkflow.Secuencia == 15)
             {
 
                 MemoryStream ms = new MemoryStream(documento.File);

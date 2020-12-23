@@ -10,9 +10,8 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style TYPE="text/css">
-    .breakhere {
-        page-break-after: always
-    }
+    .breakhere { page-break-after: always }
+    textarea { border: none; }
 </style>
 <head>
 </head>
@@ -169,12 +168,9 @@
         </tr>
         <tr>
             <td>
-                @Html.DisplayFor(m => Model.DistribucionHEProg)
+                @Html.TextAreaFor(m => Model.DistribucionHEProg, htmlAttributes: new { rows = 8, cols = 80 })
             </td>
         </tr>
-        @*<tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
-        <tr><td>-	Departamento Administrativo</td></tr>
-        <tr><td>-	Finanzas</td></tr>*@
     </table>
 </body>
 </html>
