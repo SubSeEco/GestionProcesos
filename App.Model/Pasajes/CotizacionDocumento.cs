@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Mvc;
 
 namespace App.Model.Pasajes
 {
@@ -79,7 +78,6 @@ namespace App.Model.Pasajes
         [Display(Name = "Código de barra")]
         public byte[] BarCode { get; set; }
 
-        [AllowHtml]
         public bool Selected { get; set; } = false;
 
         [NotMapped]

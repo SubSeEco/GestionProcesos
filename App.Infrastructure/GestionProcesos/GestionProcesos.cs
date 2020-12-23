@@ -2,29 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace App.Infrastructure.GestionProcesos
 {
-    public class GestionProcesos: IGestionProcesos
+    public class GestionProcesos : IGestionProcesos
     {
-        protected readonly AppContext _context;
+        private readonly AppContext _context;
 
         public GestionProcesos(AppContext context)
         {
             this._context = context;
-            System.Diagnostics.Debug.WriteLine("New EntityFrameworkRepository...");
+            System.Diagnostics.Debug.WriteLine("New Entity framework repository...");
         }
 
-        public virtual void Create<TEntity>(TEntity entity, string createdBy = null) where TEntity : class
+        public virtual void Create<TEntity>(TEntity entity) where TEntity : class
         {
             _context.Set<TEntity>().Add(entity);
         }
 
-        public virtual void Update<TEntity>(TEntity entity, string modifiedBy = null) where TEntity : class
+        public virtual void Update<TEntity>(TEntity entity) where TEntity : class
         {
             _context.Set<TEntity>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
@@ -48,39 +47,7 @@ namespace App.Infrastructure.GestionProcesos
 
         public virtual void Save()
         {
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                ThrowEnhancedValidationException(e);
-            }
-        }
-
-        public virtual Task SaveAsync()
-        {
-            try
-            {
-                return _context.SaveChangesAsync();
-            }
-            catch (DbEntityValidationException e)
-            {
-                ThrowEnhancedValidationException(e);
-            }
-
-            return Task.FromResult(0);
-        }
-
-        protected virtual void ThrowEnhancedValidationException(DbEntityValidationException e)
-        {
-            var errorMessages = e.EntityValidationErrors
-                    .SelectMany(x => x.ValidationErrors)
-                    .Select(x => x.ErrorMessage);
-
-            var fullErrorMessage = string.Join("; ", errorMessages);
-            var exceptionMessage = string.Concat(e.Message, " The validation errors are: ", fullErrorMessage);
-            throw new DbEntityValidationException(exceptionMessage, e.EntityValidationErrors);
+            _context.SaveChanges();
         }
 
         protected virtual IQueryable<TEntity> GetQueryable<TEntity>(
@@ -151,9 +118,6 @@ namespace App.Infrastructure.GestionProcesos
             int? take = null)
             where TEntity : class
         {
-
-
-
             return GetQueryable(filter, orderBy, includeProperties, skip, take).ToList();
         }
 
@@ -168,27 +132,11 @@ namespace App.Infrastructure.GestionProcesos
             return await GetQueryable(filter, orderBy, includeProperties, skip, take).ToListAsync();
         }
 
-        public virtual TEntity GetOne<TEntity>(
-            Expression<Func<TEntity, bool>> filter = null,
-            string includeProperties = "")
-            where TEntity : class
-        {
-            return GetQueryable(filter, null, includeProperties).SingleOrDefault();
-        }
-
-        public virtual async Task<TEntity> GetOneAsync<TEntity>(
-            Expression<Func<TEntity, bool>> filter = null,
-            string includeProperties = null)
-            where TEntity : class
-        {
-            return await GetQueryable(filter, null, includeProperties).SingleOrDefaultAsync();
-        }
-
         public virtual TEntity GetFirst<TEntity>(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            string includeProperties = "")
-            where TEntity : class
+            where TEntity : class 
         {
             return GetQueryable(filter, orderBy, includeProperties).FirstOrDefault();
         }
@@ -202,38 +150,32 @@ namespace App.Infrastructure.GestionProcesos
             return await GetQueryable(filter, orderBy, includeProperties).FirstOrDefaultAsync();
         }
 
-        public virtual TEntity GetById<TEntity>(object id)
-            where TEntity : class
+        public virtual TEntity GetById<TEntity>(object id) where TEntity : class
         {
             return _context.Set<TEntity>().Find(id);
         }
 
-        public virtual Task<TEntity> GetByIdAsync<TEntity>(object id)
-            where TEntity : class
+        public virtual Task<TEntity> GetByIdAsync<TEntity>(object id) where TEntity : class
         {
             return _context.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual int GetCount<TEntity>(Expression<Func<TEntity, bool>> filter = null)
-            where TEntity : class
+        public virtual int GetCount<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : class
         {
             return GetQueryable(filter).Count();
         }
 
-        public virtual Task<int> GetCountAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null)
-            where TEntity : class
+        public virtual Task<int> GetCountAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : class
         {
             return GetQueryable(filter).CountAsync();
         }
 
-        public virtual bool GetExists<TEntity>(Expression<Func<TEntity, bool>> filter = null)
-            where TEntity : class
+        public virtual bool GetExists<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : class
         {
             return GetQueryable(filter).Any();
         }
 
-        public virtual Task<bool> GetExistsAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null)
-            where TEntity : class
+        public virtual Task<bool> GetExistsAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null) where TEntity : class
         {
             return GetQueryable(filter).AnyAsync();
         }

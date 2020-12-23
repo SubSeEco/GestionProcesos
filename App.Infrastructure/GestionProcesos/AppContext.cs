@@ -48,7 +48,6 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<Accion> Accion { get; set; }
         public virtual DbSet<Entidad> Entidad { get; set; }
         public virtual DbSet<Rubrica> Rubrica { get; set; }
-        //public virtual DbSet<CoreLog> Log { get; set; }
         public virtual DbSet<TipoPrivacidad> TipoPrivacidad { get; set; }
         public virtual DbSet<Cometido> Cometido { get; set; }
         public virtual DbSet<Destinos> Destinos { get; set; }
@@ -89,7 +88,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<HorasExtras> HorasExtras { get; set; }
         public virtual DbSet<GeneracionResolucion> GeneracionResolucion { get; set; }
         public virtual DbSet<FirmaDocumentoGenerico> FirmaDocumentoGenerico { get; set; }
-
+        public virtual DbSet<Festivo> Festivo { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<AppContext>(null);
