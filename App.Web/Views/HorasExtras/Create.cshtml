@@ -22,9 +22,38 @@
                 <div class="card-content">
                     <div class="col-12">
                         <div class="input-field">
-                            @Html.TextBoxFor(m => Model.FechaSolicitud)
-                            @Html.LabelFor(m => Model.FechaSolicitud)
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                            </strong>
+                            @Html.DisplayFor(m => Model.FechaSolicitud)
                             @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-field">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.Nombre)
+                            </strong>
+                            @Html.DisplayFor(m => Model.Nombre)
+                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-field">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.NombreJefatura)
+                            </strong>
+                            @Html.DisplayFor(m => Model.NombreJefatura)
+                            @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-field">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.Unidad)
+                            </strong>
+                            @Html.DisplayFor(m => Model.Unidad)
+                            @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
                         </div>
                     </div>
                     <div class="col-12">
@@ -39,27 +68,6 @@
                             @Html.DropDownListFor(m => Model.Mes, null, "Seleccione...")
                             @Html.LabelFor(m => Model.Mes)
                             @Html.ValidationMessageFor(m => Model.Mes, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.Nombre)
-                            @Html.LabelFor(m => Model.Nombre)
-                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.NombreJefatura)
-                            @Html.LabelFor(m => Model.NombreJefatura)
-                            @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.Unidad)
-                            @Html.LabelFor(m => Model.Unidad)
-                            @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
                         </div>
                     </div>
                     <div class="section"></div>

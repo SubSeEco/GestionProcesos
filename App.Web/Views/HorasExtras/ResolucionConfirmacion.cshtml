@@ -13,6 +13,9 @@
     .breakhere {
         page-break-after: always
     }
+    textarea {
+        border: none;
+    }
 </style>
 <head>
 </head>
@@ -148,7 +151,7 @@
     </ol>
     <ol>
         <p>
-            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21.02.004 (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
+            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21 @*.02.004*@ (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
             de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </p>
     </ol>
@@ -186,17 +189,15 @@
         </tr>
     </table>
     <br /><br />
-    <table border="0" align="left" width="75%">
+    <table align="left" width="75%">
         <tr>
             <td>DISTRIBUCIÓN</td>
         </tr>
         <tr>
-            <td>@Html.DisplayFor(m => Model.DistribucionHEPag)</td>
+            <td>
+                @Html.TextAreaFor(m => Model.DistribucionHEPag, htmlAttributes: new { rows = 8, cols = 80})
+            </td>
         </tr>
-        @*<tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
-        <tr><td>-	Departamento Administrativo</td></tr>
-        <tr><td>-	Finanzas</td></tr>
-        <tr><td>-	Oficina de Partes</td></tr>*@
     </table>
 </body>
 </html>

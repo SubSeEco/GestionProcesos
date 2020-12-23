@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col s12 m6 l8">
+        <div class="col s12 m6 l9">
             @Html.Partial("_Message")
             @using (Html.BeginForm("EditConfirmacion", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -44,167 +44,174 @@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorPagadoHN)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorTotalPago)
-                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
-                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                    
+                    if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
+                    {
+                        @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                    }
+
+                    @*@Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesJefatura)*@
                 }
 
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
 
-                <div class="card">
-                    <div class="card-content">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="input-field col s12 m10 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.HorasExtrasId)
+                            </strong>
+                            @Html.DisplayFor(m => Model.HorasExtrasId)
+
+                        </div>
+                    </div>
+                    <div id="jQuery_accordion">
+                        <h3><span style="font-weight: bold">Datos del Ingreso: </span></h3>
                         <div class="row">
-                            <div class="input-field col s12 m10 l6">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.HorasExtrasId)
-                                </strong>
-                                @Html.DisplayFor(m => Model.HorasExtrasId)
-
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>@Html.DisplayNameFor(m => Model.FechaSolicitud)</strong>
+                                    @Html.DisplayFor(m => Model.FechaSolicitud)
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>@Html.DisplayNameFor(m => Model.Annio)</strong>
+                                    @Html.DisplayFor(m => Model.Annio)
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Mes)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.Mes)
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Nombre)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.Nombre)
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.NombreJefatura)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.NombreJefatura)
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.Unidad)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.Unidad)
+                                </div>
                             </div>
                         </div>
-                        <div id="jQuery_accordion">
-                            <h3><span style="font-weight: bold">Datos del Ingreso: </span></h3>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>@Html.DisplayNameFor(m => Model.FechaSolicitud)</strong>
-                                        @Html.DisplayFor(m => Model.FechaSolicitud)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>@Html.DisplayNameFor(m => Model.Annio)</strong>
-                                        @Html.DisplayFor(m => Model.Annio)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>
-                                            @Html.DisplayNameFor(m => Model.Mes)
-                                        </strong>
-                                        @Html.DisplayFor(m => Model.Mes)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>
-                                            @Html.DisplayNameFor(m => Model.Nombre)
-                                        </strong>
-                                        @Html.DisplayFor(m => Model.Nombre)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>
-                                            @Html.DisplayNameFor(m => Model.NombreJefatura)
-                                        </strong>
-                                        @Html.DisplayFor(m => Model.NombreJefatura)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>
-                                            @Html.DisplayNameFor(m => Model.Unidad)
-                                        </strong>
-                                        @Html.DisplayFor(m => Model.Unidad)
-                                    </div>
-                                </div>
+                        <h3><span style="font-weight: bold">Datos de las horas solicitadas: </span></h3>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                <span class="card-title">Solicitudes</span>
                             </div>
-                            <h3><span style="font-weight: bold">Datos de las horas solicitadas: </span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l10">
-                                    <span class="card-title">Solicitudes</span>
-                                </div>
 
-                                @if (Model.Colaborador.Count > 0)
-                                {
+                            @if (Model.Colaborador.Count > 0)
+                            {
 
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
-                                            </th>
-                                            <th>
-                                                @Html.Raw("RUT")
-                                            </th>
-                                            <th>
-                                                @Html.Raw("Tareas programadas")
-                                            </th>
-                                            <th>
-                                                @Html.Raw("Cumplimiento de tareas programadas")
-                                            </th>
-                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9 || Model.Workflow.DefinicionWorkflow.Secuencia == 10)
-                                            {
-                                                <th>
-                                                    @Html.Raw("Observaciones")
-                                                </th>
-                                            }
-                                            <th></th>
-                                        </tr>
-                                        @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().Nombre)
+                                        </th>
+                                        <th>
+                                            @Html.Raw("RUT")
+                                        </th>
+                                        <th>
+                                            @Html.Raw("Tareas programadas")
+                                        </th>
+                                        <th>
+                                            @Html.Raw("Cumplimiento de tareas programadas")
+                                        </th>
+                                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9 || Model.Workflow.DefinicionWorkflow.Secuencia == 10)
                                         {
-                                            <tr>
-                                                <td style="width:20%">
-                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
-                                                </td>
-                                                <td style="width:10%">
-                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(m => Model.Colaborador.ToArray()[i].DV)
-                                                </td>
-                                                <td style="width:35%">
-                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
-                                                </td>
-                                                <td style="width:35%">
-                                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 8)
-                                                    {
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
-                                                    }
-                                                </td>
-                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
-                                                {
-                                                    <td>
-                                                        @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
-                                                    </td>
-                                                }
-                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 10)
-                                                {
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
-                                                    </td>
-                                                }
-                                            </tr>
+                                            <th>
+                                                @Html.Raw("Observaciones")
+                                            </th>
                                         }
-                                    </table>
+                                        <th></th>
+                                    </tr>
+                                    @for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
+                                    {
+                                        <tr>
+                                            <td style="width:20%">
+                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Nombre)
+                                            </td>
+                                            <td style="width:10%">
+                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].NombreId)-@Html.DisplayFor(m => Model.Colaborador.ToArray()[i].DV)
+                                            </td>
+                                            <td style="width:35%">
+                                                @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
+                                            </td>
+                                            <td style="width:35%">
+                                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 8)
+                                                {
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                                                }
+                                                else
+                                                {
+                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
+                                                }
+                                            </td>
+                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
+                                            {
+                                                <td>
+                                                    @Html.EditorFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                                                </td>
+                                            }
+                                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 10)
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
 
-                                }
-                                @*<div class="section"></div>
-        <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>*@
-                            </div>
+                            }
+                            @*<div class="section"></div>
+                    <a href='@Url.Action("Create","Colaborador", new { id = Model.HorasExtrasId})' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>*@
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 12)
-                        {
-                            <div class="section"></div>
-                            <div class="row">
-                                @Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraResolucionConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
-                            </div>
-                            <div class="section"></div>
-                            <div class="row">
-                                @Html.ActionLink("Generar Resolucion descanso complementario", "GeneraResolucionDescanso", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
-                            </div>
-                        }
-
+                    </div>
+                    @if (Model.Workflow.DefinicionWorkflow.Secuencia == 12)
+                    {
+                        <div class="section"></div>
+                        <div class="row">
+                            @Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraResolucionConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                        </div>
+                        <div class="section"></div>
+                        <div class="row">
+                            @Html.ActionLink("Generar Resolucion descanso complementario", "GeneraResolucionDescanso", "HorasExtras", new { Id = Model.HorasExtrasId }, null)
+                        </div>
+                    }
+                    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10)
+                    {
                         <div class="section"></div>
                         <p>
                             <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                         </p>
-                    </div>
+                    }
                 </div>
+            </div>
             }
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6 l3">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>

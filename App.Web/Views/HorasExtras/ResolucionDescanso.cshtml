@@ -13,6 +13,9 @@
     .breakhere {
         page-break-after: always
     }
+    textarea {
+        border: none;
+    }
 </style>
 <head>
 </head>
@@ -166,10 +169,8 @@
             <td>DISTRIBUCIÓN</td>
         </tr>
         <tr>
-            <td>@Html.DisplayFor(m => Model.DistribucionHECom)</td>
+            <td>@Html.TextAreaFor(m => Model.DistribucionHECom, htmlAttributes: new { rows = 8, cols = 80 })</td>
         </tr>
-        @*<tr><td>-	Unidad de Gestión y Desarrollo de Personas </td></tr>        
-        <tr><td>-	Oficina de Partes</td></tr>*@
     </table>
 </body>
 </html>

@@ -151,6 +151,7 @@ namespace App.Web.Controllers
                 model.NombreId = persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.Annio = DateTime.Now.Year.ToString();
+                model.Mes = DateTime.Now.ToString("MMMM").ToUpper();
                 ViewBag.Mes = new SelectList(Meses, "Value", "Text");
                 ViewBag.Annio = new SelectList(Anno, "Value", "Text");
             }
@@ -635,23 +636,25 @@ namespace App.Web.Controllers
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = new ResponseMessage();
 
-                if (_colaborador.Exists(c => c.ObservacionesConfirmacion == null))
-                {
-                    ModelState.AddModelError(string.Empty, "Se deben llenar todos los campos de observaciones");
-                    var hora = _repository.GetById<HorasExtras>(model.HorasExtrasId);
-                    return View(hora);
-                }
+                var work = _repository.GetById<Workflow>(model.WorkflowId);
 
-                /*se guardan las observaciones de la confirmacion*/
-                foreach (var c in _colaborador)
+                if (_colaborador.Exists(c => c.ObservacionesConfirmacion == null) && (work.DefinicionWorkflow.Secuencia != 9))
                 {
-                    _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(c);
+                    _UseCaseResponseMessage.Errors.Add("Se deben llenar todos los campos de observaciones");
                 }
-
-                if (_UseCaseResponseMessage.IsValid)
+                else
                 {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    /*se guardan las observaciones de la confirmacion*/
+                    foreach (var c in _colaborador)
+                    {
+                        _UseCaseResponseMessage = _useCaseInteractor.ColaboradorUpdate(c);
+                    }
+
+                    if (_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return Redirect(Request.UrlReferrer.PathAndQuery);
+                    }
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
