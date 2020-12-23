@@ -9,37 +9,37 @@ using System.Threading.Tasks;
 
 namespace App.Infrastructure.GestionProcesos
 {
-    public class EntityFrameworkRepository<TContext> : IGestionProcesos where TContext : DbContext
+    public class GestionProcesos: IGestionProcesos
     {
-        protected readonly TContext context;
+        protected readonly AppContext _context;
 
-        public EntityFrameworkRepository(TContext context)
+        public GestionProcesos(AppContext context)
         {
-            this.context = context;
+            this._context = context;
             System.Diagnostics.Debug.WriteLine("New EntityFrameworkRepository...");
         }
 
         public virtual void Create<TEntity>(TEntity entity, string createdBy = null) where TEntity : class
         {
-            context.Set<TEntity>().Add(entity);
+            _context.Set<TEntity>().Add(entity);
         }
 
         public virtual void Update<TEntity>(TEntity entity, string modifiedBy = null) where TEntity : class
         {
-            context.Set<TEntity>().Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
+            _context.Set<TEntity>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
         public virtual void Delete<TEntity>(object id) where TEntity : class
         {
-            TEntity entity = context.Set<TEntity>().Find(id);
+            TEntity entity = _context.Set<TEntity>().Find(id);
             Delete(entity);
         }
 
         public virtual void Delete<TEntity>(TEntity entity) where TEntity : class
         {
-            var dbSet = context.Set<TEntity>();
-            if (context.Entry(entity).State == EntityState.Detached)
+            var dbSet = _context.Set<TEntity>();
+            if (_context.Entry(entity).State == EntityState.Detached)
             {
                 dbSet.Attach(entity);
             }
@@ -50,7 +50,7 @@ namespace App.Infrastructure.GestionProcesos
         {
             try
             {
-                context.SaveChanges();
+                _context.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {
@@ -62,7 +62,7 @@ namespace App.Infrastructure.GestionProcesos
         {
             try
             {
-                return context.SaveChangesAsync();
+                return _context.SaveChangesAsync();
             }
             catch (DbEntityValidationException e)
             {
@@ -92,7 +92,7 @@ namespace App.Infrastructure.GestionProcesos
             where TEntity : class
         {
             includeProperties = includeProperties ?? string.Empty;
-            IQueryable<TEntity> query = context.Set<TEntity>();
+            IQueryable<TEntity> query = _context.Set<TEntity>();
 
             if (filter != null)
             {
@@ -205,13 +205,13 @@ namespace App.Infrastructure.GestionProcesos
         public virtual TEntity GetById<TEntity>(object id)
             where TEntity : class
         {
-            return context.Set<TEntity>().Find(id);
+            return _context.Set<TEntity>().Find(id);
         }
 
         public virtual Task<TEntity> GetByIdAsync<TEntity>(object id)
             where TEntity : class
         {
-            return context.Set<TEntity>().FindAsync(id);
+            return _context.Set<TEntity>().FindAsync(id);
         }
 
         public virtual int GetCount<TEntity>(Expression<Func<TEntity, bool>> filter = null)

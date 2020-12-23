@@ -12,6 +12,7 @@ using System.IO;
 using App.Util;
 using OfficeOpenXml;
 using ExpressiveAnnotations.Attributes;
+using System.Data.Entity;
 
 namespace App.Web.Controllers
 {
@@ -325,8 +326,14 @@ namespace App.Web.Controllers
 
         public PartialViewResult Row(int ProcesoId)
         {
-            var model = _repository.GetById<GD>(ProcesoId);
-            return PartialView(model);
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                //var model = _repository.GetById<GD>(ProcesoId);
+                var model = context.GD
+                    .Include(q => q.GDOrigen)
+                    .FirstOrDefault(q => q.ProcesoId == ProcesoId);
+                return PartialView(model);
+            }
         }
 
         public PartialViewResult Workflow(int ProcesoId)

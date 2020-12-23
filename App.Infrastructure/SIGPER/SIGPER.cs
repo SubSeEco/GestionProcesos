@@ -895,7 +895,8 @@ namespace App.Infrastructure.SIGPER
             {
                 var user = GetUserByEmail(email);
                 if (user != null && user.Unidad != null && !returnValue.Any(q => q.Pl_UndCod == user.Unidad.Pl_UndCod))
-                    returnValue.Add(GetUserByEmail(email).Unidad);
+                    //returnValue.Add(GetUserByEmail(email).Unidad);
+                    returnValue.Add(user.Unidad);
             }
 
             return returnValue.OrderBy(q => q.Pl_UndDes).ToList();

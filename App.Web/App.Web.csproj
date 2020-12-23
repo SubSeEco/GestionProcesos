@@ -81,8 +81,8 @@
     <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
     </Reference>
-    <Reference Include="Glimpse.AspNet, Version=1.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.AspNet.1.9.2\lib\net45\Glimpse.AspNet.dll</HintPath>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
@@ -92,9 +92,6 @@
     </Reference>
     <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.SimpleInjector, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Glimpse.SimpleInjector.2.0.1\lib\net40\Glimpse.SimpleInjector.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -405,6 +402,7 @@
     <Content Include="Scripts\materialize-stepper.min.js" />
     <Content Include="Scripts\materialize.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\GDExterno\Row.cshtml" />
     <Content Include="Views\InformeHSA\Details.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DTOSelect.cshtml" />
     <Content Include="Views\Usuario\Create.cshtml" />
@@ -752,7 +750,6 @@
     <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
-    <Content Include="Views\GDExterno\Row.cshtml" />
     <Content Include="Views\GDExterno\DetailsAutoridad.cshtml" />
     <Content Include="Views\GDInterno\DetailsAutoridad.cshtml" />
     <Content Include="Views\GDExterno\Workflow.cshtml" />

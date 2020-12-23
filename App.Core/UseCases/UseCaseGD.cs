@@ -210,7 +210,7 @@ namespace App.Core.UseCases
                 workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
 
                 //generar tags de negocio
-                var gd = _repository.GetFirst<GD>(q => q.WorkflowId == workflowActual.WorkflowId);
+                var gd = _repository.GetFirst<GD>(q => q.ProcesoId == workflowActual.ProcesoId);
                 if (gd != null)
                     workflowActual.Proceso.Tags += gd.GetTags();
 
@@ -540,9 +540,9 @@ namespace App.Core.UseCases
                     throw new Exception(string.Format("No se encontró el usuario {0} en SIGPER.", obj.Email));
 
                 //validar la existencia de gd
-                var gd = _repository.GetFirst<GD>(q => q.WorkflowId == workflowActual.WorkflowId);
+                var gd = _repository.GetFirst<GD>(q => q.ProcesoId == workflowActual.ProcesoId);
                 if (gd == null)
-                    throw new Exception("No se encontró el ingreso de gestión documental.");
+                    throw new Exception("No se encontró el ingreso de gestión documental asociado al proceso.");
 
                 //solo poner codigos de barra en oficina de partes
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.Secuencia < 3)
