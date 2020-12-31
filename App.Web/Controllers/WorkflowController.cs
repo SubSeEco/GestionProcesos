@@ -17,6 +17,7 @@ using App.Model.ProgramacionHorasExtraordinarias;
 using System;
 using App.Model.HorasExtras;
 using App.Model.FirmaDocumentoGenerico;
+using App.Model.DTO;
 
 namespace App.Web.Controllers
 {
@@ -30,6 +31,7 @@ namespace App.Web.Controllers
         protected readonly IFolio _folio;
         protected readonly IFile _file;
         protected readonly IHSM _hsm;
+        protected readonly IWorkflowService _workflowService;
 
         public class DTOWorkflow
         {
@@ -54,6 +56,9 @@ namespace App.Web.Controllers
             public string ProcesoEmail { get; set; }
             public string ProcesoEntidad { get; set; }
             public GD GD { get; set; }
+
+            public bool EsPersonal { get; set; }
+
         }
 
         public class DTOUser
@@ -68,8 +73,8 @@ namespace App.Web.Controllers
             {
                 TextSearch = string.Empty;
                 Select = new List<App.Model.DTO.DTOSelect>();
-                TareasGrupales = new List<DTOWorkflow>();
-                TareasPersonales = new List<DTOWorkflow>();
+                TareasGrupales = new List<WorkflowDTO>();
+                TareasPersonales = new List<WorkflowDTO>();
             }
 
             [Display(Name = "Texto de búsqueda")]
@@ -86,11 +91,11 @@ namespace App.Web.Controllers
             public System.DateTime? Hasta { get; set; }
 
             public List<App.Model.DTO.DTOSelect> Select { get; set; }
-            public List<DTOWorkflow> TareasPersonales { get; set; }
-            public List<DTOWorkflow> TareasGrupales { get; set; }
+            public List<WorkflowDTO> TareasPersonales { get; set; }
+            public List<WorkflowDTO> TareasGrupales { get; set; }
         }
 
-        public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm)
+        public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm, IWorkflowService workflowService)
         {
             _repository = repository;
             _email = email;
@@ -98,6 +103,7 @@ namespace App.Web.Controllers
             _folio = folio;
             _file = file;
             _hsm = hsm;
+            _workflowService = workflowService;
         }
 
         public JsonResult GetUser(string term)
@@ -141,161 +147,11 @@ namespace App.Web.Controllers
         public ActionResult Index()
         {
             var email = UserExtended.Email(User);
-            var user = _sigper.GetUserByEmail(email);
-            var gruposEspeciales = _repository.Get<Usuario>(q => q.Email == email).Select(q => q.GrupoId).ToList();
+            var result = _workflowService.GetPendingTask(email);
 
             var model = new DTOFilter();
-
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
-            {
-                context.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-                context.Configuration.LazyLoadingEnabled = false;
-
-                //usuario administrador
-                if (_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
-                {
-                    model.TareasPersonales =
-                        (from w in context.Workflow
-                         join p in context.Proceso on w.ProcesoId equals p.ProcesoId
-                         join gd in context.GD on p.ProcesoId equals gd.ProcesoId into grupo
-                         from x in grupo.DefaultIfEmpty()
-                         where !w.Terminada
-                         where w.TareaPersonal
-                         select new DTOWorkflow
-                         {
-                             WorkflowId = w.WorkflowId,
-                             FechaCreacion = w.FechaCreacion,
-                             Asunto = w.Asunto,
-                             Definicion = w.DefinicionWorkflow.Nombre,
-                             TareaPersonal = w.TareaPersonal,
-                             NombreFuncionario = w.NombreFuncionario,
-                             Pl_UndDes = w.Pl_UndDes,
-                             Grupo = w.Grupo != null ? w.Grupo.Nombre : string.Empty,
-                             Mensaje = w.Mensaje,
-                             ProcesoId = w.ProcesoId,
-                             ProcesoFechaVencimiento = p.FechaVencimiento,
-                             ProcesoDefinicion = p.DefinicionProceso.Nombre,
-                             ProcesoNombreFuncionario = p.NombreFuncionario,
-                             ProcesoEmail = p.Email,
-                             ProcesoEntidad = p.DefinicionProceso.Entidad.Codigo,
-                             GD = x
-                         }).ToList();
-
-                    model.TareasGrupales =
-                        (from w in context.Workflow
-                         join p in context.Proceso on w.ProcesoId equals p.ProcesoId
-                         join gd in context.GD on p.ProcesoId equals gd.ProcesoId into grupo
-                         from x in grupo.DefaultIfEmpty()
-                         where !w.Terminada
-                         where !w.TareaPersonal
-                         select new DTOWorkflow
-                         {
-                             WorkflowId = w.WorkflowId,
-                             FechaCreacion = w.FechaCreacion,
-                             Asunto = w.Asunto,
-                             Definicion = w.DefinicionWorkflow.Nombre,
-                             TareaPersonal = w.TareaPersonal,
-                             NombreFuncionario = w.NombreFuncionario,
-                             Pl_UndDes = w.Pl_UndDes,
-                             Grupo = w.Grupo != null ? w.Grupo.Nombre : string.Empty,
-                             Mensaje = w.Mensaje,
-                             ProcesoId = w.ProcesoId,
-                             ProcesoFechaVencimiento = p.FechaVencimiento,
-                             ProcesoDefinicion = p.DefinicionProceso.Nombre,
-                             ProcesoNombreFuncionario = p.NombreFuncionario,
-                             ProcesoEmail = p.Email,
-                             ProcesoEntidad = p.DefinicionProceso.Entidad.Codigo,
-                             GD = x
-                         }).ToList();
-                }
-
-                //usuario normal
-                else
-                {
-                    model.TareasPersonales =
-                        (from w in context.Workflow
-                         join p in context.Proceso on w.ProcesoId equals p.ProcesoId
-                         join gd in context.GD on p.ProcesoId equals gd.ProcesoId into grupo
-                         from x in grupo.DefaultIfEmpty()
-                         where !w.Terminada
-                         where w.Email == email
-                         select new DTOWorkflow
-                         {
-                             WorkflowId = w.WorkflowId,
-                             FechaCreacion = w.FechaCreacion,
-                             Asunto = w.Asunto,
-                             Definicion = w.DefinicionWorkflow.Nombre,
-                             TareaPersonal = w.TareaPersonal,
-                             NombreFuncionario = w.NombreFuncionario,
-                             Pl_UndDes = w.Pl_UndDes,
-                             Grupo = w.Grupo != null ? w.Grupo.Nombre : string.Empty,
-                             Mensaje = w.Mensaje,
-                             ProcesoId = w.ProcesoId,
-                             ProcesoFechaVencimiento = p.FechaVencimiento,
-                             ProcesoDefinicion = p.DefinicionProceso.Nombre,
-                             ProcesoNombreFuncionario = p.NombreFuncionario,
-                             ProcesoEmail = p.Email,
-                             ProcesoEntidad = p.DefinicionProceso.Entidad.Codigo,
-                             GD = x
-                         }).ToList();
-
-                    model.TareasGrupales =
-                        (from w in context.Workflow
-                         join p in context.Proceso on w.ProcesoId equals p.ProcesoId
-                         join gd in context.GD on p.ProcesoId equals gd.ProcesoId into grupo
-                         from x in grupo.DefaultIfEmpty()
-                         where !w.Terminada
-                         where !w.TareaPersonal
-                         where w.Pl_UndCod == user.Unidad.Pl_UndCod
-                         select new DTOWorkflow
-                         {
-                             WorkflowId = w.WorkflowId,
-                             FechaCreacion = w.FechaCreacion,
-                             Asunto = w.Asunto,
-                             Definicion = w.DefinicionWorkflow.Nombre,
-                             TareaPersonal = w.TareaPersonal,
-                             NombreFuncionario = w.NombreFuncionario,
-                             Pl_UndDes = w.Pl_UndDes,
-                             Grupo = w.Grupo != null ? w.Grupo.Nombre : string.Empty,
-                             Mensaje = w.Mensaje,
-                             ProcesoId = w.ProcesoId,
-                             ProcesoFechaVencimiento = p.FechaVencimiento,
-                             ProcesoDefinicion = p.DefinicionProceso.Nombre,
-                             ProcesoNombreFuncionario = p.NombreFuncionario,
-                             ProcesoEmail = p.Email,
-                             ProcesoEntidad = p.DefinicionProceso.Entidad.Codigo,
-                             GD = x
-                         }).ToList();
-
-                    model.TareasGrupales.AddRange(
-                        (from w in context.Workflow
-                         join p in context.Proceso on w.ProcesoId equals p.ProcesoId
-                         join gd in context.GD on p.ProcesoId equals gd.ProcesoId into grupo
-                         from x in grupo.DefaultIfEmpty()
-                         where !w.Terminada
-                         where !w.TareaPersonal
-                         where gruposEspeciales.Contains(w.GrupoId.Value)
-                         select new DTOWorkflow
-                            {
-                                WorkflowId = w.WorkflowId,
-                                FechaCreacion = w.FechaCreacion,
-                                Asunto = w.Asunto,
-                                Definicion = w.DefinicionWorkflow.Nombre,
-                                TareaPersonal = w.TareaPersonal,
-                                NombreFuncionario = w.NombreFuncionario,
-                                Pl_UndDes = w.Pl_UndDes,
-                                Grupo = w.Grupo != null ? w.Grupo.Nombre : string.Empty,
-                                Mensaje = w.Mensaje,
-                                ProcesoId = w.ProcesoId,
-                                ProcesoFechaVencimiento = p.FechaVencimiento,
-                                ProcesoDefinicion = p.DefinicionProceso.Nombre,
-                                ProcesoNombreFuncionario = p.NombreFuncionario,
-                                ProcesoEmail = p.Email,
-                                ProcesoEntidad = p.DefinicionProceso.Entidad.Codigo,
-                                GD = x
-                            }).ToList());
-                }
-            }
+            model.TareasPersonales = result.Where(q => q.TareaPersonal).ToList();
+            model.TareasGrupales = result.Where(q => !q.TareaPersonal).ToList();
 
             return View(model);
         }

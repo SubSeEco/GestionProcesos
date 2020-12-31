@@ -3,10 +3,8 @@ using System;
 using System.Linq;
 using App.Model.Core;
 using App.Core.Interfaces;
-using FluentDateTime;
 using App.Model.SIGPER;
 using App.Util;
-using System.Runtime.InteropServices;
 using App.Model.Cometido;
 using System.Collections.Generic;
 
@@ -342,7 +340,8 @@ namespace App.Core.UseCases
                 proceso.DefinicionProcesoId = obj.DefinicionProcesoId;
                 proceso.Observacion = obj.Observacion;
                 proceso.FechaCreacion = DateTime.Now;
-                proceso.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionProceso.DuracionHoras);
+                proceso.CalcularFechaVencimiento(_repository.Get<Festivo>().Select(q=>q.Fecha).ToList());
+                //proceso.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionProceso.DuracionHoras);
                 proceso.FechaTermino = null;
                 proceso.Email = obj.Email.Trim();
                 proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
@@ -361,7 +360,8 @@ namespace App.Core.UseCases
                 workflow.Terminada = false;
                 workflow.Proceso = proceso;
                 workflow.DefinicionWorkflow = definicionWorkflow;
-                workflow.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionWorkflow.DefinicionProceso.DuracionHoras);
+                //workflow.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionWorkflow.DefinicionProceso.DuracionHoras);
+                workflow.FechaVencimiento = proceso.FechaVencimiento;
 
                 //determinar destino del workflow
                 switch (definicionWorkflow.TipoEjecucionId)

@@ -9,7 +9,7 @@ using System.Text;
 namespace App.Model.Core
 {
     [Table("CoreProceso")]
-    public class Proceso 
+    public class Proceso
     {
         public Proceso()
         {
@@ -119,6 +119,24 @@ namespace App.Model.Core
             tag.Append(string.Join(" ", this.Workflows.Select(q => q.Mensaje)));
 
             return tag.ToString();
+        }
+
+        public void CalcularFechaVencimiento(List<DateTime> festivos)
+        {
+            var fin = this.FechaCreacion;
+            int days = 0;
+
+            if (this.DefinicionProceso != null)
+            {
+                while (days <= this.DefinicionProceso.DuracionHoras)
+                {
+                    fin.AddDays(1);
+                    if (fin.DayOfWeek != DayOfWeek.Saturday && fin.DayOfWeek != DayOfWeek.Sunday && !festivos.Any(q => q.Date == fin.Date))
+                        days++;
+                }
+
+                this.FechaVencimiento = fin;
+            }
         }
     }
 }
