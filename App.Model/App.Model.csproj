@@ -98,6 +98,7 @@
     <Compile Include="DTO\DTOImputacion.cs" />
     <Compile Include="DTO\DTOMetadata.cs" />
     <Compile Include="DTO\DTOSelect.cs" />
+    <Compile Include="DTO\DTOStateProces.cs" />
     <Compile Include="DTO\WorkflowDTO.cs" />
     <Compile Include="FirmaDocumentoGenerico\DTOSolicitud.cs" />
     <Compile Include="FirmaDocumentoGenerico\DTOTipoDocumento.cs" />
