@@ -1,4 +1,4 @@
-﻿@*@model App.Web.Controllers.FirmaDocumentoGenericoController.DTOFileUploadCreate*@
+﻿@*@model App.Web.Controllers.FirmaDocumentoGenericoController.DTOFileUploadEdit*@
 @model App.Model.FirmaDocumentoGenerico.FirmaDocumentoGenerico
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
@@ -13,24 +13,23 @@
     @Html.Partial("_Message")
     <div class="row">
         <div class="col s12 m8 l8">
-            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FirmaAtendida", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
                 @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                @Html.HiddenFor(q => Model.FirmaDocumentoGenericoId)
+                @Html.HiddenFor(q => Model.Archivo)
 
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Ingreso de documento</span>
                         <div class="section"></div>
                         <div class="row">
-                            @*<div class="input-field col s12 m12 l12">
-                                    @Html.TextBoxFor(m => Model.OTP)
-                                    @Html.LabelFor(m => Model.OTP)
-                                    @Html.ValidationMessageFor(m => Model.OTP, "", new { @class = "text-danger" })
-                                </div>*@
 
-                            <input type="file" name="file" />
+
                             @*<div class="col s12 m12 l6">
                                     @Html.LabelFor(m => Model.TipoDocumentoCodigo)
                                     @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione...", new { @class = "browser-default" })
@@ -55,13 +54,39 @@
                                         @Html.ValidationMessageFor(model => model.FileUpload, "", new { @class = "red-text" })
                                     </div>
                                 </div>*@
+                            @*@if (Model.File != null)
+                                {
+                                    <div class="input-field col s12 m12 l12">
+                                        <strong>@Html.DisplayNameFor(m => Model.File)</strong>
+                                        <embed src="@Url.Action("ShowDocumentoSinFirma", null, new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="350px"></embed>
+                                    </div>
+                                }*@
                             @*<div class="input-field col s12 m12 l12">
                                     @Html.TextBoxFor(m => Model.Comentario)
                                     @Html.LabelFor(m => Model.Comentario)
                                     @Html.ValidationMessageFor(m => Model.Comentario, "", new { @class = "text-danger" })
                                 </div>*@
+                            @*<div class="input-field col s12 m12 l12">
+                                    <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>
+                                    <embed src="@Url.Action("ShowDocumentoSinFirma", null, new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="350px"></embed>
+                                </div>*@
+                            <div class="input-field">
+                                <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>
+                                <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="650px"></embed>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.OTP)
+                                @Html.LabelFor(m => Model.OTP)
+                                @Html.ValidationMessageFor(m => Model.OTP, "", new { @class = "text-danger" })
+                            </div>
+
+                            @*<input type="file" name="file" />*@
+
+                            @*@Html.ActionLink("Firmar Segpres", "Token", "FirmaDocumentoGenerico", new {Id = Model.FirmaDocumentoGenericoId}, null)*@
+
+
                         </div>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        <button class="waves-effect waves-light btn blue" type="submit">Firmar Documento</button>
                     </div>
                 </div>
             }
