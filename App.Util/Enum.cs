@@ -194,6 +194,13 @@ namespace App.Util
             DiasAnticipacionIngreso = 7,
         }
 
+        public enum HorasExtras
+        {
+            ConstateDias = 190,
+            //HorasDiurnas = 1.25,
+            //HorasNocturnas = 1.5,
+        }
+
         public enum EstadoProceso
         {
             EnProceso = 1,

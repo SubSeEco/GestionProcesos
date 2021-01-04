@@ -377,7 +377,7 @@ namespace App.Core.UseCases
                             {
                                 if (!workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 13))
                                 {
-                                    throw new Exception("Se debe genera la Resolución de Confirmacion de Horas Extraordinarias Pagadas.");
+                                    throw new Exception("Se debe generar la Resolución de Confirmacion de Horas Extraordinarias Pagadas.");
                                 }
                                 else if (!workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 14))
                                 {
@@ -387,8 +387,11 @@ namespace App.Core.UseCases
                         }
                         else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
                         {
-                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null /*&& workflowActual.DefinicionWorkflow.RequireDocumentacion*/ && workflowActual.Proceso != null && workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 9 && c.TipoDocumentoId != null))
-                                throw new Exception("Se debe generar la resolución correspondiente a la programación de horas extraordinarias.");
+                            if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.Proceso != null)
+                            {
+                                if (!workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 9))
+                                    throw new Exception("Se debe generar la resolución correspondiente a la programación de horas extraordinarias.");
+                            }   
                         }
                         else if (workflowActual.DefinicionWorkflow.Secuencia == 7)/*Se valida q la resolucion de programacion se encuentre firmada*/
                         {

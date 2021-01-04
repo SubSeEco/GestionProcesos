@@ -33,11 +33,12 @@
         <b>R.A.EX</b><br />
     </div>
     <center>
+        <br /><br />
         <b>AUTORIZA PAGO HORAS EXTRAORDINARIAS,  @Html.DisplayFor(m => Model.Mes).ToString().ToUpper()  DE @Html.DisplayFor(m => Model.Annio).</b><br />
         <b style="text-decoration: underline;">SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO.</b>
     </center>
     <ol>
-        <p>
+        <p align="justify" style="margin-right:30px">
             <b>VISTOS :</b>@Html.DisplayFor(m => Model.VistosHEPag)
             @*Lo dispuesto en la Ley Nº 21.192, de presupuestos del sector público para el año 2020; en el D.L. Nº 249 de 1974; artículo Nº 66 del D.F.L. Nº 29 de 2004 del Ministerio de Hacienda,
         que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; en el artículo 9º de la Ley Nº 19.104 de 1991;  Resolución Nº 6, de 2019, de la Contraloría
@@ -46,17 +47,17 @@
         </p>
     </ol>
     <ol>
-        <p>
+        <p align="justify" style="margin-right:30px">
 
             <b>CONSIDERANDO : </b><br />
-        <li>
+<li>
             Que, el Jefe Superior de la Institución, el Secretario Regional Ministerial o el Director Regional de servicios nacionales desconcentrados, según corresponda, podrá ordenar trabajos
             extraordinarios a continuación de la jornada extraordinaria, de noche o en días sábados, domingos y festivos, cuando hayan de cumplirse tareas impostergables. Que, dichas labores se
             compensarán con descanso complementario, y si ello no fuere posible, por razones de buen servicio, lo serán con un recargo en las remuneraciones.
         </li>
         </p>
-        <p>
-        <li>
+<p align="justify" style="margin-right:30px">
+<li>
             Que, es necesario autorizar pago de las horas extraordinarias, compensadas con recargo en remuneraciones, realizadas en el mes
             de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), de los funcionarios de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </li>
@@ -64,7 +65,7 @@
         </p>
     </ol>
     <ol>
-        <p>
+        <p align="justify" style="margin-right:30px">
             <b>RESUELVO : </b><br />
             <b>ARTÍCULO PRIMERO: AUTORÍCESE</b>,&nbsp;&nbsp;&nbsp;a los siguientes funcionarios de la Subsecretaría de Economía y Empresas de Menor Tamaño, los trabajos extraordinarios
             realizados en el mes de @Html.DisplayFor(m => Model.Mes) de @Html.DisplayFor(m => Model.Annio), los que serán compensados con incremento de sus remuneraciones de acuerdo a lo establecido
@@ -144,13 +145,13 @@
     </ol>
     <p class="breakhere"></p>
     <ol>
-        <p>
+        <p align="justify" style="margin-right:30px">
             <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total
             de @Html.DisplayFor(m => Model.ValorTotalHoras) - (@Html.DisplayFor(m => Model.ValorTotalHorasPalabras)), por concepto de trabajos extraordinarios, conforme al detalle descrito precedentemente.
         </p>
     </ol>
     <ol>
-        <p>
+        <p align="justify" style="margin-right:30px">
             <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21 @*.02.004*@ (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
             de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </p>

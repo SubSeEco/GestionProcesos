@@ -6,8 +6,11 @@
 @Html.HiddenFor(q => q.ProcesoId)
 
 <div class="container">
+    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+</div>
+<div class="container">
     <div class="row">
-        <div class="input-field col s12 m10 l6">
+        <div class="input-field col s12 m10 l9">
             <strong>
                 @Html.DisplayNameFor(m => Model.HorasExtrasId)
             </strong>
@@ -17,7 +20,7 @@
     <div class="row">
         @if (Model.Workflow.DefinicionWorkflow.Secuencia == 18)
         {
-            <div class="col s12 m6 l8">
+            <div class="col s12 m6 l9">
                 <div class="row">
                     <h6>
                         <i class="material-icons ">attach_file</i>
@@ -63,14 +66,14 @@
                 </div>
             </div>
 
-            <div class="col s12 m6 l4">
+            <div class="col s12 m6 l3">
                 @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
                 @Html.Action("History", "Workflow", new { Model.WorkflowId })
             </div>
         }
         else if (Model.Workflow.DefinicionWorkflow.Secuencia == 15)
         {
-            <div class="col s12 m6 l8">
+            <div class="col s12 m6 l9">
                 <div class="row">
                     <h6>
                         <i class="material-icons ">attach_file</i>
@@ -104,7 +107,7 @@
                 @*<div id="@String.Concat("#modal", 773)" class="modal">*@
                 <div class="modal-content">
                     <h4>Confirma firma de resolución de confirmación</h4>
-                    @using (Html.BeginForm("SignConfirmacion", "HorasExtras", new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId }, FormMethod.Post, new { HorasId = Model.Proceso.Documentos.Where(c =>c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId, enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("SignConfirmacion", "HorasExtras", new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId }, FormMethod.Post, new { HorasId = Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId, enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(model => Model.Proceso.Documentos.Where(c => c.TipoDocumentoId == 14).FirstOrDefault().DocumentoId)
@@ -117,9 +120,9 @@
                 </div>
             </div>
 
-            <div class="col s12 m6 l4">
+            <div class="col s12 m6 l3">
                 @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-                @Html.Action("History", "Workflow", new { Model.WorkflowId })
+                @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
             </div>
         }
     </div>

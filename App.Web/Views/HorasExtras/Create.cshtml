@@ -1,6 +1,8 @@
 ﻿@model App.Model.HorasExtras.HorasExtras
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+
 
 <div class="container">
     <div class="row">
@@ -9,73 +11,77 @@
             {
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.Nombre)
                 @Html.HiddenFor(q => Model.NombreId)
                 @Html.HiddenFor(q => Model.DV)
                 @Html.HiddenFor(q => Model.jefaturaId)
                 @Html.HiddenFor(q => Model.JefaturaDV)
+                @Html.HiddenFor(q => Model.NombreJefatura)
                 @Html.HiddenFor(q => Model.UnidadId)
+                @Html.HiddenFor(q => Model.Unidad)
+                @Html.HiddenFor(q => Model.MesBaseCalculo)
                 @Html.AntiForgeryToken()
 
-                @Html.ValidationSummary(true, "", new { @class = "red-text" })                
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
 
-            <div class="card">
-                <div class="card-content">
-                    <div class="col-12">
-                        <div class="input-field">
-                            <strong>
-                                @Html.DisplayNameFor(m => Model.FechaSolicitud)
-                            </strong>
-                            @Html.DisplayFor(m => Model.FechaSolicitud)
-                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <div class="col-12">
+                            <div class="input-field">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                                </strong>
+                                @Html.DisplayFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            <strong>
-                                @Html.DisplayNameFor(m => Model.Nombre)
-                            </strong>
-                            @Html.DisplayFor(m => Model.Nombre)
-                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                        <div class="col-12">
+                            <div class="input-field">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Nombre)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Nombre)
+                                @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            <strong>
-                                @Html.DisplayNameFor(m => Model.NombreJefatura)
-                            </strong>
-                            @Html.DisplayFor(m => Model.NombreJefatura)
-                            @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
+                        <div class="col-12">
+                            <div class="input-field">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.NombreJefatura)
+                                </strong>
+                                @Html.DisplayFor(m => Model.NombreJefatura)
+                                @Html.ValidationMessageFor(m => Model.NombreJefatura, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            <strong>
-                                @Html.DisplayNameFor(m => Model.Unidad)
-                            </strong>
-                            @Html.DisplayFor(m => Model.Unidad)
-                            @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
+                        <div class="col-12">
+                            <div class="input-field">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Unidad)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Unidad)
+                                @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.DropDownListFor(m => Model.Annio, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Annio)
-                            @Html.ValidationMessageFor(m => Model.Annio, "", new { @class = "red-text" })
+                        <div class="col-12">
+                            <div class="input-field">
+                                @Html.DropDownListFor(m => Model.Annio, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Annio)
+                                @Html.ValidationMessageFor(m => Model.Annio, "", new { @class = "red-text" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.DropDownListFor(m => Model.Mes, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.Mes)
-                            @Html.ValidationMessageFor(m => Model.Mes, "", new { @class = "red-text" })
+                        <div class="col-12">
+                            <div class="input-field">
+                                @Html.DropDownListFor(m => Model.Mes, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Mes)
+                                @Html.ValidationMessageFor(m => Model.Mes, "", new { @class = "red-text" })
+                            </div>
                         </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
                     </div>
-                    <div class="section"></div>
-                    <p>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                    </p>
                 </div>
-            </div>
             }
         </div>
         <div class="col s12 m6 l4">
@@ -85,7 +91,7 @@
     </div>
 </div>
 
-    @*@Html.Action("Footer", "Workflow", new { Model.WorkflowId })*@
+@*@Html.Action("Footer", "Workflow", new { Model.WorkflowId })*@
 
 
 
@@ -109,17 +115,17 @@
         $("#FechaSolicitud").attr('disabled', true);
         $('select').formSelect();
     });
-    </script>
+</script>
 
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
-    <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
 
-    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
-    <style TYPE="text/css">
-        strong {
-            font-weight: bolder;
-        }
-    </style>
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

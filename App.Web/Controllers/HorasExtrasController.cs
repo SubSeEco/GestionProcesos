@@ -79,6 +79,44 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult procesState(int WorkflowId)
+        {
+            var hrs = _repository.Get<HorasExtras>( c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
+            var _workflow = _repository.GetById<Workflow>(WorkflowId);
+            var _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId  == 16 && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+            List<Workflow> _Workflow;
+
+            int sec = 1;
+            if(hrs != null)
+            {
+                hrs.Workflow = _workflow;
+                sec = !string.IsNullOrEmpty(hrs.Workflow.DefinicionWorkflow.Secuencia.ToString()) ? hrs.Workflow.DefinicionWorkflow.Secuencia : 1;
+                _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == hrs.ProcesoId).ToList();
+            }
+            else
+                _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList(); 
+
+            var Total = _Definicionworkflow.Count(c => c.Habilitado == true).ToString();
+
+            var por = (float.Parse(sec.ToString()) / float.Parse(Total))*100;
+            
+            ViewBag.Secuencia = sec;
+            ViewBag.Total = Total;
+            ViewBag.Porcentaje = Math.Round((Convert.ToDouble(por)),0);
+
+            var model = new DTOStateProces()
+            {
+                Tarea = 1,
+                Total = int.Parse(Total),
+                Porcentaje = por,
+                Secuencia = sec,
+                CantTareasRealizadas = _Workflow,
+                DefWorkflow = _Definicionworkflow,
+            };
+
+            return View(model);
+        }
+
         public ActionResult View(int id)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
@@ -141,7 +179,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                model.FechaSolicitud = DateTime.Now;
+                model.FechaSolicitud = DateTime.Today.Date;
                 model.UnidadId = persona.Unidad.Pl_UndCod;
                 model.Unidad = persona.Unidad.Pl_UndDes.Trim();
                 model.jefaturaId = persona.Jefatura.RH_NumInte;
@@ -151,6 +189,7 @@ namespace App.Web.Controllers
                 model.NombreId = persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.Annio = DateTime.Now.Year.ToString();
+                model.MesBaseCalculo = DateTime.Now.Month;
                 model.Mes = DateTime.Now.ToString("MMMM").ToUpper();
                 ViewBag.Mes = new SelectList(Meses, "Value", "Text");
                 ViewBag.Annio = new SelectList(Anno, "Value", "Text");
@@ -165,6 +204,22 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                switch(model.Mes)
+                {
+                    case "Enero": model.MesBaseCalculo = 01;break;
+                    case "Febrero": model.MesBaseCalculo = 02;break;
+                    case "Marzo": model.MesBaseCalculo = 03;break;
+                    case "Abril": model.MesBaseCalculo = 04;break;
+                    case "Mayo": model.MesBaseCalculo = 05;break;
+                    case "Junio": model.MesBaseCalculo = 06;break;
+                    case "Julio": model.MesBaseCalculo = 07;break;
+                    case "Agosto": model.MesBaseCalculo = 08;break;
+                    case "Septiembre": model.MesBaseCalculo = 09;break;
+                    case "Octubre": model.MesBaseCalculo = 10;break;
+                    case "Noviembre": model.MesBaseCalculo = 11;break;
+                    case "Diciembre": model.MesBaseCalculo = 12;break;
+                }
+
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.HorasExtrasInsert(model);
 
@@ -821,10 +876,10 @@ namespace App.Web.Controllers
                     mes = model.MesBaseCalculo;
 
                 Int32 monto = _sigper.GetBaseCalculoHorasExtras(c.NombreId.Value, mes, anno, CalidadJurid);
-                Int32 baseCalculo = monto / 190;//constante
+                Int32 baseCalculo = monto / (int)Enum.HorasExtras.ConstateDias; //190;//constante
 
-                c.ValorHorasDiurnas = Convert.ToInt32(baseCalculo * 1.25);
-                c.ValorHorasNocturnas = Convert.ToInt32(baseCalculo * 1.5);
+                c.ValorHorasDiurnas = Convert.ToInt32(baseCalculo * 1.25); /*horas diurnas*/
+                c.ValorHorasNocturnas = Convert.ToInt32(baseCalculo * 1.5); /*horas nocturnas*/
             }
 
 

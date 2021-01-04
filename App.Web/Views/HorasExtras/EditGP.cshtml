@@ -1,6 +1,7 @@
 ﻿@model App.Model.HorasExtras.HorasExtras
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
 
 <div class="container">
     <div class="row">
@@ -22,6 +23,7 @@
                 @Html.HiddenFor(q => Model.JefaturaDV)
                 @Html.HiddenFor(q => Model.Unidad)
                 @Html.HiddenFor(q => Model.UnidadId)
+                @Html.HiddenFor(q => Model.MesBaseCalculo)
 
 
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
@@ -48,20 +50,6 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="input-field">
-                                        <strong>@Html.DisplayNameFor(m => Model.Annio)</strong>
-                                        @Html.DisplayFor(m => Model.Annio)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
-                                        <strong>
-                                            @Html.DisplayNameFor(m => Model.Mes)
-                                        </strong>
-                                        @Html.DisplayFor(m => Model.Mes)
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-field">
                                         <strong>
                                             @Html.DisplayNameFor(m => Model.Nombre)
                                         </strong>
@@ -82,6 +70,20 @@
                                             @Html.DisplayNameFor(m => Model.Unidad)
                                         </strong>
                                         @Html.DisplayFor(m => Model.Unidad)
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-field">
+                                        <strong>@Html.DisplayNameFor(m => Model.Annio)</strong>
+                                        @Html.DisplayFor(m => Model.Annio)
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-field">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.Mes)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.Mes)
                                     </div>
                                 </div>
                             </div>
@@ -263,7 +265,7 @@
     });
 </script>
 
-    <script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
