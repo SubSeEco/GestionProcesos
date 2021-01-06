@@ -9,8 +9,9 @@
     }
 </style>
 
+@Html.Partial("_Message")
+
 <div class="container">
-    @Html.Partial("_Message")
     <div class="row">
         <div class="col s12 m8 l8">
             @using (Html.BeginForm("FirmaAtendida", null, FormMethod.Post, new { enctype = "multipart/form-data" }))

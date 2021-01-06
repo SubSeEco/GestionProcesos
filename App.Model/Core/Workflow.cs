@@ -192,6 +192,24 @@ namespace App.Model.Core
         new DateTime(2020,11,29),
         new DateTime(2020,12,08),
         new DateTime(2020,12,25),
+        new DateTime(2021,01,01),
         };
+
+
+        public bool? EsTareaCierre { get; set; } = false;
+
+        [NotMapped]
+        public bool EsTareaCierreProceso
+        {
+            get
+            {
+                return this.Proceso != null &&
+                        this.Proceso.FechaTermino.HasValue &&
+                        this.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado &&
+                        this.FechaTermino.HasValue &&
+                        this.Terminada &&
+                        this.FechaTermino == this.Proceso.FechaTermino;
+            }
+        }
     }
 }
