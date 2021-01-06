@@ -100,6 +100,8 @@ namespace App.Core.UseCases
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
             var binario = this._minsegpres.Sign(documento, OTP, id, Rut);
 
+            model.ArchivoFirmado = binario;
+
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
             int IdDocto = 0;
@@ -128,23 +130,33 @@ namespace App.Core.UseCases
                 doc.TipoDocumentoId = tipoDoc;
 
                 _repository.Create(doc);
+                //_repository.Update(doc);
                 _repository.Save();
             }
-            else
+            else 
             {
                 var docOld = _repository.GetById<Documento>(IdDocto);
-                if (docOld.Signed != true)
-                {
-                    docOld.File = binario;
-                    docOld.Signed = false;
-                    docOld.Texto = data.Text;
-                    docOld.Metadata = data.Metadata;
-                    docOld.Type = data.Type;
-                    _repository.Update(docOld);
-                    _repository.Save();
-                }
+
+                docOld.File = binario;
+                docOld.Signed = false;
+                docOld.Texto = data.Text;
+                docOld.Metadata = data.Metadata;
+                docOld.Type = data.Type;
+                _repository.Update(docOld);
+                _repository.Save();
+
+                //if (docOld.Signed != true)
+                //{
+                //    docOld.File = binario;
+                //    docOld.Signed = false;
+                //    docOld.Texto = data.Text;
+                //    docOld.Metadata = data.Metadata;
+                //    docOld.Type = data.Type;
+                //    _repository.Update(docOld);
+                //    _repository.Save();
+                //}
             }
-          
+
             return response;
         }
 
