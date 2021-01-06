@@ -157,18 +157,20 @@ namespace App.Web.Controllers
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
+        //protected readonly IFolio _folio;
+        //protected readonly IHSM _hsm;
         protected readonly IEmail _email;
+        protected readonly IMinsegpres _minsegpres;
 
-        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, /*IFolio folio, IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
-            _folio = folio;
-            _hsm = hsm;
+            //_folio = folio;
+            //_hsm = hsm;
             _email = email;
+            _minsegpres = minsegpres;
         }
 
         public ActionResult View(int id)
@@ -232,7 +234,7 @@ namespace App.Web.Controllers
                 model.Archivo = doc;
                 model.Run = rut;
 
-                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -289,7 +291,7 @@ namespace App.Web.Controllers
 
                 model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -313,7 +315,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -449,7 +451,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut);
 
