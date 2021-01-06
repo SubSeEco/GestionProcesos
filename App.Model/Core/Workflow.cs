@@ -198,18 +198,18 @@ namespace App.Model.Core
 
         public bool? EsTareaCierre { get; set; } = false;
 
-        [NotMapped]
-        public bool EsTareaCierreProceso
-        {
-            get
-            {
-                return this.Proceso != null &&
-                        this.Proceso.FechaTermino.HasValue &&
-                        this.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado &&
-                        this.FechaTermino.HasValue &&
-                        this.Terminada &&
-                        this.FechaTermino == this.Proceso.FechaTermino;
-            }
-        }
+        //[NotMapped]
+        //public bool EsTareaCierreProceso
+        //{
+        //    get
+        //    {
+        //        return this.Proceso != null &&
+        //                this.Proceso.FechaTermino.HasValue &&
+        //                this.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado &&
+        //                this.FechaTermino.HasValue &&
+        //                this.Terminada &&
+        //                this.FechaTermino == this.Proceso.FechaTermino;
+        //    }
+        //}
     }
 }

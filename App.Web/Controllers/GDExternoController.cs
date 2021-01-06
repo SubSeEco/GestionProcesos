@@ -473,8 +473,8 @@ namespace App.Web.Controllers
                     q.FechaTermino.HasValue && // solo tareas con fecha de termino
                     (q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta) && //solo tareas atendidas dentro del periodo
                     q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
-                    q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado && //descartar procesos anulados
-                    ((bool)q.EsTareaCierre && q.Pl_UndCod != unidad.Pl_UndCod) //que la tarea no sea cerrada en mi unidad
+                    q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado//descartar procesos anulados
+                    //((bool)q.EsTareaCierre && q.Pl_UndCod != unidad.Pl_UndCod) //que la tarea no sea cerrada en mi unidad
                 ). 
                 GroupBy(g => new
                 {
