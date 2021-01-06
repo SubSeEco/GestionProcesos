@@ -108,16 +108,6 @@ namespace App.Core.UseCases
             tipoDoc = 15;
             Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
-            //var generico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-            //if (generico != null)
-            //{
-            //    foreach (var gen in generico)
-            //    {
-            //        if (gen.TipoDocumentoId == 15)
-            //            IdDocto = gen.DocumentoId;
-            //    }
-            //}
-
             if (IdDocto == 0)
             {
                 //var email = username;
