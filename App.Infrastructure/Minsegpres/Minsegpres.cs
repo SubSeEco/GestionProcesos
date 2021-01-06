@@ -66,9 +66,18 @@ namespace App.Infrastructure.Minsegpres
                     binario = Convert.FromBase64String(contenido);
                 }
             }
-            else
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
             {
+                //Root respuesta = JsonConvert.DeserializeObject<Root>(response.ErrorMessage);
+
+                //foreach (var file in respuesta.files)
+                //{
+                //    var contenido = file.content;
+                //    binario = Convert.FromBase64String(contenido);
+                //}
                 // manejar error
+                throw new System.Exception("El servicio externo de firma electrónica retornó falla.");
+
             }
 
 

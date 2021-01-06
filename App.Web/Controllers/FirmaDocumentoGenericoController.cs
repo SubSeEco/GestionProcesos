@@ -460,7 +460,7 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //return RedirectToAction("Token", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                    //return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -476,6 +476,12 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
             return File(model.Archivo, "application/pdf");
+        }
+
+        public FileResult ShowDocumentoConFirma(int id)
+        {
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+            return File(model.ArchivoFirmado, "application/pdf");
         }
 
         //public ActionResult Token(int id)

@@ -24,7 +24,10 @@ namespace App.Model.FirmaDocumentoGenerico
         public DateTime? FechaCreacion { get; set; } = DateTime.Now;
 
         [Display(Name = "Archivo")]
-        public byte[] Archivo { get; set; }
+        public byte[] Archivo { get; set; }        
+        
+        [Display(Name = "Archivo Firmado")]
+        public byte[] ArchivoFirmado { get; set; }
 
         [Display(Name = "Run")]
         public string Run { get; set; }
