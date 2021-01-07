@@ -175,7 +175,13 @@ namespace App.Model.SIGPER
         //public short? Rh_ApliCin { get; set; }
 
         [StringLength(80)]
-        public string Rh_Mail { get; set; }
+        //public string Rh_Mail { get; set; }
+        private string rh_Mail;
+        public string Rh_Mail
+        {
+            get { return string.IsNullOrEmpty(rh_Mail) ? null : rh_Mail.Trim().ToLower(); }
+            set { rh_Mail = value; }
+        }
 
         [StringLength(15)]
         public string Rh_TelOfi { get; set; }

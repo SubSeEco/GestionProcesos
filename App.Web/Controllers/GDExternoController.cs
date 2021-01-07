@@ -465,13 +465,20 @@ namespace App.Web.Controllers
 
             using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
+                var procesosCerradosEnUnidad =
+                    context.Workflow.Where(q => (bool)q.EsTareaCierre && q.Pl_UndCod == unidad.Pl_UndCod).Select(q => q.ProcesoId).ToList();
+
                 var desglose =
                 context.Workflow.Where(q =>
                     q.Proceso.Pl_UndCod != unidad.Pl_UndCod &&  //procesos originados fuera de mi unidad
                     q.Pl_UndCod == unidad.Pl_UndCod && // tareas atendidas por mi unidad
-                    q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
                     q.Terminada && //solo tareas terminadas
-                    q.FechaTermino.HasValue). // solo tareas con fecha de termino
+                    q.FechaTermino.HasValue && // solo tareas con fecha de termino
+                    (q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta) && //solo tareas atendidas dentro del periodo
+                    q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
+                    q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado && //descartar procesos anulados
+                    !procesosCerradosEnUnidad.Contains(q.ProcesoId) // descartar proceso cerrados en la unidad
+                ). 
                 GroupBy(g => new
                 {
                     g.ProcesoId,

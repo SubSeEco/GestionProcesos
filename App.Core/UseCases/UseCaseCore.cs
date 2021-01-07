@@ -918,6 +918,7 @@ namespace App.Core.UseCases
                 workflow.Email = obj.Email;
                 workflow.Terminada = true;
                 workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
+                workflow.EsTareaCierre = true;
 
                 _repository.Save();
 
