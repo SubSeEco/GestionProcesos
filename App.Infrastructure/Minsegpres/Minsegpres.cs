@@ -71,7 +71,7 @@ namespace App.Infrastructure.Minsegpres
                             //table.TotalWidth = 520f;
                             table.TotalWidth = 520f;
                             //table.SetWidths(new float[] { 8f, 25f, 6f });
-                            table.SetWidths(new float[] { 12f, 15f, 12f });
+                            table.SetWidths(new float[] { 10f, 19f, 10f });
                             //table.AddCell(new PdfPCell(new Phrase("Subsecretaría de Economía y Empresas de Menor Tamaño", fontBold)) { Colspan = 1, BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase("Documento Firmado, de acuerdo a lo establecido en artículo 40 del Reglamento de la Ley Nº 19.799", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
                             //table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
