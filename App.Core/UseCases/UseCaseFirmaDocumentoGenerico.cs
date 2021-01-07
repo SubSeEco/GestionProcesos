@@ -94,11 +94,11 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut)
+        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.Sign(documento, OTP, id, Rut);
+            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre);
 
             model.ArchivoFirmado = binario;
 
@@ -110,52 +110,73 @@ namespace App.Core.UseCases
             tipoDoc = 15;
             Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
-            if (IdDocto == 0)
-            {
-                //var email = username;
-                var email = "";
-                //var email = UserExtended.Email(User);
-                var doc = new Documento();
-                doc.Fecha = DateTime.Now;
-                doc.Email = email;
-                doc.FileName = Name;
-                doc.File = binario;
-                doc.ProcesoId = model.ProcesoId.Value;
-                doc.WorkflowId = model.WorkflowId.Value;
-                doc.Signed = false;
-                doc.Texto = data.Text;
-                doc.Metadata = data.Metadata;
-                doc.Type = data.Type;
-                doc.TipoPrivacidadId = 1;
-                doc.TipoDocumentoId = tipoDoc;
+            //var email = username;
+            var email = "";
+            //var email = UserExtended.Email(User);
+            var doc = new Documento();
+            doc.Fecha = DateTime.Now;
+            doc.Email = email;
+            doc.FileName = Name;
+            doc.File = binario;
+            doc.ProcesoId = model.ProcesoId.Value;
+            doc.WorkflowId = model.WorkflowId.Value;
+            doc.Signed = false;
+            doc.Texto = data.Text;
+            doc.Metadata = data.Metadata;
+            doc.Type = data.Type;
+            doc.TipoPrivacidadId = 1;
+            doc.TipoDocumentoId = tipoDoc;
 
-                _repository.Create(doc);
-                //_repository.Update(doc);
-                _repository.Save();
-            }
-            else 
-            {
-                var docOld = _repository.GetById<Documento>(IdDocto);
+            _repository.Create(doc);
+            //_repository.Update(doc);
+            _repository.Save();
 
-                docOld.File = binario;
-                docOld.Signed = false;
-                docOld.Texto = data.Text;
-                docOld.Metadata = data.Metadata;
-                docOld.Type = data.Type;
-                _repository.Update(docOld);
-                _repository.Save();
+            //if (IdDocto == 0)
+            //{
+            //    //var email = username;
+            //    var email = "";
+            //    //var email = UserExtended.Email(User);
+            //    var doc = new Documento();
+            //    doc.Fecha = DateTime.Now;
+            //    doc.Email = email;
+            //    doc.FileName = Name;
+            //    doc.File = binario;
+            //    doc.ProcesoId = model.ProcesoId.Value;
+            //    doc.WorkflowId = model.WorkflowId.Value;
+            //    doc.Signed = false;
+            //    doc.Texto = data.Text;
+            //    doc.Metadata = data.Metadata;
+            //    doc.Type = data.Type;
+            //    doc.TipoPrivacidadId = 1;
+            //    doc.TipoDocumentoId = tipoDoc;
 
-                //if (docOld.Signed != true)
-                //{
-                //    docOld.File = binario;
-                //    docOld.Signed = false;
-                //    docOld.Texto = data.Text;
-                //    docOld.Metadata = data.Metadata;
-                //    docOld.Type = data.Type;
-                //    _repository.Update(docOld);
-                //    _repository.Save();
-                //}
-            }
+            //    _repository.Create(doc);
+            //    //_repository.Update(doc);
+            //    _repository.Save();
+            //}
+            //else 
+            //{
+            //    var docOld = _repository.GetById<Documento>(IdDocto);
+
+            //    docOld.File = binario;
+            //    docOld.Signed = false;
+            //    docOld.Texto = data.Text;
+            //    docOld.Metadata = data.Metadata;
+            //    docOld.Type = data.Type;
+            //    _repository.Update(docOld);
+            //    _repository.Save();
+
+            //    //if (docOld.Signed != true)
+            //    //{
+            //    //    docOld.File = binario;
+            //    //    docOld.Signed = false;
+            //    //    docOld.Texto = data.Text;
+            //    //    docOld.Metadata = data.Metadata;
+            //    //    docOld.Type = data.Type;
+            //    //    _repository.Update(docOld);
+            //    //    _repository.Save();
+            //    //}
+            //}
 
             return response;
         }

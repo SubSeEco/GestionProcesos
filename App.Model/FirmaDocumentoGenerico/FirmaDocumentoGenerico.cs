@@ -31,5 +31,8 @@ namespace App.Model.FirmaDocumentoGenerico
 
         [Display(Name = "Run")]
         public string Run { get; set; }
+
+        [Display(Name = "Nombre Funcionario")]
+        public string Nombre { get; set; }
     }
 }

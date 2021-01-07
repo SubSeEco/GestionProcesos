@@ -207,6 +207,7 @@ namespace App.Web.Controllers
                 ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
             if (ModelState.IsValid)
             {
@@ -224,6 +225,8 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
             var doc = ConvertToByte(file);
 
             if (ModelState.IsValid)
@@ -231,6 +234,7 @@ namespace App.Web.Controllers
 
                 model.Archivo = doc;
                 model.Run = rut;
+                model.Nombre = nombre;
 
                 var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
@@ -265,6 +269,8 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
@@ -282,6 +288,8 @@ namespace App.Web.Controllers
             //var doc = ConvertToByte(file);
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
+
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
             if (ModelState.IsValid && file != null)
             {
@@ -425,6 +433,8 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
@@ -443,6 +453,8 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
             if (ModelState.IsValid/* && file == null*/)
             {
                 //var doc = ConvertToByte(file);
@@ -451,7 +463,7 @@ namespace App.Web.Controllers
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
-                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut);
+                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
