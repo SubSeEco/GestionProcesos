@@ -29,5 +29,9 @@ namespace App.Model.FirmaDocumentoGenerico
         public List<File> files { get; set; }
         public Metadata metadata { get; set; }
         public long idSolicitud { get; set; }
+
+        public string timestamp { get; set; }
+        public int status { get; set; }
+        public string error { get; set; }
     }
 }
