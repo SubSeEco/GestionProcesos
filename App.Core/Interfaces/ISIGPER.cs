@@ -37,5 +37,7 @@ namespace App.Core.Interfaces
         List<PEDATPER> GetUserFirmanteByUnidad(int codigoUnidad, List<string> listEmailFirmantes);
         SIGPER NewGetUserByEmail(string email);
         int GetBaseCalculoHorasExtras(int rut, int mes, int anno, int calidad);
+
+        int GetHorasTrabajadas(string rut, int mes, int anno);
     }
 }

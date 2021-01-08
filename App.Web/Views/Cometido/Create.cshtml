@@ -125,8 +125,8 @@
                         <div id="Financia">
                             <label>Marque las opciones que SI financia el organismo invitante</label>
                             @*<label style="color:green">
-                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                        </label>*@
+                                    @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                                </label>*@
                             <div class="col-12">
                                 <label>
                                     @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
@@ -159,8 +159,8 @@
                         <div class="col-12">
                             <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
                             @*<label style="color:green">
-                            @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-                        </label>*@
+                                    @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                                </label>*@
                         </div>
                         <div class="col-12">
                             <label>
@@ -237,268 +237,268 @@
         </div>
     </div>
 
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+    @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
-<script>
-    $(document).ready(function () {
-        jQuery.datetimepicker.setLocale('es');
-        jQuery('#FechaSolicitud').datetimepicker({
-            i18n: {
-                es: {
-                    months: [
-                        'Enero', 'Febrero', 'Marzo', 'Abril',
-                        'Mayo', 'Junio', 'Julio', 'Agosto',
-                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
-                    ]
+    <script>
+        $(document).ready(function () {
+            jQuery.datetimepicker.setLocale('es');
+            jQuery('#FechaSolicitud').datetimepicker({
+                i18n: {
+                    es: {
+                        months: [
+                            'Enero', 'Febrero', 'Marzo', 'Abril',
+                            'Mayo', 'Junio', 'Julio', 'Agosto',
+                            'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                        ]
+                    }
+                },
+                timepicker: false,
+                formatTime: 'H:i',
+                formatDate: 'd-m-Y'
+            });
+            $('#divReembolso').hide(100); //oculta checkbox de reembolso
+            $("#PlacaVehiculo").attr('disabled', true);
+            $("#FechaSolicitud").attr('disabled', true);
+            //$("#TipoVehiculoId").attr('disabled', true);
+            //$("#TipoReembolsoId").attr('disabled', true);
+            $('#auto').hide(100);
+            //$('#terrestre').hide(100);
+            $('#Financia').hide(100);
+            $('select').formSelect();
+            $('input:hidden').each(function (index, element) {
+                $(element).appendTo($(element).parent());
+            });
+
+            //funcion que habilita opciones de financia organismo invitante
+            $('input:radio[name="FinanciaOrganismo"]').change(function () {
+                if (document.getElementById("FinanciaOrganismo").checked == true) {
+                    $('#Financia').show();
                 }
-            },
-            timepicker: false,
-            formatTime: 'H:i',
-            formatDate: 'd-m-Y'
-        });
-        $('#divReembolso').hide(100); //oculta checkbox de reembolso
-        $("#PlacaVehiculo").attr('disabled', true);
-        $("#FechaSolicitud").attr('disabled', true);
-        //$("#TipoVehiculoId").attr('disabled', true);
-        //$("#TipoReembolsoId").attr('disabled', true);
-        $('#auto').hide(100);
-        //$('#terrestre').hide(100);
-        $('#Financia').hide(100);
-        $('select').formSelect();
-        $('input:hidden').each(function (index, element) {
-            $(element).appendTo($(element).parent());
-        });
+                else {
+                    $('#Financia').hide(100);
+                }
+            });
 
-        //funcion que habilita opciones de financia organismo invitante
-        $('input:radio[name="FinanciaOrganismo"]').change(function () {
-            if (document.getElementById("FinanciaOrganismo").checked == true) {
-                $('#Financia').show();
+            //funcion modal popup
+            $(function () {
+                $('.Create').click(function () {
+                    $('modal').appendTo('body').dialog({
+                        close: function (event, ui) {
+                            dialog.remove();
+                        },
+                        modal: true
+                    }).load(this.href, {});
+
+                    return false;
+                });
+            });
+
+            /*Carga usuario por seleccion de dropdown*/
+            $('#NombreId').on('change', function () {
+                var Rut = $(this).val(); /*alert(Rut);*/
+                $.getJSON("/Cometido/GetUsuario", { Rut: Rut },
+                    function (classesData) {
+                        document.getElementById('Rut').value = classesData["Rut"];
+                        document.getElementById('DV').value = classesData["DV"];
+                        document.getElementById('IdCargo').value = classesData["IdCargo"];
+                        document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                        document.getElementById('IdCalidad').value = classesData["IdCalidad"];
+                        document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                        document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+                        document.getElementById('IdGrado').value = classesData["IdGrado"];
+                        document.getElementById('GradoDescripcion').value = classesData["Grado"];
+                        document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
+                        document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
+                        document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
+                        document.getElementById('Jefatura').value = classesData["Jefatura"];
+                        document.getElementById('IdEscalafon').value = classesData["IdEscalafon"];
+                        document.getElementById('EscalafonDescripcion').value = classesData["Escalafon"];
+                        document.getElementById('IdUnidad').value = classesData["IdUnidad"];
+                        document.getElementById('IdPrograma').value = classesData["IdPrograma"];
+                        /*valida antecedentes para desabilitar controles*/
+                        if (document.getElementById("EstamentoDescripcion").value == "") {
+                            $("#EstamentoDescripcion").attr('disabled', true);
+                        }
+                        else {
+                            $("#EstamentoDescripcion").attr('disabled', false);
+                        }
+                        if (document.getElementById("GradoDescripcion").value == "Sin Grado") {
+                            $("#GradoDescripcion").attr('disabled', true);
+                        }
+                        else {
+                            $("#GradoDescripcion").attr('disabled', false);
+                        }
+                        if (document.getElementById("CargoDescripcion").value == "S/A") {
+                            $("#CargoDescripcion").attr('disabled', true);
+                        }
+                        else {
+                            $("#CargoDescripcion").attr('disabled', false);
+                        }
+                        if (document.getElementById("CalidadDescripcion").value == "S/A") {
+                            $("#CalidadDescripcion").attr('disabled', true);
+                        }
+                        else {
+                            $("#CalidadDescripcion").attr('disabled', false);
+                        }
+                        if (document.getElementById("ConglomeradoDescripcion").value == "") {
+                            $("#ConglomeradoDescripcion").attr('disabled', true);
+                        }
+                        else {
+                            $("#ConglomeradoDescripcion").attr('disabled', false);
+                        }
+
+
+                    })
+            })
+
+            /*Habilita tipo vehiculo*/
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                //$("#TipoVehiculoId").attr('disabled', true);
+                $("#PlacaVehiculo").attr('disabled', true);
             }
             else {
-                $('#Financia').hide(100);
+                //$("#TipoVehiculoId").attr('disabled', false);
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+            }
+
+
+            /*Muestra texto de pasaje terrestre*/
+            if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+                $('#terrestre').hide(100);
+            }
+            else {
+                $('#terrestre').show();
+            }
+
+            $('.modal').modal();
+            $('.tooltipped').tooltip();
+        });
+
+        /***********************termino script function*******************************************************************************************************/
+
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+
             }
         });
 
-        //funcion modal popup
-        $(function () {
-            $('.Create').click(function () {
-                $('modal').appendTo('body').dialog({
-                    close: function (event, ui) {
-                        dialog.remove();
-                    },
-                    modal: true
-                }).load(this.href, {});
+        /*Muestra texto de pasaje terrestre*/
+        $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+            if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+                $('#terrestre').hide(100);
+            }
+            else {
+                $('#terrestre').show();
 
-                return false;
+            }
+        });
+
+        //funcion que habilita opciones si se financia el organismo invitante
+        $('input:radio[name="FinanciaOrganismo"]').change(function () {
+            if (document.getElementById("FinanciaOrganismo").checked == true) {
+                $("#Alojamiento").attr('disabled', false);
+                $("#Alimentacion").attr('disabled', false);
+                $("#Pasajes").attr('disabled', false);
+            }
+            else {
+                $("#Alojamiento").attr('disabled', true);
+                $("#Alimentacion").attr('disabled', true);
+                $("#Pasajes").attr('disabled', true);
+            }
+        });
+
+        ///*Desabilita viatico y pasajes si se financia por organismo invitante* /
+        $('input:checkbox[name="Alojamiento"]').change(function () {
+            Bloqueo();
+        });
+
+        $('input:checkbox[name="Alimentacion"]').change(function () {
+            Bloqueo();
+        });
+
+        $('input:checkbox[name="Pasajes"]').change(function () {
+            Bloqueo();
+        });
+
+        function Bloqueo() {
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
+                2
+                $("#SolicitaViatico").attr('disabled', true);
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+                //$("#Vehiculo").attr('disabled', true);
+            }
+            else {
+                $("#SolicitaViatico").attr('disabled', false);
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+                //$("#Vehiculo").attr('disabled', false);
+            }
+
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true) {
+                $("#SolicitaViatico").attr('disabled', true);
+            }
+            else {
+                $("#SolicitaViatico").attr('disabled', false);
+            }
+
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Pasajes").checked == true) {
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+            }
+
+            if (document.getElementById("Pasajes").checked == true) {
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+            }
+        }
+
+        /*funcion que bloquea pasajes*/
+        $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
+            if (document.getElementById("ReqPasajeAereo").checked == true) {
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+                $("#Vehiculo").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+                $("#Vehiculo").attr('disabled', false);
+            }
+        });
+
+        $(function () {
+            $("#jQuery_accordion").accordion({
+                collapsible: true, heightStyle: "auto"
             });
         });
 
-        /*Carga usuario por seleccion de dropdown*/
-        $('#NombreId').on('change', function () {
-            var Rut = $(this).val(); /*alert(Rut);*/
-            $.getJSON("/Cometido/GetUsuario", { Rut: Rut },
-                function (classesData) {
-                    document.getElementById('Rut').value = classesData["Rut"];
-                    document.getElementById('DV').value = classesData["DV"];
-                    document.getElementById('IdCargo').value = classesData["IdCargo"];
-                    document.getElementById('CargoDescripcion').value = classesData["Cargo"];
-                    document.getElementById('IdCalidad').value = classesData["IdCalidad"];
-                    document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
-                    document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
-                    document.getElementById('IdGrado').value = classesData["IdGrado"];
-                    document.getElementById('GradoDescripcion').value = classesData["Grado"];
-                    document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
-                    document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
-                    document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
-                    document.getElementById('Jefatura').value = classesData["Jefatura"];
-                    document.getElementById('IdEscalafon').value = classesData["IdEscalafon"];
-                    document.getElementById('EscalafonDescripcion').value = classesData["Escalafon"];
-                    document.getElementById('IdUnidad').value = classesData["IdUnidad"];
-                    document.getElementById('IdPrograma').value = classesData["IdPrograma"];
-                    /*valida antecedentes para desabilitar controles*/
-                    if (document.getElementById("EstamentoDescripcion").value == "") {
-                        $("#EstamentoDescripcion").attr('disabled', true);
-                    }
-                    else {
-                        $("#EstamentoDescripcion").attr('disabled', false);
-                    }
-                    if (document.getElementById("GradoDescripcion").value == "Sin Grado") {
-                        $("#GradoDescripcion").attr('disabled', true);
-                    }
-                    else {
-                        $("#GradoDescripcion").attr('disabled', false);
-                    }
-                    if (document.getElementById("CargoDescripcion").value == "S/A") {
-                        $("#CargoDescripcion").attr('disabled', true);
-                    }
-                    else {
-                        $("#CargoDescripcion").attr('disabled', false);
-                    }
-                    if (document.getElementById("CalidadDescripcion").value == "S/A") {
-                        $("#CalidadDescripcion").attr('disabled', true);
-                    }
-                    else {
-                        $("#CalidadDescripcion").attr('disabled', false);
-                    }
-                    if (document.getElementById("ConglomeradoDescripcion").value == "") {
-                        $("#ConglomeradoDescripcion").attr('disabled', true);
-                    }
-                    else {
-                        $("#ConglomeradoDescripcion").attr('disabled', false);
-                    }
+    </script>
 
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
 
-                })
-        })
-
-        /*Habilita tipo vehiculo*/
-        if (document.getElementById("Vehiculo").checked == false) {
-            $('#auto').hide(100);
-            //$("#TipoVehiculoId").attr('disabled', true);
-            $("#PlacaVehiculo").attr('disabled', true);
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+    <style TYPE="text/css">
+        strong {
+            font-weight: bolder;
         }
-        else {
-            //$("#TipoVehiculoId").attr('disabled', false);
-            $("#PlacaVehiculo").attr('disabled', false);
-            $('#auto').show();
-        }
-
-
-        /*Muestra texto de pasaje terrestre*/
-        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
-            $('#terrestre').hide(100);
-        }
-        else {
-            $('#terrestre').show();
-        }
-
-        $('.modal').modal();
-        $('.tooltipped').tooltip();
-    });
-
-    /***********************termino script function*******************************************************************************************************/
-
-    /*Habilita tipo vehiculo*/
-    $('input:checkbox[name="Vehiculo"]').change(function () {
-        if (document.getElementById("Vehiculo").checked == false) {
-            $('#auto').hide(100);
-            $("#PlacaVehiculo").attr('disabled', true);            
-        }
-        else {
-            $("#PlacaVehiculo").attr('disabled', false);
-            $('#auto').show();
-
-        }
-    });
-
-    /*Muestra texto de pasaje terrestre*/
-    $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
-        if (document.getElementById("ReqPasajeTerrestre").checked == false) {
-            $('#terrestre').hide(100);
-        }
-        else {
-            $('#terrestre').show();
-
-        }
-    });
-
-    //funcion que habilita opciones si se financia el organismo invitante
-    $('input:radio[name="FinanciaOrganismo"]').change(function () {
-        if (document.getElementById("FinanciaOrganismo").checked == true) {
-            $("#Alojamiento").attr('disabled', false);
-            $("#Alimentacion").attr('disabled', false);
-            $("#Pasajes").attr('disabled', false);
-        }
-        else {
-            $("#Alojamiento").attr('disabled', true);
-            $("#Alimentacion").attr('disabled', true);
-            $("#Pasajes").attr('disabled', true);
-        }
-    });
-
-    ///*Desabilita viatico y pasajes si se financia por organismo invitante* /
-    $('input:checkbox[name="Alojamiento"]').change(function () {
-        Bloqueo();
-    });
-
-    $('input:checkbox[name="Alimentacion"]').change(function () {
-        Bloqueo();
-    });
-
-    $('input:checkbox[name="Pasajes"]').change(function () {
-        Bloqueo();
-    });
-
-    function Bloqueo() {
-        if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
-            2
-            $("#SolicitaViatico").attr('disabled', true);
-            $("#ReqPasajeAereo").attr('disabled', true);
-            $("#ReqPasajeTerrestre").attr('disabled', true);
-            //$("#Vehiculo").attr('disabled', true);
-        }
-        else {
-            $("#SolicitaViatico").attr('disabled', false);
-            $("#ReqPasajeAereo").attr('disabled', false);
-            $("#ReqPasajeTerrestre").attr('disabled', false);
-            //$("#Vehiculo").attr('disabled', false);
-        }
-
-        if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true) {
-            $("#SolicitaViatico").attr('disabled', true);
-        }
-        else {
-            $("#SolicitaViatico").attr('disabled', false);
-        }
-
-        if (document.getElementById("Alojamiento").checked == true && document.getElementById("Pasajes").checked == true) {
-            $("#ReqPasajeAereo").attr('disabled', true);
-            $("#ReqPasajeTerrestre").attr('disabled', true);
-        }
-        else {
-            $("#ReqPasajeAereo").attr('disabled', false);
-            $("#ReqPasajeTerrestre").attr('disabled', false);
-        }
-
-        if (document.getElementById("Pasajes").checked == true) {
-            $("#ReqPasajeAereo").attr('disabled', true);
-            $("#ReqPasajeTerrestre").attr('disabled', true);
-        }
-        else {
-            $("#ReqPasajeAereo").attr('disabled', false);
-            $("#ReqPasajeTerrestre").attr('disabled', false);
-        }
-    }
-
-    /*funcion que bloquea pasajes*/
-    $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
-        if (document.getElementById("ReqPasajeAereo").checked == true) {
-            $("#ReqPasajeTerrestre").attr('disabled', true);
-            $("#Vehiculo").attr('disabled', true);
-        }
-        else {
-            $("#ReqPasajeTerrestre").attr('disabled', false);
-            $("#Vehiculo").attr('disabled', false);
-        }
-    });
-
-    $(function () {
-        $("#jQuery_accordion").accordion({
-            collapsible: true, heightStyle: "auto"
-        });
-    });
-
-</script>
-
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
-<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
-<style TYPE="text/css">
-    strong {
-        font-weight: bolder;
-    }
-</style>
+    </style>

@@ -37,6 +37,7 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
         public virtual DbSet<RePagHisDet> RePagHisDet { get; set; }
         public virtual DbSet<LREMREP1Level1> LREMREP1Level1 { get; set; }
+        public virtual DbSet<MARCACIONES> MARCACIONES { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

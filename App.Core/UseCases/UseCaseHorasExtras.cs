@@ -399,6 +399,12 @@ namespace App.Core.UseCases
                             if (doc == false)
                                 throw new Exception("La Resolción de programación de horas extraordinarias, debe estar firmado electronicamente");
                         }
+                        //else if (workflowActual.DefinicionWorkflow.Secuencia == 8)/*Se valida que se suba reporte de asistencia*/
+                        //{
+                        //    //var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 9).FirstOrDefault().DocumentoId).Signed;
+                        //    //if (doc == false)
+                        //    //    throw new Exception("La Resolción de programación de horas extraordinarias, debe estar firmado electronicamente");
+                        //}
                         else if (workflowActual.DefinicionWorkflow.Secuencia == 18)/*Se valida q la resolucion de horas pagadas se encuentre firmada*/
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 13).FirstOrDefault().DocumentoId).Signed;

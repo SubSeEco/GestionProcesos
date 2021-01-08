@@ -12,7 +12,7 @@
         {
             if (Model.DefinicionWorkflow.Secuencia == 9)
             {
-                if (item.TipoDocumentoId == 7) //(item.TipoDocumentoId == 2)
+                if (item.TipoDocumentoId == 7 && item.Activo == true) //(item.TipoDocumentoId == 2)
                 {
                     <h6>
                         <i class="material-icons ">attach_file</i>
@@ -35,6 +35,8 @@
                     {
                         <div class="section"></div>
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
+                        <a class="waves-effect" href='@Url.Action("DeleteDoc", "Cometido", new { id = item.DocumentoId })'><img style="margin-left:550px" src="~/Content/images/icon-borrar.png"></img></a>
+                        
                     }
                     else
                     {
@@ -174,14 +176,14 @@
                         <i class="material-icons large secondary-content green-text">check</i>
                     }
                     <div class="section"></div>
-                    <div class="divider"></div>            
+                    <div class="divider"></div>
 
                     <!-- Modal Structure -->
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
-                            @*@using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))*@                            
-                            @using (Html.BeginForm("SignOther", "Cometido",FormMethod.Post))
+                            @*@using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))*@
+                            @using (Html.BeginForm("SignOther", "Cometido", FormMethod.Post))
                             {
                                 @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)

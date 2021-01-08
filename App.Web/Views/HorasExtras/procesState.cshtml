@@ -5,7 +5,7 @@
 
 
 <div class="col-md-6 offset-md-3">
-    @*<h4>Proceso: </h4>*@
+    <h6>Estado de Tareas</h6>
     <ul class="timeline">
         @foreach (var def in Model.DefWorkflow.ToList())
         {
@@ -13,26 +13,27 @@
             {
                 <li>
                     <strong>
-                        <a href="#">@def.Nombre</a>
+                        @*<a>@def.Nombre</a>*@
+                        @*<a>@def.Secuencia</a>*@
+                        <a style="color:red;font-size:20px" href="#" data-toggle="tooltip" title="@def.Nombre">@def.Secuencia</a>
                     </strong>
                 </li>
             }
             else
             {
                 <li>
-                    <a href="#">@def.Nombre</a>
+                    @*<a>@def.Nombre</a>*@
+                    <a href="#" data-toggle="tooltip" title="@def.Nombre">@def.Secuencia</a>
+
                 </li>
             }
         }
     </ul>
 </div>
 
-@*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
-@*<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>*@
-@*<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>*@
 <style TYPE="text/css">
-    .timeline{
-        margin-left:25%;
+    .timeline{                
+        margin-left:5%;
     }
     ul.timeline {
         list-style-type: none;
@@ -40,31 +41,39 @@
     }
 
         ul.timeline:before {
-            content: ' ';
+            /*content: ' ';*/
             background: #d4d9df;
             display: inline-block;
             position: absolute;
             left: 29px;
-            width: 2px;
+            width: 10px;
             height: 100%;
             z-index: 400;
         }
 
         ul.timeline > li {
-            margin: 20px 0;
-            padding-left: 70px;
+            /*margin: 20px 0;
+            padding-left: 70px;*/
+            display: inline-block;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
             ul.timeline > li:before {
-                content: ' ';
+                /*content: ' ';*/
                 background: white;
                 display: inline-block;
-                position: absolute;
-                border-radius: 50%;
+                /*position: absolute;*/
+                /*border-radius: 50%;*/
                 border: 3px solid #22c0e8;
                 left: 20px;
                 width: 20px;
                 height: 20px;
-                z-index: 400;
+                z-index: 400;                
             }
 </style>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
