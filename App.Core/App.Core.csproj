@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IFolio.cs" />
     <Compile Include="Interfaces\IGestionProcesos.cs" />
+    <Compile Include="Interfaces\IMinsegpres.cs" />
     <Compile Include="Interfaces\IWorkflowService.cs" />
     <Compile Include="Interfaces\ISIGPER.cs" />
     <Compile Include="Interfaces\IFile.cs" />

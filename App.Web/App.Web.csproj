@@ -19,7 +19,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -433,6 +433,7 @@
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
+    <Compile Include="Controllers\FirmaDocumentoGenericoController.cs" />
     <Compile Include="Controllers\GDExternoController.cs" />
     <Compile Include="Controllers\GDInternoController.cs" />
     <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
@@ -441,7 +442,6 @@
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
@@ -784,6 +784,10 @@
     <Content Include="Views\HorasExtras\ResolucionDescanso.cshtml" />
     <Content Include="Views\Colaborador\EditPpto.cshtml" />
     <Content Include="Views\HorasExtras\procesState.cshtml" />
+    <Content Include="Views\FirmaDocumentoGenerico\Create.cshtml" />
+    <Content Include="Views\FirmaDocumentoGenerico\Edit.cshtml" />
+    <Content Include="Views\FirmaDocumentoGenerico\Sign.cshtml" />
+    <Content Include="Views\FirmaDocumentoGenerico\FirmaAtendida.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

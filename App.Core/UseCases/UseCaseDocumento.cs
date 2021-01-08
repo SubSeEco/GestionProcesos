@@ -8,17 +8,10 @@ namespace App.Core.UseCases
     public class UseCaseDocumento
     {
         protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly IHSM _hsm;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
 
-        public UseCaseDocumento(IGestionProcesos repository, IFile file, IFolio folio)
+        public UseCaseDocumento(IGestionProcesos repository)
         {
             _repository = repository;
-            _file = file;
-            _folio = folio;
         }
         public ResponseMessage Delete(int id)
         {

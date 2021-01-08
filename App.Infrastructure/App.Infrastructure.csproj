@@ -269,6 +269,7 @@
     <Compile Include="GestionProcesos\AppContext.cs" />
     <Compile Include="GestionProcesos\GestionProcesos.cs" />
     <Compile Include="GestionProcesos\WorkflowService.cs" />
+    <Compile Include="Minsegpres\Minsegpres.cs" />
     <Compile Include="SIGPER\AppContextTurismo.cs" />
     <Compile Include="Email\Email.cs" />
     <Compile Include="HSM\HSM.cs" />

@@ -6,7 +6,6 @@ using App.Core.Interfaces;
 using Rotativa.MVC;
 using App.Core.UseCases;
 using System.Linq;
-using App.Util;
 using System.IO;
 using OfficeOpenXml;
 using System.Collections.Generic;
@@ -47,11 +46,6 @@ namespace App.Web.Controllers
         public string NumeroBoleta { get; set; }
 
         public DateTime FechaBoleta { get; set; }
-
-        //public byte[] Boleta { get; set; }
-        //public string BoletaString { get; set; }
-        //public string BoletaFilename { get; set; }
-        //public string BoletaFiletype { get; set; }
 
         public string Email { get; set; }
 
@@ -152,12 +146,6 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<InformeHSA>(id);
             model.QR = _file.CreateQR(id.ToString());
-
-            //var email = UserExtended.Email(User);
-            //var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email);
-            //if (rubrica != null)
-            //    model.Signature = rubrica.File;
-
             return new ViewAsPdf("pdf", model);
         }
 
@@ -186,7 +174,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository, _sigper, _email);
+                var _useCaseInteractor = new UseCaseInformeHSA(_repository, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -254,7 +242,7 @@ namespace App.Web.Controllers
             var _useCaseInformHSA = new UseCaseInformeHSA(_repository, _sigper, _email);
             var _UseCaseCrearInformeHSAResponseMessage = _useCaseInformHSA.InicioExterno(new Proceso
             {
-                DefinicionProcesoId = (int)App.Util.Enum.DefinicionProceso.InformeHSA,
+                DefinicionProcesoId = (int)Util.Enum.DefinicionProceso.InformeHSA,
                 Email = model.Email
             });
 
@@ -275,7 +263,7 @@ namespace App.Web.Controllers
                     ProcesoId = workflow.ProcesoId,
                     FileName = file.Filename,
                     Type = file.Filetype,
-                    File = System.Convert.FromBase64String(file.FileString),
+                    File = Convert.FromBase64String(file.FileString),
                     Email = model.Email
                 });
             }
@@ -322,7 +310,7 @@ namespace App.Web.Controllers
             if (persona != null && persona.Funcionario == null)
                 return Json(new { ok = false, error = "No se encontró información del funcionario en SIGPER" }, JsonRequestBehavior.AllowGet);
 
-            int definicionProcesoId = (int)App.Util.Enum.DefinicionProceso.InformeHSA;
+            int definicionProcesoId = (int)Util.Enum.DefinicionProceso.InformeHSA;
 
             var DTOInformeHSA = _repository
                 .Get<InformeHSA>(q => q.Proceso.DefinicionProcesoId == definicionProcesoId && q.Proceso.Email == persona.Funcionario.Rh_Mail.Trim())
@@ -341,10 +329,9 @@ namespace App.Web.Controllers
 
         public FileResult Report()
         {
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                var result = context.InformeHSA.Where(q => !q.Proceso.Anulada).Select(hsa => new
-                {
+                var result = context.InformeHSA.Where(q => !q.Proceso.Anulada).Select(hsa => new {
                     hsa.ProcesoId,
                     hsa.Proceso.EstadoProceso.Descripcion,
                     hsa.FechaSolicitud,

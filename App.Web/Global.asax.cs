@@ -36,6 +36,7 @@ namespace App.Web
             container.Register(typeof(IFile), typeof(Infrastructure.File.File));
             container.Register(typeof(IFolio), typeof(Infrastructure.Folio.Folio));
             container.Register(typeof(IWorkflowService), typeof(Infrastructure.GestionProcesos.WorkflowService));
+            container.Register(typeof(IMinsegpres), typeof(Infrastructure.Minsegpres.Minsegpres));
             container.RegisterMvcControllers(Assembly.GetExecutingAssembly());
 
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
