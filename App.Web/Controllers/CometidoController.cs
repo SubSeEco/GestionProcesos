@@ -2612,5 +2612,26 @@ namespace App.Web.Controllers
 
             return View();
         }
+
+        public ActionResult DeleteDoc(int Id)
+        {
+            var model = _repository.GetById<Documento>(Id); 
+            var _useCaseInteractor = new UseCaseDocumento(_repository, _file, _folio);
+            var _UseCaseResponseMessage = _useCaseInteractor.DeleteActivo(model.DocumentoId);
+
+            if (_UseCaseResponseMessage.IsValid)
+            {
+                TempData["Success"] = "Operación terminada correctamente.";
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+            else
+            {
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+        }
     }
 }

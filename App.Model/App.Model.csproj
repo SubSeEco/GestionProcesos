@@ -139,6 +139,7 @@
     <Compile Include="SIGPER\DGESTAMENTOS.cs" />
     <Compile Include="SIGPER\DGREGIONES.cs" />
     <Compile Include="SIGPER\LREMREP1Level1.cs" />
+    <Compile Include="SIGPER\MARCACIONES.cs" />
     <Compile Include="SIGPER\PECARGOS.cs" />
     <Compile Include="SIGPER\PeDatLab.cs" />
     <Compile Include="SIGPER\PEDATPER.cs" />

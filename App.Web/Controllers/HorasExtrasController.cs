@@ -81,20 +81,44 @@ namespace App.Web.Controllers
 
         public ActionResult procesState(int WorkflowId)
         {
-            var hrs = _repository.Get<HorasExtras>( c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
-            var _workflow = _repository.GetById<Workflow>(WorkflowId);
-            var _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId  == 16 && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
-            List<Workflow> _Workflow;
-
             int sec = 1;
-            if(hrs != null)
+            List<Workflow> _Workflow = new List<Workflow>();
+            List<DefinicionWorkflow> _Definicionworkflow = new List<DefinicionWorkflow>();
+            var _workflow = _repository.GetById<Workflow>(WorkflowId);            
+            if (_workflow != null)
             {
-                hrs.Workflow = _workflow;
-                sec = !string.IsNullOrEmpty(hrs.Workflow.DefinicionWorkflow.Secuencia.ToString()) ? hrs.Workflow.DefinicionWorkflow.Secuencia : 1;
-                _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == hrs.ProcesoId).ToList();
+                switch (_workflow.Entity)
+                {
+                    case "HorasExtras":
+                        var hrs = _repository.Get<HorasExtras>(c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
+                        if (hrs != null)
+                        {
+                            hrs.Workflow = _workflow;
+                            sec = !string.IsNullOrEmpty(hrs.Workflow.DefinicionWorkflow.Secuencia.ToString()) ? hrs.Workflow.DefinicionWorkflow.Secuencia : 1;
+                            _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == hrs.ProcesoId).ToList();
+                        }
+                        else
+                            _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList();
+
+                        _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Enum.DefinicionProceso.ProgramacionHorasExtraordinarias && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+
+                        break;
+                    case "Cometido":
+                        var _cometido = _repository.Get<Cometido>(c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
+                        if (_cometido != null)
+                        {
+                            _cometido.Workflow = _workflow;
+                            sec = !string.IsNullOrEmpty(_cometido.Workflow.DefinicionWorkflow.Secuencia.ToString()) ? _cometido.Workflow.DefinicionWorkflow.Secuencia : 1;
+                            _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == _cometido.ProcesoId).ToList();
+                        }
+                        else
+                            _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList();
+
+                        _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+
+                        break;
+                }
             }
-            else
-                _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList(); 
 
             var Total = _Definicionworkflow.Count(c => c.Habilitado == true).ToString();
 
@@ -675,10 +699,35 @@ namespace App.Web.Controllers
 
         public ActionResult EditConfirmacion(int id)
         {
-            //var persona = _sigper.GetUserByEmail(User.Email());
-            //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             var model = _repository.GetById<HorasExtras>(id);
 
+            foreach (var c in model.Colaborador)
+            {
+                /*Se toman la cantidad de horas extras desde persomatico, para validar la cantidad de horas extras*/
+                if (c.HDSigper == 0)
+                {
+                    int mes = 0;
+                    switch (model.Mes)
+                    {
+                        case "Enero": mes = 01; break;
+                        case "Febrero": mes = 02; break;
+                        case "Marzo": mes = 03; break;
+                        case "Abril": mes = 04; break;
+                        case "Mayo": mes = 05; break;
+                        case "Junio": mes = 06; break;
+                        case "Julio": mes = 07; break;
+                        case "Agosto": mes = 08; break;
+                        case "Septiembre": mes = 09; break;
+                        case "Octubre": mes = 10; break;
+                        case "Noviembre": mes = 11; break;
+                        case "Diciembre": mes = 12; break;
+                    }
+                    var hrsExtrasDiurnas = _sigper.GetHorasTrabajadas(c.NombreId.ToString(), mes, int.Parse(model.Annio));
+                    
+                    c.HDSigper = Math.Round(Convert.ToDouble(hrsExtrasDiurnas) / 60,2);
+                    c.HNSigper = 0;
+                }
+            }
             return View(model);
         }
 
@@ -870,7 +919,7 @@ namespace App.Web.Controllers
             {
                 /*Se toma base de calculo para valor horas extras*/
                 var CalidadJurid = _sigper.GetUserByRut(c.NombreId.Value).datosLaborales.RH_ContCod;
-                var anno = Convert.ToInt32(DateTime.Now.Year);
+                var anno = int.Parse(model.Annio); //Convert.ToInt32(DateTime.Now.Year);
                 var mes = Convert.ToInt32(DateTime.Now.Month) - 1;
                 if (model.MesBaseCalculo != 0)
                     mes = model.MesBaseCalculo;

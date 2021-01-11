@@ -110,5 +110,11 @@ namespace App.Model.HorasExtras
         public int? TipoItemId { get; set; } = 0;
         public virtual TipoItem TipoItem { get; set; }
 
+        /*se agregan atributos para guardar la cantidad de horas en exceso - 06012021*/
+        [Display(Name = "Horas Extras Diurnas Persomatico")]
+        public double HDSigper { get; set; } = 0;
+
+        [Display(Name = "Horas Extras Nocturnas Persomatico")]
+        public double HNSigper { get; set; } = 0;
     }
 }

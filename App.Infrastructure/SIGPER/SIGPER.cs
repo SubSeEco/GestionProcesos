@@ -1150,5 +1150,69 @@ namespace App.Infrastructure.SIGPER
                 throw;
             }
         }
+        public int GetHorasTrabajadas(string rut, int mes, int anno)
+        {
+            try
+            {
+                int HorasDiurnas = 0;
+                int TotalHorasDiurnas = 0;
+                int HorasNocturnas = 0;
+                DateTime? entrada = null;
+                DateTime? salida = null;
+
+                using (var context = new AppContextEconomia())
+                {
+                    //var marcacionesMes = (from m in context.MARCACIONES
+                    //                      where m.IDENTIFICADOR == rut
+                    //                      where m.FECHA.Year == anno
+                    //                      where m.FECHA.Month == mes
+                    //                      select m).ToList();
+
+                    var marcacionesMes = context.MARCACIONES.Where(c => c.IDENTIFICADOR == rut && c.FECHA.Year == anno && c.FECHA.Month == mes).ToList();
+
+                    //DateTime oPrimerDiaDelMes = new DateTime(anno, mes, 1);
+
+                    foreach (var dia in marcacionesMes)
+                    {
+                        if (dia.IN_OUT.Trim() == "IN" || dia.HORA.Hour < 12)
+                            entrada = dia.HORA;
+                        else if (dia.IN_OUT.Trim() == "OUT")
+                        {
+                            salida = dia.HORA;
+
+                            if((salida.Value - entrada.Value).Hours >= 9)
+                            {
+                                HorasDiurnas = (salida.Value - entrada.Value).Minutes;
+                            }
+                            else if ((salida.Value - entrada.Value).Hours >= 8)
+                            {
+                                if (dia.FECHA.DayOfWeek.ToString() == "Friday")
+                                {
+                                    if ((salida.Value - entrada.Value).Hours >= 8)
+                                    {
+                                        HorasDiurnas = (salida.Value - entrada.Value).Minutes;
+                                    }
+                                    else
+                                        HorasDiurnas = 0;// (salida.Value - entrada.Value).Minutes;
+                                }
+                                else
+                                    HorasDiurnas = 0;
+                            }
+                            else
+                                HorasDiurnas = 0;
+                            
+                        }
+                        TotalHorasDiurnas += HorasDiurnas;
+                        HorasDiurnas = 0;
+                    }
+                }
+
+                return TotalHorasDiurnas;
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
+        }
     }
 }

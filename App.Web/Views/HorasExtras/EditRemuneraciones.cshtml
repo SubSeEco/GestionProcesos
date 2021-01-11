@@ -23,6 +23,7 @@
                 @Html.HiddenFor(q => Model.JefaturaDV)
                 @Html.HiddenFor(q => Model.Unidad)
                 @Html.HiddenFor(q => Model.UnidadId)
+                @Html.HiddenFor(q => Model.MesBaseCalculo)
 
                 for (int i = 0; i < Model.Colaborador.ToArray().Length; i++)
                 {
@@ -47,6 +48,8 @@
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ValorTotalPago)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesConfirmacion)
                     @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].ObservacionesJefatura)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HDSigper)
+                    @Html.HiddenFor(m => Model.Colaborador.ToArray()[i].HNSigper)
                 }
 
 
@@ -243,7 +246,7 @@
         </div>
         <div class="col s12 m6 l12">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+            @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
         </div>
     </div>
 </div>
