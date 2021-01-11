@@ -296,6 +296,8 @@ namespace App.Web.Controllers
                 var doc = ConvertToByte(file);
 
                 model.Archivo = doc;
+                model.Run = rut;
+                model.Nombre = nombre;
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
@@ -460,6 +462,8 @@ namespace App.Web.Controllers
                 //var doc = ConvertToByte(file);
 
                 //model.Archivo = doc;
+                model.Run = rut;
+                model.Nombre = nombre;
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);

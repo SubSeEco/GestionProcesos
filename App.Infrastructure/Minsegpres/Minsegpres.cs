@@ -155,83 +155,76 @@ namespace App.Infrastructure.Minsegpres
 
                 throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
             }
-            // Status Code 401
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //// Status Code 401
+            //else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 401
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //// Status Code 403
+            //else if (response.StatusCode == HttpStatusCode.Forbidden)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 403
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //// Status Code 404
+            //else if (response.StatusCode == HttpStatusCode.NotFound)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 404
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //// Status Code 412
+            //else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 412
-            else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //// Status Code 500
+            //else if (response.StatusCode == HttpStatusCode.InternalServerError)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 500
-            else if (response.StatusCode == HttpStatusCode.InternalServerError)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //// Status Code 504
+            //else if (response.StatusCode == HttpStatusCode.BadGateway)
+            //{
+            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-                var mensajeError = respuesta.error;
+            //    var mensajeError = respuesta.error;
 
-                var statusCode = respuesta.status;
+            //    var statusCode = respuesta.status;
 
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 504
-            else if (response.StatusCode == HttpStatusCode.BadGateway)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-                var mensajeError = respuesta.error;
-
-                var statusCode = respuesta.status;
-
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
+            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            //}
+            //else
+            //{
+            //    throw new System.Exception("Error inesperado, intente nuevamente.");
+            //}
 
             return binario;
         }
