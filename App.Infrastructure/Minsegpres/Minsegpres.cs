@@ -35,29 +35,6 @@ namespace App.Infrastructure.Minsegpres
                     {
                         PdfSignatureAppearance signatureAppearance = stamper.SignatureAppearance;
 
-                        //IExternalSignature externalSignature = new X509Certificate2Signature(null, "SHA-256");
-
-                        ////agregar folio
-                        //if (!folio.IsNullOrWhiteSpace())
-                        //{
-                        //    try
-                        //    {
-                        //        //obtener informacion de la primera pagina
-                        //        var pagesize = reader.GetPageSize(1);
-                        //        var pdfContentFirstPage = stamper.GetOverContent(1);
-
-                        //        //estampa de folio
-                        //        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
-
-                        //        //estampa de fecha
-                        //        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
-                        //    }
-                        //    catch (System.Exception ex)
-                        //    {
-                        //        throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
-                        //    }
-                        //}
-
                         //agregar tabla de verificacion
                         try
                         {
@@ -115,6 +92,7 @@ namespace App.Infrastructure.Minsegpres
                {
                    {"entity", "Subsecretaría de Economía y Empresas de Menor Tamaño"},
                    { "run", Run},
+                   //{ "run", "15543185"},
                    { "expiration", expires},
                    { "purpose", "Propósito General"},
                };
@@ -155,77 +133,41 @@ namespace App.Infrastructure.Minsegpres
 
                 throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
             }
-            //// Status Code 401
-            //else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            // Status Code 403
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-            //    var mensajeError = respuesta.error;
+                var mensajeError = respuesta.error;
 
-            //    var statusCode = respuesta.status;
+                var statusCode = respuesta.status;
 
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //// Status Code 403
-            //else if (response.StatusCode == HttpStatusCode.Forbidden)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            }
+            // Status Code 404
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-            //    var mensajeError = respuesta.error;
+                var mensajeError = respuesta.error;
 
-            //    var statusCode = respuesta.status;
+                var statusCode = respuesta.status;
 
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //// Status Code 404
-            //else if (response.StatusCode == HttpStatusCode.NotFound)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
+            }
+            // Status Code 412
+            else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                //Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
 
-            //    var mensajeError = respuesta.error;
+                //var mensajeError = respuesta.error;
 
-            //    var statusCode = respuesta.status;
+                //var statusCode = respuesta.status;
 
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //// Status Code 412
-            //else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+                //throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
 
-            //    var mensajeError = respuesta.error;
-
-            //    var statusCode = respuesta.status;
-
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //// Status Code 500
-            //else if (response.StatusCode == HttpStatusCode.InternalServerError)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-            //    var mensajeError = respuesta.error;
-
-            //    var statusCode = respuesta.status;
-
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //// Status Code 504
-            //else if (response.StatusCode == HttpStatusCode.BadGateway)
-            //{
-            //    Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-            //    var mensajeError = respuesta.error;
-
-            //    var statusCode = respuesta.status;
-
-            //    throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            //}
-            //else
-            //{
-            //    throw new System.Exception("Error inesperado, intente nuevamente.");
-            //}
-
+                throw new System.Exception("ERROR: Verificación de OTP fallido.Por favor vuelve a intentar.");
+            }
             return binario;
         }
     }
