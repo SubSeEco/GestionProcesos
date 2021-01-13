@@ -57,10 +57,10 @@
         }
         else
         {
-            <ul class="collection">
-                @foreach (var item in Model.TareasPersonales.OrderByDescending(q => q.WorkflowId))
-                {
-                <li class="collection-item avatar section">
+    <ul class="collection">
+        @foreach (var item in Model.TareasPersonales.Where(q => q.FechaCreacion <= DateTime.Now).OrderByDescending(q => q.WorkflowId))
+        {
+            <li class="collection-item avatar section">
 
                     <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
 
@@ -218,8 +218,8 @@
                     }
 
                 </li>
-                }
-            </ul>
+        }
+    </ul>
         }
     </div>
     <div id="test2" class="col s12">

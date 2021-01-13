@@ -442,6 +442,7 @@
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />

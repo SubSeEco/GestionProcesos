@@ -503,7 +503,15 @@ namespace App.Core.UseCases
                 if (definicionWorkflow != null)
                 {
                     var workflow = new Workflow();
-                    workflow.FechaCreacion = DateTime.Now;
+                    /*Si la ultima tarea es de firma electronica de programacion la sgte se creara para ser ejecutada el mes sgte.*/
+                    if (workflowActual.DefinicionWorkflow.Secuencia == 7)
+                    {
+                        var newDate = "10" + "-" + "0" + (Horas.MesBaseCalculo + 1).ToString()+ "-" + Horas.Annio;
+                        workflow.FechaCreacion = Convert.ToDateTime(newDate);
+                    }                        
+                    else
+                        workflow.FechaCreacion = DateTime.Now;
+
                     workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
                     workflow.Terminada = false;
                     workflow.DefinicionWorkflow = definicionWorkflow;
