@@ -92,7 +92,8 @@ namespace App.Infrastructure.Minsegpres
                {
                    {"entity", "Subsecretaría de Economía y Empresas de Menor Tamaño"},
                    { "run", Run},
-                   //{ "run", "15543185"},
+                   // Rut Feña
+                   //{ "run", "24633745"},
                    { "expiration", expires},
                    { "purpose", "Propósito General"},
                };
@@ -158,13 +159,6 @@ namespace App.Infrastructure.Minsegpres
             // Status Code 412
             else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
             {
-                //Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-                //var mensajeError = respuesta.error;
-
-                //var statusCode = respuesta.status;
-
-                //throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
 
                 throw new System.Exception("ERROR: Verificación de OTP fallido.Por favor vuelve a intentar.");
             }

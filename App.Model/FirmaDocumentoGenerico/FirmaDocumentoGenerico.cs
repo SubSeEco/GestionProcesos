@@ -15,7 +15,7 @@ namespace App.Model.FirmaDocumentoGenerico
         [Display(Name = "Id")]
         public int FirmaDocumentoGenericoId { get; set; }
 
-        [Display(Name = "OTP")]
+        [Display(Name = "OTP (One Time Password)")]
         public string OTP { get; set; }
 
         [Display(Name = "Fecha Creación")]
