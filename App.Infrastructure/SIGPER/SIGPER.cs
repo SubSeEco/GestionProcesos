@@ -111,7 +111,7 @@ namespace App.Infrastructure.SIGPER
                             sigper.Jefatura = jefatura;
 
                         //datos laborales del funcionario
-                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
 
@@ -137,7 +137,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
                             if (FunDatosLaborales != null)
                             {
@@ -146,7 +146,7 @@ namespace App.Infrastructure.SIGPER
                         }
                         else
                         {
-                            PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
                             var CodUnidad = (from u in context.ReContra
                                              join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
@@ -171,7 +171,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             if (FunDatosLaborales != null)
                             {
                                 sigper.FunDatosLaborales = FunDatosLaborales;
@@ -207,7 +207,7 @@ namespace App.Infrastructure.SIGPER
 
                         //datos laborales del funcionario
                         //var PeDatLab = dbTurismo.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
-                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
                             var CodUnidad = (from u in context.ReContra
@@ -232,7 +232,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             if (FunDatosLaborales != null)
                             {
                                 sigper.FunDatosLaborales = FunDatosLaborales;
@@ -948,7 +948,7 @@ namespace App.Infrastructure.SIGPER
                             sigper.Jefatura = jefatura;
 
                         //datos laborales del funcionario
-                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
                             var CodUnidad = (from u in context.PeDatLab
@@ -973,7 +973,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
                             if (FunDatosLaborales != null)
                             {
@@ -1004,7 +1004,7 @@ namespace App.Infrastructure.SIGPER
                         }
                         else
                         {
-                            PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
 
                             var CodUnidad = (from u in context.PeDatLab
                                              join p in context.PEDATPER on u.RH_NumInte equals p.RH_NumInte
@@ -1029,7 +1029,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             if (FunDatosLaborales != null)
                             {
                                 sigper.FunDatosLaborales = FunDatosLaborales;
@@ -1063,7 +1063,7 @@ namespace App.Infrastructure.SIGPER
                             sigper.Jefatura = jefatura;
 
                         //datos laborales del funcionario
-                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
                             var CodUnidad = (from u in context.PeDatLab
@@ -1088,7 +1088,7 @@ namespace App.Infrastructure.SIGPER
                             }
 
                             /*datos laborales funcionario*/
-                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == 2020 || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                            var FunDatosLaborales = context.PeDatLab.Where(q => q.RH_NumInte == funcionario.RH_NumInte && q.RH_ContCod != 13 && (q.RhConIni.Value.Year == DateTime.Now.Year || q.RH_ContCod == 1)).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                             if (FunDatosLaborales != null)
                             {
                                 sigper.FunDatosLaborales = FunDatosLaborales;

@@ -171,7 +171,7 @@ namespace App.Web.Controllers
                 {
                     /*si la cotizacion se guarda ok, se guardan los archivos asociados*/
                     var email = UserExtended.Email(User);
-                    if (Request.Files.Count == 0)
+                    if (Request.Files.Count <= 0)
                         ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
 
                     for (int i = 0; i < Request.Files.Count; i++)
