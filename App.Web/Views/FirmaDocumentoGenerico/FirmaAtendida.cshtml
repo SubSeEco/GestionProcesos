@@ -6,6 +6,24 @@
     .container {
         width: 85%;
     }
+
+    #partitioned {
+        /*padding-left: 15px;*/
+        padding-left: 0px;
+        letter-spacing: 41px;
+        /*letter-spacing: 42px;*/
+        /*  font-size: 100%;*/
+        font-weight: bold;
+        border: 0;
+        background-image: linear-gradient(to left, black 70%, rgba(255, 255, 255, 0) 0%);
+        background-position: bottom;
+        background-size: 50px 1px;
+        background-repeat: repeat-x;
+        background-position-x: 35px;
+        width: 300px;
+        /*        width: 220px;
+*/
+    }
 </style>
 
 @Html.Partial("_Message")
@@ -37,12 +55,15 @@
                                 </div><br />
 
                                 <div class="input-field col s12 m12 l12">
-                                    @Html.TextBoxFor(m => Model.OTP)
-                                    @Html.LabelFor(m => Model.OTP)
-                                    @Html.ValidationMessageFor(m => Model.OTP, "", new { @class = "text-danger" })
-                                </div><br />
+                                    <div>
+                                        <b>@Html.LabelFor(m => Model.OTP)</b>
+                                    </div>
+                                    <b>@Html.TextBoxFor(m => Model.OTP, new { @id = "partitioned", maxlength = "6" })</b>
+                                </div>
 
-                                <button class="waves-effect waves-light btn blue" type="submit">Firmar Documento</button>
+                                <div class="col s12 m12 l12">
+                                    <button class="waves-effect waves-light btn blue" type="submit">Firmar Documento</button>
+                                </div>
                             }
                             else
                             {
