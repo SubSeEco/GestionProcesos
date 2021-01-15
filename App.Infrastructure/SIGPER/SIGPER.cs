@@ -520,6 +520,51 @@ namespace App.Infrastructure.SIGPER
             return returnValue;
 
         }
+        public List<PEDATPER> GetUserByUnidadWithoutHonorarios(int codigoUnidad)
+        {
+            var returnValue = new List<PEDATPER>();
+
+            try
+            {
+                using (var context = new AppContextEconomia())
+                {
+                    if (context.PLUNILAB.AsNoTracking().Any(q => q.Pl_UndCod == codigoUnidad))
+                    {
+                        var data = (from ReContra in context.ReContra
+                                    join PEDATPER in context.PEDATPER on ReContra.RH_NumInte equals PEDATPER.RH_NumInte
+                                    where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                    where ReContra.Re_ConUni == codigoUnidad
+                                    where ReContra.RH_ContCod != 10 /*distinto de honorarios*/
+                                    where ReContra.Re_ConIni == (from ud in context.ReContra where ud.RH_NumInte == PEDATPER.RH_NumInte select ud.Re_ConIni).Max()
+                                    select PEDATPER);
+
+                        returnValue.AddRange(data.ToList());
+                    }
+                }
+                using (var context = new AppContextTurismo())
+                {
+                    if (context.PLUNILAB.AsNoTracking().Any(q => q.Pl_UndCod == codigoUnidad))
+                    {
+                        var data = (from ReContra in context.ReContra
+                                    join PEDATPER in context.PEDATPER on ReContra.RH_NumInte equals PEDATPER.RH_NumInte
+                                    where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
+                                    where ReContra.Re_ConUni == codigoUnidad
+                                    where ReContra.RH_ContCod != 10
+                                    where ReContra.Re_ConIni == (from ud in context.ReContra where ud.RH_NumInte == PEDATPER.RH_NumInte select ud.Re_ConIni).Max()
+                                    select PEDATPER);
+
+                        returnValue.AddRange(data.ToList());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return returnValue;
+
+        }
         public List<PEDATPER> GetUserByUnidadForFirma(int Rut)
         {
             var returnValue = new List<PEDATPER>();
@@ -1114,7 +1159,7 @@ namespace App.Infrastructure.SIGPER
             {
                 using (var context = new AppContextEconomia())
                 {
-                    Decimal monto = 0;
+                    Decimal? monto = 0;
                     if (calidad == 10)
                     {
                         /*honorarios*/
@@ -1134,15 +1179,25 @@ namespace App.Infrastructure.SIGPER
                                        where l.lrem_tipo == 1
                                        select l.lrem_reforcod).ToList();
 
-                        monto = (from R in context.RePagHisDet
-                                 where R.RH_NumInte == rut
-                                 where R.Re_Hismm == mes
-                                 where R.Re_Hisyy == anno
-                                 where results.Contains(R.RehDetObj)
-                                 select R.RehDetObjMon).Sum().Value;
+                        var valor = from R in context.RePagHisDet
+                                     where R.RH_NumInte == rut
+                                     where R.Re_Hismm == mes
+                                     where R.Re_Hisyy == anno
+                                     where results.Contains(R.RehDetObj)
+                                     select R.RehDetObjMon.Value;
+
+                        if (valor.Count() > 0)
+                        {
+                            monto = (from R in context.RePagHisDet
+                                     where R.RH_NumInte == rut
+                                     where R.Re_Hismm == mes
+                                     where R.Re_Hisyy == anno
+                                     where results.Contains(R.RehDetObj)
+                                     select R.RehDetObjMon).Sum().Value;
+                        }
                     }
 
-                    return Convert.ToInt32(monto);
+                    return Convert.ToInt32(monto.Value);
                 }
             }
             catch (Exception)

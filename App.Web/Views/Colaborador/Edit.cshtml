@@ -33,10 +33,6 @@
                                     <th style="width:80px">
                                         @Html.DisplayNameFor(m => Model.HNCompensar)
                                     </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => Model.Descripcion)
-                                    </th>
-                                    <th></th>
                                 </tr>
                                 <tr>
                                     <td>
@@ -55,7 +51,15 @@
                                     <td>
                                         @Html.TextBoxFor(m => Model.HNCompensar, new { style = "width:50px" })
                                     </td>
-                                    <td>
+
+                                </tr>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Descripcion)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
                                         @Html.EditorFor(m => Model.Descripcion)
                                     </td>
                                 </tr>

@@ -143,8 +143,10 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
-            var model = _repository.GetById<HorasExtras>(id);
+            //var persona = _sigper.GetUserByEmail(User.Email());
+            var model = _repository.GetFirst<HorasExtras>(c => c.ProcesoId.Value == id);
+            if (model == null)
+                return RedirectToAction("Details", "Proceso", new { id });
 
             return View(model);
         }
@@ -845,6 +847,7 @@ namespace App.Web.Controllers
             model.CargoFirmanteHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHEPag).FirstOrDefault().ParrafoTexto;
             model.DistribucionHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHEPag).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
             model.VistosHEPag = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHEPag).FirstOrDefault().ParrafoTexto;
+            model.Iniciales = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.InicialesRHPagadas).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }
@@ -913,7 +916,7 @@ namespace App.Web.Controllers
                 new SelectListItem {Text = "Diciembre", Value = "12"},
             };
 
-            ViewBag.MesBaseCalculo = new SelectList(Meses, "Value", "Text");
+             ViewBag.MesBaseCalculo = new SelectList(Meses, "Value", "Text");
 
             foreach (var c in model.Colaborador)
             {
@@ -1047,6 +1050,7 @@ namespace App.Web.Controllers
             model.CargoFirmanteHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmanteHECom).FirstOrDefault().ParrafoTexto;
             model.DistribucionHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DistribucionHECom).FirstOrDefault().ParrafoTexto.Replace(",", Environment.NewLine);
             model.VistosHECom = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosHECom).FirstOrDefault().ParrafoTexto;
+            model.Iniciales = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.InicialesRHCompensadas).FirstOrDefault().ParrafoTexto;
 
             return View(model);
         }

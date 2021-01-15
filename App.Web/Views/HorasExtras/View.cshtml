@@ -1,14 +1,6 @@
 ﻿@model App.Model.HorasExtras.HorasExtras
 
-@Html.Action("Header", "Workflow", new { Model.WorkflowId })
-
-@Html.HiddenFor(q => q.WorkflowId)
-@Html.HiddenFor(q => q.ProcesoId)
-@Html.HiddenFor(q => q.HorasExtrasId)
-@Html.HiddenFor(q => Model.MesBaseCalculo)
-
-<div class="container">
-    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+<div class="container">    
 </div>
 <div class="container">
     <div class="row">
@@ -82,16 +74,16 @@
                                             @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Descripcion)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPago)
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDPagoAprobados)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensar)
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HDCompensarAprobados)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPago)
+                                            @Html.DisplayNameFor(model => model.Colaborador.FirstOrDefault().HNPagoAprobados)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensar)
+                                            @Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().HNCompensarAprobados)
                                         </th>
 
                                         <th></th>
@@ -108,16 +100,16 @@
                                                     @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].Descripcion)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPago)
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HDPagoAprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensar)
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HDCompensarAprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPago)
+                                                    @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].HNPagoAprobados)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensar)
+                                                    @Html.DisplayFor(m => Model.Colaborador.ToArray()[i].HNCompensarAprobados)
                                                 </td>
 
                                             </tr>
@@ -153,8 +145,7 @@
                             }
                         </div>
 
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 16 || Model.Workflow.DefinicionWorkflow.Secuencia == 17)
-                        {
+                      
                             <h3><span style="font-weight: bold">Refrendación de disponibilidad presupuestaria:</span></h3>
                             <div class="row">
                                 @if (Model.Colaborador.Count > 0)
@@ -222,49 +213,27 @@
                                                 <td>
                                                     @Html.DisplayFor(model => Model.Colaborador.ToArray()[i].TipoAsignacion.TasNombre)
                                                 </td>
-                                                <td>
-                                                    <a href='@Url.Action("EditPpto", "Colaborador", new { id = Model.Colaborador.ToArray()[i].ColaboradorId})'><img src="~/Content/images/icon-edit.png"></img></a>
-                                                </td>
                                             </tr>
                                         }
                                     </table>
                                 }
-                                <div class="section"></div>
-                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 17)
-                                {
-                                    @*@Html.ActionLink("Generar Resolucion de trabajos extraordinarios", "GeneraResolucionConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId }, null)*@
-                                    <a href='@Url.Action("GeneraResolucionConfirmacion", "HorasExtras", new { Id = Model.HorasExtrasId })' class="btn-floating modal-trigger btn-large green tooltipped"
-                                       data-position="left"
-                                       data-tooltip="Generar Resolucion de trabajos extraordinarios"><i class="large material-icons">create</i></a>
-                                }
                             </div>
-                        }
+                        
                     </div>
                 </div>
             </div>
         </div>
         <div class="col s12 m6 l3">
-            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
+            @*@Html.Action("Documents", "Workflow", new { Model.WorkflowId })*@
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
 </div>
-
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.datepicker').datepicker();
-        $('select').formSelect();
-        $('input:hidden').each(function (index, element) {
-            $(element).appendTo($(element).parent());
-        });
-
-        $('.modal').modal();
-        $('.tooltipped').tooltip();
-
-    });
-
     $(function () {
         $("#jQuery_accordion").accordion({
             collapsible: true, heightStyle: true

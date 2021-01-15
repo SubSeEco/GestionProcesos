@@ -137,5 +137,9 @@ namespace App.Model.HorasExtras
         [NotMapped]
         [Display(Name = "Vistos")]
         public string VistosHECom { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Iniciales")]
+        public string Iniciales { get; set; }
     }
 }

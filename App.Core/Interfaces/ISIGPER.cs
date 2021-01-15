@@ -12,7 +12,7 @@ namespace App.Core.Interfaces
         SIGPER GetUserByRut(int rut);
         List<PEDATPER> GetUserByTerm(string term);
         List<PEDATPER> GetUserByUnidad(int codigo);
-
+        List<PEDATPER> GetUserByUnidadWithoutHonorarios(int codigoUnidad);
         List<PEDATPER> GetUserByUnidadForFirma(int Rut);
         List<PEDATPER> GetAllUsersForCometido();
         List<PEDATPER> GetAllUsers();

@@ -29,7 +29,7 @@
         <b>UNIDAD DE GESTIÓN Y DESARROLLO</b><br />
         <b>DE PERSONAS</b><br />
         <b>ÁREA PERSONAS</b><br />
-        <b>MSF/PCM/BCJ</b><br />
+        <b>@Html.DisplayFor(m => Model.Iniciales)</b><br />
         <b>R.A.EX</b><br />
     </div>
     <center>
@@ -124,16 +124,16 @@
                 @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HDPagoAprobados)
             </td>
             <td style="width:10%">
-                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
+                @String.Format("{0:C0}", Model.Colaborador.ToArray()[i].ValorHorasDiurnas)
             </td>
             <td style="width:10%">
                 @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].HNPagoAprobados)
             </td>
             <td style="width:10%">
-                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
+                @String.Format("{0:C0}", Model.Colaborador.ToArray()[i].ValorHorasNocturnas)
             </td>
             <td style="width:10%">
-                @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].ValorTotalPago)
+                @String.Format("{0:C0}", Model.Colaborador.ToArray()[i].ValorTotalPago)
             </td>
             <td style="width:10%">
                 @Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoSubTitulo.TstNombre).@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoItem.TitNombre).@Html.DisplayFor(modelItem => Model.Colaborador.ToArray()[i].TipoAsignacion.TasNombre)
@@ -146,13 +146,13 @@
     <p class="breakhere"></p>
     <ol>
         <p align="justify" style="margin-right:30px">
-            <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total
+            <b>ARTÍCULO SEGUNDO: AUTORÍCESE,</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al Departamento Administrativo de la Subsecretaría de Economía y Empresas de Menor Tamaño, a pagar la suma total
             de @Html.DisplayFor(m => Model.ValorTotalHoras) - (@Html.DisplayFor(m => Model.ValorTotalHorasPalabras)), por concepto de trabajos extraordinarios, conforme al detalle descrito precedentemente.
         </p>
     </ol>
     <ol>
         <p align="justify" style="margin-right:30px">
-            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21 @*.02.004*@ (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
+            <b>ARTÍCULO TERCERO: IMPÚTESE,</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el gasto que demande esta Resolución al Subtítulo 21 @*.02.004*@ (Horas Extraordinarias Personal a Contrata), del Presupuesto para el año @Html.DisplayFor(m => Model.Annio),
             de la Subsecretaría de Economía y Empresas de Menor Tamaño.
         </p>
     </ol>

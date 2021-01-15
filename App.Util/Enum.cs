@@ -79,7 +79,9 @@ namespace App.Util
             FirmanteHECom = 27,
             CargoFirmanteHECom = 28,
             DistribucionHECom = 29,
-            VistosHECom = 30
+            VistosHECom = 30,
+            InicialesRHPagadas = 31,
+            InicialesRHCompensadas = 32,
         }
         public enum TipoAprobacion
         {

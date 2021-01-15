@@ -6,6 +6,7 @@
 @Html.HiddenFor(q => q.ProcesoId)
 
 <div class="container">
+    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
     <div class="row">
         <div class="input-field col s12 m10 l6">
             <strong>
@@ -36,14 +37,14 @@
 
             @if (!Model.Proceso.Documentos.LastOrDefault().Signed)
             {
-            <div class="section"></div>
-            <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault().DocumentoId)">Firmar</a>
+                <div class="section"></div>
+                <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault().DocumentoId)">Firmar</a>
             }
             else
             {
-            <i class="material-icons large secondary-content green-text">check</i>
+                <i class="material-icons large secondary-content green-text">check</i>
             }
-            
+
         </div>
 
         <div id="@String.Concat("#modal", Model.Proceso.Documentos.LastOrDefault().DocumentoId)" class="modal">

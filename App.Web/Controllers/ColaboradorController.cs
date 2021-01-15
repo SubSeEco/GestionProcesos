@@ -304,7 +304,8 @@ namespace App.Web.Controllers
             var persona = _sigper.GetUserByEmail(User.Email());
             var HorasExtras = _repository.GetById<HorasExtras>(Id);
 
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidadWithoutHonorarios(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
 
             var model = new Colaborador();
             //model.HorasExtras = HorasExtras;
@@ -342,13 +343,13 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
 
-                    /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var com = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
-                    var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).OrderByDescending(c =>c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
-                    if (secuencia == 1)
-                        return RedirectToAction("Edit", "HorasExtras", new {  id = com.HorasExtrasId});
+                    /*se redireccina a la vista que llamo al metodo de crear*/
+                    var hrs = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == hrs.ProcesoId).OrderByDescending(c =>c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
+                    if (secuencia == 1 || secuencia == 2)
+                        return RedirectToAction("Edit", "HorasExtras", new {  id = hrs.HorasExtrasId});
                     else
-                        return RedirectToAction("EditGP", "HorasExtras", new { id = com.HorasExtrasId });
+                        return RedirectToAction("EditGP", "HorasExtras", new { id = hrs.HorasExtrasId });
                 }
                 else
                 {

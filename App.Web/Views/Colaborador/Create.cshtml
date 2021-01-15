@@ -34,9 +34,6 @@
                                     <th style="width:80px">
                                         @Html.DisplayNameFor(m => Model.HNCompensar)
                                     </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => Model.Descripcion)
-                                    </th>
                                     <th></th>
                                 </tr>
                                 <tr>
@@ -55,12 +52,20 @@
                                     <td>
                                         @Html.TextBoxFor(m => Model.HNCompensar, new { style = "width:50px" })
                                     </td>
-                                    <td>
+
+                                </tr>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Descripcion)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
                                         @Html.EditorFor(m => Model.Descripcion)
                                         @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
                                     </td>
                                 </tr>
-                                </table>
+                            </table>
                             <div class="section"></div>
                             <p>
                                 <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>

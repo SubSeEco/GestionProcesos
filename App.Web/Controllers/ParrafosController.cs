@@ -81,7 +81,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Details", new { id = model.ParrafosId });
+                    return RedirectToAction("Index");
+                    //return RedirectToAction("Details", new { id = model.ParrafosId });
                 }
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;

@@ -1,9 +1,10 @@
 ﻿@model App.Model.HorasExtras.HorasExtras
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
-@Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+
 
 <div class="container">
+    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
     <div class="row">
         <div class="col s12 m6 l12">
             @Html.Partial("_Message")

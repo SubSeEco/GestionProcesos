@@ -789,6 +789,7 @@
     <Content Include="Views\FirmaDocumentoGenerico\Edit.cshtml" />
     <Content Include="Views\FirmaDocumentoGenerico\Sign.cshtml" />
     <Content Include="Views\FirmaDocumentoGenerico\FirmaAtendida.cshtml" />
+    <Content Include="Views\HorasExtras\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
