@@ -5135,8 +5135,10 @@ namespace App.Core.UseCases
                     {
                         /*Aprueba y notifica a Oficina de Partes*/
                         emailMsg = new List<string>();
-                        emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
-                        emailMsg.Add("scid@economia.cl"); //oficia de partes
+                        var OfPartes = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.CorreoOfPartes.ToString());
+                        //emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
+                        //emailMsg.Add("scid@economia.cl"); //oficia de partes
+                        emailMsg.Add(OfPartes.Valor); //oficia de partes
                         emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
 
                         _email.NotificacionesCometido(workflowActual,
@@ -5946,8 +5948,10 @@ namespace App.Core.UseCases
 
                                     /*Aprueba y notifica a Oficina de Partes*/
                                     emailMsg = new List<string>();
-                                    emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
-                                    emailMsg.Add("scid@economia.cl"); //oficia de partes
+                                    var OfPartes = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.CorreoOfPartes.ToString());
+                                    //emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
+                                    //emailMsg.Add("scid@economia.cl"); //oficia de partes
+                                    emailMsg.Add(OfPartes.Valor); //oficia de partes
                                     emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
 
                                     _email.NotificacionesCometido(workflow,

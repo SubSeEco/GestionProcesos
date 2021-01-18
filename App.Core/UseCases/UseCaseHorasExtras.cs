@@ -506,9 +506,18 @@ namespace App.Core.UseCases
                     /*Si la ultima tarea es de firma electronica de programacion la sgte se creara para ser ejecutada el mes sgte.*/
                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                     {
-                        var newDate = "10" + "-" + "0" + (Horas.MesBaseCalculo + 1).ToString()+ "-" + Horas.Annio;
+                        string mes = (Horas.MesBaseCalculo + 1).ToString().Length != 1 ? (Horas.MesBaseCalculo + 1).ToString() : "0" + (Horas.MesBaseCalculo + 1).ToString();
+                        string year = Horas.Annio;
+
+                        if(Horas.MesBaseCalculo == 12)
+                        {
+                            mes = "01";
+                            year = (int.Parse(Horas.Annio) + 1).ToString(); 
+                        }
+
+                        var newDate = "10" + "-" + mes + "-" + year;
                         workflow.FechaCreacion = Convert.ToDateTime(newDate);
-                    }                        
+                    }
                     else
                         workflow.FechaCreacion = DateTime.Now;
 
