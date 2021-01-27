@@ -340,7 +340,8 @@ namespace App.Infrastructure.SIGPER
                             sigper.Jefatura = jefatura;
 
                         //datos laborales del funcionario
-                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).AsEnumerable().LastOrDefault();
+                        //var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
                             sigper.FunDatosLaborales = PeDatLab;
@@ -414,7 +415,8 @@ namespace App.Infrastructure.SIGPER
                             sigper.Jefatura = jefatura;
 
                         //datos laborales del funcionario
-                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
+                        var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).AsEnumerable().LastOrDefault();
+                        //var PeDatLab = context.PeDatLab.AsNoTracking().Where(q => q.RH_NumInte == funcionario.RH_NumInte).OrderByDescending(q => q.RH_Correla).FirstOrDefault();
                         if (PeDatLab != null)
                         {
                             sigper.FunDatosLaborales = PeDatLab;
