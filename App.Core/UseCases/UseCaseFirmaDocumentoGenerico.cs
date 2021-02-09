@@ -14,7 +14,7 @@ namespace App.Core.UseCases
         //protected readonly IHSM _hsm;
         protected readonly ISIGPER _sigper;
         protected readonly IEmail _email;
-        //protected readonly IFolio _folio;
+        protected readonly IFolio _folio;
         protected readonly IFile _file;
         protected readonly IMinsegpres _minsegpres;
         public UseCaseFirmaDocumentoGenerico(IGestionProcesos repository)
@@ -22,12 +22,12 @@ namespace App.Core.UseCases
             _repository = repository;
         }
 
-        public UseCaseFirmaDocumentoGenerico(IGestionProcesos repository, ISIGPER sigper, IFile file, /*IFolio folio, IHSM hsm, */IEmail email, IMinsegpres minsegpres)
+        public UseCaseFirmaDocumentoGenerico(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm, */IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
-            //_folio = folio;
+            _folio = folio;
             //_hsm = hsm;
             _email = email;
             _minsegpres = minsegpres;
@@ -94,11 +94,41 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre)
+        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string folio, bool TipoDocumento)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre);
+            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, folio, TipoDocumento);
+
+            var persona = new SIGPER();
+
+
+            ////si el documento ya tiene folio, no solicitarlo nuevamente
+            //if (string.IsNullOrWhiteSpace(model.Folio))
+            //{
+            //    try
+            //    {
+            //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+            //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
+            //        if (_folioResponse == null)
+            //            response.Errors.Add("Error al llamar el servicio externo de folio");
+
+            //        if (_folioResponse != null && _folioResponse.status == "ERROR")
+            //            response.Errors.Add(_folioResponse.error);
+
+            //        model.Folio = _folioResponse.folio;
+
+            //        _repository.Update(model);
+            //        _repository.Save();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        response.Errors.Add(ex.Message);
+            //    }
+            //}
+
+            if (!response.IsValid)
+                return response;
 
             if (binario != null)
             {
@@ -128,6 +158,8 @@ namespace App.Core.UseCases
                 doc.Type = data.Type;
                 doc.TipoPrivacidadId = 1;
                 doc.TipoDocumentoId = tipoDoc;
+
+                doc.Folio = model.Folio;
 
                 _repository.Create(doc);
                 //_repository.Update(doc);

@@ -129,17 +129,17 @@ namespace App.Web.Controllers
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
-        //protected readonly IFolio _folio;
+        protected readonly IFolio _folio;
         //protected readonly IHSM _hsm;
         protected readonly IEmail _email;
         protected readonly IMinsegpres _minsegpres;
 
-        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, /*IFolio folio, IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
+        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
-            //_folio = folio;
+            _folio = folio;
             //_hsm = hsm;
             _email = email;
             _minsegpres = minsegpres;
@@ -210,7 +210,7 @@ namespace App.Web.Controllers
                 model.Run = rut;
                 model.Nombre = nombre;
 
-                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -273,7 +273,7 @@ namespace App.Web.Controllers
                 model.Run = rut;
                 model.Nombre = nombre;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -297,7 +297,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -331,9 +331,37 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            var folio = model.Folio;
+
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
+
+                var response = new ResponseMessage();
+
+                //si el documento ya tiene folio, no solicitarlo nuevamente
+                if (string.IsNullOrWhiteSpace(model.Folio))
+                {
+                    try
+                    {
+                        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+                        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
+                        if (_folioResponse == null)
+                            response.Errors.Add("Error al llamar el servicio externo de folio");
+
+                        if (_folioResponse != null && _folioResponse.status == "ERROR")
+                            response.Errors.Add(_folioResponse.error);
+
+                        model.Folio = _folioResponse.folio;
+
+                        _repository.Update(model);
+                        _repository.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        response.Errors.Add(ex.Message);
+                    }
+                }
             }
 
             return View(model);
@@ -351,6 +379,8 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            var folio = model.Folio;
+
             if (ModelState.IsValid/* && file == null*/)
             {
                 //var doc = ConvertToByte(file);
@@ -358,10 +388,11 @@ namespace App.Web.Controllers
                 //model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
+              
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
-                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre);
+                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.Folio, model.TipoDocumento);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
