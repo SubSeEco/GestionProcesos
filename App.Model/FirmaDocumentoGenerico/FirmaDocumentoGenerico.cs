@@ -36,7 +36,7 @@ namespace App.Model.FirmaDocumentoGenerico
         public string Nombre { get; set; }
 
         [Display(Name = "Email")]
-        public string Enail { get; set; }
+        public string Email { get; set; }
 
         [Display(Name = "Subsecretaria")]
         public string Subsecretaria { get; set; }
