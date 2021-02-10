@@ -21,11 +21,32 @@
 
                 @Html.HiddenFor(q => Model.FirmaDocumentoGenericoId)
                 @Html.HiddenFor(q => Model.Archivo)
+                @Html.HiddenFor(q => Model.TipoDocumento)
 
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Ingreso de documento</span>
                         <div class="section"></div>
+                        <div class="form-group">
+                            @*<div class="control-label col-md-2">*@
+                            <div class="control-label col s12 m12 l12">
+                                <b>@Html.LabelFor(m => m.TipoDocumento)</b>
+                            </div>
+                            <div>
+                                <div class="col-md-10">
+                                    <div class="container">
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDocumento, true)
+                                            <span>OTROS</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDocumento, false)
+                                            <span>MEMORANDUM</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><br />
                         <div class="row">
                             <div class="input-field">
                                 <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>

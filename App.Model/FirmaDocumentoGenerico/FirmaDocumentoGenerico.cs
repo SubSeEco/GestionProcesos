@@ -34,5 +34,11 @@ namespace App.Model.FirmaDocumentoGenerico
 
         [Display(Name = "Nombre Funcionario")]
         public string Nombre { get; set; }
+
+        [Display(Name = "Folio")]
+        public string Folio { get; set; }
+
+        [Display(Name = "Tipo Documento ")]
+        public bool TipoDocumento { get; set; } = true;
     }
 }
