@@ -387,8 +387,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
                 model.Run = rut;
-                model.Nombre = nombre;
-              
+                model.Nombre = nombre;             
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);

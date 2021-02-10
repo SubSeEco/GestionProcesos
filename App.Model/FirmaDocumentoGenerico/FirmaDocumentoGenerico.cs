@@ -35,6 +35,12 @@ namespace App.Model.FirmaDocumentoGenerico
         [Display(Name = "Nombre Funcionario")]
         public string Nombre { get; set; }
 
+        [Display(Name = "Email")]
+        public string Enail { get; set; }
+
+        [Display(Name = "Subsecretaria")]
+        public string Subsecretaria { get; set; }
+
         [Display(Name = "Folio")]
         public string Folio { get; set; }
 
