@@ -20,12 +20,24 @@
 
     @if (@ViewBag.Grupo == "0" || @ViewBag.Grupo == "4" || @ViewBag.Grupo == "7" || @ViewBag.Grupo == "6" || @ViewBag.Grupo == "5" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
     {
-        using (Html.BeginForm("SeguimientoGP", null))
+        using (Html.BeginForm("SeguimientoGP", null, FormMethod.Get))
         {
             @Html.AntiForgeryToken()
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Reporte Seguimiento Gestión de Personas</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Ir</button>
+                </div>
+            </div>
+        }
+
+        using (Html.BeginForm("FueraPlazo", null, FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Cometidos Fuera de Plazo</span>
                     <div class="section"></div>
                     <button class="waves-effect waves-light btn blue">Ir</button>
                 </div>
