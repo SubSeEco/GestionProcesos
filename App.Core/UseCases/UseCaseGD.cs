@@ -153,29 +153,30 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage Delete(int id)
-        {
-            var response = new ResponseMessage();
 
-            try
-            {
-                var obj = _repository.GetById<GD>(id);
-                if (obj == null)
-                    response.Errors.Add("Dato no encontrado");
+        //public ResponseMessage Delete(int id)
+        //{
+        //    var response = new ResponseMessage();
 
-                if (response.IsValid)
-                {
-                    _repository.Delete(obj);
-                    _repository.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Errors.Add(ex.Message);
-            }
+        //    try
+        //    {
+        //        var obj = _repository.GetById<GD>(id);
+        //        if (obj == null)
+        //            response.Errors.Add("Dato no encontrado");
 
-            return response;
-        }
+        //        if (response.IsValid)
+        //        {
+        //            _repository.Delete(obj);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
+
+        //    return response;
+        //}
         public ResponseMessage WorkflowUpdateInterno(Workflow obj)
         {
             var response = new ResponseMessage();

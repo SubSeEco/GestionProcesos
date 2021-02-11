@@ -129,17 +129,17 @@ namespace App.Web.Controllers
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
-        //protected readonly IFolio _folio;
+        protected readonly IFolio _folio;
         //protected readonly IHSM _hsm;
         protected readonly IEmail _email;
         protected readonly IMinsegpres _minsegpres;
 
-        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, /*IFolio folio, IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
+        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
-            //_folio = folio;
+            _folio = folio;
             //_hsm = hsm;
             _email = email;
             _minsegpres = minsegpres;
@@ -182,6 +182,7 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
+            string subsecretaria = persona.SubSecretaria.Trim();
 
             if (ModelState.IsValid)
             {
@@ -201,6 +202,10 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            string subsecretaria = persona.SubSecretaria.Trim();
+
+            string email = persona.Funcionario.Rh_Mail.Trim();
+
             var doc = ConvertToByte(file);
 
             if (ModelState.IsValid)
@@ -209,8 +214,10 @@ namespace App.Web.Controllers
                 model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
+                model.Subsecretaria = subsecretaria;
+                model.Email = email;
 
-                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -241,10 +248,6 @@ namespace App.Web.Controllers
 
             //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 15).FirstOrDefault();
 
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
@@ -265,6 +268,10 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            string subsecretaria = persona.SubSecretaria.Trim();
+
+            string email = persona.Funcionario.Rh_Mail.Trim();
+
             if (ModelState.IsValid && file != null)
             {
                 var doc = ConvertToByte(file);
@@ -272,8 +279,10 @@ namespace App.Web.Controllers
                 model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
+                model.Subsecretaria = subsecretaria;
+                model.Email = email;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -297,7 +306,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -321,20 +330,7 @@ namespace App.Web.Controllers
 
         public ActionResult FirmaAtendida(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 15).FirstOrDefault();
-
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
-            if (ModelState.IsValid)
-            {
-                model.FechaCreacion = DateTime.Now;
-            }
 
             return View(model);
         }
@@ -357,11 +353,11 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
                 model.Run = rut;
-                model.Nombre = nombre;
+                model.Nombre = nombre;             
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
-                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre);
+                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
