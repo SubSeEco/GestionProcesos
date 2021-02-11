@@ -94,11 +94,11 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string folio, bool TipoDocumento)
+        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, bool TipoDocumento)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, folio, TipoDocumento);
+            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, TipoDocumento);
 
             var persona = new SIGPER();
 
@@ -165,37 +165,6 @@ namespace App.Core.UseCases
                 //_repository.Update(doc);
                 _repository.Save();
             }
-
-            //model.ArchivoFirmado = binario;
-
-            //DTOFileMetadata data = new DTOFileMetadata();
-            //int tipoDoc = 0;
-            //int IdDocto = 0;
-            //string Name = string.Empty;
-
-            //tipoDoc = 15;
-            //Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
-
-            ////var email = username;
-            //var email = "";
-            ////var email = UserExtended.Email(User);
-            //var doc = new Documento();
-            //doc.Fecha = DateTime.Now;
-            //doc.Email = email;
-            //doc.FileName = Name;
-            //doc.File = binario;
-            //doc.ProcesoId = model.ProcesoId.Value;
-            //doc.WorkflowId = model.WorkflowId.Value;
-            //doc.Signed = false;
-            //doc.Texto = data.Text;
-            //doc.Metadata = data.Metadata;
-            //doc.Type = data.Type;
-            //doc.TipoPrivacidadId = 1;
-            //doc.TipoDocumentoId = tipoDoc;
-
-            //_repository.Create(doc);
-            ////_repository.Update(doc);
-            //_repository.Save();
 
             return response;
         }

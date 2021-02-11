@@ -23,7 +23,16 @@ namespace App.Infrastructure.Minsegpres
 {
     public class Minsegpres : IMinsegpres
     {
-        public byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, string folio, bool TipoDocumento)
+        protected readonly IGestionProcesos _repository;
+        protected readonly IFolio _folio;
+
+        public Minsegpres(IGestionProcesos repository, IFolio folio)
+        {
+            _repository = repository;
+            _folio = folio;
+        }
+
+        public byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento)
         {
             byte[] binario = null;
 
@@ -33,10 +42,39 @@ namespace App.Infrastructure.Minsegpres
                 {
                     using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
                     {
+                        var respuesta = new ResponseMessage();
 
-                        //PdfSignatureAppearance signatureAppearance = stamper.SignatureAppearance
+                        var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
                         if (TipoDocumento == false)
                         {
+                            string folio = null;
+
+                            //si el documento ya tiene folio, no solicitarlo nuevamente
+                            if (string.IsNullOrWhiteSpace(model.Folio))
+                            {
+                                try
+                                {
+                                    //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+                                    var _folioResponse = _folio.GetFolio(string.Join(", ", model.Email), "MEMO", model.Subsecretaria);
+                                    if (_folioResponse == null)
+                                        respuesta.Errors.Add("Error al llamar el servicio externo de folio");
+
+                                    if (_folioResponse != null && _folioResponse.status == "ERROR")
+                                        respuesta.Errors.Add(_folioResponse.error);
+
+                                    model.Folio = _folioResponse.folio;
+                                    folio = model.Folio;
+
+                                    _repository.Update(model);
+                                    _repository.Save();
+                                }
+                                catch (Exception ex)
+                                {
+                                    respuesta.Errors.Add(ex.Message);
+                                }
+                            }
+
                             //agregar tabla de verificacion
                             try
                             {
@@ -57,31 +95,6 @@ namespace App.Infrastructure.Minsegpres
                                 {
                                     throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
                                 }
-
-                                ////var img = Image.GetInstance(QR);
-                                ////var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                                //var fontStandard = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
-                                //var fontBold = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
-                                //var pdfContentLastPage = stamper.GetUnderContent(reader.NumberOfPages);
-                                //var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
-
-                                ////table.TotalWidth = 520f;
-                                //table.TotalWidth = 520f;
-                                ////table.SetWidths(new float[] { 8f, 25f, 6f });
-                                //table.SetWidths(new float[] { 110f, 19f, 10f });
-                                ////table.AddCell(new PdfPCell(new Phrase("Subsecretaría de Economía y Empresas de Menor Tamaño", fontBold)) { Colspan = 1, BorderColor = BaseColor.DARK_GRAY });
-                                //table.AddCell(new PdfPCell(new Phrase("Documento Firmado, de acuerdo a lo establecido en artículo 40 del Reglamento de la Ley Nº 19.799", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
-                                ////table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
-                                //table.AddCell(new PdfPCell(new Phrase("Fecha de Firma", fontBold)) { });
-                                ////table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                                //table.AddCell(new PdfPCell(new Phrase("Nombre Funcionario", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                                ////table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                                ////table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                                ////table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                                //table.AddCell(new PdfPCell(new Phrase(folio, fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                                ////table.AddCell(new PdfPCell(new Phrase(Run, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                                //table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                                //table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
                             }
                             catch (System.Exception ex)
                             {
@@ -101,21 +114,12 @@ namespace App.Infrastructure.Minsegpres
                             var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
                             var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
 
-                            //table.TotalWidth = 520f;
                             table.TotalWidth = 520f;
-                            //table.SetWidths(new float[] { 8f, 25f, 6f });
                             table.SetWidths(new float[] { 10f, 19f, 10f });
-                            //table.AddCell(new PdfPCell(new Phrase("Subsecretaría de Economía y Empresas de Menor Tamaño", fontBold)) { Colspan = 1, BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase("Documento Firmado, de acuerdo a lo establecido en artículo 40 del Reglamento de la Ley Nº 19.799", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
-                            //table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
                             table.AddCell(new PdfPCell(new Phrase("Fecha de Firma", fontBold)) { });
-                            //table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase("Nombre Funcionario", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                            //table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                            //table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                            //table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase(Nombre, fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                            //table.AddCell(new PdfPCell(new Phrase(Run, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
                         }
@@ -148,8 +152,6 @@ namespace App.Infrastructure.Minsegpres
                {
                    {"entity", "Subsecretaría de Economía y Empresas de Menor Tamaño"},
                    { "run", Run},
-                   // Rut Feña
-                   //{ "run", "24633745"},
                    { "expiration", expires},
                    { "purpose", "Propósito General"},
                };
