@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<App.Model.Core.Documento>
+@using Enum = App.Util.Enum;
 @{
     Layout = null;
 }
@@ -82,7 +83,7 @@
                 </div>
                 <div class="col s12 m12 l12">
                     <br />
-                    @if (!@item.Proceso.Terminada && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
+                    @if (@item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
                     {
                         <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumento", @item.DocumentoId)">Firmar</a>
 
@@ -102,7 +103,7 @@
                         </div>
                     }
 
-                    @if (!@item.Proceso.Terminada && @item.Activo && @item.AutorizadoParaEliminar)
+                    @if (@item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso && @item.Activo && @item.AutorizadoParaEliminar)
                     {
                         <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", @item.DocumentoId)">Eliminar</a>
                         <div id="@string.Concat("modalDeleteDocumento", @item.DocumentoId)" class="modal">

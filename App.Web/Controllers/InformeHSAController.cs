@@ -331,7 +331,7 @@ namespace App.Web.Controllers
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                var result = context.InformeHSA.Where(q => !q.Proceso.Anulada).Select(hsa => new {
+                var result = context.InformeHSA.Where(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado).Select(hsa => new {
                     hsa.ProcesoId,
                     hsa.Proceso.EstadoProceso.Descripcion,
                     hsa.FechaSolicitud,

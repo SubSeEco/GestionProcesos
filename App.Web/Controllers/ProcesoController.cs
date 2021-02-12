@@ -308,11 +308,10 @@ namespace App.Web.Controllers
 
         public ActionResult Dashboard()
         {
-            var result = _repository.GetAll<Proceso>();
-            ViewBag.EnCurso = result.Count(q => !q.Terminada);
-            ViewBag.Terminados = result.Count(q => q.Terminada);
-            ViewBag.Anulados = result.Count(q => q.Anulada);
-            ViewBag.Totales = result.Count();
+            ViewBag.EnCurso = _repository.GetCount<Proceso>(q=>q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso);
+            ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+            ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
+            ViewBag.Totales = _repository.GetCount<Proceso>();
 
             return View();
         }

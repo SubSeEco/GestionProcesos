@@ -88,8 +88,8 @@ namespace App.Model.Core
 
 
         //deprecado
-        [Display(Name = "Estado")]
-        public bool Terminada { get; set; } = false;
+        //[Display(Name = "Estado")]
+        //public bool Terminada { get; set; } = false;
 
         [Display(Name = "Anulada?")]
         public bool Anulada { get; set; } = false;

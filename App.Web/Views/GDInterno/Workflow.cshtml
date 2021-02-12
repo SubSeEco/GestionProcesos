@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<App.Model.Core.Workflow>
+@using Enum = App.Util.Enum;
 
 @{ Layout = null;}
 
@@ -54,14 +55,21 @@
                             <span class="grey-text">@Html.DisplayFor(modelItem => item.Pl_UndDes)</span><br />
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
-                            @if ((bool)item.EsTareaCierre)
+                            @if (item.TipoAprobacionId == (int)Enum.TipoAprobacion.SinAprobacion)
                             {
-                                <p> y cerrada</p>
+                                @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
                             }
                             else
                             {
-                                <p> y reenviada</p>
+                                @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
+                                if (item.EsTareaCierre)
+                                {
+                                    <p> y cerrada</p>
+                                }
+                                else
+                                {
+                                    <p> y reenviada</p>
+                                }
                             }
                         </td>
                         <td>

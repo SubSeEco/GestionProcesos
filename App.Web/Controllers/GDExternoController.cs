@@ -326,14 +326,8 @@ namespace App.Web.Controllers
 
         public PartialViewResult Row(int ProcesoId)
         {
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
-            {
-                //var model = _repository.GetById<GD>(ProcesoId);
-                var model = context.GD
-                    .Include(q => q.GDOrigen)
-                    .FirstOrDefault(q => q.ProcesoId == ProcesoId);
-                return PartialView(model);
-            }
+            var model = _repository.GetFirst<GD>(q => q.ProcesoId == ProcesoId);
+            return PartialView(model);
         }
 
         public PartialViewResult Workflow(int ProcesoId)
@@ -396,7 +390,7 @@ namespace App.Web.Controllers
 
             var detalle =
                 _repository
-                .Get<Workflow>(q => !q.Proceso.Anulada && idsProcesos.Contains(q.ProcesoId))
+                .Get<Workflow>(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado && idsProcesos.Contains(q.ProcesoId))
                 .OrderBy(q => q.ProcesoId)
                 .ThenBy(q => q.WorkflowId)
                 .Select(item => new
@@ -424,7 +418,7 @@ namespace App.Web.Controllers
             var predicate = PredicateBuilder.True<GD>();
 
             predicate = predicate.And(q => q.Fecha.Value.Year == model.Desde.Value.Year && q.Fecha.Value.Month == model.Desde.Value.Month && q.Fecha.Value.Day == model.Desde.Value.Day);
-            predicate = predicate.And(q => !q.Proceso.Anulada);
+            predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
             predicate = predicate.And(q => q.IngresoExterno);
 
             if (!string.IsNullOrWhiteSpace(model.UnidadCodigo))

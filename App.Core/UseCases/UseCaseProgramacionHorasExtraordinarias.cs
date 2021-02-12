@@ -1472,7 +1472,7 @@ namespace App.Core.UseCases
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
-                    workflowActual.Proceso.Terminada = true;
+                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
                 }

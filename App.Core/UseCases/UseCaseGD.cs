@@ -253,7 +253,7 @@ namespace App.Core.UseCases
                 if (definicionWorkflow == null)
                 {
                     workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
-                    workflowActual.Proceso.Terminada = true;
+                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
 
@@ -593,7 +593,7 @@ namespace App.Core.UseCases
                 if (definicionWorkflow == null)
                 {
                     workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
-                    workflowActual.Proceso.Terminada = true;
+                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
 
