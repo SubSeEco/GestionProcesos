@@ -4730,7 +4730,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
                     {
-                        if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (workflowActual.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
@@ -4749,7 +4749,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 17)
                     {
-                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
@@ -4758,7 +4758,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
                     {
-                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
@@ -4767,7 +4767,7 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
                     {
-                        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                        if (obj.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
                         {
                             var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
                             if (doc.Count() > 0)
@@ -5535,7 +5535,7 @@ namespace App.Core.UseCases
 
                         string jefe = string.Empty;
                         var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
-                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email.Trim();
                         var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
                         if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
                             jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();

@@ -178,7 +178,8 @@
                             @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().DefinicionWorkflow.Nombre)
                         </td>
                         <td>
-                            @Html.ActionLink("Detalles", "View", "Cometido", new { id = item.CometidoId }, null)
+                            @*@Html.ActionLink("Detalles", "View", "Cometido", new { id = item.CometidoId }, null)*@
+                            @Html.ActionLink("Detalles", "View", "Cometido", new { id = item.ProcesoId }, null)
                         </td>
                         <td>
                             @*@Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })*@

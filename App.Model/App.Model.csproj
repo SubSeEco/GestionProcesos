@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,6 +55,8 @@
   <ItemGroup>
     <Compile Include="Cometido\CentroCosto.cs" />
     <Compile Include="Cometido\Cometido.cs" />
+    <Compile Include="Cometido\DataPoint.cs" />
+    <Compile Include="Cometido\DataService.cs" />
     <Compile Include="Cometido\Destinos.cs" />
     <Compile Include="Cometido\GeneracionCDP.cs" />
     <Compile Include="Cometido\Mantenedor.cs" />

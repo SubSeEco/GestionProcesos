@@ -182,6 +182,7 @@ namespace App.Web.Controllers
 
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
+            string subsecretaria = persona.SubSecretaria.Trim();
 
             if (ModelState.IsValid)
             {
@@ -201,6 +202,10 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            string subsecretaria = persona.SubSecretaria.Trim();
+
+            string email = persona.Funcionario.Rh_Mail.Trim();
+
             var doc = ConvertToByte(file);
 
             if (ModelState.IsValid)
@@ -209,6 +214,8 @@ namespace App.Web.Controllers
                 model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
+                model.Subsecretaria = subsecretaria;
+                model.Email = email;
 
                 var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
@@ -241,10 +248,6 @@ namespace App.Web.Controllers
 
             //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 15).FirstOrDefault();
 
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
@@ -265,6 +268,10 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
+            string subsecretaria = persona.SubSecretaria.Trim();
+
+            string email = persona.Funcionario.Rh_Mail.Trim();
+
             if (ModelState.IsValid && file != null)
             {
                 var doc = ConvertToByte(file);
@@ -272,6 +279,8 @@ namespace App.Web.Controllers
                 model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
+                model.Subsecretaria = subsecretaria;
+                model.Email = email;
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
@@ -321,48 +330,7 @@ namespace App.Web.Controllers
 
         public ActionResult FirmaAtendida(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 15).FirstOrDefault();
-
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
-            var folio = model.Folio;
-
-            if (ModelState.IsValid)
-            {
-                model.FechaCreacion = DateTime.Now;
-
-                var response = new ResponseMessage();
-
-                //si el documento ya tiene folio, no solicitarlo nuevamente
-                if (string.IsNullOrWhiteSpace(model.Folio))
-                {
-                    try
-                    {
-                        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
-                        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
-                        if (_folioResponse == null)
-                            response.Errors.Add("Error al llamar el servicio externo de folio");
-
-                        if (_folioResponse != null && _folioResponse.status == "ERROR")
-                            response.Errors.Add(_folioResponse.error);
-
-                        model.Folio = _folioResponse.folio;
-
-                        _repository.Update(model);
-                        _repository.Save();
-                    }
-                    catch (Exception ex)
-                    {
-                        response.Errors.Add(ex.Message);
-                    }
-                }
-            }
 
             return View(model);
         }
@@ -379,8 +347,6 @@ namespace App.Web.Controllers
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
 
-            var folio = model.Folio;
-
             if (ModelState.IsValid/* && file == null*/)
             {
                 //var doc = ConvertToByte(file);
@@ -391,7 +357,7 @@ namespace App.Web.Controllers
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
-                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.Folio, model.TipoDocumento);
+                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;

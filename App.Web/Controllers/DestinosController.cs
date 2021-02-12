@@ -79,13 +79,13 @@ namespace App.Web.Controllers
             var viatico = _repository.GetAll<Viatico>().Where(v => v.Año == DateTime.Now.Year).FirstOrDefault();
             var viaticoHonorario = _repository.GetAll<ViaticoHonorario>().Where(v => v.Año == DateTime.Now.Year);
             var grado = cometido.GradoDescripcion;
-            var CalidadJuridica = cometido.CalidadDescripcion;
+            var CalidadJuridica = cometido.CalidadDescripcion; 
             //if (CalidadJuridica == "HONORARIOS") // "CONTRATA")
             if (cometido.IdGrado == "0") // "CONTRATA")
             {
                 /*Se busca el valor del sueldo bruto para definir el tramo en el que se encuentra*/
                 var Sueldo =_sigper.GetReContra().Where(s => s.RH_NumInte == cometido.NombreId.Value).FirstOrDefault().Re_SuelBas;
-                if (Sueldo > 0 && Sueldo <= 2004707)
+                if (Sueldo > viaticoHonorario.Where(v => v.Tramo == "Tramo C").FirstOrDefault().Desde.Value && Sueldo <= viaticoHonorario.Where(v => v.Tramo == "Tramo C").FirstOrDefault().Hasta.Value)
                 {
                     /*Tramo C*/
                     var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo C");                    
@@ -96,7 +96,7 @@ namespace App.Web.Controllers
                     total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                 }
 
-                if (Sueldo >= 2004708 && Sueldo <= 3092366)
+                if (Sueldo >= viaticoHonorario.Where(v => v.Tramo == "Tramo B").FirstOrDefault().Desde.Value && Sueldo <= viaticoHonorario.Where(v => v.Tramo == "Tramo B").FirstOrDefault().Hasta.Value)
                 {
                     /*Tramo B*/
                     var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo B");
@@ -106,10 +106,10 @@ namespace App.Web.Controllers
                     total.Dias50 += Convert.ToDouble(CantDias50) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje50.Value);
                     total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                 }
-                if (Sueldo > 3092367)
+                if (Sueldo > viaticoHonorario.Where(v => v.Tramo == "Tramo A").FirstOrDefault().Desde.Value)
                 {
                     /*Tramo A*/
-                    var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo C");
+                    var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo A");
                     total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje100.Value);
                     total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje60.Value);
                     total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje40.Value);

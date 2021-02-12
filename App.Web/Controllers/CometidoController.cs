@@ -116,13 +116,26 @@ namespace App.Web.Controllers
 
         public class Datasets
         {
-            public string label { get; set; }
+            public string label { get; set; }   
             public string[] backgroundColor { get; set; }
             public string[] borderColor { get; set; }
             public string borderWidth { get; set; }
             public double[] data { get; set; }
             public bool fill { get; set; }
         }
+
+        //public class DataColumn
+        //{
+        //    public DataColumn(string label, int valor)
+        //    {
+        //        this.label = label;
+        //        this.valor = valor;
+        //    }
+
+        //    //public string label { get; set; }
+        //    //public int valor { get; set; }
+        //}
+        
 
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
@@ -2601,6 +2614,37 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public FileResult FueraPlazo()
+        {
+            var result = _repository.GetAll<Cometido>();
+
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\FueraPlazo.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackageFueraPlazo = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageFueraPlazo.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
+            {
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
+                if (destino.Count > 0)
+                {
+                    if ((destino.FirstOrDefault().FechaInicio.Date - cometido.FechaSolicitud.Date).Days < 20)
+                    {
+                        fila++;
+                        worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion;
+                        worksheet.Cells[fila, 2].Value = cometido.FechaSolicitud.ToShortDateString();
+                        worksheet.Cells[fila, 3].Value = cometido.SolicitaViatico.ToString();
+                        worksheet.Cells[fila, 4].Value = (destino.FirstOrDefault().FechaInicio.Date - cometido.FechaSolicitud.Date).Days.ToString();
+                        worksheet.Cells[fila, 5].Value = destino.FirstOrDefault().FechaInicio.ToShortDateString();
+                    }
+                }
+            }
+
+            return File(excelPackageFueraPlazo.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptFueraPlazo_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
         public ActionResult Report()
         {            
             var user = User.Email();
@@ -2634,5 +2678,37 @@ namespace App.Web.Controllers
                 return Redirect(Request.UrlReferrer.PathAndQuery);
             }
         }
+
+        /*Graficos*/
+        public ActionResult ColumnChart()
+        {
+            //Below code can be used to include dynamic data in Chart. Check view page and uncomment the line "dataPoints: @Html.Raw(ViewBag.DataPoints)"
+            //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForCategoryAxis(20), _jsonSetting);
+            List<DataPoint> _lis = new List<DataPoint>();
+            List<DataPoint> _lisUnidades = new List<DataPoint>();
+            var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+            
+            foreach(var t in tareas)
+            {
+                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == false && c.Anulada == false).Count();
+                _lis.Add(new DataPoint(Convert.ToDouble(work),t.Nombre));
+            }
+            //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForDateTimeAxis(10), _jsonSetting);
+            ViewBag.DataPoints = JsonConvert.SerializeObject(_lis, _jsonSetting);
+
+            /*CANTIDAD DE SOLICITUDES POR UNIDADES*/            
+            var unidades = _sigper.GetUnidades();
+            foreach(var u in unidades)
+            {
+                var sol = _repository.Get<Cometido>(c => c.Activo == true && c.IdUnidad.Value == u.Pl_UndCod).Count();
+                _lisUnidades.Add(new DataPoint(Convert.ToDouble(sol),u.Pl_UndDes.Trim()));
+            }
+            ViewBag.DataUnidades = JsonConvert.SerializeObject(_lisUnidades, _jsonSetting);
+
+
+            return View();
+        }
+
+        JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
     }
 }

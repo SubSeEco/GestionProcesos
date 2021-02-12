@@ -5,7 +5,7 @@ namespace App.Core.Interfaces
 {
     public interface IMinsegpres
     {
-        byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, string folio, bool TipoDocumento);
+        byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento);
 
     }
 }

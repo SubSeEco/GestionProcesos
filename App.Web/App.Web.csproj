@@ -372,6 +372,9 @@
     <Content Include="App_Data\GDGenerico.xlsx" />
     <Content Include="App_Data\GDMinutaDocumentosOP.xlsx" />
     <Content Include="App_Data\GDPermanencia.xlsx" />
+    <Content Include="App_Data\FueraPlazo.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Producción.pubxml" />
@@ -790,6 +793,7 @@
     <Content Include="Views\FirmaDocumentoGenerico\Sign.cshtml" />
     <Content Include="Views\FirmaDocumentoGenerico\FirmaAtendida.cshtml" />
     <Content Include="Views\HorasExtras\View.cshtml" />
+    <Content Include="Views\Cometido\ColumnChart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
