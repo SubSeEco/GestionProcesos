@@ -2638,9 +2638,31 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public FileResult FueraPlazo()
+        public FileResult FueraPlazo(DTOFilterCometido model)
         {
-            var result = _repository.GetAll<Cometido>();
+            var predicate = PredicateBuilder.True<Cometido>();
+
+            if (model.Desde.HasValue)
+                predicate = predicate.And(q =>
+                    q.FechaSolicitud.Year >= model.Desde.Value.Year &&
+                    q.FechaSolicitud.Month >= model.Desde.Value.Month &&
+                    q.FechaSolicitud.Day >= model.Desde.Value.Day);
+
+            if (model.Hasta.HasValue)
+                predicate = predicate.And(q =>
+                    q.FechaSolicitud.Year <= model.Hasta.Value.Year &&
+                    q.FechaSolicitud.Month <= model.Hasta.Value.Month &&
+                    q.FechaSolicitud.Day <= model.Hasta.Value.Day);
+
+            var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            if (CometidoId.Any())
+                predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+
+            model.Result = _repository.Get(predicate);
+
+
+
+            var result = model.Result;// _repository.GetAll<Cometido>();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\FueraPlazo.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2710,8 +2732,9 @@ namespace App.Web.Controllers
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForCategoryAxis(20), _jsonSetting);
             List<DataPoint> _lis = new List<DataPoint>();
             List<DataPoint> _lisUnidades = new List<DataPoint>();
+            List<DataPoint> _lisMeses = new List<DataPoint>();
+
             var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
-            
             foreach(var t in tareas)
             {
                 var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == false && c.Anulada == false).Count();
@@ -2728,6 +2751,18 @@ namespace App.Web.Controllers
                 _lisUnidades.Add(new DataPoint(Convert.ToDouble(sol),u.Pl_UndDes.Trim()));
             }
             ViewBag.DataUnidades = JsonConvert.SerializeObject(_lisUnidades, _jsonSetting);
+
+            /*CANTIDAD DE SOLICITUDES POR MES*/
+            List<string> mes = System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames.ToList();
+            int m = 1;
+            for (int i = 0; i < mes.Count() - 1; i++)
+            {                
+                var solicitud = _repository.Get<Cometido>(c => c.Activo == true && c.FechaSolicitud.Month == m).Count();
+                _lisMeses.Add(new DataPoint(solicitud, mes[i]));
+                m = m +1;
+            }
+
+            ViewBag.DataMeses = JsonConvert.SerializeObject(_lisMeses, _jsonSetting);
 
 
             return View();
