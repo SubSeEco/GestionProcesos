@@ -3,19 +3,27 @@
     ViewBag.Title = "ColumnChart";
 }
 
-<input type="button" value="Unidades" onclick="Unidades()" />
-<input type="button" value="Tareas" onclick="Tareas()" />
+<input type="button" value="Unidades" onclick="Unidades()" class="waves-effect waves-light btn blue" />
+<input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
+<input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
 
-<h2>GRAFICOS</h2>
+
+
+<h5>GRAFICOS</h5>
 
 <div id="chartContainer"></div>
 <div id="chartUnidades"></div>
+<div id="chartMeses"></div>
 
 
 
 <script type="text/javascript">
 
     function Tareas() {
+    /*limpiar div q no se muestra*/
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+    /*******************GRAFICO UNO******************************************************************/
         var chart = new CanvasJS.Chart("chartContainer", {
             theme: "light2",
             animationEnabled: true,
@@ -47,6 +55,9 @@
     }
 
     function Unidades() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Unidades = new CanvasJS.Chart("chartUnidades", {
             theme: "light2",
@@ -76,6 +87,25 @@
             ]
         });
         Unidades.render();
+    }
+
+    function Meses() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        /*******************GRAFICO DOS******************************************************************/
+        var Meses = new CanvasJS.Chart("chartMeses", {
+            theme: "light2",
+            animationEnabled: true,
+            title: { text: "Solicitudes por Mes"},
+            data: [
+            {
+                    type: "spline",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.DataMeses),
+            }
+            ]
+        });
+        Meses.render();
     }
 
 </script>
