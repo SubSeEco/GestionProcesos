@@ -5,6 +5,10 @@ namespace App.Model.DTO
 {
     public class DTOImputacion
     {
+        public DTOImputacion()
+        {
+
+        }
         [Display(Name = "Subtitulo")]
         public int Subtitulo { get; set; }
 

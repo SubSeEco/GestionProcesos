@@ -5113,7 +5113,7 @@ namespace App.Core.UseCases
                 {
                     /*se cierra y cambia estado del proceso.*/
                     workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
-                    workflowActual.Proceso.Terminada = true;
+                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                     //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;

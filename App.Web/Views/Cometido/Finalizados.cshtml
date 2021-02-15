@@ -1,4 +1,5 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
+@using Enum = App.Util.Enum;
 
 <div class="grey lighten-3">
     <div class="container">
@@ -11,7 +12,7 @@
 
 <div class="container">
     <div class="row">
-        
+
 
         <div class="col s12 m12 l12" style="width:110%">
             <div class="card">
@@ -65,18 +66,32 @@
                         {
                             <tr>
                                 <td>
-                                    @if (item.Proceso.Anulada == true)
+                                    @if (item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.Anulado)
                                     {
                                         @Html.Raw("<span>Anulado</span>")
                                     }
-                                    @if (item.Proceso.Terminada == true)
+                                    @if (item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.Terminado)
                                     {
                                         @Html.Raw("<span>Terminado</span>")
                                     }
-                                    @if (item.Proceso.Terminada == false && item.Proceso.Anulada == false)
+                                    @if (item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso)
                                     {
                                         @Html.Raw("<span>En Curso</span>")
                                     }
+
+
+                                    @*@if (item.Proceso.Anulada == true)
+        {
+            @Html.Raw("<span>Anulado</span>")
+        }
+        @if (item.Proceso.Terminada == true)
+        {
+            @Html.Raw("<span>Terminado</span>")
+        }
+        @if (item.Proceso.Terminada == false && item.Proceso.Anulada == false)
+        {
+            @Html.Raw("<span>En Curso</span>")
+        }*@
                                 </td>
                                 <td>
                                     @if (item.UnidadDescripcion.Contains("Turismo"))

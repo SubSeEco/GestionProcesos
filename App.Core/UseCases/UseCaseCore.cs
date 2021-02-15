@@ -512,8 +512,8 @@ namespace App.Core.UseCases
 
                                 //terminar proceso
                                 obj.FechaTermino = DateTime.Now;
-                                obj.Terminada = true;
-                                obj.Anulada = true;
+                                //obj.Terminada = true;
+                                //obj.Anulada = true;
                                 obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
                                 _repository.Save();
 
@@ -546,8 +546,8 @@ namespace App.Core.UseCases
 
                         //terminar proceso
                         obj.FechaTermino = DateTime.Now;
-                        obj.Terminada = true;
-                        obj.Anulada = true;
+                        //obj.Terminada = true;
+                        //obj.Anulada = true;
                         obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
                         obj.JustificacionAnulacion = JustificacionAnulacion;
                         _repository.Save();
@@ -691,7 +691,7 @@ namespace App.Core.UseCases
                 if (definicionWorkflow == null)
                 {
                     workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
-                    workflowActual.Proceso.Terminada = true;
+                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
 
@@ -907,7 +907,7 @@ namespace App.Core.UseCases
                 //si es la ultima tarea, terminar proceso
                 if (workflow.Proceso.Workflows.Count(q => !q.Terminada) <= 1)
                 {
-                    workflow.Proceso.Terminada = true;
+                    //workflow.Proceso.Terminada = true;
                     workflow.Proceso.FechaTermino = DateTime.Now;
                     workflow.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
                 }
@@ -922,7 +922,7 @@ namespace App.Core.UseCases
 
                 _repository.Save();
 
-                if (workflow.Proceso.Terminada)
+                if (workflow.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
                     //notificar al dueño del proceso
                     _email.NotificarFinProceso(workflow.Proceso,
                     _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),

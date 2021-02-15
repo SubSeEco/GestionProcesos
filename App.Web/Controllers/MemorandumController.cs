@@ -2712,12 +2712,20 @@ namespace App.Web.Controllers
             {
                 if (model.Estado.HasValue)
                 {
+                    //if (model.Estado == 1)
+                    //    predicate = predicate.And(q => q.Proceso.Terminada == false && q.Proceso.Anulada == false);
+                    //if (model.Estado == 2)
+                    //    predicate = predicate.And(q => q.Proceso.Anulada == true);
+                    //if (model.Estado == 3)
+                    //    predicate = predicate.And(q => q.Proceso.Terminada == true);
+
                     if (model.Estado == 1)
-                        predicate = predicate.And(q => q.Proceso.Terminada == false && q.Proceso.Anulada == false);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 2)
-                        predicate = predicate.And(q => q.Proceso.Anulada == true);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 3)
-                        predicate = predicate.And(q => q.Proceso.Terminada == true);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+
                 }
 
                 if (model.NombreId.HasValue)
@@ -2826,18 +2834,26 @@ namespace App.Web.Controllers
 
                 //if (destino.Count > 0)
                 //{
-                    fila++;
-                    worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
-                    worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                    worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
-                    worksheet.Cells[fila, 4].Value = memorandum.NombreId;
-                    worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
-                    //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                    worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
-                    //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                    //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
-                    worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
-                    worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
+                fila++;
+
+                if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
+                    worksheet.Cells[fila, 1].Value = "En Curso";
+                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
+                    worksheet.Cells[fila, 1].Value = "Terminada";
+                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
+                    worksheet.Cells[fila, 1].Value = "Anulada";
+
+                //worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
+                worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
+                worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
+                worksheet.Cells[fila, 4].Value = memorandum.NombreId;
+                worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
+                //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
+                worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
+                //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
+                //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+                worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
+                worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
                 //}
             }
 

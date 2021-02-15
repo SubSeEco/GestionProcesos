@@ -1,4 +1,5 @@
 ﻿@model App.Model.Core.Proceso
+@using Enum = App.Util.Enum;
 
 @Html.Action("Header", "Proceso", new { Model.ProcesoId })
 
@@ -56,7 +57,8 @@
                         }
                     </div>
 
-                    @if (!Model.Terminada)
+                    @*@if (!Model.Terminada)*@
+                    @if (Model.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso)
                     {
                         <div class="section"></div>
                         <a href='@Url.Action("Delete", new { id = Model.ProcesoId })' class="btn red">Anular proceso</a>
