@@ -166,60 +166,19 @@ namespace App.Infrastructure.Minsegpres
             var request = new RestRequest(Method.POST);
             request.AddHeader("OTP", OTP);
             request.AddHeader("Content-Type", "application/json");
-
             request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"2c368309-d7b6-49ad-9e93-b27fdc58128e\",\r\n\"token\":\r\n\"" + tokenString + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
-            // Status Code 200
+
+            Root obj = JsonConvert.DeserializeObject<Root>(response.Content);
+
             if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+                foreach (var file in obj.files)
+                    binario = Convert.FromBase64String(file.content);
 
-                foreach (var file in respuesta.files)
-                {
-                    var contenido = file.content;
-                    binario = Convert.FromBase64String(contenido);
-                }
-            }
-            // Status Code 400
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new System.Exception(string.Join(",", obj.files.Select(q=>q.status)));
 
-                var mensajeError = respuesta.error;
-
-                var statusCode = respuesta.status;
-
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 403
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-                var mensajeError = respuesta.error;
-
-                var statusCode = respuesta.status;
-
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 404
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                Root respuesta = JsonConvert.DeserializeObject<Root>(response.Content);
-
-                var mensajeError = respuesta.error;
-
-                var statusCode = respuesta.status;
-
-                throw new System.Exception("Status Code : " + statusCode + " - Mensaje : " + mensajeError + ".");
-            }
-            // Status Code 412
-            else if (response.StatusCode == HttpStatusCode.PreconditionFailed)
-            {
-
-                throw new System.Exception("ERROR: Verificación de OTP fallido.Por favor vuelve a intentar.");
-            }
             return binario;
         }
     }
