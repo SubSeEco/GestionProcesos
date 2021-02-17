@@ -198,10 +198,10 @@ namespace App.Web.Controllers
             if (persona != null && persona.Funcionario == null)
                 return Json(new { ok = false, error = "No se encontró información del funcionario en SIGPER" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.FunDatosLaborales != null && persona.FunDatosLaborales.RH_ContCod != 10)
+            if (persona != null && persona.DatosLaborales != null && persona.DatosLaborales.RH_ContCod != 10)
                 return Json(new { ok = false, error = "El funcionario no tiene calidad jurídica de honorario a suma alzada" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.FunDatosLaborales == null)
+            if (persona != null && persona.DatosLaborales == null)
                 return Json(new { ok = false, error = "No se encontró información laboral en SIGPER" }, JsonRequestBehavior.AllowGet);
 
             if (persona != null && persona.Jefatura == null)

@@ -152,13 +152,13 @@ namespace App.Web.Controllers
         {
             var correo = _sigper.GetUserByRut(Rut).Funcionario.Rh_Mail.Trim();
             var per = _sigper.GetUserByEmail(correo);
-            var IdCargo = per.FunDatosLaborales.RhConCar.Value;
-            var cargo = string.IsNullOrEmpty(per.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == per.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidad = per.FunDatosLaborales.RH_ContCod;
-            var calidad = string.IsNullOrEmpty(per.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == per.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGrado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "0" : per.FunDatosLaborales.RhConGra.Trim();
-            var grado = string.IsNullOrEmpty(per.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : per.FunDatosLaborales.RhConGra.Trim();
-            var estamento = per.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargo = per.DatosLaborales.RhConCar.Value;
+            var cargo = string.IsNullOrEmpty(per.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == per.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidad = per.DatosLaborales.RH_ContCod;
+            var calidad = string.IsNullOrEmpty(per.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == per.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGrado = string.IsNullOrEmpty(per.DatosLaborales.RhConGra.Trim()) ? "0" : per.DatosLaborales.RhConGra.Trim();
+            var grado = string.IsNullOrEmpty(per.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : per.DatosLaborales.RhConGra.Trim();
+            var estamento = per.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
@@ -207,13 +207,13 @@ namespace App.Web.Controllers
         {
             var correodest = _sigper.GetUserByRut(RutDest).Funcionario.Rh_Mail.Trim();
             var perdest = _sigper.GetUserByEmail(correodest);
-            var IdCargoDest = perdest.FunDatosLaborales.RhConCar.Value;
-            var cargodest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perdest.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadDest = perdest.FunDatosLaborales.RH_ContCod;
-            var calidaddest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perdest.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoDest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConGra.Trim()) ? "0" : perdest.FunDatosLaborales.RhConGra.Trim();
-            var gradodest = string.IsNullOrEmpty(perdest.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perdest.FunDatosLaborales.RhConGra.Trim();
-            var estamentodest = perdest.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perdest.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoDest = perdest.DatosLaborales.RhConCar.Value;
+            var cargodest = string.IsNullOrEmpty(perdest.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perdest.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadDest = perdest.DatosLaborales.RH_ContCod;
+            var calidaddest = string.IsNullOrEmpty(perdest.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perdest.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoDest = string.IsNullOrEmpty(perdest.DatosLaborales.RhConGra.Trim()) ? "0" : perdest.DatosLaborales.RhConGra.Trim();
+            var gradodest = string.IsNullOrEmpty(perdest.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perdest.DatosLaborales.RhConGra.Trim();
+            var estamentodest = perdest.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perdest.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdDest = _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaDest = ProgIdDest != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdDest).FirstOrDefault().RePytDes : "S/A";
             var conglomeradodest = _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).ReContraSed;
@@ -262,13 +262,13 @@ namespace App.Web.Controllers
         {
             var correosecre = _sigper.GetUserByRut(RutSecre).Funcionario.Rh_Mail.Trim();
             var persecre = _sigper.GetUserByEmail(correosecre);
-            var IdCargoSecre = persecre.FunDatosLaborales.RhConCar.Value;
-            var cargosecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == persecre.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadSecre = persecre.FunDatosLaborales.RH_ContCod;
-            var calidadsecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == persecre.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoSecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConGra.Trim()) ? "0" : persecre.FunDatosLaborales.RhConGra.Trim();
-            var gradosecre = string.IsNullOrEmpty(persecre.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : persecre.FunDatosLaborales.RhConGra.Trim();
-            var estamentosecre = persecre.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persecre.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoSecre = persecre.DatosLaborales.RhConCar.Value;
+            var cargosecre = string.IsNullOrEmpty(persecre.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == persecre.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadSecre = persecre.DatosLaborales.RH_ContCod;
+            var calidadsecre = string.IsNullOrEmpty(persecre.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == persecre.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoSecre = string.IsNullOrEmpty(persecre.DatosLaborales.RhConGra.Trim()) ? "0" : persecre.DatosLaborales.RhConGra.Trim();
+            var gradosecre = string.IsNullOrEmpty(persecre.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : persecre.DatosLaborales.RhConGra.Trim();
+            var estamentosecre = persecre.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persecre.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdSecre = _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaSecre = ProgIdSecre != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdSecre).FirstOrDefault().RePytDes : "S/A";
             var conglomeradosecre = _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).ReContraSed;
@@ -317,13 +317,13 @@ namespace App.Web.Controllers
         {
             var correovisa1 = _sigper.GetUserByRut(RutVisa1).Funcionario.Rh_Mail.Trim();
             var pervisa1 = _sigper.GetUserByEmail(correovisa1);
-            var IdCargoVisa1 = pervisa1.FunDatosLaborales.RhConCar.Value;
-            var cargovisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa1.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa1 = pervisa1.FunDatosLaborales.RH_ContCod;
-            var calidadvisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa1.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa1.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa1 = string.IsNullOrEmpty(pervisa1.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa1.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa1 = pervisa1.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa1.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa1 = pervisa1.DatosLaborales.RhConCar.Value;
+            var cargovisa1 = string.IsNullOrEmpty(pervisa1.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa1.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa1 = pervisa1.DatosLaborales.RH_ContCod;
+            var calidadvisa1 = string.IsNullOrEmpty(pervisa1.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa1.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa1 = string.IsNullOrEmpty(pervisa1.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa1.DatosLaborales.RhConGra.Trim();
+            var gradovisa1 = string.IsNullOrEmpty(pervisa1.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa1.DatosLaborales.RhConGra.Trim();
+            var estamentovisa1 = pervisa1.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa1.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa1 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa1 = ProgIdVisa1 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa1).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa1 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).ReContraSed;
@@ -372,13 +372,13 @@ namespace App.Web.Controllers
         {
             var correovisa2 = _sigper.GetUserByRut(RutVisa2).Funcionario.Rh_Mail.Trim();
             var pervisa2 = _sigper.GetUserByEmail(correovisa2);
-            var IdCargoVisa2 = pervisa2.FunDatosLaborales.RhConCar.Value;
-            var cargovisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa2.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa2 = pervisa2.FunDatosLaborales.RH_ContCod;
-            var calidadvisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa2.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa2.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa2 = string.IsNullOrEmpty(pervisa2.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa2.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa2 = pervisa2.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa2.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa2 = pervisa2.DatosLaborales.RhConCar.Value;
+            var cargovisa2 = string.IsNullOrEmpty(pervisa2.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa2.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa2 = pervisa2.DatosLaborales.RH_ContCod;
+            var calidadvisa2 = string.IsNullOrEmpty(pervisa2.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa2.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa2 = string.IsNullOrEmpty(pervisa2.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa2.DatosLaborales.RhConGra.Trim();
+            var gradovisa2 = string.IsNullOrEmpty(pervisa2.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa2.DatosLaborales.RhConGra.Trim();
+            var estamentovisa2 = pervisa2.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa2.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa2 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa2 = ProgIdVisa2 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa2).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa2 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).ReContraSed;
@@ -427,13 +427,13 @@ namespace App.Web.Controllers
         {
             var correovisa3 = _sigper.GetUserByRut(RutVisa3).Funcionario.Rh_Mail.Trim();
             var pervisa3 = _sigper.GetUserByEmail(correovisa3);
-            var IdCargoVisa3 = pervisa3.FunDatosLaborales.RhConCar.Value;
-            var cargovisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa3.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa3 = pervisa3.FunDatosLaborales.RH_ContCod;
-            var calidadvisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa3.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa3.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa3 = string.IsNullOrEmpty(pervisa3.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa3.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa3 = pervisa3.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa3.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa3 = pervisa3.DatosLaborales.RhConCar.Value;
+            var cargovisa3 = string.IsNullOrEmpty(pervisa3.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa3.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa3 = pervisa3.DatosLaborales.RH_ContCod;
+            var calidadvisa3 = string.IsNullOrEmpty(pervisa3.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa3.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa3 = string.IsNullOrEmpty(pervisa3.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa3.DatosLaborales.RhConGra.Trim();
+            var gradovisa3 = string.IsNullOrEmpty(pervisa3.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa3.DatosLaborales.RhConGra.Trim();
+            var estamentovisa3 = pervisa3.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa3.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa3 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa3 = ProgIdVisa3 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa3).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa3 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).ReContraSed;
@@ -482,13 +482,13 @@ namespace App.Web.Controllers
         {
             var correovisa4 = _sigper.GetUserByRut(RutVisa4).Funcionario.Rh_Mail.Trim();
             var pervisa4 = _sigper.GetUserByEmail(correovisa4);
-            var IdCargoVisa4 = pervisa4.FunDatosLaborales.RhConCar.Value;
-            var cargovisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa4.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa4 = pervisa4.FunDatosLaborales.RH_ContCod;
-            var calidadvisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa4.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa4.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa4 = string.IsNullOrEmpty(pervisa4.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa4.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa4 = pervisa4.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa4.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa4 = pervisa4.DatosLaborales.RhConCar.Value;
+            var cargovisa4 = string.IsNullOrEmpty(pervisa4.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa4.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa4 = pervisa4.DatosLaborales.RH_ContCod;
+            var calidadvisa4 = string.IsNullOrEmpty(pervisa4.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa4.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa4 = string.IsNullOrEmpty(pervisa4.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa4.DatosLaborales.RhConGra.Trim();
+            var gradovisa4 = string.IsNullOrEmpty(pervisa4.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa4.DatosLaborales.RhConGra.Trim();
+            var estamentovisa4 = pervisa4.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa4.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa4 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa4 = ProgIdVisa4 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa4).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa4 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).ReContraSed;
@@ -537,13 +537,13 @@ namespace App.Web.Controllers
         {
             var correovisa5 = _sigper.GetUserByRut(RutVisa5).Funcionario.Rh_Mail.Trim();
             var pervisa5 = _sigper.GetUserByEmail(correovisa5);
-            var IdCargoVisa5 = pervisa5.FunDatosLaborales.RhConCar.Value;
-            var cargovisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa5.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa5 = pervisa5.FunDatosLaborales.RH_ContCod;
-            var calidadvisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa5.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa5.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa5 = string.IsNullOrEmpty(pervisa5.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa5.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa5 = pervisa5.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa5.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa5 = pervisa5.DatosLaborales.RhConCar.Value;
+            var cargovisa5 = string.IsNullOrEmpty(pervisa5.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa5.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa5 = pervisa5.DatosLaborales.RH_ContCod;
+            var calidadvisa5 = string.IsNullOrEmpty(pervisa5.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa5.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa5 = string.IsNullOrEmpty(pervisa5.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa5.DatosLaborales.RhConGra.Trim();
+            var gradovisa5 = string.IsNullOrEmpty(pervisa5.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa5.DatosLaborales.RhConGra.Trim();
+            var estamentovisa5 = pervisa5.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa5.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa5 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa5 = ProgIdVisa5 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa5).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa5 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).ReContraSed;
@@ -592,13 +592,13 @@ namespace App.Web.Controllers
         {
             var correovisa6 = _sigper.GetUserByRut(RutVisa6).Funcionario.Rh_Mail.Trim();
             var pervisa6 = _sigper.GetUserByEmail(correovisa6);
-            var IdCargoVisa6 = pervisa6.FunDatosLaborales.RhConCar.Value;
-            var cargovisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa6.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa6 = pervisa6.FunDatosLaborales.RH_ContCod;
-            var calidadvisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa6.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa6.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa6 = string.IsNullOrEmpty(pervisa6.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa6.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa6 = pervisa6.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa6.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa6 = pervisa6.DatosLaborales.RhConCar.Value;
+            var cargovisa6 = string.IsNullOrEmpty(pervisa6.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa6.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa6 = pervisa6.DatosLaborales.RH_ContCod;
+            var calidadvisa6 = string.IsNullOrEmpty(pervisa6.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa6.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa6 = string.IsNullOrEmpty(pervisa6.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa6.DatosLaborales.RhConGra.Trim();
+            var gradovisa6 = string.IsNullOrEmpty(pervisa6.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa6.DatosLaborales.RhConGra.Trim();
+            var estamentovisa6 = pervisa6.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa6.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa6 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa6 = ProgIdVisa6 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa6).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa6 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).ReContraSed;
@@ -647,13 +647,13 @@ namespace App.Web.Controllers
         {
             var correovisa7 = _sigper.GetUserByRut(RutVisa7).Funcionario.Rh_Mail.Trim();
             var pervisa7 = _sigper.GetUserByEmail(correovisa7);
-            var IdCargoVisa7 = pervisa7.FunDatosLaborales.RhConCar.Value;
-            var cargovisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa7.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa7 = pervisa7.FunDatosLaborales.RH_ContCod;
-            var calidadvisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa7.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa7.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa7 = string.IsNullOrEmpty(pervisa7.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa7.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa7 = pervisa7.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa7.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa7 = pervisa7.DatosLaborales.RhConCar.Value;
+            var cargovisa7 = string.IsNullOrEmpty(pervisa7.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa7.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa7 = pervisa7.DatosLaborales.RH_ContCod;
+            var calidadvisa7 = string.IsNullOrEmpty(pervisa7.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa7.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa7 = string.IsNullOrEmpty(pervisa7.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa7.DatosLaborales.RhConGra.Trim();
+            var gradovisa7 = string.IsNullOrEmpty(pervisa7.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa7.DatosLaborales.RhConGra.Trim();
+            var estamentovisa7 = pervisa7.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa7.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa7 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa7 = ProgIdVisa7 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa7).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa7 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).ReContraSed;
@@ -702,13 +702,13 @@ namespace App.Web.Controllers
         {
             var correovisa8 = _sigper.GetUserByRut(RutVisa8).Funcionario.Rh_Mail.Trim();
             var pervisa8 = _sigper.GetUserByEmail(correovisa8);
-            var IdCargoVisa8 = pervisa8.FunDatosLaborales.RhConCar.Value;
-            var cargovisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa8.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa8 = pervisa8.FunDatosLaborales.RH_ContCod;
-            var calidadvisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa8.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa8.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa8 = string.IsNullOrEmpty(pervisa8.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa8.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa8 = pervisa8.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa8.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa8 = pervisa8.DatosLaborales.RhConCar.Value;
+            var cargovisa8 = string.IsNullOrEmpty(pervisa8.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa8.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa8 = pervisa8.DatosLaborales.RH_ContCod;
+            var calidadvisa8 = string.IsNullOrEmpty(pervisa8.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa8.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa8 = string.IsNullOrEmpty(pervisa8.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa8.DatosLaborales.RhConGra.Trim();
+            var gradovisa8 = string.IsNullOrEmpty(pervisa8.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa8.DatosLaborales.RhConGra.Trim();
+            var estamentovisa8 = pervisa8.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa8.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa8 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa8 = ProgIdVisa8 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa8).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa8 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).ReContraSed;
@@ -757,13 +757,13 @@ namespace App.Web.Controllers
         {
             var correovisa9 = _sigper.GetUserByRut(RutVisa9).Funcionario.Rh_Mail.Trim();
             var pervisa9 = _sigper.GetUserByEmail(correovisa9);
-            var IdCargoVisa9 = pervisa9.FunDatosLaborales.RhConCar.Value;
-            var cargovisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa9.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa9 = pervisa9.FunDatosLaborales.RH_ContCod;
-            var calidadvisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa9.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa9.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa9 = string.IsNullOrEmpty(pervisa9.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa9.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa9 = pervisa9.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa9.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa9 = pervisa9.DatosLaborales.RhConCar.Value;
+            var cargovisa9 = string.IsNullOrEmpty(pervisa9.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa9.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa9 = pervisa9.DatosLaborales.RH_ContCod;
+            var calidadvisa9 = string.IsNullOrEmpty(pervisa9.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa9.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa9 = string.IsNullOrEmpty(pervisa9.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa9.DatosLaborales.RhConGra.Trim();
+            var gradovisa9 = string.IsNullOrEmpty(pervisa9.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa9.DatosLaborales.RhConGra.Trim();
+            var estamentovisa9 = pervisa9.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa9.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa9 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa9 = ProgIdVisa9 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa9).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa9 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).ReContraSed;
@@ -812,13 +812,13 @@ namespace App.Web.Controllers
         {
             var correovisa10 = _sigper.GetUserByRut(RutVisa10).Funcionario.Rh_Mail.Trim();
             var pervisa10 = _sigper.GetUserByEmail(correovisa10);
-            var IdCargoVisa10 = pervisa10.FunDatosLaborales.RhConCar.Value;
-            var cargovisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa10.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadVisa10 = pervisa10.FunDatosLaborales.RH_ContCod;
-            var calidadvisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa10.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoVisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConGra.Trim()) ? "0" : pervisa10.FunDatosLaborales.RhConGra.Trim();
-            var gradovisa10 = string.IsNullOrEmpty(pervisa10.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa10.FunDatosLaborales.RhConGra.Trim();
-            var estamentovisa10 = pervisa10.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa10.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoVisa10 = pervisa10.DatosLaborales.RhConCar.Value;
+            var cargovisa10 = string.IsNullOrEmpty(pervisa10.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == pervisa10.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadVisa10 = pervisa10.DatosLaborales.RH_ContCod;
+            var calidadvisa10 = string.IsNullOrEmpty(pervisa10.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == pervisa10.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoVisa10 = string.IsNullOrEmpty(pervisa10.DatosLaborales.RhConGra.Trim()) ? "0" : pervisa10.DatosLaborales.RhConGra.Trim();
+            var gradovisa10 = string.IsNullOrEmpty(pervisa10.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : pervisa10.DatosLaborales.RhConGra.Trim();
+            var estamentovisa10 = pervisa10.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == pervisa10.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdVisa10 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaVisa10 = ProgIdVisa10 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdVisa10).FirstOrDefault().RePytDes : "S/A";
             var conglomeradovisa10 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).ReContraSed;
@@ -867,13 +867,13 @@ namespace App.Web.Controllers
         {
             var correoana = _sigper.GetUserByRut(RutAna).Funcionario.Rh_Mail.Trim();
             var perana = _sigper.GetUserByEmail(correoana);
-            var IdCargoAna = perana.FunDatosLaborales.RhConCar.Value;
-            var cargoana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perana.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAna = perana.FunDatosLaborales.RH_ContCod;
-            var calidadana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perana.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAna = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConGra.Trim()) ? "0" : perana.FunDatosLaborales.RhConGra.Trim();
-            var gradoana = string.IsNullOrEmpty(perana.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perana.FunDatosLaborales.RhConGra.Trim();
-            var estamentoana = perana.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perana.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoAna = perana.DatosLaborales.RhConCar.Value;
+            var cargoana = string.IsNullOrEmpty(perana.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perana.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadAna = perana.DatosLaborales.RH_ContCod;
+            var calidadana = string.IsNullOrEmpty(perana.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perana.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoAna = string.IsNullOrEmpty(perana.DatosLaborales.RhConGra.Trim()) ? "0" : perana.DatosLaborales.RhConGra.Trim();
+            var gradoana = string.IsNullOrEmpty(perana.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perana.DatosLaborales.RhConGra.Trim();
+            var estamentoana = perana.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perana.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdAna = _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaAna = ProgIdAna != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAna).FirstOrDefault().RePytDes : "S/A";
             var conglomeradoana = _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).ReContraSed;
@@ -922,13 +922,13 @@ namespace App.Web.Controllers
         {
             var correoautorizafirma1 = _sigper.GetUserByRut(RutAutorizaFirma1).Funcionario.Rh_Mail.Trim();
             var perautorizafirma1 = _sigper.GetUserByEmail(correoautorizafirma1);
-            var IdCargoAutorizaFirma1 = perautorizafirma1.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma1.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma1 = perautorizafirma1.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma1.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma1.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma1.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma1 = perautorizafirma1.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma1.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoAutorizaFirma1 = perautorizafirma1.DatosLaborales.RhConCar.Value;
+            var cargoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma1.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadAutorizaFirma1 = perautorizafirma1.DatosLaborales.RH_ContCod;
+            var calidadautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma1.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoAutorizaFirma1 = string.IsNullOrEmpty(perautorizafirma1.DatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma1.DatosLaborales.RhConGra.Trim();
+            var gradoautorizafirma1 = string.IsNullOrEmpty(perautorizafirma1.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma1.DatosLaborales.RhConGra.Trim();
+            var estamentoautorizafirma1 = perautorizafirma1.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma1.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdAutorizaFirma1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaAutorizaFirma1 = ProgIdAutorizaFirma1 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma1).FirstOrDefault().RePytDes : "S/A";
             var conglomeradoautorizafirma1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).ReContraSed;
@@ -977,13 +977,13 @@ namespace App.Web.Controllers
         {
             var correoautorizafirma2 = _sigper.GetUserByRut(RutAutorizaFirma2).Funcionario.Rh_Mail.Trim();
             var perautorizafirma2 = _sigper.GetUserByEmail(correoautorizafirma2);
-            var IdCargoAutorizaFirma2 = perautorizafirma2.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma2.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma2 = perautorizafirma2.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma2.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma2.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma2.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma2 = perautorizafirma2.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma2.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoAutorizaFirma2 = perautorizafirma2.DatosLaborales.RhConCar.Value;
+            var cargoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma2.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadAutorizaFirma2 = perautorizafirma2.DatosLaborales.RH_ContCod;
+            var calidadautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma2.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoAutorizaFirma2 = string.IsNullOrEmpty(perautorizafirma2.DatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma2.DatosLaborales.RhConGra.Trim();
+            var gradoautorizafirma2 = string.IsNullOrEmpty(perautorizafirma2.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma2.DatosLaborales.RhConGra.Trim();
+            var estamentoautorizafirma2 = perautorizafirma2.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma2.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdAutorizaFirma2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaAutorizaFirma2 = ProgIdAutorizaFirma2 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma2).FirstOrDefault().RePytDes : "S/A";
             var conglomeradoautorizafirma2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).ReContraSed;
@@ -1032,13 +1032,13 @@ namespace App.Web.Controllers
         {
             var correoautorizafirma3 = _sigper.GetUserByRut(RutAutorizaFirma3).Funcionario.Rh_Mail.Trim();
             var perautorizafirma3 = _sigper.GetUserByEmail(correoautorizafirma3);
-            var IdCargoAutorizaFirma3 = perautorizafirma3.FunDatosLaborales.RhConCar.Value;
-            var cargoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma3.FunDatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
-            var IdCalidadAutorizaFirma3 = perautorizafirma3.FunDatosLaborales.RH_ContCod;
-            var calidadautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma3.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGradoAutorizaFirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma3.FunDatosLaborales.RhConGra.Trim();
-            var gradoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.FunDatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma3.FunDatosLaborales.RhConGra.Trim();
-            var estamentoautorizafirma3 = perautorizafirma3.FunDatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma3.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
+            var IdCargoAutorizaFirma3 = perautorizafirma3.DatosLaborales.RhConCar.Value;
+            var cargoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perautorizafirma3.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
+            var IdCalidadAutorizaFirma3 = perautorizafirma3.DatosLaborales.RH_ContCod;
+            var calidadautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perautorizafirma3.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+            var IdGradoAutorizaFirma3 = string.IsNullOrEmpty(perautorizafirma3.DatosLaborales.RhConGra.Trim()) ? "0" : perautorizafirma3.DatosLaborales.RhConGra.Trim();
+            var gradoautorizafirma3 = string.IsNullOrEmpty(perautorizafirma3.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : perautorizafirma3.DatosLaborales.RhConGra.Trim();
+            var estamentoautorizafirma3 = perautorizafirma3.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == perautorizafirma3.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgIdAutorizaFirma3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             var ProgramaAutorizaFirma3 = ProgIdAutorizaFirma3 != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgIdAutorizaFirma3).FirstOrDefault().RePytDes : "S/A";
             var conglomeradoautorizafirma3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).ReContraSed;
@@ -1139,12 +1139,12 @@ namespace App.Web.Controllers
                 //model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreId = persona.Funcionario.RH_NumInte;
                 //model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargo = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidad = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadDest = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
@@ -1152,12 +1152,12 @@ namespace App.Web.Controllers
                 //model.DVDest = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdDest = persona.Funcionario.RH_NumInte;
                 //model.NombreDest = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoDest = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoDest = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailDest = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqDest = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadDest = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadDest = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
@@ -1165,12 +1165,12 @@ namespace App.Web.Controllers
                 //model.DVSecre = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdSecre = persona.Funcionario.RH_NumInte;
                 //model.NombreSecre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoSecre = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoSecre = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailSecre = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqSecre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadSecre = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadSecre = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa1 = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionVisa1 = persona.Unidad.Pl_UndDes.Trim();
@@ -1178,12 +1178,12 @@ namespace App.Web.Controllers
                 //model.DVVisa1 = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoVisa1 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoVisa1 = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa1 = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa1 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadVisa1 = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa2 = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionVisa2 = persona.Unidad.Pl_UndDes.Trim();
@@ -1191,12 +1191,12 @@ namespace App.Web.Controllers
                 //model.DVVisa2 = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoVisa2 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoVisa2 = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa2 = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa2 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadVisa2 = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa3 = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionVisa3 = persona.Unidad.Pl_UndDes.Trim();
@@ -1204,12 +1204,12 @@ namespace App.Web.Controllers
                 //model.DVVisa3 = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoVisa3 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoVisa3 = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa3 = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa3 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadVisa3 = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa4 = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionVisa4 = persona.Unidad.Pl_UndDes.Trim();
@@ -1217,12 +1217,12 @@ namespace App.Web.Controllers
                 //model.DVVisa4 = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoVisa4 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoVisa4 = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa4 = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa4 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadVisa4 = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa5 = persona.Unidad.Pl_UndCod;
                 //model.UnidadDescripcionVisa5 = persona.Unidad.Pl_UndDes.Trim();
@@ -1230,12 +1230,12 @@ namespace App.Web.Controllers
                 //model.DVVisa5 = persona.Funcionario.RH_DvNuInt.Trim();
                 //model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargoVisa5 = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                //model.IdCargoVisa5 = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa5 = persona.Funcionario.Rh_Mail.Trim();
                 //model.NombreChqVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCalidadVisa5 = persona.FunDatosLaborales.RH_ContCod;
-                //model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdCalidadVisa5 = persona.DatosLaborales.RH_ContCod;
+                //model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
             }
 
             return View(model);
@@ -1297,12 +1297,12 @@ namespace App.Web.Controllers
                 //model.NombreId = persona.Funcionario.RH_NumInte;
                 //model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
                 model.Nombre = null;
-                model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargo = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 model.EmailRem = persona.Funcionario.Rh_Mail.Trim();
                 model.NombreChqRem = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidad = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 model.IdUnidadDest = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
@@ -1312,12 +1312,12 @@ namespace App.Web.Controllers
                 //model.NombreId = persona.Funcionario.RH_NumInte;
                 //model.NombreDest = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreDest = null;
-                model.IdCargoDest = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoDest = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionDest = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 model.EmailDest = persona.Funcionario.Rh_Mail.Trim();
                 model.NombreChqDest = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadDest = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadDest = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionDest = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
@@ -1327,12 +1327,12 @@ namespace App.Web.Controllers
                 //model.NombreIdSecre = persona.Funcionario.RH_NumInte;
                 //model.NombreSecre = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreSecre = null;
-                model.IdCargoSecre = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoSecre = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionSecre = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 model.EmailSecre = persona.Funcionario.Rh_Mail.Trim();
                 model.NombreChqSecre = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadSecre = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadSecre = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionSecre = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa1 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa1 = null;
@@ -1344,14 +1344,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa1 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa1 = null;
-                model.IdCargoVisa1 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa1 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa1 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa1 = null;
                 model.NombreChqVisa1 = null;
                 //model.NombreChqVisa1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa1 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa1 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa2 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa2 = null;
@@ -1363,14 +1363,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa2 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa2 = null;
-                model.IdCargoVisa2 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa2 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa2 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa2 = null;
                 model.NombreChqVisa2 = null;
                 //model.NombreChqVisa2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa2 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa2 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa3 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa3 = null;
@@ -1382,14 +1382,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa3 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa3 = null;
-                model.IdCargoVisa3 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa3 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa3 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa3 = null;
                 model.NombreChqVisa3 = null;
                 //model.NombreChqVisa3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa3 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa3 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa4 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa4 = null;
@@ -1401,14 +1401,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa4 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa4 = null;
-                model.IdCargoVisa4 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa4 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa4 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa4 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa4 = null;
                 model.NombreChqVisa4 = null;
                 //model.NombreChqVisa4 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa4 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa4 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa4 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa5 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa5 = null;
@@ -1420,14 +1420,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa5 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa5 = null;
-                model.IdCargoVisa5 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa5 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa5 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa5 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa5 = null;
                 model.NombreChqVisa5 = null;
                 //model.NombreChqVisa5 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa5 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa5 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa5 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa6 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa6 = null;
@@ -1439,14 +1439,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa6 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa6 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa6 = null;
-                model.IdCargoVisa6 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa6 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa6 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa6 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa6 = null;
                 model.NombreChqVisa6 = null;
                 //model.NombreChqVisa6 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa6 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa6 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa6 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa7 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa7 = null;
@@ -1458,14 +1458,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa7 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa7 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa7 = null;
-                model.IdCargoVisa7 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa7 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa7 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa7 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa7 = null;
                 model.NombreChqVisa7 = null;
                 //model.NombreChqVisa7 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa7 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa7 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa7 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa8 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa8 = null;
@@ -1477,14 +1477,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa8 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa8 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa8 = null;
-                model.IdCargoVisa8 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa8 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa8 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa8 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa8 = null;
                 model.NombreChqVisa8 = null;
                 //model.NombreChqVisa8 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa8 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa8 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa8 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa9 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa9 = null;
@@ -1496,14 +1496,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa9 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa9 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa9 = null;
-                model.IdCargoVisa9 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa9 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa9 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa9 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa9 = null;
                 model.NombreChqVisa9 = null;
                 //model.NombreChqVisa9 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa9 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa9 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa9 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadVisa10 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadVisa10 = null;
@@ -1515,14 +1515,14 @@ namespace App.Web.Controllers
                 //model.NombreIdVisa10 = persona.Funcionario.RH_NumInte;
                 //model.NombreVisa10 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreVisa10 = null;
-                model.IdCargoVisa10 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionVisa10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoVisa10 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionVisa10 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailVisa10 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailVisa10 = null;
                 model.NombreChqVisa10 = null;
                 //model.NombreChqVisa10 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadVisa10 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionVisa10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadVisa10 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionVisa10 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadAna = persona.Unidad.Pl_UndCod;
                 model.IdUnidadAna = null;
@@ -1534,14 +1534,14 @@ namespace App.Web.Controllers
                 //model.NombreIdAna = persona.Funcionario.RH_NumInte;
                 //model.NombreAna = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreAna = null;
-                model.IdCargoAna = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAna = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoAna = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionAna = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailAna = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailAna = null;
                 model.NombreChqAna = null;
                 //model.NombreChqAna = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAna = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAna = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadAna = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionAna = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadAutorizaFirma1 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadAutorizaFirma1 = null;
@@ -1553,14 +1553,14 @@ namespace App.Web.Controllers
                 //model.NombreIdAutorizaFirma1 = persona.Funcionario.RH_NumInte;
                 //model.NombreAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreAutorizaFirma1 = null;
-                model.IdCargoAutorizaFirma1 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoAutorizaFirma1 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionAutorizaFirma1 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailAutorizaFirma1 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailAutorizaFirma1 = null;
                 model.NombreChqAutorizaFirma1 = null;
                 //model.NombreChqAutorizaFirma1 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma1 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadAutorizaFirma1 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionAutorizaFirma1 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadAutorizaFirma2 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadAutorizaFirma2 = null;
@@ -1572,14 +1572,14 @@ namespace App.Web.Controllers
                 //model.NombreIdAutorizaFirma2 = persona.Funcionario.RH_NumInte;
                 //model.NombreAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreAutorizaFirma2 = null;
-                model.IdCargoAutorizaFirma2 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoAutorizaFirma2 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionAutorizaFirma2 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailAutorizaFirma2 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailAutorizaFirma2 = null;
                 model.NombreChqAutorizaFirma2 = null;
                 //model.NombreChqAutorizaFirma2 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma2 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadAutorizaFirma2 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionAutorizaFirma2 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
 
                 //model.IdUnidadAutorizaFirma3 = persona.Unidad.Pl_UndCod;
                 model.IdUnidadAutorizaFirma3 = null;
@@ -1591,14 +1591,14 @@ namespace App.Web.Controllers
                 //model.NombreIdAutorizaFirma3 = persona.Funcionario.RH_NumInte;
                 //model.NombreAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
                 model.NombreAutorizaFirma3 = null;
-                model.IdCargoAutorizaFirma3 = persona.FunDatosLaborales.RhConCar.Value;
-                model.CargoDescripcionAutorizaFirma3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
+                model.IdCargoAutorizaFirma3 = persona.DatosLaborales.RhConCar.Value;
+                model.CargoDescripcionAutorizaFirma3 = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar.Trim();
                 //model.EmailAutorizaFirma3 = persona.Funcionario.Rh_Mail.Trim();
                 model.EmailAutorizaFirma3 = null;
                 model.NombreChqAutorizaFirma3 = null;
                 //model.NombreChqAutorizaFirma3 = persona.Funcionario.PeDatPerChq.Trim();
-                model.IdCalidadAutorizaFirma3 = persona.FunDatosLaborales.RH_ContCod;
-                model.CalidadDescripcionAutorizaFirma3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                model.IdCalidadAutorizaFirma3 = persona.DatosLaborales.RH_ContCod;
+                model.CalidadDescripcionAutorizaFirma3 = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
             }
 
             return View(model);

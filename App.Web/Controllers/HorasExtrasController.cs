@@ -921,7 +921,7 @@ namespace App.Web.Controllers
             foreach (var c in model.Colaborador)
             {
                 /*Se toma base de calculo para valor horas extras*/
-                var CalidadJurid = _sigper.GetUserByRut(c.NombreId.Value).datosLaborales.RH_ContCod;
+                var CalidadJurid = _sigper.GetUserByRut(c.NombreId.Value).Contrato.RH_ContCod;
                 var anno = int.Parse(model.Annio); //Convert.ToInt32(DateTime.Now.Year);
                 var mes = Convert.ToInt32(DateTime.Now.Month) - 1;
                 if (model.MesBaseCalculo != 0)

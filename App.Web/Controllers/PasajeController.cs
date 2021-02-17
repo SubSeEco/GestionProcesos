@@ -45,10 +45,10 @@ namespace App.Web.Controllers
             {
                 Rut = per.Funcionario.RH_NumInte,
                 DV = per.Funcionario.RH_DvNuInt.ToString(),
-                Cargo = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
-                CalidadJuridica = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.FunDatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
-                Grado = per.FunDatosLaborales.RhConGra.Trim(),
-                Estamento = _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim(),
+                Cargo = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.DatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
+                CalidadJuridica = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.DatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
+                Grado = per.DatosLaborales.RhConGra.Trim(),
+                Estamento = _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim(),
                 Programa = "S/A",
                 Conglomerado = "S/A",
                 Unidad = per.Unidad.Pl_UndDes.Trim()
@@ -113,15 +113,15 @@ namespace App.Web.Controllers
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreId = persona.Funcionario.RH_NumInte;
                 model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
-                //model.IdCargo = persona.FunDatosLaborales.RhConCar.Value;
-                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.FunDatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar;
-                model.IdCalidad = persona.FunDatosLaborales.RH_ContCod;/*id calidad juridica*/
-                //model.CalidadDescripcion = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == persona.FunDatosLaborales.RH_ContCod.ToString()).FirstOrDefault().Pl_DesEsc;
-                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.FunDatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-                //model.IdGrado = string.IsNullOrEmpty(persona.FunDatosLaborales.RhConGra) ? int.Parse(persona.FunDatosLaborales.RhConGra) : 0;
-                //model.GradoDescripcion = string.IsNullOrEmpty(persona.FunDatosLaborales.RhConGra) ? persona.FunDatosLaborales.RhConGra : "0";
-                //model.IdEstamento = persona.FunDatosLaborales.PeDatLabEst;
-                //model.EstamentoDescripcion = _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persona.FunDatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc;
+                //model.IdCargo = persona.DatosLaborales.RhConCar.Value;
+                //model.CargoDescripcion = _sigper.GetPECARGOs().Where(c => c.Pl_CodCar == persona.DatosLaborales.RhConCar.Value).FirstOrDefault().Pl_DesCar;
+                model.IdCalidad = persona.DatosLaborales.RH_ContCod;/*id calidad juridica*/
+                //model.CalidadDescripcion = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == persona.DatosLaborales.RH_ContCod.ToString()).FirstOrDefault().Pl_DesEsc;
+                model.CalidadDescripcion = _sigper.GetDGCONTRATOS().Where(e => e.RH_ContCod == persona.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
+                //model.IdGrado = string.IsNullOrEmpty(persona.DatosLaborales.RhConGra) ? int.Parse(persona.DatosLaborales.RhConGra) : 0;
+                //model.GradoDescripcion = string.IsNullOrEmpty(persona.DatosLaborales.RhConGra) ? persona.DatosLaborales.RhConGra : "0";
+                //model.IdEstamento = persona.DatosLaborales.PeDatLabEst;
+                //model.EstamentoDescripcion = _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == persona.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc;
                 //model.FinanciaOrganismo = false;
                 //model.Vehiculo = false;
                 //model.SolicitaReembolso = false;

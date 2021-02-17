@@ -32,9 +32,6 @@ namespace App.Web.Controllers
 
         public ActionResult Index() {
 
-            var persona = _sigper.GetUserByRut(16831091);
-
-
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {
