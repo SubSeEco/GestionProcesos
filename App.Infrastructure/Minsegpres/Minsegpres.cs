@@ -139,7 +139,8 @@ namespace App.Infrastructure.Minsegpres
             DateTime issuedAt = DateTime.Now;
             DateTime expires = DateTime.Now.AddMinutes(30);
 
-            string key = "e31f64431e424c60a26436de31aad96b";
+            //Testin
+            string key = "8d7a6d0fea8541b99b0dce110fd0d077";
 
             var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
@@ -160,13 +161,15 @@ namespace App.Infrastructure.Minsegpres
             var handler = new JwtSecurityTokenHandler();
 
             var tokenString = handler.WriteToken(secToken);
-
-            var client = new RestClient("https://api.firma.test.digital.gob.cl/firma/v2/files/tickets");
+            
+            //Testing
+            var client = new RestClient("https://api.firma.cert.digital.gob.cl/firma/v2/files/tickets");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("OTP", OTP);
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"2c368309-d7b6-49ad-9e93-b27fdc58128e\",\r\n\"token\":\r\n\"" + tokenString + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
+            //Testing
+            request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"012edbcc-7eb7-4043-8c16-a7702f1ffc40\",\r\n\"token\":\r\n\"" + tokenString + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
 
