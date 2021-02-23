@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace App.Model.FirmaDocumentoGenerico
 {
@@ -46,5 +47,39 @@ namespace App.Model.FirmaDocumentoGenerico
 
         [Display(Name = "Tipo Documento ")]
         public bool TipoDocumento { get; set; } = true;
+
+        [Display(Name = "Código de barra")]
+        public byte[] BarCode { get; set; }
+
+        public int DocumentoId { get; set; } 
+
+        public string GetTags()
+        {
+            StringBuilder tag = new StringBuilder();
+
+            //solo generar tags de procesos no reservados
+            if (this.Proceso != null && !this.Proceso.Reservado)
+            {
+                if (!string.IsNullOrWhiteSpace(FirmaDocumentoGenericoId.ToString()))
+                    tag.Append(FirmaDocumentoGenericoId + " ");
+
+                if (!string.IsNullOrWhiteSpace(Nombre))
+                    tag.Append(Nombre + " ");
+
+                if (!string.IsNullOrWhiteSpace(Run))
+                    tag.Append(Run + " ");
+
+                if (!string.IsNullOrWhiteSpace(Email))
+                    tag.Append(Email + " ");
+
+                if (!string.IsNullOrWhiteSpace(Subsecretaria))
+                    tag.Append(Subsecretaria + " ");
+
+                if (!string.IsNullOrWhiteSpace(TipoDocumento.ToString()))
+                    tag.Append(TipoDocumento + " ");
+            }
+
+            return tag.ToString();
+        }
     }
 }
