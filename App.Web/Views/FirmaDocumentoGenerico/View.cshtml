@@ -1,92 +1,73 @@
 ﻿@model App.Model.FirmaDocumentoGenerico.FirmaDocumentoGenerico
 
-@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
 
 <style>
-        .container {
-            width: 85%;
-        }
-
-        #partitioned {
-            /*padding-left: 15px;*/
-            padding-left: 0px;
-            letter-spacing: 41px;
-            /*letter-spacing: 42px;*/
-            /*  font-size: 100%;*/
-            font-weight: bold;
-            border: 0;
-            background-image: linear-gradient(to left, black 70%, rgba(255, 255, 255, 0) 0%);
-            background-position: bottom;
-            background-size: 50px 1px;
-            background-repeat: repeat-x;
-            background-position-x: 35px;
-            width: 300px;
-            /*        width: 220px;
-    */
-        }
+    .container {
+        width: 85%;
+    }
 </style>
 
-@Html.Partial("_Message")
-
 <div class="container">
+    @Html.Partial("_Message")
+
     <div class="row">
         <div class="col s12 m8 l8">
-            @using (Html.BeginForm("FirmaAtendida", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.HiddenFor(q => Model.WorkflowId)
-                @Html.HiddenFor(q => Model.ProcesoId)
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Firma de documento</span>
 
-                @Html.HiddenFor(q => Model.FirmaDocumentoGenericoId)
-                @Html.HiddenFor(q => Model.Archivo)
-                @Html.HiddenFor(q => Model.Folio)
-                @Html.HiddenFor(q => Model.TipoDocumento)
-
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">Firma de Documento</span>
-                        <div class="section"></div>
-                        <div class="row">
-
-                            @if (Model.ArchivoFirmado == null)
-                            {
-                                <div class="input-field">
-                                    <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>
-                                    <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="650px"></embed>
-                                </div><br />
-
-                                <div class="input-field col s12 m12 l12">
-                                    <div>
-                                        <b>@Html.LabelFor(m => Model.OTP)</b>
-                                    </div>
-                                    <b>@Html.TextBoxFor(m => Model.OTP, new { @id = "partitioned", maxlength = "6" })</b>
-                                </div>
-
-                                <div class="col s12 m12 l12">
-                                    <button class="waves-effect waves-light btn blue" type="submit">Firmar Documento</button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="container">
-                                    <header class="jumbotron my-4">
-                                        <h1 class="display-4">Documento Firmado</h1>
-                                        <p class="lead">
-                                            Operación Exitosa, su documento ha sido firmado y se encuentra disponible para su descarga.
-                                        </p>
-                                    </header>
-                                </div><br />
-                                <div class="input-field">
-                                    <strong>@Html.DisplayNameFor(m => Model.ArchivoFirmado)</strong>
-                                    <embed src="@Url.Action("ShowDocumentoConFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="650px"></embed>
-                                </div><br />
-                            }
-
-                        </div>
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.Subsecretaria)</strong><br />
+                        @Html.DisplayFor(m => Model.Subsecretaria)
                     </div>
-                </div>
+
+                    @*<div class="input-field truncate">
+            <strong>@Html.DisplayNameFor(m => Model.URL)</strong><br />
+            @if (!string.IsNullOrWhiteSpace(Model.URL))
+            {
+                <a href="@Model.URL" target="_blank">@Model.URL</a>
             }
+            else
+            {
+                @Html.DisplayFor(m => Model.URL)
+            }
+        </div>*@
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong><br />
+                        @Html.DisplayFor(m => Model.Nombre)
+                    </div>
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                        @Html.DisplayFor(m => Model.FechaCreacion)
+                    </div>
+
+                    @*@if (!string.IsNullOrWhiteSpace(Model.Folio))
+        {
+            <div class="input-field">
+                <strong>@Html.DisplayNameFor(m => Model.Folio)</strong><br />
+                @Html.DisplayFor(m => Model.Folio)
+            </div>
+        }*@
+
+                    @if (Model.ArchivoFirmado != null)
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.ArchivoFirmado)</strong>
+                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="300px"></embed>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>
+                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="300px"></embed>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
         <div class="col s12 m4 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
@@ -94,14 +75,14 @@
         </div>
     </div>
 </div>
-
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
-
 <script type="text/javascript">
     $(document).ready(function () {
         $('.modal').modal();
-        $('select').formSelect();
         $('.tooltipped').tooltip();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
     });
 </script>
+
 

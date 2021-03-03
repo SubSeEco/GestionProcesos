@@ -794,6 +794,7 @@
     <Content Include="Views\FirmaDocumentoGenerico\FirmaAtendida.cshtml" />
     <Content Include="Views\HorasExtras\View.cshtml" />
     <Content Include="Views\Cometido\ColumnChart.cshtml" />
+    <Content Include="Views\FirmaDocumentoGenerico\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
