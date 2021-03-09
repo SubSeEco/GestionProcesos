@@ -94,6 +94,29 @@
             </div>
         }
 
+        using (Html.BeginForm("CDCFinanzas", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte CDC Finanzas</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }
+
         using (Html.BeginForm("SeguimientoUnidades", null))
         {
             @Html.AntiForgeryToken()

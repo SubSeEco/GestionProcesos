@@ -6,6 +6,7 @@
 <input type="button" value="Unidades" onclick="Unidades()" class="waves-effect waves-light btn blue" />
 <input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
 <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
+<input class="waves-effect waves-light btn blue" type="button" value="Ejecucion" onclick="Demora()" />
 
 
 
@@ -14,6 +15,7 @@
 <div id="chartContainer"></div>
 <div id="chartUnidades"></div>
 <div id="chartMeses"></div>
+<div id="chartDemora"></div>
 
 
 
@@ -23,6 +25,7 @@
     /*limpiar div q no se muestra*/
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
     /*******************GRAFICO UNO******************************************************************/
         var chart = new CanvasJS.Chart("chartContainer", {
             theme: "light2",
@@ -58,6 +61,7 @@
         /*limpiar div q no se muestra*/
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Unidades = new CanvasJS.Chart("chartUnidades", {
             theme: "light2",
@@ -93,6 +97,7 @@
         /*limpiar div q no se muestra*/
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Meses = new CanvasJS.Chart("chartMeses", {
             theme: "light2",
@@ -106,6 +111,26 @@
             ]
         });
         Meses.render();
+    }
+
+    function Demora() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        /*******************GRAFICO TRES******************************************************************/
+        var Demora = new CanvasJS.Chart("chartDemora", {
+            theme: "light2",
+            animationEnabled: true,
+            title: { text: "Tiempo demora ejecucion tareas"},
+            data: [
+            {
+                    type: "column",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.DataDemora),
+            }
+            ]
+        });
+        Demora.render();
     }
 
 </script>
