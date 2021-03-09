@@ -18,6 +18,7 @@ using System.Drawing;
 using iTextSharp.text;
 using iTextSharp.text.pdf.security;
 using System.Security.Cryptography.X509Certificates;
+using Image = iTextSharp.text.Image;
 
 namespace App.Infrastructure.Minsegpres
 {
@@ -25,15 +26,39 @@ namespace App.Infrastructure.Minsegpres
     {
         protected readonly IGestionProcesos _repository;
         protected readonly IFolio _folio;
+        protected readonly IFile _file;
 
-        public Minsegpres(IGestionProcesos repository, IFolio folio)
+        public Minsegpres(IGestionProcesos repository, IFolio folio, IFile file)
         {
             _repository = repository;
             _folio = folio;
+            _file = file;
+
         }
 
-        public byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento)
+        public byte[] Sign(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento, int DocumentoId)
         {
+            ////var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
+            //var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
+            
+            //var aux = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+            //var docugenerico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == aux.ProcesoId);
+
+            //if (docugenerico != null)
+            //{
+            //    foreach (var doc in docugenerico)
+            //    {
+            //        if (doc.DocumentoId == doc.DocumentoId)
+            //            aux.DocumentoId = doc.DocumentoId;
+            //    }
+            //}
+
+            var url_tramites_en_linea = "https://tramites.economia.gob.cl/";
+
+            //var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", aux.DocumentoId));
+            var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
+
             byte[] binario = null;
 
             using (MemoryStream ms = new MemoryStream())
@@ -105,28 +130,63 @@ namespace App.Infrastructure.Minsegpres
                         //agregar tabla de verificacion
                         try
                         {
-
-
                             //var img = Image.GetInstance(QR);
+                            var img = Image.GetInstance(_qrResponse);
                             //var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                            var fontStandard = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
-                            var fontBold = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
+                            var fontStandard = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+                            //var fontBold = new iTextSharp.text.Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
+                            var fontBold = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
                             var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
                             var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
 
                             table.TotalWidth = 520f;
-                            table.SetWidths(new float[] { 10f, 19f, 10f });
-                            table.AddCell(new PdfPCell(new Phrase("Documento Firmado, de acuerdo a lo establecido en artículo 40 del Reglamento de la Ley Nº 19.799", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
-                            table.AddCell(new PdfPCell(new Phrase("Fecha de Firma", fontBold)) { });
-                            table.AddCell(new PdfPCell(new Phrase("Nombre Funcionario", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                            table.AddCell(new PdfPCell(new Phrase(Nombre, fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.SetWidths(new float[] { 8f, 25f, 6f });
+                            table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)) { });
+                            //table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", Nombre), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            //table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", DocumentoId), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                            //table.AddCell(new PdfPCell(new Phrase(url, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", url_tramites_en_linea), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+
                             table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
                         }
                         catch (System.Exception ex)
                         {
                             throw new System.Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
                         }
+
+                        ////agregar tabla de verificacion (Método Viejo)
+                        //try
+                        //{
+
+
+                        //    //var img = Image.GetInstance(QR);
+                        //    //var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
+                        //    var fontStandard = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
+                        //    var fontBold = new iTextSharp.text.Font(/*Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY*/);
+                        //    var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
+                        //    var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+
+                        //    table.TotalWidth = 520f;
+                        //    table.SetWidths(new float[] { 10f, 19f, 10f });
+                        //    table.AddCell(new PdfPCell(new Phrase("Documento Firmado, de acuerdo a lo establecido en artículo 40 del Reglamento de la Ley Nº 19.799", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
+                        //    table.AddCell(new PdfPCell(new Phrase("Fecha de Firma", fontBold)) { });
+                        //    table.AddCell(new PdfPCell(new Phrase("Nombre Funcionario", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                        //    table.AddCell(new PdfPCell(new Phrase(Nombre, fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                        //    table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                        //    table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                        //}
+                        //catch (System.Exception ex)
+                        //{
+                        //    throw new System.Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                        //}
 
                         stamper.Close();
                     }
@@ -139,7 +199,8 @@ namespace App.Infrastructure.Minsegpres
             DateTime issuedAt = DateTime.Now;
             DateTime expires = DateTime.Now.AddMinutes(30);
 
-            string key = "e31f64431e424c60a26436de31aad96b";
+            //Testin
+            string key = "8d7a6d0fea8541b99b0dce110fd0d077";
 
             var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
@@ -160,13 +221,15 @@ namespace App.Infrastructure.Minsegpres
             var handler = new JwtSecurityTokenHandler();
 
             var tokenString = handler.WriteToken(secToken);
-
-            var client = new RestClient("https://api.firma.test.digital.gob.cl/firma/v2/files/tickets");
+            
+            //Testing
+            var client = new RestClient("https://api.firma.cert.digital.gob.cl/firma/v2/files/tickets");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("OTP", OTP);
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"2c368309-d7b6-49ad-9e93-b27fdc58128e\",\r\n\"token\":\r\n\"" + tokenString + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
+            //Testing
+            request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"012edbcc-7eb7-4043-8c16-a7702f1ffc40\",\r\n\"token\":\r\n\"" + tokenString + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
 

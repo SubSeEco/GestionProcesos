@@ -94,11 +94,11 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, bool TipoDocumento)
+        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, bool TipoDocumento, int DocumentoId)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, TipoDocumento);
+            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
             var persona = new SIGPER();
 
@@ -142,27 +142,39 @@ namespace App.Core.UseCases
                 tipoDoc = 15;
                 Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
-                //var email = username;
-                var email = "";
-                //var email = UserExtended.Email(User);
-                var doc = new Documento();
-                doc.Fecha = DateTime.Now;
-                doc.Email = email;
-                doc.FileName = Name;
-                doc.File = binario;
-                doc.ProcesoId = model.ProcesoId.Value;
-                doc.WorkflowId = model.WorkflowId.Value;
-                doc.Signed = false;
-                doc.Texto = data.Text;
-                doc.Metadata = data.Metadata;
-                doc.Type = data.Type;
-                doc.TipoPrivacidadId = 1;
-                doc.TipoDocumentoId = tipoDoc;
+                ////var email = username;
+                //var email = "";
+                ////var email = UserExtended.Email(User);
+                //var doc = new Documento();
+                //doc.Fecha = DateTime.Now;
+                //doc.Email = email;
+                //doc.FileName = Name;
+                //doc.File = binario;
+                //doc.ProcesoId = model.ProcesoId.Value;
+                //doc.WorkflowId = model.WorkflowId.Value;
+                //doc.Signed = false;
+                //doc.Texto = data.Text;
+                //doc.Metadata = data.Metadata;
+                //doc.Type = data.Type;
+                //doc.TipoPrivacidadId = 1;
+                //doc.TipoDocumentoId = tipoDoc;
 
-                doc.Folio = model.Folio;
+                //doc.Folio = model.Folio;
+                //doc.File = model.ArchivoFirmado;
 
-                _repository.Create(doc);
-                //_repository.Update(doc);
+                //_repository.Delete(doc);
+                //_repository.Create(doc);
+                ////_repository.Update(doc);
+                //_repository.Save();
+
+                var docOld = _repository.GetById<Documento>(DocumentoId);
+                docOld.Fecha = DateTime.Now;
+                docOld.File = binario;
+                docOld.Signed = false;
+                docOld.Texto = data.Text;
+                docOld.Metadata = data.Metadata;
+                docOld.Type = data.Type;
+                _repository.Update(docOld);
                 _repository.Save();
             }
 
@@ -189,6 +201,14 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
+                //generar tags de proceso
+                workflowActual.Proceso.Tags += workflowActual.Proceso.GetTags();
+
+                //generar tags de negocio
+                var fdg = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.ProcesoId == workflowActual.ProcesoId);
+                if (fdg != null)
+                    workflowActual.Proceso.Tags += fdg.GetTags();
+
                 //si ingreso esta ok y firmador aprueba sin firma...
                 if (workflowActual.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString() && workflowActual.DefinicionWorkflow.Secuencia == 2)
                 {
@@ -208,6 +228,9 @@ namespace App.Core.UseCases
                 workflowActual.GrupoId = obj.GrupoId;
                 workflowActual.Email = obj.Email;
                 workflowActual.To = obj.To;
+
+                //actualiazar tags
+                workflowActual.Proceso.Tags = string.Concat(workflowActual.Proceso.GetTags(), " ", fdg.GetTags());
 
                 if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
