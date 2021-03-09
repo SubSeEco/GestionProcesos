@@ -38,6 +38,28 @@ namespace App.Web.Controllers
     [Authorize]
     public class CometidoController : Controller
     {
+        public class DTOFilterWorkflow
+        {
+            public DTOFilterWorkflow()
+            {
+                Select = new HashSet<DTOSelect>();
+                Result = new HashSet<Workflow>();
+            }
+
+            [Display(Name = "Desde")]
+            [DataType(DataType.Date)]
+            public System.DateTime? Desde { get; set; }
+
+            [Display(Name = "Hasta")]
+            [DataType(DataType.Date)]
+            public System.DateTime? Hasta { get; set; }
+
+            [Display(Name = "DefinicionWorkflowId")]
+            public int DefinicionWorkflowId { get; set; }            
+
+            public IEnumerable<DTOSelect> Select { get; set; }
+            public IEnumerable<Workflow> Result { get; set; }
+        }
         public class DTOFilterCometido
         {
             public DTOFilterCometido()
@@ -2618,30 +2640,62 @@ namespace App.Web.Controllers
             return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoFinanzas_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
-        public FileResult CDCFinanzas(DTOFilterCometido model)
+        public FileResult CDCFinanzas(DTOFilterWorkflow model, DTOFilterCometido _model)
         {
-            var predicate = PredicateBuilder.True<Cometido>();
-
+            /*se buscan las tareas asociadas a la tareas de analista de contabilidad, segun la fecha establecida*/
+            var predicateWorkflow = PredicateBuilder.True<Workflow>();
             if (model.Desde.HasValue)
-                predicate = predicate.And(q =>
-                    q.FechaSolicitud.Year >= model.Desde.Value.Year &&
-                    q.FechaSolicitud.Month >= model.Desde.Value.Month &&
-                    q.FechaSolicitud.Day >= model.Desde.Value.Day);
+                predicateWorkflow = predicateWorkflow.And(q =>
+                    q.FechaCreacion.Year >= model.Desde.Value.Year &&
+                    q.FechaCreacion.Month >= model.Desde.Value.Month &&
+                    q.FechaCreacion.Day >= model.Desde.Value.Day);
 
             if (model.Hasta.HasValue)
-                predicate = predicate.And(q =>
-                    q.FechaSolicitud.Year <= model.Hasta.Value.Year &&
-                    q.FechaSolicitud.Month <= model.Hasta.Value.Month &&
-                    q.FechaSolicitud.Day <= model.Hasta.Value.Day);
+                predicateWorkflow = predicateWorkflow.And(q =>
+                    q.FechaCreacion.Year <= model.Hasta.Value.Year &&
+                    q.FechaCreacion.Month <= model.Hasta.Value.Month &&
+                    q.FechaCreacion.Day <= model.Hasta.Value.Day);
 
-            var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
-            if (CometidoId.Any())
-                predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 82);
 
-            model.Result = _repository.Get(predicate);
+            var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            if (WorkflowId.Any())
+                predicateWorkflow = predicateWorkflow.And(q => WorkflowId.Contains(q.WorkflowId));
 
-            var result = model.Result;// _repository.GetAll<Cometido>();
+            model.Result = _repository.Get(predicateWorkflow);
+            
 
+            /*Se buscan los cometidos asociados a las tareas antes encontradas.*/
+            //var predicate = PredicateBuilder.True<Cometido>();
+
+            ////if (_model.Desde.HasValue)
+            ////    predicate = predicate.And(q =>
+            ////        q.FechaSolicitud.Year >= _model.Desde.Value.Year &&
+            ////        q.FechaSolicitud.Month >= _model.Desde.Value.Month &&
+            ////        q.FechaSolicitud.Day >= _model.Desde.Value.Day);
+
+            ////if (_model.Hasta.HasValue)
+            ////    predicate = predicate.And(q =>
+            ////        q.FechaSolicitud.Year <= _model.Hasta.Value.Year &&
+            ////        q.FechaSolicitud.Month <= _model.Hasta.Value.Month &&
+            ////        q.FechaSolicitud.Day <= _model.Hasta.Value.Day);
+
+
+            //var CometidoId = _model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            //if (CometidoId.Any())
+            //    predicate = predicate.And(q =>  CometidoId.Contains(q.ProcesoId.Value));
+
+            //_model.Result = _repository.Get(predicate);
+
+
+            List<Cometido> ListCom = new List<Cometido>();
+            foreach (var _com in model.Result.ToList())
+            {
+                var _cometido = _repository.Get<Cometido>().Where(c => c.ProcesoId == _com.ProcesoId).ToList();
+                ListCom.AddRange(_cometido.ToList());
+            }
+            var result = ListCom;
+            
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CDCFinanzas.xlsx");
             var fileInfo = new FileInfo(file);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
