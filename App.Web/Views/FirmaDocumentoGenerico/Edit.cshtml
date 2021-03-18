@@ -12,49 +12,56 @@
     @Html.Partial("_Message")
     <div class="row">
         <div class="col s12 m8 l8">
-            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.HiddenFor(q => Model.WorkflowId)
                 @Html.HiddenFor(q => Model.ProcesoId)
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "red-text" })
-
-                @Html.HiddenFor(q => Model.FirmaDocumentoGenericoId)
-                @Html.HiddenFor(q => Model.Archivo)
-                @Html.HiddenFor(q => Model.TipoDocumento)
 
                 <div class="card">
                     <div class="card-content">
+                        <div class="container">
+                            <header class="jumbotron my-4">
+                                <h1 class="display-4">¡¡¡ ATENCIÓN !!!</h1>
+                                <p class="lead">
+                                    <h5>TODO DOCUMENTO REALIZADO POR MEDIO DE ESTA PLATAFORMA, SERÁ DE CARÁCTER PÚBLICO.</h5>
+                                </p>
+                            </header>
+                        </div><br />
                         <span class="card-title">Ingreso de documento</span>
                         <div class="section"></div>
-                        <div class="form-group">
-                            @*<div class="control-label col-md-2">*@
-                            <div class="control-label col s12 m12 l12">
-                                <b>@Html.LabelFor(m => m.TipoDocumento)</b>
-                            </div>
-                            <div>
-                                <div class="col-md-10">
-                                    <div class="container">
-                                        <label>
-                                            @Html.RadioButtonFor(m => Model.TipoDocumento, true)
-                                            <span>OTROS</span>
-                                        </label>
-                                        <label>
-                                            @Html.RadioButtonFor(m => Model.TipoDocumento, false)
-                                            <span>MEMORANDUM</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                        @*<div class="form-group">*@
+                    <div class="control-label col-md-2">
+                        <div class="input-field col s12 m10 l12">
+                            @Html.DropDownListFor(m => m.TiposFirmas, new List<SelectListItem>
+                            { new SelectListItem { Text = "ATENDIDA", Value = "ATENDIDA"},
+                              new SelectListItem { Text = "DESATENDIDA", Value = "DESATENDIDA"}})
+                            @*@Html.ValidationMessageFor(m => Model.TipoDocumentos, "", new { @class = "red-text" })*@
                         </div><br />
-                        <div class="row">
-                            <div class="input-field">
-                                <strong>@Html.DisplayNameFor(m => Model.Archivo)</strong>
-                                <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumentoGenerico", new { id = Model.FirmaDocumentoGenericoId })" type="application/pdf" width="100%" height="650px"></embed>
+                        <div class="input-field col s12 m10 l12">
+                            @Html.DropDownListFor(m => m.TipoDocumentos, new List<SelectListItem>
+                            { new SelectListItem { Text = "OTROS", Value = "OTROS"},
+                              new SelectListItem { Text = "MEMORANDUM", Value = "MEMORANDUM"}})
+                            @*@Html.ValidationMessageFor(m => Model.TipoDocumentos, "", new { @class = "red-text" })*@
+                        </div><br />
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(model => model.File, "", new
+                                {
+                                    @type = "file"@*, @multiple = "multiple"*@})
                             </div>
-                            <input type="file" name="file" />
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.File, "", new { @class = "red-text" })
                         </div>
-                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                    </div>
+                        @*<div class="row">
+                                <input type="file" name="file" />
+                            </div>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>*@
                     </div>
                 </div>
             }
