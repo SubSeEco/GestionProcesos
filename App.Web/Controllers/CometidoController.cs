@@ -38,6 +38,28 @@ namespace App.Web.Controllers
     [Authorize]
     public class CometidoController : Controller
     {
+        public class DTOFilterWorkflow
+        {
+            public DTOFilterWorkflow()
+            {
+                Select = new HashSet<DTOSelect>();
+                Result = new HashSet<Workflow>();
+            }
+
+            [Display(Name = "Desde")]
+            [DataType(DataType.Date)]
+            public System.DateTime? Desde { get; set; }
+
+            [Display(Name = "Hasta")]
+            [DataType(DataType.Date)]
+            public System.DateTime? Hasta { get; set; }
+
+            [Display(Name = "DefinicionWorkflowId")]
+            public int DefinicionWorkflowId { get; set; }            
+
+            public IEnumerable<DTOSelect> Select { get; set; }
+            public IEnumerable<Workflow> Result { get; set; }
+        }
         public class DTOFilterCometido
         {
             public DTOFilterCometido()
@@ -2607,16 +2629,172 @@ namespace App.Web.Controllers
                 foreach (var w in workflow)
                 {
                     if(w.DefinicionWorkflowId == 82)
-                        worksheet.Cells[fila, 11].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A";
+                        worksheet.Cells[fila, 11].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
 
-                    if(w.DefinicionWorkflowId == 84)
-                        worksheet.Cells[fila, 15].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A";
+                    if (w.DefinicionWorkflowId == 84)
+                        worksheet.Cells[fila, 15].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de tesorerria*/
                 }
             }
 
 
             return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoFinanzas_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
+
+        public FileResult CDCFinanzas(DTOFilterWorkflow model, DTOFilterCometido _model)
+        {
+            /*se buscan las tareas asociadas a la tareas de analista de contabilidad, segun la fecha establecida*/
+            var predicateWorkflow = PredicateBuilder.True<Workflow>();
+            if (model.Desde.HasValue)
+                predicateWorkflow = predicateWorkflow.And(q =>
+                    q.FechaCreacion.Year >= model.Desde.Value.Year &&
+                    q.FechaCreacion.Month >= model.Desde.Value.Month &&
+                    q.FechaCreacion.Day >= model.Desde.Value.Day);
+
+            if (model.Hasta.HasValue)
+                predicateWorkflow = predicateWorkflow.And(q =>
+                    q.FechaCreacion.Year <= model.Hasta.Value.Year &&
+                    q.FechaCreacion.Month <= model.Hasta.Value.Month &&
+                    q.FechaCreacion.Day <= model.Hasta.Value.Day);
+
+            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 82);
+
+            var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            if (WorkflowId.Any())
+                predicateWorkflow = predicateWorkflow.And(q => WorkflowId.Contains(q.WorkflowId));
+
+            model.Result = _repository.Get(predicateWorkflow);
+            
+
+            /*Se buscan los cometidos asociados a las tareas antes encontradas.*/
+            //var predicate = PredicateBuilder.True<Cometido>();
+
+            ////if (_model.Desde.HasValue)
+            ////    predicate = predicate.And(q =>
+            ////        q.FechaSolicitud.Year >= _model.Desde.Value.Year &&
+            ////        q.FechaSolicitud.Month >= _model.Desde.Value.Month &&
+            ////        q.FechaSolicitud.Day >= _model.Desde.Value.Day);
+
+            ////if (_model.Hasta.HasValue)
+            ////    predicate = predicate.And(q =>
+            ////        q.FechaSolicitud.Year <= _model.Hasta.Value.Year &&
+            ////        q.FechaSolicitud.Month <= _model.Hasta.Value.Month &&
+            ////        q.FechaSolicitud.Day <= _model.Hasta.Value.Day);
+
+
+            //var CometidoId = _model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
+            //if (CometidoId.Any())
+            //    predicate = predicate.And(q =>  CometidoId.Contains(q.ProcesoId.Value));
+
+            //_model.Result = _repository.Get(predicate);
+
+
+            List<Cometido> ListCom = new List<Cometido>();
+            foreach (var _com in model.Result.ToList())
+            {
+                var _cometido = _repository.Get<Cometido>().Where(c => c.ProcesoId == _com.ProcesoId).ToList();
+                ListCom.AddRange(_cometido.ToList());
+            }
+            var result = ListCom;
+            
+            var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CDCFinanzas.xlsx");
+            var fileInfo = new FileInfo(file);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelPackageSeguimientoUnidades = new ExcelPackage(fileInfo);
+
+            var fila = 1;
+            var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[0];
+            foreach (var cometido in result.ToList().Where(c => c.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)) //.OrderByDescending(c => c.CometidoId))
+            {
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                DateTime? inicio = null;
+                DateTime? fin = null;
+
+                fila++;
+                worksheet.Cells[fila, 1].Value = cometido.CometidoId.ToString();
+                worksheet.Cells[fila, 2].Value = cometido.Nombre;
+                worksheet.Cells[fila, 3].Value = cometido.FechaSolicitud.ToShortDateString();
+                worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
+                worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
+                worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
+                worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToString() : "S/A";
+
+                //worksheet.Cells[fila, 16].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagadorTesoreria) ? cometido.NombreFuncionarioPagadorTesoreria : "S/A";
+                worksheet.Cells[fila, 10].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria.ToString() : "S/A";
+                worksheet.Cells[fila, 11].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToString() : "S/A";
+
+                /*se busca la fecha de creacion de las tareas*/
+                foreach (var w in workflow)
+                {
+                    if (w.DefinicionWorkflowId == 82)
+                    {
+                        worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
+                        inicio = w.FechaCreacion != null ? w.FechaCreacion : DateTime.Now;
+                    }                            
+
+                    if (w.DefinicionWorkflowId == 84)
+                        worksheet.Cells[fila, 9].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de tesorerria*/
+
+                    if (w.DefinicionWorkflowId == 86)
+                    {
+                        worksheet.Cells[fila, 12].Value = w.FechaTermino != null ? w.FechaTermino.ToString() : "S/A"; /*fecha termino a analista de finznzas*/
+                        fin = w.FechaTermino != null ? w.FechaTermino.Value : DateTime.Now;
+                    }
+                }
+
+                if (inicio != null && fin != null)
+                {
+                    int day = 0;
+                    for (var i = inicio.Value; i <= fin.Value; i = i.AddDays(1))
+                    {
+                        if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !feriados.Any(q => q.Date == i.Date))
+                        {
+                            day++;
+                        }
+                    }
+
+                    worksheet.Cells[fila, 13].Value = day.ToString(); /*dias transcurridos - habiles*/
+                }
+                else
+                    worksheet.Cells[fila, 13].Value = "S/A"; /*dias transcurridos - habiles*/                
+            }
+
+
+            return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptCDCFinanzas_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
+
+        //public decimal? MinutosPermanencia
+        //{
+        //    get
+        //    {
+        //        if (!FechaTermino.HasValue)
+        //            return null;
+
+        //        int minutes = 0;
+        //        for (var i = FechaCreacion; i <= FechaTermino.Value; i = i.AddMinutes(1))
+        //            if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !feriados.Any(q => q.Date == i.Date))
+        //                if (i.TimeOfDay.Hours >= 9 && i.TimeOfDay.Hours <= 18)
+        //                    minutes++;
+
+        //        return minutes;
+        //    }
+        //}
+
+        private List<DateTime> feriados = new List<DateTime>() {
+        new DateTime(2020,09,18),
+        new DateTime(2020,09,19),
+        new DateTime(2020,10,12),
+        new DateTime(2020,10,25),
+        new DateTime(2020,10,31),
+        new DateTime(2020,11,01),
+        new DateTime(2020,11,29),
+        new DateTime(2020,12,08),
+        new DateTime(2020,12,25),
+        new DateTime(2021,01,01),
+        };
+
+
+
+
 
         public ActionResult Finalizados()
         {
@@ -2638,7 +2816,7 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public FileResult FueraPlazo(DTOFilterCometido model)
+        public FileResult FueraPlazo( DTOFilterCometido model)
         {
             var predicate = PredicateBuilder.True<Cometido>();
 
@@ -2733,7 +2911,9 @@ namespace App.Web.Controllers
             List<DataPoint> _lis = new List<DataPoint>();
             List<DataPoint> _lisUnidades = new List<DataPoint>();
             List<DataPoint> _lisMeses = new List<DataPoint>();
+            List<DataPoint> _lisDemora = new List<DataPoint>();
 
+            /*CANTIDAD DE TAREAS ACTIVAS*/
             var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
             foreach(var t in tareas)
             {
@@ -2763,6 +2943,31 @@ namespace App.Web.Controllers
             }
 
             ViewBag.DataMeses = JsonConvert.SerializeObject(_lisMeses, _jsonSetting);
+
+
+            /*TIEMPO DE DEMORA DE EJECUCION TAREAS*/
+            var demora = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+            foreach (var t in demora)
+            {
+                int dif = 0;
+                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == true && c.Anulada == false).Count();
+                var tar = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == true && c.Anulada == false).ToList();
+                foreach (var d in tar)
+                {
+                    if(d.FechaTermino != null)
+                    {                        
+                        var res = (d.FechaTermino.Value.Date - d.FechaCreacion.Date);
+                        dif += res.Days;
+                    }                
+                }
+                if (work == 0)
+                    work = 1;
+
+                var time = dif / work;
+                _lisDemora.Add(new DataPoint(Convert.ToDouble(time), t.Nombre));
+            }
+            //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForDateTimeAxis(10), _jsonSetting);
+            ViewBag.DataDemora = JsonConvert.SerializeObject(_lisDemora, _jsonSetting);
 
 
             return View();

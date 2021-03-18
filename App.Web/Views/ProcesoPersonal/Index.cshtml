@@ -97,8 +97,7 @@
                         <p>@Html.Action("Row", "GDExterno", new { item.ProcesoId })</p>
                     }
 
-                    @*@if (!item.Terminada && !item.Anulada)*@
-                    @if (Model.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso)
+                    @if (item.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso)
                     {
                         <p>@Html.ActionLink("Anular", "Delete", new { id = item.ProcesoId }, new { @class = "waves-effect waves-light btn red" })</p>
                     }
