@@ -484,7 +484,7 @@ namespace App.Core.UseCases
                         Documento doc = hrs.Proceso.Documentos.Where(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
                         var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
-                        List<string> emailMsg;
+                        //List<string> emailMsg;
 
                         _email.NotificarFinProceso(workflowActual.Proceso,
                         _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),

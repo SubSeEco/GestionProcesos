@@ -2720,7 +2720,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 1].Value = cometido.CometidoId.ToString();
                 worksheet.Cells[fila, 2].Value = cometido.Nombre;
                 worksheet.Cells[fila, 3].Value = cometido.FechaSolicitud.ToShortDateString();
-                worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
+                worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico.ToString();// cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
                 worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                 worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
                 worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToString() : "S/A";

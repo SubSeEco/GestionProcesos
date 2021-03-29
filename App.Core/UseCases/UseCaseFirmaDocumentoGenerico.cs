@@ -140,7 +140,7 @@ namespace App.Core.UseCases
 
                     DTOFileMetadata data = new DTOFileMetadata();
                     int tipoDoc = 0;
-                    int IdDocto = 0;
+                    //int IdDocto = 0;
                     string Name = string.Empty;
 
                     tipoDoc = 15;

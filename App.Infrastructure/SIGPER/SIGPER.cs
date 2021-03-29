@@ -1160,7 +1160,7 @@ namespace App.Infrastructure.SIGPER
             {
                 int HorasDiurnas = 0;
                 int TotalHorasDiurnas = 0;
-                int HorasNocturnas = 0;
+                //int HorasNocturnas = 0;
                 DateTime? entrada = null;
                 DateTime? salida = null;
 
