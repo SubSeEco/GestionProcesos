@@ -5,6 +5,6 @@ namespace App.Core.Interfaces
 {
     public interface IWorkflowService
     {
-        List<WorkflowDTO> GetPendingTask(string email);
+        List<WorkflowDTO> GetPendingTask(App.Model.SIGPER.SIGPER user);
     }
 }

@@ -5,6 +5,7 @@ using App.Core.Interfaces;
 using App.Model.SIGPER;
 using System.Linq;
 using App.Model.DTO;
+using System.Collections.Generic;
 
 namespace App.Core.UseCases
 {
@@ -94,11 +95,101 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, bool TipoDocumento, int DocumentoId)
+        public ResponseMessage Firma(byte[][] documentos, string OTP, string tokenJWT, int id, string Rut, string Nombre, bool TipoDocumento, int DocumentoId)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.Sign(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+
+            foreach (var documento in documentos)
+            {
+                var binario = this._minsegpres.SignConOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+
+                var persona = new SIGPER();
+
+
+                ////si el documento ya tiene folio, no solicitarlo nuevamente
+                //if (string.IsNullOrWhiteSpace(model.Folio))
+                //{
+                //    try
+                //    {
+                //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+                //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
+                //        if (_folioResponse == null)
+                //            response.Errors.Add("Error al llamar el servicio externo de folio");
+
+                //        if (_folioResponse != null && _folioResponse.status == "ERROR")
+                //            response.Errors.Add(_folioResponse.error);
+
+                //        model.Folio = _folioResponse.folio;
+
+                //        _repository.Update(model);
+                //        _repository.Save();
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        response.Errors.Add(ex.Message);
+                //    }
+                //}
+
+                if (!response.IsValid)
+                    return response;
+
+                if (binario != null)
+                {
+                    model.ArchivoFirmado = binario;
+
+                    DTOFileMetadata data = new DTOFileMetadata();
+                    int tipoDoc = 0;
+                    int IdDocto = 0;
+                    string Name = string.Empty;
+
+                    tipoDoc = 15;
+                    Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+
+                    ////var email = username;
+                    //var email = "";
+                    ////var email = UserExtended.Email(User);
+                    //var doc = new Documento();
+                    //doc.Fecha = DateTime.Now;
+                    //doc.Email = email;
+                    //doc.FileName = Name;
+                    //doc.File = binario;
+                    //doc.ProcesoId = model.ProcesoId.Value;
+                    //doc.WorkflowId = model.WorkflowId.Value;
+                    //doc.Signed = false;
+                    //doc.Texto = data.Text;
+                    //doc.Metadata = data.Metadata;
+                    //doc.Type = data.Type;
+                    //doc.TipoPrivacidadId = 1;
+                    //doc.TipoDocumentoId = tipoDoc;
+
+                    //doc.Folio = model.Folio;
+                    //doc.File = model.ArchivoFirmado;
+
+                    //_repository.Delete(doc);
+                    //_repository.Create(doc);
+                    ////_repository.Update(doc);
+                    //_repository.Save();
+
+                    var docOld = _repository.GetById<Documento>(DocumentoId);
+                    docOld.Fecha = DateTime.Now;
+                    docOld.File = binario;
+                    docOld.Signed = false;
+                    docOld.Texto = data.Text;
+                    docOld.Metadata = data.Metadata;
+                    docOld.Type = data.Type;
+                    _repository.Update(docOld);
+                    _repository.Save();
+                }
+            }
+            return response;
+        }
+
+        public ResponseMessage Firma2(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
+        {
+            var response = new ResponseMessage();
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+            var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
             var persona = new SIGPER();
 
@@ -132,7 +223,7 @@ namespace App.Core.UseCases
 
             if (binario != null)
             {
-                model.ArchivoFirmado = binario;
+                model.ArchivoFirmado2 = binario;
 
                 DTOFileMetadata data = new DTOFileMetadata();
                 int tipoDoc = 0;
@@ -180,6 +271,143 @@ namespace App.Core.UseCases
 
             return response;
         }
+
+        public ResponseMessage FirmaMasiva(byte[][] documentos, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
+        {
+            var response = new ResponseMessage();
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+            foreach (var documento in documentos)
+            {
+                var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+
+                var persona = new SIGPER();
+
+
+                ////si el documento ya tiene folio, no solicitarlo nuevamente
+                //if (string.IsNullOrWhiteSpace(model.Folio))
+                //{
+                //    try
+                //    {
+                //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+                //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
+                //        if (_folioResponse == null)
+                //            response.Errors.Add("Error al llamar el servicio externo de folio");
+
+                //        if (_folioResponse != null && _folioResponse.status == "ERROR")
+                //            response.Errors.Add(_folioResponse.error);
+
+                //        model.Folio = _folioResponse.folio;
+
+                //        _repository.Update(model);
+                //        _repository.Save();
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        response.Errors.Add(ex.Message);
+                //    }
+                //}
+
+                if (!response.IsValid)
+                    return response;
+
+                //if (binario != null)
+                //{
+                //    model.ArchivoFirmado = binario;
+
+                //    DTOFileMetadata data = new DTOFileMetadata();
+                //    int tipoDoc = 0;
+                //    int IdDocto = 0;
+                //    string Name = string.Empty;
+
+                //    tipoDoc = 15;
+                //    Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+
+                //    ////var email = username;
+                //    //var email = "";
+                //    ////var email = UserExtended.Email(User);
+                //    //var doc = new Documento();
+                //    //doc.Fecha = DateTime.Now;
+                //    //doc.Email = email;
+                //    //doc.FileName = Name;
+                //    //doc.File = binario;
+                //    //doc.ProcesoId = model.ProcesoId.Value;
+                //    //doc.WorkflowId = model.WorkflowId.Value;
+                //    //doc.Signed = false;
+                //    //doc.Texto = data.Text;
+                //    //doc.Metadata = data.Metadata;
+                //    //doc.Type = data.Type;
+                //    //doc.TipoPrivacidadId = 1;
+                //    //doc.TipoDocumentoId = tipoDoc;
+
+                //    //doc.Folio = model.Folio;
+                //    //doc.File = model.ArchivoFirmado;
+
+                //    //_repository.Delete(doc);
+                //    //_repository.Create(doc);
+                //    ////_repository.Update(doc);
+                //    //_repository.Save();
+
+                //    var docOld = _repository.GetById<Documento>(DocumentoId);
+                //    docOld.Fecha = DateTime.Now;
+                //    docOld.File = binario;
+                //    docOld.Signed = false;
+                //    docOld.Texto = data.Text;
+                //    docOld.Metadata = data.Metadata;
+                //    docOld.Type = data.Type;
+                //    _repository.Update(docOld);
+                //    _repository.Save();
+                //}
+
+                //model.ArchivoFirmado = binario;
+
+                DTOFileMetadata data = new DTOFileMetadata();
+                int tipoDoc = 0;
+                int IdDocto = 0;
+                string Name = string.Empty;
+
+                tipoDoc = 15;
+                Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+
+                ////var email = username;
+                //var email = "";
+                ////var email = UserExtended.Email(User);
+                //var doc = new Documento();
+                //doc.Fecha = DateTime.Now;
+                //doc.Email = email;
+                //doc.FileName = Name;
+                //doc.File = binario;
+                //doc.ProcesoId = model.ProcesoId.Value;
+                //doc.WorkflowId = model.WorkflowId.Value;
+                //doc.Signed = false;
+                //doc.Texto = data.Text;
+                //doc.Metadata = data.Metadata;
+                //doc.Type = data.Type;
+                //doc.TipoPrivacidadId = 1;
+                //doc.TipoDocumentoId = tipoDoc;
+
+                //doc.Folio = model.Folio;
+                //doc.File = model.ArchivoFirmado;
+
+                //_repository.Delete(doc);
+                //_repository.Create(doc);
+                ////_repository.Update(doc);
+                //_repository.Save();
+
+                var docOld = _repository.GetById<Documento>(DocumentoId);
+                docOld.Fecha = DateTime.Now;
+                docOld.File = binario;
+                docOld.Signed = false;
+                docOld.Texto = data.Text;
+                docOld.Metadata = data.Metadata;
+                docOld.Type = data.Type;
+                _repository.Update(docOld);
+                _repository.Save();
+            }
+
+            return response;
+        }
+
 
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
@@ -244,6 +472,66 @@ namespace App.Core.UseCases
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
+
+                //if (workflowActual.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+                //{
+                //    //Se toma valor de cometidos para definir curso de accion del flujo
+                //    var FirmaDocumentoGenerico = new FirmaDocumentoGenerico();
+                //    FirmaDocumentoGenerico = _repository.Get<FirmaDocumentoGenerico>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                //    if (FirmaDocumentoGenerico != null)
+                //    {
+                //        //determinar siguiente tarea desde el diseño de proceso
+                //        if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                //        {
+                //            if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                //            {
+                //                //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
+                //                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 != null)
+                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && FirmaDocumentoGenerico.TipoFirma == true)
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
+                //                }
+                //                else
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3);
+                //                }
+                //            }
+                //            else if (workflowActual.DefinicionWorkflow.Secuencia == 2)
+                //            {
+                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 4);
+                //                }
+                //                else
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                //                }
+                //            }
+                //            else if (workflowActual.DefinicionWorkflow.Secuencia == 3)
+                //            {
+                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 4);
+                //                }
+                //                else
+                //                {
+                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                //    {
+                //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                //    }
+                //    else
+                //    {
+                //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                //    }
+                //}
 
                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);

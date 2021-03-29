@@ -166,7 +166,8 @@ namespace App.Web.Controllers
         public ActionResult Create(int WorkFlowId)
         {
             var workflow = _repository.GetById<Workflow>(WorkFlowId);
-            var model = new FirmaDocumentoGenerico()
+
+            var model = new FirmaDocumentoGenerico() 
             {
                 WorkflowId = workflow.WorkflowId,
                 ProcesoId = workflow.ProcesoId,
@@ -194,7 +195,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(FirmaDocumentoGenerico model, HttpPostedFileBase file)
+        public ActionResult Create(FirmaDocumentoGenerico model/*, HttpPostedFileBase file*/)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
@@ -206,28 +207,101 @@ namespace App.Web.Controllers
 
             string email = persona.Funcionario.Rh_Mail.Trim();
 
-            var doc = ConvertToByte(file);
+            if (Request.Files.Count == 0)
+                ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
 
-            var DocumentoId = 0;
+            //var doc = ConvertToByte(file);
+
+ 
 
             if (ModelState.IsValid)
             {
-                model.Archivo = doc;
+                //model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
                 model.Subsecretaria = subsecretaria;
                 model.Email = email;
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+                    var target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = file.FileName;
+                    doc.File = target.ToArray();
+                    doc.ProcesoId = model.ProcesoId;
+                    doc.WorkflowId = model.WorkflowId;
+                    doc.Signed = false;
+                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoDocumentoId = 15; /*Por default el tipo de documento es "Otros"*/
+
+                    
+
+                    //obtener metadata del documento
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        doc.Texto = metadata.Text;
+                        doc.Metadata = metadata.Metadata;
+                        doc.Type = metadata.Type;
+                    }
+
+                    ///*Se define el tipo de documento de acuerdo a la tarea dentro del proceso de cometido*/
+                    //var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+                    //if (workflowActual != null)
+                    //{
+                    //    if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                    //    {
+                    //        if (workflowActual.DefinicionWorkflow.Secuencia == 16)/*analista contabilidad*/
+                    //        {
+                    //            doc.TipoDocumentoId = 4;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //        else if (workflowActual.DefinicionWorkflow.Secuencia == 18)/*analista tesoreria*/
+                    //        {
+                    //            doc.TipoDocumentoId = 5;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //        else if (workflowActual.DefinicionWorkflow.Secuencia == 9)/*jefatura ppto*/
+                    //        {
+                    //            doc.TipoDocumentoId = 7;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //    }
+                    //}
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
 
                 var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    //return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-                    return RedirectToAction("GeneraDocumento", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                    return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
+                    //return RedirectToAction("GeneraDocumento", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
                 }
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
+            }
+
+            return View(model);
+        }
+
+        public ActionResult FEADocumentos(int ProcesoId)
+        {
+            var email = UserExtended.Email(User);
+
+            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
+            foreach (var item in model)
+            {
+                item.AutorizadoParaFirma = item.FirmanteEmail == email;
+                //item.AutorizadoParaEliminar = item.Email == email;
             }
 
             return View(model);
@@ -259,7 +333,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(FirmaDocumentoGenerico model, HttpPostedFileBase file)
+        public ActionResult Edit(FirmaDocumentoGenerico model/*, HttpPostedFileBase file*/)
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
@@ -273,15 +347,71 @@ namespace App.Web.Controllers
 
             string email = persona.Funcionario.Rh_Mail.Trim();
 
-            if (ModelState.IsValid && file != null)
+            if (ModelState.IsValid)
             {
-                var doc = ConvertToByte(file);
+                //var doc = ConvertToByte(file);
 
-                model.Archivo = doc;
+                //model.Archivo = doc;
                 model.Run = rut;
                 model.Nombre = nombre;
                 model.Subsecretaria = subsecretaria;
                 model.Email = email;
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+                    var target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = file.FileName;
+                    doc.File = target.ToArray();
+                    doc.ProcesoId = model.ProcesoId;
+                    doc.WorkflowId = model.WorkflowId;
+                    doc.Signed = false;
+                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoDocumentoId = 15; /*Por default el tipo de documento es "Otros"*/
+
+
+
+                    //obtener metadata del documento
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        doc.Texto = metadata.Text;
+                        doc.Metadata = metadata.Metadata;
+                        doc.Type = metadata.Type;
+                    }
+
+                    ///*Se define el tipo de documento de acuerdo a la tarea dentro del proceso de cometido*/
+                    //var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+                    //if (workflowActual != null)
+                    //{
+                    //    if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                    //    {
+                    //        if (workflowActual.DefinicionWorkflow.Secuencia == 16)/*analista contabilidad*/
+                    //        {
+                    //            doc.TipoDocumentoId = 4;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //        else if (workflowActual.DefinicionWorkflow.Secuencia == 18)/*analista tesoreria*/
+                    //        {
+                    //            doc.TipoDocumentoId = 5;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //        else if (workflowActual.DefinicionWorkflow.Secuencia == 9)/*jefatura ppto*/
+                    //        {
+                    //            doc.TipoDocumentoId = 7;
+                    //            doc.TipoDocumentoFirma = "OTRO";
+                    //        }
+                    //    }
+                    //}
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
@@ -333,7 +463,17 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
-            return View(model);
+            //if (model.TiposFirmas == "DESATENDIDA")
+            //{
+            //    return RedirectToAction("FirmaDesatendida", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+            //}
+            //else
+            //{
+                //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
+                var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+
+                return View(model);
+            //}
         }
 
         [HttpPost]
@@ -347,8 +487,12 @@ namespace App.Web.Controllers
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
             string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
+           
+            //var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+         
             var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+
+            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
             if (docugenerico != null)
             {
@@ -356,7 +500,7 @@ namespace App.Web.Controllers
                     model.DocumentoId = docugenerico.DocumentoId;
             }
 
-            if (ModelState.IsValid/* && file == null*/)
+            if (ModelState.IsValid)
             {
                 //var doc = ConvertToByte(file);
 
@@ -367,9 +511,76 @@ namespace App.Web.Controllers
                 model.Archivo = docugenerico.File;
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
-                //var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
+                var _UseCaseResponseMessage = _useCaseInteractor.Firma(archivos, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
-                var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
+
+                if (_UseCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
+
+                if (_UseCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente.";
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                }
+
+                foreach (var item in _UseCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+            }
+
+            return View(model);
+        }
+
+        public ActionResult FirmaDesatendida(int id)
+        {
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
+            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FirmaDesatendida(FirmaDocumentoGenerico model, HttpPostedFileBase file)
+        {
+            var persona = _sigper.GetUserByEmail(User.Email());
+
+            //var doc = ConvertToByte(file);
+
+            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
+
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
+            //var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+
+            var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+
+            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
+
+            if (docugenerico != null)
+            {
+                if (docugenerico.DocumentoId == docugenerico.DocumentoId)
+                    model.DocumentoId = docugenerico.DocumentoId;
+            }
+
+            if (ModelState.IsValid)
+            {
+                //var doc = ConvertToByte(file);
+
+                //model.Archivo = doc;
+                model.DocumentoId = docugenerico.DocumentoId;
+                model.Run = rut;
+                model.Nombre = nombre;
+                model.Archivo = docugenerico.File;
+
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _UseCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumentos, model.DocumentoId);
+                //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -401,6 +612,13 @@ namespace App.Web.Controllers
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
             return File(model.ArchivoFirmado, "application/pdf");
         }
+
+        public FileResult ShowDocumentoCon2Firma(int id)
+        {
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+            return File(model.ArchivoFirmado2, "application/pdf");
+        }
+        
 
         public ActionResult GeneraDocumento(int id)
         {
@@ -442,8 +660,8 @@ namespace App.Web.Controllers
                 doc.Email = email;
                 doc.FileName = Name;
                 doc.File = pdf;
-                doc.ProcesoId = model.ProcesoId.Value;
-                doc.WorkflowId = model.WorkflowId.Value;
+                doc.ProcesoId = model.ProcesoId;
+                doc.WorkflowId = model.WorkflowId;
                 doc.Signed = false;
                 doc.Texto = data.Text;
                 doc.Metadata = data.Metadata;
@@ -467,8 +685,8 @@ namespace App.Web.Controllers
                 doc.Email = email;
                 doc.FileName = Name;
                 doc.File = pdf;
-                doc.ProcesoId = model.ProcesoId.Value;
-                doc.WorkflowId = model.WorkflowId.Value;
+                doc.ProcesoId = model.ProcesoId;
+                doc.WorkflowId = model.WorkflowId;
                 doc.Signed = false;
                 doc.Texto = data.Text;
                 doc.Metadata = data.Metadata;

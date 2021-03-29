@@ -8,14 +8,7 @@ namespace App.Infrastructure.GestionProcesos
 {
     public class WorkflowService : IWorkflowService
     {
-        private readonly ISIGPER _sigper;
-
-        public WorkflowService(ISIGPER sigper)
-        {
-            _sigper = sigper;
-        }
-
-        public List<WorkflowDTO> GetPendingTask(string userEmail)
+        public List<WorkflowDTO> GetPendingTask(App.Model.SIGPER.SIGPER user)
         {
             var result = new List<WorkflowDTO>();
 
@@ -25,7 +18,7 @@ namespace App.Infrastructure.GestionProcesos
                 _context.Configuration.ValidateOnSaveEnabled = false; 
                 _context.Configuration.LazyLoadingEnabled = false;
 
-                var userIsAdmin = _context.Usuario.AsNoTracking().Any(q => q.Habilitado && q.Email == userEmail && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
+                var userIsAdmin = _context.Usuario.AsNoTracking().Any(q => q.Habilitado && q.Email == user.Funcionario.Rh_Mail && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
 
                 if (userIsAdmin)
                 {
@@ -88,8 +81,7 @@ namespace App.Infrastructure.GestionProcesos
 
                 if (!userIsAdmin)
                 {
-                    var user = _sigper.GetUserByEmail(userEmail);
-                    var gruposEspeciales = _context.Usuario.AsNoTracking().Where(q => q.Email == userEmail).Select(q => q.GrupoId).ToList();
+                    var gruposEspeciales = _context.Usuario.AsNoTracking().Where(q => q.Email == user.Funcionario.Rh_Mail).Select(q => q.GrupoId).ToList();
 
                     result.AddRange(
                         (from w in _context.Workflow
@@ -97,7 +89,7 @@ namespace App.Infrastructure.GestionProcesos
                         join gd in _context.GD.Include(q => q.GDOrigen) on p.ProcesoId equals gd.ProcesoId into grupo
                         from x in grupo.DefaultIfEmpty()
                         where !w.Terminada
-                        where w.Email == userEmail
+                        where w.Email == user.Funcionario.Rh_Mail
                          where w.TareaPersonal
                         select new WorkflowDTO
                         {

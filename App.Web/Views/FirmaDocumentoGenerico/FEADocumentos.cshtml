@@ -1,0 +1,135 @@
+﻿@model IEnumerable<App.Model.Core.Documento>
+
+@using Enum = App.Util.Enum;
+@{ 
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-content">
+        <div class="row">
+            <div class="col 19">
+                <span class="card-title">
+                    Documentos
+                </span>
+            </div>
+            @if (Model.Any())
+            {
+                <div class="col 13">
+                    <div class="switch">
+                        <label>
+                            @Html.CheckBox("Preview", true)
+                            <span class="lever">
+                                Previsualizar
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!Model.Any())
+        {
+            <p>
+                No existen documentos
+            </p>
+        }
+
+        @foreach (var item in Model)
+        {
+            <div class="divider">
+            </div>
+
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    @if (item.Signed)
+                    {
+                        <i class="material-icons "medium right green-text>lock_outline</i>
+                    }
+
+                    <h6>
+                        <i class="material-icons">attach_file</i>
+                        <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
+                    </h6>
+
+                    @if (item.EsOficial)
+                    {
+                        <span class="new badge red" data-badge-caption="Oficial">
+                        </span>
+                    }
+                    <p>
+                        Creado por @item.Email el @item.Fecha<br />
+                    </p>
+                    <p>
+                        Tipo de documento @item.TipoDocumentoFirma
+                    </p>
+
+                    @if (item.RequiereFirmaElectronica)
+                    {
+                        <p>
+                            Para firma de @item.FirmanteEmail<br />
+                        </p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(item.Descripcion))
+                    {
+                        <p>
+                            Descripción: @item.Descripcion
+                        </p>
+                    }
+                </div>
+                <div class="pdfPreview">
+                    <div class="col s12 m12 l12">
+                        @if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf") && item.File != null)
+                        {
+                            <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                        }
+                    </div>
+                </div>
+                <div class="col s12 m12 l12">
+                    <br />
+                    @if (@item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso && @item.RequiereFirmaElectronica && item.AutorizadoParaFirma && !item.Signed)
+                    {
+                        <a class="waves-effect waves-light btn modal-trigger btn blue" href="#@string.Concat("modalFirmaDocumento", item.DocumentoId)">
+                            Firmar
+                        </a>
+
+                        <div id="@string.Concat("modalFirmaDocumento", item.DocumentoId)" class="modal">
+                            <div class="modal-content">
+                                <h4>Confirmación</h4>
+                                <p>¿Confirma la operación de firma electrónica del documento?</p>
+                            </div>
+                            <div class="modal-footer m1">
+                                @using (Html.BeginForm("Sign", "Documento", new { id = item.DocumentoId }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button class="waves-effect waves-light btn blue" type="submit">Confirmar</button>
+                                    <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (item.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.EnProceso && item.Activo && item.AutorizadoParaEliminar)
+                    {
+                        <a class="waves-effect waves-light btn modal-trigger btn red" href="#@string.Concat("modalDeleteDocumento", item.DocumentoId)">Eliminar</a>
+                        <div id="@string.Concat("modalDeleteDocumento", item.DocumentoId)" class="modal">
+                            <div class="modal-content">
+                                <h4>Confirmación</h4>
+                                <p>¿Confirma la eliminación del documento?</p>
+                            </div>
+                            <div class="modal-footer m1">
+                                @using (Html.BeginForm("DeleteDocument", "GDExterno", new { id = item.DocumentoId }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button class="waves-effect waves-light btn red" type="submit">Confirmar</button>
+                                    <a href="#!" class="modal-close waves-effect btn grey">Cancelar</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
