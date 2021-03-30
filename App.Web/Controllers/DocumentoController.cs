@@ -42,7 +42,7 @@ namespace App.Web.Controllers
             public DTOFilter()
             {
                 TextSearch = string.Empty;
-                Select = new HashSet<App.Model.DTO.DTOSelect>();
+                Select = new HashSet<Model.DTO.DTOSelect>();
                 Result = new HashSet<Documento>();
             }
 
@@ -51,13 +51,13 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
-            public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
+            public IEnumerable<Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<Documento> Result { get; set; }
         }
 
@@ -97,7 +97,7 @@ namespace App.Web.Controllers
         {
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = new List<Documento>()
             };
             return View(model);
@@ -331,7 +331,7 @@ namespace App.Web.Controllers
             if (id.IsNullOrWhiteSpace())
                 return Json(new DTODocumento { OK = false, Error = "Error: código no especificado" }, JsonRequestBehavior.AllowGet);
 
-            var documento = new App.Model.Core.Documento();
+            var documento = new Documento();
             if (id.IsInt())
                 documento = _repository.GetById<Documento>(id.ToInt());
             else

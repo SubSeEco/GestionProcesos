@@ -106,19 +106,19 @@ namespace App.Infrastructure.Minsegpres
 
                                     //estampa de folio
                                     //ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
-                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
 
                                     //estampa de fecha
-                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
                                 }
-                                catch (System.Exception ex)
+                                catch (Exception ex)
                                 {
-                                    throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
+                                    throw new Exception("Error al insertar folio en el documento:" + ex.Message);
                                 }
                             }
-                            catch (System.Exception ex)
+                            catch (Exception ex)
                             {
-                                throw new System.Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                                throw new Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
                             }
                         }
 
@@ -128,9 +128,9 @@ namespace App.Infrastructure.Minsegpres
                             //var img = Image.GetInstance(QR);
                             var img = Image.GetInstance(_qrResponse);
                             //var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                            var fontStandard = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+                            var fontStandard = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
                             //var fontBold = new iTextSharp.text.Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
-                            var fontBold = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
+                            var fontBold = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
                             var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
                             var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
 
@@ -152,9 +152,9 @@ namespace App.Infrastructure.Minsegpres
 
                             table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
                         }
-                        catch (System.Exception ex)
+                        catch (Exception ex)
                         {
-                            throw new System.Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                            throw new Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
                         }
 
                         ////agregar tabla de verificacion (Método Viejo)
@@ -275,7 +275,7 @@ namespace App.Infrastructure.Minsegpres
                     binario = Convert.FromBase64String(file.content);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new System.Exception(string.Join(",", obj.files.Select(q=>q.status)));
+                throw new Exception(string.Join(",", obj.files.Select(q=>q.status)));
 
             return binario;
         }
@@ -446,9 +446,9 @@ namespace App.Infrastructure.Minsegpres
             //Testin
             string key = "8d7a6d0fea8541b99b0dce110fd0d077";
 
-            var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-            var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials
+            var credentials = new SigningCredentials
                               (securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             var header = new JwtHeader(credentials);
@@ -488,7 +488,7 @@ namespace App.Infrastructure.Minsegpres
                     binario = Convert.FromBase64String(file.content);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new System.Exception(string.Join(",", obj.files.Select(q => q.status)));
+                throw new Exception(string.Join(",", obj.files.Select(q => q.status)));
 
             return binario;
         }

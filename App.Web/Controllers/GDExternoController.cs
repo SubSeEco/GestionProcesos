@@ -360,7 +360,7 @@ namespace App.Web.Controllers
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDGenerico.xlsx")));
 
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
                 var resumen = context
                 .GD
@@ -433,7 +433,7 @@ namespace App.Web.Controllers
 
             //documentos desde oficina de partes hacia las unidades
 
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
                 var docs = context
                     .GD
@@ -467,7 +467,7 @@ namespace App.Web.Controllers
             if (unidad == null)
                 throw new Exception("No se encontró la unidad en sigper.");
 
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
                 var procesosCerradosEnUnidad = context
                     .Workflow

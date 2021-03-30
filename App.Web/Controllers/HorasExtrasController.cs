@@ -26,7 +26,7 @@ namespace App.Web.Controllers
         protected readonly IFolio _folio;
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<Colaborador> ListDestino = new List<Colaborador>();
 
         public HorasExtrasController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)

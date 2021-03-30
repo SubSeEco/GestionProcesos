@@ -39,7 +39,7 @@ namespace App.Web.Controllers
             public DTOFilter()
             {
                 TextSearch = string.Empty;
-                Select = new HashSet<App.Model.DTO.DTOSelect>();
+                Select = new HashSet<Model.DTO.DTOSelect>();
                 Result = new HashSet<Proceso>();
             }
 
@@ -48,14 +48,14 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "Tipos de proceso")]
-            public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
+            public IEnumerable<Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<Proceso> Result { get; set; }
 
             [Display(Name = "Estado")]
@@ -179,7 +179,7 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
             return View(model);
@@ -238,7 +238,7 @@ namespace App.Web.Controllers
         {
             ViewBag.DefinicionProcesoId = new SelectList(_repository.Get<DefinicionProceso>(q => q.Habilitado && q.DefinicionWorkflows.Any(i => i.Habilitado)).OrderBy(q => q.Nombre), "DefinicionProcesoId", "Nombre");
 
-            return View(new App.Model.Core.Proceso());
+            return View(new Proceso());
         }
 
         [HttpPost]

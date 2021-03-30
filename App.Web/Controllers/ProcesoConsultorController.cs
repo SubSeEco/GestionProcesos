@@ -52,7 +52,7 @@ namespace App.Web.Controllers
             public DateTime? Hasta { get; set; }
 
             [Display(Name = "Incluir los siguientes tipos de procesos")]
-            public IEnumerable<App.Model.DTO.DTOSelect> Select { get; set; }
+            public IEnumerable<Model.DTO.DTOSelect> Select { get; set; }
             public IEnumerable<DTOResult> Result { get; set; }
             [Display(Name = "Estado del proceso")]
             public int? EstadoProcesoId { get; set; }
@@ -72,7 +72,7 @@ namespace App.Web.Controllers
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
 
             var model = new DTOFilter() {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new App.Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
             };
 
             return View(model);
@@ -90,7 +90,7 @@ namespace App.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+                using (var context = new Infrastructure.GestionProcesos.AppContext())
                 {
                     StringBuilder query = new StringBuilder("SELECT * FROM CoreProceso WHERE 1=1");
 

@@ -122,7 +122,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseInformeHSA(_repository, _sigper, _email);
+                var _useCaseInteractor = new UseCaseInformeHSA(_repository, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {

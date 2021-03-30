@@ -61,7 +61,7 @@ namespace App.Web.Controllers
             public bool TieneFirma { get; set; }
 
             [Display(Name = "Fecha creación")]
-            public System.DateTime? FechaCreacion { get; set; }
+            public DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
@@ -106,7 +106,7 @@ namespace App.Web.Controllers
             public bool TieneFirma { get; set; }
 
             [Display(Name = "Fecha creación")]
-            public System.DateTime? FechaCreacion { get; set; }
+            public DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
@@ -268,7 +268,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {

@@ -64,7 +64,7 @@ namespace App.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Model.Core.Rubrica model)
+        public ActionResult Create(Rubrica model)
         {
             if (ModelState.IsValid)
             {

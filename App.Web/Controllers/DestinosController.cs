@@ -17,7 +17,7 @@ namespace App.Web.Controllers
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<Destinos> ListDestino { get; set; }
         public class DtoMontos
         {

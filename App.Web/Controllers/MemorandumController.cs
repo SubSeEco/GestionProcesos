@@ -41,11 +41,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "ID")]
             public int ID { get; set; }
@@ -55,15 +55,15 @@ namespace App.Web.Controllers
 
             [Display(Name = "Fecha Inicio")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaInicio { get; set; }
+            public DateTime? FechaInicio { get; set; }
 
             [Display(Name = "Fecha Término")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaTermino { get; set; }
+            public DateTime? FechaTermino { get; set; }
 
             [Display(Name = "Fecha de solicitud")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaSolicitud { get; set; }
+            public DateTime? FechaSolicitud { get; set; }
 
             [Display(Name = "Funcionario")]
             public int? NombreId { get; set; }
@@ -113,7 +113,7 @@ namespace App.Web.Controllers
         protected readonly IFolio _folio;
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
         //public static List<Destinos> ListDestino = new List<Destinos>();
 
         public MemorandumController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
@@ -1605,7 +1605,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.MemorandumInsert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -2314,7 +2314,7 @@ namespace App.Web.Controllers
                         string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
 
                         //convertir resultado en objeto 
-                        var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
+                        var obj = JsonConvert.DeserializeObject<DTOFolio>(result);
 
                         //verificar resultado
                         if (obj.status == "OK")

@@ -13,7 +13,7 @@ namespace App.Web.Controllers
     public class GrupoController : Controller
     {
         protected readonly IGestionProcesos _repository;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
         public GrupoController(IGestionProcesos repository)
         {
