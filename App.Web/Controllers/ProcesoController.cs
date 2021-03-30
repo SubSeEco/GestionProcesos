@@ -10,12 +10,12 @@ using App.Core.UseCases;
 using System.IO;
 using OfficeOpenXml;
 using App.Model.Cometido;
-using System.Xml;
 
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ProcesoController : Controller
     {
         public class DTODelete
@@ -308,7 +308,7 @@ namespace App.Web.Controllers
 
         public ActionResult Dashboard()
         {
-            ViewBag.EnCurso = _repository.GetCount<Proceso>(q=>q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso);
+            ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso);
             ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
             ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
             ViewBag.Totales = _repository.GetCount<Proceso>();
@@ -318,40 +318,44 @@ namespace App.Web.Controllers
 
         public FileResult Report()
         {
-            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                var procesos = context.Proceso.Select(proceso => new
-                {
-                    proceso.ProcesoId,
-                    proceso.DefinicionProceso.Nombre,
-                    proceso.FechaCreacion,
-                    proceso.FechaVencimiento,
-                    proceso.FechaTermino,
-                    proceso.Email,
-                    proceso.EstadoProceso.Descripcion,
-                    Obervacion = proceso.Reservado ? "": proceso.Observacion,
-                    Reservado = proceso.Reservado ? "SI" : "NO"
-                }).ToList();
+                var procesos = context
+                    .Proceso
+                    .AsNoTracking()
+                    .Select(proceso => new {
+                        proceso.ProcesoId,
+                        proceso.DefinicionProceso.Nombre,
+                        proceso.FechaCreacion,
+                        proceso.FechaVencimiento,
+                        proceso.FechaTermino,
+                        procesoEmail = proceso.Reservado ? "" : proceso.Email,
+                        proceso.EstadoProceso.Descripcion,
+                        Observacion = proceso.Reservado ? "" : proceso.Observacion,
+                        Reservado = proceso.Reservado ? "SI" : "NO"})
+                    .ToList();
 
-                var workflows = context.Workflow.Select(workflow => new
-                {
-                    workflow.Proceso.ProcesoId,
-                    workflow.Proceso.DefinicionProceso.Nombre,
-                    workflow.Proceso.FechaCreacion,
-                    workflow.Proceso.FechaVencimiento,
-                    workflow.Proceso.FechaTermino,
-                    workflow.Proceso.Email,
-                    workflow.Proceso.EstadoProceso.Descripcion,
-                    observacion = workflow.Proceso.Reservado ? "": workflow.Proceso.Observacion,
-                    workflow.WorkflowId,
-                    WorkflowDefinicion = workflow.DefinicionWorkflow.Nombre,
-                    workflow.Pl_UndDes,
-                    WorkflowEmail = workflow.Email,
-                    WorkflowFechaCreacion = workflow.FechaCreacion,
-                    WorkflowFechaCreacionFechaTermino = workflow.FechaTermino,
-                    WorkflowTipoAprobacion = workflow.TipoAprobacion.Nombre,
-                    WorkflowObservacion = workflow.Proceso.Reservado ? "" : workflow.Observacion,
-                }).ToList();
+                var workflows = context
+                    .Workflow
+                    .AsNoTracking()
+                    .Select(workflow => new {
+                        workflow.Proceso.ProcesoId,
+                        workflow.Proceso.DefinicionProceso.Nombre,
+                        workflow.Proceso.FechaCreacion,
+                        workflow.Proceso.FechaVencimiento,
+                        workflow.Proceso.FechaTermino,
+                        workflowProcesoEmail = workflow.Proceso.Reservado ? "" : workflow.Proceso.Email,
+                        workflow.Proceso.EstadoProceso.Descripcion,
+                        observacion = workflow.Proceso.Reservado ? "" : workflow.Proceso.Observacion,
+                        workflow.WorkflowId,
+                        WorkflowDefinicion = workflow.DefinicionWorkflow.Nombre,
+                        Pl_UndDes = workflow.Proceso.Reservado ? "": workflow.Pl_UndDes,
+                        WorkflowEmail = workflow.Proceso.Reservado ? "" : workflow.Email,
+                        WorkflowFechaCreacion = workflow.FechaCreacion,
+                        WorkflowFechaCreacionFechaTermino = workflow.FechaTermino,
+                        WorkflowTipoAprobacion = workflow.Proceso.Reservado ? "" : workflow.TipoAprobacion.Nombre,
+                        WorkflowObservacion = workflow.Proceso.Reservado ? "" : workflow.Observacion,})
+                    .ToList();
 
                 var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
                 var fileInfo = new FileInfo(file);

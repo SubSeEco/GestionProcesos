@@ -17,6 +17,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CotizacionController : Controller
     {
         protected readonly IGestionProcesos _repository;

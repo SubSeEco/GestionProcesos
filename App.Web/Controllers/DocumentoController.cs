@@ -14,6 +14,9 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
     public class DTODocumento
     {
         public DTODocumento()

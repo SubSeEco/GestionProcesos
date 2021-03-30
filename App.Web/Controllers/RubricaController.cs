@@ -9,6 +9,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class RubricaController : Controller
     {
         protected readonly IGestionProcesos _repository;

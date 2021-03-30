@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
     public class DTOInformeHSA
     {
         public DTOInformeHSA()
@@ -324,30 +327,34 @@ namespace App.Web.Controllers
                     NumeroBoleta = q.NumeroBoleta
                 }).ToList();
 
-            return Json(new { ok = true, error = "", DTOInformeHSA}, JsonRequestBehavior.AllowGet);
+            return Json(new { ok = true, error = "", DTOInformeHSA }, JsonRequestBehavior.AllowGet);
         }
 
         public FileResult Report()
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                var result = context.InformeHSA.Where(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado).Select(hsa => new {
-                    hsa.ProcesoId,
-                    hsa.Proceso.EstadoProceso.Descripcion,
-                    hsa.FechaSolicitud,
-                    hsa.FechaDesde,
-                    hsa.FechaHasta,
-                    hsa.RUT,
-                    hsa.Nombre,
-                    hsa.Unidad,
-                    hsa.NombreJefatura,
-                    ConJornada = hsa.ConJornada ? "SI" : "NO",
-                    hsa.Funciones,
-                    hsa.Actividades,
-                    hsa.Observaciones,
-                    hsa.FechaBoleta,
-                    hsa.NumeroBoleta,
-                });
+                var result = context
+                    .InformeHSA
+                    .AsNoTracking()
+                    .Where(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado).Select(hsa => new
+                    {
+                        hsa.ProcesoId,
+                        hsa.Proceso.EstadoProceso.Descripcion,
+                        hsa.FechaSolicitud,
+                        hsa.FechaDesde,
+                        hsa.FechaHasta,
+                        hsa.RUT,
+                        hsa.Nombre,
+                        hsa.Unidad,
+                        hsa.NombreJefatura,
+                        ConJornada = hsa.ConJornada ? "SI" : "NO",
+                        hsa.Funciones,
+                        hsa.Actividades,
+                        hsa.Observaciones,
+                        hsa.FechaBoleta,
+                        hsa.NumeroBoleta,
+                    });
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));

@@ -9,6 +9,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class GrupoController : Controller
     {
         protected readonly IGestionProcesos _repository;

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using App.Model.Cometido;
 using App.Model.Pasajes;
 using App.Model.Core;
@@ -18,16 +16,9 @@ using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.Linq;
-using jdk.nashorn.@internal.objects.annotations;
-using com.mp4parser.streaming.extensions;
-using System.ServiceModel.Security;
-using System.Net.Configuration;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -36,6 +27,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CometidoController : Controller
     {
         public class DTOFilterWorkflow

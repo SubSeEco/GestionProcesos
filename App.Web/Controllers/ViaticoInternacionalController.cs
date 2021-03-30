@@ -9,6 +9,10 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
+
     public class ViaticoInternacionalController : Controller
     {
         protected readonly IGestionProcesos _repository;

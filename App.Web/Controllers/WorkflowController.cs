@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.Pasajes;
 using App.Core.Interfaces;
-using App.Util;
 using App.Model.Cometido;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
@@ -23,6 +22,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class WorkflowController : Controller
     {
         protected readonly IGestionProcesos _repository;

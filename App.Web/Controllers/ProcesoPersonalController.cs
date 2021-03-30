@@ -11,6 +11,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ProcesoPersonalController : Controller
     {
         public class DTODelete

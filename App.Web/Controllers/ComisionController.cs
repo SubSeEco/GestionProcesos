@@ -12,6 +12,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ComisionController : Controller
     {
         protected readonly IGestionProcesos _repository;

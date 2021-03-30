@@ -12,7 +12,9 @@ using System.Web.Mvc;
 
 namespace App.Web.Controllers
 {
+    [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CotizacionDocumentoController : Controller
     {
         protected readonly IFile _file;

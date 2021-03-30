@@ -502,56 +502,56 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage FixFolio()
-        {
-            var response = new ResponseMessage();
+        //public ResponseMessage FixFolio()
+        //{
+        //    var response = new ResponseMessage();
 
-            var firmaDocumentos = _repository.GetAll<FirmaDocumento>();
-            foreach (var firmaDocumento in firmaDocumentos.ToList())
-            {
-                var documento = _repository.GetFirst<Documento>(q => q.File == firmaDocumento.DocumentoConFirma);
-                if (documento != null)
-                {
-                    documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
-                    documento.Folio = firmaDocumento.Folio;
-                    _repository.Update<Documento>(documento);
+        //    var firmaDocumentos = _repository.GetAll<FirmaDocumento>();
+        //    foreach (var firmaDocumento in firmaDocumentos.ToList())
+        //    {
+        //        var documento = _repository.GetFirst<Documento>(q => q.File == firmaDocumento.DocumentoConFirma);
+        //        if (documento != null)
+        //        {
+        //            documento.FileName = firmaDocumento.DocumentoConFirmaFilename;
+        //            documento.Folio = firmaDocumento.Folio;
+        //            _repository.Update<Documento>(documento);
 
-                    firmaDocumento.DocumentoId = documento.DocumentoId;
-                    _repository.Update<FirmaDocumento>(firmaDocumento);
-                }
-            }
+        //            firmaDocumento.DocumentoId = documento.DocumentoId;
+        //            _repository.Update<FirmaDocumento>(firmaDocumento);
+        //        }
+        //    }
 
-            if (response.IsValid)
-            {
-                _repository.Save();
-            }
+        //    if (response.IsValid)
+        //    {
+        //        _repository.Save();
+        //    }
 
-            return response;
-        }
-        public ResponseMessage FixFileMetadata()
-        {
-            var response = new ResponseMessage();
+        //    return response;
+        //}
+        //public ResponseMessage FixFileMetadata()
+        //{
+        //    var response = new ResponseMessage();
 
-            var ids = _repository.Get<Documento>(q => string.IsNullOrEmpty(q.Metadata)).Select(q=>q.DocumentoId);
-            foreach (var id in ids)
-            {
-                var doc = _repository.GetById<Documento>(id);
+        //    var ids = _repository.Get<Documento>(q => string.IsNullOrEmpty(q.Metadata)).Select(q=>q.DocumentoId);
+        //    foreach (var id in ids)
+        //    {
+        //        var doc = _repository.GetById<Documento>(id);
 
-                //obtener metadata del documento
-                var metadata = _file.BynaryToText(doc.File);
-                if (metadata != null)
-                {
-                    doc.Texto = metadata.Text;
-                    doc.Metadata = metadata.Metadata;
-                    doc.Type = metadata.Type;
-                }
+        //        //obtener metadata del documento
+        //        var metadata = _file.BynaryToText(doc.File);
+        //        if (metadata != null)
+        //        {
+        //            doc.Texto = metadata.Text;
+        //            doc.Metadata = metadata.Metadata;
+        //            doc.Type = metadata.Type;
+        //        }
 
-                //actualizar datos
-                _repository.Update(doc);
-                _repository.Save();
-            }
+        //        //actualizar datos
+        //        _repository.Update(doc);
+        //        _repository.Save();
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
     }
 }

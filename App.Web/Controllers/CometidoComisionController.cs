@@ -5,6 +5,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CometidoComisionController : Controller
     {
         public ActionResult Index()

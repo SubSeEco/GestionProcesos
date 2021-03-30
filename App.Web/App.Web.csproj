@@ -484,6 +484,7 @@
     </Compile>
     <Compile Include="Helper\AuditAttribute.cs" />
     <Compile Include="Helper\AuthenticationService.cs" />
+    <Compile Include="Helper\NoDirectAccessAttribute.cs" />
     <Compile Include="Helper\UserExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

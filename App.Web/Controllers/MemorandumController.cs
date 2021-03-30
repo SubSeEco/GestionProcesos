@@ -9,18 +9,12 @@ using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
 using App.Core.Interfaces;
-using App.Model.Shared;
 using App.Util;
 using Newtonsoft.Json;
 using App.Core.UseCases;
-using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using Rotativa;
-using org.mp4parser.aspectj.runtime.@internal;
 //using App.Infrastructure.Extensions;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
@@ -30,6 +24,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class MemorandumController : Controller
     {
         public class DTOFilterMemorandum

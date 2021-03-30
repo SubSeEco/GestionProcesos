@@ -6,7 +6,9 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
     [Authorize]
+    [NoDirectAccess]
 
     public class DefinicionWorkflowController : Controller
     {

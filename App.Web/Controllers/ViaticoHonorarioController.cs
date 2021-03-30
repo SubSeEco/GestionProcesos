@@ -7,6 +7,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class ViaticoHonorarioController : Controller
     {
         protected readonly IGestionProcesos _repository;

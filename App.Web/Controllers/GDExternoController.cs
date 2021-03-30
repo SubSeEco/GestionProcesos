@@ -12,12 +12,12 @@ using System.IO;
 using App.Util;
 using OfficeOpenXml;
 using ExpressiveAnnotations.Attributes;
-using System.Data.Entity;
 
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class GDExternoController : Controller
     {
         public class DTOReport
@@ -360,9 +360,11 @@ namespace App.Web.Controllers
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDGenerico.xlsx")));
 
-            var resumen =
-                _repository
-                .GetAll<GD>()
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                var resumen = context
+                .GD
+                .AsNoTracking()
                 .OrderBy(q => q.ProcesoId)
                 .Select(item => new
                 {
@@ -385,32 +387,34 @@ namespace App.Web.Controllers
                     Reservado = item.Proceso.Reservado ? string.Empty : string.Empty
                 }).ToList();
 
-            var idsProcesos =
-                resumen.Select(q => q.ProcesoId).Distinct();
+                var idsProcesos =
+                    resumen.Select(q => q.ProcesoId).Distinct();
 
-            var detalle =
-                _repository
-                .Get<Workflow>(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado && idsProcesos.Contains(q.ProcesoId))
-                .OrderBy(q => q.ProcesoId)
-                .ThenBy(q => q.WorkflowId)
-                .Select(item => new
-                {
-                    item.ProcesoId,
-                    item.WorkflowId,
-                    Proceso = item.Proceso.DefinicionProceso.Nombre,
-                    Workflow = item.DefinicionWorkflow.Nombre,
-                    TipoAprobacion = item.TipoAprobacion != null ? item.TipoAprobacion.Nombre : string.Empty,
-                    item.FechaCreacion,
-                    item.FechaTermino,
-                    item.NombreFuncionario,
-                    item.Pl_UndDes,
-                    item.Observacion,
-                });
+                var detalle = context
+                    .Workflow
+                    .AsNoTracking()
+                    .Where(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado && idsProcesos.Contains(q.ProcesoId))
+                    .OrderBy(q => q.ProcesoId)
+                    .ThenBy(q => q.WorkflowId)
+                    .Select(item => new
+                    {
+                        item.ProcesoId,
+                        item.WorkflowId,
+                        Proceso = item.Proceso.DefinicionProceso.Nombre,
+                        Workflow = item.DefinicionWorkflow.Nombre,
+                        TipoAprobacion = item.TipoAprobacion != null ? item.TipoAprobacion.Nombre : string.Empty,
+                        item.FechaCreacion,
+                        item.FechaTermino,
+                        item.NombreFuncionario,
+                        item.Pl_UndDes,
+                        item.Observacion,
+                    });
 
-            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
-            excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
+                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
+                excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
 
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            }
         }
 
         public FileResult ReportMinutaDocumentosOP(DTOReport model)
@@ -428,27 +432,33 @@ namespace App.Web.Controllers
             var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\GDMinutaDocumentosOP.xlsx")));
 
             //documentos desde oficina de partes hacia las unidades
-            var docs = _repository
-                .Get(predicate)
-                .OrderBy(q => q.DestinoUnidadDescripcion)
-                .ThenBy(q => q.GDId)
-                .Select(item => new
-                {
-                    item.DestinoUnidadDescripcion,
-                    item.DestinoFuncionarioNombre,
-                    item.NumeroExterno,
-                    item.Fecha,
-                    item.FechaIngreso,
-                    item.ProcesoId,
-                    Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
-                    item.Materia,
-                    item.Referencia,
-                    item.Observacion,
-                });
 
-            excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(docs);
+            using (var context = new App.Infrastructure.GestionProcesos.AppContext())
+            {
+                var docs = context
+                    .GD
+                    .AsNoTracking()
+                    .Where(predicate)
+                    .OrderBy(q => q.DestinoUnidadDescripcion)
+                    .ThenBy(q => q.GDId)
+                    .Select(item => new
+                    {
+                        item.DestinoUnidadDescripcion,
+                        item.DestinoFuncionarioNombre,
+                        item.NumeroExterno,
+                        item.Fecha,
+                        item.FechaIngreso,
+                        item.ProcesoId,
+                        Origen = item.GDOrigen != null ? item.GDOrigen.Descripcion : string.Empty,
+                        item.Materia,
+                        item.Referencia,
+                        item.Observacion,
+                    });
 
-            return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(docs);
+
+                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            }
         }
 
         public FileResult ReportPermanencia(DTOReport model)
@@ -459,11 +469,16 @@ namespace App.Web.Controllers
 
             using (var context = new App.Infrastructure.GestionProcesos.AppContext())
             {
-                var procesosCerradosEnUnidad =
-                    context.Workflow.Where(q => (bool)q.EsTareaCierre && q.Pl_UndCod == unidad.Pl_UndCod).Select(q => q.ProcesoId).ToList();
+                var procesosCerradosEnUnidad = context
+                    .Workflow
+                    .AsNoTracking()
+                    .Where(q => (bool)q.EsTareaCierre && q.Pl_UndCod == unidad.Pl_UndCod).Select(q => q.ProcesoId)
+                    .ToList();
 
-                var desglose =
-                context.Workflow.Where(q =>
+                var desglose = context
+                .Workflow
+                .AsNoTracking()
+                .Where(q =>
                     q.Proceso.Pl_UndCod != unidad.Pl_UndCod &&  //procesos originados fuera de mi unidad
                     q.Pl_UndCod == unidad.Pl_UndCod && // tareas atendidas por mi unidad
                     q.Terminada && //solo tareas terminadas
@@ -472,7 +487,7 @@ namespace App.Web.Controllers
                     q.Proceso.DefinicionProceso.Entidad.Codigo.Contains("GD") && //solo procesos gd
                     q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado && //descartar procesos anulados
                     !procesosCerradosEnUnidad.Contains(q.ProcesoId) // descartar proceso cerrados en la unidad
-                ). 
+                ).
                 GroupBy(g => new
                 {
                     g.ProcesoId,

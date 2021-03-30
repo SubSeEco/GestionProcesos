@@ -14,6 +14,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class PasajeController : Controller
     {
         protected readonly IGestionProcesos _repository;

@@ -10,6 +10,9 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
     public class DestinosComisionController : Controller
     {
         protected readonly IGestionProcesos _repository;

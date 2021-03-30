@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
-using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
 using App.Core.Interfaces;
-using App.Model.Shared;
-using App.Util;
-using Newtonsoft.Json;
 using App.Core.UseCases;
-using App.Model.Comisiones;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using Rotativa;
 using App.Model.HorasExtras;
 using App.Model.Cometido;
 
@@ -27,6 +13,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ColaboradorController : Controller
     {
         protected readonly IGestionProcesos _repository;
