@@ -463,14 +463,25 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
+            //permiso = persona.a
+
+            var permiso = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()));
+
+            var permisoEspecial = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
+
+            if (permisoEspecial != null)
+            {
+                permisoEspecial = model.permisoEspecial;
+            }
+
             //if (model.TiposFirmas == "DESATENDIDA")
             //{
             //    return RedirectToAction("FirmaDesatendida", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
             //}
             //else
             //{
-                //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-                var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
+            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
 
                 return View(model);
             //}

@@ -755,7 +755,7 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
-            var model = _repository.GetAll<ProgramacionHorasExtraordinarias>();
+            var model = _repository.Get<ProgramacionHorasExtraordinarias>();
             return View(model);
         }
 
@@ -777,25 +777,25 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
-            var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
-            ViewBag.NombreId = usuarios;
-            ViewBag.NombreIdDest = usuarios;
-            ViewBag.NombreIdSecre = usuarios;
-            ViewBag.NombreIdVisa1 = usuarios;
-            ViewBag.NombreIdVisa2 = usuarios;
-            ViewBag.NombreIdVisa3 = usuarios;
-            ViewBag.NombreIdVisa4 = usuarios;
-            ViewBag.NombreIdVisa5 = usuarios;
-            ViewBag.NombreIdVisa6 = usuarios;
-            ViewBag.NombreIdVisa7 = usuarios;
-            ViewBag.NombreIdVisa8 = usuarios;
-            ViewBag.NombreIdVisa9 = usuarios;
-            ViewBag.NombreIdVisa10 = usuarios;
-            ViewBag.NombreIdAna = usuarios;
-            ViewBag.NombreIdAutorizaFirma1 = usuarios;
-            ViewBag.NombreIdAutorizaFirma2 = usuarios;
-            ViewBag.NombreIdAutorizaFirma3 = usuarios;
+            //ViewBag.NombreId = usuarios;
+            //ViewBag.NombreIdDest = usuarios;
+            //ViewBag.NombreIdSecre = usuarios;
+            //ViewBag.NombreIdVisa1 = usuarios;
+            //ViewBag.NombreIdVisa2 = usuarios;
+            //ViewBag.NombreIdVisa3 = usuarios;
+            //ViewBag.NombreIdVisa4 = usuarios;
+            //ViewBag.NombreIdVisa5 = usuarios;
+            //ViewBag.NombreIdVisa6 = usuarios;
+            //ViewBag.NombreIdVisa7 = usuarios;
+            //ViewBag.NombreIdVisa8 = usuarios;
+            //ViewBag.NombreIdVisa9 = usuarios;
+            //ViewBag.NombreIdVisa10 = usuarios;
+            //ViewBag.NombreIdAna = usuarios;
+            //ViewBag.NombreIdAutorizaFirma1 = usuarios;
+            //ViewBag.NombreIdAutorizaFirma2 = usuarios;
+            //ViewBag.NombreIdAutorizaFirma3 = usuarios;
 
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
@@ -1376,7 +1376,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -1510,7 +1510,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -1829,11 +1829,11 @@ namespace App.Web.Controllers
         {
             //var model = _repository.GetById<Memorandum>(id);
 
-            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            //ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             //if (model.GeneracionCDP.Count > 0)
             //{
             //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
@@ -1870,7 +1870,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -2020,7 +2020,7 @@ namespace App.Web.Controllers
                 Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucion = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
                 if (resolucion != null)
                 {
                     foreach (var res in resolucion)
@@ -2250,7 +2250,7 @@ namespace App.Web.Controllers
 
         public FileResult DownloadGP()
         {
-            var result = _repository.GetAll<ProgramacionHorasExtraordinarias>();
+            var result = _repository.Get<ProgramacionHorasExtraordinarias>();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoMemo.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2260,7 +2260,7 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoMemo.Workbook.Worksheets[1];
             foreach (var memorandum in result.ToList())
             {
-                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
+                var workflow = _repository.Get<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
                 //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 //if (destino.Count > 0)
