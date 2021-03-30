@@ -139,8 +139,8 @@ namespace App.Core.UseCases
                     model.ArchivoFirmado = binario;
 
                     DTOFileMetadata data = new DTOFileMetadata();
-                    //int tipoDoc = 0;
-                    //int IdDocto = 0;
+                    int tipoDoc = 0;
+                    int IdDocto = 0;
                     string Name = string.Empty;
 
                     //tipoDoc = 15;
@@ -173,7 +173,7 @@ namespace App.Core.UseCases
                     int idDoctoViatico = 0;
 
                     /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                    var firmagenerica = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                    var firmagenerica = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
                     if (firmagenerica != null)
                     {
                         foreach (var firm in firmagenerica)
