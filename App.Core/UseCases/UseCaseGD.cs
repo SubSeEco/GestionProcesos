@@ -5,7 +5,6 @@ using App.Core.Interfaces;
 using App.Model.SIGPER;
 using System.Linq;
 using App.Util;
-using System.Collections.Generic;
 
 namespace App.Core.UseCases
 {

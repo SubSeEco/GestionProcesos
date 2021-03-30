@@ -1,5 +1,4 @@
-﻿using App.Core.Interfaces;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Text;
 using System.Web;
@@ -12,8 +11,6 @@ namespace App.Web
 {
     public class AuditAttribute : ActionFilterAttribute
     {
-        public IGestionProcesos _repository;
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var request = filterContext.HttpContext.Request;

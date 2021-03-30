@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using App.Core.Interfaces;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using RestSharp;
 using App.Model.Core;
@@ -14,10 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using iTextSharp.text.pdf;
-using System.Drawing;
 using iTextSharp.text;
-using iTextSharp.text.pdf.security;
-using System.Security.Cryptography.X509Certificates;
 using Image = iTextSharp.text.Image;
 
 namespace App.Infrastructure.Minsegpres
