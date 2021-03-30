@@ -329,7 +329,7 @@ namespace App.Web.Controllers
                     proceso.FechaTermino,
                     proceso.Email,
                     proceso.EstadoProceso.Descripcion,
-                    proceso.Observacion,
+                    Obervacion = proceso.Reservado ? "": proceso.Observacion,
                     Reservado = proceso.Reservado ? "SI" : "NO"
                 }).ToList();
 
@@ -342,7 +342,7 @@ namespace App.Web.Controllers
                     workflow.Proceso.FechaTermino,
                     workflow.Proceso.Email,
                     workflow.Proceso.EstadoProceso.Descripcion,
-                    workflow.Proceso.Observacion,
+                    observacion = workflow.Proceso.Reservado ? "": workflow.Proceso.Observacion,
                     workflow.WorkflowId,
                     WorkflowDefinicion = workflow.DefinicionWorkflow.Nombre,
                     workflow.Pl_UndDes,
@@ -350,7 +350,7 @@ namespace App.Web.Controllers
                     WorkflowFechaCreacion = workflow.FechaCreacion,
                     WorkflowFechaCreacionFechaTermino = workflow.FechaTermino,
                     WorkflowTipoAprobacion = workflow.TipoAprobacion.Nombre,
-                    WorkflowObservacion = workflow.Observacion,
+                    WorkflowObservacion = workflow.Proceso.Reservado ? "" : workflow.Observacion,
                 }).ToList();
 
                 var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
