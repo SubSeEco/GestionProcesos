@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,23 +9,14 @@ using App.Core.UseCases;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Security.Cryptography;
-using System.Net;
-using System.Web.Script.Serialization;
-using System.Xml.Serialization;
-using com.sun.tools.@internal.ws.processor.model;
 using System.Web.Security;
 using App.Model.DTO;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class FirmaDocumentoGenericoController : Controller
     {
         public class EmpModel
@@ -71,7 +61,7 @@ namespace App.Web.Controllers
             public bool TieneFirma { get; set; }
 
             [Display(Name = "Fecha creación")]
-            public System.DateTime? FechaCreacion { get; set; }
+            public DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
@@ -116,7 +106,7 @@ namespace App.Web.Controllers
             public bool TieneFirma { get; set; }
 
             [Display(Name = "Fecha creación")]
-            public System.DateTime? FechaCreacion { get; set; }
+            public DateTime? FechaCreacion { get; set; }
 
             [Display(Name = "Folio")]
             public string Folio { get; set; }
@@ -278,7 +268,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-                var _useCaseInteractor = new Core.UseCases.UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {

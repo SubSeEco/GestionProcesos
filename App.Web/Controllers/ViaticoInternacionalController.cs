@@ -9,11 +9,15 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
+
     public class ViaticoInternacionalController : Controller
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public ViaticoInternacionalController(IGestionProcesos repository, ISIGPER sigper)
         {
             _repository = repository;

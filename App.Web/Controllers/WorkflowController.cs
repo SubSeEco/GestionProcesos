@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using App.Model.Core;
 using App.Model.Pasajes;
 using App.Core.Interfaces;
-using App.Util;
 using App.Model.Cometido;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
@@ -23,6 +22,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class WorkflowController : Controller
     {
         protected readonly IGestionProcesos _repository;
@@ -72,7 +73,7 @@ namespace App.Web.Controllers
             public DTOFilter()
             {
                 TextSearch = string.Empty;
-                Select = new List<App.Model.DTO.DTOSelect>();
+                Select = new List<DTOSelect>();
                 TareasGrupales = new List<WorkflowDTO>();
                 TareasPersonales = new List<WorkflowDTO>();
             }
@@ -83,14 +84,14 @@ namespace App.Web.Controllers
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [DataType(DataType.Date)]
             [Display(Name = "Desde")]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             [DataType(DataType.Date)]
             [Display(Name = "Hasta")]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
-            public List<App.Model.DTO.DTOSelect> Select { get; set; }
+            public List<DTOSelect> Select { get; set; }
             public List<WorkflowDTO> TareasPersonales { get; set; }
             public List<WorkflowDTO> TareasGrupales { get; set; }
         }
@@ -469,7 +470,7 @@ namespace App.Web.Controllers
 
             if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseCometidoComision(_repository, _email, _sigper, _file);
+                var _useCaseInteractor = new UseCaseCometidoComision(_repository, _email, _sigper, _file);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -481,7 +482,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -493,7 +494,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -504,7 +505,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -515,7 +516,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateInterno(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -526,7 +527,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateExterno(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -537,7 +538,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -548,7 +549,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -559,7 +560,7 @@ namespace App.Web.Controllers
             }
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -571,7 +572,7 @@ namespace App.Web.Controllers
             }
             else
             {
-                var _useCaseInteractor = new App.Core.UseCases.UseCaseCore(_repository, _email, _sigper);
+                var _useCaseInteractor = new UseCaseCore(_repository, _email, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -643,7 +644,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
@@ -671,7 +672,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
@@ -712,7 +713,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 

@@ -78,7 +78,7 @@ namespace App.Infrastructure.File
             byte[] returnValue;
 
             if (documento == null)
-                throw new System.Exception("Debe especificar el documento");
+                throw new Exception("Debe especificar el documento");
 
             using (MemoryStream ms = new MemoryStream())
             using (var reader = new PdfReader(documento))
@@ -91,9 +91,9 @@ namespace App.Infrastructure.File
                     ColumnText.ShowTextAligned(pdfContent, iTextSharp.text.Element.ALIGN_MIDDLE,new iTextSharp.text.Phrase("ID " + text, new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 14, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.BLUE)),10, pagesize.Height - 20, 0);
                     stamper.Close();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    throw new System.Exception("Error al insertar código en documento:" + ex.Message);
+                    throw new Exception("Error al insertar código en documento:" + ex.Message);
                 }
 
                 stamper.Close();

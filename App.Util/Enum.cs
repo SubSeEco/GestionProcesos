@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace App.Util
+﻿namespace App.Util
 {
     public static class Enum
     {

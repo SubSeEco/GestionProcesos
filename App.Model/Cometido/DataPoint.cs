@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace App.Model.Cometido
 {
-	[DataContract]
+    [DataContract]
 	public class DataPoint
 	{
 		public DataPoint(double y, string label)
@@ -52,14 +48,14 @@ namespace App.Model.Cometido
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "y")]
-		public Nullable<double> Y = null;
+		public double? Y = null;
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "x")]
-		public Nullable<double> X = null;
+		public double? X = null;
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "z")]
-		public Nullable<double> Z = null;
+		public double? Z = null;
 	}
 }

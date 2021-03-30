@@ -26,7 +26,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarInicioProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarInicioProceso(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -46,7 +46,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarNuevoWorkflow(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarNuevoWorkflow(Workflow workflow, Configuracion plantillaCorreo, Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -87,7 +87,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarFinProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarFinProceso(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla fin de proceso");
@@ -107,7 +107,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarAnulacionProceso(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarAnulacionProceso(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla fin de proceso");
@@ -127,7 +127,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarRespuestaSIAC(Model.Core.Proceso proceso, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto)
+        public void NotificarRespuestaSIAC(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -147,7 +147,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarFirmaResolucionCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, Model.Core.Configuracion asunto, List<string> Mails)
+        public void NotificarFirmaResolucionCometido(Workflow workflow, Configuracion plantillaCorreo, Configuracion asunto, List<string> Mails)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -191,7 +191,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificacionesCometido(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
+        public void NotificacionesCometido(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -259,7 +259,7 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificacionesHorasExtras(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdHorasExtras, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
+        public void NotificacionesHorasExtras(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdHorasExtras, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");
@@ -326,7 +326,7 @@ namespace App.Infrastructure.Email
                 throw ex;
             }
         }
-        public void NotificacionesMemorandum(Model.Core.Workflow workflow, Model.Core.Configuracion plantillaCorreo, string asunto, List<string> Mails, int MemorandumId, Documento documento)
+        public void NotificacionesMemorandum(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int MemorandumId, Documento documento)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
                 throw new Exception("No existe la plantilla de notificación de tareas");

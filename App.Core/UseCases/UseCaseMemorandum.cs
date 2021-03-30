@@ -2,7 +2,6 @@
 using System.Linq;
 using App.Model.Core;
 using App.Model.Memorandum;
-using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;

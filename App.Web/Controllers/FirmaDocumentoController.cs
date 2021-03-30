@@ -13,6 +13,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class FirmaDocumentoController : Controller
     {
         public class DTOFileUploadCreate

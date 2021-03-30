@@ -9,10 +9,12 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class UsuarioController : Controller
     {
         protected readonly IGestionProcesos _repository;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
         public UsuarioController(IGestionProcesos repository)
         {
