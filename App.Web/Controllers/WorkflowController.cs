@@ -147,7 +147,8 @@ namespace App.Web.Controllers
         public ActionResult Index()
         {
             var email = UserExtended.Email(User);
-            var result = _workflowService.GetPendingTask(email);
+            var user = _sigper.GetUserByEmail(email);
+            var result = _workflowService.GetPendingTask(user);
 
             var model = new DTOFilter();
             model.TareasPersonales = result.Where(q => q.TareaPersonal).ToList();

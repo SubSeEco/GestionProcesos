@@ -375,7 +375,9 @@
     <Content Include="App_Data\FueraPlazo.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\CDCFinanzas.xlsx" />
+    <Content Include="App_Data\CDCFinanzas.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Producción.pubxml" />
@@ -445,7 +447,9 @@
     <Compile Include="Controllers\GeneraResolucionController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\MemorandumController.cs" />

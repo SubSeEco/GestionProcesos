@@ -122,6 +122,9 @@ namespace App.Web.Controllers
             [Display(Name = "Admin")]
             public bool Admin { get; set; }
 
+            [Display(Name = "Activo")]
+            public bool Activo { get; set; }
+
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
         }
@@ -2535,23 +2538,27 @@ namespace App.Web.Controllers
                         q.FechaSolicitud.Month <= model.FechaTermino.Value.Month &&
                         q.FechaSolicitud.Day <= model.FechaTermino.Value.Day);
 
+                predicate = predicate.And(q => q.Activo == true);/*Selecciona los cometidos q esten activos y que no hayan sido anulados*/
+
+                predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado); /*selecciona los cometidos que se encuentre terminados*/
+
                 model.Result = _repository.Get(predicate);
             }
             
             var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Result.Select(w => new XElement("DOCUMENTO",
                                                 new XElement("RUN", w.Rut),
                                                 new XElement("DIGITO_VERIFICADOR", w.DV),
-                                                new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo.Contains("Ministerial") ? "DECRETO EXENTO" : "RESOLUCION EXENTA" : "S/A"),
+                                                new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo.Contains("Ministerial") ? "DECRETO EXENTO" : "RESOLUCION EXENTA" : " "),
                                                 new XElement("NUMERO_DOCUMENTO", w.CometidoId),
-                                                new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToShortDateString()),
+                                                new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToString("dd/MM/yyyy").Replace("-","/")),//.ToShortDateString("dd/mm/yyyy")),
                                                 new XElement("SERVICIO_EMISOR", "119246"),
                                                 new XElement("DEPENDENCIA_EMISORA", "119247"),
                                                 new XElement("SERVICIO_DESTINO", "119247"),
                                                 new XElement("DEPENDENCIA_DESTINO", "119247"),
-                                                new XElement("COMUNA_DESTINO", w.Destinos.Count > 0 ? RegionComunaContraloria.Where(r => r.COMUNA.Contains(w.Destinos.FirstOrDefault().ComunaDescripcion.Trim())).FirstOrDefault().CODIGOCOMUNA.ToString() : "S/A"),
-                                                new XElement("REGION_DESTINO", w.Destinos.Count > 0 ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
-                                                new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy") : "S/A"),
-                                                new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToString("dd/MM/yyyy") : "S/A"),
+                                                new XElement("REGION_DESTINO", w.Destinos.Count() > 0 ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
+                                                new XElement("COMUNA_DESTINO", w.Destinos.Count() > 0 ? RegionComunaContraloria.Where(r => r.COMUNA.Contains(w.Destinos.FirstOrDefault().ComunaDescripcion.Trim())).FirstOrDefault().CODIGOCOMUNA.ToString() : "S/A"),                                                
+                                                new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy").Replace("-","/") : "S/A"),
+                                                new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToString("dd/MM/yyyy").Replace("-", "/") : "S/A"),
                                                 new XElement("MOTIVO_COMETIDO_FUNCIONARIO", "Reunión fuera del servicio" /*w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"*/),
                                                 new XElement("TIENE_BENEFICIOS",
                                                                 new XElement("SELECCIONE_BENEFICIOS",
@@ -2713,7 +2720,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 1].Value = cometido.CometidoId.ToString();
                 worksheet.Cells[fila, 2].Value = cometido.Nombre;
                 worksheet.Cells[fila, 3].Value = cometido.FechaSolicitud.ToShortDateString();
-                worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
+                worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico.ToString();// cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
                 worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                 worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
                 worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToString() : "S/A";
@@ -2727,9 +2734,19 @@ namespace App.Web.Controllers
                 {
                     if (w.DefinicionWorkflowId == 82)
                     {
-                        worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
-                        inicio = w.FechaCreacion != null ? w.FechaCreacion : DateTime.Now;
-                    }                            
+
+                        if (w.FechaCreacion.Hour >= 16 && w.FechaCreacion.Minute >= 01)
+                        {
+                            worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1).ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
+                            inicio = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1) : DateTime.Now;
+                        }                            
+                        else
+                        {
+                            worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
+                            inicio = w.FechaCreacion != null ? w.FechaCreacion : DateTime.Now;
+                        }
+                            
+                    }
 
                     if (w.DefinicionWorkflowId == 84)
                         worksheet.Cells[fila, 9].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de tesorerria*/
