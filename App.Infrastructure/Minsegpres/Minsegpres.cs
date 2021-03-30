@@ -247,6 +247,7 @@ namespace App.Infrastructure.Minsegpres
                 run = Run,
                 expiration = expires,
                 purpose = "Propósito General"
+                //purpose = "Desatendido"
             };
 
             var payloadPart = Base64UrlEncoder.Encode(JsonConvert.SerializeObject(payloadNew));

@@ -64,9 +64,7 @@
                             <div class="file-field input-field">
                                 <div class="btn grey">
                                     <i class="material-icons">attach_file</i>
-                                    @Html.TextBoxFor(model => model.File, "", new
-                                    {
-                                        @type = "file"@*, @multiple = "multiple"*@})
+                                    @Html.TextBoxFor(model => model.File, "", new { @type = "file"@*, @multiple = "multiple"*@})
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text" placeholder="Buscar archivo...">
