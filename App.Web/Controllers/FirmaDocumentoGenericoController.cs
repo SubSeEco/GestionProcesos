@@ -520,8 +520,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    //return Redirect(Request.UrlReferrer.PathAndQuery);
-                    return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                    //return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
