@@ -139,11 +139,11 @@ namespace App.Core.UseCases
                     model.ArchivoFirmado = binario;
 
                     DTOFileMetadata data = new DTOFileMetadata();
-                    int tipoDoc = 0;
-                    int IdDocto = 0;
+                    //int tipoDoc = 0;
+                    //int IdDocto = 0;
                     string Name = string.Empty;
 
-                    tipoDoc = 15;
+                    //tipoDoc = 15;
                     Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
                     ////var email = username;
@@ -170,8 +170,22 @@ namespace App.Core.UseCases
                     //_repository.Create(doc);
                     ////_repository.Update(doc);
                     //_repository.Save();
+                    int idDoctoViatico = 0;
 
-                    var docOld = _repository.GetById<Documento>(DocumentoId);
+                    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+                    var firmagenerica = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                    if (firmagenerica != null)
+                    {
+                        foreach (var firm in firmagenerica)
+                        {
+                            if (firm.TipoDocumentoId == 15)
+                                idDoctoViatico = firm.DocumentoId;
+                        }
+                    }
+
+                    //var docOld = _repository.GetById<Documento>(DocumentoId);
+                    var docOld = _repository.GetById<Documento>(idDoctoViatico);
+
                     docOld.Fecha = DateTime.Now;
                     docOld.File = binario;
                     docOld.Signed = false;
@@ -226,11 +240,11 @@ namespace App.Core.UseCases
                 model.ArchivoFirmado2 = binario;
 
                 DTOFileMetadata data = new DTOFileMetadata();
-                int tipoDoc = 0;
-                int IdDocto = 0;
+                //int tipoDoc = 0;
+                //int IdDocto = 0;
                 string Name = string.Empty;
 
-                tipoDoc = 15;
+                //tipoDoc = 15;
                 Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
                 ////var email = username;
@@ -362,11 +376,11 @@ namespace App.Core.UseCases
                 //model.ArchivoFirmado = binario;
 
                 DTOFileMetadata data = new DTOFileMetadata();
-                int tipoDoc = 0;
-                int IdDocto = 0;
+                //int tipoDoc = 0;
+                //int IdDocto = 0;
                 string Name = string.Empty;
 
-                tipoDoc = 15;
+                //tipoDoc = 15;
                 Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
                 ////var email = username;

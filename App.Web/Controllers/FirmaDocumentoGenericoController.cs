@@ -409,7 +409,7 @@ namespace App.Web.Controllers
                     //    }
                     //}
 
-                    _repository.Create(doc);
+                    _repository.Create(doc);                   
                     _repository.Save();
                 }
 
@@ -520,8 +520,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                    return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -573,7 +573,8 @@ namespace App.Web.Controllers
                 //var doc = ConvertToByte(file);
 
                 //model.Archivo = doc;
-                model.DocumentoId = docugenerico.DocumentoId;
+                //model.DocumentoId = docugenerico.DocumentoId;
+
                 model.Run = rut;
                 model.Nombre = nombre;
                 model.Archivo = docugenerico.File;
@@ -601,6 +602,17 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult DocumentoFirmado(int id)
+        {
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
+            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+
+
+            return View(model);
+        }
+
         public FileResult ShowDocumentoSinFirma(int id)
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
@@ -624,8 +636,8 @@ namespace App.Web.Controllers
         {
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
-            int tipoDoc = 0;
-            int IdDocto = 0;
+            //int tipoDoc = 0;
+            //int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
@@ -636,7 +648,7 @@ namespace App.Web.Controllers
             pdf = model.Archivo;
             //data = GetBynary(pdf);
             data = _file.BynaryToText(pdf);
-            tipoDoc = 15;
+            //tipoDoc = 15;
             Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
             int idDoctoViatico = 0;
 
@@ -667,7 +679,7 @@ namespace App.Web.Controllers
                 doc.Metadata = data.Metadata;
                 doc.Type = data.Type;
                 doc.TipoPrivacidadId = 1;
-                doc.TipoDocumentoId = tipoDoc;
+                //doc.TipoDocumentoId = tipoDoc;
 
                 //doc.File = model.Archivo;
                 //doc.DocumentoId = model.DocumentoId;
@@ -692,7 +704,7 @@ namespace App.Web.Controllers
                 doc.Metadata = data.Metadata;
                 doc.Type = data.Type;
                 doc.TipoPrivacidadId = 1;
-                doc.TipoDocumentoId = tipoDoc;
+                //doc.TipoDocumentoId = tipoDoc;
 
                 //doc.File = model.Archivo;
                 //doc.DocumentoId = model.DocumentoId;
@@ -713,8 +725,8 @@ namespace App.Web.Controllers
         {
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
-            int tipoDoc = 0;
-            int IdDocto = 0;
+            //int tipoDoc = 0;
+            //int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
@@ -725,7 +737,7 @@ namespace App.Web.Controllers
             pdf = model.Archivo;
             //data = GetBynary(pdf);
             data = _file.BynaryToText(pdf);
-            tipoDoc = 15;
+            //tipoDoc = 15;
             Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
             int idDoctoViatico = 0;
 
