@@ -9,7 +9,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
     <NameOfLastUsedPublishProfile>C:\Users\vsilva\source\repos\GestionProcesos\App.Web\Properties\PublishProfiles\Test.pubxml</NameOfLastUsedPublishProfile>
     <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
