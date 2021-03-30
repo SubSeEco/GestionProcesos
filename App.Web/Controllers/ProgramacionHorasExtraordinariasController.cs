@@ -1425,7 +1425,7 @@ namespace App.Web.Controllers
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var programacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
+                var programacion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9);
                 if (programacion != null)
                 {
                     IdDocto = programacion.DocumentoId;
@@ -1563,12 +1563,6 @@ namespace App.Web.Controllers
                 if (resolucionprogramacion != null)
                 {
                     IdDocto = resolucionprogramacion.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
@@ -1609,11 +1603,7 @@ namespace App.Web.Controllers
 
             }
 
-            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
-
             return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         [AllowAnonymous]
@@ -1624,56 +1614,10 @@ namespace App.Web.Controllers
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
-                //model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
-                //model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
-
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-                //return View(model);
             }
             else
             {
-                //model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                //model.DiasPlural = "s";
-                //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
-                //model.Anno = DateTime.Now.Year.ToString();
-                //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                //model.Fecha = DateTime.Now;
-                //model.FechaFirma = DateTime.Now;
-
-                //model.Firma = false;
-                //model.NumeroResolucion = model.CometidoId;
-                //model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
-
-                /*se traen los datos de la tabla parrafos*/
-                //var parrafos = _repository.GetAll<Parrafos>();
-                //switch (model.IdGrado)
-                //{
-                //    case "B":/*Firma Subsecretario*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    case "C": /*firma ministro*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    default:
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                //        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true).ToList();
-                //        if (vit.Count > 0)
-                //            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
-                //        else
-                //            model.ViaticodeVuelta = string.Empty;
-
-                //        break;
-                //}
-
                 /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
                 var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
                 if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
@@ -1738,20 +1682,6 @@ namespace App.Web.Controllers
                     //}
                 }
 
-
-                //if (model.CalidadDescripcion.Contains("honorario"))
-                //if (model.IdGrado == "0")
-                //if (model.GradoDescripcion == "0")
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
-                //    return View(model);
-                //}
-                //else
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
-                //    //return new ViewAsPdf("Resolucion", model);
-                //    return View(model);
-                //}
                 return View(model);
             }
         }
@@ -1905,105 +1835,9 @@ namespace App.Web.Controllers
                     _repository.Update(docOld);
                     _repository.Save();
                 }
-
-
-
-                /*Se genera certificado de pasaje si es que existe*/
-                //if (model.ReqPasajeAereo == true)
-                //{
-                //    Rotativa.ActionAsPdf resultPdfPasaje = new Rotativa.ActionAsPdf("CDPPasajes", new { id = model.CometidoId }) { FileName = "CDP_Pasajes" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdfPasaje.BuildFile(ControllerContext);
-                //    data = GetBynary(pdf);
-                //    tipoDoc = 3;
-                //    Name = "CDP Pasaje Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                //    int idDoctoPasaje = 0;
-
-                //    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //    var CdpPasaje = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //    if (CdpPasaje != null)
-                //    {
-                //        foreach (var res in CdpPasaje)
-                //        {
-                //            if (res.TipoDocumentoId == 3)
-                //                idDoctoPasaje = res.DocumentoId;
-                //        }
-                //    }
-
-                //    if(idDoctoPasaje == 0)
-                //    {
-                //        /*se guarda certificado de pasaje*/
-                //        var email = UserExtended.Email(User);
-                //        var docPasaje = new Documento();
-                //        docPasaje.Fecha = DateTime.Now;
-                //        docPasaje.Email = email;
-                //        docPasaje.FileName = Name;
-                //        docPasaje.File = pdf;
-                //        docPasaje.ProcesoId = model.ProcesoId.Value;
-                //        docPasaje.WorkflowId = model.WorkflowId.Value;
-                //        docPasaje.Signed = false;
-                //        docPasaje.Texto = data.Text;
-                //        docPasaje.Metadata = data.Metadata;
-                //        docPasaje.Type = data.Type;
-                //        docPasaje.TipoPrivacidadId = 1;
-                //        docPasaje.TipoDocumentoId = tipoDoc;
-
-                //        _repository.Create(docPasaje);
-                //        _repository.Save();
-                //    }
-                //    else
-                //    {
-                //        var docOld = _repository.GetById<Documento>(idDoctoPasaje);
-                //        docOld.File = pdf;
-                //        docOld.Signed = false;
-                //        docOld.Texto = data.Text;
-                //        docOld.Metadata = data.Metadata;
-                //        docOld.Type = data.Type;
-                //        _repository.Update(docOld);
-                //        _repository.Save();
-                //    }
-                //}
             }
             else
             {
-                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                //{
-                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                //    //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //    //}
-                //    //else
-                //    //{
-                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //    //}
-                //}
-                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-                //    tipoDoc = 8;
-                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-                //else
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 pdf = resultPdf.BuildFile(ControllerContext);
                 //data = GetBynary(pdf);
@@ -2137,13 +1971,6 @@ namespace App.Web.Controllers
             {
                 if (model.Estado.HasValue)
                 {
-                    //if (model.Estado == 1)
-                    //    predicate = predicate.And(q => q.Proceso.Terminada == false && q.Proceso.Anulada == false);
-                    //if (model.Estado == 2)
-                    //    predicate = predicate.And(q => q.Proceso.Anulada == true);
-                    //if (model.Estado == 3)
-                    //    predicate = predicate.And(q => q.Proceso.Terminada == true);
-
                     if (model.Estado == 1)
                         predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 2)
@@ -2152,79 +1979,12 @@ namespace App.Web.Controllers
                         predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
                 }
 
-                //if (model.NombreId.HasValue)
-                //    predicate = predicate.And(q => q.NombreId == model.NombreId);
-
-                //if (model.IdUnidad.HasValue)
-                //    predicate = predicate.And(q => q.IdUnidad == model.IdUnidad);
-
-                //if (model.Destino.HasValue)
-                //    predicate = predicate.And(q => q.Destinos.FirstOrDefault().IdRegion == model.Destino.Value.ToString());
-
-                //if (model.FechaInicio.HasValue)
-                //    predicate = predicate.And(q =>
-                //        q.Destinos.FirstOrDefault().FechaInicio.Year >= model.FechaInicio.Value.Year &&
-                //        q.Destinos.FirstOrDefault().FechaInicio.Month >= model.FechaInicio.Value.Month &&
-                //        q.Destinos.FirstOrDefault().FechaInicio.Day >= model.FechaInicio.Value.Day);
-
-                //if (model.FechaTermino.HasValue)
-                //    predicate = predicate.And(q =>
-                //        q.Destinos.LastOrDefault().FechaInicio.Year <= model.FechaTermino.Value.Year &&
-                //        q.Destinos.LastOrDefault().FechaInicio.Month <= model.FechaTermino.Value.Month &&
-                //        q.Destinos.LastOrDefault().FechaInicio.Day <= model.FechaTermino.Value.Day);
-
                 var MemorandumId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (MemorandumId.Any())
                     predicate = predicate.And(q => MemorandumId.Contains(q.ProgramacionHorasExtraordinariasId));
 
                 model.Result = _repository.Get(predicate);
             }
-
-            //foreach (var res in model.Result)
-            //{
-            //    res.Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-            //    if (res.Proceso.Anulada == false && res.Proceso.Terminada == false)
-            //        model.Estado = 1; // "En Proceso";
-            //    else if (res.Proceso.Terminada == true)
-            //        model.Estado = 3; //Terminado
-            //    else if (res.Proceso.Anulada == true)
-            //        model.Estado = 2; //Anulado
-
-            //    //model.Result.FirstOrDefault().Subscretaria = res.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-
-            //    //var workflow = _repository.Get<Workflow>(c => c.ProcesoId == res.ProcesoId);
-            //    //foreach(var w in workflow)
-            //    //{
-            //    //    res.Workflow.Email = w.Email;
-            //    //}
-
-            //    //switch (res.Proceso.DefinicionProcesoId)
-            //    //{
-            //    //    case 13:
-            //    //        var com = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //    //        if (com.Count() > 0)
-            //    //        {
-            //    //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
-            //    //        }
-            //    //        break;
-            //    //    case 10:
-            //    //        var come = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //    //        if (come.Count() > 0)
-            //    //        {
-            //    //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
-            //    //        }
-            //    //        break;
-            //    //    case 12:
-            //    //        var comision = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId);
-            //    //        if (comision.Count() > 0)
-            //    //        {
-            //    //            model.Result.Where(p => p.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId = _repository.Get<Cometido>(c => c.ProcesoId == res.ProcesoId).FirstOrDefault().CometidoId;
-            //    //        }
-            //    //        break;
-            //    //}
-            //}
-
-
 
             List<SelectListItem> Estado = new List<SelectListItem>
             {
@@ -2254,30 +2014,16 @@ namespace App.Web.Controllers
             foreach (var memorandum in result.ToList())
             {
                 var workflow = _repository.Get<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
-                //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
-
-                //if (destino.Count > 0)
-                //{
                 fila++;
-                //worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
                 if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
                     worksheet.Cells[fila, 1].Value = "En Curso";
                 else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
                     worksheet.Cells[fila, 1].Value = "Terminada";
                 else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
                     worksheet.Cells[fila, 1].Value = "Anulada";
-
-                //worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                //worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
-                //worksheet.Cells[fila, 4].Value = memorandum.NombreId;
-                //worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
-                //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                //worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
-                //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
+               
                 worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
                 worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
-                //}
             }
 
             return File(excelPackageSeguimientoMemo.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoGP_yyyyMMddhhmmss") + ".xlsx");

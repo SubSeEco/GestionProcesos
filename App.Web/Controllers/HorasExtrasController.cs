@@ -368,7 +368,7 @@ namespace App.Web.Controllers
             Name = "Resolución Programación Trabajos Extraordinarios nro" + " " + hrs.HorasExtrasId.ToString() + ".pdf";
 
             /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-            var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.ProcesoId);
+            var docto = _repository.Get<Documento>(d => d.ProcesoId == hrs.ProcesoId);
             if (docto != null)
             {
                 foreach (var res in docto)
@@ -514,7 +514,7 @@ namespace App.Web.Controllers
             int tipoDoc = 0;
             int idDoctoHoras = 0;
             string Name = string.Empty;
-            var hrs = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+            var hrs = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
 
             /*Se genera resolucuion de trabajos extraordinarios*/
             Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionServicio", new { mes = hrs.FirstOrDefault().Mes, annio = hrs.FirstOrDefault().Annio }) { FileName = "ResolucionProgramacionServicio" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -524,7 +524,7 @@ namespace App.Web.Controllers
             Name = "Resolución Programación Trabajos Extraordinarios mes" + " " + hrs.FirstOrDefault().Mes.ToString() + ".pdf";
 
             /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-            var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.FirstOrDefault().ProcesoId);
+            var docto = _repository.Get<Documento>(d => d.ProcesoId == hrs.FirstOrDefault().ProcesoId);
             if (docto != null)
             {
                 foreach (var res in docto)
@@ -778,7 +778,7 @@ namespace App.Web.Controllers
             Name = "Resolución Confirmación Horas Extraordinarios Pagadas nro" + " " + hrs.HorasExtrasId.ToString() + ".pdf";
 
             /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-            var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.ProcesoId);
+            var docto = _repository.Get<Documento>(d => d.ProcesoId == hrs.ProcesoId);
             if (docto != null)
             {
                 foreach (var res in docto)
@@ -983,7 +983,7 @@ namespace App.Web.Controllers
             Name = "Resolución Confirmación Horas Extraordinarios Compensadas nro" + " " + hrs.HorasExtrasId.ToString() + ".pdf";
 
             /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-            var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.ProcesoId);
+            var docto = _repository.Get<Documento>(d => d.ProcesoId == hrs.ProcesoId);
             if (docto != null)
             {
                 foreach (var res in docto)

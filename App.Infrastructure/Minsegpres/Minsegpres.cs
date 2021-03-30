@@ -33,25 +33,7 @@ namespace App.Infrastructure.Minsegpres
 
         public byte[] SignConOtp(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento, int DocumentoId)
         {
-            ////var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
-            //var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.url_tramites_en_linea));
-            
-            //var aux = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var docugenerico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == aux.ProcesoId);
-
-            //if (docugenerico != null)
-            //{
-            //    foreach (var doc in docugenerico)
-            //    {
-            //        if (doc.DocumentoId == doc.DocumentoId)
-            //            aux.DocumentoId = doc.DocumentoId;
-            //    }
-            //}
-
             var url_tramites_en_linea = "https://tramites.economia.gob.cl/";
-
-            //var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", aux.DocumentoId));
             var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
 
             byte[] binario = null;

@@ -1774,7 +1774,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -1816,105 +1816,9 @@ namespace App.Web.Controllers
                     _repository.Update(docOld);
                     _repository.Save();
                 }
-
-
-
-                /*Se genera certificado de pasaje si es que existe*/
-                //if (model.ReqPasajeAereo == true)
-                //{
-                //    Rotativa.ActionAsPdf resultPdfPasaje = new Rotativa.ActionAsPdf("CDPPasajes", new { id = model.CometidoId }) { FileName = "CDP_Pasajes" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdfPasaje.BuildFile(ControllerContext);
-                //    data = GetBynary(pdf);
-                //    tipoDoc = 3;
-                //    Name = "CDP Pasaje Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                //    int idDoctoPasaje = 0;
-
-                //    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //    var CdpPasaje = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //    if (CdpPasaje != null)
-                //    {
-                //        foreach (var res in CdpPasaje)
-                //        {
-                //            if (res.TipoDocumentoId == 3)
-                //                idDoctoPasaje = res.DocumentoId;
-                //        }
-                //    }
-
-                //    if(idDoctoPasaje == 0)
-                //    {
-                //        /*se guarda certificado de pasaje*/
-                //        var email = UserExtended.Email(User);
-                //        var docPasaje = new Documento();
-                //        docPasaje.Fecha = DateTime.Now;
-                //        docPasaje.Email = email;
-                //        docPasaje.FileName = Name;
-                //        docPasaje.File = pdf;
-                //        docPasaje.ProcesoId = model.ProcesoId.Value;
-                //        docPasaje.WorkflowId = model.WorkflowId.Value;
-                //        docPasaje.Signed = false;
-                //        docPasaje.Texto = data.Text;
-                //        docPasaje.Metadata = data.Metadata;
-                //        docPasaje.Type = data.Type;
-                //        docPasaje.TipoPrivacidadId = 1;
-                //        docPasaje.TipoDocumentoId = tipoDoc;
-
-                //        _repository.Create(docPasaje);
-                //        _repository.Save();
-                //    }
-                //    else
-                //    {
-                //        var docOld = _repository.GetById<Documento>(idDoctoPasaje);
-                //        docOld.File = pdf;
-                //        docOld.Signed = false;
-                //        docOld.Texto = data.Text;
-                //        docOld.Metadata = data.Metadata;
-                //        docOld.Type = data.Type;
-                //        _repository.Update(docOld);
-                //        _repository.Save();
-                //    }
-                //}
             }
             else
             {
-                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                //{
-                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                //    //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //    //}
-                //    //else
-                //    //{
-                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //    //}
-                //}
-                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-                //    tipoDoc = 8;
-                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-                //else
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Memorandum" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
@@ -1977,19 +1881,10 @@ namespace App.Web.Controllers
             }
 
             return RedirectToAction("Edit", "Memorandum", new { model.WorkflowId, id = model.MemorandumId });
-
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         public ActionResult GeneraDocumento2(int id)
         {
-            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            //foreach (var key in Request.Cookies.AllKeys)
-            //{
-            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            //}
-
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
@@ -2009,7 +1904,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -2051,105 +1946,9 @@ namespace App.Web.Controllers
                     _repository.Update(docOld);
                     _repository.Save();
                 }
-
-
-
-                /*Se genera certificado de pasaje si es que existe*/
-                //if (model.ReqPasajeAereo == true)
-                //{
-                //    Rotativa.ActionAsPdf resultPdfPasaje = new Rotativa.ActionAsPdf("CDPPasajes", new { id = model.CometidoId }) { FileName = "CDP_Pasajes" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdfPasaje.BuildFile(ControllerContext);
-                //    data = GetBynary(pdf);
-                //    tipoDoc = 3;
-                //    Name = "CDP Pasaje Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
-                //    int idDoctoPasaje = 0;
-
-                //    /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //    var CdpPasaje = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                //    if (CdpPasaje != null)
-                //    {
-                //        foreach (var res in CdpPasaje)
-                //        {
-                //            if (res.TipoDocumentoId == 3)
-                //                idDoctoPasaje = res.DocumentoId;
-                //        }
-                //    }
-
-                //    if(idDoctoPasaje == 0)
-                //    {
-                //        /*se guarda certificado de pasaje*/
-                //        var email = UserExtended.Email(User);
-                //        var docPasaje = new Documento();
-                //        docPasaje.Fecha = DateTime.Now;
-                //        docPasaje.Email = email;
-                //        docPasaje.FileName = Name;
-                //        docPasaje.File = pdf;
-                //        docPasaje.ProcesoId = model.ProcesoId.Value;
-                //        docPasaje.WorkflowId = model.WorkflowId.Value;
-                //        docPasaje.Signed = false;
-                //        docPasaje.Texto = data.Text;
-                //        docPasaje.Metadata = data.Metadata;
-                //        docPasaje.Type = data.Type;
-                //        docPasaje.TipoPrivacidadId = 1;
-                //        docPasaje.TipoDocumentoId = tipoDoc;
-
-                //        _repository.Create(docPasaje);
-                //        _repository.Save();
-                //    }
-                //    else
-                //    {
-                //        var docOld = _repository.GetById<Documento>(idDoctoPasaje);
-                //        docOld.File = pdf;
-                //        docOld.Signed = false;
-                //        docOld.Texto = data.Text;
-                //        docOld.Metadata = data.Metadata;
-                //        docOld.Type = data.Type;
-                //        _repository.Update(docOld);
-                //        _repository.Save();
-                //    }
-                //}
             }
             else
             {
-                //if (model.CalidadDescripcion.Contains("HONORARIOS"))/*valida si es contrata u honorario*/
-                //{
-                //    //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
-                //    //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.MemorandumId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Orden de Pago Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //    //}
-                //    //else
-                //    //{
-                //    //    //TempData["Error"] = "No existen antecedentes del grado del funcionario";
-                //    //    TempData["Success"] = "No existen antecedentes del grado del funcionario.";
-                //    //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //    //}
-                //}
-                //else if (model.CalidadDescripcion.Contains("TITULAR"))/*valida si es autoridad*/
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.MemorandumId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-                //    tipoDoc = 8;
-                //    Name = "Resolucion Ministerial Exenta nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-                //else
-                //{
-                //    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                //    pdf = resultPdf.BuildFile(ControllerContext);
-                //    //data = GetBynary(pdf);
-                //    data = _file.BynaryToText(pdf);
-
-                //    tipoDoc = 8;
-                //    Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
-                //}
-
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Memorandum" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
@@ -2160,7 +1959,7 @@ namespace App.Web.Controllers
                 Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (resolucion != null)
                 {
                     foreach (var res in resolucion)
@@ -2222,55 +2021,12 @@ namespace App.Web.Controllers
             var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
-                //model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
-                //model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
-
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-                //return View(model);
             }
             else
             {
-                //model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                //model.DiasPlural = "s";
-                //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
-                //model.Anno = DateTime.Now.Year.ToString();
-                //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
                 model.FechaSolicitud = DateTime.Now;
                 model.FechaFirma = DateTime.Now;
-
-                //model.Firma = false;
-                //model.NumeroResolucion = model.CometidoId;
-                //model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
-
-                /*se traen los datos de la tabla parrafos*/
-                //var parrafos = _repository.GetAll<Parrafos>();
-                //switch (model.IdGrado)
-                //{
-                //    case "B":/*Firma Subsecretario*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    case "C": /*firma ministro*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    default:
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                //        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true).ToList();
-                //        if (vit.Count > 0)
-                //            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
-                //        else
-                //            model.ViaticodeVuelta = string.Empty;
-
-                //        break;
-                //}
 
                 /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
                 var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
@@ -2337,17 +2093,12 @@ namespace App.Web.Controllers
                 }
 
 
-                //if (model.CalidadDescripcion.Contains("honorario"))
-                //if (model.IdGrado == "0")
                 if (model.GradoDescripcion == "0")
                 {
-                    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
                     return View(model);
                 }
                 else
                 {
-                    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
-                    //return new ViewAsPdf("Resolucion", model);
                     return View(model);
                 }
             }
@@ -2359,12 +2110,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        //public FileResult ShowDocumentoSinFirma(int id)
-        //{
-        //    var model = _repository.GetById<Memorandum>(id);
-        //    return File(model.DocumentoSinFirma, "application/pdf");
-        //}
-
         //Firma Vieja
         public ActionResult Sign(int id)
         {
@@ -2373,7 +2118,7 @@ namespace App.Web.Controllers
             /*Validar si existe un documento asociado y si se encuentra firmado*/
             //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == 2933); // model.ProcesoId && c.TipoDocumentoId == 8);
             //var doc = _repository.GetById<Documento>(773); // model.ProcesoId && c.TipoDocumentoId == 8);
-            var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8).FirstOrDefault();
+            var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8);
             if (doc != null)
             {
                 //if (doc.FirstOrDefault().Signed != true)
@@ -2478,7 +2223,7 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
                     foreach (var res in cdpViatico)
@@ -2628,7 +2373,7 @@ namespace App.Web.Controllers
                 Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (resolucion != null)
                 {
                     foreach (var res in resolucion)

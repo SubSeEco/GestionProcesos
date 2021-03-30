@@ -465,8 +465,8 @@ namespace App.Core.UseCases
                     /*Si el proceso corresponde a cometido se deja como falso*/
                     if (obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometido)
                     {
-                        var cometido = _repository.Get<Cometido>(c => c.ProcesoId == obj.ProcesoId).FirstOrDefault();
-                        var doc = _repository.Get<Documento>(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
+                        var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == obj.ProcesoId);
+                        var doc = _repository.GetFirst<Documento>(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
                         if (cometido != null)
                         {
                             /*se valida que la tarea en que se encuentre el cometido permita la anulacion*/
@@ -512,18 +512,20 @@ namespace App.Core.UseCases
 
                                 //terminar proceso
                                 obj.FechaTermino = DateTime.Now;
-                                //obj.Terminada = true;
-                                //obj.Anulada = true;
                                 obj.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Anulado;
                                 _repository.Save();
 
                                 //notificar a todos los que participaron en el proceso
                                 var workflow = obj.Workflows.FirstOrDefault();
-                                var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
-                                var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
+                                var solicitante = _repository.GetFirst<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1);
+                                var QuienViaja = _sigper.GetUserByRut(cometido.Rut);
+
                                 List<string> emailMsg = new List<string>();
-                                emailMsg.Add(solicitante.Trim()); //solicitante
-                                emailMsg.Add(QuienViaja);//quien viaja
+                                if (solicitante != null)
+                                    emailMsg.Add(solicitante.Email.Trim());
+
+                                if (QuienViaja != null && QuienViaja.Funcionario != null)
+                                    emailMsg.Add(QuienViaja.Funcionario.Rh_Mail.Trim());
 
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAnulacionCometido),

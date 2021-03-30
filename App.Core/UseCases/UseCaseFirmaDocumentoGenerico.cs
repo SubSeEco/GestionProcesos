@@ -138,8 +138,8 @@ namespace App.Core.UseCases
                     model.ArchivoFirmado = binario;
 
                     DTOFileMetadata data = new DTOFileMetadata();
-                    int tipoDoc = 0;
-                    int IdDocto = 0;
+                    //int tipoDoc = 0;
+                    //int IdDocto = 0;
                     string Name = string.Empty;
 
                     //tipoDoc = 15;
@@ -172,7 +172,7 @@ namespace App.Core.UseCases
                     int idDoctoViatico = 0;
 
                     /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                    var firmagenerica = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                    var firmagenerica = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                     if (firmagenerica != null)
                     {
                         foreach (var firm in firmagenerica)
@@ -456,9 +456,6 @@ namespace App.Core.UseCases
                     var firma = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.WorkflowId == obj.WorkflowId);
                     if (firma == null)
                         throw new Exception("No se encontró el ingreso de documento.");
-
-                    //if (firma != null && firma.DocumentoConFirma == null && obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                    //    throw new Exception("No se puede aprobar un documento no firmado.");
                 }
 
                 //terminar workflow actual
@@ -485,66 +482,6 @@ namespace App.Core.UseCases
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
-
-                //if (workflowActual.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
-                //{
-                //    //Se toma valor de cometidos para definir curso de accion del flujo
-                //    var FirmaDocumentoGenerico = new FirmaDocumentoGenerico();
-                //    FirmaDocumentoGenerico = _repository.Get<FirmaDocumentoGenerico>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                //    if (FirmaDocumentoGenerico != null)
-                //    {
-                //        //determinar siguiente tarea desde el diseño de proceso
-                //        if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
-                //        {
-                //            if (workflowActual.DefinicionWorkflow.Secuencia == 1)
-                //            {
-                //                //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
-                //                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 != null)
-                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && FirmaDocumentoGenerico.TipoFirma == true)
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
-                //                }
-                //                else
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3);
-                //                }
-                //            }
-                //            else if (workflowActual.DefinicionWorkflow.Secuencia == 2)
-                //            {
-                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 4);
-                //                }
-                //                else
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
-                //                }
-                //            }
-                //            else if (workflowActual.DefinicionWorkflow.Secuencia == 3)
-                //            {
-                //                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 4);
-                //                }
-                //                else
-                //                {
-                //                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1);
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                //    {
-                //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
-                //    }
-                //    else
-                //    {
-                //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
-                //    }
-                //}
 
                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
