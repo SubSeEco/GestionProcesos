@@ -76,7 +76,7 @@ namespace App.Web.Controllers
             double porcentaje40 = 0.4;
             double porcentaje50 = 0.5;
             var cometido = _repository.GetById<Cometido>(CometidoId);
-            var viatico = _repository.GetAll<Viatico>().Where(v => v.Año == DateTime.Now.Year).FirstOrDefault();
+            var viatico = _repository.GetFirst<Viatico>(v => v.Año == DateTime.Now.Year);
             var viaticoHonorario = _repository.GetAll<ViaticoHonorario>().Where(v => v.Año == DateTime.Now.Year);
             var grado = cometido.GradoDescripcion;
             var CalidadJuridica = cometido.CalidadDescripcion; 

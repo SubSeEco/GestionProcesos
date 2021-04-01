@@ -1376,14 +1376,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;                    
                 }
 
                 if (idDoctoViatico == 0)
@@ -1510,14 +1507,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
                 }
 
                 if (idDoctoViatico == 0)
@@ -1870,14 +1864,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
                 }
 
                 if (idDoctoViatico == 0)
@@ -2020,14 +2011,11 @@ namespace App.Web.Controllers
                 Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (resolucion != null)
                 {
-                    foreach (var res in resolucion)
-                    {
-                        if (res.TipoDocumentoId == 8)
-                            IdDocto = res.DocumentoId;
-                    }
+                    if (resolucion.TipoDocumentoId == 8)
+                        IdDocto = resolucion.DocumentoId;
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/

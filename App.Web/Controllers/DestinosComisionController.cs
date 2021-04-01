@@ -60,8 +60,8 @@ namespace App.Web.Controllers
             double porcentaje40 = 0.4;
             double porcentaje50 = 0.5;
             var comision = _repository.GetById<Comisiones>(ComisionId);
-            var viatico = _repository.GetAll<ViaticoInternacional>().Where(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId).FirstOrDefault();
-            var viaticoInternacional = _repository.GetAll<ViaticoInternacional>().Where(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId).FirstOrDefault();
+            var viatico = _repository.GetFirst<ViaticoInternacional>(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId);
+            var viaticoInternacional = _repository.GetFirst<ViaticoInternacional>(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId);
             var grado = comision.GradoDescripcion;
             var CalidadJuridica = comision.CalidadDescripcion;
             float monto;
