@@ -2543,6 +2543,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
                 //}
             }
+            excelPackageSeguimientoMemo.Workbook.Worksheets[0].Cells.AutoFitColumns();
 
             return File(excelPackageSeguimientoMemo.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoGP_yyyyMMddhhmmss") + ".xlsx");
         }

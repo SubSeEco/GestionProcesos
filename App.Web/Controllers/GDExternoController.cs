@@ -411,7 +411,10 @@ namespace App.Web.Controllers
                     });
 
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(resumen);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
+
                 excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(detalle);
+                excel.Workbook.Worksheets[1].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }
@@ -456,6 +459,7 @@ namespace App.Web.Controllers
                     });
 
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(docs);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }
@@ -516,6 +520,7 @@ namespace App.Web.Controllers
                 excel.Workbook.Worksheets[0].Cells[3, 2].Value = model.Desde;
                 excel.Workbook.Worksheets[0].Cells[4, 2].Value = model.Hasta;
                 excel.Workbook.Worksheets[0].Cells[7, 1].LoadFromCollection(desglose);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }

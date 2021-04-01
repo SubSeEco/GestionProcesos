@@ -3245,7 +3245,6 @@ namespace App.Core.UseCases
             if (!obj.VtcTipoSubAsignacionId.HasValue)
                 response.Errors.Add("Se debe ingresar el tipo de subasignacion");
 
-
             try
             {
                 if (response.IsValid)
