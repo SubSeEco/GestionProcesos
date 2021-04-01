@@ -262,7 +262,7 @@ namespace App.Web.Controllers
         {
             var correofunc2 = _sigper.GetUserByRut(RutFunc2).Funcionario.Rh_Mail.Trim();
             var perfunc2 = _sigper.GetUserByEmail(correofunc2);
-            var IdCargoFunc2= perfunc2.DatosLaborales.RhConCar.Value;
+            var IdCargoFunc2 = perfunc2.DatosLaborales.RhConCar.Value;
             var cargofunc2 = string.IsNullOrEmpty(perfunc2.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc2.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
             var IdCalidadFunc2 = perfunc2.DatosLaborales.RH_ContCod;
             var calidadfunc2 = string.IsNullOrEmpty(perfunc2.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc2.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
@@ -1363,138 +1363,7 @@ namespace App.Web.Controllers
             int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
-            {
-                /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
-                data = _file.BynaryToText(pdf);
-                tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
-                int idDoctoViatico = 0;
-
-                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
-                if (cdpViatico != null)
-                {
-                    if (cdpViatico.TipoDocumentoId == 2)
-                        idDoctoViatico = cdpViatico.DocumentoId;                    
-                }
-
-                if (idDoctoViatico == 0)
-                {
-                    /*se guarda certificado de viatico*/
-                    var email = UserExtended.Email(User);
-                    var doc = new Documento();
-                    doc.Fecha = DateTime.Now;
-                    doc.Email = email;
-                    doc.FileName = Name;
-                    doc.File = pdf;
-                    doc.ProcesoId = model.ProcesoId.Value;
-                    doc.WorkflowId = model.WorkflowId.Value;
-                    doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
-                    doc.TipoDocumentoId = tipoDoc;
-
-                    _repository.Create(doc);
-                    _repository.Save();
-                }
-                else
-                {
-                    var docOld = _repository.GetById<Documento>(idDoctoViatico);
-                    docOld.File = pdf;
-                    docOld.Signed = false;
-                    docOld.Texto = data.Text;
-                    docOld.Metadata = data.Metadata;
-                    docOld.Type = data.Type;
-                    _repository.Update(docOld);
-                    _repository.Save();
-                }
-            }
-            else
-            {
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Programacion Horas Extraordinarias" + ".pdf" };
-                pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
-                data = _file.BynaryToText(pdf);
-
-                tipoDoc = 9;
-                Name = "Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
-
-                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var programacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
-                if (programacion != null)
-                {
-                    IdDocto = programacion.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
-                }
-
-                /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
-                if (IdDocto == 0)
-                {
-                    var email = UserExtended.Email(User);
-                    var doc = new Documento();
-                    doc.Fecha = DateTime.Now;
-                    doc.Email = email;
-                    doc.FileName = Name;
-                    doc.File = pdf;
-                    doc.ProcesoId = model.ProcesoId.Value;
-                    doc.WorkflowId = model.WorkflowId.Value;
-                    doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
-                    doc.TipoDocumentoId = tipoDoc;
-
-                    _repository.Create(doc);
-                    _repository.Save();
-                }
-                else
-                {
-                    var docOld = _repository.GetById<Documento>(IdDocto);
-                    if (docOld.Signed != true)
-                    {
-                        docOld.File = pdf;
-                        docOld.Signed = false;
-                        docOld.Texto = data.Text;
-                        docOld.Metadata = data.Metadata;
-                        docOld.Type = data.Type;
-                        _repository.Update(docOld);
-                        _repository.Save();
-                    }
-                }
-
-            }
-
-            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
-
-            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
-        }
-
-        public ActionResult GeneraDocumento2(int id)
-        {
-            byte[] pdf = null;
-            DTOFileMetadata data = new DTOFileMetadata();
-            int tipoDoc = 0;
-            int IdDocto = 0;
-            string Name = string.Empty;
-            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
@@ -1549,28 +1418,18 @@ namespace App.Web.Controllers
             }
             else
             {
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionProgramacion", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolución Programacion Horas Extraordinarias" + ".pdf" };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Programacion Horas Extraordinarias" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
-                tipoDoc = 10;
-                Name = "Resolución Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                tipoDoc = 9;
+                Name = "Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var resolucionprogramacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 10).FirstOrDefault();
-                if (resolucionprogramacion != null)
-                {
-                    IdDocto = resolucionprogramacion.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
-                }
+                var programacion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9);
+                if (programacion != null)
+                    IdDocto = programacion.DocumentoId;
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
                 if (IdDocto == 0)
@@ -1610,11 +1469,138 @@ namespace App.Web.Controllers
 
             }
 
-            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
+        }
+
+        public ActionResult GeneraDocumento2(int id)
+        {
+            byte[] pdf = null;
+            DTOFileMetadata data = new DTOFileMetadata();
+            int tipoDoc = 0;
+            int IdDocto = 0;
+            string Name = string.Empty;
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId !=
+                    (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) ||
+                (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId ==
+                    (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            ) /*genera CDP, por la etapa en la que se encuentra*/
+            {
+                /*Se genera certificado de viatico*/
+                Rotativa.ActionAsPdf resultPdf =
+                    new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId })
+                    {
+                        FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/
+                        FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName
+                    };
+                pdf = resultPdf.BuildFile(ControllerContext);
+                //data = GetBynary(pdf);
+                data = _file.BynaryToText(pdf);
+                tipoDoc = 2;
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                int idDoctoViatico = 0;
+
+                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+                if (cdpViatico != null)
+                {
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
+                }
+
+                if (idDoctoViatico == 0)
+                {
+                    /*se guarda certificado de viatico*/
+                    var email = UserExtended.Email(User);
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = Name;
+                    doc.File = pdf;
+                    doc.ProcesoId = model.ProcesoId.Value;
+                    doc.WorkflowId = model.WorkflowId.Value;
+                    doc.Signed = false;
+                    doc.Texto = data.Text;
+                    doc.Metadata = data.Metadata;
+                    doc.Type = data.Type;
+                    doc.TipoPrivacidadId = 1;
+                    doc.TipoDocumentoId = tipoDoc;
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
+                else
+                {
+                    var docOld = _repository.GetById<Documento>(idDoctoViatico);
+                    docOld.File = pdf;
+                    docOld.Signed = false;
+                    docOld.Texto = data.Text;
+                    docOld.Metadata = data.Metadata;
+                    docOld.Type = data.Type;
+                    _repository.Update(docOld);
+                    _repository.Save();
+                }
+            }
+            else
+            {
+                Rotativa.ActionAsPdf resultPdf =
+                    new Rotativa.ActionAsPdf("ResolucionProgramacion",
+                            new { id = model.ProgramacionHorasExtraordinariasId })
+                    { FileName = "Resolución Programacion Horas Extraordinarias" + ".pdf" };
+                pdf = resultPdf.BuildFile(ControllerContext);
+                data = _file.BynaryToText(pdf);
+
+                tipoDoc = 10;
+                Name = "Resolución Programacion Horas Extraordinarias nro" + " " +
+                       model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+
+                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucionprogramacion =
+                    _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 10);
+                if (resolucionprogramacion != null)
+                    IdDocto = resolucionprogramacion.DocumentoId;
+
+                /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
+                if (IdDocto == 0)
+                {
+                    var email = UserExtended.Email(User);
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = Name;
+                    doc.File = pdf;
+                    doc.ProcesoId = model.ProcesoId.Value;
+                    doc.WorkflowId = model.WorkflowId.Value;
+                    doc.Signed = false;
+                    doc.Texto = data.Text;
+                    doc.Metadata = data.Metadata;
+                    doc.Type = data.Type;
+                    doc.TipoPrivacidadId = 1;
+                    doc.TipoDocumentoId = tipoDoc;
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
+                else
+                {
+                    var docOld = _repository.GetById<Documento>(IdDocto);
+                    if (docOld.Signed != true)
+                    {
+                        docOld.File = pdf;
+                        docOld.Signed = false;
+                        docOld.Texto = data.Text;
+                        docOld.Metadata = data.Metadata;
+                        docOld.Type = data.Type;
+                        _repository.Update(docOld);
+                        _repository.Save();
+                    }
+                }
+
+            }
 
             return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         [AllowAnonymous]
@@ -1622,139 +1608,11 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            {
-                //model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
-                //model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
-
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-                //return View(model);
-            }
-            else
-            {
-                //model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                //model.DiasPlural = "s";
-                //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
-                //model.Anno = DateTime.Now.Year.ToString();
-                //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                //model.Fecha = DateTime.Now;
-                //model.FechaFirma = DateTime.Now;
 
-                //model.Firma = false;
-                //model.NumeroResolucion = model.CometidoId;
-                //model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
-
-                /*se traen los datos de la tabla parrafos*/
-                //var parrafos = _repository.GetAll<Parrafos>();
-                //switch (model.IdGrado)
-                //{
-                //    case "B":/*Firma Subsecretario*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    case "C": /*firma ministro*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    default:
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                //        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true).ToList();
-                //        if (vit.Count > 0)
-                //            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
-                //        else
-                //            model.ViaticodeVuelta = string.Empty;
-
-                //        break;
-                //}
-
-                /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
-                {
-                    //if (model.Folio == null)
-                    //{
-                    //    #region Folio
-                    //    /*se va a buscar el folio de testing*/
-                    //    DTOFolio folio = new DTOFolio();
-                    //    folio.periodo = DateTime.Now.Year.ToString();
-                    //    folio.solicitante = "Gestion Procesos - Memorandum";/*Sistema que solicita el numero de Folio*/
-                    //    if (model.IdCalidad == 10)
-                    //    {
-                    //        folio.tipodocumento = "RAEX";/*"ORPA";*/
-                    //    }
-                    //    else
-                    //    {
-                    //        switch (model.IdGrado)
-                    //        {
-                    //            case "B":/*Resolución Ministerial Exenta*/
-                    //                folio.tipodocumento = "RMEX";
-                    //                break;
-                    //            case "C": /*Resolución Ministerial Exenta*/
-                    //                folio.tipodocumento = "RMEX";
-                    //                break;
-                    //            default:
-                    //                folio.tipodocumento = "MEMO";/*Resolución Administrativa Exenta*/
-                    //                break;
-                    //        }
-                    //    }
-
-                    //    //definir url
-                    //    var url = "http://wsfolio.test.economia.cl/api/folio/";
-
-                    //    //definir cliente http
-                    //    var clientehttp = new WebClient();
-                    //    clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-                    //    //invocar metodo remoto
-                    //    string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
-
-                    //    //convertir resultado en objeto 
-                    //    var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
-
-                    //    //verificar resultado
-                    //    if (obj.status == "OK")
-                    //    {
-                    //        model.Folio = obj.folio;
-                    //        model.FechaSolicitud = model.FechaFirma;
-                    //        //model.Firma = true;
-                    //        //model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
-
-                    //        _repository.Update(model);
-                    //        _repository.Save();
-                    //    }
-                    //    if (obj.status == "ERROR")
-                    //    {
-                    //        TempData["Error"] = obj.error;
-                    //        //return View(DTOFolio);
-                    //    }
-                    //    #endregion
-                    //}
-                }
-
-
-                //if (model.CalidadDescripcion.Contains("honorario"))
-                //if (model.IdGrado == "0")
-                //if (model.GradoDescripcion == "0")
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
-                //    return View(model);
-                //}
-                //else
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
-                //    //return new ViewAsPdf("Resolucion", model);
-                //    return View(model);
-                //}
-                return View(model);
-            }
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -1762,23 +1620,11 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            {
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-            }
-            else
-            {
-                //model.Fecha = DateTime.Now;
 
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
-                {
-
-                }
-
-                return View(model);
-            }
+            return View(model);
         }
 
         public ActionResult Anular(int id)
@@ -1821,20 +1667,11 @@ namespace App.Web.Controllers
 
         public ActionResult DetailsGM(int id)
         {
-            //var model = _repository.GetById<Memorandum>(id);
-
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //if (model.GeneracionCDP.Count > 0)
-            //{
-            //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
-            //    model.GeneracionCDP.Add(cdp);
-            //}
-
-            //return View(model);
 
             Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
             foreach (var key in Request.Cookies.AllKeys)
@@ -1849,9 +1686,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            //model.FechaFirma = DateTime.Now;
-
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
@@ -2056,28 +1891,23 @@ namespace App.Web.Controllers
 
             }
 
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
             return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
         }
 
         public ActionResult SignResolucion(int id)
         {
-            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);//.Where(c => c.ProgramacionHorasExtraordinariasId == id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
             return View(model);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public ActionResult SignResolucion(int? DocumentoId)
         {
-            //IdProceso = 2423;
-            //var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == IdProceso.Value).FirstOrDefault();
-
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                var obj = _repository.Get<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == DocumentoId).FirstOrDefault();
-                var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 10).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var obj = _repository.GetFirst<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == DocumentoId);
+                var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 10);
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);
 
@@ -2248,13 +2078,8 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoMemo.Workbook.Worksheets[1];
             foreach (var memorandum in result.ToList())
             {
-                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
-                //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
-
-                //if (destino.Count > 0)
-                //{
+                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == memorandum.ProcesoId);
                 fila++;
-                //worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
                 if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
                     worksheet.Cells[fila, 1].Value = "En Curso";
                 else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
@@ -2262,18 +2087,11 @@ namespace App.Web.Controllers
                 else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
                     worksheet.Cells[fila, 1].Value = "Anulada";
 
-                //worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                //worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
-                //worksheet.Cells[fila, 4].Value = memorandum.NombreId;
-                //worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
-                //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                //worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
-                //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
                 worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
                 worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
-                //}
             }
+
+            excelPackageSeguimientoMemo.Workbook.Worksheets[1].Cells.AutoFitColumns();
 
             return File(excelPackageSeguimientoMemo.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoGP_yyyyMMddhhmmss") + ".xlsx");
         }

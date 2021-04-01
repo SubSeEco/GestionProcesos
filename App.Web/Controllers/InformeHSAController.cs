@@ -359,6 +359,7 @@ namespace App.Web.Controllers
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }

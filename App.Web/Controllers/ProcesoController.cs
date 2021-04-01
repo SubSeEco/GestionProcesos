@@ -179,7 +179,7 @@ namespace App.Web.Controllers
 
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.Get<DefinicionProceso>(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>().ToList()
             };
             return View(model);
@@ -363,7 +363,10 @@ namespace App.Web.Controllers
                 var excel = new ExcelPackage(fileInfo);
 
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(procesos);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
+
                 excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(workflows);
+                excel.Workbook.Worksheets[1].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }

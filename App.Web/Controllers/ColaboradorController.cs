@@ -330,7 +330,7 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
 
                     /*se redireccina a la vista que llamo al metodo de crear*/
-                    var hrs = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var hrs = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
                     var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == hrs.ProcesoId).OrderByDescending(c =>c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
                     if (secuencia == 1 || secuencia == 2)
                         return RedirectToAction("Edit", "HorasExtras", new {  id = hrs.HorasExtrasId});
@@ -350,7 +350,6 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Colaborador>(id);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
-            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
             return View(model);
         }
@@ -414,7 +413,7 @@ namespace App.Web.Controllers
                 TempData["Success"] = "Operación terminada correctamente.";
 
                 /*se redireccina a la vista que llamo al metodo de borrar*/
-                var com = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HrsId).FirstOrDefault();
+                var com = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == HrsId);
                 var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
                 if (pro.Count() > 0)
                     return RedirectToAction("Edit", "HorasExtras", new { id = HrsId });
@@ -438,7 +437,6 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Colaborador>(id);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
-            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
             return View(model);
         }
@@ -459,7 +457,7 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var he = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
                     var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
                     if (pro.Count() > 0)
                         return RedirectToAction("EditGP", "HorasExtras", new { id = he.HorasExtrasId });
@@ -508,7 +506,7 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var he = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
                     var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
                     if (pro.Count() > 0)
                         return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });

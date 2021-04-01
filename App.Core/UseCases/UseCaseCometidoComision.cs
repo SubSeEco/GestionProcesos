@@ -3245,7 +3245,6 @@ namespace App.Core.UseCases
             if (!obj.VtcTipoSubAsignacionId.HasValue)
                 response.Errors.Add("Se debe ingresar el tipo de subasignacion");
 
-
             try
             {
                 if (response.IsValid)
@@ -5118,7 +5117,7 @@ namespace App.Core.UseCases
                     /*si no existen mas tareas se envia correo de notificacion*/
                     var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId);
                     /*se trae documento para adjuntar*/
-                    Documento doc = cometido.Proceso.Documentos.Where(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
+                    Documento doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
                     var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                     var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
                     List<string> emailMsg;

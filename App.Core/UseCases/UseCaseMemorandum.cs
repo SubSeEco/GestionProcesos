@@ -1120,7 +1120,7 @@ namespace App.Core.UseCases
                         {
                             Memorandum memo = _repository.GetFirst<Memorandum>(c => c.ProcesoId == workflow.ProcesoId);
 
-                            Documento doc = memo.Proceso.Documentos.Where(d => d.ProcesoId == memo.ProcesoId && d.TipoDocumentoId == 8).FirstOrDefault();
+                            Documento doc = memo.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == memo.ProcesoId && d.TipoDocumentoId == 8);
 
                             //Memorandum memo1 = new Memorandum();
                             //var list1 = memo1.ListaChk1.Trim();

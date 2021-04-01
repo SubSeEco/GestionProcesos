@@ -78,7 +78,7 @@ namespace App.Web.Controllers
                 switch (_workflow.Entity)
                 {
                     case "HorasExtras":
-                        var hrs = _repository.Get<HorasExtras>(c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
+                        var hrs = _repository.GetFirst<HorasExtras>(c => c.WorkflowId.Value == WorkflowId);
                         if (hrs != null)
                         {
                             hrs.Workflow = _workflow;
@@ -92,7 +92,7 @@ namespace App.Web.Controllers
 
                         break;
                     case "Cometido":
-                        var _cometido = _repository.Get<Cometido>(c => c.WorkflowId.Value == WorkflowId).FirstOrDefault();
+                        var _cometido = _repository.GetFirst<Cometido>(c => c.WorkflowId.Value == WorkflowId);
                         if (_cometido != null)
                         {
                             _cometido.Workflow = _workflow;
@@ -334,7 +334,7 @@ namespace App.Web.Controllers
                 TempData["Success"] = "Operación terminada correctamente.";
 
                 /*se redireccina a la vista que llamo al metodo de borrar*/
-                var com = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasId).FirstOrDefault();
+                var com = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == HorasId);
                 var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId);//.Where(c => c.DefinicionWorkflow.Secuencia == 6);
                 if (pro.Count() > 0)
                     return RedirectToAction("Edit", "HorasExtras", new { id = HorasId });
@@ -440,8 +440,8 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                var obj = _repository.Get<HorasExtras>(c => c.HorasExtrasId == DocumentoId).FirstOrDefault();
-                var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 9).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var obj = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == DocumentoId);
+                var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 9);
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, obj.HorasExtrasId);
 
@@ -583,7 +583,7 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionServicio(string mes, string annio)
         {
-            var model = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+            var model = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
             return View(model);
         }
 
@@ -853,8 +853,6 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                //var obj = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasId).FirstOrDefault();
-                //var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 13).FirstOrDefault();
                 var doc = _repository.GetById<Documento>(HorasId);
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);

@@ -86,7 +86,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             if (!_repository.GetExists<GeneracionResolucion>(q => q.Mes == mes && q.Annio == annio))
             {
-                var hrs = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+                var hrs = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
 
                 /*Se genera resolucuion de trabajos extraordinarios*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionServicio", new { mes = hrs.FirstOrDefault().Mes, annio = hrs.FirstOrDefault().Annio }) { FileName = "ResolucionProgramacionServicio" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -186,7 +186,7 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResolucionServicio(string mes, string annio)
         {
-            var model = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+            var model = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
             return View(model);
         }
     }
