@@ -330,6 +330,9 @@ namespace App.Web.Controllers
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
+                var doc = _repository.GetFirst<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5);
+                var user = User.Email();
+                //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
 
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -405,13 +408,13 @@ namespace App.Web.Controllers
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<Cometido>(id);
-            var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == model.CometidoId).ToList();
+            var cdp = _repository.GetAll<GeneracionCDP>().Where(c => c.CometidoId == model.CometidoId).ToList();
             if (cdp != null)
             {
                 model.GeneracionCDP.Add(cdp.FirstOrDefault());
 
                 /*Validar si existe un documento asociado y si se encuentra firmado*/
-                var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1);
+                var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
                 if (doc != null)
                 {
                     if (doc.Signed != true)
@@ -435,12 +438,12 @@ namespace App.Web.Controllers
         public ActionResult SignOther(int? DocumentoId)
         {
             //IdProceso = 2423;
-            //var model = _repository.GetFirst<Cometido>().Where(c => c.ProcesoId == IdProceso.Value);
+            //var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == IdProceso.Value).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
-                var doc = _repository.GetFirst<Documento>(c => c.DocumentoId == DocumentoId);
+                var doc = _repository.Get<Documento>(c => c.DocumentoId == DocumentoId).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user, null);
 
@@ -606,7 +609,7 @@ namespace App.Web.Controllers
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
             return View(model);
         }
 
@@ -679,7 +682,7 @@ namespace App.Web.Controllers
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
             return View(model);
         }
 
@@ -696,7 +699,7 @@ namespace App.Web.Controllers
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
+            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");            
             return View(model);
         }
 
@@ -769,7 +772,7 @@ namespace App.Web.Controllers
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
+            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -1005,7 +1008,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<Cometido>(id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1176,7 +1179,8 @@ namespace App.Web.Controllers
                 }
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1);
+                var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                 if (resolucion != null)
                 {
                     IdDocto = resolucion.DocumentoId;
@@ -1250,7 +1254,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Cometido>(id);
 
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1389,7 +1393,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(Id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1405,7 +1409,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(Id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1850,7 +1854,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 9].Value = cometido.Destinos.Any() ? cometido.Destinos.LastOrDefault().FechaHasta.ToString() : "S/A";
                 //worksheet.Cells[fila, 10].Value = cometido.Proceso.DefinicionProceso != null ? cometido.Proceso.DefinicionProceso.Nombre : string.Empty;
 
-                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
 
                 worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
                 worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
@@ -1984,8 +1988,8 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoGP.Workbook.Worksheets[0];
             foreach (var cometido in result.ToList())
             {
-                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (destino.Count > 0)
                 {
@@ -2051,7 +2055,7 @@ namespace App.Web.Controllers
             foreach (var com in cometido.OrderByDescending(r => r.CometidoId).ToList())
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == com.ProcesoId);
-                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();
+                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();               
 
                 if (pasaje.Count > 0)
                 {
@@ -2061,7 +2065,7 @@ namespace App.Web.Controllers
                         fila++;
 
                         /*se extraen los datos asociados a las cotizaciones*/
-                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected).ToList();
+                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
                         if (cotizacion.Count > 0)
                         {
                             worksheet.Cells[fila, 16].Value = cotizacion.Count() >= 2 ? "SI" : "NO";
@@ -2188,7 +2192,7 @@ namespace App.Web.Controllers
             var model = new DTOFilterCometido();
             //ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             //ViewBag.Ejecutor = new SelectList(_repository.GetAll<DefinicionWorkflow>().Where(c => c.DefinicionProcesoId == 13 && c.NombreUsuario != null).ToList(), "NombreUsuario", "NombreUsuario");
-            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x => x.First()).ToList(), "Email", "Email");
+            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x =>x.First()).ToList(), "Email", "Email");
             return View(model);
         }
 
@@ -2257,7 +2261,7 @@ namespace App.Web.Controllers
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
-                //var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 fila++;
                 foreach (var w in workflow)
@@ -2322,7 +2326,7 @@ namespace App.Web.Controllers
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
                 //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (destino.Count > 0)
                 {
@@ -2354,7 +2358,7 @@ namespace App.Web.Controllers
             fila++;
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
-                //var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
+                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
                 var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (destino.Count > 0)
@@ -2415,7 +2419,7 @@ namespace App.Web.Controllers
             {
                 var workflow = _repository.GetFirst<Workflow>(w => w.ProcesoId == cometido.ProcesoId && w.DefinicionWorkflow.Secuencia == 9);
                 var cdp = _repository.GetFirst<GeneracionCDP>(w => w.CometidoId == cometido.CometidoId);
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (cdp != null)
                 {
@@ -2573,8 +2577,8 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[0];
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
-                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 fila++;
                 worksheet.Cells[fila, 1].Value = cometido.CometidoId.ToString();
@@ -2681,7 +2685,7 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[0];
             foreach (var cometido in result.ToList().Where(c => c.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)) //.OrderByDescending(c => c.CometidoId))
             {
-                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
                 DateTime? inicio = null;
                 DateTime? fin = null;
 
@@ -2833,7 +2837,7 @@ namespace App.Web.Controllers
             var worksheet = excelPackageFueraPlazo.Workbook.Worksheets[0];
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
                 if (destino.Count > 0)
                 {
                     if ((destino.FirstOrDefault().FechaInicio.Date - cometido.FechaSolicitud.Date).Days < 20)

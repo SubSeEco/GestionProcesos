@@ -4811,11 +4811,11 @@ namespace App.Core.UseCases
                             {
                                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) /*validaciones de secuencia del proceso cometido con pasaje*/
                                 {
-                                    if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Cometido.SolicitaViatico != true) /*si cometido no tiene viatico, no pasa por las tareas de generacion cdp*/
+                                    if (workflowActual.DefinicionWorkflow.Secuencia == 7) /*si cometido no tiene viatico, no pasa por las tareas de generacion cdp*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Cometido.ResolucionRevocatoria)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13); 
                                     }
@@ -5793,11 +5793,17 @@ namespace App.Core.UseCases
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista ppto
                                     }
 
+                                    /*se valida si cometido tiene resolucion de revcatoria*/
+                                    Documento doc = null;
+                                    if (cometido.ResolucionRevocatoria == true)
+                                        doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 16);
+
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
                                     "Tiene el cometido N°: " + cometido.CometidoId + " " + "pendiente de compromiso",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                                 {
