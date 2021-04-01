@@ -66,10 +66,10 @@
                                     <button class="waves-effect waves-light btn blue" type="submit">Firmar Documento</button>
                                 </div><br />
 
-                                @*if (Model.permisoEspecial)
+                                if (Model.permisoEspecial == false)
                                 {
                                     @Html.ActionLink("Firmar Todos Sin OTP", "GeneraDocumento", "FirmaDocumentoGenerico", new { Id = Model.FirmaDocumentoGenericoId }, null)
-                                }*@
+                                }
 
                                 @*<div class="col s12 m12 l12">
                 @Html.ActionLink("Firmar Todos Los Documentos", "FirmaMasiva", "FirmaDocumentoGenerico", new { Id = Model.FirmaDocumentoGenericoId }, null)

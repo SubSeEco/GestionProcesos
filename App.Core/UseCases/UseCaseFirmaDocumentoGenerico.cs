@@ -138,8 +138,8 @@ namespace App.Core.UseCases
                     model.ArchivoFirmado = binario;
 
                     DTOFileMetadata data = new DTOFileMetadata();
-                    int tipoDoc = 0;
-                    int IdDocto = 0;
+                    //int tipoDoc = 0;
+                    //int IdDocto = 0;
                     string Name = string.Empty;
 
                     //tipoDoc = 15;

@@ -459,7 +459,7 @@ namespace App.Web.Controllers
 
             var permisoEspecial = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
 
-            if (permisoEspecial != null)
+            if (permisoEspecial == true)
             {
                 permisoEspecial = model.permisoEspecial;
             }
