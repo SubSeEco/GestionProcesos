@@ -97,7 +97,7 @@ namespace App.Web.Controllers
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.FirstOrDefault().ProcesoId);
-                var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var docto = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (docto != null)
                 {
                     foreach (var res in docto)

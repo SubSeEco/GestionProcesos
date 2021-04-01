@@ -313,6 +313,9 @@ namespace App.Model.Cometido
         [Display(Name = "Tipo Acto Administrativo")]
         public string TipoActoAdministrativo { get; set; }
 
+        [Display(Name = "Resolucion Revocatoria")]
+        public bool ResolucionRevocatoria { get; set; } = false;
+
         public string GetTags()
         {
             StringBuilder tag = new StringBuilder();

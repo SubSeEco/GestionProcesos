@@ -45,7 +45,6 @@ namespace App.Web.Controllers
             DTOImputacion Imputacion = new DTOImputacion();
 
             var ProgId = per.Contrato.Re_ConPyt != 0 ? per.Contrato.Re_ConPyt : 1;
-            //var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             int Iditem;
             int Idasignacion = 0;
             int Idsubtitulo = ProgId == 5 || ProgId == 7 || ProgId == 11 || ProgId == 12 || ProgId == 16 || ProgId == 17 || ProgId == 18 || ProgId == 19 || ProgId == 20 ? 3 : 1;

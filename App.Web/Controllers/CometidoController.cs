@@ -344,10 +344,10 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
-                //var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
+                var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var doc = _repository.Get<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5).FirstOrDefault();
                 var user = User.Email();
-                var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
+                //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
 
                 //if (_UseCaseResponseMessage.Warnings.Count > 0)
                 //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -370,7 +370,7 @@ namespace App.Web.Controllers
                     .ToList();
             }
 
-            var modelo = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+            var modelo = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
             
             return View(modelo);
             //return View(model);
@@ -2436,8 +2436,8 @@ namespace App.Web.Controllers
             var worksheet = excelPackagePresupuesto.Workbook.Worksheets[0];
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
-                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId && w.DefinicionWorkflow.Secuencia == 9).FirstOrDefault();
-                var cdp = _repository.GetAll<GeneracionCDP>().Where(w => w.CometidoId == cometido.CometidoId).FirstOrDefault();
+                var workflow = _repository.GetFirst<Workflow>(w => w.ProcesoId == cometido.ProcesoId && w.DefinicionWorkflow.Secuencia == 9);
+                var cdp = _repository.GetFirst<GeneracionCDP>(w => w.CometidoId == cometido.CometidoId);
                 var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (cdp != null)
@@ -2800,11 +2800,6 @@ namespace App.Web.Controllers
         new DateTime(2020,12,25),
         new DateTime(2021,01,01),
         };
-
-
-
-
-
         public ActionResult Finalizados()
         {
             var predicate = PredicateBuilder.True<Cometido>();
@@ -2926,7 +2921,7 @@ namespace App.Web.Controllers
             var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
             foreach(var t in tareas)
             {
-                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == false && c.Anulada == false).Count();
+                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == false && c.Anulada == false && c.FechaCreacion.Year == DateTime.Now.Year).Count();
                 _lis.Add(new DataPoint(Convert.ToDouble(work),t.Nombre));
             }
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForDateTimeAxis(10), _jsonSetting);
@@ -2936,7 +2931,7 @@ namespace App.Web.Controllers
             var unidades = _sigper.GetUnidades();
             foreach(var u in unidades)
             {
-                var sol = _repository.Get<Cometido>(c => c.Activo == true && c.IdUnidad.Value == u.Pl_UndCod).Count();
+                var sol = _repository.Get<Cometido>(c => c.Activo == true && c.IdUnidad.Value == u.Pl_UndCod && c.FechaSolicitud.Year == DateTime.Now.Year).Count();
                 _lisUnidades.Add(new DataPoint(Convert.ToDouble(sol),u.Pl_UndDes.Trim()));
             }
             ViewBag.DataUnidades = JsonConvert.SerializeObject(_lisUnidades, _jsonSetting);
@@ -2946,7 +2941,7 @@ namespace App.Web.Controllers
             int m = 1;
             for (int i = 0; i < mes.Count() - 1; i++)
             {                
-                var solicitud = _repository.Get<Cometido>(c => c.Activo == true && c.FechaSolicitud.Month == m).Count();
+                var solicitud = _repository.Get<Cometido>(c => c.Activo == true && c.FechaSolicitud.Month == m && c.FechaSolicitud.Year == DateTime.Now.Year).Count();
                 _lisMeses.Add(new DataPoint(solicitud, mes[i]));
                 m = m +1;
             }

@@ -416,13 +416,18 @@
                         <div class="section"></div>
                         <p>
                             <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
-                            @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
+                            @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
+
+                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 6 && Model.ResolucionRevocatoria == true)
+                            {
+                                <a href="#modalCreate" class="waves-effect waves-light btn blue modal-trigger" data-position="left" data-tooltip="Adjuntar archivo">Adjunta resolucion revocatoria<i class="large material-icons"></i></a>
+                            }
                         </p>
                     </div>
                 </div>
             }
         </div>
-
+         
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })

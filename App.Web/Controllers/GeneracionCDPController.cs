@@ -306,7 +306,7 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
 
                     /*se traen los datos del cometido, para determinar a q tarea se debe devolver*/
-                    model.Cometido = _repository.GetAll<Cometido>().Where(c =>c.CometidoId == model.CometidoId).FirstOrDefault();
+                    model.Cometido = _repository.GetFirst<Cometido>(c =>c.CometidoId == model.CometidoId);
                     if (model.Cometido.Workflow.DefinicionWorkflow.Secuencia == 8)
                     {
                         return RedirectToAction("EditPpto", "Cometido", new { model.WorkflowId, id = model.CometidoId });
@@ -326,7 +326,7 @@ namespace App.Web.Controllers
                     .ToList();
             }
 
-            model.Cometido = _repository.GetAll<Cometido>().Where(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+            model.Cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
             /*Viaticos*/
             ViewBag.VtcTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre", model.VtcTipoPartidaId);
             ViewBag.VtcTipoCapituloId = new SelectList(_repository.GetAll<TipoCapitulo>(), "TipoCapituloId", "TcaNombre", model.VtcTipoCapituloId);

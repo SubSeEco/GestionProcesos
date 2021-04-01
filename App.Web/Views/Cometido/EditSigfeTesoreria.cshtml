@@ -98,7 +98,7 @@
                 @Html.HiddenFor(q => Model.Folio)
                 @Html.HiddenFor(q => Model.FechaResolucion)
                 @Html.HiddenFor(q => Model.TipoActoAdministrativo)
-                @*@Html.HiddenFor(q => Model.Proceso.Documentos)*@
+                @*@Html.HiddenFor(q => Model.ResolucionRevocatoria)*@
                 @*@Html.HiddenFor(q => Model.Destinos)
                     @Html.HiddenFor(q => Model.GeneracionCDP)*@
 
@@ -662,9 +662,20 @@
                                     @Html.TextBoxFor(m => Model.ObservacionesPagoSigfeTesoreria)
                                     @Html.ValidationMessageFor(m => Model.ObservacionesPagoSigfeTesoreria, "", new { @class = "red-text" })
                                 </div>
+                                <div class="input-field col s12 m10 l10">
+                                    <label>
+                                        @Html.CheckBoxFor(m => Model.ResolucionRevocatoria)
+                                        <span>
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.ResolucionRevocatoria)
+                                            </strong>
+                                        </span>
+                                    </label>
+                                    <div class="section"></div>
+                                </div>
                             </div>
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia != 19)
+                        @if (Model.Workflow.DefinicionWorkflow.Secuencia != 20)// 19)
                         {
                             <div class="section"></div>
                             <p>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Model.ProgramacionHorasExtraordinarias;
@@ -8,11 +9,18 @@ using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
 using App.Core.Interfaces;
+using App.Model.Shared;
 using App.Util;
+using Newtonsoft.Json;
 using App.Core.UseCases;
+using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using Rotativa;
+using org.mp4parser.aspectj.runtime.@internal;
 //using App.Infrastructure.Extensions;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
@@ -22,7 +30,6 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
-    [NoDirectAccess]
     public class ProgramacionHorasExtraordinariasController : Controller
     {
         public class DTOFilterProgramacionHorasExtraordinarias
@@ -39,11 +46,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public DateTime? Desde { get; set; }
+            public System.DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public DateTime? Hasta { get; set; }
+            public System.DateTime? Hasta { get; set; }
 
             [Display(Name = "ID")]
             public int ID { get; set; }
@@ -53,15 +60,15 @@ namespace App.Web.Controllers
 
             [Display(Name = "Fecha Inicio")]
             [DataType(DataType.Date)]
-            public DateTime? FechaInicio { get; set; }
+            public System.DateTime? FechaInicio { get; set; }
 
             [Display(Name = "Fecha Término")]
             [DataType(DataType.Date)]
-            public DateTime? FechaTermino { get; set; }
+            public System.DateTime? FechaTermino { get; set; }
 
             [Display(Name = "Fecha de solicitud")]
             [DataType(DataType.Date)]
-            public DateTime? FechaSolicitud { get; set; }
+            public System.DateTime? FechaSolicitud { get; set; }
 
             [Display(Name = "Funcionario")]
             public int? NombreId { get; set; }
@@ -111,7 +118,7 @@ namespace App.Web.Controllers
         protected readonly IFolio _folio;
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
-        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         //public static List<Destinos> ListDestino = new List<Destinos>();
 
         public ProgramacionHorasExtraordinariasController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
@@ -748,7 +755,7 @@ namespace App.Web.Controllers
 
         public ActionResult Index()
         {
-            var model = _repository.Get<ProgramacionHorasExtraordinarias>();
+            var model = _repository.GetAll<ProgramacionHorasExtraordinarias>();
             return View(model);
         }
 
@@ -770,25 +777,25 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
-            //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
+            var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
-            //ViewBag.NombreId = usuarios;
-            //ViewBag.NombreIdDest = usuarios;
-            //ViewBag.NombreIdSecre = usuarios;
-            //ViewBag.NombreIdVisa1 = usuarios;
-            //ViewBag.NombreIdVisa2 = usuarios;
-            //ViewBag.NombreIdVisa3 = usuarios;
-            //ViewBag.NombreIdVisa4 = usuarios;
-            //ViewBag.NombreIdVisa5 = usuarios;
-            //ViewBag.NombreIdVisa6 = usuarios;
-            //ViewBag.NombreIdVisa7 = usuarios;
-            //ViewBag.NombreIdVisa8 = usuarios;
-            //ViewBag.NombreIdVisa9 = usuarios;
-            //ViewBag.NombreIdVisa10 = usuarios;
-            //ViewBag.NombreIdAna = usuarios;
-            //ViewBag.NombreIdAutorizaFirma1 = usuarios;
-            //ViewBag.NombreIdAutorizaFirma2 = usuarios;
-            //ViewBag.NombreIdAutorizaFirma3 = usuarios;
+            ViewBag.NombreId = usuarios;
+            ViewBag.NombreIdDest = usuarios;
+            ViewBag.NombreIdSecre = usuarios;
+            ViewBag.NombreIdVisa1 = usuarios;
+            ViewBag.NombreIdVisa2 = usuarios;
+            ViewBag.NombreIdVisa3 = usuarios;
+            ViewBag.NombreIdVisa4 = usuarios;
+            ViewBag.NombreIdVisa5 = usuarios;
+            ViewBag.NombreIdVisa6 = usuarios;
+            ViewBag.NombreIdVisa7 = usuarios;
+            ViewBag.NombreIdVisa8 = usuarios;
+            ViewBag.NombreIdVisa9 = usuarios;
+            ViewBag.NombreIdVisa10 = usuarios;
+            ViewBag.NombreIdAna = usuarios;
+            ViewBag.NombreIdAutorizaFirma1 = usuarios;
+            ViewBag.NombreIdAutorizaFirma2 = usuarios;
+            ViewBag.NombreIdAutorizaFirma3 = usuarios;
 
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
@@ -1153,7 +1160,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasInsert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -1223,27 +1230,27 @@ namespace App.Web.Controllers
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc1 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc2 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc3 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc4 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc5 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc6 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc7 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc8 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc9 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc10 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc11 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc12 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc13 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc14 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc15 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc16 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc17 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc18 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc19 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc20 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             if (ModelState.IsValid)
             {
@@ -1288,27 +1295,27 @@ namespace App.Web.Controllers
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc1 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc2 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc3 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc4 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc5 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc6 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc7 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc8 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc9 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc10 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc11 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc12 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc13 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc14 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc15 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc16 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc17 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc18 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc19 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc20 = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             if (ModelState.IsValid)
             {
@@ -1369,14 +1376,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;                    
                 }
 
                 if (idDoctoViatico == 0)
@@ -1503,14 +1507,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
                 }
 
                 if (idDoctoViatico == 0)
@@ -1822,11 +1823,11 @@ namespace App.Web.Controllers
         {
             //var model = _repository.GetById<Memorandum>(id);
 
-            //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
+            ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             //if (model.GeneracionCDP.Count > 0)
             //{
             //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
@@ -1863,14 +1864,11 @@ namespace App.Web.Controllers
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (cdpViatico != null)
                 {
-                    foreach (var res in cdpViatico)
-                    {
-                        if (res.TipoDocumentoId == 2)
-                            idDoctoViatico = res.DocumentoId;
-                    }
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
                 }
 
                 if (idDoctoViatico == 0)
@@ -2013,14 +2011,11 @@ namespace App.Web.Controllers
                 Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var resolucion = _repository.Get<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
                 if (resolucion != null)
                 {
-                    foreach (var res in resolucion)
-                    {
-                        if (res.TipoDocumentoId == 8)
-                            IdDocto = res.DocumentoId;
-                    }
+                    if (resolucion.TipoDocumentoId == 8)
+                        IdDocto = resolucion.DocumentoId;
                 }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
@@ -2243,7 +2238,7 @@ namespace App.Web.Controllers
 
         public FileResult DownloadGP()
         {
-            var result = _repository.Get<ProgramacionHorasExtraordinarias>();
+            var result = _repository.GetAll<ProgramacionHorasExtraordinarias>();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoMemo.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2253,7 +2248,7 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoMemo.Workbook.Worksheets[1];
             foreach (var memorandum in result.ToList())
             {
-                var workflow = _repository.Get<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
+                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
                 //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 //if (destino.Count > 0)

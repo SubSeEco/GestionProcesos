@@ -374,26 +374,6 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    //if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoGD)
-                    //{
-                    //    //traer el ultimo ingreso GD
-                    //    var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && q.EntityId != null).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
-                    //    if (workflowInicial == null)
-                    //        throw new Exception("No se encontró el workflow inicial.");
-
-                    //    var ingresogd = _repository.GetFirst<GDIngreso>(q => q.GDIngresoId == workflowInicial.EntityId);
-                    //    if (ingresogd == null)
-                    //        throw new Exception("No se encontró el ingreso de gestión documental.");
-
-                    //    if (ingresogd != null)
-                    //    {
-                    //        workflow.Pl_UndCod = ingresogd.Pl_UndCod;
-                    //        workflow.Pl_UndDes = ingresogd.Pl_UndDes;
-                    //        workflow.Email = ingresogd.UsuarioDestino;
-                    //        workflow.TareaPersonal = !string.IsNullOrWhiteSpace(workflow.Email);
-                    //    }
-                    //}
-
                     if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
                     {
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
