@@ -7,6 +7,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class TipoCapituloController : Controller
     {
         protected readonly IGestionProcesos _repository;

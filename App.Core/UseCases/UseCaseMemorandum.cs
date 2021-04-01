@@ -2,7 +2,6 @@
 using System.Linq;
 using App.Model.Core;
 using App.Model.Memorandum;
-using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
@@ -20,10 +19,6 @@ namespace App.Core.UseCases
         protected readonly IFolio _folio;
         protected readonly IFile _file;
 
-        public UseCaseMemorandum(IGestionProcesos repository)
-        {
-            _repository = repository;
-        }
         public UseCaseMemorandum(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
@@ -105,8 +100,6 @@ namespace App.Core.UseCases
             var memo = _repository.GetById<Memorandum>(id);
             if (memo == null)
                 response.Errors.Add("Documento a firmar no encontrado");
-            //if (memo != null && memo.DocumentoSinFirma == null)
-            //    response.Errors.Add("Documento a firmar no encontrado");
 
             var url_tramites_en_linea = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.url_tramites_en_linea.ToString());
             if (url_tramites_en_linea == null)
@@ -159,52 +152,18 @@ namespace App.Core.UseCases
             if (!response.IsValid)
                 return response;
 
-            ////crear nuevo documento
-            //var documento = new Documento() {
-            //    Proceso = memo.Proceso,
-            //    Workflow = memo.Workflow,
-            //    Fecha = DateTime.Now,
-            //    //Email = memo.Autor,
-            //    Email = memo.EmailRem.Trim(),
-            //    Signed = false,
-            //    Type = "application/pdf",
-            //    TipoPrivacidadId = 1,
-            //    TipoDocumentoId = 6,
-            //    Folio = memo.Folio
-            //};
-            //_repository.Create(documento);
-            //_repository.Save();
-
-            var doc = _repository.Get<Documento>(c => c.ProcesoId == memo.ProcesoId).FirstOrDefault();
+            var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == memo.ProcesoId);
 
             //generar código QR
             var qr = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", doc.DocumentoId));
 
-
             //firmar documento
             var _hsmResponse = _hsm.Sign(doc.File, idsFirma, doc.DocumentoId, doc.Folio, url_tramites_en_linea.Valor, qr);
 
-            //byte[] _hsmResponse = null;
-            //foreach (var item in idsFirma)
-            //{
-            //     _hsmResponse = _hsm.Sign(doc.File, item, null, doc.Folio, "");
-
-            //}
-
             //actualizar firma documento
             doc.File = _hsmResponse;
-            //memo.DocumentoConFirmaFilename = memo.DocumentoSinFirmaFilename;
-            //memo.Firmante = string.Join(", ", idsFirma);
             doc.Signed = true;
-            //memo.FechaFirma = DateTime.Now;
-            //memo.DocumentoId = documento.DocumentoId;
             _repository.Update(doc);
-
-            ////actualizar documento con contenido firmado
-            //documento.File = _hsmResponse;
-            //documento.FileName = memo.DocumentoConFirmaFilename;
-            //documento.Signed = true;
-            //_repository.Update(doc);
 
             //guardar cambios
             _repository.Save();
@@ -231,135 +190,11 @@ namespace App.Core.UseCases
                     throw new Exception("No se encontró el usuario que ejecutó el workflow.");
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0))
                     workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
-                /*Si la tarea es rechazada se valida que se ingrese una observacion - en el proceso cometido*/
-                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                //{
-                //    throw new Exception("Se debe señalra el motivo del rechazo para la tarea.");
-                //}
+
                 /*Valida la carga de adjuntos segun el tipo de proceso*/
-                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
-                {
-                    //if (workflowActual.DefinicionWorkflow.Secuencia == 4)
-                    //{
-                    //    //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
-                    //    var Pasaje = new Pasaje();
-                    //    Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                    //    if (Pasaje.TipoDestino == true)
-                    //    {
-                    //        if (workflowActual.Proceso.Documentos.Count < 1)
-                    //        {
-                    //            throw new Exception("Debe adjuntar a los menos una cotizaciones.");
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        if (workflowActual.Proceso.Documentos.Count < 3)
-                    //        {
-                    //            throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
-                    //        }
-                    //    }
-                    //}
-                    //else if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())
-                    //{
-                    //    throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
-                    //}                                         
-                }
-                //else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-                //else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum)
-                //{
-                //    if (workflowActual.DefinicionWorkflow.Secuencia == 3)
-                //    {
-                //        if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                //        {
-                //            //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
-                //            var Pasaje = new Pasaje();
-                //            Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                //            if (Pasaje != null)
-                //            {
-                //                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
-                //                if (cotizacion != null)
-                //                {
-                //                    if (Pasaje.TipoDestino == true)
-                //                    {
-                //                        if (cotizacion.CotizacionDocumento.Count < 1)
-                //                        {
-                //                            throw new Exception("Debe adjuntar a los menos una cotizaciones.");
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-                //                        if (cotizacion.CotizacionDocumento.Count < 3)
-                //                        {
-                //                            throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
-                //                        }
-                //                    }
-                //                }
-                //                else
-                //                    throw new Exception("No se ha ingresado cotización.");
-                //            }
-                //        }
-                //    }
-                //    else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
-                //    {
-                //        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 4 && c.TipoDocumentoId != null))
-                //            throw new Exception("Debe adjuntar documentos en la tarea de analista de contabilidad.");
-                //    }
-                //    else if (workflowActual.DefinicionWorkflow.Secuencia == 18)
-                //    {
-                //        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
-                //            throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
-                //    }
-                //}
-                else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-                {
-                    //if (workflowActual.DefinicionWorkflow.Secuencia == 3)
-                    //{
-                    //    if (obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                    //    {
-                    //        //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
-                    //        var Pasaje = new Pasaje();
-                    //        Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                    //        if (Pasaje != null)
-                    //        {
-                    //            var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
-                    //            if (cotizacion != null)
-                    //            {
-                    //                if (Pasaje.TipoDestino == true)
-                    //                {
-                    //                    if (cotizacion.CotizacionDocumento.Count < 1)
-                    //                    {
-                    //                        throw new Exception("Debe adjuntar a los menos una cotizaciones.");
-                    //                    }
-                    //                }
-                    //                else
-                    //                {
-                    //                    if (cotizacion.CotizacionDocumento.Count < 3)
-                    //                    {
-                    //                        throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
-                    //                    }
-                    //                }
-                    //            }
-                    //            else
-                    //                throw new Exception("No se ha ingresado cotización.");
-                    //        }
-                    //    }
-                    //}
-                    //else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
-                    //{
-                    //    if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 4 && c.TipoDocumentoId != null))
-                    //        throw new Exception("Debe adjuntar documentos en la tarea de analista de contabilidad.");
-                    //}
-                    //else if (workflowActual.DefinicionWorkflow.Secuencia == 18)
-                    //{
-                    //    if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
-                    //        throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
-                    //}
-                }
-                else
-                {
+                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
                     if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())
                         throw new Exception("Debe adjuntar documentos.");
-                }
 
                 //terminar workflow actual
                 workflowActual.FechaTermino = DateTime.Now;
@@ -387,56 +222,20 @@ namespace App.Core.UseCases
                 {
                     //Se toma valor de cometidos para definir curso de accion del flujo
                     var Memorandum = new Memorandum();
-                    Memorandum = _repository.Get<Memorandum>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                    Memorandum = _repository.GetFirst<Memorandum>(q => q.WorkflowId == obj.WorkflowId);
                     if (Memorandum != null)
                     {
                         //determinar siguiente tarea desde el diseño de proceso
                         if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
-                            //if (workflowActual.DefinicionWorkflow.Secuencia == 1)
-                            //{
-                            //    //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
-                            //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 == null)
-                            //    {
-                            //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 7);
-                            //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
-                            //    }
-                            //    else
-                            //    {
-                            //        /*buscar el objeto de negocio condsulta integridad*/
-                            //        var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                            //        var pro = con.ProcesoId;
 
-                            //        //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
-                            //        var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
-                            //        var correo = con.EmailVisa1;
-                            //        var unidaddes = con.UnidadDescripcionVisa1;
-                            //        var unidadcod = con.IdUnidadVisa1;
-
-                            //        //var correo = work.To;
-                            //        workflowActual.Email = correo;
-                            //        obj.To = correo;
-
-                            //        workflowActual.Pl_UndDes = unidaddes;
-                            //        obj.Pl_UndDes = unidaddes;
-
-                            //        workflowActual.Pl_UndCod = unidadcod;
-                            //        obj.Pl_UndCod = unidadcod;
-
-                            //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
-                            //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
-                            //    }
-                            //}
                             if (workflowActual.DefinicionWorkflow.Secuencia == 1)
                             {
-                                //if (workflowActual.TipoAprobacionId == (int)Enum.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.To == null)
-                                //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 != null)
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso && Memorandum.EmailVisa1 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
-                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var correo = con.EmailRem;
                                     var unidaddes = con.UnidadDescripcion;
@@ -458,7 +257,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -486,7 +285,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa2 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -515,7 +314,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -543,7 +342,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa3 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -572,7 +371,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -600,7 +399,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa4 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -629,7 +428,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -657,7 +456,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa5 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -686,7 +485,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -714,7 +513,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa6 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -743,7 +542,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -771,7 +570,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa7 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -800,7 +599,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -828,7 +627,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa8 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -857,7 +656,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -885,7 +684,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa9 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -914,7 +713,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -942,7 +741,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada && Memorandum.EmailVisa10 == null)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -971,7 +770,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -1003,10 +802,9 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
-                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var correo = con.EmailRem;
                                     var unidaddes = con.UnidadDescripcion;
@@ -1035,7 +833,7 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -1064,7 +862,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
                                     //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
@@ -1089,10 +887,9 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     /*buscar el objeto de negocio condsulta integridad*/
-                                    var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                                    var con = _repository.GetFirst<Memorandum>(c => c.WorkflowId == obj.WorkflowId);
                                     var pro = con.ProcesoId;
 
-                                    //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
                                     var correo = con.EmailDest;
                                     var unidaddes = con.UnidadDescripcionDest;
@@ -1112,39 +909,6 @@ namespace App.Core.UseCases
                                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                                 }
                             }
-                        //else if (workflowActual.DefinicionWorkflow.Secuencia == 9)
-                        //{
-                        //    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                        //    {
-                        //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 11);
-                        //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
-                        //    }
-                        //    else
-                        //    {
-                        //        ///*buscar el objeto de negocio condsulta integridad*/
-                        //        //var con = _repository.Get<Memorandum>(c => c.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                        //        //var pro = con.ProcesoId;
-
-                        //        ////var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId != 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
-                        //        //var work = _repository.Get<Workflow>(c => c.ProcesoId == con.ProcesoId && c.TipoAprobacionId == 1).OrderByDescending(c => c.WorkflowId).FirstOrDefault();
-                        //        //var correo = con.EmailAna;
-                        //        //var unidaddes = con.UnidadDescripcionAna;
-                        //        //var unidadcod = con.IdUnidadAna;
-
-                        //        ////var correo = work.To;
-                        //        //workflowActual.Email = correo;
-                        //        //obj.To = correo;
-
-                        //        //workflowActual.Pl_UndDes = unidaddes;
-                        //        //obj.Pl_UndDes = unidaddes;
-
-                        //        //workflowActual.Pl_UndCod = unidadcod;
-                        //        //obj.Pl_UndCod = unidadcod;
-
-                        //        //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 2);
-                        //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
-                        //    }
-                        //}
                     }
                 }
                 else
@@ -1354,7 +1118,7 @@ namespace App.Core.UseCases
                     {
                         if (workflowActual.DefinicionWorkflow.Secuencia == 12)
                         {
-                            Memorandum memo = _repository.Get<Memorandum>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
+                            Memorandum memo = _repository.GetFirst<Memorandum>(c => c.ProcesoId == workflow.ProcesoId);
 
                             Documento doc = memo.Proceso.Documentos.Where(d => d.ProcesoId == memo.ProcesoId && d.TipoDocumentoId == 8).FirstOrDefault();
 

@@ -5,6 +5,9 @@ using App.Core.Interfaces;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
     public class ParametrosComisionesController : Controller
     {
         protected readonly IGestionProcesos _repository;

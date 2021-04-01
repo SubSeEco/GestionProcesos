@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using App.Model.Core;
-using App.Model.ProgramacionHorasExtraordinarias;
-using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
@@ -274,7 +272,7 @@ namespace App.Core.UseCases
 
                     /*Se busca proceso para determinar tipo de documento*/
                     string TipoDocto;
-                    var horas = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HorasExtrasId.Value).FirstOrDefault();
+                    var horas = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == HorasExtrasId.Value);
 
                     if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
                         TipoDocto = obj.TipoDocumentoFirma;
@@ -441,7 +439,7 @@ namespace App.Core.UseCases
 
                 /*Se toman los valores de la solicitud, para definir curso de las sgtes tareas*/
                 var Horas = new HorasExtras();
-                Horas = _repository.Get<HorasExtras>(h => h.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                Horas = _repository.GetFirst<HorasExtras>(h => h.WorkflowId == obj.WorkflowId);
 
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
@@ -479,11 +477,11 @@ namespace App.Core.UseCases
                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                     {
                         /*si no existen mas tareas se envia correo de notificacion*/
-                        var hrs = _repository.Get<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
+                        var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId);
                         /*se trae documento para adjuntar*/
                         Documento doc = hrs.Proceso.Documentos.Where(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
-                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
-                        var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
+                        //var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                        //var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
                         //List<string> emailMsg;
 
                         _email.NotificarFinProceso(workflowActual.Proceso,
@@ -708,7 +706,7 @@ namespace App.Core.UseCases
                     if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
                     {
                         string jefe = string.Empty;
-                        var hrs = _repository.Get<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
+                        var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId);
                         var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         var QuienViaja = _sigper.GetUserByRut(hrs.NombreId.Value).Funcionario.Rh_Mail.Trim();
                         if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
@@ -793,7 +791,7 @@ namespace App.Core.UseCases
                                     //emailMsg.Add("scid@economia.cl"); //oficia de partes
                                     emailMsg.Add(OfPartes.Valor); //oficia de partes
                                     emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
-                                    Documento doc = hrs.Proceso.Documentos.Where(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
+                                    Documento doc = hrs.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9);
 
                                     _email.NotificacionesHorasExtras(workflowActual,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),

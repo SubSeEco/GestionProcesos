@@ -8,8 +8,6 @@ using App.Model.Shared;
 using App.Model.SIGPER;
 using System.Collections.Generic;
 using App.Core.Interfaces;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using App.Util;
 
 namespace App.Core.UseCases
@@ -764,8 +762,8 @@ namespace App.Core.UseCases
 
                     /*Se busca cometido para determinar tipo de documento*/
                     string TipoDocto;
-                    var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId.Value).FirstOrDefault();
-                    if(com != null)
+                    var com = _repository.GetFirst<Cometido>(c => c.CometidoId == cometidoId.Value);
+                    if (com != null)
                     {
                         if (com.IdCalidad == 10)
                         {
@@ -787,14 +785,14 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         if (!string.IsNullOrEmpty(obj.TipoDocumentoFirma))
                             TipoDocto = obj.TipoDocumentoFirma;
                         else
                             TipoDocto = "OTRO";
                     }
-                    
+
 
                     //listado de id de firmantes
                     var idsFirma = new List<string>();
@@ -823,7 +821,7 @@ namespace App.Core.UseCases
                             _repository.Save();
 
                             /*Se agregan lo datos del folio al objeto cometido*/
-                            if(com != null)
+                            if (com != null)
                             {
                                 com.Folio = _folioResponse.folio;
                                 com.FechaResolucion = DateTime.Now;
@@ -846,7 +844,7 @@ namespace App.Core.UseCases
                     }
 
                     //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
-                    var docto = _hsm.Sign(documento.File,idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
+                    var docto = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
                     documento.File = docto;
                     documento.Signed = true;
 
@@ -902,28 +900,13 @@ namespace App.Core.UseCases
                         _repository.Update(cotizacionDocto);
 
                         /*se marca o desmarca la cotizacion seleccionda en lista de cotizaciones*/
-                        var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
+                        var cotiza = _repository.GetFirst<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId);
                         if (cotiza != null)
                         {
                             cotiza.Seleccion = item.Selected;
                             _repository.Update(cotiza);
                         }
-
-
-
-                            //if (item.Selected == true)
-                            //{
-                            //    /*se marca cotizacion seleccionda en lista de cotizaciones*/
-                            //    var cotiza = _repository.Get<Cotizacion>(c => c.CotizacionId == cotizacionDocto.CotizacionId).FirstOrDefault();
-                            //    if (cotiza != null)
-                            //    {
-                            //        cotiza.Seleccion = true;
-
-                            //        _repository.Update(cotiza);
-                            //        //_repository.Save();
-                            //    }
-                            //}
-                        }
+                    }
                 }
                 _repository.Save();
             }
@@ -1281,7 +1264,7 @@ namespace App.Core.UseCases
                 //{
                 //    response.Errors.Add("Se ha selecionado la opcion de Solicita Reembolso, por lo tanto debe señalar el Tipo de Reembolso");
                 //}
-                if(!obj.NombreId.HasValue)
+                if (!obj.NombreId.HasValue)
                     response.Errors.Add("No se ha señalado el nombre del funcionario que viaja.");
 
                 if (string.IsNullOrEmpty(obj.CometidoDescripcion))
@@ -1431,7 +1414,7 @@ namespace App.Core.UseCases
                     //        DestinosDelete(destinoCometido.DestinoId);
                     //    }
                     //}
-                        
+
 
                     /*se suma el valor total del viatico*/
                     obj.TotalViatico = 0;
@@ -1448,7 +1431,7 @@ namespace App.Core.UseCases
                 {
                     if (!string.IsNullOrEmpty(obj.ProgramaDescripcion))
                     {
-                        var prog = _sigper.GetREPYTs().Where(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim()).FirstOrDefault();
+                        var prog = _sigper.GetREPYTs().FirstOrDefault(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim());
                         if (prog != null)
                             obj.IdPrograma = int.Parse(prog.RePytCod.ToString());
                     }
@@ -1474,7 +1457,7 @@ namespace App.Core.UseCases
                     obj.IdGrado = obj.GradoDescripcion;
                 }
 
-                if(string.IsNullOrEmpty(obj.Jefatura) || obj.Jefatura == "Sin jefatura definida")
+                if (string.IsNullOrEmpty(obj.Jefatura) || obj.Jefatura == "Sin jefatura definida")
                     response.Errors.Add("No se ha definido la jefatura del funcionario.");
 
 
@@ -1569,14 +1552,13 @@ namespace App.Core.UseCases
             obj.TotalViatico = 0;
             obj.Total = 0;
         }
-
         public ResponseMessage DestinosInsert(Destinos obj)
         {
             var response = new ResponseMessage();
 
             try
             {
-                var cometido = _repository.Get<Cometido>(c => c.CometidoId == obj.CometidoId).FirstOrDefault();
+                var cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == obj.CometidoId);
                 //reglas de negocio
                 /*validacion de fechas*/
                 if (obj.FechaInicio == null)
@@ -1915,7 +1897,7 @@ namespace App.Core.UseCases
                         if (destinos.FechaInicio.Date == obj.FechaInicio.Date)
                         {
 
-                            if(destinos.DestinoId != obj.DestinoId)
+                            if (destinos.DestinoId != obj.DestinoId)
                             {
                                 if (destinos.Dias40 > 0 && destinos.Dias100 == 0 && destinos.Dias60 == 0)
                                 {
@@ -2064,7 +2046,7 @@ namespace App.Core.UseCases
         public ResponseMessage DestinosUpdate(Destinos objController)
         {
             var response = new ResponseMessage();
-            Destinos obj = _repository.Get<Destinos>(q => q.DestinoId == objController.DestinoId).FirstOrDefault();
+            Destinos obj = _repository.GetFirst<Destinos>(q => q.DestinoId == objController.DestinoId);
             try
             {
                 obj.Dias100 = objController.Dias100;
@@ -2104,23 +2086,23 @@ namespace App.Core.UseCases
                 if (objController.EditGP == true)
                 {
                     if (dias != cantNew)
-                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");                    
+                        response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
                 }
                 else
                 {
                     if (dias != cantOld)
                     {
-                        if(objController.FechaInicio.Hour < 17)
+                        if (objController.FechaInicio.Hour < 17)
                         {
                             response.Errors.Add("La cantidad de días solicitados debe(n) ser " + dias + " en total");
                         }
-                    }                        
+                    }
                 }
 
                 /*se valida que la fecha de inicio no se superior que la de termino*/
                 if (objController.FechaHasta < objController.FechaInicio)
                     response.Errors.Add("La fecha de inicio no puede ser superior o igual a la de término");
-                
+
 
                 /*Se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
                 if (obj.Dias100 > 0)
@@ -2138,9 +2120,9 @@ namespace App.Core.UseCases
                         {
                             if (destinos.FechaInicio.Month == mes && destinos.Dias100 != 0 && destinos.Dias100 != null)
                                 Totaldias100Mes += destinos.Dias100.Value;
-                            
+
                             if (destinos.FechaInicio.Year == year && destinos.Dias100 != 0 && destinos.Dias100 != null)
-                                Totaldias100Ano += destinos.Dias100.Value;                            
+                                Totaldias100Ano += destinos.Dias100.Value;
                         }
                     }
                     if (Totaldias100Mes + obj.Dias100 > 10)
@@ -2156,7 +2138,7 @@ namespace App.Core.UseCases
                     }
                     if (Totaldias100Ano + obj.Dias100 > 90)
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90).ToString() + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
-                    
+
                 }
 
                 /*En la tarea de analista gestion personas, se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
@@ -2215,7 +2197,7 @@ namespace App.Core.UseCases
                     obj.Total = 0;
                 }
 
-                var com = _repository.Get<Cometido>(c => c.CometidoId == obj.CometidoId).FirstOrDefault();
+                var com = _repository.GetFirst<Cometido>(c => c.CometidoId == obj.CometidoId);
                 if (com.SolicitaViatico == false)
                 {
                     response.Warnings.Add("Este cometido tendrá un viático de $0");
@@ -2239,7 +2221,7 @@ namespace App.Core.UseCases
                 }
                 else
                     response.Errors.Add("Se debe señalar la comuna de destino");
-                
+
 
                 if (objController.IdRegion != null)
                 {
@@ -2248,7 +2230,7 @@ namespace App.Core.UseCases
                 }
                 else
                     response.Errors.Add("Se debe señalar la region de destino");
-                
+
 
                 //if (com.ReqPasajeAereo == true)
                 //{
@@ -2530,7 +2512,7 @@ namespace App.Core.UseCases
                     if (objController.EditGP == true)
                     {
                         if (diasAdyacencia != cantAdyacenciaNew)
-                            response.Errors.Add("La cantidad de días solicitados debe(n) ser " + diasAdyacencia + " en total");                        
+                            response.Errors.Add("La cantidad de días solicitados debe(n) ser " + diasAdyacencia + " en total");
                     }
                     else
                     {
@@ -2593,7 +2575,7 @@ namespace App.Core.UseCases
                                         obj.Total = 0;
                                         obj.TotalViatico = 0;
                                     }
-                                }                                
+                                }
                             }
                         }
                     }
@@ -3299,7 +3281,7 @@ namespace App.Core.UseCases
             if (!obj.VtcTipoAsignacionId.HasValue)
                 response.Errors.Add("Se debe ingresar el tipo de asignacion");
             if (!obj.VtcTipoSubAsignacionId.HasValue)
-                response.Errors.Add("Se debe ingresar el tipo de subasignacion");            
+                response.Errors.Add("Se debe ingresar el tipo de subasignacion");
 
             try
             {
@@ -3732,7 +3714,7 @@ namespace App.Core.UseCases
 
                 if (!string.IsNullOrEmpty(obj.ProgramaDescripcion) && obj.IdPrograma == null)
                 {
-                    var prog = _sigper.GetREPYTs().Where(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim()).FirstOrDefault();
+                    var prog = _sigper.GetREPYTs().FirstOrDefault(c => c.RePytDes.Trim() == obj.ProgramaDescripcion.Trim());
                     if (prog != null)
                         obj.IdPrograma = int.Parse(prog.RePytCod.ToString());
                 }
@@ -3802,7 +3784,7 @@ namespace App.Core.UseCases
 
             try
             {
-                var comision = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault();
+                var comision = _repository.GetFirst<Comisiones>(c => c.ComisionesId == obj.ComisionesId);
                 //reglas de negocio
                 /*validacion de fechas*/
                 if (obj.FechaInicio == null)
@@ -3972,7 +3954,7 @@ namespace App.Core.UseCases
                     response.Errors.Add("La fecha de inicio no puede ser superior o igual a la de término");
                 }
 
-                var comision = _repository.Get<Comisiones>(c => c.ComisionesId == obj.ComisionesId).FirstOrDefault();
+                var comision = _repository.GetFirst<Comisiones>(c => c.ComisionesId == obj.ComisionesId);
                 if (comision.SolicitaViatico == false)
                 {
                     response.Warnings.Add("Este cometido tendrá un viático de $0");
@@ -4628,7 +4610,7 @@ namespace App.Core.UseCases
 
         //    return response;
         //}
-        
+
         //metodos migrados desde usecase core
 
         public ResponseMessage WorkflowUpdate(Workflow obj, string userLoged)
@@ -4641,7 +4623,7 @@ namespace App.Core.UseCases
             {
                 if (obj == null)
                     throw new Exception("Debe especificar un workflow.");
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == obj.WorkflowId) ?? null; //var workflowActual = _repository.Get<Workflow>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();                
+                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == obj.WorkflowId) ?? null;
                 if (workflowActual == null)
                     throw new Exception("No se encontró el workflow.");
                 var definicionworkflowlist = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == 13 /*workflowActual.Proceso.DefinicionProcesoId*/).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId) ?? null;
@@ -4673,7 +4655,7 @@ namespace App.Core.UseCases
                     {
                         //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
                         var Pasaje = new Pasaje();
-                        Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                        Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
                         if (Pasaje.TipoDestino == true)
                         {
                             if (workflowActual.Proceso.Documentos.Count < 1)
@@ -4702,7 +4684,7 @@ namespace App.Core.UseCases
                         {
                             //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
                             var Pasaje = new Pasaje();
-                            Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                            Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
                             if (Pasaje != null)
                             {
                                 var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId).LastOrDefault();
@@ -4754,7 +4736,7 @@ namespace App.Core.UseCases
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
-                        }                            
+                        }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
                     {
@@ -4763,7 +4745,7 @@ namespace App.Core.UseCases
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
-                        }                            
+                        }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
                     {
@@ -4778,7 +4760,7 @@ namespace App.Core.UseCases
                                         throw new Exception("Los documento cargados desde contabilidad y tesorería, deben estar firmado electronicamente por el encargado de finanzas");
                                 }
                             }
-                        }                         
+                        }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
                     {
@@ -4787,7 +4769,7 @@ namespace App.Core.UseCases
                             //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
                             bool cotiza = false;
                             var Pasaje = new Pasaje();
-                            Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                            Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
                             if (Pasaje != null)
                             {
                                 var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
@@ -4804,13 +4786,13 @@ namespace App.Core.UseCases
                                 }
                             }
 
-                            if(cotiza == false)
+                            if (cotiza == false)
                                 throw new Exception("Se debe seleccionar una cotizacion para los pasajes solicitados.");
                         }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
                     {
-                        var com = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                        var com = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
                         if (!com.Destinos.Any())
                             throw new Exception("Se deben ingresar destinos al cometido.");
 
@@ -4859,16 +4841,16 @@ namespace App.Core.UseCases
                 {
                     //Se toma valor de cometidos para definir curso de accion del flujo
                     var Cometido = new Cometido();
-                    Cometido = _repository.Get<Cometido>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                    Cometido = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
                     //Cometido = _repository.Get<Cometido>(q => q.ProcesoId == obj.ProcesoId).FirstOrDefault();
                     //if (Cometido.SolicitaViatico == true)
                     //    throw new Exception("Solicitud tiene viatico.");
-                    
+
                     /*Si el cometido es nulo pq viene d una tarea de pasaje, se busca por el proceso asociado entre el coemtido y el pasaje*/
                     if (Cometido == null)
                     {
-                        var Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
-                        Cometido = _repository.Get<Cometido>(q => q.ProcesoId == Pasaje.ProcesoId).FirstOrDefault();
+                        var Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
+                        Cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == Pasaje.ProcesoId);
                     }
 
                     //DETERRMINAR SIGUIENTE TAREA DESDE EL DISEÑO DE PROCESO
@@ -5047,7 +5029,7 @@ namespace App.Core.UseCases
                 else if (workflowActual.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
                 {
                     var Pasaje = new Pasaje();
-                    Pasaje = _repository.Get<Pasaje>(q => q.WorkflowId == obj.WorkflowId).FirstOrDefault();
+                    Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
 
                     //deterrminar siguiente tarea desde el diseño de proceso
                     if (!workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
@@ -5134,7 +5116,7 @@ namespace App.Core.UseCases
 
                     #region ENVIO DE NOTIFICACION TERMINO PROCESO
                     /*si no existen mas tareas se envia correo de notificacion*/
-                    var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId).FirstOrDefault();
+                    var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == workflowActual.ProcesoId);
                     /*se trae documento para adjuntar*/
                     Documento doc = cometido.Proceso.Documentos.Where(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
                     var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
@@ -5233,7 +5215,7 @@ namespace App.Core.UseCases
                     workflow.ProcesoId = workflowActual.ProcesoId;
                     workflow.Mensaje = obj.Observacion;
                     workflow.TareaPersonal = false;
-                    workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<Cometido>(c =>c.ProcesoId == workflow.ProcesoId).FirstOrDefault().CometidoId;
+                    workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault().CometidoId;
 
                     ///*Si el proceso corresponde a Cometidos y esta en la tarea de pago tesoreria se notifica con correo a quien viaja*/
                     //if (workflow.DefinicionWorkflow.Entidad.Codigo == (int)App.Util.Enum.Entidad.Cometido.ToString())
@@ -5545,7 +5527,7 @@ namespace App.Core.UseCases
                     {
 
                         string jefe = string.Empty;
-                        var cometido = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault();
+                        var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == workflow.ProcesoId);
                         var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email.Trim();
                         var QuienViaja = _sigper.GetUserByRut(cometido.Rut).Funcionario.Rh_Mail.Trim();
                         if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
@@ -5590,7 +5572,7 @@ namespace App.Core.UseCases
                                     {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
                                     }
-                                    
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEnvioSolicitudAnalistaAbastecimiento),
                                     "Tiene una solicitud de cotización de pasajes para el cometido N°: " + cometido.CometidoId.ToString(),
@@ -5656,7 +5638,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-                                if(workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
                                     /*Rechazo a solicitante*/
                                     emailMsg = new List<string>();
@@ -5735,13 +5717,13 @@ namespace App.Core.UseCases
                                     {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Jefatura Abastecimiento
                                     }
-                                    
+
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaAprobacionPasaje_JefaturaAbastecimiento),
                                     "Tiene una compra de pasajes pendiente para el cometido N°" + cometido.CometidoId.ToString(),
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");                                    
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
@@ -5763,14 +5745,14 @@ namespace App.Core.UseCases
                                     {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 3 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Abastecimiento
                                     }
-                                    
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaRechazoPasaje_AnalistaAbastecimiento),
                                     "Tiene una cotización de pasajes rechazada para el cometido N° " + cometido.CometidoId.ToString(),
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-                                
+
                                 break;
                             case 5:/*Analista de Abastecimiento compra pasajes y adjunta documentación*/
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
@@ -5861,7 +5843,7 @@ namespace App.Core.UseCases
                                     {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista ppto
                                     }
-                                    
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
                                     "Tiene el cometido N°: " + cometido.CometidoId.ToString() + " " + "pendiente de compromiso",
@@ -5942,7 +5924,7 @@ namespace App.Core.UseCases
                                     {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista PPto
                                     }
-                                    
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoPPto_AnalistaPpto),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
@@ -5955,7 +5937,7 @@ namespace App.Core.UseCases
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
                                 {
                                     /*se trae documento para adjuntar*/
-                                    Documento doc = cometido.Proceso.Documentos.Where(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1).FirstOrDefault();
+                                    Documento doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
 
                                     /*Aprueba y notifica a Oficina de Partes*/
                                     emailMsg = new List<string>();
@@ -5970,7 +5952,7 @@ namespace App.Core.UseCases
                                     "Se ha tramitado un cometido nacional",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,
-                                    doc,cometido.Folio,cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
+                                    doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
 
                                     /*Aprueba y notifica a solicitante y quien viaja*/
                                     emailMsg = new List<string>();
@@ -5981,7 +5963,7 @@ namespace App.Core.UseCases
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_Solicitante_QuienViaja),
                                     "Se ha tramitado el cometido nacional solicitado",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
+                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
 
                                     /*Aprueba y notifica a analista de contabilidad para devengo*/
                                     emailMsg = new List<string>();
@@ -5998,15 +5980,15 @@ namespace App.Core.UseCases
                                         }
                                     }
                                     else
-                                    {                                        
+                                    {
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 16 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Contabilidad
-                                    }                                    
+                                    }
 
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_AnalistaConta),
                                     "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "para devengo",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,doc,"","","");
+                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -6018,7 +6000,7 @@ namespace App.Core.UseCases
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_JefePpto),
                                     "Su solicitud de cometido N°:" + cometido.CometidoId.ToString() + " " + "ha sido devuelta",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor,null, "", "", "");
+                                _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                     /*Rechaza y notifica a Analista de Gestión y Desarrollo de Personas (si cometido no irroga gasto)*/
                                     emailMsg = new List<string>();
@@ -6043,7 +6025,7 @@ namespace App.Core.UseCases
                                         var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email).ToList();
                                         if (emails.Any())
                                         {
-                                            foreach(var c in emails)
+                                            foreach (var c in emails)
                                             {
                                                 emailMsg.Add(c.Trim());
                                             }
@@ -6101,9 +6083,9 @@ namespace App.Core.UseCases
                                     }
                                 }
                                 else
-                                {                                    
+                                {
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 18 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Tesoreria
-                                }                                
+                                }
 
                                 _email.NotificacionesCometido(workflow,
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoConta_AnalistaTesoreria),
@@ -6123,7 +6105,7 @@ namespace App.Core.UseCases
                                 emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
-                                if(cometido.ObservacionesPagoSigfeTesoreria != null)
+                                if (cometido.ObservacionesPagoSigfeTesoreria != null)
                                 {
                                     /*Aprueba pago con observaciones o sin pago y notifica a Analista de Unidad de Desarrollo y Gestión de Personas */
                                     emailMsg = new List<string>();
@@ -6167,7 +6149,7 @@ namespace App.Core.UseCases
                                     /*Aprueba pago con observaciones o sin pago y envía a Encargado(a) de Unidad de Finanzas*/
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 20 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Finanzas
-                                                                   
+
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoTesoreria_EncargadoFinanzas2),
                                     "Tiene el cometido N°" + cometido.CometidoId.ToString() + " " + "CON OBSERVACIONES para aprobación",

@@ -7,6 +7,8 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
+
     public class SubsecretariaController : Controller
     {
         protected readonly IGestionProcesos _repository;

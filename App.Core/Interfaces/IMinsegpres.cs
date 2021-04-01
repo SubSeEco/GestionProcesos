@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-
-namespace App.Core.Interfaces
+﻿namespace App.Core.Interfaces
 {
     public interface IMinsegpres
     {

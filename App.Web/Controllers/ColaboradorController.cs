@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
-using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.Core;
 using App.Model.DTO;
 //using App.Model.Shared;
 using App.Core.Interfaces;
-using App.Model.Shared;
-using App.Util;
-using Newtonsoft.Json;
 using App.Core.UseCases;
-using App.Model.Comisiones;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using Rotativa;
 using App.Model.HorasExtras;
 using App.Model.Cometido;
 
@@ -27,6 +13,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ColaboradorController : Controller
     {
         protected readonly IGestionProcesos _repository;
@@ -35,7 +22,7 @@ namespace App.Web.Controllers
         protected readonly IFolio _folio;
         protected readonly IHSM _hsm;
         protected readonly IEmail _email;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
         public ColaboradorController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
         {
             _repository = repository;
@@ -58,7 +45,6 @@ namespace App.Web.Controllers
             DTOImputacion Imputacion = new DTOImputacion();
 
             var ProgId = per.Contrato.Re_ConPyt != 0 ? per.Contrato.Re_ConPyt : 1;
-            //var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
             int Iditem;
             int Idasignacion = 0;
             int Idsubtitulo = ProgId == 5 || ProgId == 7 || ProgId == 11 || ProgId == 12 || ProgId == 16 || ProgId == 17 || ProgId == 18 || ProgId == 19 || ProgId == 20 ? 3 : 1;

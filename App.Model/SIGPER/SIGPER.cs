@@ -2,6 +2,15 @@
 {
     public class SIGPER
     {
+        public SIGPER()
+        {
+            Funcionario = new PEDATPER();
+            Unidad = new PLUNILAB();
+            Jefatura = new PEDATPER();
+            Secretaria = new PEDATPER();
+            DatosLaborales = new PeDatLab();
+            Contrato = new ReContra();
+        }
         public PEDATPER Funcionario { get; set; }
         public PLUNILAB Unidad { get; set; }
         public PEDATPER Jefatura { get; set; }

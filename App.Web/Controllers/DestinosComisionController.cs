@@ -10,11 +10,14 @@ using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
+    [Audit]
+    [Authorize]
+    [NoDirectAccess]
     public class DestinosComisionController : Controller
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<DestinosComision> ListDestino { get; set; }
         public class DtoMontos
         {

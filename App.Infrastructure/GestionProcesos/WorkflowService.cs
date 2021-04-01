@@ -8,7 +8,7 @@ namespace App.Infrastructure.GestionProcesos
 {
     public class WorkflowService : IWorkflowService
     {
-        public List<WorkflowDTO> GetPendingTask(App.Model.SIGPER.SIGPER user)
+        public List<WorkflowDTO> GetPendingTask(Model.SIGPER.SIGPER user)
         {
             var result = new List<WorkflowDTO>();
 

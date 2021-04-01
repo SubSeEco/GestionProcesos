@@ -8,6 +8,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class DefinicionProcesoController : Controller
     {
         protected readonly IGestionProcesos _repository;

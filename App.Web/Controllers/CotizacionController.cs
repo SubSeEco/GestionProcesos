@@ -17,12 +17,13 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CotizacionController : Controller
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
         public CotizacionController(IGestionProcesos repository, ISIGPER sigper, IFile file)
         {

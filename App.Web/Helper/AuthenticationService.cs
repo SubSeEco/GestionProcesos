@@ -33,12 +33,12 @@ namespace App.Web
             this.authenticationManager = authenticationManager;
         }
 
-        public static IEnumerable<App.Model.DTO.DTODomainUser> GetDomainUser()
+        public static IEnumerable<Model.DTO.DTODomainUser> GetDomainUser()
         {
             var principalContext = new PrincipalContext(ContextType.Domain, LDAPServer, LDAPContainer, LDAPUsername, LDAPPassword);
             var searcher = new PrincipalSearcher(new UserPrincipal(principalContext));
 
-            return searcher.FindAll().Select(q => new App.Model.DTO.DTODomainUser() { Email = ((UserPrincipal)q).EmailAddress, User = q.Name });
+            return searcher.FindAll().Select(q => new Model.DTO.DTODomainUser() { Email = ((UserPrincipal)q).EmailAddress, User = q.Name });
         }
 
         public AuthenticationResult SignIn(String username, String password)

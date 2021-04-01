@@ -12,12 +12,13 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ComisionController : Controller
     {
         protected readonly IGestionProcesos _repository;
         protected readonly ISIGPER _sigper;
         protected readonly IFile _file;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<DestinosComision> ListDestino = new List<DestinosComision>();
 
 

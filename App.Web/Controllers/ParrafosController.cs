@@ -8,6 +8,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class ParrafosController : Controller
     {
         protected readonly IGestionProcesos _repository;

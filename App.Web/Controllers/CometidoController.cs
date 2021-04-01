@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using App.Model.Cometido;
 using App.Model.Pasajes;
 using App.Model.Core;
@@ -18,16 +16,9 @@ using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.Linq;
-using jdk.nashorn.@internal.objects.annotations;
-using com.mp4parser.streaming.extensions;
-using System.ServiceModel.Security;
-using System.Net.Configuration;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -36,6 +27,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class CometidoController : Controller
     {
         public class DTOFilterWorkflow
@@ -48,11 +40,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "DefinicionWorkflowId")]
             public int DefinicionWorkflowId { get; set; }            
@@ -74,11 +66,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "ID Cometido")]
             public int ID { get; set; }
@@ -88,15 +80,15 @@ namespace App.Web.Controllers
 
             [Display(Name = "Fecha Inicio")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaInicio { get; set; }
+            public DateTime? FechaInicio { get; set; }
 
             [Display(Name = "Fecha Término")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaTermino { get; set; }
+            public DateTime? FechaTermino { get; set; }
 
             [Display(Name = "Fecha de solicitud")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaSolicitud { get; set; }
+            public DateTime? FechaSolicitud { get; set; }
 
             [Display(Name = "Funcionario")]
             public int? NombreId { get; set; }
@@ -167,7 +159,7 @@ namespace App.Web.Controllers
         protected readonly IFile _file;
         protected readonly IHSM _hsm;
         protected readonly IFolio _folio;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<Destinos> ListDestino = new List<Destinos>();
 
         public CometidoController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm, IFile file, IFolio folio)

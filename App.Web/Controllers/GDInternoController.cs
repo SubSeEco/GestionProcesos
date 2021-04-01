@@ -15,6 +15,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
+    [NoDirectAccess]
     public class GDInternoController : Controller
     {
         public class DTOFileUploadFEA

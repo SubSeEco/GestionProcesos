@@ -55,6 +55,12 @@ namespace App.Model.FirmaDocumentoGenerico
         [Display(Name = "Tipo Firma")]
         public string TiposFirmas { get; set; }
 
+        [Display(Name = "Permiso Especial")]
+        public bool permisoEspecial { get; set; } = false;        
+        
+        [Display(Name = "Acceso Premium")]
+        public string AccesoPremium { get; set; } 
+
         //[Required(ErrorMessage = "Es necesario especificar una región")]
         //[RequiredIf("Region", null, ErrorMessage = "Es necesario especificar una región")]
         [Display(Name = "Tipo Documento")]
