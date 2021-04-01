@@ -307,12 +307,7 @@ namespace App.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 15).FirstOrDefault();
-
             if (ModelState.IsValid)
             {
                 model.FechaCreacion = DateTime.Now;
@@ -641,7 +636,7 @@ namespace App.Web.Controllers
             //int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            //var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
 
             /*Se genera certificado de viatico*/
             Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -730,7 +725,7 @@ namespace App.Web.Controllers
             //int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
 
             /*Se genera certificado de viatico*/
             Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };

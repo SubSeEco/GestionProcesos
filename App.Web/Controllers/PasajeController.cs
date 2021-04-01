@@ -254,11 +254,9 @@ namespace App.Web.Controllers
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
             ViewBag.IdCiudadOrigen = new SelectList(_repository.Get<Ciudad>(), "CiudadId", "CiudadNombre");
-            //ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-
-
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-            var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
+            
+            var pasaje = _repository.GetFirst<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value);
             ViewBag.Pasaje = pasaje;
 
             return View(model);
@@ -268,7 +266,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditAbast(Pasaje model)
         {
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
             
             if (ModelState.IsValid)
             {
@@ -303,13 +301,13 @@ namespace App.Web.Controllers
         public ActionResult EditSeleccion(int id)
         {
             var model = _repository.GetById<Pasaje>(id);
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-            var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
+            var pasaje = _repository.GetFirst<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value);
             ViewBag.Pasaje = pasaje;
 
             if (model.Workflow.DefinicionWorkflow.Secuencia == 5)
             {
-                var cotizacion = _repository.GetAll<Cotizacion>().Where(c => c.PasajeId == model.PasajeId).ToList();
+                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == model.PasajeId).ToList();
                 if (cotizacion.Count > 1)
                 {
                     var max = cotizacion.Max(c => c.ValorPasaje);
@@ -330,9 +328,9 @@ namespace App.Web.Controllers
         [ValidateInput(false)]
         public ActionResult EditSeleccion(List<CotizacionDocumento> CotizacionDocumento, int PasajeId)
         {
-            var model = _repository.Get<Pasaje>(c => c.PasajeId == PasajeId).FirstOrDefault();
+            var model = _repository.GetFirst<Pasaje>(c => c.PasajeId == PasajeId);
             var Cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == PasajeId).ToList();
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
 
             if (ModelState.IsValid)
             {

@@ -479,7 +479,7 @@ namespace App.Core.UseCases
                         /*si no existen mas tareas se envia correo de notificacion*/
                         var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId);
                         /*se trae documento para adjuntar*/
-                        Documento doc = hrs.Proceso.Documentos.Where(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
+                        Documento doc = hrs.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9);
                         //var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         //var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
                         //List<string> emailMsg;

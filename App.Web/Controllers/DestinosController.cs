@@ -78,7 +78,7 @@ namespace App.Web.Controllers
             double porcentaje50 = 0.5;
             var cometido = _repository.GetById<Cometido>(CometidoId);
             var viatico = _repository.GetFirst<Viatico>(v => v.Año == DateTime.Now.Year);
-            var viaticoHonorario = _repository.GetAll<ViaticoHonorario>().Where(v => v.Año == DateTime.Now.Year);
+            var viaticoHonorario = _repository.Get<ViaticoHonorario>(v => v.Año == DateTime.Now.Year);
             var grado = cometido.GradoDescripcion;
             var CalidadJuridica = cometido.CalidadDescripcion; 
             //if (CalidadJuridica == "HONORARIOS") // "CONTRATA")
@@ -307,7 +307,7 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
 
                     /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var com = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+                    var com = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
                     var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
                     if (pro.Count() > 0)
                         return RedirectToAction("EditGP", "Cometido", new { model.WorkflowId, id = model.CometidoId });
@@ -329,7 +329,7 @@ namespace App.Web.Controllers
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(),model.IdComuna);
-            model.Cometido = _repository.Get<Cometido>(c => c.CometidoId == model.CometidoId).FirstOrDefault();
+            model.Cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
 
             model.Dias100Aprobados = 0;
             model.Dias60Aprobados = 0;
@@ -471,7 +471,7 @@ namespace App.Web.Controllers
                 TempData["Success"] = "Operación terminada correctamente.";
 
                 /*se redireccina a la vista que llamo al metodo de borrar*/
-                var com = _repository.Get<Cometido>(c => c.CometidoId == cometidoId).FirstOrDefault();
+                var com = _repository.GetFirst<Cometido>(c => c.CometidoId == cometidoId);
                 var pro = _repository.Get<Workflow>(p =>p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
                 if(pro.Count() > 0)
                     return RedirectToAction("EditGP", "Cometido", new { id = cometidoId });

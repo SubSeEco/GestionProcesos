@@ -113,7 +113,7 @@ namespace App.Web.Controllers
         {
             /*inicializacion de atributos*/
             var model = new Cotizacion();
-            var pasaje = _repository.Get<Pasaje>(p => p.PasajeId == id).FirstOrDefault();
+            var pasaje = _repository.GetFirst<Pasaje>(p => p.PasajeId == id);
             ViewBag.EmpresaAerolineaId = new List<SelectListItem>();
             ViewBag.EmpresaAerolineaId = new SelectList(_repository.Get<EmpresaAerolinea>(), "EmpresaAerolineaId", "NombreEmpresa");// (_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
 
@@ -265,7 +265,7 @@ namespace App.Web.Controllers
                 {                    
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se devuelve a la tarea que llamo el metodo*/
-                    var pas = _repository.Get<Pasaje>(c => c.PasajeId == model.PasajeId).FirstOrDefault();
+                    var pas = _repository.GetFirst<Pasaje>(c => c.PasajeId == model.PasajeId);
                     var pro = _repository.Get<Workflow>(p => p.ProcesoId == pas.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 5);
                     if(pro.Count() > 0)
                         return RedirectToAction("EditSeleccion", "Pasaje", new { model.WorkflowId, id = model.PasajeId });

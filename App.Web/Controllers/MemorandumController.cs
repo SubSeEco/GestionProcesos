@@ -1749,19 +1749,13 @@ namespace App.Web.Controllers
 
         public ActionResult GeneraDocumento(int id)
         {
-            //Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
-            //foreach (var key in Request.Cookies.AllKeys)
-            //{
-            //    cookieCollection.Add(key, Request.Cookies.Get(key).Value);
-            //}
-
             byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<Memorandum>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
@@ -1819,28 +1813,17 @@ namespace App.Web.Controllers
             }
             else
             {
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Memorandum" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
                 Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var memorandum = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 8).FirstOrDefault();
+                var memorandum = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 8);
                 if (memorandum != null)
-                {
                     IdDocto = memorandum.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
-                }
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
                 if (IdDocto == 0)
@@ -1891,7 +1874,7 @@ namespace App.Web.Controllers
             int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<Memorandum>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
@@ -2018,7 +2001,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Memorandum>(id);
 
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
@@ -2114,19 +2097,6 @@ namespace App.Web.Controllers
         public ActionResult Sign(int id)
         {
             var model = _repository.GetById<Memorandum>(id);
-
-            /*Validar si existe un documento asociado y si se encuentra firmado*/
-            //var doc = _repository.GetAll<Documento>().Where(c => c.ProcesoId == 2933); // model.ProcesoId && c.TipoDocumentoId == 8);
-            //var doc = _repository.GetById<Documento>(773); // model.ProcesoId && c.TipoDocumentoId == 8);
-            var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 8);
-            if (doc != null)
-            {
-                //if (doc.FirstOrDefault().Signed != true)
-                //    model.Proceso.Documentos = doc.ToList();
-                //else
-                //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";lista
-            }
-
             return View(model);
         }
 
@@ -2134,22 +2104,10 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Sign(Memorandum model)
         {
-            var firmante1 = _repository.GetAll<Memorandum>().Where(c => c.MemorandumId == model.MemorandumId).FirstOrDefault();
+            var firmante1 = _repository.GetFirst<Memorandum>(c => c.MemorandumId == model.MemorandumId);
 
             var listafirmantes = new List<string>();
             listafirmantes.Add(firmante1.EmailRem.ToString());
-            //listafirmantes.Add(!string.IsNullOrEmpty(firmante1.EmailSecre.ToString));
-            //listafirmantes.Add(firmante1.EmailDest);
-            //listafirmantes.Add(firmante1.EmailSecre);
-
-
-
-
-            //foreach (var item in listafirmantes)
-            //{
-            //    item.EmailRem = firmante1.EmailRem;
-
-            //}
 
             var email = UserExtended.Email(User);
 
@@ -2180,20 +2138,11 @@ namespace App.Web.Controllers
 
         public ActionResult DetailsGM(int id)
         {
-            //var model = _repository.GetById<Memorandum>(id);
-
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //if (model.GeneracionCDP.Count > 0)
-            //{
-            //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
-            //    model.GeneracionCDP.Add(cdp);
-            //}
-
-            //return View(model);
 
             Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
             foreach (var key in Request.Cookies.AllKeys)
@@ -2208,9 +2157,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<Memorandum>(id);
 
-            //model.FechaFirma = DateTime.Now;
-
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
             if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
@@ -2569,7 +2516,7 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoMemo.Workbook.Worksheets[1];
             foreach (var memorandum in result.ToList())
             {
-                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
+                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == memorandum.ProcesoId);
                 //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 //if (destino.Count > 0)
