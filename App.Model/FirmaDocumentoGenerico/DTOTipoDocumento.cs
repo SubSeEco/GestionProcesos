@@ -4,10 +4,6 @@ namespace App.Model.FirmaDocumentoGenerico
 {
     public class DTOTipoDocumento
     {
-        public DTOTipoDocumento()
-        {
-        }
-
         [Display(Name = "ID")]
         public int TipoDocumentoId { get; set; }
 

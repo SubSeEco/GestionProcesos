@@ -9,14 +9,9 @@ namespace App.Model.Pasajes
     [Table("Cotizacion")]
     public class Cotizacion :Core.BaseEntity
     {
-        public Cotizacion()
-        {
-            CotizacionDocumento = new List<CotizacionDocumento>();
-        }
-
         /*list de docto cotizaciones*/
         [Display(Name = "Lista Cotización Docto")]
-        public virtual IList<CotizacionDocumento> CotizacionDocumento { get; set; }
+        public virtual IList<CotizacionDocumento> CotizacionDocumento { get; set; } = new List<CotizacionDocumento>();
 
         /*Definicion de atributos*/
 
@@ -51,7 +46,7 @@ namespace App.Model.Pasajes
         public DateTime VencimientoCotizacion { get; set; }
 
         [Display(Name = "Seleccion Cotización")]
-        public bool Seleccion { get; set; } = false;
+        public bool Seleccion { get; set; } 
 
         /*Nuevos requerimientos 27102020*/
         [Display(Name = "ID Orden de Compra")]

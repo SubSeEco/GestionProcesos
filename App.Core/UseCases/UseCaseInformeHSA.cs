@@ -3,18 +3,17 @@ using App.Model.Core;
 using App.Core.Interfaces;
 using App.Model.InformeHSA;
 using App.Util;
-using App.Model.SIGPER;
 using System.Linq;
 
 namespace App.Core.UseCases
 {
     public class UseCaseInformeHSA
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IEmail _email;
 
-        public UseCaseInformeHSA(IGestionProcesos repositoryGestionProcesos, ISIGPER sigper, IEmail email)
+        public UseCaseInformeHSA(IGestionProcesos repositoryGestionProcesos, ISigper sigper, IEmail email)
         {
             _repository = repositoryGestionProcesos;
             _sigper = sigper;
@@ -101,8 +100,7 @@ namespace App.Core.UseCases
                 if (definicionWorkflow == null)
                     throw new ArgumentNullException("No se encontró la definición de tarea del proceso asociado al workflow.");
 
-                var persona = new SIGPER();
-                persona = _sigper.GetUserByEmail(obj.Email);
+                var persona = _sigper.GetUserByEmail(obj.Email);
 
                 var proceso = new Proceso();
                 proceso.DefinicionProcesoId = obj.DefinicionProcesoId;
@@ -112,12 +110,12 @@ namespace App.Core.UseCases
                 proceso.CalcularFechaVencimiento(_repository.Get<Festivo>().Select(q=>q.Fecha).ToList());
                 proceso.FechaTermino = null;
                 proceso.Email = obj.Email;
-                proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.EnProceso;
+                proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.EnProceso;
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
 
                 var workflow = new Workflow();
                 workflow.FechaCreacion = DateTime.Now;
-                workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
+                workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
                 workflow.Terminada = false;
                 workflow.Proceso = proceso;
                 workflow.DefinicionWorkflow = definicionWorkflow;
@@ -126,11 +124,11 @@ namespace App.Core.UseCases
 
                 switch (definicionWorkflow.TipoEjecucionId)
                 {
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+                    case (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
 
                         persona = _sigper.GetUserByEmail(proceso.Email);
                         if (persona.Funcionario == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -139,11 +137,11 @@ namespace App.Core.UseCases
 
                         break;
 
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+                    case (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
                         persona = _sigper.GetUserByEmail(proceso.Email);
                         if (persona.Funcionario == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -152,7 +150,7 @@ namespace App.Core.UseCases
 
                         break;
 
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+                    case (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
                         workflow.GrupoId = definicionWorkflow.GrupoId;
                         workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
@@ -162,11 +160,11 @@ namespace App.Core.UseCases
                         break;
 
 
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico:
+                    case (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico:
 
                         persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                         if (persona.Funcionario == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
 
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -185,8 +183,8 @@ namespace App.Core.UseCases
                 //notificar al dueño del proceso
                 if (workflow.DefinicionWorkflow.NotificarAlAutor)
                     _email.NotificarInicioProceso(proceso,
-                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_nuevo_proceso)),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_nuevo_proceso)),
+                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                 response.EntityId = proceso.ProcesoId;
             }

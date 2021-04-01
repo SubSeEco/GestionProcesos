@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using App.Model.Core;
 
 namespace App.Model.Cometido
 {
     [Table("CentroCosto")]
-    public class CentroCosto : Core.BaseEntity
+    public class CentroCosto : BaseEntity
     {
-        public CentroCosto()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "CentroCostoId")]
         public int CentroCostoId { get; set; }

@@ -6,7 +6,6 @@ using App.Core.Interfaces;
 using iTextSharp.text.pdf;
 using QRCoder;
 using TikaOnDotNet.TextExtraction;
-using Zen.Barcode;
 
 namespace App.Infrastructure.File
 {
@@ -35,7 +34,7 @@ namespace App.Infrastructure.File
             return data;
         }
 
-        public byte[] CreateQR(string text)
+        public byte[] CreateQr(string text)
         {
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
@@ -48,7 +47,7 @@ namespace App.Infrastructure.File
             }
         }
 
-        public static byte[] ImageToByte(Image img)
+        private static byte[] ImageToByte(Image img)
         {
             using (var stream = new MemoryStream())
             {
@@ -57,21 +56,21 @@ namespace App.Infrastructure.File
             }
         }
 
-        public byte[] CreateBarCode(string code)
-        {
-            byte[] imagebyte;
+        //public byte[] CreateBarCode(string code)
+        //{
+        //    byte[] imagebyte;
 
-            var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-            var image = barcode39.Draw(code, 35);
+        //    var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
+        //    var image = barcode39.Draw(code, 35);
 
-            using (var ms = new MemoryStream())
-            {
-                image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                imagebyte = ms.ToArray();
-            }
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+        //        imagebyte = ms.ToArray();
+        //    }
 
-            return imagebyte;
-        }
+        //    return imagebyte;
+        //}
 
         public byte[] EstamparCodigoEnDocumento(byte[] documento, string text)
         {

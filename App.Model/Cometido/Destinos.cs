@@ -1,17 +1,13 @@
-﻿using ExpressiveAnnotations.Attributes;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ExpressiveAnnotations.Attributes;
 
 namespace App.Model.Cometido
 {
     [Table("Destinos")]
     public class Destinos
     {
-        public Destinos()
-        { }
-
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "DestinosId")]

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class RePagHisDet
     {
-        public RePagHisDet()
-        { }
-
         [Key]
         [Display(Name = "RH_NumInte")]
         public int RH_NumInte { get; set; }

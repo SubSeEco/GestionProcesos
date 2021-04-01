@@ -10,7 +10,7 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class ConfiguracionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public ConfiguracionController(IGestionProcesos repository)
         {

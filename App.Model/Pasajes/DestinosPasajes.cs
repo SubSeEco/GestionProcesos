@@ -7,9 +7,6 @@ namespace App.Model.Pasajes
     [Table("DestinosPasajes")]
     public class DestinosPasajes
     {
-        public DestinosPasajes()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "Destinos Pasajes Id")]

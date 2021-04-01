@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace App.Model.Cometido
 {
@@ -8,54 +7,54 @@ namespace App.Model.Cometido
 	{
 		public DataPoint(double y, string label)
 		{
-			this.Y = y;
-			this.Label = label;
+			Y = y;
+			Label = label;
 		}
 
 		public DataPoint(double x, double y)
 		{
-			this.X = x;
-			this.Y = y;
+			X = x;
+			Y = y;
 		}
 
 
 		public DataPoint(double x, double y, string label)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Label = label;
+			X = x;
+			Y = y;
+			Label = label;
 		}
 
 		public DataPoint(double x, double y, double z)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+			X = x;
+			Y = y;
+			Z = z;
 		}
 
 		public DataPoint(double x, double y, double z, string label)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
-			this.Label = label;
+			X = x;
+			Y = y;
+			Z = z;
+			Label = label;
 		}
 
 
 		//Explicitly setting the name to be used while serializing to JSON. 
 		[DataMember(Name = "label")]
-		public string Label = null;
+		public string Label;
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "y")]
-		public double? Y = null;
+		public double? Y;
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "x")]
-		public double? X = null;
+		public double? X;
 
 		//Explicitly setting the name to be used while serializing to JSON.
 		[DataMember(Name = "z")]
-		public double? Z = null;
+		public double? Z;
 	}
 }

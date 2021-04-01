@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using App.Model.Core;
 
 namespace App.Model.Cometido
 {
     [Table("Mantenedor")]
-    public class Mantenedor: Core.BaseEntity
+    public class Mantenedor: BaseEntity
     {
-        public Mantenedor()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Mantenedor Id")]
         public int MantenedorId { get; set; }

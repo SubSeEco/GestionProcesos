@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreAccion")]
     public class Accion
     {
-        public Accion()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int AccionId { get; set; }

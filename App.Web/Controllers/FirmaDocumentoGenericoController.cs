@@ -7,9 +7,7 @@ using App.Model.FirmaDocumentoGenerico;
 using App.Core.Interfaces;
 using App.Core.UseCases;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 using System;
-using System.Web.Security;
 using App.Model.DTO;
 
 namespace App.Web.Controllers
@@ -19,64 +17,60 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class FirmaDocumentoGenericoController : Controller
     {
-        public class EmpModel
-        {
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "Select File")]
-            public HttpPostedFileBase files { get; set; }
-        }
+        //public class EmpModel
+        //{
+        //    [Required]
+        //    [DataType(DataType.Upload)]
+        //    [Display(Name = "Select File")]
+        //    public HttpPostedFileBase files { get; set; }
+        //}
 
-        public class DTOFileUploadCreate
-        {
-            public DTOFileUploadCreate()
-            {
-            }
+        //public class DTOFileUploadCreate
+        //{
+        //    public DTOFileUploadCreate()
+        //    {
+        //    }
 
-            public int FirmaDocumentoGenericoId { get; set; }
-            public int ProcesoId { get; set; }
-            public int WorkflowId { get; set; }
-            [Display(Name = "Comentario")]
-            public string Comentario { get; set; }
+        //    public int FirmaDocumentoGenericoId { get; set; }
+        //    public int ProcesoId { get; set; }
+        //    public int WorkflowId { get; set; }
+        //    [Display(Name = "Comentario")]
+        //    public string Comentario { get; set; }
 
-            public string Autor { get; set; }
+        //    public string Autor { get; set; }
 
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Tipo documento")]
-            public string TipoDocumentoCodigo { get; set; }
+        //    [Required(ErrorMessage = "Es necesario especificar este dato")]
+        //    [Display(Name = "Tipo documento")]
+        //    public string TipoDocumentoCodigo { get; set; }
 
-            [Display(Name = "Tipo documento")]
-            public string TipoDocumentoDescripcion { get; set; }
+        //    [Display(Name = "Tipo documento")]
+        //    public string TipoDocumentoDescripcion { get; set; }
 
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            public HttpPostedFileBase FileUpload { get; set; }
+        //    [Required(ErrorMessage = "Es necesario especificar este dato")]
+        //    [Display(Name = "Archivo")]
+        //    [DataType(DataType.Upload)]
+        //    public HttpPostedFileBase FileUpload { get; set; }
 
-            [Display(Name = "Documento a firmar")]
-            public byte[] File { get; set; }
+        //    [Display(Name = "Documento a firmar")]
+        //    public byte[] File { get; set; }
 
-            public string Firmante { get; set; }
+        //    public string Firmante { get; set; }
 
-            public bool TieneFirma { get; set; }
+        //    public bool TieneFirma { get; set; }
 
-            [Display(Name = "Fecha creación")]
-            public DateTime? FechaCreacion { get; set; }
+        //    [Display(Name = "Fecha creación")]
+        //    public DateTime? FechaCreacion { get; set; }
 
-            [Display(Name = "Folio")]
-            public string Folio { get; set; }
+        //    [Display(Name = "Folio")]
+        //    public string Folio { get; set; }
 
-            [Display(Name = "URL gestión documental")]
-            [DataType(DataType.Url)]
-            public string URL { get; set; }
-        }
+        //    [Display(Name = "URL gestión documental")]
+        //    [DataType(DataType.Url)]
+        //    public string URL { get; set; }
+        //}
 
         public class DTOFileUploadEdit
         {
-            public DTOFileUploadEdit()
-            {
-            }
-
             public int FirmaDocumentoGenericoId { get; set; }
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
@@ -116,22 +110,16 @@ namespace App.Web.Controllers
             public string URL { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        //protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
-        protected readonly IMinsegpres _minsegpres;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IMinsegpres _minsegpres;
 
-        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
+        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISigper sigper, IFile file, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
-            _folio = folio;
-            //_hsm = hsm;
-            _email = email;
             _minsegpres = minsegpres;
         }
 
@@ -165,15 +153,15 @@ namespace App.Web.Controllers
 
             var persona = _sigper.GetUserByEmail(User.Email());
             if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en Sigper");
             if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en Sigper");
             if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en Sigper");
 
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-            string subsecretaria = persona.SubSecretaria.Trim();
+            //string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
+            //string nombre = persona.Funcionario.PeDatPerChq.Trim();
+            //string subsecretaria = persona.SubSecretaria.Trim();
 
             if (ModelState.IsValid)
             {
@@ -226,7 +214,7 @@ namespace App.Web.Controllers
                     doc.ProcesoId = model.ProcesoId;
                     doc.WorkflowId = model.WorkflowId;
                     doc.Signed = false;
-                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoPrivacidadId = (int)Util.Enum.Privacidad.Privado;
                     doc.TipoDocumentoId = 15; /*Por default el tipo de documento es "Otros"*/
 
                     
@@ -268,7 +256,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -301,7 +289,7 @@ namespace App.Web.Controllers
         {
             byte[] imageByte = null;
             BinaryReader rdr = new BinaryReader(file.InputStream);
-            imageByte = rdr.ReadBytes((int)file.ContentLength);
+            imageByte = rdr.ReadBytes(file.ContentLength);
             return imageByte;
         }
 
@@ -356,7 +344,7 @@ namespace App.Web.Controllers
                     doc.ProcesoId = model.ProcesoId;
                     doc.WorkflowId = model.WorkflowId;
                     doc.Signed = false;
-                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoPrivacidadId = (int)Util.Enum.Privacidad.Privado;
                     doc.TipoDocumentoId = 15; /*Por default el tipo de documento es "Otros"*/
 
 
@@ -398,7 +386,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -422,7 +410,7 @@ namespace App.Web.Controllers
 
                 //model.Archivo = doc;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -450,11 +438,11 @@ namespace App.Web.Controllers
 
             //permiso = persona.a
 
-            var permiso = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()));
+            //var permiso = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(Util.Enum.Grupo.Cometido.ToString()));
 
-            var permisoEspecial = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
+            var permisoEspecial = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(Util.Enum.Grupo.Administrador.ToString()));
 
-            if (permisoEspecial == true)
+            if (permisoEspecial)
             {
                 permisoEspecial = model.permisoEspecial;
             }
@@ -466,7 +454,7 @@ namespace App.Web.Controllers
             //else
             //{
             //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
 
                 return View(model);
             //}
@@ -491,10 +479,10 @@ namespace App.Web.Controllers
             var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
             if (docugenerico != null)
-            {
-                if (docugenerico.DocumentoId == docugenerico.DocumentoId)
+            //{
+            //    if (docugenerico.DocumentoId == docugenerico.DocumentoId)
                     model.DocumentoId = docugenerico.DocumentoId;
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -506,7 +494,7 @@ namespace App.Web.Controllers
                 model.Nombre = nombre;
                 model.Archivo = docugenerico.File;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.Firma(archivos, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
 
@@ -534,7 +522,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
             //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
 
 
             return View(model);
@@ -559,10 +547,10 @@ namespace App.Web.Controllers
             var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
             if (docugenerico != null)
-            {
-                if (docugenerico.DocumentoId == docugenerico.DocumentoId)
+            //{
+            //    if (docugenerico.DocumentoId == docugenerico.DocumentoId)
                     model.DocumentoId = docugenerico.DocumentoId;
-            }
+            //}
 
             if (ModelState.IsValid)
             {
@@ -575,7 +563,7 @@ namespace App.Web.Controllers
                 model.Nombre = nombre;
                 model.Archivo = docugenerico.File;
 
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _minsegpres);
                 var _UseCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumentos, model.DocumentoId);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
 
@@ -639,13 +627,13 @@ namespace App.Web.Controllers
             //var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
 
             /*Se genera certificado de viatico*/
-            Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+            //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
             //pdf = resultPdf.BuildFile(ControllerContext);
             pdf = model.Archivo;
             //data = GetBynary(pdf);
             data = _file.BynaryToText(pdf);
             //tipoDoc = 15;
-            Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+            Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId + ".pdf";
             int idDoctoViatico = 0;
 
             ///*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -723,18 +711,18 @@ namespace App.Web.Controllers
             DTOFileMetadata data = new DTOFileMetadata();
             //int tipoDoc = 0;
             //int IdDocto = 0;
-            string Name = string.Empty;
+            //string Name = string.Empty;
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            //var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
 
             /*Se genera certificado de viatico*/
-            Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
+            //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Documento Genérico nro", new { id = model.FirmaDocumentoGenericoId }) { FileName = "Documento Genérico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
             //pdf = resultPdf.BuildFile(ControllerContext);
             pdf = model.Archivo;
             //data = GetBynary(pdf);
             data = _file.BynaryToText(pdf);
             //tipoDoc = 15;
-            Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+            //Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId + ".pdf";
             int idDoctoViatico = 0;
 
             ///*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/

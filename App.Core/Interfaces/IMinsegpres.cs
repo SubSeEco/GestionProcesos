@@ -2,8 +2,8 @@
 {
     public interface IMinsegpres
     {
-        byte[] SignConOtp(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento, int DocumentoId);
+        byte[] SignConOtp(byte[] documento, string otp, int id, string run, string nombre, bool tipoDocumento, int documentoId);
         
-        byte[] SignSinOtp(byte[] documento, string OTP, int id, string Run, string Nombre, string TipoDocumento, int DocumentoId);
+        byte[] SignSinOtp(byte[] documento, string otp, int id, string run, string nombre, string tipoDocumento, int documentoId);
     }
 }

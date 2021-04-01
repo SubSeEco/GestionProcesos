@@ -7,11 +7,6 @@ namespace App.Model.Core
     [Table("CoreGrupo")]
     public class Grupo 
     {
-        public Grupo()
-        {
-            Usuarios = new HashSet<Usuario>();
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int GrupoId { get; set; }
@@ -20,6 +15,6 @@ namespace App.Model.Core
         [Display(Name = "Grupo")]
         public string Nombre { get; set; }
 
-        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; } = new HashSet<Usuario>();
     }
 }

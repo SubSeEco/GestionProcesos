@@ -7,10 +7,6 @@ namespace App.Model.FirmaDocumento
     [Table("FirmaDocumento")]
     public class FirmaDocumento
     {
-        public FirmaDocumento()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int FirmaDocumentoId { get; set; }

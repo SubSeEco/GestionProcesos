@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using App.Model.Cometido;
 using App.Core.Interfaces;
 using App.Core.UseCases;
@@ -11,10 +10,10 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class GeneracionCDPController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
 
-        public GeneracionCDPController(IGestionProcesos repository,ISIGPER sigper)
+        public GeneracionCDPController(IGestionProcesos repository,ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -242,12 +241,12 @@ namespace App.Web.Controllers
 
                 //TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             return View(model);
         }
@@ -319,12 +318,12 @@ namespace App.Web.Controllers
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             model.Cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
             /*Viaticos*/

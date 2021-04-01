@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedSubsecretaria")]
     public class Subsecretaria
     {
-        public Subsecretaria()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int SubsecretariaId { get; set; }

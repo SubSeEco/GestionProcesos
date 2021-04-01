@@ -2,8 +2,8 @@
 
 namespace App.Core.Interfaces
 {
-    public interface IHSM
+    public interface IHsm
     {
-        byte[] Sign(byte[] documento, List<string> Firmante, int documentoId, string folio, string url, byte[] QR);
+        byte[] Sign(byte[] documento, List<string> firmante, int documentoId, string folio, string url, byte[] qr);
     }
 }

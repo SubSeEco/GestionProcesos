@@ -47,7 +47,7 @@ namespace App.Web.Controllers
             public DateTime? Hasta { get; set; }
 
             [Display(Name = "DefinicionWorkflowId")]
-            public int DefinicionWorkflowId { get; set; }            
+            public int DefinicionWorkflowId { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Workflow> Result { get; set; }
@@ -121,25 +121,25 @@ namespace App.Web.Controllers
             public IEnumerable<Cometido> Result { get; set; }
         }
 
-        public class Chart
-        {
-            public Chart()
-            {
-                datasets = new List<Datasets>();
-            }
-            public string[] labels { get; set; }
-            public List<Datasets> datasets { get; set; }
-        }
+        //public class Chart
+        //{
+        //    public Chart()
+        //    {
+        //        datasets = new List<Datasets>();
+        //    }
+        //    public string[] labels { get; set; }
+        //    public List<Datasets> datasets { get; set; }
+        //}
 
-        public class Datasets
-        {
-            public string label { get; set; }   
-            public string[] backgroundColor { get; set; }
-            public string[] borderColor { get; set; }
-            public string borderWidth { get; set; }
-            public double[] data { get; set; }
-            public bool fill { get; set; }
-        }
+        //public class Datasets
+        //{
+        //    public string label { get; set; }
+        //    public string[] backgroundColor { get; set; }
+        //    public string[] borderColor { get; set; }
+        //    public string borderWidth { get; set; }
+        //    public double[] data { get; set; }
+        //    public bool fill { get; set; }
+        //}
 
         //public class DataColumn
         //{
@@ -152,17 +152,16 @@ namespace App.Web.Controllers
         //    //public string label { get; set; }
         //    //public int valor { get; set; }
         //}
-        
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IHSM _hsm;
-        protected readonly IFolio _folio;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IHsm _hsm;
+        private readonly IFolio _folio;
         private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public static List<Destinos> ListDestino = new List<Destinos>();
+        private static List<Destinos> ListDestino = new List<Destinos>();
 
-        public CometidoController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm, IFile file, IFolio folio)
+        public CometidoController(IGestionProcesos repository, ISigper sigper, IHsm hsm, IFile file, IFolio folio)
         {
             _repository = repository;
             _sigper = sigper;
@@ -212,23 +211,23 @@ namespace App.Web.Controllers
             var cargo = string.IsNullOrEmpty(per.Contrato.Re_ConCar.ToString().Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == per.Contrato.Re_ConCar).FirstOrDefault().Pl_DesCar.Trim();
             var IdCalidad = per.Contrato.RH_ContCod;
             var calidad = string.IsNullOrEmpty(per.Contrato.RH_ContCod.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == per.Contrato.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
-            var IdGrado = string.IsNullOrEmpty(per.Contrato.Re_ConGra.ToString().Trim()) ? "0" : per.Contrato.Re_ConGra.ToString().Trim();
-            var grado = string.IsNullOrEmpty(per.Contrato.Re_ConGra.ToString().Trim()) ? "Sin Grado" : per.Contrato.Re_ConGra.ToString().Trim();
+            var IdGrado = string.IsNullOrEmpty(per.Contrato.Re_ConGra.Trim()) ? "0" : per.Contrato.Re_ConGra.Trim();
+            var grado = string.IsNullOrEmpty(per.Contrato.Re_ConGra.Trim()) ? "Sin Grado" : per.Contrato.Re_ConGra.Trim();
             var estamento = per.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var IdEscalafon = int.Parse(per.Contrato.Re_ConEsc.Trim());
             var Escalafon = per.Contrato.Re_ConEsc == "0" ? "S/A" : _sigper.GetGESCALAFONEs().Where(c => c.Pl_CodEsc == per.Contrato.Re_ConEsc).FirstOrDefault().Pl_DesEsc.Trim();
             //var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).OrderByDescending(c => c.ReContraLabCor).FirstOrDefault().Re_ConPyt;// == 0 ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte && c.Re_ConIni.Year == DateTime.Now.Year).FirstOrDefault().Re_ConPyt;
-            var ProgId = per.Contrato.Re_ConPyt != 0 ? per.Contrato.Re_ConPyt : 1 ;
+            var ProgId = per.Contrato.Re_ConPyt != 0 ? per.Contrato.Re_ConPyt : 1;
             var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida";
-            var IdUnidad= per.Contrato.Re_ConUni.ToString().Trim();
+            var IdUnidad = per.Contrato.Re_ConUni.ToString().Trim();
             var Unidad = _sigper.GetUnidad(per.Contrato.Re_ConUni).Pl_UndDes.Trim();
 
 
 
             string rut;
-            if (per.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (per.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = per.Funcionario.RH_NumInte.ToString();
                 rut = string.Concat("0", t);
@@ -238,28 +237,26 @@ namespace App.Web.Controllers
                 rut = per.Funcionario.RH_NumInte.ToString();
             }
 
-            return Json(new { Rut = rut,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
-                IdCargo = IdCargo,
+            return Json(new
+            {
+                Rut = rut,
+                DV = per.Funcionario.RH_DvNuInt,
+                IdCargo,
                 Cargo = cargo,
-                IdCalidad = IdCalidad,
+                IdCalidad,
                 CalidadJuridica = calidad,
-                IdGrado = IdGrado,
+                IdGrado,
                 Grado = grado,
                 Estamento = estamento,
                 Programa = Programa.Trim(),
                 Conglomerado = conglomerado,
-                Unidad = Unidad,
-                IdUnidad = IdUnidad,
+                Unidad,
+                IdUnidad,
                 Jefatura = jefatura,
-                IdEscalafon = IdEscalafon,
-                Escalafon = Escalafon,
+                IdEscalafon,
+                Escalafon,
                 IdPrograma = ProgId
             }, JsonRequestBehavior.AllowGet);
-
-
-            //return Json("ok",JsonRequestBehavior.AllowGet);
-            //return Json(per.Funcionario, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()
@@ -275,18 +272,11 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
-            //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso");
-            //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
 
-
-            //var model = _repository.GetById<Cometido>(id);
-            //var model = _repository.GetFirst<Cometido>(q => q.CometidoId == id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
             if (model == null)
                 return RedirectToAction("Details", "Proceso", new { id });
@@ -321,11 +311,6 @@ namespace App.Web.Controllers
         public ActionResult DetailsDocto(int id)
         {
             var model = _repository.GetById<Cometido>(id);
-            //if (model.GeneracionCDP.Count > 0)
-            //{
-            //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
-            //    model.GeneracionCDP.Add(cdp);
-            //}
 
             return View(model);
         }
@@ -345,12 +330,6 @@ namespace App.Web.Controllers
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
-                var doc = _repository.GetFirst<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5);
-                var user = User.Email();
-                //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
-
-                //if (_UseCaseResponseMessage.Warnings.Count > 0)
-                //    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
 
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -363,15 +342,15 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             var modelo = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
-            
+
             return View(modelo);
             //return View(model);
         }
@@ -441,7 +420,7 @@ namespace App.Web.Controllers
                     //    TempData["Warning"] = "Documento se encuentra firmado electronicamente";
                 }
             }
-            
+
             return View(model);
         }
 
@@ -479,12 +458,12 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
             //return View(model);
             return Redirect(Request.UrlReferrer.ToString());
         }
@@ -496,7 +475,7 @@ namespace App.Web.Controllers
 
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
-            ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().Where(q => q.Activo == true).OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
+            ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().Where(q => q.Activo).OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(201110), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             //ViewBag.NombreId = new SelectList(_sigper.GetAllUsers().Where(c =>c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
@@ -516,18 +495,18 @@ namespace App.Web.Controllers
             };
 
             if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en Sigper");
             if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en Sigper");
             if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en Sigper");
             if (persona.Contrato == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información asociada a los datos laborales del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información asociada a los datos laborales del funcionario en Sigper");
 
             if (ModelState.IsValid)
             {
-                /*Datos personales*/                
-                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                /*Datos personales*/
+                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreId = persona.Funcionario.RH_NumInte;
                 model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
@@ -573,7 +552,7 @@ namespace App.Web.Controllers
                 model.FinanciaOrganismo = false;
                 model.Vehiculo = false;
                 model.SolicitaReembolso = true;
-                
+
 
                 model.Destinos = ListDestino;
             }
@@ -584,14 +563,14 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Cometido model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsersForCometido().Where(c => c.Rh_Mail.ToLower().Contains("economia")), "RH_NumInte", "PeDatPerChq");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
 
             model.FechaSolicitud = DateTime.Now;
             model.SolicitaReembolso = true;
             model.Destinos = ListDestino;
-            
+
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
@@ -618,16 +597,16 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(id);
 
-            List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
-            {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
-            };
+            //List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
+            //{
+            //new SelectListItem {Text = "Pago", Value = "1"},
+            //new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
+            //new SelectListItem {Text = "No Pago", Value = "3"},
+            //};
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPago");
             return View(model);
         }
 
@@ -675,12 +654,12 @@ namespace App.Web.Controllers
                         ModelState.AddModelError(string.Empty, item);
                     }
                 }
-                else
-                {
-                    var errors = ModelState.Select(x => x.Value.Errors)
-                        .Where(y => y.Count > 0)
-                        .ToList();
-                }
+                //else
+                //{
+                //    var errors = ModelState.Select(x => x.Value.Errors)
+                //        .Where(y => y.Count > 0)
+                //        .ToList();
+                //}
             }
             else
             {
@@ -690,17 +669,17 @@ namespace App.Web.Controllers
                 }
             }
 
-            List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
-            {
-            new SelectListItem {Text = "Pago", Value = "1"},
-            new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Pago", Value = "3"},
-            };
+            //List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
+            //{
+            //new SelectListItem {Text = "Pago", Value = "1"},
+            //new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
+            //new SelectListItem {Text = "No Pago", Value = "3"},
+            //};
 
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
+            ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPago");
             return View(model);
         }
 
@@ -708,16 +687,16 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(id);
 
-            List<SelectListItem> tipoPago = new List<SelectListItem>
-            {
-            new SelectListItem {Text = "Devengo", Value = "1"},
-            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Devengo", Value = "3"},
-            };
+            //List<SelectListItem> tipoPago = new List<SelectListItem>
+            //{
+            //new SelectListItem {Text = "Devengo", Value = "1"},
+            //new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            //new SelectListItem {Text = "No Devengo", Value = "3"},
+            //};
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");            
+            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -732,14 +711,14 @@ namespace App.Web.Controllers
                 var nombre = _sigper.GetUserByRut(model.IdFuncionarioPagador.Value).Funcionario.PeDatPerChq;
                 model.NombreFuncionarioPagador = nombre.Trim();
             }
-            
+
             if (!model.IdTipoPago.HasValue)
                 resp.Errors.Add("Debe ingresar tipo de pago.");
 
-            if(string.IsNullOrEmpty(model.IdSigfe))
+            if (string.IsNullOrEmpty(model.IdSigfe))
                 resp.Errors.Add("Debe ingresar Folio SIGFE.");
 
-            if(!model.FechaPagoSigfe.HasValue)
+            if (!model.FechaPagoSigfe.HasValue)
                 resp.Errors.Add("Debe ingresar fecha pago sigfe");
 
             if (resp.Errors.Count == 0)
@@ -765,12 +744,12 @@ namespace App.Web.Controllers
                         ModelState.AddModelError(string.Empty, item);
                     }
                 }
-                else
-                {
-                    var errors = ModelState.Select(x => x.Value.Errors)
-                        .Where(y => y.Count > 0)
-                        .ToList();
-                }
+                //else
+                //{
+                //    var errors = ModelState.Select(x => x.Value.Errors)
+                //        .Where(y => y.Count > 0)
+                //        .ToList();
+                //}
             }
             else
             {
@@ -780,17 +759,17 @@ namespace App.Web.Controllers
                 }
             }
 
-            List<SelectListItem> tipoPago = new List<SelectListItem>
-            {
-            new SelectListItem {Text = "Devengo", Value = "1"},
-            new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
-            new SelectListItem {Text = "No Devengo", Value = "3"},
-            };
+            //List<SelectListItem> tipoPago = new List<SelectListItem>
+            //{
+            //new SelectListItem {Text = "Devengo", Value = "1"},
+            //new SelectListItem {Text = "Devengo con Observaciones", Value = "2"},
+            //new SelectListItem {Text = "No Devengo", Value = "3"},
+            //};
 
             model = _repository.GetById<Cometido>(model.CometidoId);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
+            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -830,7 +809,7 @@ namespace App.Web.Controllers
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
                 var resp = new ResponseMessage();
                 var res = new ResponseMessage();
-                
+
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;
@@ -839,7 +818,7 @@ namespace App.Web.Controllers
                 {
                     /*Se ingresa informacion de pasajes*/
                     /*Se crean los pasajes, si se solicitan*/
-                    if (model.ReqPasajeAereo == true)
+                    if (model.ReqPasajeAereo)
                     {
                         if (DesPasajes != null && DesPasajes.IdRegion != null)
                         {
@@ -888,7 +867,7 @@ namespace App.Web.Controllers
                     }
 
                     /*se valiada se si ha creado los pasajes, cuando se solicitan*/
-                    if (model.ReqPasajeAereo == true)
+                    if (model.ReqPasajeAereo)
                     {
                         var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == model.ProcesoId).ToList();
                         if (pasaje.Count <= 0)
@@ -905,12 +884,12 @@ namespace App.Web.Controllers
                 }
 
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
             //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso", model.TipoReembolsoId);
@@ -1026,7 +1005,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<Cometido>(id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.CometidoId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1035,7 +1014,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.CometidoId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -1049,7 +1028,7 @@ namespace App.Web.Controllers
                     }
                 }
 
-                if(idDoctoViatico == 0)
+                if (idDoctoViatico == 0)
                 {
                     /*se guarda certificado de viatico*/
                     var email = UserExtended.Email(User);
@@ -1083,7 +1062,7 @@ namespace App.Web.Controllers
                     _repository.Save();
                 }
 
-                
+
 
                 /*Se genera certificado de pasaje si es que existe*/
                 //if (model.ReqPasajeAereo == true)
@@ -1142,15 +1121,15 @@ namespace App.Web.Controllers
             }
             else
             {
-                if(model.IdEscalafon == 1 && model.IdEscalafon != null) /*Autoridad de Gobierno*/
+                if (model.IdEscalafon == 1 && model.IdEscalafon != null) /*Autoridad de Gobierno*/
                 {
                     //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf"};
+                    Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf" };
                     pdf = resultPdf.BuildFile(ControllerContext);
                     //data = GetBynary(pdf);
                     data = _file.BynaryToText(pdf);
                     tipoDoc = 1;
-                    Name = "Resolucion Ministerial Exenta nro" + " " + model.CometidoId.ToString() + ".pdf";
+                    Name = "Resolucion Ministerial Exenta nro" + " " + model.CometidoId + ".pdf";
                 }
                 else
                 {
@@ -1159,13 +1138,13 @@ namespace App.Web.Controllers
                         //if (model.IdGrado != "0" && model.GradoDescripcion != "0")
                         //{
                         //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf"};
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf" };
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
 
                         tipoDoc = 1;
-                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                        Name = "Orden de Pago Cometido nro" + " " + model.CometidoId + ".pdf";
                         //}
                         //else
                         //{
@@ -1186,13 +1165,13 @@ namespace App.Web.Controllers
                     else
                     {
                         //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf"};
+                        Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf" };
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
 
                         tipoDoc = 1;
-                        Name = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                        Name = "Resolucion Cometido nro" + " " + model.CometidoId + ".pdf";
                     }
                 }
 
@@ -1251,7 +1230,7 @@ namespace App.Web.Controllers
 
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
-        
+
         //private DTOFileMetadata GetBynary(byte[] pdf)
         //{
         //    var data = new App.Model.DTO.DTOFileMetadata();
@@ -1271,7 +1250,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Cometido>(id);
 
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1296,25 +1275,25 @@ namespace App.Web.Controllers
                 switch (model.IdGrado)
                 {
                     case "B":/*Firma Subsecretario*/
-                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
+                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
+                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
+                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
+                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
                         break;
                     case "C": /*firma ministro*/
-                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
+                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
+                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
+                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
+                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
                         break;
                     default:
-                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true).ToList();
+                        model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
+                        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
+                        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
+                        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
+                        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo).ToList();
                         if (vit.Count > 0)
-                            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
+                            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
                         else
                             model.ViaticodeVuelta = string.Empty;
 
@@ -1410,7 +1389,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(Id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1426,7 +1405,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(Id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje))
             {
                 model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
                 model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
@@ -1453,20 +1432,20 @@ namespace App.Web.Controllers
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();
-            model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-            model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-            model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-            model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoOP).FirstOrDefault().ParrafoTexto;
-            
-            foreach(var p in parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.DejaseConstancia))
+            model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
+            model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
+            model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
+            model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistoOP).FirstOrDefault().ParrafoTexto;
+
+            foreach (var p in parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.DejaseConstancia))
             {
-                if (p.ParrafoActivo == true)
-                    model.DejaseConstancia = parrafos.Where(xp => xp.ParrafosId == (int)App.Util.Enum.Firmas.DejaseConstancia).FirstOrDefault().ParrafoTexto;
+                if (p.ParrafoActivo)
+                    model.DejaseConstancia = parrafos.Where(xp => xp.ParrafosId == (int)Util.Enum.Firmas.DejaseConstancia).FirstOrDefault().ParrafoTexto;
                 else
                     model.DejaseConstancia = string.Empty;
             }
 
-            
+
 
             //switch (model.IdGrado)
             //{
@@ -1584,25 +1563,25 @@ namespace App.Web.Controllers
             switch (model.IdGrado)
             {
                 case "B":/*Firma Subsecretario*/
-                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
+                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
+                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
+                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
+                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
                     break;
                 case "C": /*firma ministro*/
-                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
+                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
+                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
+                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
+                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
                     break;
                 default:
-                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                    var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true);
+                    model.Orden = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
+                    model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
+                    model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
+                    model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
+                    var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo);
                     if (vit != null)
-                        model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
+                        model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
                     else
                         model.ViaticodeVuelta = string.Empty;
                     break;
@@ -1739,7 +1718,6 @@ namespace App.Web.Controllers
 
             #endregion
 
-
             if (model.GradoDescripcion == "0")
             {
                 return View(model);
@@ -1747,8 +1725,8 @@ namespace App.Web.Controllers
             else
             {
                 return View(model);
-            }            
-    }
+            }
+        }
 
         public ActionResult Anular(int id)
         {
@@ -1894,8 +1872,8 @@ namespace App.Web.Controllers
             };
 
             /*Se busca rol de funcionario y unidad para mostrar el dropdwon de unidades en la busqueda del reporte*/
-            var GrupoId = _repository.Get<Usuario>(c => c.Email == persona.Funcionario.Rh_Mail.Trim() && c.Habilitado == true);
-            if (GrupoId.Count() > 0)
+            var GrupoId = _repository.Get<Usuario>(c => c.Email == persona.Funcionario.Rh_Mail.Trim() && c.Habilitado);
+            if (GrupoId.Any())
             {
                 foreach (var usr in GrupoId)
                 {
@@ -1944,14 +1922,14 @@ namespace App.Web.Controllers
                     //    predicate = predicate.And(q => q.Proceso.Terminada == true);
 
                     if (model.Estado == 1)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 2)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 3)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
                 }
 
-                    if (model.NombreId.HasValue)
+                if (model.NombreId.HasValue)
                     predicate = predicate.And(q => q.NombreId == model.NombreId);
 
                 if (model.IdUnidad.HasValue)
@@ -2014,11 +1992,11 @@ namespace App.Web.Controllers
                     fila++;
                     //worksheet.Cells[fila, 1].Value = cometido.Proceso.Terminada == false && cometido.Proceso.Anulada == false ? "En Curso" : cometido.Workflow.Terminada == true ? "Terminada" : "Anulada";
 
-                    if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
+                    if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso)
                         worksheet.Cells[fila, 1].Value = "En Curso";
-                    else if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
+                    else if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                         worksheet.Cells[fila, 1].Value = "Terminada";
-                    else if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
+                    else if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado)
                         worksheet.Cells[fila, 1].Value = "Anulada";
 
                     worksheet.Cells[fila, 2].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
@@ -2040,7 +2018,7 @@ namespace App.Web.Controllers
         public FileResult Caigg(DTOFilterCometido model)
         {
             var predicate = PredicateBuilder.True<Cometido>();
-         
+
             if (model.Desde.HasValue)
                 predicate = predicate.And(q =>
                     q.FechaSolicitud.Year >= model.Desde.Value.Year &&
@@ -2058,7 +2036,7 @@ namespace App.Web.Controllers
                 predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
 
             model.Result = _repository.Get(predicate);
-            
+
 
             var cometido = model.Result;// _repository.Get<Cometido>(c => c.FechaSolicitud >= model.Desde && c.FechaSolicitud <= model.Hasta);
             //var cometido = _repository.GetAll<Cometido>().Where(c => c.CometidoId == 364).ToList();
@@ -2073,9 +2051,9 @@ namespace App.Web.Controllers
             foreach (var com in cometido.OrderByDescending(r => r.CometidoId).ToList())
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == com.ProcesoId);
-                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();               
+                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();
 
-                if(pasaje.Count > 0)
+                if (pasaje.Count > 0)
                 {
                     /*se extraen los datos asociados al pasaje*/
                     for (var pas = 0; pas < pasaje.Count + 1; pas++)//foreach (var pas in pasaje)
@@ -2083,7 +2061,7 @@ namespace App.Web.Controllers
                         fila++;
 
                         /*se extraen los datos asociados a las cotizaciones*/
-                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
+                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected).ToList();
                         if (cotizacion.Count > 0)
                         {
                             worksheet.Cells[fila, 16].Value = cotizacion.Count() >= 2 ? "SI" : "NO";
@@ -2130,14 +2108,14 @@ namespace App.Web.Controllers
                         worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                         worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
                         worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
-                        worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
-                        worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
+                        worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo : "S/A"; /*Tipo Acto Administrativo*/
+                        worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio : "S/A"; /*Nro Acto Administrativo*/
                         worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
                         worksheet.Cells[fila, 7].Value = com.Nombre;
 
                         worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                         worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
-                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
+                        worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo ? "Nacional" : "N/A";
                         worksheet.Cells[fila, 13].Value = "N/A";
                         worksheet.Cells[fila, 14].Value = "N/A";
 
@@ -2156,22 +2134,22 @@ namespace App.Web.Controllers
                             worksheet.Cells[fila, 27].Value = "Pagado";
                     }
                 }
-                else 
+                else
                 {
                     fila++;
                     worksheet.Cells[fila, 1].Value = com.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                     worksheet.Cells[fila, 2].Value = workflow.FirstOrDefault().Proceso.DefinicionProceso.Nombre;
                     worksheet.Cells[fila, 3].Value = com.UnidadDescripcion.Contains("Sere") ? com.UnidadDescripcion : "Nivel Central";
-                    worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo.ToString() : "S/A"; /*Tipo Acto Administrativo*/
-                    worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio.ToString() : "S/A"; /*Nro Acto Administrativo*/
+                    worksheet.Cells[fila, 4].Value = com.TipoActoAdministrativo != null ? com.TipoActoAdministrativo : "S/A"; /*Tipo Acto Administrativo*/
+                    worksheet.Cells[fila, 5].Value = com.Folio != null ? com.Folio : "S/A"; /*Nro Acto Administrativo*/
                     worksheet.Cells[fila, 6].Value = com.CometidoId.ToString();
                     worksheet.Cells[fila, 7].Value = com.Nombre;
-                    
+
                     worksheet.Cells[fila, 8].Value = "S/A";
 
                     worksheet.Cells[fila, 9].Value = com.CargoDescripcion.Trim() == "Ministro" || com.CargoDescripcion.Trim() == "Subsecretario" ? com.CargoDescripcion.Trim() : "Otro";
                     worksheet.Cells[fila, 10].Value = com.CargoDescripcion;
-                    worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo == true ? "Nacional" : "N/A";
+                    worksheet.Cells[fila, 11].Value = com.ReqPasajeAereo ? "Nacional" : "N/A";
                     //worksheet.Cells[fila, 12].Value = "N/A"; /*clase de pasaje*/
                     worksheet.Cells[fila, 13].Value = "N/A";
                     worksheet.Cells[fila, 14].Value = "N/A";
@@ -2210,7 +2188,7 @@ namespace App.Web.Controllers
             var model = new DTOFilterCometido();
             //ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             //ViewBag.Ejecutor = new SelectList(_repository.GetAll<DefinicionWorkflow>().Where(c => c.DefinicionProcesoId == 13 && c.NombreUsuario != null).ToList(), "NombreUsuario", "NombreUsuario");
-            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x =>x.First()).ToList(), "Email", "Email");
+            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x => x.First()).ToList(), "Email", "Email");
             return View(model);
         }
 
@@ -2234,7 +2212,7 @@ namespace App.Web.Controllers
                     //var mail = _sigper.GetUserByRut(int.Parse(model.Ejecutor)).Funcionario.Rh_Mail.Trim();
                     predicate = predicate.And(q => q.Proceso.Workflows.Any(p => p.Email == mail));
                 }
-                    
+
 
                 if (model.FechaSolicitud.HasValue)
                     predicate = predicate.And(q =>
@@ -2279,7 +2257,7 @@ namespace App.Web.Controllers
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
-                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
+                //var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 fila++;
                 foreach (var w in workflow)
@@ -2306,7 +2284,7 @@ namespace App.Web.Controllers
                     //fila++;
                 }
             }
-            
+
 
             return File(excelPackageSeguimientoUnidades.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSeguimientoUnidades_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
@@ -2315,14 +2293,14 @@ namespace App.Web.Controllers
         {
             var model = new DTOFilterCometido();
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));            
+            ViewBag.IdUnidad = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes").Where(c => c.Text.Contains("ECONOMIA"));
             return View(model);
         }
 
         [HttpPost]
         public ActionResult SolicitudesTransparencia(DTOFilterCometido model)
         {
-            var predicate = PredicateBuilder.True<Cometido>();
+            //var predicate = PredicateBuilder.True<Cometido>();
 
 
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
@@ -2341,7 +2319,7 @@ namespace App.Web.Controllers
 
             var fila = 1;
             var worksheet = excelPackageAjusteAsistencia.Workbook.Worksheets[0];
-            foreach (var cometido in result.ToList().OrderByDescending(c =>c.CometidoId))
+            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
                 //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
                 var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
@@ -2349,7 +2327,7 @@ namespace App.Web.Controllers
                 if (destino.Count > 0)
                 {
                     fila++;
-                    worksheet.Cells[fila, 1].Value = cometido.Rut + "-" + cometido.DV.ToString();
+                    worksheet.Cells[fila, 1].Value = cometido.Rut + "-" + cometido.DV;
                     worksheet.Cells[fila, 2].Value = destino.Any() ? ((destino.LastOrDefault().FechaHasta.Day - destino.FirstOrDefault().FechaInicio.Day) + 1).ToString() : "S/A";
                     worksheet.Cells[fila, 3].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToShortDateString() : "S/A";
                     worksheet.Cells[fila, 4].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToShortDateString() : "S/A";
@@ -2376,28 +2354,28 @@ namespace App.Web.Controllers
             fila++;
             foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
             {
-                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
+                //var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
                 var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
 
                 if (destino.Count > 0)
                 {
                     fila++;
-                    worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía"; 
+                    worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                     worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
                     worksheet.Cells[fila, 3].Value = cometido.NombreCometido;
                     worksheet.Cells[fila, 4].Value = cometido.FechaSolicitud.ToShortDateString();
                     worksheet.Cells[fila, 5].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
                     //worksheet.Cells[fila, 6].Value = cometido.Proceso.Terminada == false && cometido.Proceso.Anulada == false ? "En Proceso" : cometido.Workflow.Terminada == true ? "Terminada" : "Anulada";
 
-                    if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
+                    if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso)
                         worksheet.Cells[fila, 6].Value = "En Curso";
-                    else if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
+                    else if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                         worksheet.Cells[fila, 6].Value = "Terminada";
-                    else if (cometido.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
+                    else if (cometido.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado)
                         worksheet.Cells[fila, 6].Value = "Anulada";
 
-                    worksheet.Cells[fila, 7].Value = cometido.Folio != null ? cometido.Folio.ToString() : "S/A";
-                    worksheet.Cells[fila, 8].Value = cometido.TipoActoAdministrativo != null ? cometido.TipoActoAdministrativo.ToString() : "S/A";
+                    worksheet.Cells[fila, 7].Value = cometido.Folio != null ? cometido.Folio : "S/A";
+                    worksheet.Cells[fila, 8].Value = cometido.TipoActoAdministrativo != null ? cometido.TipoActoAdministrativo : "S/A";
                     worksheet.Cells[fila, 9].Value = cometido.Nombre != null ? cometido.Nombre.Trim() : "S/A";
                     worksheet.Cells[fila, 10].Value = cometido.EstamentoDescripcion;
                     worksheet.Cells[fila, 11].Value = cometido.Rut + "-" + cometido.DV;
@@ -2419,7 +2397,7 @@ namespace App.Web.Controllers
                 }
             }
 
-            return File(excelPackageTransparencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSolicitudTransparencia_" +  DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+            return File(excelPackageTransparencia.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptSolicitudTransparencia_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
         }
 
         public FileResult ReportePresupuesto()
@@ -2444,12 +2422,12 @@ namespace App.Web.Controllers
                     fila++;
                     worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
                     worksheet.Cells[fila, 2].Value = cometido.CometidoId.ToString();
-                    worksheet.Cells[fila, 3].Value = cdp.VtcIdCompromiso != null ? cdp.VtcIdCompromiso.ToString() : "S/A" ;
+                    worksheet.Cells[fila, 3].Value = cdp.VtcIdCompromiso != null ? cdp.VtcIdCompromiso : "S/A";
                     worksheet.Cells[fila, 4].Value = cdp.VtcTipoSubTituloId.HasValue && cdp.VtcTipoItemId.HasValue ? cdp.TipoSubTitulo.TstNombre + "." + cdp.TipoItem.TitNombre : "S/A";
                     worksheet.Cells[fila, 5].Value = workflow != null && workflow.FechaTermino.HasValue ? workflow.FechaTermino.Value.ToShortDateString() : "S/A";
-                    worksheet.Cells[fila, 6].Value = cometido.Rut + "-" + cometido.DV.ToString();
+                    worksheet.Cells[fila, 6].Value = cometido.Rut + "-" + cometido.DV;
                     worksheet.Cells[fila, 7].Value = cometido.Nombre != null ? cometido.Nombre : "S/A";
-                    if(cometido.UnidadDescripcion.Trim() == "SECRETARÍA REGIONAL MINISTERIAL DE ARICA Y PARINACOTA")
+                    if (cometido.UnidadDescripcion.Trim() == "SECRETARÍA REGIONAL MINISTERIAL DE ARICA Y PARINACOTA")
                         worksheet.Cells[fila, 8].Value = "REGION DE ARICA Y PARINACOTA";
                     else if (cometido.UnidadDescripcion.Trim() == "SECRETARÍA REGIONAL MINISTERIAL DE TARAPACA")
                         worksheet.Cells[fila, 8].Value = "REGION DE TARAPACA";
@@ -2484,7 +2462,7 @@ namespace App.Web.Controllers
 
                     worksheet.Cells[fila, 9].Value = cometido.GradoDescripcion;
 
-                    if(destino.Count > 0)
+                    if (destino.Count > 0)
                     {
                         worksheet.Cells[fila, 10].Value = destino != null ? destino.FirstOrDefault().ComunaDescripcion : "S/A";
                         worksheet.Cells[fila, 11].Value = destino != null ? destino.FirstOrDefault().FechaInicio.ToString("MMMM") : "S/A";
@@ -2495,15 +2473,15 @@ namespace App.Web.Controllers
                         worksheet.Cells[fila, 16].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
                         worksheet.Cells[fila, 17].Value = destino != null ? destino.LastOrDefault().Dias50Aprobados.ToString() : "S/A";
                     }
-                    
+
                     worksheet.Cells[fila, 18].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                     worksheet.Cells[fila, 19].Value = cdp.VtcCompromisoAcumulado != null ? cdp.VtcCompromisoAcumulado : "S/A";
                     worksheet.Cells[fila, 20].Value = cdp.VtcSaldo != null ? cdp.VtcSaldo : "S/A";
                 }
             }
 
-            return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet,"rptPresupuesto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
-        }     
+            return File(excelPackagePresupuesto.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "rptPresupuesto_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
+        }
         public ActionResult ReporteContraloria()
         {
             var model = new DTOFilterCometido();
@@ -2531,31 +2509,31 @@ namespace App.Web.Controllers
 
                 predicate = predicate.And(q => q.Activo == true);/*Selecciona los cometidos q esten activos y que no hayan sido anulados*/
 
-                predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado); /*selecciona los cometidos que se encuentre terminados*/
+                predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado); /*selecciona los cometidos que se encuentre terminados*/
 
                 model.Result = _repository.Get(predicate);
             }
-            
+
             var xdoc = new XDocument(new XElement("LISTADOCUMENTOS", model.Result.Select(w => new XElement("DOCUMENTO",
                                                 new XElement("RUN", w.Rut),
                                                 new XElement("DIGITO_VERIFICADOR", w.DV),
                                                 new XElement("TIPO_DOCUMENTO", w.TipoActoAdministrativo != null ? w.TipoActoAdministrativo.Contains("Ministerial") ? "DECRETO EXENTO" : "RESOLUCION EXENTA" : " "),
                                                 new XElement("NUMERO_DOCUMENTO", w.CometidoId),
-                                                new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToString("dd/MM/yyyy").Replace("-","/")),//.ToShortDateString("dd/mm/yyyy")),
+                                                new XElement("FECHA_DOCUMENTO", w.FechaSolicitud.ToString("dd/MM/yyyy").Replace("-", "/")),//.ToShortDateString("dd/mm/yyyy")),
                                                 new XElement("SERVICIO_EMISOR", "119246"),
                                                 new XElement("DEPENDENCIA_EMISORA", "119247"),
                                                 new XElement("SERVICIO_DESTINO", "119247"),
                                                 new XElement("DEPENDENCIA_DESTINO", "119247"),
-                                                new XElement("REGION_DESTINO", w.Destinos.Count() > 0 ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
-                                                new XElement("COMUNA_DESTINO", w.Destinos.Count() > 0 ? RegionComunaContraloria.Where(r => r.COMUNA.Contains(w.Destinos.FirstOrDefault().ComunaDescripcion.Trim())).FirstOrDefault().CODIGOCOMUNA.ToString() : "S/A"),                                                
-                                                new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy").Replace("-","/") : "S/A"),
+                                                new XElement("REGION_DESTINO", w.Destinos.Any() ? RegionComunaContraloria.Where(r => r.REGIÓN.Contains(w.Destinos.FirstOrDefault().RegionDescripcion.Trim())).FirstOrDefault().CODIGOREGION.ToString() : "S/A"),
+                                                new XElement("COMUNA_DESTINO", w.Destinos.Any() ? RegionComunaContraloria.Where(r => r.COMUNA.Contains(w.Destinos.FirstOrDefault().ComunaDescripcion.Trim())).FirstOrDefault().CODIGOCOMUNA.ToString() : "S/A"),
+                                                new XElement("FECHA_DESDE", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaInicio.ToString("dd/MM/yyyy").Replace("-", "/") : "S/A"),
                                                 new XElement("FECHA_HASTA", w.Destinos.Count > 0 ? w.Destinos.FirstOrDefault().FechaHasta.ToString("dd/MM/yyyy").Replace("-", "/") : "S/A"),
                                                 new XElement("MOTIVO_COMETIDO_FUNCIONARIO", "Reunión fuera del servicio" /*w.NombreCometido != null ? w.NombreCometido.Trim() : "S/A"*/),
                                                 new XElement("TIENE_BENEFICIOS",
                                                                 new XElement("SELECCIONE_BENEFICIOS",
-                                                                new XElement("PASAJE", w.ReqPasajeAereo == true ? "SI" : "NO"),
-                                                                new XElement("VIATICO", w.SolicitaViatico == true ? "SI" : "NO"),
-                                                                new XElement("ALOJAMIENTO", w.Alojamiento == true ? "SI" : "NO"))
+                                                                new XElement("PASAJE", w.ReqPasajeAereo ? "SI" : "NO"),
+                                                                new XElement("VIATICO", w.SolicitaViatico ? "SI" : "NO"),
+                                                                new XElement("ALOJAMIENTO", w.Alojamiento ? "SI" : "NO"))
                                                                 ),
                                                 new XElement("MONTO", w.TotalViatico != null ? w.TotalViatico.Value.ToString() : "0")
                                                 ))));
@@ -2573,7 +2551,7 @@ namespace App.Web.Controllers
             settings.IndentChars = "\t";
 
             var stream = new MemoryStream();
-            var writer = XmlWriter.Create(stream,settings);
+            var writer = XmlWriter.Create(stream, settings);
             writer.WriteStartDocument(true);
             writer.WriteRaw(xmldoc.InnerXml);
             writer.Close();
@@ -2583,7 +2561,7 @@ namespace App.Web.Controllers
         }
 
         public FileResult SeguimientoFinanzas()
-      {
+        {
             var result = _repository.GetAll<Cometido>();
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoFinanzas.xlsx");
@@ -2606,7 +2584,7 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                 /*Datos desde destinos*/
                 if (destino.Count > 0)
-                {                    
+                {
                     worksheet.Cells[fila, 6].Value = destino != null ? destino.LastOrDefault().Dias40Aprobados.ToString() : "S/A";
                     worksheet.Cells[fila, 7].Value = destino != null ? destino.LastOrDefault().Dias60Aprobados.ToString() : "S/A";
                     worksheet.Cells[fila, 8].Value = destino != null ? destino.LastOrDefault().Dias100Aprobados.ToString() : "S/A";
@@ -2614,19 +2592,19 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 10].Value = destino != null ? destino.LastOrDefault().Dias00Aprobados.ToString() : "S/A";
                     //fila++;
                 }
-                
+
                 worksheet.Cells[fila, 12].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagador) ? cometido.NombreFuncionarioPagador : "S/A";
-                worksheet.Cells[fila, 13].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
+                worksheet.Cells[fila, 13].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe : "S/A";
                 worksheet.Cells[fila, 14].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToShortDateString() : "S/A";
-                
+
                 worksheet.Cells[fila, 16].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagadorTesoreria) ? cometido.NombreFuncionarioPagadorTesoreria : "S/A";
-                worksheet.Cells[fila, 17].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria.ToString() : "S/A";
+                worksheet.Cells[fila, 17].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria : "S/A";
                 worksheet.Cells[fila, 18].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToShortDateString() : "S/A";
 
                 /*se busca la fecha de creacion de las tareas*/
                 foreach (var w in workflow)
                 {
-                    if(w.DefinicionWorkflowId == 82)
+                    if (w.DefinicionWorkflowId == 82)
                         worksheet.Cells[fila, 11].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
 
                     if (w.DefinicionWorkflowId == 84)
@@ -2661,7 +2639,7 @@ namespace App.Web.Controllers
                 predicateWorkflow = predicateWorkflow.And(q => WorkflowId.Contains(q.WorkflowId));
 
             model.Result = _repository.Get(predicateWorkflow);
-            
+
 
             /*Se buscan los cometidos asociados a las tareas antes encontradas.*/
             //var predicate = PredicateBuilder.True<Cometido>();
@@ -2693,7 +2671,7 @@ namespace App.Web.Controllers
                 ListCom.AddRange(_cometido.ToList());
             }
             var result = ListCom;
-            
+
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\CDCFinanzas.xlsx");
             var fileInfo = new FileInfo(file);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -2713,11 +2691,11 @@ namespace App.Web.Controllers
                 worksheet.Cells[fila, 3].Value = cometido.FechaSolicitud.ToShortDateString();
                 worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico.ToString();// cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
                 worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
-                worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe.ToString() : "S/A";
+                worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe : "S/A";
                 worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToString() : "S/A";
 
                 //worksheet.Cells[fila, 16].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagadorTesoreria) ? cometido.NombreFuncionarioPagadorTesoreria : "S/A";
-                worksheet.Cells[fila, 10].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria.ToString() : "S/A";
+                worksheet.Cells[fila, 10].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria : "S/A";
                 worksheet.Cells[fila, 11].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToString() : "S/A";
 
                 /*se busca la fecha de creacion de las tareas*/
@@ -2730,13 +2708,13 @@ namespace App.Web.Controllers
                         {
                             worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1).ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
                             inicio = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1) : DateTime.Now;
-                        }                            
+                        }
                         else
                         {
                             worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
                             inicio = w.FechaCreacion != null ? w.FechaCreacion : DateTime.Now;
                         }
-                            
+
                     }
 
                     if (w.DefinicionWorkflowId == 84)
@@ -2754,7 +2732,7 @@ namespace App.Web.Controllers
                     int day = 0;
                     for (var i = inicio.Value; i <= fin.Value; i = i.AddDays(1))
                     {
-                        if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !feriados.Any(q => q.Date == i.Date))
+                        if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !Util.Enum.Feriados.Any(q => q.Date == i.Date))
                         {
                             day++;
                         }
@@ -2763,7 +2741,7 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 13].Value = day.ToString(); /*dias transcurridos - habiles*/
                 }
                 else
-                    worksheet.Cells[fila, 13].Value = "S/A"; /*dias transcurridos - habiles*/                
+                    worksheet.Cells[fila, 13].Value = "S/A"; /*dias transcurridos - habiles*/
             }
 
 
@@ -2787,18 +2765,19 @@ namespace App.Web.Controllers
         //    }
         //}
 
-        private List<DateTime> feriados = new List<DateTime>() {
-        new DateTime(2020,09,18),
-        new DateTime(2020,09,19),
-        new DateTime(2020,10,12),
-        new DateTime(2020,10,25),
-        new DateTime(2020,10,31),
-        new DateTime(2020,11,01),
-        new DateTime(2020,11,29),
-        new DateTime(2020,12,08),
-        new DateTime(2020,12,25),
-        new DateTime(2021,01,01),
-        };
+        //private List<DateTime> feriados = new List<DateTime>() {
+        //new DateTime(2020,09,18),
+        //new DateTime(2020,09,19),
+        //new DateTime(2020,10,12),
+        //new DateTime(2020,10,25),
+        //new DateTime(2020,10,31),
+        //new DateTime(2020,11,01),
+        //new DateTime(2020,11,29),
+        //new DateTime(2020,12,08),
+        //new DateTime(2020,12,25),
+        //new DateTime(2021,01,01),
+        //};
+
         public ActionResult Finalizados()
         {
             var predicate = PredicateBuilder.True<Cometido>();
@@ -2807,7 +2786,7 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 ////predicate = predicate.And(q => q.Proceso.Terminada == true && q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
-                predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+                predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
 
                 var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (CometidoId.Any())
@@ -2815,11 +2794,11 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
             }
-            
+
             return View(model);
         }
 
-        public FileResult FueraPlazo( DTOFilterCometido model)
+        public FileResult FueraPlazo(DTOFilterCometido model)
         {
             var predicate = PredicateBuilder.True<Cometido>();
 
@@ -2873,12 +2852,12 @@ namespace App.Web.Controllers
         }
 
         public ActionResult Report()
-        {            
+        {
             var user = User.Email();
-            var grupo = _repository.GetExists<Usuario>(c => c.Email == user && c.Habilitado == true)  ? _repository.Get<Usuario>(c => c.Email == user && c.Habilitado == true).FirstOrDefault().GrupoId.ToString() : string.Empty ;
+            var grupo = _repository.GetExists<Usuario>(c => c.Email == user && c.Habilitado) ? _repository.Get<Usuario>(c => c.Email == user && c.Habilitado).FirstOrDefault().GrupoId.ToString() : string.Empty;
             if (string.IsNullOrWhiteSpace(grupo))
                 grupo = "0";
-         
+
             ViewBag.User = User.Email();
             ViewBag.Grupo = grupo;
 
@@ -2917,21 +2896,21 @@ namespace App.Web.Controllers
             List<DataPoint> _lisDemora = new List<DataPoint>();
 
             /*CANTIDAD DE TAREAS ACTIVAS*/
-            var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
-            foreach(var t in tareas)
+            var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado).OrderBy(c => c.Secuencia).ToList();
+            foreach (var t in tareas)
             {
                 var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == false && c.Anulada == false && c.FechaCreacion.Year == DateTime.Now.Year).Count();
-                _lis.Add(new DataPoint(Convert.ToDouble(work),t.Nombre));
+                _lis.Add(new DataPoint(Convert.ToDouble(work), t.Nombre));
             }
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForDateTimeAxis(10), _jsonSetting);
             ViewBag.DataPoints = JsonConvert.SerializeObject(_lis, _jsonSetting);
 
-            /*CANTIDAD DE SOLICITUDES POR UNIDADES*/            
+            /*CANTIDAD DE SOLICITUDES POR UNIDADES*/
             var unidades = _sigper.GetUnidades();
-            foreach(var u in unidades)
+            foreach (var u in unidades)
             {
                 var sol = _repository.Get<Cometido>(c => c.Activo == true && c.IdUnidad.Value == u.Pl_UndCod && c.FechaSolicitud.Year == DateTime.Now.Year).Count();
-                _lisUnidades.Add(new DataPoint(Convert.ToDouble(sol),u.Pl_UndDes.Trim()));
+                _lisUnidades.Add(new DataPoint(Convert.ToDouble(sol), u.Pl_UndDes.Trim()));
             }
             ViewBag.DataUnidades = JsonConvert.SerializeObject(_lisUnidades, _jsonSetting);
 
@@ -2939,29 +2918,29 @@ namespace App.Web.Controllers
             List<string> mes = System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames.ToList();
             int m = 1;
             for (int i = 0; i < mes.Count() - 1; i++)
-            {                
+            {
                 var solicitud = _repository.Get<Cometido>(c => c.Activo == true && c.FechaSolicitud.Month == m && c.FechaSolicitud.Year == DateTime.Now.Year).Count();
                 _lisMeses.Add(new DataPoint(solicitud, mes[i]));
-                m = m +1;
+                m = m + 1;
             }
 
             ViewBag.DataMeses = JsonConvert.SerializeObject(_lisMeses, _jsonSetting);
 
 
             /*TIEMPO DE DEMORA DE EJECUCION TAREAS*/
-            var demora = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado == true).OrderBy(c => c.Secuencia).ToList();
+            var demora = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado).OrderBy(c => c.Secuencia).ToList();
             foreach (var t in demora)
             {
                 int dif = 0;
-                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == true && c.Anulada == false).Count();
-                var tar = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada == true && c.Anulada == false).ToList();
+                var work = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada && c.Anulada == false).Count();
+                var tar = _repository.Get<Workflow>(c => c.DefinicionWorkflowId == t.DefinicionWorkflowId && c.Terminada && c.Anulada == false).ToList();
                 foreach (var d in tar)
                 {
-                    if(d.FechaTermino != null)
-                    {                        
+                    if (d.FechaTermino != null)
+                    {
                         var res = (d.FechaTermino.Value.Date - d.FechaCreacion.Date);
                         dif += res.Days;
-                    }                
+                    }
                 }
                 if (work == 0)
                     work = 1;

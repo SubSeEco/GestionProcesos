@@ -17,7 +17,7 @@
     <div class="section"></div>
     <div class="section"></div>
     <div class="section"></div>
-    <center>
+    <div style="text-align: center;">
         <div class="container">
             <div class="z-depth-1 lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
                 <div class="align center">
@@ -28,7 +28,7 @@
                     </p>
                 </div>
 
-                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("Login", "Account", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -56,16 +56,16 @@
                             @Html.ValidationMessageFor(m => Model.Password, "", new { @class = "red-text" })
                         </div>
                     </div>
-                    <center>
+                    <div style="text-align: center;" >
                         <div class='row'>
                             <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect blue'>Login</button>
                         </div>
-                    </center>
+                    </div>
                 }
             </div>
 
         </div>
-    </center>
+    </div>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script type="text/javascript">

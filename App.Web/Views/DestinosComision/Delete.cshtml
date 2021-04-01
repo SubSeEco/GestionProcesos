@@ -184,7 +184,7 @@
                     }));
                 });
                 $('select').formSelect();
-            })
+            });
     });
 
     function CalculaViaticos() {
@@ -196,7 +196,7 @@
         $.getJSON("/Destinos/Viatico", { CometidoId: cometido, CantDias100: Dias100, CantDias60: Dias60, CantDias40: Dias40, CantDias50: Dias50 },
             function (Data) {
                 document.getElementById("Total").value = Data.DiasTotal;
-            })
+            });
     }
 </script>
 

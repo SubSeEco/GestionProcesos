@@ -1,28 +1,28 @@
-﻿using App.Model.SIGPER;
+﻿using App.Model.Sigper;
 using System.Collections.Generic;
 
 namespace App.Core.Interfaces
 {
-    public interface ISIGPER
+    public interface ISigper
     {
-        List<PECARGOS> GetCargos();
-        PECARGOS GetCargo(int codigo);
+        //List<PECARGOS> GetCargos();
+        //PECARGOS GetCargo(int codigo);
         PLUNILAB GetUnidad(int codigo);
-        SIGPER GetUserByEmail(string email);
-        SIGPER GetUserByRut(int rut);
+        Sigper GetUserByEmail(string email);
+        Sigper GetUserByRut(int rut);
         List<PEDATPER> GetUserByTerm(string term);
         List<PEDATPER> GetUserByUnidad(int codigo);
         List<PEDATPER> GetUserByUnidadWithoutHonorarios(int codigoUnidad);
-        List<PEDATPER> GetUserByUnidadForFirma(int Rut);
+        //List<PEDATPER> GetUserByUnidadForFirma(int rut);
         List<PEDATPER> GetAllUsersForCometido();
         List<PEDATPER> GetAllUsers();
 
         List<PLUNILAB> GetUnidades();
-        SIGPER GetJefaturaByUnidad(int codigo);
-        SIGPER GetSecretariaByUnidad(int codigo);
+        //SIGPER GetJefaturaByUnidad(int codigo);
+        Sigper GetSecretariaByUnidad(int codigo);
         List<DGREGIONES> GetRegion();
         string GetRegionbyComuna(string codComuna);
-        List<DGCOMUNAS> GetComunasbyRegion(string IdRegion);
+        List<DGCOMUNAS> GetComunasbyRegion(string idRegion);
         List<DGCOMUNAS> GetDGCOMUNAs();
         //List<DGPAISES> GetDGPAISESs();
         List<DGESCALAFONES> GetGESCALAFONEs();
@@ -35,7 +35,7 @@ namespace App.Core.Interfaces
 
         List<PLUNILAB> GetUnidadesFirmantes(List<string> listEmailFirmantes);
         List<PEDATPER> GetUserFirmanteByUnidad(int codigoUnidad, List<string> listEmailFirmantes);
-        SIGPER NewGetUserByEmail(string email);
+        Sigper NewGetUserByEmail(string email);
         int GetBaseCalculoHorasExtras(int rut, int mes, int anno, int calidad);
 
         int GetHorasTrabajadas(string rut, int mes, int anno);

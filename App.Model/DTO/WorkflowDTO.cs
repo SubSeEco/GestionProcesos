@@ -5,9 +5,6 @@ namespace App.Model.DTO
 {
     public class WorkflowDTO
     {
-        public WorkflowDTO()
-        {
-        }
         public int WorkflowId { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string Asunto { get; set; }

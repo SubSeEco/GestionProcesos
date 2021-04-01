@@ -11,7 +11,7 @@ namespace App.Web.Controllers
 
     public class ViaticoController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public ViaticoController(IGestionProcesos repository)
         {

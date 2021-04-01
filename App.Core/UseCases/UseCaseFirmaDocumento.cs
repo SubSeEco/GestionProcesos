@@ -2,7 +2,7 @@
 using App.Model.Core;
 using App.Model.FirmaDocumento;
 using App.Core.Interfaces;
-using App.Model.SIGPER;
+using App.Model.Sigper;
 using System.Linq;
 using System.Collections.Generic;
 using App.Util;
@@ -11,17 +11,17 @@ namespace App.Core.UseCases
 {
     public class UseCaseFirmaDocumento
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly IHSM _hsm;
-        protected readonly ISIGPER _sigper;
-        protected readonly IEmail _email;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
+        private readonly IGestionProcesos _repository;
+        private readonly IHsm _hsm;
+        private readonly ISigper _sigper;
+        private readonly IEmail _email;
+        private readonly IFolio _folio;
+        private readonly IFile _file;
         public UseCaseFirmaDocumento(IGestionProcesos repository)
         {
             _repository = repository;
         }
-        public UseCaseFirmaDocumento(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public UseCaseFirmaDocumento(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -88,7 +88,7 @@ namespace App.Core.UseCases
         public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
             var response = new ResponseMessage();
-            var persona = new SIGPER();
+            var persona = new Sigper();
 
             if (id == 0)
                 response.Errors.Add("Id de documento a firmar no encontrado");
@@ -118,7 +118,7 @@ namespace App.Core.UseCases
             {
                 persona = _sigper.GetUserByEmail(firmante);
                 if (persona == null)
-                    response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+                    response.Errors.Add("No se encontró usuario firmante en sistema Sigper");
 
                 if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
                     response.Errors.Add("No se encontró la subsecretaría del firmante");
@@ -170,7 +170,7 @@ namespace App.Core.UseCases
                 Fecha = DateTime.Now,
                 Email = firmaDocumento.Autor,
                 Signed = false,
-                TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Publico,
+                TipoPrivacidadId = (int)Util.Enum.Privacidad.Publico,
                 TipoDocumentoId = 6,
                 Folio = firmaDocumento.Folio,
             };
@@ -180,7 +180,7 @@ namespace App.Core.UseCases
             try
             {
                 //generar código QR
-                var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+                var _qrResponse = _file.CreateQr(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
                 //firmar documento
                 var _hsmResponse = _hsm.Sign(firmaDocumento.DocumentoSinFirma, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _qrResponse);
@@ -226,7 +226,7 @@ namespace App.Core.UseCases
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
             var response = new ResponseMessage();
-            var persona = new SIGPER();
+            var persona = new Sigper();
 
             try
             {
@@ -244,13 +244,13 @@ namespace App.Core.UseCases
                     throw new Exception("Es necesario aceptar o rechazar la tarea.");
 
                 //si ingreso esta ok y firmador aprueba sin firma...
-                if (workflowActual.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString() && workflowActual.DefinicionWorkflow.Secuencia == 2)
+                if (workflowActual.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString() && workflowActual.DefinicionWorkflow.Secuencia == 2)
                 {
                     var firma = _repository.GetFirst<FirmaDocumento>(q => q.WorkflowId == obj.WorkflowId);
                     if (firma == null)
                         throw new Exception("No se encontró el ingreso de documento.");
 
-                    if (firma != null && firma.DocumentoConFirma == null && obj.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    if (firma != null && firma.DocumentoConFirma == null && obj.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                         throw new Exception("No se puede aprobar un documento no firmado.");
                 }
 
@@ -267,7 +267,7 @@ namespace App.Core.UseCases
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
 
                 if (!workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-                    workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
+                    workflowActual.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.Aprobada;
 
                 //determinar siguiente tarea en base a estado y definicion de proceso
                 DefinicionWorkflow definicionWorkflow = null;
@@ -276,7 +276,7 @@ namespace App.Core.UseCases
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
 
-                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                 else
                     definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
@@ -284,15 +284,15 @@ namespace App.Core.UseCases
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
-                    workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
+                    workflowActual.Proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Terminado;
                     //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
 
                     //notificar al dueño del proceso
                     _email.NotificarFinProceso(workflowActual.Proceso,
-                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
-                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_fin_proceso)),
+                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
 
                 //en el caso de existir mas tareas, crearla
@@ -300,20 +300,20 @@ namespace App.Core.UseCases
                 {
                     var workflow = new Workflow();
                     workflow.FechaCreacion = DateTime.Now;
-                    workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
+                    workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
                     workflow.Terminada = false;
                     workflow.DefinicionWorkflow = definicionWorkflow;
                     workflow.ProcesoId = workflowActual.ProcesoId;
                     workflow.Mensaje = obj.Observacion;
                     //workflow.TareaPersonal = false;
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                     {
                         if (obj.Pl_UndCod.HasValue)
                         {
                             var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad en SIGPER.");
+                                throw new Exception("No se encontró la unidad en Sigper.");
 
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -329,7 +329,7 @@ namespace App.Core.UseCases
                         {
                             persona = _sigper.GetUserByEmail(obj.To);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -339,7 +339,7 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
                     {
                         var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && (q.To != null || q.Pl_UndCod != null) && q.WorkflowId != workflowActual.WorkflowId).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
                         if (workflowInicial == null)
@@ -349,7 +349,7 @@ namespace App.Core.UseCases
                         {
                             var unidad = _sigper.GetUnidad(workflowInicial.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad en SIGPER.");
+                                throw new Exception("No se encontró la unidad en Sigper.");
 
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -364,7 +364,7 @@ namespace App.Core.UseCases
                         {
                             persona = _sigper.GetUserByEmail(workflowInicial.To);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -374,11 +374,11 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
                     {
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -386,15 +386,15 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = true;
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
                     {
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
 
                         var jefatura = _sigper.GetUserByEmail(persona.Jefatura.Rh_Mail.Trim());
                         if (jefatura == null)
-                            throw new Exception("No se encontró la jefatura en SIGPER.");
+                            throw new Exception("No se encontró la jefatura en Sigper.");
                         workflow.Email = jefatura.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = jefatura.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = jefatura.Unidad.Pl_UndCod;
@@ -403,11 +403,11 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = true;
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
                     {
                         persona = _sigper.GetUserByEmail(obj.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -415,7 +415,7 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = true;
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                     {
                         if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
                             throw new Exception("No se especificó la unidad o grupo de destino.");
@@ -424,7 +424,7 @@ namespace App.Core.UseCases
                         {
                             var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad destino en SIGPER.");
+                                throw new Exception("No se encontró la unidad destino en Sigper.");
                             workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                             workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
                             workflow.TareaPersonal = false;
@@ -448,11 +448,11 @@ namespace App.Core.UseCases
 
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
                     {
                         persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
 
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
@@ -469,8 +469,8 @@ namespace App.Core.UseCases
                     //se adjunta copia al autor
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
                         _email.NotificarNuevoWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaNuevaTarea),
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
 
             }

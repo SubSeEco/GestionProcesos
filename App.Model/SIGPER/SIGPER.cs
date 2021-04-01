@@ -1,8 +1,8 @@
-﻿namespace App.Model.SIGPER
+﻿namespace App.Model.Sigper
 {
-    public class SIGPER
+    public class Sigper
     {
-        public SIGPER()
+        public Sigper()
         {
             Funcionario = new PEDATPER();
             Unidad = new PLUNILAB();

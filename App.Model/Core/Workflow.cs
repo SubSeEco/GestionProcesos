@@ -1,20 +1,16 @@
-﻿using ExpressiveAnnotations.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using ExpressiveAnnotations.Attributes;
+using Enum = App.Util.Enum;
 
 namespace App.Model.Core
 {
     [Table("CoreWorkflow")]
     public class Workflow
     {
-        public Workflow()
-        {
-            Documentos = new HashSet<Documento>();
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int WorkflowId { get; set; }
@@ -78,13 +74,13 @@ namespace App.Model.Core
         public virtual TipoAprobacion TipoAprobacion { get; set; }
 
         [Display(Name = "Terminada?")]
-        public bool Terminada { get; set; } = false;
+        public bool Terminada { get; set; }
 
         [Display(Name = "Anulada?")]
-        public bool Anulada { get; set; } = false;
+        public bool Anulada { get; set; }
 
         [Display(Name = "Tarea es personal?")]
-        public bool TareaPersonal { get; set; } = false;
+        public bool TareaPersonal { get; set; }
 
         [Display(Name = "Asunto")]
         public string Asunto { get; set; }
@@ -100,10 +96,7 @@ namespace App.Model.Core
 
         public int? ToPl_UndCod { get; set; }
 
-        public virtual ICollection<Documento> Documentos { get; set; }
-
-
-
+        public virtual ICollection<Documento> Documentos { get; set; } = new HashSet<Documento>();
 
 
         [NotMapped]
@@ -132,29 +125,23 @@ namespace App.Model.Core
 
         [NotMapped]
         public bool EsAprobacionCometidoCompraPasaje =>
-               this.DefinicionWorkflow != null
-            && this.DefinicionWorkflow.DefinicionProcesoId == 13
-            && this.DefinicionWorkflow.Secuencia == 4;
+               DefinicionWorkflow != null
+            && DefinicionWorkflow.DefinicionProcesoId == 13
+            && DefinicionWorkflow.Secuencia == 4;
 
         [NotMapped]
         public bool EsFirmaDocumento =>
-               this.DefinicionWorkflow != null
-            && this.DefinicionWorkflow.DefinicionProceso != null
-            && this.DefinicionWorkflow.DefinicionProceso.Entidad != null
-            && this.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString();
+               DefinicionWorkflow != null
+            && DefinicionWorkflow.DefinicionProceso != null
+            && DefinicionWorkflow.DefinicionProceso.Entidad != null
+            && DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Enum.Entidad.FirmaDocumento.ToString();
 
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
-        public TimeSpan Span
-        {
-            get
-            {
-                return ((FechaTermino.HasValue ? FechaTermino.Value : DateTime.Now) - FechaCreacion);
-            }
-        }
+        public TimeSpan Span => ((FechaTermino.HasValue ? FechaTermino.Value : DateTime.Now) - FechaCreacion);
 
         [NotMapped]
-        public bool DesactivarDestinoEnRechazo { get; set; } = false;
+        public bool DesactivarDestinoEnRechazo { get; set; } 
 
 
         [NotMapped]
@@ -172,9 +159,9 @@ namespace App.Model.Core
                 if (!FechaTermino.HasValue)
                     return null;
 
-                int minutes = 0;
+                var minutes = 0;
                 for (var i = FechaCreacion; i <= FechaTermino.Value; i = i.AddMinutes(1))
-                    if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !feriados.Any(q => q.Date == i.Date))
+                    if (i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday && !Enum.Feriados.Any(q => q.Date == i.Date))
                         if (i.TimeOfDay.Hours >= 9 && i.TimeOfDay.Hours <= 18)
                             minutes++;
 
@@ -182,19 +169,8 @@ namespace App.Model.Core
             }
         }
 
-        private List<DateTime> feriados = new List<DateTime>() {
-        new DateTime(2020,09,18),
-        new DateTime(2020,09,19),
-        new DateTime(2020,10,12),
-        new DateTime(2020,10,25),
-        new DateTime(2020,10,31),
-        new DateTime(2020,11,01),
-        new DateTime(2020,11,29),
-        new DateTime(2020,12,08),
-        new DateTime(2020,12,25),
-        new DateTime(2021,01,01),
-        };
+     
 
-        public bool EsTareaCierre { get; set; } = false;
+        public bool EsTareaCierre { get; set; } 
     }
 }

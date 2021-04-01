@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Enum.cs" />
     <Compile Include="StringExtension.cs" />
-    <Compile Include="ConvertExtension.cs" />
     <Compile Include="PredicateBuilderExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

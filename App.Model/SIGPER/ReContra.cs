@@ -1,13 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class ReContra
     {
-        public ReContra()
-        { }
-
         [Key]
         [Display(Name = "RH_NumInte")]
         public int RH_NumInte { get; set; }
@@ -23,18 +20,6 @@ namespace App.Model.SIGPER
 
         [Display(Name = "Re_ConPyt")]
         public Decimal Re_SuelBas { get; set; }
-
-        //[Display(Name = "Re_conpyt")]
-        //public Decimal Re_conpyt { get; set; }
-
-        //[Display(Name = "Re_concfi")]
-        //public Int16 Re_concfi { get; set; }
-
-        //[Display(Name = "ReContraEst")]
-        //public Int16 ReContraEst { get; set; }
-
-        //[Display(Name = "Re_ConTipHon")]
-        //public Int16 Re_ConTipHon { get; set; }RE_ConCor
 
         [Display(Name = "Re_ConCar")]
         public Int32 Re_ConCar { get; set; }
@@ -59,6 +44,5 @@ namespace App.Model.SIGPER
 
         [Display(Name = "Re_ConGra")]
         public string Re_ConGra { get; set; }
-        
     }
 }

@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedPais")]
     public class Pais 
     {
-        public Pais()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Pais Id")]
         public int PaisId { get; set; }

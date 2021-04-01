@@ -1,22 +1,16 @@
-﻿using App.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using App.Util;
 
 namespace App.Model.Core
 {
     [Table("CoreProceso")]
     public class Proceso
     {
-        public Proceso()
-        {
-            Workflows = new HashSet<Workflow>();
-            Documentos = new HashSet<Documento>();
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Editable(false)]
         [Display(Name = "Id")]
@@ -61,20 +55,14 @@ namespace App.Model.Core
 
         [NotMapped]
         [Display(Name = "Tiempo ejecución")]
-        public TimeSpan Span
-        {
-            get
-            {
-                return ((FechaTermino.HasValue ? FechaTermino.Value : DateTime.Now) - FechaCreacion);
-            }
-        }
+        public TimeSpan Span => ((FechaTermino.HasValue ? FechaTermino.Value : DateTime.Now) - FechaCreacion);
 
         [NotMapped]
         [Display(Name = "Numero Solicitud")]
         public string NroSolicitud { get; set; }
 
-        public virtual ICollection<Workflow> Workflows { get; set; }
-        public virtual ICollection<Documento> Documentos { get; set; }
+        public virtual ICollection<Workflow> Workflows { get; set; } = new HashSet<Workflow>();
+        public virtual ICollection<Documento> Documentos { get; set; } = new HashSet<Documento>();
 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
@@ -86,56 +74,43 @@ namespace App.Model.Core
         [DataType(DataType.MultilineText)]
         public string JustificacionAnulacion { get; set; }
 
-
-        //deprecado
-        //[Display(Name = "Estado")]
-        //public bool Terminada { get; set; } = false;
-
-        [Display(Name = "Anulada?")]
-        public bool Anulada { get; set; } = false;
-
         [Display(Name = "Reservado?")]
-        public bool Reservado { get; set; } = false;
-
-        [NotMapped]
-        [Display(Name = "Es autor?")]
-        public bool EsAutor { get; set; } = false;
-
+        public bool Reservado { get; set; }
 
         [Display(Name = "Tags")]
         public string Tags { get; set; }
 
         public string GetTags()
         {
-            StringBuilder tag = new StringBuilder();
+            var tag = new StringBuilder();
             tag.Append(ProcesoId.ToString().TrimOrEmpty() + " ");
             tag.Append(Observacion.TrimOrEmpty() + " ");
             tag.Append(Email.TrimOrEmpty() + " ");
             tag.Append(NombreFuncionario.TrimOrEmpty() + " ");
-            tag.Append(string.Join(" ", this.Documentos.Select(q => q.Texto)) + " ");
-            tag.Append(string.Join(" ", this.Documentos.Select(q => q.Folio)) + " ");
-            tag.Append(string.Join(" ", this.Documentos.Select(q => q.FileName)) + " ");
-            tag.Append(string.Join(" ", this.Workflows.Select(q => q.Observacion)));
-            tag.Append(string.Join(" ", this.Workflows.Select(q => q.Mensaje)));
+            tag.Append(string.Join(" ", Documentos.Select(q => q.Texto)) + " ");
+            tag.Append(string.Join(" ", Documentos.Select(q => q.Folio)) + " ");
+            tag.Append(string.Join(" ", Documentos.Select(q => q.FileName)) + " ");
+            tag.Append(string.Join(" ", Workflows.Select(q => q.Observacion)));
+            tag.Append(string.Join(" ", Workflows.Select(q => q.Mensaje)));
 
             return tag.ToString();
         }
 
         public void CalcularFechaVencimiento(List<DateTime> festivos)
         {
-            var fin = this.FechaCreacion;
-            int days = 0;
+            var fin = FechaCreacion;
+            var days = 0;
 
-            if (this.DefinicionProceso != null)
+            if (DefinicionProceso != null)
             {
-                while (days <= this.DefinicionProceso.DuracionHoras)
+                while (days <= DefinicionProceso.DuracionHoras)
                 {
                     fin.AddDays(1);
-                    if (fin.DayOfWeek != DayOfWeek.Saturday && fin.DayOfWeek != DayOfWeek.Sunday && !festivos.Any(q => q.Date == fin.Date))
+                    if (fin.DayOfWeek != DayOfWeek.Saturday && fin.DayOfWeek != DayOfWeek.Sunday && festivos.All(q => q.Date != fin.Date))
                         days++;
                 }
 
-                this.FechaVencimiento = fin;
+                FechaVencimiento = fin;
             }
         }
     }

@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreRubrica")]
     public class Rubrica
     {
-        public Rubrica()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int RubricaId { get; set; }

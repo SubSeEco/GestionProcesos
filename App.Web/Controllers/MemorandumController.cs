@@ -7,7 +7,6 @@ using System.Web.Security;
 using App.Model.Memorandum;
 using App.Model.Core;
 using App.Model.DTO;
-//using App.Model.Shared;
 using App.Core.Interfaces;
 using App.Util;
 using Newtonsoft.Json;
@@ -15,10 +14,6 @@ using App.Core.UseCases;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
-//using App.Infrastructure.Extensions;
-//using com.sun.corba.se.spi.ior;
-//using System.Net.Mail;
-//using com.sun.codemodel.@internal;
 
 namespace App.Web.Controllers
 {
@@ -159,10 +154,10 @@ namespace App.Web.Controllers
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreorem = per.Funcionario != null ? per.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rut;
-            if (per.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (per.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = per.Funcionario.RH_NumInte.ToString();
                 rut = string.Concat("0", t);
@@ -175,12 +170,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 Rut = rut,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
-                IdCargo = IdCargo,
+                DV = per.Funcionario.RH_DvNuInt,
+                IdCargo,
                 Cargo = cargo,
-                IdCalidad = IdCalidad,
+                IdCalidad,
                 CalidadJuridica = calidad,
-                IdGrado = IdGrado,
+                IdGrado,
                 Grado = grado,
                 Estamento = estamento,
                 Programa = Programa.Trim(),
@@ -214,10 +209,10 @@ namespace App.Web.Controllers
             var conglomeradodest = _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perdest.Funcionario.RH_NumInte).ReContraSed;
             var jefaturadest = perdest.Jefatura != null ? perdest.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreodest = perdest.Funcionario != null ? perdest.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombredest = perdest.Funcionario != null ? perdest.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombredest = perdest.Funcionario != null ? perdest.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutdest;
-            if (perdest.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perdest.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perdest.Funcionario.RH_NumInte.ToString();
                 rutdest = string.Concat("0", t);
@@ -230,12 +225,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutDest = rutdest,
-                DVDest = perdest.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoDest = IdCargoDest,
+                DVDest = perdest.Funcionario.RH_DvNuInt,
+                IdCargoDest,
                 CargoDest = cargodest,
-                IdCalidadDest = IdCalidadDest,
+                IdCalidadDest,
                 CalidadJuridicaDest = calidaddest,
-                IdGradoDest = IdGradoDest,
+                IdGradoDest,
                 GradoDest = gradodest,
                 EstamentoDest = estamentodest,
                 ProgramaDest = ProgramaDest.Trim(),
@@ -269,10 +264,10 @@ namespace App.Web.Controllers
             var conglomeradosecre = _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == persecre.Funcionario.RH_NumInte).ReContraSed;
             var jefaturasecre = persecre.Jefatura != null ? persecre.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreosecre = persecre.Funcionario != null ? persecre.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombresecre = persecre.Funcionario != null ? persecre.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombresecre = persecre.Funcionario != null ? persecre.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutsecre;
-            if (persecre.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (persecre.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = persecre.Funcionario.RH_NumInte.ToString();
                 rutsecre = string.Concat("0", t);
@@ -285,12 +280,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutSecre = rutsecre,
-                DVSecre = persecre.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoSecre = IdCargoSecre,
+                DVSecre = persecre.Funcionario.RH_DvNuInt,
+                IdCargoSecre,
                 CargoSecre = cargosecre,
-                IdCalidadSecre = IdCalidadSecre,
+                IdCalidadSecre,
                 CalidadJuridicaSecre = calidadsecre,
-                IdGradoSecre = IdGradoSecre,
+                IdGradoSecre,
                 GradoSecre = gradosecre,
                 EstamentoSecre = estamentosecre,
                 ProgramaSecre = ProgramaSecre.Trim(),
@@ -324,10 +319,10 @@ namespace App.Web.Controllers
             var conglomeradovisa1 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa1.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa1 = pervisa1.Jefatura != null ? pervisa1.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa1 = pervisa1.Funcionario != null ? pervisa1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa1 = pervisa1.Funcionario != null ? pervisa1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa1 = pervisa1.Funcionario != null ? pervisa1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa1;
-            if (pervisa1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa1.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa1.Funcionario.RH_NumInte.ToString();
                 rutvisa1 = string.Concat("0", t);
@@ -340,12 +335,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa1 = rutvisa1,
-                DVVisa1 = pervisa1.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa1 = IdCargoVisa1,
+                DVVisa1 = pervisa1.Funcionario.RH_DvNuInt,
+                IdCargoVisa1,
                 CargoVisa1 = cargovisa1,
-                IdCalidadVisa1 = IdCalidadVisa1,
+                IdCalidadVisa1,
                 CalidadJuridicaVisa1 = calidadvisa1,
-                IdGradoVisa1 = IdGradoVisa1,
+                IdGradoVisa1,
                 GradoVisa1 = gradovisa1,
                 EstamentoVisa1 = estamentovisa1,
                 ProgramaVisa1 = ProgramaVisa1.Trim(),
@@ -379,10 +374,10 @@ namespace App.Web.Controllers
             var conglomeradovisa2 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa2.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa2 = pervisa2.Jefatura != null ? pervisa2.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa2 = pervisa2.Funcionario != null ? pervisa2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa2 = pervisa2.Funcionario != null ? pervisa2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa2 = pervisa2.Funcionario != null ? pervisa2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa2;
-            if (pervisa2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa2.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa2.Funcionario.RH_NumInte.ToString();
                 rutvisa2 = string.Concat("0", t);
@@ -395,12 +390,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa2 = rutvisa2,
-                DVVisa2 = pervisa2.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa2 = IdCargoVisa2,
+                DVVisa2 = pervisa2.Funcionario.RH_DvNuInt,
+                IdCargoVisa2,
                 CargoVisa2 = cargovisa2,
-                IdCalidadVisa2 = IdCalidadVisa2,
+                IdCalidadVisa2,
                 CalidadJuridicaVisa2 = calidadvisa2,
-                IdGradoVisa2 = IdGradoVisa2,
+                IdGradoVisa2,
                 GradoVisa2 = gradovisa2,
                 EstamentoVisa2 = estamentovisa2,
                 ProgramaVisa2 = ProgramaVisa2.Trim(),
@@ -434,10 +429,10 @@ namespace App.Web.Controllers
             var conglomeradovisa3 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa3.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa3 = pervisa3.Jefatura != null ? pervisa3.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa3 = pervisa3.Funcionario != null ? pervisa3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa3 = pervisa3.Funcionario != null ? pervisa3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa3 = pervisa3.Funcionario != null ? pervisa3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa3;
-            if (pervisa3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa3.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa3.Funcionario.RH_NumInte.ToString();
                 rutvisa3 = string.Concat("0", t);
@@ -450,12 +445,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa3 = rutvisa3,
-                DVVisa3 = pervisa3.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa3 = IdCargoVisa3,
+                DVVisa3 = pervisa3.Funcionario.RH_DvNuInt,
+                IdCargoVisa3,
                 CargoVisa3 = cargovisa3,
-                IdCalidadVisa3 = IdCalidadVisa3,
+                IdCalidadVisa3,
                 CalidadJuridicaVisa3 = calidadvisa3,
-                IdGradoVisa3 = IdGradoVisa3,
+                IdGradoVisa3,
                 GradoVisa3 = gradovisa3,
                 EstamentoVisa3 = estamentovisa3,
                 ProgramaVisa3 = ProgramaVisa3.Trim(),
@@ -489,10 +484,10 @@ namespace App.Web.Controllers
             var conglomeradovisa4 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa4.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa4 = pervisa4.Jefatura != null ? pervisa4.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa4 = pervisa4.Funcionario != null ? pervisa4.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa4 = pervisa4.Funcionario != null ? pervisa4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa4 = pervisa4.Funcionario != null ? pervisa4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa4;
-            if (pervisa4.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa4.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa4.Funcionario.RH_NumInte.ToString();
                 rutvisa4 = string.Concat("0", t);
@@ -505,12 +500,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa4 = rutvisa4,
-                DVVisa4 = pervisa4.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa4 = IdCargoVisa4,
+                DVVisa4 = pervisa4.Funcionario.RH_DvNuInt,
+                IdCargoVisa4,
                 CargoVisa4 = cargovisa4,
-                IdCalidadVisa4 = IdCalidadVisa4,
+                IdCalidadVisa4,
                 CalidadJuridicaVisa4 = calidadvisa4,
-                IdGradoVisa4 = IdGradoVisa4,
+                IdGradoVisa4,
                 GradoVisa4 = gradovisa4,
                 EstamentoVisa4 = estamentovisa4,
                 ProgramaVisa4 = ProgramaVisa4.Trim(),
@@ -544,10 +539,10 @@ namespace App.Web.Controllers
             var conglomeradovisa5 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa5.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa5 = pervisa5.Jefatura != null ? pervisa5.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa5 = pervisa5.Funcionario != null ? pervisa5.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa5 = pervisa5.Funcionario != null ? pervisa5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa5 = pervisa5.Funcionario != null ? pervisa5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa5;
-            if (pervisa5.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa5.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa5.Funcionario.RH_NumInte.ToString();
                 rutvisa5 = string.Concat("0", t);
@@ -560,12 +555,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa5 = rutvisa5,
-                DVVisa5 = pervisa5.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa5 = IdCargoVisa5,
+                DVVisa5 = pervisa5.Funcionario.RH_DvNuInt,
+                IdCargoVisa5,
                 CargoVisa5 = cargovisa5,
-                IdCalidadVisa5 = IdCalidadVisa5,
+                IdCalidadVisa5,
                 CalidadJuridicaVisa5 = calidadvisa5,
-                IdGradoVisa5 = IdGradoVisa5,
+                IdGradoVisa5,
                 GradoVisa5 = gradovisa5,
                 EstamentoVisa5 = estamentovisa5,
                 ProgramaVisa5 = ProgramaVisa5.Trim(),
@@ -599,10 +594,10 @@ namespace App.Web.Controllers
             var conglomeradovisa6 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa6.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa6 = pervisa6.Jefatura != null ? pervisa6.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa6 = pervisa6.Funcionario != null ? pervisa6.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa6 = pervisa6.Funcionario != null ? pervisa6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa6 = pervisa6.Funcionario != null ? pervisa6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa6;
-            if (pervisa6.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa6.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa6.Funcionario.RH_NumInte.ToString();
                 rutvisa6 = string.Concat("0", t);
@@ -615,12 +610,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa6 = rutvisa6,
-                DVVisa6 = pervisa6.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa6 = IdCargoVisa6,
+                DVVisa6 = pervisa6.Funcionario.RH_DvNuInt,
+                IdCargoVisa6,
                 CargoVisa6 = cargovisa6,
-                IdCalidadVisa6 = IdCalidadVisa6,
+                IdCalidadVisa6,
                 CalidadJuridicaVisa6 = calidadvisa6,
-                IdGradoVisa6 = IdGradoVisa6,
+                IdGradoVisa6,
                 GradoVisa6 = gradovisa6,
                 EstamentoVisa6 = estamentovisa6,
                 ProgramaVisa6 = ProgramaVisa6.Trim(),
@@ -654,10 +649,10 @@ namespace App.Web.Controllers
             var conglomeradovisa7 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa7.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa7 = pervisa7.Jefatura != null ? pervisa7.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa7 = pervisa7.Funcionario != null ? pervisa7.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa7 = pervisa7.Funcionario != null ? pervisa7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa7 = pervisa7.Funcionario != null ? pervisa7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa7;
-            if (pervisa7.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa7.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa7.Funcionario.RH_NumInte.ToString();
                 rutvisa7 = string.Concat("0", t);
@@ -670,12 +665,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa7 = rutvisa7,
-                DVVisa7 = pervisa7.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa7 = IdCargoVisa7,
+                DVVisa7 = pervisa7.Funcionario.RH_DvNuInt,
+                IdCargoVisa7,
                 CargoVisa7 = cargovisa7,
-                IdCalidadVisa7 = IdCalidadVisa7,
+                IdCalidadVisa7,
                 CalidadJuridicaVisa7 = calidadvisa7,
-                IdGradoVisa7 = IdGradoVisa7,
+                IdGradoVisa7,
                 GradoVisa7 = gradovisa7,
                 EstamentoVisa7 = estamentovisa7,
                 ProgramaVisa7 = ProgramaVisa7.Trim(),
@@ -709,10 +704,10 @@ namespace App.Web.Controllers
             var conglomeradovisa8 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa8.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa8 = pervisa8.Jefatura != null ? pervisa8.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa8 = pervisa8.Funcionario != null ? pervisa8.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa8 = pervisa8.Funcionario != null ? pervisa8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa8 = pervisa8.Funcionario != null ? pervisa8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa8;
-            if (pervisa8.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa8.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa8.Funcionario.RH_NumInte.ToString();
                 rutvisa8 = string.Concat("0", t);
@@ -725,12 +720,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa8 = rutvisa8,
-                DVVisa8 = pervisa8.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa8 = IdCargoVisa8,
+                DVVisa8 = pervisa8.Funcionario.RH_DvNuInt,
+                IdCargoVisa8,
                 CargoVisa8 = cargovisa8,
-                IdCalidadVisa8 = IdCalidadVisa8,
+                IdCalidadVisa8,
                 CalidadJuridicaVisa8 = calidadvisa8,
-                IdGradoVisa8 = IdGradoVisa8,
+                IdGradoVisa8,
                 GradoVisa8 = gradovisa8,
                 EstamentoVisa8 = estamentovisa8,
                 ProgramaVisa8 = ProgramaVisa8.Trim(),
@@ -764,10 +759,10 @@ namespace App.Web.Controllers
             var conglomeradovisa9 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa9.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa9 = pervisa9.Jefatura != null ? pervisa9.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa9 = pervisa9.Funcionario != null ? pervisa9.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa9 = pervisa9.Funcionario != null ? pervisa9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa9 = pervisa9.Funcionario != null ? pervisa9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa9;
-            if (pervisa9.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa9.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa9.Funcionario.RH_NumInte.ToString();
                 rutvisa9 = string.Concat("0", t);
@@ -780,12 +775,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa9 = rutvisa9,
-                DVVisa9 = pervisa9.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa9 = IdCargoVisa9,
+                DVVisa9 = pervisa9.Funcionario.RH_DvNuInt,
+                IdCargoVisa9,
                 CargoVisa9 = cargovisa9,
-                IdCalidadVisa9 = IdCalidadVisa9,
+                IdCalidadVisa9,
                 CalidadJuridicaVisa9 = calidadvisa9,
-                IdGradoVisa9 = IdGradoVisa9,
+                IdGradoVisa9,
                 GradoVisa9 = gradovisa9,
                 EstamentoVisa9 = estamentovisa9,
                 ProgramaVisa9 = ProgramaVisa9.Trim(),
@@ -819,10 +814,10 @@ namespace App.Web.Controllers
             var conglomeradovisa10 = _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == pervisa10.Funcionario.RH_NumInte).ReContraSed;
             var jefaturavisa10 = pervisa10.Jefatura != null ? pervisa10.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreovisa10 = pervisa10.Funcionario != null ? pervisa10.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrevisa10 = pervisa10.Funcionario != null ? pervisa10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrevisa10 = pervisa10.Funcionario != null ? pervisa10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutvisa10;
-            if (pervisa10.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (pervisa10.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = pervisa10.Funcionario.RH_NumInte.ToString();
                 rutvisa10 = string.Concat("0", t);
@@ -835,12 +830,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutVisa10 = rutvisa10,
-                DVVisa10 = pervisa10.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoVisa10 = IdCargoVisa10,
+                DVVisa10 = pervisa10.Funcionario.RH_DvNuInt,
+                IdCargoVisa10,
                 CargoVisa10 = cargovisa10,
-                IdCalidadVisa10 = IdCalidadVisa10,
+                IdCalidadVisa10,
                 CalidadJuridicaVisa10 = calidadvisa10,
-                IdGradoVisa10 = IdGradoVisa10,
+                IdGradoVisa10,
                 GradoVisa10 = gradovisa10,
                 EstamentoVisa10 = estamentovisa10,
                 ProgramaVisa10 = ProgramaVisa10.Trim(),
@@ -874,10 +869,10 @@ namespace App.Web.Controllers
             var conglomeradoana = _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perana.Funcionario.RH_NumInte).ReContraSed;
             var jefaturaana = perana.Jefatura != null ? perana.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreoana = perana.Funcionario != null ? perana.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreana = perana.Funcionario != null ? perana.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombreana = perana.Funcionario != null ? perana.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutana;
-            if (perana.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perana.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perana.Funcionario.RH_NumInte.ToString();
                 rutana = string.Concat("0", t);
@@ -890,12 +885,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutAna = rutana,
-                DVAna = perana.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAna = IdCargoAna,
+                DVAna = perana.Funcionario.RH_DvNuInt,
+                IdCargoAna,
                 CargoAna = cargoana,
-                IdCalidadAna = IdCalidadAna,
+                IdCalidadAna,
                 CalidadJuridicaAna = calidadana,
-                IdGradoAna = IdGradoAna,
+                IdGradoAna,
                 GradoAna = gradoana,
                 EstamentoAna = estamentoana,
                 ProgramaAna = ProgramaAna.Trim(),
@@ -929,10 +924,10 @@ namespace App.Web.Controllers
             var conglomeradoautorizafirma1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma1.Funcionario.RH_NumInte).ReContraSed;
             var jefaturaautorizafirma1 = perautorizafirma1.Jefatura != null ? perautorizafirma1.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreoautorizafirma1 = perautorizafirma1.Funcionario != null ? perautorizafirma1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma1 = perautorizafirma1.Funcionario != null ? perautorizafirma1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombreautorizafirma1 = perautorizafirma1.Funcionario != null ? perautorizafirma1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutautorizafirma1;
-            if (perautorizafirma1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perautorizafirma1.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perautorizafirma1.Funcionario.RH_NumInte.ToString();
                 rutautorizafirma1 = string.Concat("0", t);
@@ -945,8 +940,8 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutAutorizaFirma1 = rutautorizafirma1,
-                DVAutorizaFirma1 = perautorizafirma1.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma1 = IdCargoAutorizaFirma1,
+                DVAutorizaFirma1 = perautorizafirma1.Funcionario.RH_DvNuInt,
+                IdCargoAutorizaFirma1,
                 CargoAutorizaFirma1 = cargoautorizafirma1,
                 IdCalidadautorizaFirma1 = IdCalidadAutorizaFirma1,
                 CalidadJuridicaAutorizaFirma1 = calidadautorizafirma1,
@@ -984,10 +979,10 @@ namespace App.Web.Controllers
             var conglomeradoautorizafirma2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma2.Funcionario.RH_NumInte).ReContraSed;
             var jefaturaautorizafirma2 = perautorizafirma2.Jefatura != null ? perautorizafirma2.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreoautorizafirma2 = perautorizafirma2.Funcionario != null ? perautorizafirma2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma2 = perautorizafirma2.Funcionario != null ? perautorizafirma2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombreautorizafirma2 = perautorizafirma2.Funcionario != null ? perautorizafirma2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutautorizafirma2;
-            if (perautorizafirma2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perautorizafirma2.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perautorizafirma2.Funcionario.RH_NumInte.ToString();
                 rutautorizafirma2 = string.Concat("0", t);
@@ -1000,8 +995,8 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutAutorizaFirma2 = rutautorizafirma2,
-                DVAutorizaFirma2 = perautorizafirma2.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma2 = IdCargoAutorizaFirma2,
+                DVAutorizaFirma2 = perautorizafirma2.Funcionario.RH_DvNuInt,
+                IdCargoAutorizaFirma2,
                 CargoAutorizaFirma2 = cargoautorizafirma2,
                 IdCalidadautorizaFirma2 = IdCalidadAutorizaFirma2,
                 CalidadJuridicaAutorizaFirma2 = calidadautorizafirma2,
@@ -1039,10 +1034,10 @@ namespace App.Web.Controllers
             var conglomeradoautorizafirma3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perautorizafirma3.Funcionario.RH_NumInte).ReContraSed;
             var jefaturaautorizafirma3 = perautorizafirma3.Jefatura != null ? perautorizafirma3.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreoautorizafirma3 = perautorizafirma3.Funcionario != null ? perautorizafirma3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombreautorizafirma3 = perautorizafirma3.Funcionario != null ? perautorizafirma3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombreautorizafirma3 = perautorizafirma3.Funcionario != null ? perautorizafirma3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutautorizafirma3;
-            if (perautorizafirma3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perautorizafirma3.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perautorizafirma3.Funcionario.RH_NumInte.ToString();
                 rutautorizafirma3 = string.Concat("0", t);
@@ -1055,8 +1050,8 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutAutorizaFirma3 = rutautorizafirma3,
-                DVAutorizaFirma3 = perautorizafirma3.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoAutorizaFirma3 = IdCargoAutorizaFirma3,
+                DVAutorizaFirma3 = perautorizafirma3.Funcionario.RH_DvNuInt,
+                IdCargoAutorizaFirma3,
                 CargoAutorizaFirma3 = cargoautorizafirma3,
                 IdCalidadautorizaFirma3 = IdCalidadAutorizaFirma3,
                 CalidadJuridicaAutorizaFirma3 = calidadautorizafirma3,
@@ -1091,7 +1086,7 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var model = _repository.GetById<Memorandum>(id);
 
@@ -1100,7 +1095,7 @@ namespace App.Web.Controllers
 
         public ActionResult Details(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
@@ -1286,7 +1281,7 @@ namespace App.Web.Controllers
 
                 model.IdUnidad = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
-                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreId = null;
                 //model.NombreId = persona.Funcionario.RH_NumInte;
@@ -1301,7 +1296,7 @@ namespace App.Web.Controllers
 
                 model.IdUnidadDest = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcionDest = persona.Unidad.Pl_UndDes.Trim();
-                model.RutDest = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutDest = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVDest = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdDest = null;
                 //model.NombreId = persona.Funcionario.RH_NumInte;
@@ -1316,7 +1311,7 @@ namespace App.Web.Controllers
 
                 model.IdUnidadSecre = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcionSecre = persona.Unidad.Pl_UndDes.Trim();
-                model.RutSecre = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutSecre = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVSecre = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdSecre = null;
                 //model.NombreIdSecre = persona.Funcionario.RH_NumInte;
@@ -1333,7 +1328,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa1 = null;
                 //model.UnidadDescripcionVisa1 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa1 = null;
-                model.RutVisa1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa1 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa1 = null;
                 //model.NombreIdVisa1 = persona.Funcionario.RH_NumInte;
@@ -1352,7 +1347,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa2 = null;
                 //model.UnidadDescripcionVisa2 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa2 = null;
-                model.RutVisa2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa2 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa2 = null;
                 //model.NombreIdVisa2 = persona.Funcionario.RH_NumInte;
@@ -1371,7 +1366,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa3 = null;
                 //model.UnidadDescripcionVisa3 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa3 = null;
-                model.RutVisa3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa3 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa3 = null;
                 //model.NombreIdVisa3 = persona.Funcionario.RH_NumInte;
@@ -1390,7 +1385,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa4 = null;
                 //model.UnidadDescripcionVisa4 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa4 = null;
-                model.RutVisa4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa4 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa4 = null;
                 //model.NombreIdVisa4 = persona.Funcionario.RH_NumInte;
@@ -1409,7 +1404,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa5 = null;
                 //model.UnidadDescripcionVisa5 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa5 = null;
-                model.RutVisa5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa5 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa5 = null;
                 //model.NombreIdVisa5 = persona.Funcionario.RH_NumInte;
@@ -1428,7 +1423,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa6 = null;
                 //model.UnidadDescripcionVisa6 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa6 = null;
-                model.RutVisa6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa6 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa6 = null;
                 //model.NombreIdVisa6 = persona.Funcionario.RH_NumInte;
@@ -1447,7 +1442,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa7 = null;
                 //model.UnidadDescripcionVisa7 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa7 = null;
-                model.RutVisa7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa7 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa7 = null;
                 //model.NombreIdVisa7 = persona.Funcionario.RH_NumInte;
@@ -1466,7 +1461,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa8 = null;
                 //model.UnidadDescripcionVisa8 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa8 = null;
-                model.RutVisa8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa8 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa8 = null;
                 //model.NombreIdVisa8 = persona.Funcionario.RH_NumInte;
@@ -1485,7 +1480,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa9 = null;
                 //model.UnidadDescripcionVisa9 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa9 = null;
-                model.RutVisa9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa9 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa9 = null;
                 //model.NombreIdVisa9 = persona.Funcionario.RH_NumInte;
@@ -1504,7 +1499,7 @@ namespace App.Web.Controllers
                 model.IdUnidadVisa10 = null;
                 //model.UnidadDescripcionVisa10 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionVisa10 = null;
-                model.RutVisa10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutVisa10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVVisa10 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdVisa10 = null;
                 //model.NombreIdVisa10 = persona.Funcionario.RH_NumInte;
@@ -1523,7 +1518,7 @@ namespace App.Web.Controllers
                 model.IdUnidadAna = null;
                 //model.UnidadDescripcionAna = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionAna = null;
-                model.RutAna = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutAna = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVAna = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdAna = null;
                 //model.NombreIdAna = persona.Funcionario.RH_NumInte;
@@ -1542,7 +1537,7 @@ namespace App.Web.Controllers
                 model.IdUnidadAutorizaFirma1 = null;
                 //model.UnidadDescripcionAutorizaFirma1 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionAutorizaFirma1 = null;
-                model.RutAutorizaFirma1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutAutorizaFirma1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVAutorizaFirma1 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdAutorizaFirma1 = null;
                 //model.NombreIdAutorizaFirma1 = persona.Funcionario.RH_NumInte;
@@ -1561,7 +1556,7 @@ namespace App.Web.Controllers
                 model.IdUnidadAutorizaFirma2 = null;
                 //model.UnidadDescripcionAutorizaFirma2 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionAutorizaFirma2 = null;
-                model.RutAutorizaFirma2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutAutorizaFirma2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVAutorizaFirma2 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdAutorizaFirma2 = null;
                 //model.NombreIdAutorizaFirma2 = persona.Funcionario.RH_NumInte;
@@ -1580,7 +1575,7 @@ namespace App.Web.Controllers
                 model.IdUnidadAutorizaFirma3 = null;
                 //model.UnidadDescripcionAutorizaFirma3 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionAutorizaFirma3 = null;
-                model.RutAutorizaFirma3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutAutorizaFirma3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVAutorizaFirma3 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdAutorizaFirma3 = null;
                 //model.NombreIdAutorizaFirma3 = persona.Funcionario.RH_NumInte;
@@ -1622,7 +1617,7 @@ namespace App.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
@@ -1658,7 +1653,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Memorandum model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
@@ -1686,7 +1681,7 @@ namespace App.Web.Controllers
 
         public ActionResult EditAna(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
@@ -1722,7 +1717,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditAna(Memorandum model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
@@ -1749,14 +1744,14 @@ namespace App.Web.Controllers
 
         public ActionResult GeneraDocumento(int id)
         {
-            byte[] pdf = null;
+            byte[] pdf;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<Memorandum>(id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1764,7 +1759,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -1818,7 +1813,7 @@ namespace App.Web.Controllers
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.MemorandumId + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var memorandum = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 8);
@@ -1875,7 +1870,7 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<Memorandum>(id);
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1883,7 +1878,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -1939,7 +1934,7 @@ namespace App.Web.Controllers
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.MemorandumId + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
@@ -2002,7 +1997,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Memorandum>(id);
 
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
             {
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
             }
@@ -2013,7 +2008,7 @@ namespace App.Web.Controllers
 
                 /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
                 var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
+                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.Memorandum))
                 {
                     if (model.Folio == null)
                     {
@@ -2106,10 +2101,8 @@ namespace App.Web.Controllers
         {
             var firmante1 = _repository.GetFirst<Memorandum>(c => c.MemorandumId == model.MemorandumId);
 
-            var listafirmantes = new List<string>();
-            listafirmantes.Add(firmante1.EmailRem.ToString());
-
-            var email = UserExtended.Email(User);
+            //var listafirmantes = new List<string>();
+            //listafirmantes.Add(firmante1.EmailRem);
 
             if (ModelState.IsValid)
             {
@@ -2158,7 +2151,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Memorandum>(id);
 
             var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.MemorandumId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -2166,7 +2159,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.MemorandumId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -2317,7 +2310,7 @@ namespace App.Web.Controllers
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.MemorandumId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.MemorandumId + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId);
@@ -2407,11 +2400,11 @@ namespace App.Web.Controllers
                     //    predicate = predicate.And(q => q.Proceso.Terminada == true);
 
                     if (model.Estado == 1)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 2)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 3)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
 
                 }
 
@@ -2523,11 +2516,11 @@ namespace App.Web.Controllers
                 //{
                 fila++;
 
-                if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
+                if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso)
                     worksheet.Cells[fila, 1].Value = "En Curso";
-                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
+                else if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                     worksheet.Cells[fila, 1].Value = "Terminada";
-                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
+                else if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado)
                     worksheet.Cells[fila, 1].Value = "Anulada";
 
                 //worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";

@@ -1,18 +1,12 @@
-﻿using ExpressiveAnnotations.Attributes;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ExpressiveAnnotations.Attributes;
 
 namespace App.Model.Core
 {
     [Table("CoreDefinicionWorkflow")]
     public class DefinicionWorkflow
     {
-        public DefinicionWorkflow()
-        {
-            Workflows = new HashSet<Workflow>();
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int DefinicionWorkflowId { get; set; }
@@ -85,85 +79,85 @@ namespace App.Model.Core
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Notificar cambios de estado al autor por correo electrónico?")]
-        public bool NotificarAlAutor { get; set; } = false;
+        public bool NotificarAlAutor { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Notificar asignaciones de tareas de estado al autor por correo electrónico?")]
-        public bool NotificarAsignacion { get; set; } = false;
+        public bool NotificarAsignacion { get; set; }
 
 
 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Mostrar detalles del proceso?")]
-        public bool PermitirVerDetalles { get; set; } = false;
+        public bool PermitirVerDetalles { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Permitir ver documentos adjuntos?")]
-        public bool PermitirVerDocumentos { get; set; } = false;
+        public bool PermitirVerDocumentos { get; set; } 
 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Permitir adjuntar documentos simples?")]
-        public bool PermitirAdjuntarDocumentos { get; set; } = false;
+        public bool PermitirAdjuntarDocumentos { get; set; } 
 
         [Display(Name = "Permitir adjuntar documentos para FEA?")]
-        public bool PermitirAdjuntarDocumentosConFirmaElectronica { get; set; } = false;
+        public bool PermitirAdjuntarDocumentosConFirmaElectronica { get; set; }
 
 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Requiere documentos adjuntos?")]
-        public bool RequireDocumentacion { get; set; } = false;
+        public bool RequireDocumentacion { get; set; }
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Permitir generar documentos a partir de información ingresada?")]
-        public bool PermitirGenerarDocumentos { get; set; } = false;
+        public bool PermitirGenerarDocumentos { get; set; } 
 
 
 
         [Display(Name = "Permitir reasignar tarea a otra unidad o funcionario?")]
-        public bool PermitirReenvioUnidad { get; set; } = false;
+        public bool PermitirReenvioUnidad { get; set; } 
 
         [Display(Name = "Permitir reasignar tarea an grupo especial?")]
-        public bool PermitirReenvioGrupoEspecial { get; set; } = false;
+        public bool PermitirReenvioGrupoEspecial { get; set; } 
 
-        [Display(Name = "Permitir archivar tarea?")]
-        public bool PermitirArchivarTarea { get; set; } = false;
+        //[Display(Name = "Permitir archivar tarea?")]
+        //public bool PermitirArchivarTarea { get; set; } = false;
 
         //[Display(Name = "Permitir anular proceso?")]
         //public bool PermitirAnularProceso { get; set; } = false;
 
 
         [Display(Name = "Permitir envío de tarea?")]
-        public bool PermitirTerminar { get; set; } = false;
+        public bool PermitirTerminar { get; set; } 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Requiere aprobación al momento de enviar tarea?")]
-        public bool RequiereAprobacionAlEnviar { get; set; } = false;
+        public bool RequiereAprobacionAlEnviar { get; set; } 
 
         [Display(Name = "Permitir seleccionar unidad y funcionario de destino?")]
-        public bool PermitirSeleccionarUnidadDestino { get; set; } = false;
+        public bool PermitirSeleccionarUnidadDestino { get; set; }
 
         [Display(Name = "Permitir seleccionar grupo especial de destino?")]
-        public bool PermitirSeleccionarGrupoEspecialDestino { get; set; } = false;
+        public bool PermitirSeleccionarGrupoEspecialDestino { get; set; }
 
         [Display(Name = "Permitir multiples evaluaciones de la misma tarea?")]
-        public bool PermitirMultipleEvaluacion { get; set; } = false;
+        public bool PermitirMultipleEvaluacion { get; set; } 
 
         public virtual DefinicionWorkflow DefinicionWorkflowRechazo { get; set; }
-        public virtual ICollection<Workflow> Workflows { get; set; }
+        //public virtual ICollection<Workflow> Workflows { get; set; } = new HashSet<Workflow>();
 
         [Display(Name = "Instrucciones")]
         public string Instrucciones { get; set; }
 
         [Display(Name = "Seleccionar solo personas de la misma unidad?")]
-        public bool PermitirSeleccionarPersonasMismaUnidad { get; set; } = false;
+        public bool PermitirSeleccionarPersonasMismaUnidad { get; set; }
 
         [Display(Name = "Permitir finalizar proceso?")]
-        public bool PermitirFinalizarProceso { get; set; } = false;
+        public bool PermitirFinalizarProceso { get; set; } 
 
         [Display(Name = "Desactivar destino en el rechazo?")]
-        public bool DesactivarDestinoEnRechazo { get; set; } = false;
+        public bool DesactivarDestinoEnRechazo { get; set; } 
     }
 }

@@ -19,16 +19,16 @@
             <img src="data:image;base64,@System.Convert.ToBase64String(Model.QR)" width="170px" />
         </div>*@
     </div>
-    <center>
-        <p class="flow-text">
-            <h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br />PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>
-        </p>
-        <p class="flow-text">
-            Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)
-        </p>
-    </center>
-
+<div style="text-align: center;" >
     <p class="flow-text">
+        <h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br/>PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>
+    </p>
+    <p class="flow-text">
+        Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)
+    </p>
+</div>
+
+<p class="flow-text">
         <b>I. ANTECEDENTES PERSONALES</b>
         <table>
             <tbody>
@@ -100,15 +100,15 @@
     @*<center>
         <img src="~/Content/LogoPieFirma.png" width="220px" />
     </center>*@
-    <center>
-        <p class="flow-text">
-            <b>
-                @Model.Nombre<br />
-                        @Model.Unidad
-                    </b>
-        </p>
-    </center>
-    @*<div class="section"></div>*@
+<div style="text-align: center;" >
+    <p class="flow-text">
+        <b>
+            @Model.Nombre<br/>
+            @Model.Unidad
+        </b>
+    </p>
+</div>
+@*<div class="section"></div>*@
     <p class="flow-text center grey-text text-darken-2">Se certifica el cumplimiento de las funciones encomendadas y se aprueba el presente Informe, autorizándose el pago correspondiente.</p>
 </body>
 </html>

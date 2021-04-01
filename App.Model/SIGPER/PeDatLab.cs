@@ -2,16 +2,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     [Table("PeDatLab")]
-    public partial class PeDatLab
+    public class PeDatLab
     {
-        //[Key]
-        //[Column(Order = 0)]
-        //[StringLength(3)]
-        //public string Rh_InstPub { get; set; }
-
         [Key]
         [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -27,12 +22,9 @@ namespace App.Model.SIGPER
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short RH_Correla { get; set; }
 
-        //public int? RhConPerDig { get; set; }
-
         public int? RhConCar { get; set; }
 
-        [StringLength(5)]
-        public string RhConGra { get; set; }
+        [StringLength(5)] public string RhConGra { get; set; }
 
         //[Column(TypeName = "money")]
         //public decimal? RhConSueBas { get; set; }
@@ -52,8 +44,7 @@ namespace App.Model.SIGPER
         //[StringLength(12)]
         //public string RhConPla { get; set; }
 
-        [StringLength(6)]
-        public string RhConEsc { get; set; }
+        [StringLength(6)] public string RhConEsc { get; set; }
 
         //public short? RhConNumHrs { get; set; }
 

@@ -12,7 +12,7 @@
                         @Html.HiddenFor(q => Model.ComisionesId)
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "red-text" })
-                        if (Model.Comisiones.SolicitaViatico == true)
+                        if (Model.Comisiones.SolicitaViatico)
                         {
                             <div id="dvViaticos">
                                 <div class="input-field col s12 m6 l3">
@@ -80,7 +80,7 @@
                         }
                         <br />
                         <div class="section"></div>
-                        if (Model.Comisiones.ReqPasajeAereo == true)
+                        if (Model.Comisiones.ReqPasajeAereo)
                         {
                             <div id="dvPasajes">
                                 <span class="card-title" style="font-weight: bold">Pasajes</span>

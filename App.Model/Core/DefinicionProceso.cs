@@ -7,12 +7,6 @@ namespace App.Model.Core
     [Table("CoreDefinicionProceso")]
     public class DefinicionProceso
     {
-        public DefinicionProceso()
-        {
-            DefinicionWorkflows = new HashSet<DefinicionWorkflow>();
-            Procesos = new HashSet<Proceso>();
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int DefinicionProcesoId { get; set; }
@@ -34,8 +28,8 @@ namespace App.Model.Core
         [Display(Name = "Habilitado?")]
         public bool Habilitado { get; set; }
 
-        public virtual ICollection<DefinicionWorkflow> DefinicionWorkflows { get; set; }
-        public virtual ICollection<Proceso> Procesos { get; set; }
+        public virtual ICollection<DefinicionWorkflow> DefinicionWorkflows { get; set; } = new HashSet<DefinicionWorkflow>();
+        public virtual ICollection<Proceso> Procesos { get; set; } = new HashSet<Proceso>();
 
         [NotMapped]
         [Display(Name = "Participantes")]
@@ -47,6 +41,6 @@ namespace App.Model.Core
         public virtual Entidad Entidad { get; set; }
 
         [Display(Name = "Ejecutar primera tarea inmediatamente?")]
-        public bool EjecutarInmediatamente { get; set; } = false;
+        public bool EjecutarInmediatamente { get; set; }
     }
 }

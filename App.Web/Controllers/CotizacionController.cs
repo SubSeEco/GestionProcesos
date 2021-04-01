@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,7 +8,6 @@ using System.Web.Script.Serialization;
 using App.Model.Pasajes;
 //using App.Model.Shared;
 using App.Core.Interfaces;
-using Newtonsoft.Json;
 using App.Core.UseCases;
 using App.Model.Core;
 
@@ -20,12 +18,12 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class CotizacionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
-        public CotizacionController(IGestionProcesos repository, ISIGPER sigper, IFile file)
+        public CotizacionController(IGestionProcesos repository, ISigper sigper, IFile file)
         {
             _repository = repository;
             _sigper = sigper;
@@ -35,31 +33,26 @@ namespace App.Web.Controllers
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
         }
 
-        public class FileUpload
-        {
-            public FileUpload()
-            {
-            }
+        //public class FileUpload
+        //{
+        //    [Required(ErrorMessage = "Es necesario especificar este dato")]
+        //    [Display(Name = "Archivo")]
+        //    [DataType(DataType.Upload)]
+        //    //public HttpPostedFileBase File { get; set; }
+        //    public System.Web.HttpPostedFileBase[] File { get; set; }
 
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            //public HttpPostedFileBase File { get; set; }
-            public System.Web.HttpPostedFileBase[] File { get; set; }
-
-            //public int ProcesoId { get; set; }
-            //public int WorkflowId { get; set; }
-        }
+        //    //public int ProcesoId { get; set; }
+        //    //public int WorkflowId { get; set; }
+        //}
 
         private string GetDolar()
         {
             string apiUrl = "https://www.mindicador.cl/api";
-            string jsonString = "{}";
             WebClient http = new WebClient();
             JavaScriptSerializer jss = new JavaScriptSerializer();
 
             http.Headers.Add(HttpRequestHeader.Accept, "application/json");
-            jsonString = http.DownloadString(apiUrl);
+            var jsonString = http.DownloadString(apiUrl);
             var indicatorsObject = jss.Deserialize<Dictionary<string, object>>(jsonString);
 
             Dictionary<string, Dictionary<string, string>> dailyIndicators = new Dictionary<string, Dictionary<string, string>>();
@@ -266,8 +259,8 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se devuelve a la tarea que llamo el metodo*/
                     var pas = _repository.GetFirst<Pasaje>(c => c.PasajeId == model.PasajeId);
-                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == pas.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 5);
-                    if(pro.Count() > 0)
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == pas.ProcesoId && p.DefinicionWorkflow.Secuencia == 5);
+                    if(pro.Any())
                         return RedirectToAction("EditSeleccion", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
                     else
                         return RedirectToAction("EditAbast", "Pasaje", new { model.WorkflowId, id = model.PasajeId });

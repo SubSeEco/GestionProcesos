@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedInstitucion")]
     public class Institucion
     {
-        public Institucion()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int InstitucionId { get; set; }

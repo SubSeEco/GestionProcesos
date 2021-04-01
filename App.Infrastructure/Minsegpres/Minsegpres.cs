@@ -9,7 +9,6 @@ using System.Net;
 using App.Model.FirmaDocumentoGenerico;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
@@ -19,9 +18,9 @@ namespace App.Infrastructure.Minsegpres
 {
     public class Minsegpres : IMinsegpres
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
+        private readonly IGestionProcesos _repository;
+        private readonly IFolio _folio;
+        private readonly IFile _file;
 
         public Minsegpres(IGestionProcesos repository, IFolio folio, IFile file)
         {
@@ -34,7 +33,7 @@ namespace App.Infrastructure.Minsegpres
         public byte[] SignConOtp(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento, int DocumentoId)
         {
             var url_tramites_en_linea = "https://tramites.economia.gob.cl/";
-            var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
+            var _qrResponse = _file.CreateQr(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
 
             byte[] binario = null;
 
@@ -88,10 +87,10 @@ namespace App.Infrastructure.Minsegpres
 
                                     //estampa de folio
                                     //ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
-                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
 
                                     //estampa de fecha
-                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+                                    ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
                                 }
                                 catch (Exception ex)
                                 {
@@ -110,17 +109,17 @@ namespace App.Infrastructure.Minsegpres
                             //var img = Image.GetInstance(QR);
                             var img = Image.GetInstance(_qrResponse);
                             //var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                            var fontStandard = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+                            var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
                             //var fontBold = new iTextSharp.text.Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
-                            var fontBold = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
+                            var fontBold = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
                             var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
                             var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
 
                             table.TotalWidth = 520f;
-                            table.SetWidths(new float[] { 8f, 25f, 6f });
+                            table.SetWidths(new[] { 8f, 25f, 6f });
                             table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
-                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)) { });
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
                             //table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase(string.Join(", ", Nombre), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
@@ -173,7 +172,7 @@ namespace App.Infrastructure.Minsegpres
 
             string fileContent = Convert.ToBase64String(documento);
 
-            DateTime issuedAt = DateTime.Now;
+            //DateTime issuedAt = DateTime.Now;
             DateTime expires = DateTime.Now.AddMinutes(30);
 
             //Testin
@@ -422,30 +421,30 @@ namespace App.Infrastructure.Minsegpres
 
             string fileContent = Convert.ToBase64String(documento);
 
-            DateTime issuedAt = DateTime.Now;
-            DateTime expires = DateTime.Now.AddMinutes(30);
+            //DateTime issuedAt = DateTime.Now;
+            //DateTime expires = DateTime.Now.AddMinutes(30);
 
             //Testin
-            string key = "8d7a6d0fea8541b99b0dce110fd0d077";
+            //string key = "8d7a6d0fea8541b99b0dce110fd0d077";
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-            var credentials = new SigningCredentials
-                              (securityKey, SecurityAlgorithms.HmacSha256Signature);
+            //var credentials = new SigningCredentials
+            //                  (securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            var header = new JwtHeader(credentials);
+            //var header = new JwtHeader(credentials);
 
-            var payload = new JwtPayload
-               {
-                   { "entity", "Subsecretaría de Economía y Empresas de Menor Tamaño"},
-                   { "run", Run},
-                   { "expiration", expires},
-                   //{ "purpose", "Propósito General"},
-                   { "purpose", "Desatendido"},
-               };
+            //var payload = new JwtPayload
+            //   {
+            //       { "entity", "Subsecretaría de Economía y Empresas de Menor Tamaño"},
+            //       { "run", Run},
+            //       { "expiration", expires},
+            //       //{ "purpose", "Propósito General"},
+            //       { "purpose", "Desatendido"},
+            //   };
 
-            var secToken = new JwtSecurityToken(header, payload);
-            var handler = new JwtSecurityTokenHandler();
+            //var secToken = new JwtSecurityToken(header, payload);
+            //var handler = new JwtSecurityTokenHandler();
 
             //var tokenString = handler.WriteToken(secToken);
 

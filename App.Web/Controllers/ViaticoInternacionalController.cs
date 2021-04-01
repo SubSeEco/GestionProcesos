@@ -15,13 +15,11 @@ namespace App.Web.Controllers
 
     public class ViaticoInternacionalController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public ViaticoInternacionalController(IGestionProcesos repository, ISIGPER sigper)
+        public ViaticoInternacionalController(IGestionProcesos repository)
         {
             _repository = repository;
-            _sigper = sigper;
 
             if (ActiveDirectoryUsers == null)
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();

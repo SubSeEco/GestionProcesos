@@ -6,9 +6,6 @@ namespace App.Model.Comisiones
     [Table("SIGPERTipoVehiculo")]
     public class SIGPERTipoVehiculo
     {
-        public SIGPERTipoVehiculo()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "Id")]

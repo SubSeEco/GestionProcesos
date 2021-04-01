@@ -1,21 +1,20 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using App.Model.Core;
-using App.Model.Shared;
+using App.Model.InformeHSA;
+using App.Model.GestionDocumental;
 using App.Model.Cometido;
 using App.Model.Pasajes;
+using App.Model.Shared;
 using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
-using App.Model.InformeHSA;
-using App.Model.Memorandum;
-using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.HorasExtras;
 using App.Model.FirmaDocumentoGenerico;
 
 namespace App.Infrastructure.GestionProcesos
 {
-    public partial class AppContext : DbContext
+    public class AppContext : DbContext
     {
         // Your context has been configured to use a 'App.Context' connection string from your application's 
         // configuration file (App.config or Web.config). By default, this connection string targets the 
@@ -80,7 +79,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<SIGPERTipoVehiculo> SIGPERTipoVehiculo { get; set; }
         public virtual DbSet<InformeHSA> InformeHSA { get; set; }
         public virtual DbSet<EstadoProceso> EstadoProceso { get; set; }
-        public virtual DbSet<Memorandum> Memorandum { get; set; }
+        //public virtual DbSet<Memorandum> Memorandum { get; set; }
         public virtual DbSet<RegionComunaContraloria> RegionComunaContraloria { get; set; }
         public virtual DbSet<GD> GD { get; set; }
         public virtual DbSet<GDOrigen> GDOrigen { get; set; }
@@ -93,7 +92,7 @@ namespace App.Infrastructure.GestionProcesos
         {
             Database.SetInitializer<AppContext>(null);
             base.OnModelCreating(modelBuilder);
-            
+
             if (modelBuilder != null)
                 modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }

@@ -1,19 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class MARCACIONES
     {
-        public MARCACIONES()
-        { }
-
-        
         [Display(Name = "IDENTIFICADOR")]
         public string IDENTIFICADOR { get; set; }
 
-        [Display(Name = "SERIAL")]
-        public string SERIAL { get; set; }
+        //[Display(Name = "SERIAL")]
+        //public string SERIAL { get; set; }
 
         [Display(Name = "FECHA")]
         public DateTime FECHA { get; set; }

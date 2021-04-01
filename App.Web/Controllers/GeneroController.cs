@@ -10,7 +10,7 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class GeneroController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public GeneroController(IGestionProcesos repository)
         {

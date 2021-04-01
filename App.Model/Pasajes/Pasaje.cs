@@ -9,19 +9,13 @@ namespace App.Model.Pasajes
     [Table("Pasaje")]
     public class Pasaje: Core.BaseEntity
     {
-        public Pasaje()
-        {
-            Cotizacion = new List<Cotizacion>();
-            DestinosPasajes = new List<DestinosPasajes>();
-        }
-
         /*list de cotizaciones*/
         [Display(Name = "Lista Cotización")]
-        public virtual IList<Cotizacion> Cotizacion { get; set; }
+        public virtual IList<Cotizacion> Cotizacion { get; set; } = new List<Cotizacion>();
 
         /*list de destinos*/
         [Display(Name = "Lista Cotización")]
-        public virtual IList<DestinosPasajes> DestinosPasajes { get; set; }
+        public virtual IList<DestinosPasajes> DestinosPasajes { get; set; } = new List<DestinosPasajes>();
 
         /*Definicion de atributos*/
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -124,7 +118,6 @@ namespace App.Model.Pasajes
 
         #region ORIGEN DESTINOS
 
-        ///*ORIGEN*/
         //[Display(Name = "Origen Comuna Id")]
         //public string IdComunaOrigen { get; set; }
         //[Display(Name = "Origen Comuna")]

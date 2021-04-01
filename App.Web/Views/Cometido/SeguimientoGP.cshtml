@@ -34,7 +34,7 @@
                         @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
                     </div>
                     <div class="input-field col s12 m12 l12">
-                        @if (Model.Admin == true)
+                        @if (Model.Admin)
                         {
                             @Html.DropDownListFor(m => Model.IdUnidad, null, "Seleccione...")
                         }

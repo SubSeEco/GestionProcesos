@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreEstadoProceso")]
     public class EstadoProceso 
     {
-        public EstadoProceso()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int EstadoProcesoId { get; set; }

@@ -18,10 +18,6 @@ namespace App.Web.Controllers
     {
         public class DTOFileUploadCreate
         {
-            public DTOFileUploadCreate()
-            {
-            }
-
             public int FirmaDocumentoId { get; set; }
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
@@ -62,10 +58,6 @@ namespace App.Web.Controllers
 
         public class DTOFileUploadEdit
         {
-            public DTOFileUploadEdit()
-            {
-            }
-
             public int FirmaDocumentoId { get; set; }
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
@@ -104,14 +96,14 @@ namespace App.Web.Controllers
             public string URL { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IFolio _folio;
+        private readonly IHsm _hsm;
+        private readonly IEmail _email;
 
-        public FirmaDocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public FirmaDocumentoController(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -238,7 +230,7 @@ namespace App.Web.Controllers
                     URL = model.URL,
                     Observaciones = model.Comentario,
                     Autor = model.Autor,
-                }); ;
+                });
 
                 if (_UseCaseResponseMessage.IsValid)
                 {

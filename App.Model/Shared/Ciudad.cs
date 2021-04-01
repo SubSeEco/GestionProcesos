@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedCiudad")]
     public class Ciudad
     {
-        public Ciudad()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Ciudad Id")]
         public int CiudadId { get; set; }

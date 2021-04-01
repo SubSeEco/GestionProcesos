@@ -15,8 +15,8 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class DestinosController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
         public static List<Destinos> ListDestino { get; set; }
         public class DtoMontos
@@ -38,7 +38,7 @@ namespace App.Web.Controllers
 
         //}
 
-        public DestinosController(IGestionProcesos repository, ISIGPER sigper)
+        public DestinosController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -59,15 +59,15 @@ namespace App.Web.Controllers
         }
 
         public JsonResult GetRegion(string IdComuna)
-        {            
+        {
             var region = _sigper.GetRegionbyComuna(IdComuna).Trim();
-            return Json(new { regionDescripcion = region}, JsonRequestBehavior.AllowGet);
+            return Json(new { regionDescripcion = region }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetComunas(string IdRegion)
         {
             var comunas = _sigper.GetComunasbyRegion(IdRegion);
-            return Json ( comunas.Select(q => new { value = q.Pl_CodCom.Trim(),text = q.Pl_DesCom.Trim()}) , JsonRequestBehavior.AllowGet);
+            return Json(comunas.Select(q => new { value = q.Pl_CodCom.Trim(), text = q.Pl_DesCom.Trim() }), JsonRequestBehavior.AllowGet);
         }
 
         public DtoMontos CalculoViatico(int CometidoId, int CantDias100, int CantDias60, int CantDias40, int CantDias50)
@@ -80,16 +80,16 @@ namespace App.Web.Controllers
             var viatico = _repository.GetFirst<Viatico>(v => v.Año == DateTime.Now.Year);
             var viaticoHonorario = _repository.Get<ViaticoHonorario>(v => v.Año == DateTime.Now.Year);
             var grado = cometido.GradoDescripcion;
-            var CalidadJuridica = cometido.CalidadDescripcion; 
+            //var CalidadJuridica = cometido.CalidadDescripcion;
             //if (CalidadJuridica == "HONORARIOS") // "CONTRATA")
             if (cometido.IdGrado == "0") // "CONTRATA")
             {
                 /*Se busca el valor del sueldo bruto para definir el tramo en el que se encuentra*/
-                var Sueldo =_sigper.GetReContra().Where(s => s.RH_NumInte == cometido.NombreId.Value).FirstOrDefault().Re_SuelBas;
+                var Sueldo = _sigper.GetReContra().Where(s => s.RH_NumInte == cometido.NombreId.Value).FirstOrDefault().Re_SuelBas;
                 if (Sueldo > viaticoHonorario.Where(v => v.Tramo == "Tramo C").FirstOrDefault().Desde.Value && Sueldo <= viaticoHonorario.Where(v => v.Tramo == "Tramo C").FirstOrDefault().Hasta.Value)
                 {
                     /*Tramo C*/
-                    var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo C");                    
+                    var tramo = viaticoHonorario.Where(v => v.Tramo == "Tramo C");
                     total.Dias100 += Convert.ToDouble(CantDias100) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje100.Value);
                     total.Dias60 += Convert.ToDouble(CantDias60) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje60.Value);
                     total.Dias40 += Convert.ToDouble(CantDias40) * Convert.ToDouble(tramo.FirstOrDefault().Porcentaje40.Value);
@@ -134,49 +134,49 @@ namespace App.Web.Controllers
 
                 {
                     case "A":
-                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango1.Value),0);
-                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje60,0);
-                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje40,0);
-                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje50,0);
+                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango1.Value), 0);
+                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje60, 0);
+                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje40, 0);
+                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango1.Value) * porcentaje50, 0);
                         total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                         break;
                     case "B":
                     case "C":
-                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango2.Value),0);
-                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje60,0);
-                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje40,0);
-                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje50,0);
+                        total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango2.Value), 0);
+                        total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje60, 0);
+                        total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje40, 0);
+                        total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango2.Value) * porcentaje50, 0);
                         total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                         break;
                     default:
                         //profesionales
                         var numeroRangoEus = Convert.ToInt32(grado);
                         if (numeroRangoEus >= 2 && numeroRangoEus <= 4) //(grado == "10") Vna_EstamentoRango3
-                        {                            
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango3.Value),0);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje60,0);
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje40,0);
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje50,0);
+                        {
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango3.Value), 0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje60, 0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje40, 0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango3.Value) * porcentaje50, 0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }
                         //tecnicos
                         if (numeroRangoEus >= 5 && numeroRangoEus <= 10) // --> Vna_EstamentoRango4
                         {
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango4.Value),0);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje60,0);
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje40,0);
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango4.Value)* porcentaje50,0);
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango4.Value), 0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje60, 0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje40, 0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango4.Value) * porcentaje50, 0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }
                         //administrativos
                         if (numeroRangoEus >= 11 && numeroRangoEus <= 31) // Vna_EstamentoRango5,Vna_EstamentoRango6
                         {
-                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango5.Value),0);
-                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje60,0);
-                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje40,0);
-                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje50,0);
+                            total.Dias100 += Convert.ToDouble(CantDias100) * Math.Round(Convert.ToDouble(viatico.Rango5.Value), 0);
+                            total.Dias60 += Convert.ToDouble(CantDias60) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje60, 0);
+                            total.Dias40 += Convert.ToDouble(CantDias40) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje40, 0);
+                            total.Dias50 += Convert.ToDouble(CantDias50) * Math.Round(Convert.ToDouble(viatico.Rango5.Value) * porcentaje50, 0);
                             total.DiasTotal = total.Dias100 + total.Dias60 + total.Dias40 + total.Dias50;
                             break;
                         }
@@ -188,36 +188,43 @@ namespace App.Web.Controllers
 
         public JsonResult Viatico(int CometidoId, int CantDias100, int CantDias60, int CantDias40, int CantDias50)
         {
-            DtoMontos valor = CalculoViatico(CometidoId, CantDias100, CantDias60, CantDias40, CantDias50);            
-            return Json(new { Dias100Monto = Math.Round(valor.Dias100.Value,0)
-                            , Dias60Monto = Math.Round(valor.Dias60.Value , 0)
-                            , Dias40Monto = Math.Round(valor.Dias40.Value ,0 )
-                            , Dias50Monto  = Math.Round(valor.Dias50.Value ,0 )
-                            , DiasTotal = Math.Round(valor.DiasTotal.Value, 0)}, JsonRequestBehavior.AllowGet);
+            DtoMontos valor = CalculoViatico(CometidoId, CantDias100, CantDias60, CantDias40, CantDias50);
+            return Json(new
+            {
+                Dias100Monto = Math.Round(valor.Dias100.Value, 0)
+                            ,
+                Dias60Monto = Math.Round(valor.Dias60.Value, 0)
+                            ,
+                Dias40Monto = Math.Round(valor.Dias40.Value, 0)
+                            ,
+                Dias50Monto = Math.Round(valor.Dias50.Value, 0)
+                            ,
+                DiasTotal = Math.Round(valor.DiasTotal.Value, 0)
+            }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public JsonResult Viatico60(int CometidoId, int CantDias)
         {
-            double monto60 = CalculoViatico(CometidoId,0, CantDias,0,0).Dias60.Value;
-            return Json(new { Dias60Monto = Math.Round(monto60,0) }, JsonRequestBehavior.AllowGet);
+            double monto60 = CalculoViatico(CometidoId, 0, CantDias, 0, 0).Dias60.Value;
+            return Json(new { Dias60Monto = Math.Round(monto60, 0) }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Viatico40(int CometidoId, int CantDias)
         {
-            double monto40 = CalculoViatico(CometidoId,0,0, CantDias,0).Dias40.Value;
-            return Json(new { Dias40Monto = Math.Round(monto40,0) }, JsonRequestBehavior.AllowGet);
+            double monto40 = CalculoViatico(CometidoId, 0, 0, CantDias, 0).Dias40.Value;
+            return Json(new { Dias40Monto = Math.Round(monto40, 0) }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Viatico50(int CometidoId, int CantDias)
         {
-            double monto50 = CalculoViatico(CometidoId, 0, 0, 0,CantDias).Dias50.Value;
-            return Json(new { Dias50Monto = Math.Round(monto50,0) }, JsonRequestBehavior.AllowGet);
+            double monto50 = CalculoViatico(CometidoId, 0, 0, 0, CantDias).Dias50.Value;
+            return Json(new { Dias50Monto = Math.Round(monto50, 0) }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Viatico100(int CometidoId, int cantDias)
         {
-            double monto = CalculoViatico(CometidoId, cantDias,0,0,0).Dias100.Value;
-            return Json(new { Dias100Monto = Math.Round(monto,0) }, JsonRequestBehavior.AllowGet);
+            double monto = CalculoViatico(CometidoId, cantDias, 0, 0, 0).Dias100.Value;
+            return Json(new { Dias100Monto = Math.Round(monto, 0) }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()
@@ -264,12 +271,12 @@ namespace App.Web.Controllers
             model.Dias60 = 0;
             model.Dias40 = 0;
             model.Dias50 = 0;
-            model.Dias00 = 0;           
+            model.Dias00 = 0;
             model.Total = 0;
             model.Dias100Aprobados = 0;
             model.Dias60Aprobados = 0;
             model.Dias40Aprobados = 0;
-            model.Dias50Aprobados = 0;            
+            model.Dias50Aprobados = 0;
             model.Dias00Aprobados = 0;
             model.Dias100Monto = 0;
             model.Dias60Monto = 0;
@@ -281,7 +288,7 @@ namespace App.Web.Controllers
             //model.Cometido.ReqPasajeAereo = cometido.ReqPasajeAereo;
             model.WorkflowId = cometido.WorkflowId;
 
-            
+
 
             return View(model);
         }
@@ -308,11 +315,11 @@ namespace App.Web.Controllers
 
                     /*se redireccina a la vista que llamo al metodo de borrar*/
                     var com = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
-                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
-                    if (pro.Count() > 0)
+                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId && p.DefinicionWorkflow.Secuencia == 6);
+                    if (pro.Any())
                         return RedirectToAction("EditGP", "Cometido", new { model.WorkflowId, id = model.CometidoId });
                     else
-                        return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId });                    
+                        return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId });
                 }
                 else
                 {
@@ -326,9 +333,9 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new List<SelectListItem>();
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion);
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(),model.IdComuna);
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(), model.IdComuna);
             model.Cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
 
             model.Dias100Aprobados = 0;
@@ -366,7 +373,7 @@ namespace App.Web.Controllers
                     //ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
 
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId});
+                    return RedirectToAction("Edit", "Cometido", new { model.WorkflowId, id = model.CometidoId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -412,7 +419,7 @@ namespace App.Web.Controllers
         public ActionResult EditGP(Destinos model)
         {
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(),model.IdRegion);
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion);
 
 
             var modelOld = _repository.GetById<Destinos>(model.DestinoId);
@@ -445,7 +452,7 @@ namespace App.Web.Controllers
 
             return View(model);
         }
-        
+
         public ActionResult Delete(int id)
         {
             var model = _repository.GetById<Destinos>(id);
@@ -464,7 +471,7 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Destinos>(id);
             var cometidoId = model.CometidoId;
             var _UseCaseResponseMessage = _useCaseInteractor.DestinosDelete(id);
-            
+
 
             if (_UseCaseResponseMessage.IsValid)
             {
@@ -472,13 +479,13 @@ namespace App.Web.Controllers
 
                 /*se redireccina a la vista que llamo al metodo de borrar*/
                 var com = _repository.GetFirst<Cometido>(c => c.CometidoId == cometidoId);
-                var pro = _repository.Get<Workflow>(p =>p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
-                if(pro.Count() > 0)
+                var pro = _repository.GetExists<Workflow>(p => p.ProcesoId == com.ProcesoId && p.DefinicionWorkflow.Secuencia == 6);
+                if (pro)
                     return RedirectToAction("EditGP", "Cometido", new { id = cometidoId });
-                else
-                    return RedirectToAction("Edit", "Cometido", new { id = cometidoId });
+
+                return RedirectToAction("Edit", "Cometido", new { id = cometidoId });
             }
-                
+
 
             foreach (var item in _UseCaseResponseMessage.Errors)
             {

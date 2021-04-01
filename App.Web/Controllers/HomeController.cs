@@ -10,24 +10,22 @@ namespace App.Web.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IHSM _hsm;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
 
         public class DTOUser
         {
-            public bool IsAdmin { get; set; } = false;
-            public bool IsConsultor { get; set; } = false;
-            public bool IsCometido { get; set; } = false;
+            public bool IsAdmin { get; set; } 
+            public bool IsConsultor { get; set; } 
+            public bool IsCometido { get; set; } 
 
-            public int Task { get; set; } = 0;
+            public int Task { get; set; } 
         }
 
-        public HomeController(IGestionProcesos repository, ISIGPER sigper, IHSM hsm)
+        public HomeController(IGestionProcesos repository, ISigper sigper)
         {
             _sigper = sigper;
             _repository = repository;
-            _hsm = hsm;
         }
 
         public ActionResult Index() {
@@ -35,16 +33,16 @@ namespace App.Web.Controllers
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {
-                IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())),
-                IsConsultor = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Consultor.ToString())),
-                IsCometido = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()))
+                IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(Enum.Grupo.Administrador.ToString())),
+                IsConsultor = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(Enum.Grupo.Consultor.ToString())),
+                IsCometido = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(Enum.Grupo.Cometido.ToString()))
             };
 
             var user = _sigper.GetUserByEmail(email);
-            var gruposEspeciales = _repository.Get<Usuario>(q => q.Habilitado && q.Email == email && !q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())).Select(q => q.GrupoId).ToList();
+            var gruposEspeciales = _repository.Get<Usuario>(q => q.Habilitado && q.Email == email && !q.Grupo.Nombre.Contains(Enum.Grupo.Administrador.ToString())).Select(q => q.GrupoId).ToList();
 
             if (user.Funcionario == null || user.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en el sistema SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en el sistema Sigper");
 
             if (ModelState.IsValid)
             {
@@ -56,7 +54,7 @@ namespace App.Web.Controllers
                 predicateGrupal = predicateGrupal.And(q => !q.Terminada && !q.TareaPersonal);
 
                 //no es administrador, filtrar por grupo y tareas personales
-                if (!_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString())))
+                if (!_repository.GetExists<Usuario>(q => q.Habilitado && q.Email == email && q.Grupo.Nombre.Contains(Enum.Grupo.Administrador.ToString())))
                 {
                     predicatePersonal = predicatePersonal.And(q => q.TareaPersonal && q.Email == email);
                     predicateGrupal = predicateGrupal.And(q => !q.TareaPersonal && (q.Pl_UndCod == user.Unidad.Pl_UndCod || gruposEspeciales.Contains(q.GrupoId.Value)));

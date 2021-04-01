@@ -28,13 +28,12 @@ namespace App.Util
 
         public static int ToInteger(object obj)
         {
-            int intHelper = 0;
             if (obj == null)
             {
                 return 0;
             }
 
-            if (int.TryParse(obj.ToString(), out intHelper))
+            if (int.TryParse(obj.ToString(), out var intHelper))
             {
                 return intHelper;
             }
@@ -50,8 +49,7 @@ namespace App.Util
 
         public static double ToDouble(object obj)
         {
-            double dblHelper = 0;
-            if (obj != null && double.TryParse(obj.ToString(), out dblHelper))
+            if (obj != null && double.TryParse(obj.ToString(), out var dblHelper))
             {
                 return dblHelper;
             }
@@ -60,8 +58,7 @@ namespace App.Util
 
         public static decimal ToDecimal(object obj)
         {
-            decimal decHelper = 0;
-            if (obj != null && decimal.TryParse(obj.ToString(), out decHelper))
+            if (obj != null && decimal.TryParse(obj.ToString(), out var decHelper))
             {
                 return decHelper;
             }
@@ -89,12 +86,11 @@ namespace App.Util
 
         public static bool ToBoolean(object obj)
         {
-            bool bolHelper;
             if (obj == null)
             {
                 return false;
             }
-            if (bool.TryParse(obj.ToString().ToLower(), out bolHelper))
+            if (bool.TryParse(obj.ToString().ToLower(), out var bolHelper))
             {
                 return bolHelper;
             }
@@ -224,13 +220,12 @@ namespace App.Util
 
         public static int? ToNullableInteger(object obj)
         {
-            int intHelper = 0;
             if (obj == null)
             {
                 return null;
             }
 
-            if (int.TryParse(obj.ToString(), out intHelper))
+            if (int.TryParse(obj.ToString(), out var intHelper))
             {
                 return intHelper;
             }
@@ -250,8 +245,7 @@ namespace App.Util
 
         public static double? ToNullableDouble(object obj)
         {
-            double dblHelper = 0;
-            if (obj != null && double.TryParse(obj.ToString(), out dblHelper))
+            if (obj != null && double.TryParse(obj.ToString(), out var dblHelper))
             {
                 return dblHelper;
             }
@@ -260,8 +254,7 @@ namespace App.Util
 
         public static decimal? ToNullableDecimal(object obj)
         {
-            decimal decHelper = 0;
-            if (obj != null && decimal.TryParse(obj.ToString(), out decHelper))
+            if (obj != null && decimal.TryParse(obj.ToString(), out var decHelper))
             {
                 return decHelper;
             }
@@ -270,13 +263,12 @@ namespace App.Util
 
         public static bool? ToNullableBoolean(object obj)
         {
-            bool bolHelper;
             if (obj == null)
             {
                 return null;
             }
 
-            if (bool.TryParse(obj.ToString().ToLower(), out bolHelper))
+            if (bool.TryParse(obj.ToString().ToLower(), out var bolHelper))
             {
                 return bolHelper;
             }
@@ -310,7 +302,7 @@ namespace App.Util
         {
             CultureInfo ci = new CultureInfo("es-es");
             DateTime dtHelper = DateTime.MinValue;
-            if (obj != null && !obj.ToString().Trim().Equals(string.Empty) && DateTime.TryParse(obj.ToString() + " 23:59:59", ci, DateTimeStyles.None, out dtHelper))
+            if (obj != null && !obj.ToString().Trim().Equals(string.Empty) && DateTime.TryParse(obj + " 23:59:59", ci, DateTimeStyles.None, out dtHelper))
             {
                 return dtHelper;
             }
@@ -339,8 +331,7 @@ namespace App.Util
 
         public static string ToStringBoolean(object obj)
         {
-            bool bolHelper;
-            if (obj != null && bool.TryParse(obj.ToString().ToLower(), out bolHelper))
+            if (obj != null && bool.TryParse(obj.ToString().ToLower(), out var bolHelper))
             {
                 if (bolHelper)
                 {

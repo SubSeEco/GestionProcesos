@@ -22,7 +22,7 @@
                             @Html.HiddenFor(q => Model.CometidoId)
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary(true, "", new { @class = "red-text" })
-                            if (Model.Cometido.SolicitaViatico == true || Model.Cometido.SolicitaViatico != true)
+                            if (Model.Cometido.SolicitaViatico || Model.Cometido.SolicitaViatico != true)
                             {
                                 <div id="dvViaticos">
                                     <div class="input-field col s12 m6 l3">

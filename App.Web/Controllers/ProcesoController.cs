@@ -20,11 +20,6 @@ namespace App.Web.Controllers
     {
         public class DTODelete
         {
-            public DTODelete()
-            {
-
-            }
-
             public int ProcesoId { get; set; }
 
 
@@ -82,11 +77,11 @@ namespace App.Web.Controllers
             public bool fill { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly IEmail _email;
+        private readonly ISigper _sigper;
 
-        public ProcesoController(IGestionProcesos repository, IEmail email, ISIGPER sigper)
+        public ProcesoController(IGestionProcesos repository, IEmail email, ISigper sigper)
         {
             _repository = repository;
             _email = email;
@@ -105,7 +100,7 @@ namespace App.Web.Controllers
             {
                 label = "N° de procesos",
                 data = result.ToList().OrderByDescending(q => q.Value).Select(q => (double)q.Value).ToArray(),
-                backgroundColor = new string[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
+                backgroundColor = new[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
             });
 
             return Json(_chart, JsonRequestBehavior.AllowGet);
@@ -125,8 +120,8 @@ namespace App.Web.Controllers
             _chart.datasets.Add(new Datasets()
             {
                 label = "Días promedio",
-                data = result.ToList().OrderByDescending(q => q.Value).Select(q => (double)q.Value).ToArray(),
-                backgroundColor = new string[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
+                data = result.ToList().OrderByDescending(q => q.Value).Select(q => q.Value).ToArray(),
+                backgroundColor = new[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
             });
 
             return Json(_chart, JsonRequestBehavior.AllowGet);
@@ -146,8 +141,8 @@ namespace App.Web.Controllers
             _chart.datasets.Add(new Datasets()
             {
                 label = "Días promedio",
-                data = result.ToList().OrderByDescending(q => q.Value).Select(q => (double)q.Value).ToArray(),
-                backgroundColor = new string[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
+                data = result.ToList().OrderByDescending(q => q.Value).Select(q => q.Value).ToArray(),
+                backgroundColor = new[] { "#2ecc71", "#3498db", "#e74c3c", "#f1c40f", "#9b59b6", "#34495e" }
             });
 
             return Json(_chart, JsonRequestBehavior.AllowGet);
@@ -308,9 +303,9 @@ namespace App.Web.Controllers
 
         public ActionResult Dashboard()
         {
-            ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso);
-            ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
-            ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
+            ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso);
+            ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
+            ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
             ViewBag.Totales = _repository.GetCount<Proceso>();
 
             return View();

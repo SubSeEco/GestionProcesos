@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class DGREGIONES
     {
-        public DGREGIONES()
-        {
-        }
-
         [Key]
         [Display(Name = "Pl_CodReg")]
         public string Pl_CodReg { get; set; }

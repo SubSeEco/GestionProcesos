@@ -270,13 +270,13 @@
     <Compile Include="GestionProcesos\GestionProcesos.cs" />
     <Compile Include="GestionProcesos\WorkflowService.cs" />
     <Compile Include="Minsegpres\Minsegpres.cs" />
-    <Compile Include="SIGPER\AppContextTurismo.cs" />
+    <Compile Include="Sigper\AppContextTurismo.cs" />
     <Compile Include="Email\Email.cs" />
-    <Compile Include="HSM\HSM.cs" />
+    <Compile Include="Hsm\HSM.cs" />
     <Compile Include="File\File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SIGPER\AppContextEconomia.cs" />
-    <Compile Include="SIGPER\SIGPER.cs" />
+    <Compile Include="Sigper\AppContextEconomia.cs" />
+    <Compile Include="Sigper\Sigper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

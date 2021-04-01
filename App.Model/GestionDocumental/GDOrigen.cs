@@ -5,10 +5,6 @@ namespace App.Model.GestionDocumental
 {
     public class GDOrigen
     {
-        public GDOrigen()
-        {
-        }
-
         //comun
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]

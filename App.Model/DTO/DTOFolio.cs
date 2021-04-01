@@ -4,10 +4,6 @@ namespace App.Model.DTO
 {
     public class DTOFolio
     {
-        public DTOFolio()
-        {
-
-        }
         public string status { get; set; }
         public string error { get; set; }
 

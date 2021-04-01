@@ -1,4 +1,7 @@
-﻿namespace App.Util
+﻿using System;
+using System.Collections.Generic;
+
+namespace App.Util
 {
     public static class Enum
     {
@@ -34,17 +37,17 @@
             Remuneraciones
         }
 
-        public enum TipoWorkflow
-        {
-            Create = 1,
-            Edit = 2,
-            Details = 3,
-            Sign = 4,
-            Validate = 5,
-            Evaluate = 6,
-            Finish = 7,
-            AskArchive = 8
-        }
+        //public enum TipoWorkflow
+        //{
+        //    Create = 1,
+        //    Edit = 2,
+        //    Details = 3,
+        //    Sign = 4,
+        //    Validate = 5,
+        //    Evaluate = 6,
+        //    Finish = 7,
+        //    AskArchive = 8
+        //}
 
         public enum Firmas
         {
@@ -188,10 +191,10 @@
         }
 
      
-        public enum Cometidos
-        {
-            DiasAnticipacionIngreso = 7,
-        }
+        //public enum Cometidos
+        //{
+        //    DiasAnticipacionIngreso = 7,
+        //}
 
         public enum HorasExtras
         {
@@ -212,5 +215,19 @@
             Publico = 1,
             Privado = 2,
         }
+
+        public static List<DateTime> Feriados => new List<DateTime> {
+            new DateTime(2020,09,18),
+            new DateTime(2020,09,19),
+            new DateTime(2020,10,12),
+            new DateTime(2020,10,25),
+            new DateTime(2020,10,31),
+            new DateTime(2020,11,01),
+            new DateTime(2020,11,29),
+            new DateTime(2020,12,08),
+            new DateTime(2020,12,25),
+            new DateTime(2021,01,01),
+            new DateTime(2021,04,02),
+        };
     }
 }

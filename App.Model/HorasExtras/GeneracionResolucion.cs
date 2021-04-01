@@ -7,9 +7,6 @@ namespace App.Model.HorasExtras
     [Table("GeneracionResolucion")]
     public class GeneracionResolucion : Core.BaseEntity
     {
-        public GeneracionResolucion()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Generacion ResolucionId")]
         public int GeneracionResolucionId { get; set; }

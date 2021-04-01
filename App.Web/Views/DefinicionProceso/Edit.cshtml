@@ -104,7 +104,7 @@
     $(function () {
         $("#sortable").sortable({
             stop: function (event, ui) {
-                var map = Function.prototype.call.bind([].map)
+                var map = Function.prototype.call.bind([].map);
                 var list = document.querySelectorAll("li");
                 $("#ids").val(map(list, function (x) { return x.id; }));
             }

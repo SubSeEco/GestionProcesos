@@ -412,7 +412,7 @@ else
                                                             @Html.HiddenFor(m => CotizacionDocumento.ToArray()[i].Selected)
                                                             <span></span>
                                                         </label>
-                                                        @if (CotizacionDocumento.ToArray()[i].Selected == true)
+                                                        @if (CotizacionDocumento.ToArray()[i].Selected)
                                                         {
                                                             <a href='@Url.Action("Edit", "Cotizacion", new { id = CotizacionDocumento.ToArray()[i].CotizacionId})'><img src="~/Content/images/icon-edit.png"></img></a>
                                                         }
@@ -503,7 +503,7 @@ else
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
 <script>
-    $(document).ready(function () { })
+    $(document).ready(function () { });
     $('input:hidden').each(function (index, element) {
         $(element).appendTo($(element).parent());
     });

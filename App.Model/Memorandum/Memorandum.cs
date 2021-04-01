@@ -7,10 +7,6 @@ namespace App.Model.Memorandum
     [Table("Memorandum")]
     public class Memorandum : Core.BaseEntity
     {
-        public Memorandum()
-        {
-        }
-
         //[HiddenInput(DisplayValue = false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Numero Memorandum")]
@@ -1377,6 +1373,6 @@ namespace App.Model.Memorandum
         public string Firmante { get; set; }
 
         [Display(Name = "Memorandum Reservado")]
-        public bool Reservado { get; set; } = false;
+        public bool Reservado { get; set; } 
     }
 }

@@ -8,20 +8,14 @@ namespace App.Model.Comisiones
 {
     [Table("Comisiones")]
     public class Comisiones : Core.BaseEntity
-    {        
-        public Comisiones()
-        {
-            DestinosComision = new List<DestinosComision>();
-            GeneracionCDPComision = new List<GeneracionCDPComision>();
-        }
-
+    {
         /*list de Generacion CDP*/
         [Display(Name = "Lista GeneracionCDP")]
-        public virtual List<GeneracionCDPComision> GeneracionCDPComision { get; set; }
+        public virtual List<GeneracionCDPComision> GeneracionCDPComision { get; set; } = new List<GeneracionCDPComision>();
 
         /*list de destino*/
         [Display(Name = "Lista Destinos")]
-        public virtual List<DestinosComision> DestinosComision { get; set; }
+        public virtual List<DestinosComision> DestinosComision { get; set; } = new List<DestinosComision>();
 
         [Required(ErrorMessage = "Se debe indicar la fecha")]
         [Display(Name = "Fecha Solicitud")]

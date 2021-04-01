@@ -16,9 +16,6 @@ namespace App.Web.Controllers
     {
         public class DTOResult
         {
-            public DTOResult()
-            {
-            }
             public int ProcesoId { get; set; }
             public bool Reservado { get; set; }
             public bool EsAutor { get; set; }
@@ -58,13 +55,11 @@ namespace App.Web.Controllers
             public int? EstadoProcesoId { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
 
-        public ProcesoConsultorController(IGestionProcesos repository, IEmail email)
+        public ProcesoConsultorController(IGestionProcesos repository)
         {
             _repository = repository;
-            _email = email;
         }
 
         public ActionResult Index()

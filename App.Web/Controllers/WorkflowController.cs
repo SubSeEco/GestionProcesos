@@ -10,7 +10,6 @@ using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Core.UseCases;
 using App.Model.InformeHSA;
-using App.Model.Memorandum;
 using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using System;
@@ -26,43 +25,43 @@ namespace App.Web.Controllers
 
     public class WorkflowController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
-        protected readonly IHSM _hsm;
-        protected readonly IWorkflowService _workflowService;
+        private readonly IGestionProcesos _repository;
+        private readonly IEmail _email;
+        private readonly ISigper _sigper;
+        private readonly IFolio _folio;
+        private readonly IFile _file;
+        private readonly IHsm _hsm;
+        private readonly IWorkflowService _workflowService;
 
-        public class DTOWorkflow
-        {
-            public DTOWorkflow()
-            {
-            }
+        //public class DTOWorkflow
+        //{
+        //    public DTOWorkflow()
+        //    {
+        //    }
 
-            public int WorkflowId { get; set; }
-            public DateTime FechaCreacion { get; set; }
-            public string Asunto { get; set; }
-            public string Definicion { get; set; }
-            public bool TareaPersonal { get; set; }
-            public string NombreFuncionario { get; set; }
-            public string Pl_UndDes { get; set; }
-            public string Grupo { get; set; }
-            public string Mensaje { get; set; }
+        //    public int WorkflowId { get; set; }
+        //    public DateTime FechaCreacion { get; set; }
+        //    public string Asunto { get; set; }
+        //    public string Definicion { get; set; }
+        //    public bool TareaPersonal { get; set; }
+        //    public string NombreFuncionario { get; set; }
+        //    public string Pl_UndDes { get; set; }
+        //    public string Grupo { get; set; }
+        //    public string Mensaje { get; set; }
 
-            public int ProcesoId { get; set; }
-            public DateTime? ProcesoFechaVencimiento { get; set; }
-            public string ProcesoDefinicion { get; set; }
-            public string ProcesoNombreFuncionario { get; set; }
-            public string ProcesoEmail { get; set; }
-            public string ProcesoEntidad { get; set; }
-            public GD GD { get; set; }
+        //    public int ProcesoId { get; set; }
+        //    public DateTime? ProcesoFechaVencimiento { get; set; }
+        //    public string ProcesoDefinicion { get; set; }
+        //    public string ProcesoNombreFuncionario { get; set; }
+        //    public string ProcesoEmail { get; set; }
+        //    public string ProcesoEntidad { get; set; }
+        //    public GD GD { get; set; }
 
-            public bool EsPersonal { get; set; }
+        //    public bool EsPersonal { get; set; }
 
-        }
+        //}
 
-        public class DTOUser
+        private class DTOUser
         {
             public string id { get; set; }
             public string value { get; set; }
@@ -96,7 +95,7 @@ namespace App.Web.Controllers
             public List<WorkflowDTO> TareasGrupales { get; set; }
         }
 
-        public WorkflowController(IGestionProcesos repository, IEmail email, ISIGPER sigper, IFolio folio, IFile file, IHSM hsm, IWorkflowService workflowService)
+        public WorkflowController(IGestionProcesos repository, IEmail email, ISigper sigper, IFolio folio, IFile file, IHsm hsm, IWorkflowService workflowService)
         {
             _repository = repository;
             _email = email;
@@ -192,13 +191,13 @@ namespace App.Web.Controllers
             if (workflow != null && workflow.Anulada)
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra anulada");
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.Cometido.ToString())
             {
                 var obj = _repository.GetFirst<Cometido>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.CometidoId;
-                    workflow.Entity = App.Util.Enum.Entidad.Cometido.ToString();
+                    workflow.Entity = Util.Enum.Entidad.Cometido.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -206,13 +205,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Pasaje.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.Pasaje.ToString())
             {
                 var obj = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.PasajeId;
-                    workflow.Entity = App.Util.Enum.Entidad.Pasaje.ToString();
+                    workflow.Entity = Util.Enum.Entidad.Pasaje.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -220,13 +219,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Comision.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.Comision.ToString())
             {
                 var obj = _repository.GetFirst<Comisiones>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.ComisionesId;
-                    workflow.Entity = App.Util.Enum.Entidad.Comision.ToString();
+                    workflow.Entity = Util.Enum.Entidad.Comision.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -234,13 +233,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var obj = _repository.GetFirst<FirmaDocumento>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.FirmaDocumentoId;
-                    workflow.Entity = App.Util.Enum.Entidad.FirmaDocumento.ToString();
+                    workflow.Entity = Util.Enum.Entidad.FirmaDocumento.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -248,13 +247,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.InformeHSA.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.InformeHSA.ToString())
             {
                 var obj = _repository.GetFirst<InformeHSA>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.InformeHSAId;
-                    workflow.Entity = App.Util.Enum.Entidad.InformeHSA.ToString();
+                    workflow.Entity = Util.Enum.Entidad.InformeHSA.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -262,41 +261,41 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
-            {
-                var obj = _repository.GetFirst<Memorandum>(q => q.ProcesoId == workflow.ProcesoId);
-                if (obj != null)
-                {
-                    workflow.EntityId = obj.MemorandumId;
-                    workflow.Entity = App.Util.Enum.Entidad.Memorandum.ToString();
-                    obj.WorkflowId = workflow.WorkflowId;
+            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.Memorandum.ToString())
+            //{
+            //    var obj = _repository.GetFirst<Memorandum>(q => q.ProcesoId == workflow.ProcesoId);
+            //    if (obj != null)
+            //    {
+            //        workflow.EntityId = obj.MemorandumId;
+            //        workflow.Entity = Util.Enum.Entidad.Memorandum.ToString();
+            //        obj.WorkflowId = workflow.WorkflowId;
 
-                    _repository.Update(obj);
-                    _repository.Save();
-                }
-            }
+            //        _repository.Update(obj);
+            //        _repository.Save();
+            //    }
+            //}
 
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
-            {
-                var obj = _repository.GetFirst<GD>(q => q.ProcesoId == workflow.ProcesoId);
-                if (obj != null)
-                {
-                    workflow.EntityId = obj.GDId;
-                    workflow.Entity = App.Util.Enum.Entidad.GDInterno.ToString();
-                    obj.WorkflowId = workflow.WorkflowId;
-
-                    _repository.Update(obj);
-                    _repository.Save();
-                }
-            }
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.GDInterno.ToString())
             {
                 var obj = _repository.GetFirst<GD>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.GDId;
-                    workflow.Entity = App.Util.Enum.Entidad.GDExterno.ToString();
+                    workflow.Entity = Util.Enum.Entidad.GDInterno.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.GDExterno.ToString())
+            {
+                var obj = _repository.GetFirst<GD>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.GDId;
+                    workflow.Entity = Util.Enum.Entidad.GDExterno.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -304,13 +303,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
             {
                 var obj = _repository.GetFirst<ProgramacionHorasExtraordinarias>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.ProgramacionHorasExtraordinariasId;
-                    workflow.Entity = App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString();
+                    workflow.Entity = Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -318,13 +317,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.HorasExtras.ToString())
             {
                 var obj = _repository.GetFirst<HorasExtras>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.HorasExtrasId;
-                    workflow.Entity = App.Util.Enum.Entidad.HorasExtras.ToString();
+                    workflow.Entity = Util.Enum.Entidad.HorasExtras.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -332,13 +331,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.GeneraResolucion.ToString())
             {
                 var obj = _repository.GetFirst<GeneracionResolucion>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.GeneracionResolucionId;
-                    workflow.Entity = App.Util.Enum.Entidad.GeneraResolucion.ToString();
+                    workflow.Entity = Util.Enum.Entidad.GeneraResolucion.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -346,13 +345,13 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
             {
                 var obj = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.ProcesoId == workflow.ProcesoId);
                 if (obj != null)
                 {
                     workflow.EntityId = obj.FirmaDocumentoGenericoId;
-                    workflow.Entity = App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString();
+                    workflow.Entity = Util.Enum.Entidad.FirmaDocumentoGenerico.ToString();
                     obj.WorkflowId = workflow.WorkflowId;
 
                     _repository.Update(obj);
@@ -383,7 +382,7 @@ namespace App.Web.Controllers
 
         public ActionResult Send(int id)
         {
-            var email = UserExtended.Email(User);
+            //var email = UserExtended.Email(User);
 
             ViewBag.TipoAprobacionId = new SelectList(_repository.Get<TipoAprobacion>(q => q.TipoAprobacionId > 1).OrderBy(q => q.Nombre), "TipoAprobacionId", "Nombre");
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre");
@@ -468,7 +467,7 @@ namespace App.Web.Controllers
 
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
 
-            if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje)
+            if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudPasaje)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _email, _sigper, _file);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
@@ -480,7 +479,7 @@ namespace App.Web.Controllers
 
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumento.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
@@ -492,9 +491,20 @@ namespace App.Web.Controllers
 
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Memorandum.ToString())
+            //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.Memorandum.ToString())
+            //{
+            //    var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+            //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+            //    if (_UseCaseResponseMessage.IsValid)
+            //    {
+            //        TempData["Success"] = "Operación terminada correctamente.";
+            //        return RedirectToAction("OK");
+            //    }
+            //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            //}
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
             {
-                var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -503,20 +513,9 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDInterno.ToString())
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("OK");
-                }
-                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-            }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDInterno.ToString())
-            {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateInterno(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -525,9 +524,9 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GDExterno.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDExterno.ToString())
             {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdateExterno(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -536,7 +535,7 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.HorasExtras.ToString())
             {
                 var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
@@ -547,9 +546,9 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.GeneraResolucion.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GeneraResolucion.ToString())
             {
-                var _useCaseInteractor = new UseCaseGeneraResolucion(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseGeneraResolucion(_repository, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -558,7 +557,7 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
             {
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
@@ -644,7 +643,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
@@ -672,7 +671,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 
@@ -713,7 +712,7 @@ namespace App.Web.Controllers
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.Pl_UndCod);
             ViewBag.GrupoId = new SelectList(_repository.GetAll<Grupo>(), "GrupoId", "Nombre", model.GrupoId);
-            ViewBag.To = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
             if (model.Pl_UndCod.HasValue)
                 ViewBag.To = new SelectList(_sigper.GetUserByUnidad(model.Pl_UndCod.Value).Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
 

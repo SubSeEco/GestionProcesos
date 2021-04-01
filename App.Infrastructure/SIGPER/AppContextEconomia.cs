@@ -3,16 +3,16 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using App.Model.Cometido;
 using App.Model.Comisiones;
 using App.Model.Shared;
-using App.Model.SIGPER;
+using App.Model.Sigper;
 
-namespace App.Infrastructure.SIGPER
+namespace App.Infrastructure.Sigper
 {
-    public partial class AppContextEconomia : DbContext
+    public class AppContextEconomia : DbContext
     {
         public AppContextEconomia(): base("name=SIGPEREconomia")
         {
-            this.Configuration.AutoDetectChangesEnabled = false;
-            this.Configuration.ValidateOnSaveEnabled = false;
+            Configuration.AutoDetectChangesEnabled = false;
+            Configuration.ValidateOnSaveEnabled = false;
         }
         public virtual DbSet<PEDATPER> PEDATPER { get; set; }
         public virtual DbSet<PeDatLab> PeDatLab { get; set; }

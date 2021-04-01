@@ -6,9 +6,6 @@ namespace App.Model.Cometido
     [Table("Viatico")]
     public class Viatico
     {
-        public Viatico()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "ViaticoId")]

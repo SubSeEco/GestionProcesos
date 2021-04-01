@@ -1,15 +1,15 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using App.Model.SIGPER;
+using App.Model.Sigper;
 
-namespace App.Infrastructure.SIGPER
+namespace App.Infrastructure.Sigper
 { 
-    public partial class AppContextTurismo : DbContext
+    public class AppContextTurismo : DbContext
     {
         public AppContextTurismo(): base("name=SIGPERTurismo")
         {
-            this.Configuration.AutoDetectChangesEnabled = false;
-            this.Configuration.ValidateOnSaveEnabled = false;
+            Configuration.AutoDetectChangesEnabled = false;
+            Configuration.ValidateOnSaveEnabled = false;
         }
         public virtual DbSet<PEDATPER> PEDATPER { get; set; }
         public virtual DbSet<PeDatLab> PeDatLab { get; set; }
@@ -19,7 +19,7 @@ namespace App.Infrastructure.SIGPER
         public virtual DbSet<PEFERJEFAJ> PEFERJEFAJ { get; set; }
         public virtual DbSet<PECARGOS> PECARGOS { get; set; }
         public virtual DbSet<DGESCALAFONES> DGESCALAFONES { get; set; }
-        public virtual DbSet<DGESTAMENTOS> DGESTAMENTOS { get; set; }        
+        public virtual DbSet<DGESTAMENTOS> DGESTAMENTOS { get; set; }
         public virtual DbSet<REPYT> REPYT { get; set; }
         public virtual DbSet<DGCONTRATOS> DGCONTRATOS { get; set; }
 

@@ -6,7 +6,5 @@ namespace App.Core.Interfaces
     {
         List<Model.FirmaDocumento.DTOTipoDocumento> GetTipoDocumento();
         Model.FirmaDocumento.DTOSolicitud GetFolio(string solicitante, string tipoDocumento, string subSecretaria);
-        List<Model.FirmaDocumento.DTOSolicitud> GetSolicitud();
-
     }
 }

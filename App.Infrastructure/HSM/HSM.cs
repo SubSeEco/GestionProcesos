@@ -10,68 +10,68 @@ using System.Linq;
 
 namespace App.Infrastructure.HSM
 {
-    public class HSM : IHSM
+    public class Hsm : IHsm
     {
         //Método deprecado, se recomienda usar la nueva sobrecarga
-        public byte[] Sign(byte[] documento, string Firmante, string unidadOrganizacional, string folio = null, string razon = "Documento firmado electrónicamente Ley 19.799")
-        {
-            if (documento == null)
-                throw new System.Exception("No se especificó el contenido del documento.");
-            if (string.IsNullOrWhiteSpace(Firmante))
-                throw new System.Exception("No se especificó el firmante documento.");
+        //public byte[] Sign(byte[] documento, string Firmante, string unidadOrganizacional, string folio = null, string razon = "Documento firmado electrónicamente Ley 19.799")
+        //{
+        //    if (documento == null)
+        //        throw new System.Exception("No se especificó el contenido del documento.");
+        //    if (string.IsNullOrWhiteSpace(Firmante))
+        //        throw new System.Exception("No se especificó el firmante documento.");
 
-            if (!string.IsNullOrWhiteSpace(folio))
-            {
-                try
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        using (var reader = new PdfReader(documento))
-                        {
-                            using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
-                            {
-                                //obtener informacion de la primera pagina
-                                var pagesize = reader.GetPageSize(1);
-                                var pdfContentFirstPage = stamper.GetOverContent(1);
+        //    if (!string.IsNullOrWhiteSpace(folio))
+        //    {
+        //        try
+        //        {
+        //            using (MemoryStream ms = new MemoryStream())
+        //            {
+        //                using (var reader = new PdfReader(documento))
+        //                {
+        //                    using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
+        //                    {
+        //                        //obtener informacion de la primera pagina
+        //                        var pagesize = reader.GetPageSize(1);
+        //                        var pdfContentFirstPage = stamper.GetOverContent(1);
 
-                                //estampa de folio
-                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+        //                        //estampa de folio
+        //                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
 
-                                //estampa de fecha
-                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+        //                        //estampa de fecha
+        //                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
 
-                                stamper.Close();
-                            }
-                        }
-                        documento = ms.ToArray();
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
-                }
-            }
+        //                        stamper.Close();
+        //                    }
+        //                }
+        //                documento = ms.ToArray();
+        //            }
+        //        }
+        //        catch (System.Exception ex)
+        //        {
+        //            throw new System.Exception("Error al insertar folio en el documento:" + ex.Message);
+        //        }
+        //    }
 
-            try
-            {
-                SignFileImplClient ws = new SignFileImplClient();
-                var respuesta = ws.SignFile(documento, Firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", "Documento firmado electrónicamente Ley 19.799", unidadOrganizacional, 10, 10, 150, 150);
+        //    try
+        //    {
+        //        SignFileImplClient ws = new SignFileImplClient();
+        //        var respuesta = ws.SignFile(documento, Firmante.Trim(), "BOTTOM_EDGE_CENTER", "0", "Documento firmado electrónicamente Ley 19.799", unidadOrganizacional, 10, 10, 150, 150);
 
-                //sin respuesta 
-                if (respuesta == null)
-                    throw new System.Exception("El servicio externo de firma electrónica no retornó respuesta");
+        //        //sin respuesta 
+        //        if (respuesta == null)
+        //            throw new System.Exception("El servicio externo de firma electrónica no retornó respuesta");
 
-                //respuesta con error
-                if (respuesta != null && respuesta.status.Contains("FAIL"))
-                    throw new System.Exception("El servicio externo de firma electrónica retornó falla.");
+        //        //respuesta con error
+        //        if (respuesta != null && respuesta.status.Contains("FAIL"))
+        //            throw new System.Exception("El servicio externo de firma electrónica retornó falla.");
 
-                return respuesta.message;
-            }
-            catch (System.Exception ex)
-            {
-                throw new System.Exception("Error al firmar documento: " + ex.Message);
-            }
-        }
+        //        return respuesta.message;
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        throw new System.Exception("Error al firmar documento: " + ex.Message);
+        //    }
+        //}
 
         public byte[] Sign(byte[] documento, List<string> firmantes, int documentoId, string folio, string url, byte[] QR)
         {
@@ -124,10 +124,10 @@ namespace App.Infrastructure.HSM
                             var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
 
                             table.TotalWidth = 520f;
-                            table.SetWidths(new float[] { 8f, 25f, 6f });
+                            table.SetWidths(new[] { 8f, 25f, 6f });
                             table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
-                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)) { });
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
                             table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
                             table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });

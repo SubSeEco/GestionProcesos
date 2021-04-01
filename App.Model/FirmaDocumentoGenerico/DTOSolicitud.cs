@@ -4,10 +4,6 @@ namespace App.Model.FirmaDocumentoGenerico
 {
     public class DTOSolicitud
     {
-        public DTOSolicitud()
-        {
-        }
-
         [Display(Name = "Status")]
         public string status { get; set; }
 

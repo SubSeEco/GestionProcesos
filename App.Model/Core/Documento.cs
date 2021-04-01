@@ -1,16 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enum = App.Util.Enum;
 
 namespace App.Model.Core
 {
     [Table("CoreDocumento")]
     public class Documento
     {
-        public Documento()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DocumentoId { get; set; }
 
@@ -31,7 +28,7 @@ namespace App.Model.Core
 
         //Todo documento nace privado, solo cambia a publico cuando se firma para efectos de verificación 
         [Display(Name = "Privacidad")]
-        public int? TipoPrivacidadId { get; set; } = (int)Util.Enum.Privacidad.Privado;
+        public int? TipoPrivacidadId { get; set; } = (int)Enum.Privacidad.Privado;
         public virtual TipoPrivacidad TipoPrivacidad { get; set; }
 
 
@@ -67,7 +64,7 @@ namespace App.Model.Core
         public string Ubicacion { get; set; }
 
         [Display(Name = "Firmado")]
-        public bool Signed { get; set; } = false;
+        public bool Signed { get; set; } 
 
         [Display(Name = "Código")]
         public string Codigo { get; set; }

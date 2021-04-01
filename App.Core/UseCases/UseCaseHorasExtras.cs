@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using App.Model.Core;
-using App.Model.SIGPER;
+using App.Model.Sigper;
 using System.Collections.Generic;
 using App.Core.Interfaces;
 using App.Util;
@@ -11,12 +11,12 @@ namespace App.Core.UseCases
 {
     public class UseCaseHorasExtras
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly IHSM _hsm;
-        protected readonly ISIGPER _sigper;
-        protected readonly IEmail _email;
-        protected readonly IFolio _folio;
-        protected readonly IFile _file;
+        private readonly IGestionProcesos _repository;
+        private readonly IHsm _hsm;
+        private readonly ISigper _sigper;
+        private readonly IEmail _email;
+        private readonly IFolio _folio;
+        private readonly IFile _file;
         //private IGestionProcesos repository;
         //private ISIGPER sigper;
 
@@ -24,7 +24,7 @@ namespace App.Core.UseCases
         {
             _repository = repository;
         }
-        public UseCaseHorasExtras(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public UseCaseHorasExtras(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -34,7 +34,7 @@ namespace App.Core.UseCases
             _email = email;
         }
 
-        public UseCaseHorasExtras(IGestionProcesos repository, ISIGPER sigper)
+        public UseCaseHorasExtras(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -78,29 +78,29 @@ namespace App.Core.UseCases
 
             return response;
         }
-        public ResponseMessage HorasExtrasDelete(int id)
-        {
-            var response = new ResponseMessage();
+        //public ResponseMessage HorasExtrasDelete(int id)
+        //{
+        //    var response = new ResponseMessage();
 
-            try
-            {
-                var obj = _repository.GetById<HorasExtras>(id);
-                if (obj == null)
-                    response.Errors.Add("Dato no encontrado");
+        //    try
+        //    {
+        //        var obj = _repository.GetById<HorasExtras>(id);
+        //        if (obj == null)
+        //            response.Errors.Add("Dato no encontrado");
 
-                if (response.IsValid)
-                {
-                    _repository.Delete(obj);
-                    _repository.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Errors.Add(ex.Message);
-            }
+        //        if (response.IsValid)
+        //        {
+        //            _repository.Delete(obj);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
 
 
         public ResponseMessage ColaboradorInsert(Colaborador obj)
@@ -194,7 +194,7 @@ namespace App.Core.UseCases
         public ResponseMessage SignReso(Documento obj, string email, int? HorasExtrasId)
         {
             var response = new ResponseMessage();
-            var persona = new SIGPER();
+            var persona = new Sigper();
 
             try
             {
@@ -202,7 +202,7 @@ namespace App.Core.UseCases
                 if (documento == null)
                     response.Errors.Add("Documento no encontrado");
 
-                if (obj.Signed == true)
+                if (obj.Signed)
                     response.Errors.Add("Documento ya se encuentra firmado");
 
                 var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == email && q.HabilitadoFirma);
@@ -231,13 +231,13 @@ namespace App.Core.UseCases
                 if (rubrica == null)
                     response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
 
-                var HSMUser = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMUser);
+                var HSMUser = _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.HSMUser);
                 if (HSMUser == null)
                     response.Errors.Add("No se encontró la configuración de usuario de HSM.");
                 if (HSMUser != null && string.IsNullOrWhiteSpace(HSMUser.Valor))
                     response.Errors.Add("La configuración de usuario de HSM es inválida.");
 
-                var HSMPassword = _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.HSMPassword);
+                var HSMPassword = _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.HSMPassword);
                 if (HSMPassword == null)
                     response.Errors.Add("No se encontró la configuración de usuario de HSM.");
                 if (HSMPassword != null && string.IsNullOrWhiteSpace(HSMPassword.Valor))
@@ -264,7 +264,7 @@ namespace App.Core.UseCases
                     {
                         persona = _sigper.GetUserByEmail(email);
                         if (persona == null)
-                            response.Errors.Add("No se encontró usuario firmante en sistema SIGPER");
+                            response.Errors.Add("No se encontró usuario firmante en sistema Sigper");
 
                         if (persona != null && string.IsNullOrWhiteSpace(persona.SubSecretaria))
                             response.Errors.Add("No se encontró la subsecretaría del firmante");
@@ -284,7 +284,7 @@ namespace App.Core.UseCases
                     idsFirma.Add(rubrica.IdentificadorFirma);
 
                     //generar código QR
-                    byte[] QR = _file.CreateQR(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+                    byte[] qr = _file.CreateQr(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
                     //si el documento ya tiene folio no solicitarlo nuevamente
                     if (string.IsNullOrWhiteSpace(documento.Folio))
@@ -321,7 +321,7 @@ namespace App.Core.UseCases
                     }
 
                     //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
-                    var docto = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, QR);
+                    var docto = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
                     documento.File = docto;
                     documento.Signed = true;
 
@@ -342,7 +342,7 @@ namespace App.Core.UseCases
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
             var response = new ResponseMessage();
-            var persona = new SIGPER();
+            var persona = new Sigper();
 
             try
             {
@@ -357,7 +357,7 @@ namespace App.Core.UseCases
                 if (string.IsNullOrWhiteSpace(obj.Email))
                     throw new Exception("No se encontró el usuario que ejecutó el workflow.");
                 if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0))
-                    workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
+                    workflowActual.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.Aprobada;
                 else
                 {
                     if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())
@@ -365,9 +365,9 @@ namespace App.Core.UseCases
                 }
 
                 /*VALIDACIONES Y REGLAS DE NEGOCIO*/
-                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.ProgramacionHorasExtraordinarias)
+                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.ProgramacionHorasExtraordinarias)
                 {
-                    if (obj.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                    if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                     {
                         if (workflowActual.DefinicionWorkflow.Secuencia == 12)/*Valida la creacion de adjuntos segun el tipo de proceso*/
                         {
@@ -432,21 +432,20 @@ namespace App.Core.UseCases
                     workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
 
                 if (!workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
-                    workflowActual.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.Aprobada;
+                    workflowActual.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.Aprobada;
 
                 //DETERMINAR SIGUIENTE TAREA EN BASE A ESTADO Y DEFINICION DE PROCESO
                 DefinicionWorkflow definicionWorkflow = null;
 
                 /*Se toman los valores de la solicitud, para definir curso de las sgtes tareas*/
-                var Horas = new HorasExtras();
-                Horas = _repository.GetFirst<HorasExtras>(h => h.WorkflowId == obj.WorkflowId);
+                var Horas = _repository.GetFirst<HorasExtras>(h => h.WorkflowId == obj.WorkflowId);
 
                 //si permite multiple evaluacion generar la misma tarea
                 if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
                     definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
                 else
                 {
-                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                     {
                         if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Horas.Aprobado != true) /*Si esta en la tarea de firma programacion y no se aprueba se termina la tramitacion*/
                         {
@@ -468,7 +467,7 @@ namespace App.Core.UseCases
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
-                    workflowActual.Proceso.EstadoProcesoId = (int)App.Util.Enum.EstadoProceso.Terminado;
+                    workflowActual.Proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Terminado;
                     //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
                     _repository.Save();
@@ -477,16 +476,16 @@ namespace App.Core.UseCases
                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                     {
                         /*si no existen mas tareas se envia correo de notificacion*/
-                        var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId);
+                        //var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflowActual.ProcesoId);
                         /*se trae documento para adjuntar*/
-                        Documento doc = hrs.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9);
+                        //Documento doc = hrs.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9);
                         //var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflowActual.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
                         //var jefe = _sigper.GetUserByRut(hrs.jefaturaId.Value).Funcionario.Rh_Mail.Trim();
                         //List<string> emailMsg;
 
                         _email.NotificarFinProceso(workflowActual.Proceso,
-                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(App.Util.Enum.Configuracion.plantilla_fin_proceso)),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_fin_proceso)),
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                         //_email.NotificacionesCometido(workflowActual,
                         //_repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaEncargadoDeptoAdmin_OfPartes), /*notificacion a oficia de partes*/
@@ -504,7 +503,7 @@ namespace App.Core.UseCases
                     /*Si la ultima tarea es de firma electronica de programacion la sgte se creara para ser ejecutada el mes sgte.*/
                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                     {
-                        string mes = (Horas.MesBaseCalculo + 1).ToString().Length != 1 ? (Horas.MesBaseCalculo + 1).ToString() : "0" + (Horas.MesBaseCalculo + 1).ToString();
+                        string mes = (Horas.MesBaseCalculo + 1).ToString().Length != 1 ? (Horas.MesBaseCalculo + 1).ToString() : "0" + (Horas.MesBaseCalculo + 1);
                         string year = Horas.Annio;
 
                         if(Horas.MesBaseCalculo == 12)
@@ -519,7 +518,7 @@ namespace App.Core.UseCases
                     else
                         workflow.FechaCreacion = DateTime.Now;
 
-                    workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
+                    workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
                     workflow.Terminada = false;
                     workflow.DefinicionWorkflow = definicionWorkflow;
                     workflow.ProcesoId = workflowActual.ProcesoId;
@@ -527,14 +526,14 @@ namespace App.Core.UseCases
                     workflow.TareaPersonal = false;
                     workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault().HorasExtrasId;
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                     {
                         // si seleccionó unidad y usuario...
                         if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
                         {
                             persona = _sigper.GetUserByEmail(obj.To);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -548,7 +547,7 @@ namespace App.Core.UseCases
                         {
                             var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad en SIGPER.");
+                                throw new Exception("No se encontró la unidad en Sigper.");
 
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -561,7 +560,7 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
                     {
 
                         var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && (q.To != null || q.Pl_UndCod != null) && q.WorkflowId != workflowActual.WorkflowId).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
@@ -572,7 +571,7 @@ namespace App.Core.UseCases
                         {
                             var unidad = _sigper.GetUnidad(workflowInicial.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad en SIGPER.");
+                                throw new Exception("No se encontró la unidad en Sigper.");
 
                             workflow.Pl_UndCod = unidad.Pl_UndCod;
                             workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -587,7 +586,7 @@ namespace App.Core.UseCases
                         {
                             persona = _sigper.GetUserByEmail(workflowInicial.To);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -597,11 +596,11 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
                     {
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -609,15 +608,15 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = true;
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
                     {
                         persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
 
                         var jefatura = _sigper.GetUserByEmail(persona.Jefatura.Rh_Mail.Trim());
                         if (jefatura == null)
-                            throw new Exception("No se encontró la jefatura en SIGPER.");
+                            throw new Exception("No se encontró la jefatura en Sigper.");
                         workflow.Email = jefatura.Funcionario.Rh_Mail.Trim();
                         workflow.NombreFuncionario = jefatura.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = jefatura.Unidad.Pl_UndCod;
@@ -626,11 +625,11 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = true;
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
                     {
                         persona = _sigper.GetUserByEmail(obj.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
                         workflow.Email = persona.Jefatura.Rh_Mail.Trim();
                         workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -639,7 +638,7 @@ namespace App.Core.UseCases
                     }
 
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                     {
                         if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
                             throw new Exception("No se especificó la unidad o grupo de destino.");
@@ -648,7 +647,7 @@ namespace App.Core.UseCases
                         {
                             var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
                             if (unidad == null)
-                                throw new Exception("No se encontró la unidad destino en SIGPER.");
+                                throw new Exception("No se encontró la unidad destino en Sigper.");
                             workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                             workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
                             workflow.TareaPersonal = false;
@@ -671,11 +670,11 @@ namespace App.Core.UseCases
                         }
                     }
 
-                    if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
                     {
                         persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                         if (persona == null)
-                            throw new Exception("No se encontró el usuario en SIGPER.");
+                            throw new Exception("No se encontró el usuario en Sigper.");
 
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
@@ -692,27 +691,27 @@ namespace App.Core.UseCases
                     //notificar actualización del estado al dueño
                     if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
                         _email.NotificarNuevoWorkflow(workflowActual,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                     //notificar por email al ejecutor de proxima tarea
                     if (workflow.DefinicionWorkflow.NotificarAsignacion)
                         _email.NotificarNuevoWorkflow(workflow,
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
-                        _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaNuevaTarea),
+                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                     #region NOTIFICACIONES DE CORREO PROCESO HORAS EXTRAS
 
-                    if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.HorasExtras.ToString())
+                    if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.HorasExtras.ToString())
                     {
-                        string jefe = string.Empty;
                         var hrs = _repository.GetFirst<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId);
-                        var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
-                        var QuienViaja = _sigper.GetUserByRut(hrs.NombreId.Value).Funcionario.Rh_Mail.Trim();
-                        if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
-                            jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
-                        else
-                            jefe = "mmontoya@economia.cl";
+                        //var solicitante = _repository.Get<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1).FirstOrDefault().Email;
+                        //var QuienViaja = _sigper.GetUserByRut(hrs.NombreId.Value).Funcionario.Rh_Mail.Trim();
+                        //string jefe = string.Empty;
+                        //if (_sigper.GetUserByEmail(QuienViaja).Jefatura != null)
+                        //    jefe = _sigper.GetUserByEmail(QuienViaja).Jefatura.Rh_Mail.Trim();
+                        //else
+                        //    jefe = "mmontoya@economia.cl";
 
                         List<string> emailMsg;
                         switch (workflowActual.DefinicionWorkflow.Secuencia)
@@ -720,69 +719,69 @@ namespace App.Core.UseCases
                             case 1: break;
                             case 2: break;
                             case 3: /*3.- Recepciona y Analiza Programación de Horas Extraordinarias (Jefatura Departamento Administrativo)*/
-                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 4 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista Gestion Personas
 
                                     _email.NotificacionesHorasExtras(workflow,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 break;
                             case 4: /*4.- Recepción Programación de Horas Extraordinarias (Analista Área Personas)*/
-                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 5 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargada Area Personas
 
                                     _email.NotificacionesHorasExtras(workflow,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 break;
                             case 5:/*5.- Visar Resolución Programación de Horas Extraordinarias (Encargado(a) Área de Personas)*/
-                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 6 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Unidad GP
 
                                     _email.NotificacionesHorasExtras(workflow,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 break;
                             case 6: /*6.- Visar Resolución Programación de Horas Extraordinarias (Encargado(a) Unidad de Gestión y Desarrollo de Personas)*/
-                                if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 7 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Encargado Depto Administrativo
 
                                     _email.NotificacionesHorasExtras(workflowActual,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 break;
                             case 7: /*7.- Firma Resolución Programación de Horas Extraordinarias (Jefatura Departamento Administrativo)*/
                                 //if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                                if (workflowActual.TipoAprobacionId != (int)App.Util.Enum.TipoAprobacion.Rechazada)
+                                if (workflowActual.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                                 {
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Secretaria
 
                                     _email.NotificacionesHorasExtras(workflow,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                     /*nofifica a oficina de partes la resolucion firmada*/
                                     emailMsg = new List<string>();
@@ -794,10 +793,10 @@ namespace App.Core.UseCases
                                     Documento doc = hrs.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == hrs.ProcesoId && d.TipoDocumentoId == 9);
 
                                     _email.NotificacionesHorasExtras(workflowActual,
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaHorasExtras),
-                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId.ToString() + " " + "para aprobación",
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaHorasExtras),
+                                    "Tiene una solicitud de programación de horas extraordinarias N°: " + hrs.HorasExtrasId + " " + "para aprobación",
                                     emailMsg, hrs.HorasExtrasId, hrs.FechaSolicitud.ToShortDateString(), "",
-                                    _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                                 }
                                 break;
                             case 8: break;
@@ -820,13 +819,13 @@ namespace App.Core.UseCases
                 /*Si esta en la tarea 14, se crea una segunda tarea de firma resolucion horas compensadas para encargado de GP*/
                 if (workflowActual.DefinicionWorkflow.Secuencia == 14)
                 {
-                    if (workflowActual.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+                    if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                     {
                         DefinicionWorkflow newdefinicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16);
 
                         var workflow = new Workflow();
                         workflow.FechaCreacion = DateTime.Now;
-                        workflow.TipoAprobacionId = (int)App.Util.Enum.TipoAprobacion.SinAprobacion;
+                        workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
                         workflow.Terminada = false;
                         workflow.DefinicionWorkflow = newdefinicionWorkflow;
                         workflow.ProcesoId = workflowActual.ProcesoId;
@@ -834,14 +833,14 @@ namespace App.Core.UseCases
                         workflow.TareaPersonal = false;
                         workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<HorasExtras>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault().HorasExtrasId;
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                         {
                             // si seleccionó unidad y usuario...
                             if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
                             {
                                 persona = _sigper.GetUserByEmail(obj.To);
                                 if (persona == null)
-                                    throw new Exception("No se encontró el usuario en SIGPER.");
+                                    throw new Exception("No se encontró el usuario en Sigper.");
 
                                 workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                                 workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -855,7 +854,7 @@ namespace App.Core.UseCases
                             {
                                 var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
                                 if (unidad == null)
-                                    throw new Exception("No se encontró la unidad en SIGPER.");
+                                    throw new Exception("No se encontró la unidad en Sigper.");
 
                                 workflow.Pl_UndCod = unidad.Pl_UndCod;
                                 workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -868,7 +867,7 @@ namespace App.Core.UseCases
                             }
                         }
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
                         {
 
                             var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && (q.To != null || q.Pl_UndCod != null) && q.WorkflowId != workflowActual.WorkflowId).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
@@ -879,7 +878,7 @@ namespace App.Core.UseCases
                             {
                                 var unidad = _sigper.GetUnidad(workflowInicial.Pl_UndCod.Value);
                                 if (unidad == null)
-                                    throw new Exception("No se encontró la unidad en SIGPER.");
+                                    throw new Exception("No se encontró la unidad en Sigper.");
 
                                 workflow.Pl_UndCod = unidad.Pl_UndCod;
                                 workflow.Pl_UndDes = unidad.Pl_UndDes;
@@ -894,7 +893,7 @@ namespace App.Core.UseCases
                             {
                                 persona = _sigper.GetUserByEmail(workflowInicial.To);
                                 if (persona == null)
-                                    throw new Exception("No se encontró el usuario en SIGPER.");
+                                    throw new Exception("No se encontró el usuario en Sigper.");
 
                                 workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                                 workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
@@ -904,11 +903,11 @@ namespace App.Core.UseCases
                             }
                         }
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
                         {
                             persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
                             workflow.Email = persona.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                             workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -916,15 +915,15 @@ namespace App.Core.UseCases
                             workflow.TareaPersonal = true;
                         }
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
                         {
                             persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             var jefatura = _sigper.GetUserByEmail(persona.Jefatura.Rh_Mail.Trim());
                             if (jefatura == null)
-                                throw new Exception("No se encontró la jefatura en SIGPER.");
+                                throw new Exception("No se encontró la jefatura en Sigper.");
                             workflow.Email = jefatura.Funcionario.Rh_Mail.Trim();
                             workflow.NombreFuncionario = jefatura.Funcionario.PeDatPerChq.Trim();
                             workflow.Pl_UndCod = jefatura.Unidad.Pl_UndCod;
@@ -933,11 +932,11 @@ namespace App.Core.UseCases
                             workflow.TareaPersonal = true;
                         }
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
                         {
                             persona = _sigper.GetUserByEmail(obj.Email);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
                             workflow.Email = persona.Jefatura.Rh_Mail.Trim();
                             workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
                             workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -946,7 +945,7 @@ namespace App.Core.UseCases
                         }
 
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                         {
                             if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
                                 throw new Exception("No se especificó la unidad o grupo de destino.");
@@ -955,7 +954,7 @@ namespace App.Core.UseCases
                             {
                                 var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
                                 if (unidad == null)
-                                    throw new Exception("No se encontró la unidad destino en SIGPER.");
+                                    throw new Exception("No se encontró la unidad destino en Sigper.");
                                 workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
                                 workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
                                 workflow.TareaPersonal = false;
@@ -978,11 +977,11 @@ namespace App.Core.UseCases
                             }
                         }
 
-                        if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
+                        if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
                         {
                             persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                             if (persona == null)
-                                throw new Exception("No se encontró el usuario en SIGPER.");
+                                throw new Exception("No se encontró el usuario en Sigper.");
 
                             workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                             workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
@@ -999,14 +998,14 @@ namespace App.Core.UseCases
                         //notificar actualización del estado al dueño
                         if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
                             _email.NotificarNuevoWorkflow(workflowActual,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaCorreoCambioEstado),
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
 
                         //notificar por email al ejecutor de proxima tarea
                         if (workflow.DefinicionWorkflow.NotificarAsignacion)
                             _email.NotificarNuevoWorkflow(workflow,
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.PlantillaNuevaTarea),
-                            _repository.GetById<Configuracion>((int)App.Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaNuevaTarea),
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                     }
                 }
             }
