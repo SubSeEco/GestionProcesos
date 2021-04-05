@@ -214,7 +214,7 @@
             <td colspan="2">
                 <ol>
                     <strong>DÉJASE CONSTANCIA:</strong>
-                    @if (Model.SolicitaViatico == true)
+                    @if (Model.SolicitaViatico)
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
@@ -304,7 +304,7 @@
 
                     }
 
-                    @if (Model.Vehiculo == true)
+                    @if (Model.Vehiculo)
                     {
 
                         <li>
@@ -331,7 +331,7 @@
                     <!--</p>
                     </li>-->
 
-                    @if (Model.ReqPasajeAereo == true)
+                    @if (Model.ReqPasajeAereo)
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
@@ -371,13 +371,13 @@
                     {
                         <p align="justify" style="margin-right:30px">
                             <strong>IMPÚTESE</strong>,
-                            @if (Model.SolicitaViatico == true)
+                            @if (Model.SolicitaViatico)
                             {
 
                                 if (Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre != "24")
                                 {
                                     @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
-                                    if (Model.SolicitaViatico == true)
+                                    if (Model.SolicitaViatico)
                                     {
                                         @Html.Raw(", al Subtítulo ")
                                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")

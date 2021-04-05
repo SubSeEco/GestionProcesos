@@ -17,9 +17,7 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class CotizacionDocumentoController : Controller
     {
-        protected readonly IFile _file;
-        protected readonly IHSM _IHSM;
-
+        private readonly IFile _file;
         public class DTOFilter
         {
             public DTOFilter()
@@ -46,10 +44,6 @@ namespace App.Web.Controllers
 
         public class FileUpload
         {
-            public FileUpload()
-            {
-            }
-
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Archivo")]
             [DataType(DataType.Upload)]
@@ -60,13 +54,12 @@ namespace App.Web.Controllers
             public int WorkflowId { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
-        public CotizacionDocumentoController(IGestionProcesos repository, IFile pdf, IHSM hsm)
+        public CotizacionDocumentoController(IGestionProcesos repository, IFile pdf)
         {
             _repository = repository;
             _file = pdf;
-            _IHSM = hsm;
         }
 
         public ActionResult Index()
@@ -259,7 +252,7 @@ namespace App.Web.Controllers
         [HttpPost]
         public ActionResult Delete(int id, int WorkflowId)
         {
-            var model = _repository.GetById<DefinicionWorkflow>(id);
+            //var model = _repository.GetById<DefinicionWorkflow>(id);
             return RedirectToAction("Execute", "Workflow", new { id = WorkflowId });
         }       
 

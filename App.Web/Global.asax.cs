@@ -31,8 +31,8 @@ namespace App.Web
             container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
             container.Register(typeof(IGestionProcesos), typeof(Infrastructure.GestionProcesos.GestionProcesos));
             container.Register(typeof(IEmail), typeof(Infrastructure.Email.Email));
-            container.Register(typeof(IHSM), typeof(Infrastructure.HSM.HSM));
-            container.Register(typeof(ISIGPER), typeof(Infrastructure.SIGPER.SIGPER));
+            container.Register(typeof(IHsm), typeof(Infrastructure.HSM.Hsm));
+            container.Register(typeof(ISigper), typeof(Infrastructure.Sigper.Sigper));
             container.Register(typeof(IFile), typeof(Infrastructure.File.File));
             container.Register(typeof(IFolio), typeof(Infrastructure.Folio.Folio));
             container.Register(typeof(IWorkflowService), typeof(Infrastructure.GestionProcesos.WorkflowService));

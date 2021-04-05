@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class DGESTAMENTOS
     {
-        public DGESTAMENTOS()
-        { }
-
         [Key]
         [Display(Name = "DgEstCod")]
         public short DgEstCod { get; set; }

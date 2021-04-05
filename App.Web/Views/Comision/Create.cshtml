@@ -318,8 +318,8 @@
                     }
 
 
-                })
-        })
+                });
+        });
     });
 
     //funcion que habilita opciones si se financia el organismo invitante
@@ -336,7 +336,7 @@
         }
     });
 
-    ///*Desabilita viatico y pasajes si se financia por organismo invitante* /
+    //Desabilita viatico y pasajes si se financia por organismo invitante
     $('input:checkbox[name="Alojamiento"]').change(function () {
         Bloqueo();
     });
@@ -351,7 +351,6 @@
 
     function Bloqueo() {
         if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
-            2
             $("#SolicitaViatico").attr('disabled', true);
             $("#ReqPasajeAereo").attr('disabled', true);
             $("#ReqPasajeTerrestre").attr('disabled', true);

@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedGenero")]
     public class Genero
     {
-        public Genero()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int GeneroId { get; set; }

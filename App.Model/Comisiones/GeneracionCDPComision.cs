@@ -8,9 +8,6 @@ namespace App.Model.Comisiones
     [Table("GeneracionCDPComision")]
     public class GeneracionCDPComision : Core.BaseEntity
     {
-        public GeneracionCDPComision()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "GeneracionCDPComisionId")]
         public int GeneracionCDPComisionId { get; set; }

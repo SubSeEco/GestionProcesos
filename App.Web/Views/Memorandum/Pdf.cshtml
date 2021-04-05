@@ -22,15 +22,15 @@
                 <img src="data:image;base64,@System.Convert.ToBase64String(Model.QR)" width="170px" />
             </div>*@
     </div>
-    <center>
-        <p class="flow-text">
-            @*<h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br />PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>*@
-            <h5><b>MEMORANDUM <br />N° @Html.DisplayFor(m => Model.Folio)</b></h5>
-        </p>
-        <p class="flow-text">
-            @*Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)*@
-        </p>
-    </center><br /><br />
+<div style="text-align: center;" >
+    <p class="flow-text">
+        @*<h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br />PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>*@
+        <h5><b>MEMORANDUM <br/>N° @Html.DisplayFor(m => Model.Folio)</b></h5>
+    </p>
+    <p class="flow-text">
+        @*Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)*@
+    </p>
+</div><br /><br />
 
     <p class="flow-text">
         <h6><b>A : @Html.DisplayFor(m => Model.NombreChqDest)</b></h6>
@@ -134,15 +134,15 @@
     <div class="section"></div>
 
     <footer>
-        <center>
+        <div style="text-align: center;" >
             <img src="~/Content/LogoPieFirma.png" width="220px" />
-        </center>
-        <center>
+        </div>
+        <div style="text-align: center;" >
             <p class="flow-text">
-                <h6></h6><b>@Model.NombreChqRem</b><br />
+                <h6></h6><b>@Model.NombreChqRem</b><br/>
                 <b>@Model.UnidadDescripcion</b>
             </p>
-        </center>
+        </div>
     </footer>
     @*<center>
             <img src="~/Content/LogoPieFirma.png" width="220px" />

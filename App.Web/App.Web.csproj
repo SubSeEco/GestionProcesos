@@ -459,7 +459,6 @@
     </Compile>
     <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
-    <Compile Include="Controllers\MemorandumController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
     <Compile Include="Controllers\PasajeController.cs" />
@@ -535,9 +534,6 @@
     <Content Include="Views\Subsecretaria\Details.cshtml" />
     <Content Include="Views\Subsecretaria\Edit.cshtml" />
     <Content Include="Views\Subsecretaria\Index.cshtml" />
-    <Content Include="Views\Contrato\Create.cshtml" />
-    <Content Include="Views\Contrato\Details.cshtml" />
-    <Content Include="Views\Contrato\Edit.cshtml" />
     <Content Include="Views\Grupo\Create.cshtml" />
     <Content Include="Views\Grupo\Delete.cshtml" />
     <Content Include="Views\Grupo\Details.cshtml" />
@@ -552,7 +548,6 @@
     <Content Include="Views\Programa\Index.cshtml" />
     <Content Include="Views\Workflow\Documents.cshtml" />
     <Content Include="Views\Documento\Sign.cshtml" />
-    <Content Include="Views\Contrato\Sign.cshtml" />
     <Content Include="Views\Rubrica\Create.cshtml" />
     <Content Include="Views\Rubrica\Delete.cshtml" />
     <Content Include="Views\Rubrica\Details.cshtml" />
@@ -561,9 +556,6 @@
     <Content Include="Views\Workflow\Footer.cshtml" />
     <Content Include="Views\Documento\Index.cshtml" />
     <Content Include="Views\Documento\Details.cshtml" />
-    <Content Include="Views\Contrato\Index.cshtml" />
-    <Content Include="Views\Contrato\View.cshtml" />
-    <Content Include="Views\Contrato\Validate.cshtml" />
     <Content Include="Views\Cometido\Create.cshtml" />
     <Content Include="Views\Cometido\Index.cshtml" />
     <Content Include="Views\Cometido\Edit.cshtml" />
@@ -732,14 +724,6 @@
     <Content Include="Views\ProcesoPersonal\Details.cshtml" />
     <Content Include="Views\ProcesoPersonal\Index.cshtml" />
     <Content Include="Views\Proceso\View.cshtml" />
-    <Content Include="Views\Memorandum\Create.cshtml" />
-    <Content Include="Views\Memorandum\Details.cshtml" />
-    <Content Include="Views\Memorandum\Edit.cshtml" />
-    <Content Include="Views\Memorandum\Sign.cshtml" />
-    <Content Include="Views\Memorandum\View.cshtml" />
-    <Content Include="Views\Memorandum\Pdf.cshtml" />
-    <Content Include="Views\Memorandum\EditAna.cshtml" />
-    <Content Include="Views\Memorandum\SeguimientoMemo.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
     <Content Include="Views\Workflow\Index.cshtml" />

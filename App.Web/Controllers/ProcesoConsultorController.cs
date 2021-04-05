@@ -16,9 +16,6 @@ namespace App.Web.Controllers
     {
         public class DTOResult
         {
-            public DTOResult()
-            {
-            }
             public int ProcesoId { get; set; }
             public bool Reservado { get; set; }
             public bool EsAutor { get; set; }
@@ -58,13 +55,11 @@ namespace App.Web.Controllers
             public int? EstadoProcesoId { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
 
-        public ProcesoConsultorController(IGestionProcesos repository, IEmail email)
+        public ProcesoConsultorController(IGestionProcesos repository)
         {
             _repository = repository;
-            _email = email;
         }
 
         public ActionResult Index()
@@ -72,7 +67,7 @@ namespace App.Web.Controllers
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
 
             var model = new DTOFilter() {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.Get<DefinicionProceso>(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
             };
 
             return View(model);

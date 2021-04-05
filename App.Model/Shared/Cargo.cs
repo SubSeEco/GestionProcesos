@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedCargo")]
     public class Cargo
     {
-        public Cargo()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int CargoId { get; set; }

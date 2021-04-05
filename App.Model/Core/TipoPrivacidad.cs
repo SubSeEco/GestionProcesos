@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreTipoPrivacidad")]
     public class TipoPrivacidad
     {
-        public TipoPrivacidad()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int TipoPrivacidadId { get; set; }

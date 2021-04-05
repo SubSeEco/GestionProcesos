@@ -1,57 +1,57 @@
 ﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
-    <div class="grey lighten-3">
-        <div class="container">
-            <div class="section">
-                <h3 class="header">Reporte seguimiento Unidades</h3>
-                <br />
-            </div>
+<div class="grey lighten-3">
+    <div class="container">
+        <div class="section">
+            <h3 class="header">Reporte seguimiento Unidades</h3>
+            <br />
         </div>
     </div>
+</div>
 
 <div class="container">
     <div class="row">
-     
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Filtros</span>
-                    @using (Html.BeginForm())
-                    {
-                        @Html.AntiForgeryToken()
 
-                        <div class="row">
-                            <div class="input-field col s12 m12 l12">
-                                @Html.TextBoxFor(m => Model.ID)
-                                @Html.LabelFor(m => Model.ID)
-                                @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12">
-                                @*@Html.EditorFor(m => Model.Ejecutor)*@
-                                @Html.DropDownListFor(m => Model.Ejecutor, null, "Seleccione...")
-                                @Html.LabelFor(m => Model.Ejecutor)
-                                @Html.ValidationMessageFor(m => Model.Ejecutor, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.FechaInicio)
-                                @Html.LabelFor(m => Model.FechaInicio)
-                                @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.FechaTermino)
-                                @Html.LabelFor(m => Model.FechaTermino)
-                                @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
-                            </div>
-                            <div class="input-field col s12 m12 l12">
-                                @Html.EditorFor(m => Model.FechaSolicitud)
-                                @Html.LabelFor(m => Model.FechaSolicitud)
-                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                            </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Filtros</span>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="input-field col s12 m12 l12">
+                            @Html.TextBoxFor(m => Model.ID)
+                            @Html.LabelFor(m => Model.ID)
+                            @Html.ValidationMessageFor(m => Model.ID, "", new { @class = "red-text" })
                         </div>
-                        <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
-                        @Html.ActionLink("Descargar Excel", "DownloadSeguimiento", "Cometido")
-                    }
-                </div>
+                        <div class="input-field col s12 m12 l12">
+                            @*@Html.EditorFor(m => Model.Ejecutor)*@
+                            @Html.DropDownListFor(m => Model.Ejecutor, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Ejecutor)
+                            @Html.ValidationMessageFor(m => Model.Ejecutor, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.EditorFor(m => Model.FechaInicio)
+                            @Html.LabelFor(m => Model.FechaInicio)
+                            @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.EditorFor(m => Model.FechaTermino)
+                            @Html.LabelFor(m => Model.FechaTermino)
+                            @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.EditorFor(m => Model.FechaSolicitud)
+                            @Html.LabelFor(m => Model.FechaSolicitud)
+                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                    @Html.ActionLink("Descargar Excel", "DownloadSeguimiento", "Cometido")
+                }
             </div>
-       
+        </div>
+
         <div class="col s12 m12 l12">
             <div class="card">
                 <div class="card-content">
@@ -144,7 +144,7 @@
                                                         int dif = 0;
                                                         if (t.FechaTermino.HasValue)
                                                         {
-                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days +1;
+                                                            dif = (t.FechaTermino.Value - t.FechaCreacion).Days + 1;
                                                         }
                                                         else
                                                         {
@@ -167,10 +167,9 @@
                         }
                     </table>
                 </div>
-                </div>
             </div>
-
         </div>
+
     </div>
 </div>
 <div class="fixed-action-btn">

@@ -7,33 +7,27 @@ namespace App.Util
     {
         public static bool IsBoolean(this string texto)
         {
-            bool valor;
-            return bool.TryParse(texto, out valor);
+            return bool.TryParse(texto, out var valor);
         }
         public static bool IsInt(this string texto)
         {
-            int valor;
-            return int.TryParse(texto, out valor);
+            return int.TryParse(texto, out var valor);
         }
         public static bool IsDecimal(this string texto)
         {
-            decimal valor;
-            return decimal.TryParse(texto, out valor);
+            return decimal.TryParse(texto, out var valor);
         }
         public static bool IsDouble(this string texto)
         {
-            double valor;
-            return double.TryParse(texto, out valor);
+            return double.TryParse(texto, out var valor);
         }
         public static bool IsFloat(this string texto)
         {
-            float valor;
-            return float.TryParse(texto, out valor);
+            return float.TryParse(texto, out var valor);
         }
         public static bool IsDateTime(this string texto)
         {
-            DateTime valor;
-            return DateTime.TryParse(texto, out valor);
+            return DateTime.TryParse(texto, out var valor);
         }
         public static bool IsHour(this string texto)
         {
@@ -43,8 +37,7 @@ namespace App.Util
                 return false;
             }
 
-            int valorInt;
-            if (!int.TryParse(arregloHora[0], out valorInt))
+            if (!int.TryParse(arregloHora[0], out var valorInt))
             {
                 return false;
             }
@@ -53,22 +46,20 @@ namespace App.Util
                 return false;
             }
 
-            DateTime valor;
-            return DateTime.TryParse(texto, out valor);
+            return DateTime.TryParse(texto, out var valor);
         }
         public static bool IsRut(this string texto)
         {
             if (texto == null)
                 return false;
 
-            int parteNumeral;
             var arregloRut = texto.Split('-');
             texto = texto.Insert(texto.Length - 1, "-");
             //var arregloRut = texto.Split('-');
             if (arregloRut.Length != 2)
                 return false;
 
-            if (!int.TryParse(arregloRut[0], out parteNumeral))
+            if (!int.TryParse(arregloRut[0], out var parteNumeral))
                 return false;
 
             var digitoVerificador = arregloRut[1].ToUpper();
@@ -107,8 +98,7 @@ namespace App.Util
         }
         public static bool IsUrl(this string texto)
         {
-            Uri uri;
-            return Uri.TryCreate(texto, UriKind.Absolute, out uri);
+            return Uri.TryCreate(texto, UriKind.Absolute, out var uri);
         }
         public static bool IsNullOrWhiteSpace(this string texto)
         {
@@ -116,52 +106,34 @@ namespace App.Util
         }
         public static bool IsGuId(this string texto)
         {
-            Guid valor;
-            return Guid.TryParse(texto, out valor);
+            return Guid.TryParse(texto, out var valor);
         }
         public static int ToInt(this string texto)
         {
-            int valor;
-            int.TryParse(texto, out valor);
+            int.TryParse(texto, out var valor);
             return valor;
         }
         public static string enletras(string num)
         {
 
-            string res, dec = "";
-
-            Int64 entero;
-
-            int decimales;
-
+            string dec = "";
             double nro;
 
             try
             {
-
                 nro = Convert.ToDouble(num);
-
             }
-
             catch
             {
-
                 return "";
-
             }
 
-            entero = Convert.ToInt64(Math.Truncate(nro));
-
-            decimales = Convert.ToInt32(Math.Round((nro - entero) * 100, 2));
-
+            var entero = Convert.ToInt64(Math.Truncate(nro));
+            var decimales = Convert.ToInt32(Math.Round((nro - entero) * 100, 2));
             if (decimales > 0)
-            {
+                dec = " CON " + decimales + "PESOS";
 
-                dec = " CON " + decimales.ToString() + "PESOS";
-
-            }
-
-            res = toText(Convert.ToDouble(entero)) + dec;
+            var res = toText(Convert.ToDouble(entero)) + dec;
 
             return res;
 

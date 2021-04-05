@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedCategoria")]
     public class Categoria
     {
-        public Categoria()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int CategoriaId { get; set; }

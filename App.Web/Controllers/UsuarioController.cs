@@ -13,7 +13,7 @@ namespace App.Web.Controllers
 
     public class UsuarioController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
         public UsuarioController(IGestionProcesos repository)
@@ -115,7 +115,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var model = _repository.GetById<Usuario>(id);
+            //var model = _repository.GetById<Usuario>(id);
             var _useCaseInteractor = new UseCaseCore(_repository);
             var _UseCaseResponseMessage = _useCaseInteractor.UsuarioDelete(id);
 

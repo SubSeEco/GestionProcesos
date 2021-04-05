@@ -6,10 +6,6 @@ namespace App.Model.Cometido
     [Table("ViaticoHonorario")]
     public class ViaticoHonorario
     {
-        public ViaticoHonorario()
-        { }
-
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "ViaticoHonorarioId")]

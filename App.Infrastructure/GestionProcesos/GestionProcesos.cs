@@ -14,7 +14,7 @@ namespace App.Infrastructure.GestionProcesos
 
         public GestionProcesos(AppContext context)
         {
-            this._context = context;
+            _context = context;
             System.Diagnostics.Debug.WriteLine("New Entity framework repository...");
         }
 
@@ -67,7 +67,7 @@ namespace App.Infrastructure.GestionProcesos
             }
 
             foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }

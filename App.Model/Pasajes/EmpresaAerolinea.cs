@@ -6,9 +6,6 @@ namespace App.Model.Pasajes
     [Table("EmpresaAerolinea")]
     public class EmpresaAerolinea : Core.BaseEntity
     {
-        public EmpresaAerolinea()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "EmpresaAerolineaId")]
         public int EmpresaAerolineaId { get; set; }

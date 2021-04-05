@@ -16,11 +16,6 @@ namespace App.Web.Controllers
     {
         public class DTODelete
         {
-            public DTODelete()
-            {
-                    
-            }
-
             public int ProcesoId { get; set; }
 
 
@@ -58,15 +53,12 @@ namespace App.Web.Controllers
             [Display(Name = "Estado")]
             public int? EstadoProcesoId { get; set; }
         }
-        protected readonly IGestionProcesos _repository;
-        protected readonly IEmail _email;
-        protected readonly ISIGPER _sigper;
-
-        public ProcesoPersonalController(IGestionProcesos repository, IEmail email, ISIGPER sigper)
+        private readonly IGestionProcesos _repository;
+        private readonly IEmail _email;
+        public ProcesoPersonalController(IGestionProcesos repository, IEmail email)
         {
             _repository = repository;
             _email = email;
-            _sigper = sigper;
         }
 
         public ActionResult Index()
@@ -76,7 +68,7 @@ namespace App.Web.Controllers
             var email = UserExtended.Email(User);
             var model = new DTOFilter()
             {
-                Select = _repository.GetAll<DefinicionProceso>().Where(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
+                Select = _repository.Get<DefinicionProceso>(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
                 Result = _repository.Get<Proceso>(q => q.Email == email).ToList()
             };
             return View(model);

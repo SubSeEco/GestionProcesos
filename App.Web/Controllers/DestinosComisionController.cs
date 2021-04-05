@@ -15,10 +15,10 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class DestinosComisionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public static List<DestinosComision> ListDestino { get; set; }
+        //public static List<DestinosComision> ListDestino { get; set; }
         public class DtoMontos
         {
             public double? Dias100 { get; set; } = 0;
@@ -29,7 +29,7 @@ namespace App.Web.Controllers
             public double? DiasTotal { get; set; } = 0;
         }
 
-        public DestinosComisionController(IGestionProcesos repository, ISIGPER sigper)
+        public DestinosComisionController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -66,7 +66,7 @@ namespace App.Web.Controllers
             var viatico = _repository.GetFirst<ViaticoInternacional>(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId);
             var viaticoInternacional = _repository.GetFirst<ViaticoInternacional>(v => v.Año == DateTime.Now.Year && v.CiudadId.Value == CiudadId);
             var grado = comision.GradoDescripcion;
-            var CalidadJuridica = comision.CalidadDescripcion;
+            //var CalidadJuridica = comision.CalidadDescripcion;
             float monto;
             //if (CalidadJuridica == "HONORARIOS") // "CONTRATA")
             if (comision.IdGrado == "0") // "CONTRATA")

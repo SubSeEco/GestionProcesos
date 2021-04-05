@@ -5,9 +5,9 @@ namespace App.Model.Core
 {
     public class ResponseMessage
     {
-        public List<string> Errors { get; private set; }
-        public List<string> Warnings { get; private set; }
-        public bool IsValid { get { return !Errors.Any(); } set { } }
+        public List<string> Errors { get; set; }
+        public List<string> Warnings { get; set; }
+        public bool IsValid => !Errors.Any();
         public int EntityId { get; set; }
 
         public ResponseMessage()

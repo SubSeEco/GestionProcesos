@@ -7,7 +7,7 @@ namespace App.Core.UseCases
 {
     public class UseCaseDocumento
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public UseCaseDocumento(IGestionProcesos repository)
         {

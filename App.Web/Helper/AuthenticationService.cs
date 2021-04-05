@@ -10,10 +10,10 @@ namespace App.Web
 {
     public class AuthenticationService
     {
-        public static string LDAPServer = "maestrof.economia.cl:389";
-        public static string LDAPContainer = "OU=OU,DC=economia,DC=cl";
-        public static string LDAPUsername = "leer_ad";
-        public static string LDAPPassword = "leer_ad";
+        private static string LDAPServer = "maestrof.economia.cl:389";
+        private static string LDAPContainer = "OU=OU,DC=economia,DC=cl";
+        private static string LDAPUsername = "leer_ad";
+        private static string LDAPPassword = "leer_ad";
 
         public class AuthenticationResult
         {
@@ -22,8 +22,8 @@ namespace App.Web
                 ErrorMessage = errorMessage;
             }
 
-            public String ErrorMessage { get; private set; }
-            public Boolean IsSuccess => String.IsNullOrEmpty(ErrorMessage);
+            public string ErrorMessage { get; private set; }
+            public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
         }
 
         private readonly IAuthenticationManager authenticationManager;

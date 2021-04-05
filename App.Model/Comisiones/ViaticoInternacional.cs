@@ -6,9 +6,6 @@ namespace App.Model.Comisiones
     [Table("ViaticoInternacional")]
     public class ViaticoInternacional
     {
-        public ViaticoInternacional()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "Viatico Internacional Id")]

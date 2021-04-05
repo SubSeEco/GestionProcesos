@@ -15,10 +15,10 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class DestinosPasajesController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public static List<DestinosPasajes> ListDestino { get; set; }
+        //public static List<DestinosPasajes> ListDestino { get; set; }
         //public class DtoMontos
         //{
         //    public double? Dias100 { get; set; } = 0;
@@ -29,7 +29,7 @@ namespace App.Web.Controllers
         //    public double? DiasTotal { get; set; } = 0;
         //}
 
-        public DestinosPasajesController(IGestionProcesos repository, ISIGPER sigper)
+        public DestinosPasajesController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;

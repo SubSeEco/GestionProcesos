@@ -8,9 +8,6 @@ namespace App.Model.Comisiones
     [Table("DestinosComision")]
     public class DestinosComision
     {
-        public DestinosComision()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Display(Name = "Destinos Comision Id")]

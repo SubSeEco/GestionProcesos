@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreTipoDocumento")]
     public class TipoDocumento
     {
-        public TipoDocumento()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int TipoDocumentoId { get; set; }

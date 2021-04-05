@@ -45,9 +45,9 @@
     <Compile Include="Interfaces\IFolio.cs" />
     <Compile Include="Interfaces\IGestionProcesos.cs" />
     <Compile Include="Interfaces\IMinsegpres.cs" />
-    <Compile Include="Interfaces\ISIGPER.cs" />
+    <Compile Include="Interfaces\ISigper.cs" />
     <Compile Include="Interfaces\IFile.cs" />
-    <Compile Include="Interfaces\IHSM.cs" />
+    <Compile Include="Interfaces\IHsm.cs" />
     <Compile Include="Interfaces\IEmail.cs" />
     <Compile Include="Interfaces\IWorkflowService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,7 +61,6 @@
     <Compile Include="UseCases\UseCaseHorasExtras.cs" />
     <Compile Include="UseCases\UseCaseProgramacionHorasExtraordinarias.cs" />
     <Compile Include="UseCases\UseCaseInformeHSA.cs" />
-    <Compile Include="UseCases\UseCaseMemorandum.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

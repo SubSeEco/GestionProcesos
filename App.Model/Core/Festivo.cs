@@ -7,10 +7,6 @@ namespace App.Model.Core
     [Table("CoreFestivo")]
     public class Festivo
     {
-        public Festivo()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int FestivoId { get; set; }

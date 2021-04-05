@@ -1,7 +1,5 @@
 ﻿using App.Model.Core;
 using App.Core.Interfaces;
-using System.ComponentModel.DataAnnotations;
-using System.Web;
 using System.Web.Mvc;
 using App.Core.UseCases;
 
@@ -13,36 +11,11 @@ namespace App.Web.Controllers
 
     public class RubricaController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        public class FileUpload
-        {
-            public FileUpload()
-            {
-            }
+        private readonly IGestionProcesos _repository;
 
-            [Display(Name = "Autor")]
-            public string Email { get; set; }
-
-            [Display(Name = "Funcionario")]
-            public string Funcionario { get; set; }
-
-            [Required(ErrorMessage = "Es necesario especificar este dato")]
-            [Display(Name = "Archivo")]
-            [DataType(DataType.Upload)]
-            public HttpPostedFileBase File { get; set; }
-
-            [Display(Name = "Identificador de firma electrónica")]
-            public string IdentificadorFirma { get; set; }
-
-            [Display(Name = "Habilitado para firmar")]
-            public bool HabilitadoFirma { get; set; }
-        }
-
-        public RubricaController(IGestionProcesos repository, ISIGPER sigper)
+        public RubricaController(IGestionProcesos repository)
         {
             _repository = repository;
-            _sigper = sigper;
         }
 
         public ActionResult Index()

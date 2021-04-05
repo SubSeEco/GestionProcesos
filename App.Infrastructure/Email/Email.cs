@@ -10,7 +10,7 @@ namespace App.Infrastructure.Email
 {
     public class Email : IEmail
     {
-        public void Send(MailMessage message)
+        private void Send(MailMessage message)
         {
             try
             {
@@ -127,69 +127,69 @@ namespace App.Infrastructure.Email
             }
         }
 
-        public void NotificarRespuestaSIAC(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
-        {
-            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
-                throw new Exception("No existe la plantilla de notificación de tareas");
-            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
-                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+        //public void NotificarRespuestaSIAC(Proceso proceso, Configuracion plantillaCorreo, Configuracion asunto)
+        //{
+        //    if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+        //        throw new Exception("No existe la plantilla de notificación de tareas");
+        //    if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
+        //        throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", proceso.ProcesoId.ToString());
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", proceso.DefinicionProceso.Nombre);
 
-            using (MailMessage emailMsg = new MailMessage())
-            {
-                emailMsg.IsBodyHtml = true;
-                emailMsg.Body = plantillaCorreo.Valor;
-                emailMsg.Subject = asunto.Valor;
-                emailMsg.To.Add(proceso.Email);
-                Send(emailMsg);
-            }
-        }
+        //    using (MailMessage emailMsg = new MailMessage())
+        //    {
+        //        emailMsg.IsBodyHtml = true;
+        //        emailMsg.Body = plantillaCorreo.Valor;
+        //        emailMsg.Subject = asunto.Valor;
+        //        emailMsg.To.Add(proceso.Email);
+        //        Send(emailMsg);
+        //    }
+        //}
 
-        public void NotificarFirmaResolucionCometido(Workflow workflow, Configuracion plantillaCorreo, Configuracion asunto, List<string> Mails)
-        {
-            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
-                throw new Exception("No existe la plantilla de notificación de tareas");
-            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
-                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+        //public void NotificarFirmaResolucionCometido(Workflow workflow, Configuracion plantillaCorreo, Configuracion asunto, List<string> Mails)
+        //{
+        //    if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+        //        throw new Exception("No existe la plantilla de notificación de tareas");
+        //    if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto.Valor)))
+        //        throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", workflow.WorkflowId.ToString());
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", workflow.DefinicionWorkflow.DefinicionProceso.Nombre);
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Tarea]", workflow.DefinicionWorkflow.Nombre);
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Id]", workflow.WorkflowId.ToString());
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Proceso]", workflow.DefinicionWorkflow.DefinicionProceso.Nombre);
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Tarea]", workflow.DefinicionWorkflow.Nombre);
 
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
+        //    if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+        //        plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
+        //    if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+        //        plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
 
-            using (MailMessage emailMsg = new MailMessage())
-            {
-                emailMsg.IsBodyHtml = true;
-                emailMsg.Body = plantillaCorreo.Valor;
-                emailMsg.Subject = asunto.Valor;
+        //    using (MailMessage emailMsg = new MailMessage())
+        //    {
+        //        emailMsg.IsBodyHtml = true;
+        //        emailMsg.Body = plantillaCorreo.Valor;
+        //        emailMsg.Subject = asunto.Valor;
 
-                switch (workflow.DefinicionWorkflow.TipoEjecucionId)
-                {
-                    case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+        //        switch (workflow.DefinicionWorkflow.TipoEjecucionId)
+        //        {
+        //            case (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+        //            case (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+        //            case (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
-                        emailMsg.To.Add(workflow.Email);
-                        break;
+        //                emailMsg.To.Add(workflow.Email);
+        //                break;
 
-                    case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+        //            case (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
-                        return;
-                }
+        //                return;
+        //        }
 
-                foreach (var correo in Mails)
-                {
-                    emailMsg.To.Add(correo);
-                }
-                Send(emailMsg);
-            }
-        }
+        //        foreach (var correo in Mails)
+        //        {
+        //            emailMsg.To.Add(correo);
+        //        }
+        //        Send(emailMsg);
+        //    }
+        //}
 
         public void NotificacionesCometido(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
         {
@@ -209,9 +209,9 @@ namespace App.Infrastructure.Email
             Mail.Valor = Mail.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
 
 
-            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                 Mail.Valor = Mail.Valor.Replace("[Estado]", "Aprobado");
-            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                 Mail.Valor = Mail.Valor.Replace("[Estado]", "Rechazado");
 
             SmtpClient smtpClient = new SmtpClient();
@@ -231,10 +231,10 @@ namespace App.Infrastructure.Email
 
             switch (workflow.DefinicionWorkflow.TipoEjecucionId)
             {
-                case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+                case (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+                case (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+                case (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+                case (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
                     emailMsg.To.Add(workflow.Email);
                     break;
@@ -277,9 +277,9 @@ namespace App.Infrastructure.Email
             Mail.Valor = Mail.Valor.Replace("[TipoActoAdm]", TipoActoAdm);
 
 
-            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                 Mail.Valor = Mail.Valor.Replace("[Estado]", "Aprobado");
-            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
+            if (Mail.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                 Mail.Valor = Mail.Valor.Replace("[Estado]", "Rechazado");
 
             SmtpClient smtpClient = new SmtpClient();
@@ -299,10 +299,10 @@ namespace App.Infrastructure.Email
 
             switch (workflow.DefinicionWorkflow.TipoEjecucionId)
             {
-                case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+                case (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+                case (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+                case (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+                case (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
                     emailMsg.To.Add(workflow.Email);
                     break;
@@ -326,59 +326,59 @@ namespace App.Infrastructure.Email
                 throw ex;
             }
         }
-        public void NotificacionesMemorandum(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int MemorandumId, Documento documento)
-        {
-            if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
-                throw new Exception("No existe la plantilla de notificación de tareas");
-            if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto)))
-                throw new Exception("No se ha configurado el asunto de los correos electrónicos");
+        //public void NotificacionesMemorandum(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int MemorandumId, Documento documento)
+        //{
+        //    if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))
+        //        throw new Exception("No existe la plantilla de notificación de tareas");
+        //    if (asunto == null || (asunto != null && string.IsNullOrWhiteSpace(asunto)))
+        //        throw new Exception("No se ha configurado el asunto de los correos electrónicos");
 
-            plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[MemorandumId]", MemorandumId.ToString());
-            //plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
+        //    plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[MemorandumId]", MemorandumId.ToString());
+        //    //plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[FechaSolicitud]", FechaSolicitud);
 
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
-            if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Rechazada)
-                plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
+        //    if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+        //        plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Aprobado");
+        //    if (plantillaCorreo.Valor.Contains("[Estado]") && workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+        //        plantillaCorreo.Valor = plantillaCorreo.Valor.Replace("[Estado]", "Rechazado");
 
-            SmtpClient smtpClient = new SmtpClient();
-            MailMessage emailMsg = new MailMessage();
-            emailMsg.IsBodyHtml = true;
-            emailMsg.Body = plantillaCorreo.Valor;
-            emailMsg.Subject = asunto;
+        //    SmtpClient smtpClient = new SmtpClient();
+        //    MailMessage emailMsg = new MailMessage();
+        //    emailMsg.IsBodyHtml = true;
+        //    emailMsg.Body = plantillaCorreo.Valor;
+        //    emailMsg.Subject = asunto;
 
-            MemoryStream ms = new MemoryStream(documento.File);
-            Attachment attach = new Attachment(ms, documento.FileName);
-            emailMsg.Attachments.Add(attach);
+        //    MemoryStream ms = new MemoryStream(documento.File);
+        //    Attachment attach = new Attachment(ms, documento.FileName);
+        //    emailMsg.Attachments.Add(attach);
 
 
-            switch (workflow.DefinicionWorkflow.TipoEjecucionId)
-            {
-                case (int)App.Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
+        //    switch (workflow.DefinicionWorkflow.TipoEjecucionId)
+        //    {
+        //        case (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo:
+        //        case (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso:
+        //        case (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso:
 
-                    emailMsg.To.Add(workflow.Email);
-                    break;
+        //            emailMsg.To.Add(workflow.Email);
+        //            break;
 
-                case (int)App.Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
+        //        case (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico:
 
-                    return;
-            }
+        //            return;
+        //    }
 
-            foreach (var correo in Mails)
-            {
-                emailMsg.To.Add(correo);
-            }
+        //    foreach (var correo in Mails)
+        //    {
+        //        emailMsg.To.Add(correo);
+        //    }
 
-            try
-            {
-                smtpClient.Send(emailMsg);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //    try
+        //    {
+        //        smtpClient.Send(emailMsg);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }

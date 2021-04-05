@@ -1,30 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
 using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.Core;
 using App.Model.DTO;
-//using App.Model.Shared;
 using App.Core.Interfaces;
-using App.Model.Shared;
 using App.Util;
-using Newtonsoft.Json;
 using App.Core.UseCases;
-using App.Model.Comisiones;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using Rotativa;
-using org.mp4parser.aspectj.runtime.@internal;
-//using App.Infrastructure.Extensions;
-//using com.sun.corba.se.spi.ior;
-//using System.Net.Mail;
-//using com.sun.codemodel.@internal;
 
 namespace App.Web.Controllers
 {
@@ -46,11 +33,11 @@ namespace App.Web.Controllers
 
             [Display(Name = "Desde")]
             [DataType(DataType.Date)]
-            public System.DateTime? Desde { get; set; }
+            public DateTime? Desde { get; set; }
 
             [Display(Name = "Hasta")]
             [DataType(DataType.Date)]
-            public System.DateTime? Hasta { get; set; }
+            public DateTime? Hasta { get; set; }
 
             [Display(Name = "ID")]
             public int ID { get; set; }
@@ -60,15 +47,15 @@ namespace App.Web.Controllers
 
             [Display(Name = "Fecha Inicio")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaInicio { get; set; }
+            public DateTime? FechaInicio { get; set; }
 
             [Display(Name = "Fecha Término")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaTermino { get; set; }
+            public DateTime? FechaTermino { get; set; }
 
             [Display(Name = "Fecha de solicitud")]
             [DataType(DataType.Date)]
-            public System.DateTime? FechaSolicitud { get; set; }
+            public DateTime? FechaSolicitud { get; set; }
 
             [Display(Name = "Funcionario")]
             public int? NombreId { get; set; }
@@ -92,43 +79,42 @@ namespace App.Web.Controllers
             public IEnumerable<ProgramacionHorasExtraordinarias> Result { get; set; }
         }
 
-        public class Chart
-        {
-            public Chart()
-            {
-                datasets = new List<Datasets>();
-            }
-            public string[] labels { get; set; }
-            public List<Datasets> datasets { get; set; }
-        }
+        //public class Chart
+        //{
+        //    public Chart()
+        //    {
+        //        datasets = new List<Datasets>();
+        //    }
+        //    public string[] labels { get; set; }
+        //    public List<Datasets> datasets { get; set; }
+        //}
 
-        public class Datasets
-        {
-            public string label { get; set; }
-            public string[] backgroundColor { get; set; }
-            public string[] borderColor { get; set; }
-            public string borderWidth { get; set; }
-            public double[] data { get; set; }
-            public bool fill { get; set; }
-        }
+        //public class Datasets
+        //{
+        //    public string label { get; set; }
+        //    public string[] backgroundColor { get; set; }
+        //    public string[] borderColor { get; set; }
+        //    public string borderWidth { get; set; }
+        //    public double[] data { get; set; }
+        //    public bool fill { get; set; }
+        //}
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
-        private static List<App.Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IFolio _folio;
+        private readonly IHsm _hsm;
+
+        private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
         //public static List<Destinos> ListDestino = new List<Destinos>();
 
-        public ProgramacionHorasExtraordinariasController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public ProgramacionHorasExtraordinariasController(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm)
         {
             _repository = repository;
             _sigper = sigper;
             _file = file;
             _folio = folio;
             _hsm = hsm;
-            _email = email;
 
             //if (tipoDocumentoList == null)
             //    tipoDocumentoList = _folio.GetTipoDocumento();
@@ -164,10 +150,10 @@ namespace App.Web.Controllers
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreorem = per.Funcionario != null ? per.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rut;
-            if (per.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (per.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = per.Funcionario.RH_NumInte.ToString();
                 rut = string.Concat("0", t);
@@ -180,12 +166,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 Rut = rut,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
-                IdCargo = IdCargo,
+                DV = per.Funcionario.RH_DvNuInt,
+                IdCargo,
                 Cargo = cargo,
-                IdCalidad = IdCalidad,
+                IdCalidad,
                 CalidadJuridica = calidad,
-                IdGrado = IdGrado,
+                IdGrado,
                 Grado = grado,
                 Estamento = estamento,
                 Programa = Programa.Trim(),
@@ -219,10 +205,10 @@ namespace App.Web.Controllers
             var conglomeradofunc1 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc1.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc1 = perfunc1.Jefatura != null ? perfunc1.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc1 = perfunc1.Funcionario != null ? perfunc1.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc1 = perfunc1.Funcionario != null ? perfunc1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc1 = perfunc1.Funcionario != null ? perfunc1.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc1;
-            if (perfunc1.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc1.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc1.Funcionario.RH_NumInte.ToString();
                 rutfunc1 = string.Concat("0", t);
@@ -235,12 +221,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc1 = rutfunc1,
-                DVFunc1 = perfunc1.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc1 = IdCargoFunc1,
+                DVFunc1 = perfunc1.Funcionario.RH_DvNuInt,
+                IdCargoFunc1,
                 CargoFunc1 = cargofunc1,
                 IdCalidadVisa1 = IdCalidadFunc1,
                 CalidadJuridicaFunc1 = calidadfunc1,
-                IdGradoFunc1 = IdGradoFunc1,
+                IdGradoFunc1,
                 GradoFunc1 = gradofunc1,
                 EstamentoFunc1 = estamentofunc1,
                 ProgramaFunc1 = ProgramaFunc1.Trim(),
@@ -262,7 +248,7 @@ namespace App.Web.Controllers
         {
             var correofunc2 = _sigper.GetUserByRut(RutFunc2).Funcionario.Rh_Mail.Trim();
             var perfunc2 = _sigper.GetUserByEmail(correofunc2);
-            var IdCargoFunc2= perfunc2.DatosLaborales.RhConCar.Value;
+            var IdCargoFunc2 = perfunc2.DatosLaborales.RhConCar.Value;
             var cargofunc2 = string.IsNullOrEmpty(perfunc2.DatosLaborales.RhConEsc.Trim()) ? "S/A" : _sigper.GetPECARGOs().Where(e => e.Pl_CodCar == perfunc2.DatosLaborales.RhConCar).FirstOrDefault().Pl_DesCar.Trim();
             var IdCalidadFunc2 = perfunc2.DatosLaborales.RH_ContCod;
             var calidadfunc2 = string.IsNullOrEmpty(perfunc2.DatosLaborales.RhConCar.ToString()) ? "S/A" : _sigper.GetDGCONTRATOS().Where(c => c.RH_ContCod == perfunc2.DatosLaborales.RH_ContCod).FirstOrDefault().RH_ContDes.Trim();
@@ -274,10 +260,10 @@ namespace App.Web.Controllers
             var conglomeradofunc2 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc2.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc2 = perfunc2.Jefatura != null ? perfunc2.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc2 = perfunc2.Funcionario != null ? perfunc2.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc2 = perfunc2.Funcionario != null ? perfunc2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc2 = perfunc2.Funcionario != null ? perfunc2.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc2;
-            if (perfunc2.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc2.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc2.Funcionario.RH_NumInte.ToString();
                 rutfunc2 = string.Concat("0", t);
@@ -290,12 +276,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc2 = rutfunc2,
-                DVFunc2 = perfunc2.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc2 = IdCargoFunc2,
+                DVFunc2 = perfunc2.Funcionario.RH_DvNuInt,
+                IdCargoFunc2,
                 CargoFunc2 = cargofunc2,
                 IdCalidadVisa2 = IdCalidadFunc2,
                 CalidadJuridicaFunc2 = calidadfunc2,
-                IdGradoFunc2 = IdGradoFunc2,
+                IdGradoFunc2,
                 GradoFunc2 = gradofunc2,
                 EstamentoFunc2 = estamentofunc2,
                 ProgramaFunc2 = ProgramaFunc2.Trim(),
@@ -329,10 +315,10 @@ namespace App.Web.Controllers
             var conglomeradofunc3 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc3.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc3 = perfunc3.Jefatura != null ? perfunc3.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc3 = perfunc3.Funcionario != null ? perfunc3.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc3 = perfunc3.Funcionario != null ? perfunc3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc3 = perfunc3.Funcionario != null ? perfunc3.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc3;
-            if (perfunc3.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc3.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc3.Funcionario.RH_NumInte.ToString();
                 rutfunc3 = string.Concat("0", t);
@@ -345,12 +331,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc3 = rutfunc3,
-                DVFunc3 = perfunc3.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc3 = IdCargoFunc3,
+                DVFunc3 = perfunc3.Funcionario.RH_DvNuInt,
+                IdCargoFunc3,
                 CargoFunc3 = cargofunc3,
                 IdCalidadVisa3 = IdCalidadFunc3,
                 CalidadJuridicaFunc3 = calidadfunc3,
-                IdGradoFunc3 = IdGradoFunc3,
+                IdGradoFunc3,
                 GradoFunc3 = gradofunc3,
                 EstamentoFunc3 = estamentofunc3,
                 ProgramaFunc3 = ProgramaFunc3.Trim(),
@@ -384,10 +370,10 @@ namespace App.Web.Controllers
             var conglomeradofunc4 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc4.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc4 = perfunc4.Jefatura != null ? perfunc4.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc4 = perfunc4.Funcionario != null ? perfunc4.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc4 = perfunc4.Funcionario != null ? perfunc4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc4 = perfunc4.Funcionario != null ? perfunc4.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc4;
-            if (perfunc4.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc4.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc4.Funcionario.RH_NumInte.ToString();
                 rutfunc4 = string.Concat("0", t);
@@ -400,12 +386,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc4 = rutfunc4,
-                DVFunc4 = perfunc4.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc4 = IdCargoFunc4,
+                DVFunc4 = perfunc4.Funcionario.RH_DvNuInt,
+                IdCargoFunc4,
                 CargoFunc4 = cargofunc4,
                 IdCalidadVisa4 = IdCalidadFunc4,
                 CalidadJuridicaFunc4 = calidadfunc4,
-                IdGradoFunc4 = IdGradoFunc4,
+                IdGradoFunc4,
                 GradoFunc4 = gradofunc4,
                 EstamentoFunc4 = estamentofunc4,
                 ProgramaFunc4 = ProgramaFunc4.Trim(),
@@ -439,10 +425,10 @@ namespace App.Web.Controllers
             var conglomeradofunc5 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc5.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc5 = perfunc5.Jefatura != null ? perfunc5.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc5 = perfunc5.Funcionario != null ? perfunc5.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc5 = perfunc5.Funcionario != null ? perfunc5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc5 = perfunc5.Funcionario != null ? perfunc5.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc5;
-            if (perfunc5.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc5.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc5.Funcionario.RH_NumInte.ToString();
                 rutfunc5 = string.Concat("0", t);
@@ -455,12 +441,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc5 = rutfunc5,
-                DVFunc5 = perfunc5.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc5 = IdCargoFunc5,
+                DVFunc5 = perfunc5.Funcionario.RH_DvNuInt,
+                IdCargoFunc5,
                 CargoFunc5 = cargofunc5,
                 IdCalidadVisa5 = IdCalidadFunc5,
                 CalidadJuridicaFunc5 = calidadfunc5,
-                IdGradoFunc5 = IdGradoFunc5,
+                IdGradoFunc5,
                 GradoFunc5 = gradofunc5,
                 EstamentoFunc5 = estamentofunc5,
                 ProgramaFunc5 = ProgramaFunc5.Trim(),
@@ -494,10 +480,10 @@ namespace App.Web.Controllers
             var conglomeradofunc6 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc6.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc6 = perfunc6.Jefatura != null ? perfunc6.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc6 = perfunc6.Funcionario != null ? perfunc6.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc6 = perfunc6.Funcionario != null ? perfunc6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc6 = perfunc6.Funcionario != null ? perfunc6.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc6;
-            if (perfunc6.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc6.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc6.Funcionario.RH_NumInte.ToString();
                 rutfunc6 = string.Concat("0", t);
@@ -510,12 +496,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc6 = rutfunc6,
-                DVFunc6 = perfunc6.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc6 = IdCargoFunc6,
+                DVFunc6 = perfunc6.Funcionario.RH_DvNuInt,
+                IdCargoFunc6,
                 CargoFunc6 = cargofunc6,
                 IdCalidadVisa6 = IdCalidadFunc6,
                 CalidadJuridicaFunc6 = calidadfunc6,
-                IdGradoFunc6 = IdGradoFunc6,
+                IdGradoFunc6,
                 GradoFunc6 = gradofunc6,
                 EstamentoFunc6 = estamentofunc6,
                 ProgramaFunc6 = ProgramaFunc6.Trim(),
@@ -549,10 +535,10 @@ namespace App.Web.Controllers
             var conglomeradofunc7 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc7.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc7 = perfunc7.Jefatura != null ? perfunc7.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc7 = perfunc7.Funcionario != null ? perfunc7.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc7 = perfunc7.Funcionario != null ? perfunc7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc7 = perfunc7.Funcionario != null ? perfunc7.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc7;
-            if (perfunc7.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc7.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc7.Funcionario.RH_NumInte.ToString();
                 rutfunc7 = string.Concat("0", t);
@@ -565,12 +551,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc7 = rutfunc7,
-                DVFunc7 = perfunc7.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc7 = IdCargoFunc7,
+                DVFunc7 = perfunc7.Funcionario.RH_DvNuInt,
+                IdCargoFunc7,
                 CargoFunc7 = cargofunc7,
                 IdCalidadVisa7 = IdCalidadFunc7,
                 CalidadJuridicaFunc7 = calidadfunc7,
-                IdGradoFunc7 = IdGradoFunc7,
+                IdGradoFunc7,
                 GradoFunc7 = gradofunc7,
                 EstamentoFunc7 = estamentofunc7,
                 ProgramaFunc7 = ProgramaFunc7.Trim(),
@@ -604,10 +590,10 @@ namespace App.Web.Controllers
             var conglomeradofunc8 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc8.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc8 = perfunc8.Jefatura != null ? perfunc8.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc8 = perfunc8.Funcionario != null ? perfunc8.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc8 = perfunc8.Funcionario != null ? perfunc8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc8 = perfunc8.Funcionario != null ? perfunc8.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc8;
-            if (perfunc8.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc8.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc8.Funcionario.RH_NumInte.ToString();
                 rutfunc8 = string.Concat("0", t);
@@ -620,12 +606,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc8 = rutfunc8,
-                DVFunc8 = perfunc8.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc8 = IdCargoFunc8,
+                DVFunc8 = perfunc8.Funcionario.RH_DvNuInt,
+                IdCargoFunc8,
                 CargoFunc8 = cargofunc8,
                 IdCalidadVisa8 = IdCalidadFunc8,
                 CalidadJuridicaFunc8 = calidadfunc8,
-                IdGradoFunc8 = IdGradoFunc8,
+                IdGradoFunc8,
                 GradoFunc8 = gradofunc8,
                 EstamentoFunc8 = estamentofunc8,
                 ProgramaFunc8 = ProgramaFunc8.Trim(),
@@ -659,10 +645,10 @@ namespace App.Web.Controllers
             var conglomeradofunc9 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc9.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc9 = perfunc9.Jefatura != null ? perfunc9.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc9 = perfunc9.Funcionario != null ? perfunc9.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc9 = perfunc9.Funcionario != null ? perfunc9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc9 = perfunc9.Funcionario != null ? perfunc9.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc9;
-            if (perfunc9.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc9.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc9.Funcionario.RH_NumInte.ToString();
                 rutfunc9 = string.Concat("0", t);
@@ -675,12 +661,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc9 = rutfunc9,
-                DVFunc9 = perfunc9.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc9 = IdCargoFunc9,
+                DVFunc9 = perfunc9.Funcionario.RH_DvNuInt,
+                IdCargoFunc9,
                 CargoFunc9 = cargofunc9,
                 IdCalidadVisa9 = IdCalidadFunc9,
                 CalidadJuridicaFunc9 = calidadfunc9,
-                IdGradoFunc9 = IdGradoFunc9,
+                IdGradoFunc9,
                 GradoFunc9 = gradofunc9,
                 EstamentoFunc9 = estamentofunc9,
                 ProgramaFunc9 = ProgramaFunc9.Trim(),
@@ -714,10 +700,10 @@ namespace App.Web.Controllers
             var conglomeradofunc10 = _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == perfunc10.Funcionario.RH_NumInte).ReContraSed;
             var jefaturafunc10 = perfunc10.Jefatura != null ? perfunc10.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreofunc10 = perfunc10.Funcionario != null ? perfunc10.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrefunc10 = perfunc10.Funcionario != null ? perfunc10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrefunc10 = perfunc10.Funcionario != null ? perfunc10.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rutfunc10;
-            if (perfunc10.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (perfunc10.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = perfunc10.Funcionario.RH_NumInte.ToString();
                 rutfunc10 = string.Concat("0", t);
@@ -730,12 +716,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 RutFunc10 = rutfunc10,
-                DVFunc10 = perfunc10.Funcionario.RH_DvNuInt.ToString(),
-                IdCargoFunc10 = IdCargoFunc10,
+                DVFunc10 = perfunc10.Funcionario.RH_DvNuInt,
+                IdCargoFunc10,
                 CargoFunc10 = cargofunc10,
                 IdCalidadVisa10 = IdCalidadFunc10,
                 CalidadJuridicaFunc10 = calidadfunc10,
-                IdGradoFunc10 = IdGradoFunc10,
+                IdGradoFunc10,
                 GradoFunc10 = gradofunc10,
                 EstamentoFunc10 = estamentofunc10,
                 ProgramaFunc10 = ProgramaFunc10.Trim(),
@@ -766,7 +752,7 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
@@ -775,7 +761,7 @@ namespace App.Web.Controllers
 
         public ActionResult Details(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
@@ -947,7 +933,7 @@ namespace App.Web.Controllers
             {
                 model.IdUnidad = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
-                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreId = null;
                 //model.NombreId = persona.Funcionario.RH_NumInte;
@@ -964,7 +950,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc1 = null;
                 //model.UnidadDescripcionFunc1 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc1 = null;
-                model.RutFunc1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc1 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc1 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc1 = null;
                 //model.NombreIdFunc1 = persona.Funcionario.RH_NumInte;
@@ -983,7 +969,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc2 = null;
                 //model.UnidadDescripcionFunc2 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc2 = null;
-                model.RutFunc2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc2 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc2 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc2 = null;
                 //model.NombreIdFunc2 = persona.Funcionario.RH_NumInte;
@@ -1002,7 +988,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc3 = null;
                 //model.UnidadDescripcionFunc3 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc3 = null;
-                model.RutFunc3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc3 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc3 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc3 = null;
                 //model.NombreIdFunc3 = persona.Funcionario.RH_NumInte;
@@ -1021,7 +1007,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc4 = null;
                 //model.UnidadDescripcionFunc4 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc4 = null;
-                model.RutFunc4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc4 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc4 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc4 = null;
                 //model.NombreIdFunc4 = persona.Funcionario.RH_NumInte;
@@ -1040,7 +1026,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc5 = null;
                 //model.UnidadDescripcionFunc5 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc5 = null;
-                model.RutFunc5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc5 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc5 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc5 = null;
                 //model.NombreIdFunc5 = persona.Funcionario.RH_NumInte;
@@ -1059,7 +1045,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc6 = null;
                 //model.UnidadDescripcionFunc6 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc6 = null;
-                model.RutFunc6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc6 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc6 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc6 = null;
                 //model.NombreIdFunc6 = persona.Funcionario.RH_NumInte;
@@ -1078,7 +1064,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc7 = null;
                 //model.UnidadDescripcionFunc7 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc7 = null;
-                model.RutFunc7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc7 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc7 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc7 = null;
                 //model.NombreIdFunc7 = persona.Funcionario.RH_NumInte;
@@ -1097,7 +1083,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc8 = null;
                 //model.UnidadDescripcionFunc8 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc8 = null;
-                model.RutFunc8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc8 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc8 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc8 = null;
                 //model.NombreIdFunc8 = persona.Funcionario.RH_NumInte;
@@ -1116,7 +1102,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc9 = null;
                 //model.UnidadDescripcionFunc9 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc9 = null;
-                model.RutFunc9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc9 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc9 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc9 = null;
                 //model.NombreIdFunc9 = persona.Funcionario.RH_NumInte;
@@ -1135,7 +1121,7 @@ namespace App.Web.Controllers
                 model.IdUnidadFunc10 = null;
                 //model.UnidadDescripcionFunc10 = persona.Unidad.Pl_UndDes.Trim();
                 model.UnidadDescripcionFunc10 = null;
-                model.RutFunc10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.RutFunc10 = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DVFunc10 = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreIdFunc10 = null;
                 //model.NombreIdFunc10 = persona.Funcionario.RH_NumInte;
@@ -1160,7 +1146,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new Core.UseCases.UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasInsert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -1177,7 +1163,7 @@ namespace App.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
 
@@ -1199,11 +1185,11 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ProgramacionHorasExtraordinarias model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -1230,27 +1216,27 @@ namespace App.Web.Controllers
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             if (ModelState.IsValid)
             {
@@ -1264,11 +1250,11 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditAnalista(ProgramacionHorasExtraordinarias model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -1295,27 +1281,27 @@ namespace App.Web.Controllers
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
             ViewBag.Pl_UndCod = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.To = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc1 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc2 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc3 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc4 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc5 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc6 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc7 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc8 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc9 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc10 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc11 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc12 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc13 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc14 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc15 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc16 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc17 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc18 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc19 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
-            ViewBag.ToFunc20 = new SelectList(new List<App.Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.To = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc1 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc2 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc3 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc4 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc5 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc6 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc7 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc8 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc9 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc10 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc11 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc12 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc13 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc14 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc15 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc16 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc17 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc18 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc19 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
+            ViewBag.ToFunc20 = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail, Nombre = c.PeDatPerChq }).ToList(), "Email", "Nombre");
 
             if (ModelState.IsValid)
             {
@@ -1329,11 +1315,11 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditVisador(ProgramacionHorasExtraordinarias model)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.ProgramacionHorasExtraordinariasUpdate(model);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -1357,14 +1343,14 @@ namespace App.Web.Controllers
 
         public ActionResult GeneraDocumento(int id)
         {
-            byte[] pdf = null;
+            byte[] pdf;
             DTOFileMetadata data = new DTOFileMetadata();
             int tipoDoc = 0;
             int IdDocto = 0;
             string Name = string.Empty;
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1372,138 +1358,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
-                int idDoctoViatico = 0;
-
-                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
-                if (cdpViatico != null)
-                {
-                    if (cdpViatico.TipoDocumentoId == 2)
-                        idDoctoViatico = cdpViatico.DocumentoId;                    
-                }
-
-                if (idDoctoViatico == 0)
-                {
-                    /*se guarda certificado de viatico*/
-                    var email = UserExtended.Email(User);
-                    var doc = new Documento();
-                    doc.Fecha = DateTime.Now;
-                    doc.Email = email;
-                    doc.FileName = Name;
-                    doc.File = pdf;
-                    doc.ProcesoId = model.ProcesoId.Value;
-                    doc.WorkflowId = model.WorkflowId.Value;
-                    doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
-                    doc.TipoDocumentoId = tipoDoc;
-
-                    _repository.Create(doc);
-                    _repository.Save();
-                }
-                else
-                {
-                    var docOld = _repository.GetById<Documento>(idDoctoViatico);
-                    docOld.File = pdf;
-                    docOld.Signed = false;
-                    docOld.Texto = data.Text;
-                    docOld.Metadata = data.Metadata;
-                    docOld.Type = data.Type;
-                    _repository.Update(docOld);
-                    _repository.Save();
-                }
-            }
-            else
-            {
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Programacion Horas Extraordinarias" + ".pdf" };
-                pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
-                data = _file.BynaryToText(pdf);
-
-                tipoDoc = 9;
-                Name = "Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
-
-                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
-                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var programacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9).FirstOrDefault();
-                if (programacion != null)
-                {
-                    IdDocto = programacion.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
-                }
-
-                /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
-                if (IdDocto == 0)
-                {
-                    var email = UserExtended.Email(User);
-                    var doc = new Documento();
-                    doc.Fecha = DateTime.Now;
-                    doc.Email = email;
-                    doc.FileName = Name;
-                    doc.File = pdf;
-                    doc.ProcesoId = model.ProcesoId.Value;
-                    doc.WorkflowId = model.WorkflowId.Value;
-                    doc.Signed = false;
-                    doc.Texto = data.Text;
-                    doc.Metadata = data.Metadata;
-                    doc.Type = data.Type;
-                    doc.TipoPrivacidadId = 1;
-                    doc.TipoDocumentoId = tipoDoc;
-
-                    _repository.Create(doc);
-                    _repository.Save();
-                }
-                else
-                {
-                    var docOld = _repository.GetById<Documento>(IdDocto);
-                    if (docOld.Signed != true)
-                    {
-                        docOld.File = pdf;
-                        docOld.Signed = false;
-                        docOld.Texto = data.Text;
-                        docOld.Metadata = data.Metadata;
-                        docOld.Type = data.Type;
-                        _repository.Update(docOld);
-                        _repository.Save();
-                    }
-                }
-
-            }
-
-            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
-
-            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
-        }
-
-        public ActionResult GeneraDocumento2(int id)
-        {
-            byte[] pdf = null;
-            DTOFileMetadata data = new DTOFileMetadata();
-            int tipoDoc = 0;
-            int IdDocto = 0;
-            string Name = string.Empty;
-            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
-            {
-                /*Se genera certificado de viatico*/
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/ FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
-                data = _file.BynaryToText(pdf);
-                tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -1549,28 +1404,18 @@ namespace App.Web.Controllers
             }
             else
             {
-                //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.MemorandumId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionProgramacion", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Resolución Programacion Horas Extraordinarias" + ".pdf" };
+                Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "Programacion Horas Extraordinarias" + ".pdf" };
                 pdf = resultPdf.BuildFile(ControllerContext);
-                //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
 
-                tipoDoc = 10;
-                Name = "Resolución Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                tipoDoc = 9;
+                Name = "Programacion Horas Extraordinarias nro" + " " + model.ProgramacionHorasExtraordinariasId + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
-                var resolucionprogramacion = _repository.Get<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 10).FirstOrDefault();
-                if (resolucionprogramacion != null)
-                {
-                    IdDocto = resolucionprogramacion.DocumentoId;
-
-                    //foreach (var res in memorandum)
-                    //{
-                    //    if (res.TipoDocumentoId == 1)
-                    //        IdDocto = res.DocumentoId;
-                    //}
-                }
+                var programacion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 9);
+                if (programacion != null)
+                    IdDocto = programacion.DocumentoId;
 
                 /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
                 if (IdDocto == 0)
@@ -1610,11 +1455,138 @@ namespace App.Web.Controllers
 
             }
 
-            //return RedirectToAction("Edit", "ProgramacionHorasExtraordinarias", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
+            return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
+        }
+
+        public ActionResult GeneraDocumento2(int id)
+        {
+            byte[] pdf = null;
+            DTOFileMetadata data = new DTOFileMetadata();
+            int tipoDoc = 0;
+            int IdDocto = 0;
+            string Name = string.Empty;
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId !=
+                    (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) ||
+                (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId ==
+                    (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+            ) /*genera CDP, por la etapa en la que se encuentra*/
+            {
+                /*Se genera certificado de viatico*/
+                Rotativa.ActionAsPdf resultPdf =
+                    new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId })
+                    {
+                        FileName = "CDP_Viatico" + ".pdf", /*Cookies = cookieCollection,*/
+                        FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName
+                    };
+                pdf = resultPdf.BuildFile(ControllerContext);
+                //data = GetBynary(pdf);
+                data = _file.BynaryToText(pdf);
+                tipoDoc = 2;
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId + ".pdf";
+                int idDoctoViatico = 0;
+
+                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+                var cdpViatico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+                if (cdpViatico != null)
+                {
+                    if (cdpViatico.TipoDocumentoId == 2)
+                        idDoctoViatico = cdpViatico.DocumentoId;
+                }
+
+                if (idDoctoViatico == 0)
+                {
+                    /*se guarda certificado de viatico*/
+                    var email = UserExtended.Email(User);
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = Name;
+                    doc.File = pdf;
+                    doc.ProcesoId = model.ProcesoId.Value;
+                    doc.WorkflowId = model.WorkflowId.Value;
+                    doc.Signed = false;
+                    doc.Texto = data.Text;
+                    doc.Metadata = data.Metadata;
+                    doc.Type = data.Type;
+                    doc.TipoPrivacidadId = 1;
+                    doc.TipoDocumentoId = tipoDoc;
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
+                else
+                {
+                    var docOld = _repository.GetById<Documento>(idDoctoViatico);
+                    docOld.File = pdf;
+                    docOld.Signed = false;
+                    docOld.Texto = data.Text;
+                    docOld.Metadata = data.Metadata;
+                    docOld.Type = data.Type;
+                    _repository.Update(docOld);
+                    _repository.Save();
+                }
+            }
+            else
+            {
+                Rotativa.ActionAsPdf resultPdf =
+                    new Rotativa.ActionAsPdf("ResolucionProgramacion",
+                            new { id = model.ProgramacionHorasExtraordinariasId })
+                    { FileName = "Resolución Programacion Horas Extraordinarias" + ".pdf" };
+                pdf = resultPdf.BuildFile(ControllerContext);
+                data = _file.BynaryToText(pdf);
+
+                tipoDoc = 10;
+                Name = "Resolución Programacion Horas Extraordinarias nro" + " " +
+                       model.ProgramacionHorasExtraordinariasId + ".pdf";
+
+                /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
+                //var resolucion = _repository.GetAll<Documento>().Where(d => d.ProcesoId == model.ProcesoId);
+                var resolucionprogramacion =
+                    _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId && d.TipoDocumentoId == 10);
+                if (resolucionprogramacion != null)
+                    IdDocto = resolucionprogramacion.DocumentoId;
+
+                /*se guarda el pdf generado como documento adjunto -- se valida si ya existe el documento para actualizar*/
+                if (IdDocto == 0)
+                {
+                    var email = UserExtended.Email(User);
+                    var doc = new Documento();
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = Name;
+                    doc.File = pdf;
+                    doc.ProcesoId = model.ProcesoId.Value;
+                    doc.WorkflowId = model.WorkflowId.Value;
+                    doc.Signed = false;
+                    doc.Texto = data.Text;
+                    doc.Metadata = data.Metadata;
+                    doc.Type = data.Type;
+                    doc.TipoPrivacidadId = 1;
+                    doc.TipoDocumentoId = tipoDoc;
+
+                    _repository.Create(doc);
+                    _repository.Save();
+                }
+                else
+                {
+                    var docOld = _repository.GetById<Documento>(IdDocto);
+                    if (docOld.Signed != true)
+                    {
+                        docOld.File = pdf;
+                        docOld.Signed = false;
+                        docOld.Texto = data.Text;
+                        docOld.Metadata = data.Metadata;
+                        docOld.Type = data.Type;
+                        _repository.Update(docOld);
+                        _repository.Save();
+                    }
+                }
+
+            }
 
             return RedirectToAction("Execute", "Workflow", new { id = model.WorkflowId });
-
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         [AllowAnonymous]
@@ -1622,139 +1594,11 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            {
-                //model.GeneracionCDP.FirstOrDefault().FechaFirma = DateTime.Now;
-                //model.GeneracionCDP.FirstOrDefault().PsjFechaFirma = DateTime.Now;
-
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-                //return View(model);
-            }
-            else
-            {
-                //model.Dias = (model.Destinos.LastOrDefault().FechaHasta.Date - model.Destinos.FirstOrDefault().FechaInicio.Date).Days + 1;
-                //model.DiasPlural = "s";
-                //model.Tiempo = model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now ? "Pasado" : "Futuro";
-                //model.Anno = DateTime.Now.Year.ToString();
-                //model.Subscretaria = model.UnidadDescripcion.Contains("Turismo") ? "SUBSECRETARIO DE TURISMO" : "SUBSECRETARIA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO";
-                //model.Fecha = DateTime.Now;
-                //model.FechaFirma = DateTime.Now;
 
-                //model.Firma = false;
-                //model.NumeroResolucion = model.CometidoId;
-                //model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
-
-                /*se traen los datos de la tabla parrafos*/
-                //var parrafos = _repository.GetAll<Parrafos>();
-                //switch (model.IdGrado)
-                //{
-                //    case "B":/*Firma Subsecretario*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteSubse).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoSubse).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    case "C": /*firma ministro*/
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.OrdenMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.FirmanteMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoMinistro).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistosRME).FirstOrDefault().ParrafoTexto;
-                //        break;
-                //    default:
-                //        model.Orden = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Orden).FirstOrDefault().ParrafoTexto;
-                //        model.Firmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
-                //        model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
-                //        model.Vistos = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.VistoRAE).FirstOrDefault().ParrafoTexto;
-                //        var vit = _repository.Get<Parrafos>(c => c.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta && c.ParrafoActivo == true).ToList();
-                //        if (vit.Count > 0)
-                //            model.ViaticodeVuelta = parrafos.Where(p => p.ParrafosId == (int)App.Util.Enum.Firmas.ViaticodeVuelta).FirstOrDefault().ParrafoTexto;
-                //        else
-                //            model.ViaticodeVuelta = string.Empty;
-
-                //        break;
-                //}
-
-                /*Se valida que se encuentre en la tarea de Firma electronica para agregar folio y fecha de resolucion*/
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
-                {
-                    //if (model.Folio == null)
-                    //{
-                    //    #region Folio
-                    //    /*se va a buscar el folio de testing*/
-                    //    DTOFolio folio = new DTOFolio();
-                    //    folio.periodo = DateTime.Now.Year.ToString();
-                    //    folio.solicitante = "Gestion Procesos - Memorandum";/*Sistema que solicita el numero de Folio*/
-                    //    if (model.IdCalidad == 10)
-                    //    {
-                    //        folio.tipodocumento = "RAEX";/*"ORPA";*/
-                    //    }
-                    //    else
-                    //    {
-                    //        switch (model.IdGrado)
-                    //        {
-                    //            case "B":/*Resolución Ministerial Exenta*/
-                    //                folio.tipodocumento = "RMEX";
-                    //                break;
-                    //            case "C": /*Resolución Ministerial Exenta*/
-                    //                folio.tipodocumento = "RMEX";
-                    //                break;
-                    //            default:
-                    //                folio.tipodocumento = "MEMO";/*Resolución Administrativa Exenta*/
-                    //                break;
-                    //        }
-                    //    }
-
-                    //    //definir url
-                    //    var url = "http://wsfolio.test.economia.cl/api/folio/";
-
-                    //    //definir cliente http
-                    //    var clientehttp = new WebClient();
-                    //    clientehttp.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-                    //    //invocar metodo remoto
-                    //    string result = clientehttp.UploadString(url, "POST", JsonConvert.SerializeObject(folio));
-
-                    //    //convertir resultado en objeto 
-                    //    var obj = JsonConvert.DeserializeObject<App.Model.DTO.DTOFolio>(result);
-
-                    //    //verificar resultado
-                    //    if (obj.status == "OK")
-                    //    {
-                    //        model.Folio = obj.folio;
-                    //        model.FechaSolicitud = model.FechaFirma;
-                    //        //model.Firma = true;
-                    //        //model.TipoActoAdministrativo = "Resolución Administrativa Exenta";
-
-                    //        _repository.Update(model);
-                    //        _repository.Save();
-                    //    }
-                    //    if (obj.status == "ERROR")
-                    //    {
-                    //        TempData["Error"] = obj.error;
-                    //        //return View(DTOFolio);
-                    //    }
-                    //    #endregion
-                    //}
-                }
-
-
-                //if (model.CalidadDescripcion.Contains("honorario"))
-                //if (model.IdGrado == "0")
-                //if (model.GradoDescripcion == "0")
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Orden", model);
-                //    return View(model);
-                //}
-                //else
-                //{
-                //    //return new Rotativa.MVC.ViewAsPdf("Pdf", model);
-                //    //return new ViewAsPdf("Resolucion", model);
-                //    return View(model);
-                //}
-                return View(model);
-            }
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -1762,23 +1606,11 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
-            {
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if (Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                 return new Rotativa.MVC.ViewAsPdf("CDPViatico", model);
-            }
-            else
-            {
-                //model.Fecha = DateTime.Now;
 
-                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId) ?? null;
-                if (workflowActual.DefinicionWorkflow.Secuencia == 12 || (workflowActual.DefinicionWorkflow.Secuencia == 12 && workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.Memorandum))
-                {
-
-                }
-
-                return View(model);
-            }
+            return View(model);
         }
 
         public ActionResult Anular(int id)
@@ -1803,7 +1635,7 @@ namespace App.Web.Controllers
             {
                 model.Firmante = UserExtended.Email(User);
 
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
                 var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.ProgramacionHorasExtraordinariasId, new List<string> { model.Firmante });
                 //var _UseCaseResponseMessage = _useCaseInteractor.Sign(model.ProgramacionHorasExtraordinariasId, new List<string> { model.Firmante }, model.Firmante);
 
@@ -1821,20 +1653,11 @@ namespace App.Web.Controllers
 
         public ActionResult DetailsGM(int id)
         {
-            //var model = _repository.GetById<Memorandum>(id);
-
             ViewBag.NombreId = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdDest = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdSecre = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa1 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             ViewBag.NombreIdVisa2 = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
-            //if (model.GeneracionCDP.Count > 0)
-            //{
-            //    var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
-            //    model.GeneracionCDP.Add(cdp);
-            //}
-
-            //return View(model);
 
             Dictionary<string, string> cookieCollection = new Dictionary<string, string>();
             foreach (var key in Request.Cookies.AllKeys)
@@ -1849,10 +1672,8 @@ namespace App.Web.Controllers
             string Name = string.Empty;
             var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
 
-            //model.FechaFirma = DateTime.Now;
-
-            var Workflow = _repository.Get<Workflow>(q => q.WorkflowId == model.WorkflowId).FirstOrDefault();
-            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
+            var Workflow = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
+            if ((Workflow.DefinicionWorkflow.Secuencia == 6 && Workflow.DefinicionWorkflow.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) || (Workflow.DefinicionWorkflow.Secuencia == 8 && Workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)) /*genera CDP, por la etapa en la que se encuentra*/
             {
                 /*Se genera certificado de viatico*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("CDPViatico", new { id = model.ProgramacionHorasExtraordinariasId }) { FileName = "CDP_Viatico" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
@@ -1860,7 +1681,7 @@ namespace App.Web.Controllers
                 //data = GetBynary(pdf);
                 data = _file.BynaryToText(pdf);
                 tipoDoc = 2;
-                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                Name = "CDP Viatico Cometido nro" + " " + model.ProgramacionHorasExtraordinariasId + ".pdf";
                 int idDoctoViatico = 0;
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
@@ -2008,7 +1829,7 @@ namespace App.Web.Controllers
                 data = _file.BynaryToText(pdf);
 
                 tipoDoc = 8;
-                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId.ToString() + ".pdf";
+                Name = "Memorandum nro" + " " + model.ProgramacionHorasExtraordinariasId + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 var resolucion = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
@@ -2056,28 +1877,23 @@ namespace App.Web.Controllers
 
             }
 
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
             return RedirectToAction("Sign", "Memorandum", new { model.WorkflowId, id = model.ProgramacionHorasExtraordinariasId });
         }
 
         public ActionResult SignResolucion(int id)
         {
-            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);//.Where(c => c.ProgramacionHorasExtraordinariasId == id);
+            var model = _repository.GetById<ProgramacionHorasExtraordinarias>(id);
             return View(model);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public ActionResult SignResolucion(int? DocumentoId)
         {
-            //IdProceso = 2423;
-            //var model = _repository.GetAll<Cometido>().Where(c => c.ProcesoId == IdProceso.Value).FirstOrDefault();
-
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm, _email);
-                var obj = _repository.Get<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == DocumentoId).FirstOrDefault();
-                var doc = _repository.Get<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 10).FirstOrDefault();//.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 4).FirstOrDefault();
+                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
+                var obj = _repository.GetFirst<ProgramacionHorasExtraordinarias>(c => c.ProgramacionHorasExtraordinariasId == DocumentoId);
+                var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == obj.ProcesoId && c.TipoDocumentoId == 10);
                 var user = User.Email();
                 var _UseCaseResponseMessage = _useCaseInteractor.SignReso(doc, user, null);
 
@@ -2095,12 +1911,12 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
             //return View(model);
             return Redirect(Request.UrlReferrer.ToString());
         }
@@ -2140,11 +1956,11 @@ namespace App.Web.Controllers
                     //    predicate = predicate.And(q => q.Proceso.Terminada == true);
 
                     if (model.Estado == 1)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Terminado && q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 2)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
                     if (model.Estado == 3)
-                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado);
+                        predicate = predicate.And(q => q.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
                 }
 
                 //if (model.NombreId.HasValue)
@@ -2248,32 +2064,20 @@ namespace App.Web.Controllers
             var worksheet = excelPackageSeguimientoMemo.Workbook.Worksheets[1];
             foreach (var memorandum in result.ToList())
             {
-                var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == memorandum.ProcesoId);
-                //var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
-
-                //if (destino.Count > 0)
-                //{
+                var workflow = _repository.Get<Workflow>(w => w.ProcesoId == memorandum.ProcesoId);
                 fila++;
-                //worksheet.Cells[fila, 1].Value = memorandum.Proceso.Terminada == false && memorandum.Proceso.Anulada == false ? "En Proceso" : memorandum.Workflow.Terminada == true ? "Terminada" : "Anulada";
-                if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso)
+                if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso)
                     worksheet.Cells[fila, 1].Value = "En Curso";
-                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Terminado)
+                else if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                     worksheet.Cells[fila, 1].Value = "Terminada";
-                else if (memorandum.Proceso.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.Anulado)
+                else if (memorandum.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado)
                     worksheet.Cells[fila, 1].Value = "Anulada";
 
-                //worksheet.Cells[fila, 2].Value = memorandum.UnidadDescripcion.Contains("Turismo") ? "Turismo" : "Economía";
-                //worksheet.Cells[fila, 3].Value = memorandum.MemorandumId.ToString();
-                //worksheet.Cells[fila, 4].Value = memorandum.NombreId;
-                //worksheet.Cells[fila, 5].Value = memorandum.UnidadDescripcion;
-                //worksheet.Cells[fila, 6].Value = destino.FirstOrDefault().RegionDescripcion != null ? destino.FirstOrDefault().RegionDescripcion : "S/A";
-                //worksheet.Cells[fila, 7].Value = memorandum.FechaSolicitud.ToString();
-                //worksheet.Cells[fila, 8].Value = destino.Any() ? destino.FirstOrDefault().FechaInicio.ToString() : "S/A";
-                //worksheet.Cells[fila, 9].Value = destino.Any() ? destino.LastOrDefault().FechaHasta.ToString() : "S/A";
                 worksheet.Cells[fila, 10].Value = workflow.LastOrDefault().Email;
                 worksheet.Cells[fila, 11].Value = workflow.LastOrDefault().FechaCreacion.ToString();
-                //}
             }
+
+            excelPackageSeguimientoMemo.Workbook.Worksheets[1].Cells.AutoFitColumns();
 
             return File(excelPackageSeguimientoMemo.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("rptSeguimientoGP_yyyyMMddhhmmss") + ".xlsx");
         }

@@ -20,10 +20,6 @@ namespace App.Web.Controllers
     {
         public class DTOFileUploadFEA
         {
-            public DTOFileUploadFEA()
-            {
-            }
-
             public int ProcesoId { get; set; }
             public int WorkflowId { get; set; }
 
@@ -33,7 +29,7 @@ namespace App.Web.Controllers
             public HttpPostedFileBase[] File { get; set; }
 
             [Display(Name = "Es documento oficial?")]
-            public bool EsOficial { get; set; } = false;
+            public bool EsOficial { get; set; } 
 
             [Display(Name = "Tiene firma electrónica?")]
             public bool TieneFirmaElectronica { get; set; }
@@ -60,13 +56,13 @@ namespace App.Web.Controllers
             public string Descripcion { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IFolio _folio;
+        private readonly IEmail _email;
 
-        public GDInternoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IEmail email)
+        public GDInternoController(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -127,7 +123,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Insert(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -153,7 +149,7 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var _useCaseInteractor = new UseCaseGD(_repository, _file, _folio, _sigper, _email);
+                var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
                 var _UseCaseResponseMessage = _useCaseInteractor.Update(model);
                 if (_UseCaseResponseMessage.IsValid)
                 {
@@ -171,7 +167,7 @@ namespace App.Web.Controllers
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
             ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteEmail = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var model = new DTOFileUploadFEA() { ProcesoId = ProcesoId, WorkflowId = WorkflowId };
             return View(model);
@@ -183,7 +179,7 @@ namespace App.Web.Controllers
         {
             ViewBag.TipoDocumentoCodigo = new SelectList(_folio.GetTipoDocumento().Select(q => new { q.Codigo, q.Descripcion }), "Codigo", "Descripcion");
             ViewBag.FirmanteUnidadCodigo = new SelectList(_sigper.GetUnidadesFirmantes(_repository.Get<Rubrica>(q => q.HabilitadoFirma).Select(q => q.Email.Trim()).ToList()), "Pl_UndCod", "Pl_UndDes");
-            ViewBag.FirmanteEmail = new SelectList(new List<Model.SIGPER.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
+            ViewBag.FirmanteEmail = new SelectList(new List<Model.Sigper.PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre");
 
             var email = UserExtended.Email(User);
 
@@ -199,7 +195,7 @@ namespace App.Web.Controllers
                     documento.Email = email;
                     documento.ProcesoId = model.ProcesoId;
                     documento.WorkflowId = model.WorkflowId;
-                    documento.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    documento.TipoPrivacidadId = (int)Util.Enum.Privacidad.Privado;
                     documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
                     documento.EsOficial = model.EsOficial;
                     documento.Signed = model.TieneFirmaElectronica;
@@ -266,7 +262,7 @@ namespace App.Web.Controllers
 
         public PartialViewResult WorkflowAutoridad(int ProcesoId)
         {
-            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)App.Util.Enum.TipoAprobacion.Aprobada);
+            var model = _repository.Get<Workflow>(q => q.ProcesoId == ProcesoId && q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada);
             return PartialView(model);
         }
     }

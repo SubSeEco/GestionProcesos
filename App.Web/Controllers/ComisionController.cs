@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using App.Model.Comisiones;
 using App.Model.Core;
-//using App.Model.Shared;
 using App.Core.Interfaces;
 using App.Core.UseCases;
 
@@ -15,14 +14,12 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class ComisionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public static List<DestinosComision> ListDestino = new List<DestinosComision>();
+        private static List<DestinosComision> ListDestino = new List<DestinosComision>();
 
-
-        public ComisionController(IGestionProcesos repository, ISIGPER sigper)
+        public ComisionController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -47,7 +44,7 @@ namespace App.Web.Controllers
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
 
             string rut;
-            if (per.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (per.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = per.Funcionario.RH_NumInte.ToString();
                 rut = string.Concat("0", t);
@@ -60,12 +57,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 Rut = rut,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
-                IdCargo = IdCargo,
+                DV = per.Funcionario.RH_DvNuInt,
+                IdCargo,
                 Cargo = cargo,
-                IdCalidad = IdCalidad,
+                IdCalidad,
                 CalidadJuridica = calidad,
-                IdGrado = IdGrado,
+                IdGrado,
                 Grado = grado,
                 Estamento = estamento,
                 Programa = Programa.Trim(),
@@ -110,7 +107,7 @@ namespace App.Web.Controllers
 
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            ////var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
 
@@ -126,8 +123,8 @@ namespace App.Web.Controllers
 
             var user = User.Identity.Name;
             var host = System.Net.Dns.GetHostEntry(Request.UserHostAddress).HostName;
-            ViewBag.Host = host.ToString();
-            ViewBag.Name = user.ToString();
+            ViewBag.Host = host;
+            ViewBag.Name = user;
 
            var workflow = _repository.GetById<Workflow>(WorkFlowId);
             var model = new Comisiones
@@ -138,18 +135,18 @@ namespace App.Web.Controllers
             };
 
             if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en Sigper");
             if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en Sigper");
             if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en Sigper");
 
             if (ModelState.IsValid)
             {
                 model.FechaSolicitud = DateTime.Now;
                 model.IdUnidad = persona.Unidad.Pl_UndCod;
                 model.UnidadDescripcion = persona.Unidad.Pl_UndDes.Trim();
-                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte.ToString()) : persona.Funcionario.RH_NumInte;
+                model.Rut = persona.Funcionario.RH_NumInte.ToString().Length < 8 ? Convert.ToInt32("0" + persona.Funcionario.RH_NumInte) : persona.Funcionario.RH_NumInte;
                 model.DV = persona.Funcionario.RH_DvNuInt.Trim();
                 model.NombreId = persona.Funcionario.RH_NumInte;
                 model.Nombre = persona.Funcionario.PeDatPerChq.Trim();
@@ -253,12 +250,12 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
 
             return View(model);
@@ -308,12 +305,12 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
 
             return View(model);

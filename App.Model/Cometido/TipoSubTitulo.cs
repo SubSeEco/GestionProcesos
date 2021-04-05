@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using App.Model.Core;
 
 namespace App.Model.Cometido
 {
     [Table("TipoSubTitulo")]
-    public class TipoSubTitulo : Core.BaseEntity
+    public class TipoSubTitulo : BaseEntity
     {
-        public TipoSubTitulo()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "TipoSubTituloId")]
         public int TipoSubTituloId { get; set; }

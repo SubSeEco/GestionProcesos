@@ -16,23 +16,15 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class GeneraResolucionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly IFile _file;
 
         private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
 
-        public GeneraResolucionController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public GeneraResolucionController(IGestionProcesos repository, IFile file)
         {
             _repository = repository;
-            _sigper = sigper;
             _file = file;
-            _folio = folio;
-            _hsm = hsm;
-            _email = email;
 
 
             if (ActiveDirectoryUsers == null)
@@ -79,21 +71,19 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public ActionResult /*FileResult*/ GeneraResolucion(string mes, string annio, GeneracionResolucion model)
         {
-            byte[] pdf = null;
             DTOFileMetadata data = new DTOFileMetadata();
-            int tipoDoc = 0;
             int idDoctoHoras = 0;
             string Name = string.Empty;
             if (!_repository.GetExists<GeneracionResolucion>(q => q.Mes == mes && q.Annio == annio))
             {
-                var hrs = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+                var hrs = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
 
                 /*Se genera resolucuion de trabajos extraordinarios*/
                 Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("ResolucionServicio", new { mes = hrs.FirstOrDefault().Mes, annio = hrs.FirstOrDefault().Annio }) { FileName = "ResolucionProgramacionServicio" + ".pdf", FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
-                pdf = resultPdf.BuildFile(ControllerContext);
+                var pdf = resultPdf.BuildFile(ControllerContext);
                 data = _file.BynaryToText(pdf);
-                tipoDoc = 12;
-                Name = "Resolución Programación Trabajos Extraordinarios mes" + " " + hrs.FirstOrDefault().Mes.ToString() + ".pdf";
+                var tipoDoc = 12;
+                Name = "Resolución Programación Trabajos Extraordinarios mes" + " " + hrs.FirstOrDefault().Mes + ".pdf";
 
                 /*si se crea una resolucion se debe validar que ya no exista otra, sino se actualiza la que existe*/
                 //var docto = _repository.GetAll<Documento>().Where(d => d.ProcesoId == hrs.FirstOrDefault().ProcesoId);
@@ -179,14 +169,12 @@ namespace App.Web.Controllers
             ViewBag.Annio = new SelectList(Anno, "Value", "Text");
 
             return View(model);
-            //return Redirect(Request.UrlReferrer.PathAndQuery);
-            //return File(docOld.File, "application/pdf");
         }
 
         [AllowAnonymous]
         public ActionResult ResolucionServicio(string mes, string annio)
         {
-            var model = _repository.GetAll<HorasExtras>().Where(c => c.Mes == mes && c.Annio == annio);
+            var model = _repository.Get<HorasExtras>(c => c.Mes == mes && c.Annio == annio);
             return View(model);
         }
     }

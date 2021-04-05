@@ -9,14 +9,9 @@ namespace App.Model.HorasExtras
     [Table("HorasExtras")]
     public class HorasExtras : Core.BaseEntity
     {
-        public HorasExtras()
-        {
-            Colaborador = new List<Colaborador>();
-        }
-
         /*list de destino*/
         [Display(Name = "Lista Colaborador")]
-        public virtual List<Colaborador> Colaborador { get; set; }
+        public virtual List<Colaborador> Colaborador { get; set; } = new List<Colaborador>();
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Horas Extras Id")]
@@ -60,7 +55,7 @@ namespace App.Model.HorasExtras
         public int? UnidadId { get; set; }
 
         [Display(Name = "Aprobado")]
-        public bool Aprobado { get; set; } = false;
+        public bool Aprobado { get; set; }
 
         [Display(Name = "Valor Total Horas")]
         [AssertThat("ValorTotalHoras >= 0", ErrorMessage = "El valor debe ser mayor o igual a 0")]

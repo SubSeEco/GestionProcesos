@@ -7,10 +7,6 @@ namespace App.Model.ProgramacionHorasExtraordinarias
     [Table("ProgramacionHorasExtraordinarias")]
     public class ProgramacionHorasExtraordinarias : Core.BaseEntity
     {
-        public ProgramacionHorasExtraordinarias()
-        {
-        }
-
         //[HiddenInput(DisplayValue = false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]

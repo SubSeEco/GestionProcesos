@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreTipoAprobacion")]
     public class TipoAprobacion 
     {
-        public TipoAprobacion()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int TipoAprobacionId { get; set; }

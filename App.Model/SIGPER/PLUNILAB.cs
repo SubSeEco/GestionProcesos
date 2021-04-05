@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
 
     [Table("PLUNILAB")]
-    public partial class PLUNILAB
+    public class PLUNILAB
     {
         [Key]
         public int Pl_UndCod { get; set; }

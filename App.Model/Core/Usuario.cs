@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreUsuario")]
     public class Usuario
     {
-        public Usuario()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int UsuarioId { get; set; }

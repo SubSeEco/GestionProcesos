@@ -9,10 +9,6 @@ namespace App.Model.FirmaDocumentoGenerico
     [Table("FirmaDocumentoGenerico")]
     public class FirmaDocumentoGenerico
     {
-        public FirmaDocumentoGenerico()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int FirmaDocumentoGenericoId { get; set; }
@@ -73,10 +69,10 @@ namespace App.Model.FirmaDocumentoGenerico
 
         public string GetTags()
         {
-            StringBuilder tag = new StringBuilder();
+            var tag = new StringBuilder();
 
             //solo generar tags de procesos no reservados
-            if (this.Proceso != null && !this.Proceso.Reservado)
+            if (Proceso != null && !Proceso.Reservado)
             {
                 if (!string.IsNullOrWhiteSpace(FirmaDocumentoGenericoId.ToString()))
                     tag.Append(FirmaDocumentoGenericoId + " ");
@@ -93,7 +89,7 @@ namespace App.Model.FirmaDocumentoGenerico
                 if (!string.IsNullOrWhiteSpace(Subsecretaria))
                     tag.Append(Subsecretaria + " ");
 
-                if (!string.IsNullOrWhiteSpace(TipoDocumentos.ToString()))
+                if (!string.IsNullOrWhiteSpace(TipoDocumentos))
                     tag.Append(TipoDocumentos + " ");
             }
 

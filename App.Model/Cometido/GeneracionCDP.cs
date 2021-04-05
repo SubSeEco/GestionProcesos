@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using App.Model.Core;
+
 namespace App.Model.Cometido
 {
-    public class GeneracionCDP : Core.BaseEntity
+    public class GeneracionCDP : BaseEntity
     {
-        public GeneracionCDP()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "GeneracionCDPId")]
         public int GeneracionCDPId { get; set; }

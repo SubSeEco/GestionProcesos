@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedTipoPagoSIGFE")]
     public class TipoPagoSIGFE
     {
-        public TipoPagoSIGFE()
-        {
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "TipoPagoId")]

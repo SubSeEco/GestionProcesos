@@ -6,10 +6,6 @@ namespace App.Model.Shared
     [Table("SharedRegion")]
     public class Region
     {
-        public Region()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int RegionId { get; set; }

@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class LREMREP1Level1
     {
-        public LREMREP1Level1()
-        {}
-
         [Key]
         [Display(Name = "lrem_codrep")]
         public int lrem_codrep { get; set; }

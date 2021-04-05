@@ -12,10 +12,10 @@ namespace App.Web.Controllers
 
     public class DefinicionWorkflowController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
 
-        public DefinicionWorkflowController(IGestionProcesos repository, ISIGPER sigper)
+        public DefinicionWorkflowController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -41,7 +41,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(DefinicionWorkflow model)
         {
-            if (model.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso || model.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso || model.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaJefaturaDeFuncionarioQueViaja)
+            if (model.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso || model.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso || model.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaJefaturaDeFuncionarioQueViaja)
                 model.GrupoId = null;
 
             if (ModelState.IsValid)
@@ -89,7 +89,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DefinicionWorkflow model)
         {
-            if (model.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso || model.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
+            if (model.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso || model.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
                 model.GrupoId = null;
 
             if (ModelState.IsValid)

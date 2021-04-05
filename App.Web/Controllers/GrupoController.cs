@@ -12,7 +12,7 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class GrupoController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
         private static List<Model.DTO.DTODomainUser> ActiveDirectoryUsers { get; set; }
 
         public GrupoController(IGestionProcesos repository)
@@ -107,7 +107,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var model = _repository.GetById<Grupo>(id);
+            //var model = _repository.GetById<Grupo>(id);
             var _useCaseInteractor = new UseCaseCore(_repository);
             var _UseCaseResponseMessage = _useCaseInteractor.GrupoDelete(id);
 

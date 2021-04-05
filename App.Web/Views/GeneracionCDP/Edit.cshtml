@@ -22,7 +22,7 @@
 
         <div class="card">
             <div class="card-content">
-                @if (Model.Cometido.SolicitaViatico == true || Model.Cometido.SolicitaViatico != true)
+                @if (Model.Cometido.SolicitaViatico || Model.Cometido.SolicitaViatico != true)
                 {
                     <span class="card-title">Viaticos</span>
                     <table class="table">

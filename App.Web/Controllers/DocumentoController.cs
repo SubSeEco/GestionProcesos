@@ -19,11 +19,6 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class DTODocumento
     {
-        public DTODocumento()
-        {
-
-        }
-
         public int Id { get; set; }
         public string Archivo { get; set; }
         public string Nombre { get; set; }
@@ -63,10 +58,6 @@ namespace App.Web.Controllers
 
         public class FileUpload
         {
-            public FileUpload()
-            {
-            }
-
             [Required(ErrorMessage = "Es necesario especificar este dato")]
             [Display(Name = "Archivo")]
             [DataType(DataType.Upload)]
@@ -76,14 +67,14 @@ namespace App.Web.Controllers
             public int WorkflowId { get; set; }
         }
 
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IFolio _folio;
+        private readonly IHsm _hsm;
+        private readonly IEmail _email;
 
-        public DocumentoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public DocumentoController(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -172,7 +163,7 @@ namespace App.Web.Controllers
                     doc.ProcesoId = model.ProcesoId;
                     doc.WorkflowId = model.WorkflowId;
                     doc.Signed = false;
-                    doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                    doc.TipoPrivacidadId = (int)Util.Enum.Privacidad.Privado;
                     doc.TipoDocumentoId = 6; /*Por default el tipo de documento es "Otros"*/
 
                     //obtener metadata del documento
@@ -188,7 +179,7 @@ namespace App.Web.Controllers
                     var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == model.WorkflowId);
                     if (workflowActual != null)
                     {
-                        if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                        if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                         {
                             if (workflowActual.DefinicionWorkflow.Secuencia == 16)/*analista contabilidad*/
                             {
@@ -267,7 +258,7 @@ namespace App.Web.Controllers
         [HttpPost]
         public ActionResult Delete(int id, int WorkflowId)
         {
-            var model = _repository.GetById<DefinicionWorkflow>(id);
+            //var model = _repository.GetById<DefinicionWorkflow>(id);
             return RedirectToAction("Execute", "Workflow", new { id = WorkflowId });
         }
 
@@ -302,7 +293,7 @@ namespace App.Web.Controllers
                 var doc = new Documento();
                 doc.Fecha = DateTime.Now;
                 doc.Email = email;
-                doc.FileName = "Resolucion Cometido nro" + " " + model.CometidoId.ToString() + ".pdf";
+                doc.FileName = "Resolucion Cometido nro" + " " + model.CometidoId + ".pdf";
                 doc.File = pdf;
                 doc.ProcesoId = model.ProcesoId.Value;
                 doc.WorkflowId = model.WorkflowId.Value;
@@ -310,7 +301,7 @@ namespace App.Web.Controllers
                 doc.Texto = data.Text;
                 doc.Metadata = data.Metadata;
                 doc.Type = data.Type;
-                doc.TipoPrivacidadId = (int)App.Util.Enum.Privacidad.Privado;
+                doc.TipoPrivacidadId = (int)Util.Enum.Privacidad.Privado;
                 doc.TipoDocumentoId = 1;
 
                 _repository.Create(doc);
@@ -345,13 +336,13 @@ namespace App.Web.Controllers
             if (documento == null)
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no encontrado" }, JsonRequestBehavior.AllowGet);
 
-            if (documento != null && documento.File == null)
+            if (documento.File == null)
                 return Json(new DTODocumento { OK = false, Error = "Error: documento encontrado, pero sin contenido" }, JsonRequestBehavior.AllowGet);
 
-            if (documento != null && !documento.FileName.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
+            if (!documento.FileName.IsNullOrWhiteSpace() && !documento.FileName.Contains(".pdf"))
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no es tipo PDF" }, JsonRequestBehavior.AllowGet);
 
-            if (documento != null && documento.TipoPrivacidadId == (int)App.Util.Enum.Privacidad.Privado)
+            if (documento.TipoPrivacidadId == (int)Util.Enum.Privacidad.Privado)
                 return Json(new DTODocumento { OK = false, Error = "Error: documento no es público" }, JsonRequestBehavior.AllowGet);
 
             var model = new DTODocumento() {

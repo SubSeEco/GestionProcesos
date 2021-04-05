@@ -7,10 +7,6 @@ namespace App.Model.InformeHSA
 {
     public class InformeHSA
     {
-        public InformeHSA()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int InformeHSAId { get; set; }
@@ -48,7 +44,7 @@ namespace App.Model.InformeHSA
         public string NombreJefatura { get; set; }
 
         [Display(Name = "Con jornada?")]
-        public bool ConJornada { get; set; } = false;
+        public bool ConJornada { get; set; } 
 
         [Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Funciones establecidas en el contrato, numeradas.")]

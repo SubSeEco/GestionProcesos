@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreTipoEjecucion")]
     public class TipoEjecucion
     {
-        public TipoEjecucion()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int TipoEjecucionId { get; set; }

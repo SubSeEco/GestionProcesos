@@ -11,7 +11,7 @@ namespace App.Web.Controllers
 
     public class TipoSubAsignacionController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public TipoSubAsignacionController(IGestionProcesos repository)
         {

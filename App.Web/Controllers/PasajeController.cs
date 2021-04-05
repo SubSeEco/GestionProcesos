@@ -17,10 +17,10 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class PasajeController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
 
-        public PasajeController(IGestionProcesos repository, ISIGPER sigper)
+        public PasajeController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
@@ -45,7 +45,7 @@ namespace App.Web.Controllers
             return Json(new
             {
                 Rut = per.Funcionario.RH_NumInte,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
+                DV = per.Funcionario.RH_DvNuInt,
                 Cargo = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.DatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
                 CalidadJuridica = _sigper.GetGESCALAFONEs().Where(e => e.Pl_CodEsc == per.DatosLaborales.RhConEsc).FirstOrDefault().Pl_DesEsc.Trim(),
                 Grado = per.DatosLaborales.RhConGra.Trim(),
@@ -101,11 +101,11 @@ namespace App.Web.Controllers
             };
 
             if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en Sigper");
             if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en Sigper");
             if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en Sigper");
 
             if (ModelState.IsValid)
             {
@@ -209,12 +209,12 @@ namespace App.Web.Controllers
 
                 //TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             return View(model);
         }
@@ -254,11 +254,9 @@ namespace App.Web.Controllers
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
             ViewBag.IdCiudadOrigen = new SelectList(_repository.Get<Ciudad>(), "CiudadId", "CiudadNombre");
-            //ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-
-
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-            var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
+            
+            var pasaje = _repository.GetFirst<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value);
             ViewBag.Pasaje = pasaje;
 
             return View(model);
@@ -268,7 +266,7 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditAbast(Pasaje model)
         {
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
             
             if (ModelState.IsValid)
             {
@@ -286,12 +284,12 @@ namespace App.Web.Controllers
 
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
             ViewBag.IdComunaOrigen = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
             ViewBag.IdPaisOrigen = new SelectList(_repository.Get<Pais>(), "PaisId", "PaisNombre");
@@ -303,16 +301,16 @@ namespace App.Web.Controllers
         public ActionResult EditSeleccion(int id)
         {
             var model = _repository.GetById<Pasaje>(id);
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
-            var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
+            var pasaje = _repository.GetFirst<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value);
             ViewBag.Pasaje = pasaje;
 
             if (model.Workflow.DefinicionWorkflow.Secuencia == 5)
             {
-                var cotizacion = _repository.GetAll<Cotizacion>().Where(c => c.PasajeId == model.PasajeId).ToList();
+                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == model.PasajeId).ToList();
                 if (cotizacion.Count > 1)
                 {
-                    var max = cotizacion.Max(c => c.ValorPasaje);
+                    //var max = cotizacion.Max(c => c.ValorPasaje);
                     var min = cotizacion.Min(c => c.ValorPasaje);
 
                     var seleccion = _repository.Get<Cotizacion>(c => c.ValorPasaje == min).FirstOrDefault().Seleccion;
@@ -330,9 +328,9 @@ namespace App.Web.Controllers
         [ValidateInput(false)]
         public ActionResult EditSeleccion(List<CotizacionDocumento> CotizacionDocumento, int PasajeId)
         {
-            var model = _repository.Get<Pasaje>(c => c.PasajeId == PasajeId).FirstOrDefault();
-            var Cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == PasajeId).ToList();
-            ViewBag.Cometido = _repository.Get<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault();
+            var model = _repository.GetFirst<Pasaje>(c => c.PasajeId == PasajeId);
+            //var Cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == PasajeId).ToList();
+            ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
 
             if (ModelState.IsValid)
             {
@@ -362,12 +360,12 @@ namespace App.Web.Controllers
                 //    ModelState.AddModelError(string.Empty, item);                    
                 //}                
             }
-            else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
-            }
+            //else
+            //{
+            //    var errors = ModelState.Select(x => x.Value.Errors)
+            //        .Where(y => y.Count > 0)
+            //        .ToList();
+            //}
 
             return View(model);
         }

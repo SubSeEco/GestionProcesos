@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     [Table("PECARGOS")]
-    public partial class PECARGOS
+    public class PECARGOS
     {
         [Key]
         public int Pl_CodCar  { get; set; }

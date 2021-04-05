@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Model.SIGPER
+namespace App.Model.Sigper
 {
     public class DGCOMUNAS
     {
-        public DGCOMUNAS()
-        { }
-
         //[Key]
         [Display(Name = "Pl_CodReg")]
         public string Pl_CodReg { get; set; }
@@ -17,6 +14,5 @@ namespace App.Model.SIGPER
 
         [Display(Name = "Pl_DesCom")]
         public string Pl_DesCom { get; set; }
-
-}
+    }
 }

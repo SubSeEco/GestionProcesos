@@ -240,22 +240,26 @@
     /*Carga dropdown de comunas*/
     $('#IdRegion').on('change', function () {
         var Region = $(this).val();
-        $.getJSON("/Destinos/GetComunas", { IdRegion: Region },
-            function (classesData) {
+        $.getJSON("/Destinos/GetComunas",
+            { IdRegion: Region },
+            function(classesData) {
                 var select = $("#IdComuna");
                 select.empty();
-                select.append($('<option/>', {
-                    value: 0,
-                    text: "Seleccione..."
-                }));
-                $.each(classesData, function (index, itemData) {
-                    select.append($('<option/>', {
-                        value: itemData.value,
-                        text: itemData.text
+                select.append($('<option/>',
+                    {
+                        value: 0,
+                        text: "Seleccione..."
                     }));
-                });
+                $.each(classesData,
+                    function(index, itemData) {
+                        select.append($('<option/>',
+                            {
+                                value: itemData.value,
+                                text: itemData.text
+                            }));
+                    });
                 $('select').formSelect();
-            })
+            });
         //$("#IdComuna").attr('disabled', false);
     });
 
@@ -273,7 +277,7 @@
                 document.getElementById('Dias60Monto').value = Data.Dias60Monto;
                 document.getElementById('Dias40Monto').value = Data.Dias40Monto;
                 document.getElementById('Dias50Monto').value = Data.Dias50Monto;
-            })
+            });
     }
 </script>
 

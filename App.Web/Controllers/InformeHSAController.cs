@@ -59,10 +59,6 @@ namespace App.Web.Controllers
 
     public class DTOArchivo
     {
-        public DTOArchivo()
-        {
-        }
-
         public string FileString { get; set; }
         public string Filename { get; set; }
         public string Filetype { get; set; }
@@ -72,12 +68,12 @@ namespace App.Web.Controllers
     [Authorize]
     public class InformeHSAController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
+        private readonly IFile _file;
+        private readonly IEmail _email;
 
-        public InformeHSAController(IGestionProcesos repository, ISIGPER sigper, IFile file, IEmail email)
+        public InformeHSAController(IGestionProcesos repository, ISigper sigper, IFile file, IEmail email)
         {
             _repository = repository;
             _sigper = sigper;
@@ -96,11 +92,11 @@ namespace App.Web.Controllers
 
             var persona = _sigper.GetUserByEmail(User.Email());
             if (persona.Funcionario == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información del funcionario en Sigper");
             if (persona.Unidad == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la unidad del funcionario en Sigper");
             if (persona.Jefatura == null)
-                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en SIGPER");
+                ModelState.AddModelError(string.Empty, "No se encontró información de la jefatura del funcionario en Sigper");
 
             if (ModelState.IsValid)
             {
@@ -148,7 +144,7 @@ namespace App.Web.Controllers
         public ActionResult Pdf(int id)
         {
             var model = _repository.GetById<InformeHSA>(id);
-            model.QR = _file.CreateQR(id.ToString());
+            model.QR = _file.CreateQr(id.ToString());
             return new ViewAsPdf("pdf", model);
         }
 
@@ -196,22 +192,22 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByRut(id);
             if (persona == null)
-                return Json(new { ok = false, error = "Error al consultar el sistema SIGPER" }, JsonRequestBehavior.AllowGet);
+                return Json(new { ok = false, error = "Error al consultar el sistema Sigper" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.Funcionario == null)
-                return Json(new { ok = false, error = "No se encontró información del funcionario en SIGPER" }, JsonRequestBehavior.AllowGet);
+            if (persona.Funcionario == null)
+                return Json(new { ok = false, error = "No se encontró información del funcionario en Sigper" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.DatosLaborales != null && persona.DatosLaborales.RH_ContCod != 10)
+            if (persona.DatosLaborales != null && persona.DatosLaborales.RH_ContCod != 10)
                 return Json(new { ok = false, error = "El funcionario no tiene calidad jurídica de honorario a suma alzada" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.DatosLaborales == null)
-                return Json(new { ok = false, error = "No se encontró información laboral en SIGPER" }, JsonRequestBehavior.AllowGet);
+            if (persona.DatosLaborales == null)
+                return Json(new { ok = false, error = "No se encontró información laboral en Sigper" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.Jefatura == null)
-                return Json(new { ok = false, error = "No se encontró información de la jefatura en SIGPER" }, JsonRequestBehavior.AllowGet);
+            if (persona.Jefatura == null)
+                return Json(new { ok = false, error = "No se encontró información de la jefatura en Sigper" }, JsonRequestBehavior.AllowGet);
 
-            if (persona != null && persona.Unidad == null)
-                return Json(new { ok = false, error = "No se encontró información de la unidad en SIGPER" }, JsonRequestBehavior.AllowGet);
+            if (persona.Unidad == null)
+                return Json(new { ok = false, error = "No se encontró información de la unidad en Sigper" }, JsonRequestBehavior.AllowGet);
 
             return Json(new { ok = true, error = "", Nombre = persona.Funcionario.PeDatPerChq, Unidad = persona.Unidad.Pl_UndDes, NombreJefatura = persona.Jefatura.PeDatPerChq, Email = persona.Funcionario.Rh_Mail }, JsonRequestBehavior.AllowGet);
         }
@@ -309,9 +305,9 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByRut(id);
             if (persona == null)
-                return Json(new { ok = false, error = "Error al consultar el sistema SIGPER" }, JsonRequestBehavior.AllowGet);
+                return Json(new { ok = false, error = "Error al consultar el sistema Sigper" }, JsonRequestBehavior.AllowGet);
             if (persona != null && persona.Funcionario == null)
-                return Json(new { ok = false, error = "No se encontró información del funcionario en SIGPER" }, JsonRequestBehavior.AllowGet);
+                return Json(new { ok = false, error = "No se encontró información del funcionario en Sigper" }, JsonRequestBehavior.AllowGet);
 
             int definicionProcesoId = (int)Util.Enum.DefinicionProceso.InformeHSA;
 
@@ -337,7 +333,7 @@ namespace App.Web.Controllers
                 var result = context
                     .InformeHSA
                     .AsNoTracking()
-                    .Where(q => q.Proceso.EstadoProcesoId != (int)App.Util.Enum.EstadoProceso.Anulado).Select(hsa => new
+                    .Where(q => q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado).Select(hsa => new
                     {
                         hsa.ProcesoId,
                         hsa.Proceso.EstadoProceso.Descripcion,
@@ -359,6 +355,7 @@ namespace App.Web.Controllers
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
+                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }

@@ -11,7 +11,7 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class ParrafosController : Controller
     {
-        protected readonly IGestionProcesos _repository;
+        private readonly IGestionProcesos _repository;
 
         public ParrafosController(IGestionProcesos repository)
         {

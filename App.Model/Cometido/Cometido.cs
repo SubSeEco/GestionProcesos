@@ -1,31 +1,26 @@
-﻿using App.Model.Shared;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using ExpressiveAnnotations.Attributes;
-using System.Text;
 using System.Linq;
+using System.Text;
+using App.Model.Core;
+using App.Model.Shared;
+using ExpressiveAnnotations.Attributes;
 
 namespace App.Model.Cometido
 {
     [Table("Cometido")]
-    public class Cometido : Core.BaseEntity
+    public class Cometido : BaseEntity
     {
-        public Cometido()
-        {
-            Destinos = new List<Destinos>();
-            GeneracionCDP = new List<GeneracionCDP>();
-        }
-
         /*list de Generacion CDP*/
         [Display(Name = "Lista GeneracionCDP")]
-        public virtual List<GeneracionCDP> GeneracionCDP { get; set; }
+        public virtual List<GeneracionCDP> GeneracionCDP { get; set; } = new List<GeneracionCDP>();
 
         /*list de destino*/
         [Display(Name = "Lista Destinos")]
-        public virtual List<Destinos> Destinos { get; set; }
-        
+        public virtual List<Destinos> Destinos { get; set; } = new List<Destinos>();
+
 
         /*Definicion de atributos*/
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -260,12 +255,12 @@ namespace App.Model.Cometido
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago")]
         [ForeignKey("TipoPagoSIGFE"), Column(Order = 0)]
         [Display(Name = "Tipo de Devengo")]
-        public int? IdTipoPago { get; set; } = null;
+        public int? IdTipoPago { get; set; }
         public virtual TipoPagoSIGFE TipoPagoSIGFE { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el nombre del funcionario que realiza el pago")]
         [Display(Name = "Funcionario que realiza el devengo")]
-        public int? IdFuncionarioPagador { get; set; } = null;
+        public int? IdFuncionarioPagador { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el nombre del funcionario que realiza el pago")]
         [Display(Name = "Nombre Funcionario pagador")]
@@ -287,7 +282,7 @@ namespace App.Model.Cometido
         //[Required(ErrorMessage = "Se debe señalar el tipo de pago en tesoreria")]
         [ForeignKey("TipoPagoSIGFETesoreria"), Column(Order = 1)]
         [Display(Name = "Tipo de Pago Tesorería")]
-        public int? IdTipoPagoTesoreria { get; set; } = null;
+        public int? IdTipoPagoTesoreria { get; set; }
         public virtual TipoPagoSIGFE TipoPagoSIGFETesoreria { get; set; }
 
         //[Required(ErrorMessage = "Se debe señalar el nombre del funcionario que realiza el pago")]
@@ -314,11 +309,11 @@ namespace App.Model.Cometido
         public string TipoActoAdministrativo { get; set; }
 
         [Display(Name = "Resolucion Revocatoria")]
-        public bool ResolucionRevocatoria { get; set; } = false;
+        public bool ResolucionRevocatoria { get; set; }
 
         public string GetTags()
         {
-            StringBuilder tag = new StringBuilder();
+            var tag = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(CometidoId.ToString()))
                 tag.Append(CometidoId + " ");
@@ -326,13 +321,12 @@ namespace App.Model.Cometido
                 tag.Append(NombreCometido + " ");
             if (string.IsNullOrWhiteSpace(Nombre))
                 tag.Append(Nombre + " ");
-            if (string.IsNullOrWhiteSpace(Destinos.FirstOrDefault().ComunaDescripcion))
-                tag.Append(Destinos.FirstOrDefault().ComunaDescripcion + " ");
+            if (string.IsNullOrWhiteSpace(Destinos.FirstOrDefault()?.ComunaDescripcion))
+                tag.Append(Destinos.FirstOrDefault()?.ComunaDescripcion + " ");
             if (!string.IsNullOrWhiteSpace(UnidadDescripcion))
                 tag.Append(UnidadDescripcion);
 
             return tag.ToString();
         }
-
     }
 }

@@ -8,7 +8,7 @@ namespace App.Infrastructure.GestionProcesos
 {
     public class WorkflowService : IWorkflowService
     {
-        public List<WorkflowDTO> GetPendingTask(Model.SIGPER.SIGPER user)
+        public List<WorkflowDTO> GetPendingTask(Model.Sigper.Sigper user)
         {
             var result = new List<WorkflowDTO>();
 
@@ -18,7 +18,7 @@ namespace App.Infrastructure.GestionProcesos
                 _context.Configuration.ValidateOnSaveEnabled = false; 
                 _context.Configuration.LazyLoadingEnabled = false;
 
-                var userIsAdmin = _context.Usuario.AsNoTracking().Any(q => q.Habilitado && q.Email == user.Funcionario.Rh_Mail && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
+                var userIsAdmin = _context.Usuario.AsNoTracking().Any(q => q.Habilitado && q.Email == user.Funcionario.Rh_Mail && q.Grupo.Nombre.Contains(Util.Enum.Grupo.Administrador.ToString()));
 
                 if (userIsAdmin)
                 {

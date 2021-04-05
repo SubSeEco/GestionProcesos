@@ -51,7 +51,7 @@
             }
         </div>
         <div class="col s12 m6 l7">
-            @Html.Action("FEADocumentos", "GDInterno", new { ProcesoId = Model.ProcesoId })
+            @Html.Action("FEADocumentos", "GDInterno", new {Model.ProcesoId })
         </div>
         <div class="col s12 m12 l12">
             @Html.Action("Workflow", "GDInterno", new { Model.ProcesoId })

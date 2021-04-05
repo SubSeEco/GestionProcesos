@@ -16,24 +16,13 @@ namespace App.Web.Controllers
     [NoDirectAccess]
     public class ColaboradorController : Controller
     {
-        protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
-        protected readonly IFile _file;
-        protected readonly IFolio _folio;
-        protected readonly IHSM _hsm;
-        protected readonly IEmail _email;
+        private readonly IGestionProcesos _repository;
+        private readonly ISigper _sigper;
         private static List<DTODomainUser> ActiveDirectoryUsers { get; set; }
-        public ColaboradorController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, IHSM hsm, IEmail email)
+        public ColaboradorController(IGestionProcesos repository, ISigper sigper)
         {
             _repository = repository;
             _sigper = sigper;
-            _file = file;
-            _folio = folio;
-            _hsm = hsm;
-            _email = email;
-
-            //if (tipoDocumentoList == null)
-            //    tipoDocumentoList = _folio.GetTipoDocumento();
 
             if (ActiveDirectoryUsers == null)
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
@@ -42,7 +31,7 @@ namespace App.Web.Controllers
         public DTOImputacion Imputacion(int Rut)
         {
             var per = _sigper.GetUserByRut(Rut);
-            DTOImputacion Imputacion = new DTOImputacion();
+            var imputacion = new DTOImputacion();
 
             var ProgId = per.Contrato.Re_ConPyt != 0 ? per.Contrato.Re_ConPyt : 1;
             int Iditem;
@@ -110,11 +99,11 @@ namespace App.Web.Controllers
                     break;
             }
 
-            Imputacion.Item = Iditem;
-            Imputacion.Asignacion = Idasignacion;
-            Imputacion.Subtitulo = Idsubtitulo;
+            imputacion.Item = Iditem;
+            imputacion.Asignacion = Idasignacion;
+            imputacion.Subtitulo = Idsubtitulo;
 
-            return Imputacion;
+            return imputacion;
         }
         public JsonResult GetUser(string term)
         {
@@ -138,14 +127,14 @@ namespace App.Web.Controllers
             var grado = string.IsNullOrEmpty(per.DatosLaborales.RhConGra.Trim()) ? "Sin Grado" : per.DatosLaborales.RhConGra.Trim();
             var estamento = per.DatosLaborales.PeDatLabEst == 0 ? "" : _sigper.GetDGESTAMENTOs().Where(e => e.DgEstCod.ToString() == per.DatosLaborales.PeDatLabEst.Value.ToString()).FirstOrDefault().DgEstDsc.Trim();
             var ProgId = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : (int)_sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault().Re_ConPyt;
-            var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault().RePytDes : "S/A";
+            var Programa = ProgId != 0 ? _sigper.GetREPYTs().Where(c => c.RePytCod == ProgId).FirstOrDefault()?.RePytDes : "S/A";
             var conglomerado = _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte) == null ? 0 : _sigper.GetReContra().Where(c => c.RH_NumInte == per.Funcionario.RH_NumInte).FirstOrDefault(c => c.RH_NumInte == per.Funcionario.RH_NumInte).ReContraSed;
             var jefatura = per.Jefatura != null ? per.Jefatura.PeDatPerChq : "Sin jefatura definida";
             var ecorreorem = per.Funcionario != null ? per.Funcionario.Rh_Mail.Trim() : "Sin correo definido";
-            var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
+            //var nombrerem = per.Funcionario != null ? per.Funcionario.PeDatPerChq.Trim() : "Sin nombre definido";
 
             string rut;
-            if (per.Funcionario.RH_NumInte.ToString().Length < 8 == true)
+            if (per.Funcionario.RH_NumInte.ToString().Length < 8)
             {
                 string t = per.Funcionario.RH_NumInte.ToString();
                 rut = string.Concat("0", t);
@@ -158,12 +147,12 @@ namespace App.Web.Controllers
             return Json(new
             {
                 Rut = rut,
-                DV = per.Funcionario.RH_DvNuInt.ToString(),
-                IdCargo = IdCargo,
+                DV = per.Funcionario.RH_DvNuInt,
+                IdCargo,
                 Cargo = cargo,
-                IdCalidad = IdCalidad,
+                IdCalidad,
                 CalidadJuridica = calidad,
-                IdGrado = IdGrado,
+                IdGrado,
                 Grado = grado,
                 Estamento = estamento,
                 Programa = Programa.Trim(),
@@ -175,7 +164,7 @@ namespace App.Web.Controllers
                 NombreChqRem = per.Funcionario.PeDatPerChq.Trim(),
 
             }, JsonRequestBehavior.AllowGet);
-            
+
         }
 
         //public JsonResult GetImputacion(int Rut)
@@ -264,7 +253,7 @@ namespace App.Web.Controllers
         }
         public ActionResult View(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
             var model = _repository.GetById<Colaborador>(id);
 
             return View(model);
@@ -272,7 +261,7 @@ namespace App.Web.Controllers
 
         public ActionResult Details(int id)
         {
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
             //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             var model = _repository.GetById<Colaborador>(id);
 
@@ -296,7 +285,7 @@ namespace App.Web.Controllers
             var model = new Colaborador();
             //model.HorasExtras = HorasExtras;
             model.HorasExtrasId = HorasExtras.HorasExtrasId;
-            
+
 
             return View(model);
         }
@@ -330,10 +319,10 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
 
                     /*se redireccina a la vista que llamo al metodo de crear*/
-                    var hrs = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
-                    var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == hrs.ProcesoId).OrderByDescending(c =>c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
+                    var hrs = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
+                    var secuencia = _repository.Get<Workflow>(p => p.ProcesoId == hrs.ProcesoId).OrderByDescending(c => c.WorkflowId).FirstOrDefault().DefinicionWorkflow.Secuencia;
                     if (secuencia == 1 || secuencia == 2)
-                        return RedirectToAction("Edit", "HorasExtras", new {  id = hrs.HorasExtrasId});
+                        return RedirectToAction("Edit", "HorasExtras", new { id = hrs.HorasExtrasId });
                     else
                         return RedirectToAction("EditGP", "HorasExtras", new { id = hrs.HorasExtrasId });
                 }
@@ -350,7 +339,6 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Colaborador>(id);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
-            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
             return View(model);
         }
@@ -375,7 +363,7 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Edit", "HorasExtras", new { id = model.HorasExtrasId});
+                    return RedirectToAction("Edit", "HorasExtras", new { id = model.HorasExtrasId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -385,7 +373,7 @@ namespace App.Web.Controllers
             }
 
             var persona = _sigper.GetUserByEmail(User.Email());
-            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq",model.NombreId);
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
 
             return View(model);
         }
@@ -414,12 +402,12 @@ namespace App.Web.Controllers
                 TempData["Success"] = "Operación terminada correctamente.";
 
                 /*se redireccina a la vista que llamo al metodo de borrar*/
-                var com = _repository.Get<HorasExtras>(c => c.HorasExtrasId == HrsId).FirstOrDefault();
-                var pro = _repository.Get<Workflow>(p => p.ProcesoId == com.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 6);
-                if (pro.Count() > 0)
+                var com = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == HrsId);
+                var pro = _repository.GetExists<Workflow>(p => p.ProcesoId == com.ProcesoId && p.DefinicionWorkflow.Secuencia == 6);
+                if (pro)
                     return RedirectToAction("Edit", "HorasExtras", new { id = HrsId });
-                else
-                    return RedirectToAction("Edit", "HorasExtras", new { id = HrsId });
+
+                return RedirectToAction("Edit", "HorasExtras", new { id = HrsId });
             }
 
 
@@ -438,7 +426,6 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Colaborador>(id);
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq", model.NombreId);
-            //model.HorasExtras = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
 
             return View(model);
         }
@@ -459,13 +446,13 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
+                    var he = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
                     var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
-                    if (pro.Count() > 0)
+                    if (pro.Any())
                         return RedirectToAction("EditGP", "HorasExtras", new { id = he.HorasExtrasId });
                     else
                         return RedirectToAction("Edit", "HorasExtras", new { id = he.HorasExtrasId });
-                    
+
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)
@@ -483,9 +470,9 @@ namespace App.Web.Controllers
         public ActionResult EditPpto(int id)
         {
             var model = _repository.GetById<Colaborador>(id);
-            var persona = _sigper.GetUserByEmail(User.Email());
+            //var persona = _sigper.GetUserByEmail(User.Email());
 
-            ViewBag.TipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre",model.TipoItemId);
+            ViewBag.TipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre", model.TipoItemId);
             ViewBag.TipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre", model.TipoAsignacionId);
             ViewBag.TipoSubTituloId = new SelectList(_repository.GetAll<TipoSubTitulo>(), "TipoSubTituloId", "TstNombre", model.TipoSubTituloId);
 
@@ -508,12 +495,12 @@ namespace App.Web.Controllers
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
                     /*se redireccina a la vista que llamo al metodo de borrar*/
-                    var he = _repository.Get<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId).FirstOrDefault();
-                    var pro = _repository.Get<Workflow>(p => p.ProcesoId == he.ProcesoId).Where(c => c.DefinicionWorkflow.Secuencia == 3 || c.DefinicionWorkflow.Secuencia == 4);
-                    if (pro.Count() > 0)
+                    var he = _repository.GetFirst<HorasExtras>(c => c.HorasExtrasId == model.HorasExtrasId);
+                    var pro = _repository.GetExists<Workflow>(p => p.ProcesoId == he.ProcesoId && (p.DefinicionWorkflow.Secuencia == 3 || p.DefinicionWorkflow.Secuencia == 4));
+                    if (pro)
                         return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });
-                    else
-                        return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });
+
+                    return RedirectToAction("Details", "HorasExtras", new { id = he.HorasExtrasId });
 
                 }
 

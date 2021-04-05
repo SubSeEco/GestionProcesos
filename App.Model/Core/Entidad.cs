@@ -6,10 +6,6 @@ namespace App.Model.Core
     [Table("CoreEntidad")]
     public class Entidad
     {
-        public Entidad()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int EntidadId { get; set; }

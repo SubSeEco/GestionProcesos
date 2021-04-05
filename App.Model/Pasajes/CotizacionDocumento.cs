@@ -8,10 +8,6 @@ namespace App.Model.Pasajes
     [Table("CotizacionDocumento")]
     public class CotizacionDocumento
     {
-        public CotizacionDocumento()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CotizacionDocumentoId { get; set; }
 
@@ -69,7 +65,7 @@ namespace App.Model.Pasajes
         public string Ubicacion { get; set; }
 
         [Display(Name = "Firmado")]
-        public bool Signed { get; set; } = false;
+        public bool Signed { get; set; }
 
         //[Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Código")]
@@ -78,7 +74,7 @@ namespace App.Model.Pasajes
         [Display(Name = "Código de barra")]
         public byte[] BarCode { get; set; }
 
-        public bool Selected { get; set; } = false;
+        public bool Selected { get; set; }
 
         [NotMapped]
         [Display(Name = "Certificado electrónico")]

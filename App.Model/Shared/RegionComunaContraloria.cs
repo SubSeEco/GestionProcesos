@@ -5,9 +5,6 @@ namespace App.Model.Shared
 {
     public class RegionComunaContraloria
     {
-        public RegionComunaContraloria()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "ID")]
         public int ID { get; set; }

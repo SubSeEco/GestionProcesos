@@ -6,9 +6,6 @@ namespace App.Model.Comisiones
     [Table("ParrafoComisiones")]
     public class ParrafoComisiones
     {
-        public ParrafoComisiones()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Parrafo Comision Id")]
         public int ParrafoComisionesId { get; set; }

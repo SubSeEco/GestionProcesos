@@ -8,9 +8,6 @@ namespace App.Model.HorasExtras
     [Table("Colaborador")]
     public class Colaborador 
     {
-        public Colaborador()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int ColaboradorId { get; set; }
@@ -31,16 +28,16 @@ namespace App.Model.HorasExtras
         public string DV { get; set; }
 
         [Display(Name = "Horas Diurnas a Pago")]
-        public int HDPago { get; set; } = 0;
+        public int HDPago { get; set; }
 
         [Display(Name = "Horas Diurnas a Compensar")]
-        public int HDCompensar { get; set; } = 0;
+        public int HDCompensar { get; set; }
 
         [Display(Name = "Horas Nocturnas a Pago")]
-        public int HNPago { get; set; } = 0;
+        public int HNPago { get; set; }
 
         [Display(Name = "Horas Nocturnas a Compensar")]
-        public int HNCompensar { get; set; } = 0;
+        public int HNCompensar { get; set; } 
 
         [Required(ErrorMessage = "Se deben señalar las descripcion de las tareas")]
         [Display(Name = "Descripcion de tareas")]
@@ -112,9 +109,9 @@ namespace App.Model.HorasExtras
 
         /*se agregan atributos para guardar la cantidad de horas en exceso - 06012021*/
         [Display(Name = "Horas Extras Diurnas Persomatico")]
-        public double HDSigper { get; set; } = 0;
+        public double HDSigper { get; set; } 
 
         [Display(Name = "Horas Extras Nocturnas Persomatico")]
-        public double HNSigper { get; set; } = 0;
+        public double HNSigper { get; set; }
     }
 }

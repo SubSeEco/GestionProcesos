@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using App.Model.Core;
 
 namespace App.Model.Cometido
 {
     [Table("TipoPartida")]
-    public class TipoPartida : Core.BaseEntity
+    public class TipoPartida : BaseEntity
     {
-        public TipoPartida()
-        { }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "TipoPartidaId")]
         public int TipoPartidaId { get; set; }

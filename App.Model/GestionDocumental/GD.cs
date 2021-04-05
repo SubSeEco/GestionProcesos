@@ -8,10 +8,6 @@ namespace App.Model.GestionDocumental
 {
     public class GD
     {
-        public GD()
-        {
-        }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]
         public int GDId { get; set; }
@@ -70,7 +66,7 @@ namespace App.Model.GestionDocumental
 
         //destino 2
         [Display(Name = "Agregar destino")]
-        public bool SegundoDestino { get; set; } = false;
+        public bool SegundoDestino { get; set; }
 
         [Display(Name = "Unidad destino")]
         [RequiredIf("SegundoDestino", ErrorMessage = "Es necesario especificar este dato")]
@@ -95,10 +91,10 @@ namespace App.Model.GestionDocumental
 
         public string GetTags()
         {
-            StringBuilder tag = new StringBuilder();
+            var tag = new StringBuilder();
 
             //solo generar tags de procesos no reservados
-            if (this.Proceso != null && !this.Proceso.Reservado)
+            if (Proceso != null && !Proceso.Reservado)
             {
                 if (!string.IsNullOrWhiteSpace(Materia))
                     tag.Append(Materia + " ");
