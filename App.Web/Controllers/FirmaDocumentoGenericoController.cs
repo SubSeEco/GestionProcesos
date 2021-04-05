@@ -471,7 +471,11 @@ namespace App.Web.Controllers
             //else
             //{
             //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+
+            //método lento
+            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
+
+            var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
 
                 return View(model);
             //}
@@ -493,7 +497,10 @@ namespace App.Web.Controllers
          
             var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
 
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
+            //método lento
+            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
+
+            var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
             if (docugenerico != null)
             {
@@ -581,7 +588,7 @@ namespace App.Web.Controllers
                 model.Archivo = docugenerico.File;
 
                 var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
-                var _UseCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumentos, model.DocumentoId);
+                var _UseCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
                 //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
@@ -632,6 +639,55 @@ namespace App.Web.Controllers
             return File(model.ArchivoFirmado2, "application/pdf");
         }
         
+        public ActionResult FirmaSinOtp(int id)
+        {
+            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+            var persona = _sigper.GetUserByEmail(User.Email());
+
+            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
+
+            string nombre = persona.Funcionario.PeDatPerChq.Trim();
+
+            var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+
+            var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
+
+            if (docugenerico != null)
+            {
+                if (docugenerico.DocumentoId == docugenerico.DocumentoId)
+                    model.DocumentoId = docugenerico.DocumentoId;
+            }
+
+            if (ModelState.IsValid)
+            {
+                model.DocumentoId = docugenerico.DocumentoId;
+                model.Run = rut;
+                model.Nombre = nombre;
+                model.Archivo = docugenerico.File;
+
+                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
+                var _useCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
+
+                if (_useCaseResponseMessage.Warnings.Count > 0)
+                    TempData["Warning"] = _useCaseResponseMessage.Warnings;
+
+                if (_useCaseResponseMessage.IsValid)
+                {
+                    TempData["Success"] = "Operación terminada correctamente";
+                    //return Redirect(Request.UrlReferrer.PathAndQuery);
+                    return RedirectToAction("FirmaAtendida", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
+                }
+
+                foreach (var item in _useCaseResponseMessage.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, item);
+                }
+
+            }
+
+            return View(model);
+        }
 
         public ActionResult GeneraDocumento(int id)
         {

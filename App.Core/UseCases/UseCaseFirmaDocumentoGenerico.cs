@@ -198,101 +198,101 @@ namespace App.Core.UseCases
             return response;
         }
 
-        public ResponseMessage Firma2(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
-        {
-            var response = new ResponseMessage();
-            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-            var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+        //public ResponseMessage Firma2(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
+        //{
+        //    var response = new ResponseMessage();
+        //    var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+        //    var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
-            var persona = new SIGPER();
+        //    var persona = new SIGPER();
 
 
-            ////si el documento ya tiene folio, no solicitarlo nuevamente
-            //if (string.IsNullOrWhiteSpace(model.Folio))
-            //{
-            //    try
-            //    {
-            //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
-            //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
-            //        if (_folioResponse == null)
-            //            response.Errors.Add("Error al llamar el servicio externo de folio");
+        //    ////si el documento ya tiene folio, no solicitarlo nuevamente
+        //    //if (string.IsNullOrWhiteSpace(model.Folio))
+        //    //{
+        //    //    try
+        //    //    {
+        //    //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+        //    //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
+        //    //        if (_folioResponse == null)
+        //    //            response.Errors.Add("Error al llamar el servicio externo de folio");
 
-            //        if (_folioResponse != null && _folioResponse.status == "ERROR")
-            //            response.Errors.Add(_folioResponse.error);
+        //    //        if (_folioResponse != null && _folioResponse.status == "ERROR")
+        //    //            response.Errors.Add(_folioResponse.error);
 
-            //        model.Folio = _folioResponse.folio;
+        //    //        model.Folio = _folioResponse.folio;
 
-            //        _repository.Update(model);
-            //        _repository.Save();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        response.Errors.Add(ex.Message);
-            //    }
-            //}
+        //    //        _repository.Update(model);
+        //    //        _repository.Save();
+        //    //    }
+        //    //    catch (Exception ex)
+        //    //    {
+        //    //        response.Errors.Add(ex.Message);
+        //    //    }
+        //    //}
 
-            if (!response.IsValid)
-                return response;
+        //    if (!response.IsValid)
+        //        return response;
 
-            if (binario != null)
-            {
-                model.ArchivoFirmado2 = binario;
+        //    if (binario != null)
+        //    {
+        //        model.ArchivoFirmado2 = binario;
 
-                DTOFileMetadata data = new DTOFileMetadata();
-                //int tipoDoc = 0;
-                //int IdDocto = 0;
-                string Name = string.Empty;
+        //        DTOFileMetadata data = new DTOFileMetadata();
+        //        //int tipoDoc = 0;
+        //        //int IdDocto = 0;
+        //        string Name = string.Empty;
 
-                //tipoDoc = 15;
-                Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
+        //        //tipoDoc = 15;
+        //        Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
 
-                ////var email = username;
-                //var email = "";
-                ////var email = UserExtended.Email(User);
-                //var doc = new Documento();
-                //doc.Fecha = DateTime.Now;
-                //doc.Email = email;
-                //doc.FileName = Name;
-                //doc.File = binario;
-                //doc.ProcesoId = model.ProcesoId.Value;
-                //doc.WorkflowId = model.WorkflowId.Value;
-                //doc.Signed = false;
-                //doc.Texto = data.Text;
-                //doc.Metadata = data.Metadata;
-                //doc.Type = data.Type;
-                //doc.TipoPrivacidadId = 1;
-                //doc.TipoDocumentoId = tipoDoc;
+        //        ////var email = username;
+        //        //var email = "";
+        //        ////var email = UserExtended.Email(User);
+        //        //var doc = new Documento();
+        //        //doc.Fecha = DateTime.Now;
+        //        //doc.Email = email;
+        //        //doc.FileName = Name;
+        //        //doc.File = binario;
+        //        //doc.ProcesoId = model.ProcesoId.Value;
+        //        //doc.WorkflowId = model.WorkflowId.Value;
+        //        //doc.Signed = false;
+        //        //doc.Texto = data.Text;
+        //        //doc.Metadata = data.Metadata;
+        //        //doc.Type = data.Type;
+        //        //doc.TipoPrivacidadId = 1;
+        //        //doc.TipoDocumentoId = tipoDoc;
 
-                //doc.Folio = model.Folio;
-                //doc.File = model.ArchivoFirmado;
+        //        //doc.Folio = model.Folio;
+        //        //doc.File = model.ArchivoFirmado;
 
-                //_repository.Delete(doc);
-                //_repository.Create(doc);
-                ////_repository.Update(doc);
-                //_repository.Save();
+        //        //_repository.Delete(doc);
+        //        //_repository.Create(doc);
+        //        ////_repository.Update(doc);
+        //        //_repository.Save();
 
-                var docOld = _repository.GetById<Documento>(DocumentoId);
-                docOld.Fecha = DateTime.Now;
-                docOld.File = binario;
-                docOld.Signed = false;
-                docOld.Texto = data.Text;
-                docOld.Metadata = data.Metadata;
-                docOld.Type = data.Type;
-                _repository.Update(docOld);
-                _repository.Save();
-            }
+        //        var docOld = _repository.GetById<Documento>(DocumentoId);
+        //        docOld.Fecha = DateTime.Now;
+        //        docOld.File = binario;
+        //        docOld.Signed = false;
+        //        docOld.Texto = data.Text;
+        //        docOld.Metadata = data.Metadata;
+        //        docOld.Type = data.Type;
+        //        _repository.Update(docOld);
+        //        _repository.Save();
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
 
-        public ResponseMessage FirmaMasiva(byte[][] documentos, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
+        public ResponseMessage FirmaMasiva(byte[][] documentos,  int id, string Rut, string Nombre, bool TipoDocumento, int DocumentoId)
         {
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
             foreach (var documento in documentos)
             {
-                var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+                var binario = this._minsegpres.SignSinOtp(documento, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
                 var persona = new SIGPER();
 
@@ -407,7 +407,9 @@ namespace App.Core.UseCases
                 ////_repository.Update(doc);
                 //_repository.Save();
 
-                var docOld = _repository.GetById<Documento>(DocumentoId);
+                //var docOld = _repository.GetById<Documento>(DocumentoId);
+                var docOld = _repository.GetById<Documento>(id);
+
                 docOld.Fecha = DateTime.Now;
                 docOld.File = binario;
                 docOld.Signed = false;
