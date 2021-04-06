@@ -2,7 +2,7 @@
 using App.Model.Core;
 using App.Model.FirmaDocumentoGenerico;
 using App.Core.Interfaces;
-using App.Model.SIGPER;
+using App.Model.Sigper;
 using System.Linq;
 using App.Model.DTO;
 
@@ -12,7 +12,7 @@ namespace App.Core.UseCases
     {
         protected readonly IGestionProcesos _repository;
         //protected readonly IHSM _hsm;
-        protected readonly ISIGPER _sigper;
+        protected readonly ISigper _sigper;
         protected readonly IEmail _email;
         protected readonly IFolio _folio;
         protected readonly IFile _file;
@@ -22,7 +22,7 @@ namespace App.Core.UseCases
             _repository = repository;
         }
 
-        public UseCaseFirmaDocumentoGenerico(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm, */IEmail email, IMinsegpres minsegpres)
+        public UseCaseFirmaDocumentoGenerico(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, /* IHSM hsm, */IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;
@@ -103,7 +103,7 @@ namespace App.Core.UseCases
             {
                 var binario = this._minsegpres.SignConOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
-                var persona = new SIGPER();
+                var persona = new Sigper();
 
 
                 ////si el documento ya tiene folio, no solicitarlo nuevamente
@@ -294,7 +294,7 @@ namespace App.Core.UseCases
             {
                 var binario = this._minsegpres.SignSinOtp(documento, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
-                var persona = new SIGPER();
+                var persona = new Sigper();
 
 
                 ////si el documento ya tiene folio, no solicitarlo nuevamente
@@ -427,7 +427,7 @@ namespace App.Core.UseCases
         public ResponseMessage WorkflowUpdate(Workflow obj)
         {
             var response = new ResponseMessage();
-            var persona = new SIGPER();
+            var persona = new Sigper();
 
             try
             {

@@ -117,14 +117,14 @@ namespace App.Web.Controllers
         }
 
         protected readonly IGestionProcesos _repository;
-        protected readonly ISIGPER _sigper;
+        protected readonly ISigper _sigper;
         protected readonly IFile _file;
         protected readonly IFolio _folio;
         //protected readonly IHSM _hsm;
         protected readonly IEmail _email;
         protected readonly IMinsegpres _minsegpres;
 
-        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISIGPER sigper, IFile file, IFolio folio, /* IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
+        public FirmaDocumentoGenericoController(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, /* IHSM hsm,*/ IEmail email, IMinsegpres minsegpres)
         {
             _repository = repository;
             _sigper = sigper;

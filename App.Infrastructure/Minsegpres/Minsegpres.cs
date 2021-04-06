@@ -34,7 +34,7 @@ namespace App.Infrastructure.Minsegpres
         public byte[] SignConOtp(byte[] documento, string OTP, int id, string Run, string Nombre, bool TipoDocumento, int DocumentoId)
         {
             var url_tramites_en_linea = "https://tramites.economia.gob.cl/";
-            var _qrResponse = _file.CreateQR(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
+            var _qrResponse = _file.CreateQr(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
 
             byte[] binario = null;
 
