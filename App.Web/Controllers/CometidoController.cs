@@ -299,11 +299,19 @@ namespace App.Web.Controllers
         public ActionResult Details(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+
+            model.Workflow = workflow;
+            model.Proceso = proceso;
+
             if (model.GeneracionCDP.Count > 0)
             {
                 var cdp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault().GeneracionCDPId);
                 model.GeneracionCDP.Add(cdp);
             }
+
+            
 
             return View(model);
         }
@@ -318,7 +326,10 @@ namespace App.Web.Controllers
         public ActionResult DetailsFinanzas(int id)
         {
             var model = _repository.GetById<Cometido>(id);
-
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);            
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+            model.Proceso = proceso;
+            model.Workflow = workflow;
             return View(model);
         }
 
@@ -599,6 +610,8 @@ namespace App.Web.Controllers
         public ActionResult EditSigfeTesoreria(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = workflow;
 
             //List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
             //{
@@ -689,6 +702,8 @@ namespace App.Web.Controllers
         public ActionResult EditSigfe(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = workflow;
 
             //List<SelectListItem> tipoPago = new List<SelectListItem>
             //{
@@ -906,6 +921,8 @@ namespace App.Web.Controllers
         public ActionResult EditGP(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = workflow;
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
@@ -950,6 +967,8 @@ namespace App.Web.Controllers
         public ActionResult EditPpto(int id)
         {
             var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = workflow;
 
             //model.Destinos = ListDestino;
             var persona = _sigper.GetUserByEmail(User.Email());
