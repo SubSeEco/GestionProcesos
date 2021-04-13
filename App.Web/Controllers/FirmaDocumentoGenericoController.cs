@@ -283,20 +283,6 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult FEADocumentos(int ProcesoId)
-        {
-            var email = UserExtended.Email(User);
-
-            var model = _repository.Get<Documento>(q => q.ProcesoId == ProcesoId && q.Activo);
-            foreach (var item in model)
-            {
-                item.AutorizadoParaFirma = item.FirmanteEmail == email;
-                //item.AutorizadoParaEliminar = item.Email == email;
-            }
-
-            return View(model);
-        }
-
         public byte[] ConvertToByte(HttpPostedFileBase file)
         {
             byte[] imageByte = null;
@@ -541,82 +527,9 @@ namespace App.Web.Controllers
             return View(model);
         }
 
-        public ActionResult FirmaDesatendida(int id)
-        {
-            var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
-
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult FirmaDesatendida(FirmaDocumentoGenerico model, HttpPostedFileBase file)
-        {
-            var persona = _sigper.GetUserByEmail(User.Email());
-
-            //var doc = ConvertToByte(file);
-
-            string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
-
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-
-            //var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
-
-            var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
-
-            var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
-
-            if (docugenerico != null)
-            {
-                if (docugenerico.DocumentoId == docugenerico.DocumentoId)
-                    model.DocumentoId = docugenerico.DocumentoId;
-            }
-
-            if (ModelState.IsValid)
-            {
-                //var doc = ConvertToByte(file);
-
-                //model.Archivo = doc;
-                //model.DocumentoId = docugenerico.DocumentoId;
-
-                model.Run = rut;
-                model.Nombre = nombre;
-                model.Archivo = docugenerico.File;
-
-                var _useCaseInteractor = new UseCaseFirmaDocumentoGenerico(_repository, _sigper, _file, _folio, _email, _minsegpres);
-                var _UseCaseResponseMessage = _useCaseInteractor.FirmaMasiva(archivos, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
-                //var _UseCaseResponseMessage = _useCaseInteractor.Firma(model.Archivo, model.OTP, null, model.FirmaDocumentoGenericoId, rut, nombre, model.TipoDocumento, model.DocumentoId);
-
-                if (_UseCaseResponseMessage.Warnings.Count > 0)
-                    TempData["Warning"] = _UseCaseResponseMessage.Warnings;
-
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                    //return RedirectToAction("DocumentoFirmado", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
-                }
-
-                foreach (var item in _UseCaseResponseMessage.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item);
-                }
-            }
-
-            return View(model);
-        }
-
         public ActionResult DocumentoFirmado(int id)
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-
-            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
-
 
             return View(model);
         }
