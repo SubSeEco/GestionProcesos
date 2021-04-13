@@ -248,6 +248,9 @@ namespace App.Web.Controllers
         public ActionResult EditAbast(int id)
         {
             var model = _repository.GetById<Pasaje>(id);
+            var work = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = work;
+
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdComunaOrigen = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
@@ -304,6 +307,9 @@ namespace App.Web.Controllers
             ViewBag.Cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId.Value == model.ProcesoId.Value);
             var pasaje = _repository.GetFirst<Pasaje>(p => p.ProcesoId.Value == model.ProcesoId.Value);
             ViewBag.Pasaje = pasaje;
+
+            var work = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = work;
 
             if (model.Workflow.DefinicionWorkflow.Secuencia == 5)
             {
