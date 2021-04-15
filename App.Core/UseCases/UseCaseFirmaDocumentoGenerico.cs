@@ -5,6 +5,12 @@ using App.Core.Interfaces;
 using App.Model.Sigper;
 using System.Linq;
 using App.Model.DTO;
+using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+//using iTextSharp.text.pdf;
+//using iTextSharp.text;
+//using Image = iTextSharp.text.Image;
 
 namespace App.Core.UseCases
 {
@@ -99,8 +105,119 @@ namespace App.Core.UseCases
             var response = new ResponseMessage();
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
+            var url_tramites_en_linea = "https://tramites.economia.gob.cl/";
+            var _qrResponse = _file.CreateQr(string.Concat(url_tramites_en_linea, "/GPDocumentoVerificacion/Details/", DocumentoId));
+
             foreach (var documento in documentos)
             {
+                using (MemoryStream ms = new MemoryStream())
+
+                {
+                    using (var reader = new PdfReader(documento))
+                    {
+                        using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
+                        {
+                            var respuesta = new ResponseMessage();
+
+                            //var model = _repository.GetById<FirmaDocumentoGenerico>(id);
+
+                            if (model.TipoDocumento == false)
+                            {
+                                string folio = null;
+
+                                //si el documento ya tiene folio, no solicitarlo nuevamente
+                                if (string.IsNullOrWhiteSpace(model.Folio))
+                                {
+                                    try
+                                    {
+                                        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
+                                        var _folioResponse = _folio.GetFolio(string.Join(", ", model.Email), "MEMO", model.Subsecretaria);
+                                        if (_folioResponse == null)
+                                            respuesta.Errors.Add("Error al llamar el servicio externo de folio");
+
+                                        if (_folioResponse != null && _folioResponse.status == "ERROR")
+                                            respuesta.Errors.Add(_folioResponse.error);
+
+                                        model.Folio = _folioResponse.folio;
+                                        folio = model.Folio;
+
+                                        _repository.Update(model);
+                                        _repository.Save();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        respuesta.Errors.Add(ex.Message);
+                                    }
+                                }
+
+                                //agregar tabla de verificacion
+                                try
+                                {
+                                    try
+                                    {
+                                        //obtener informacion de la primera pagina
+                                        var pagesize = reader.GetPageSize(1);
+                                        var pdfContentFirstPage = stamper.GetOverContent(1);
+
+                                        //estampa de folio
+                                        //ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+                                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+
+                                        //estampa de fecha
+                                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 13, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw new Exception("Error al insertar folio en el documento:" + ex.Message);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                                }
+                            }
+
+                            //agregar tabla de verificacion
+                            try
+                            {
+                                //var img = Image.GetInstance(QR);
+                                var img = Image.GetInstance(_qrResponse);
+                                //var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
+                                var fontStandard = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+                                //var fontBold = new iTextSharp.text.Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
+                                var fontBold = new Font(iTextSharp.text.Font.FontFamily.HELVETICA, 9, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
+                                var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
+                                var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+
+                                table.TotalWidth = 520f;
+                                table.SetWidths(new float[] { 8f, 25f, 6f });
+                                table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
+                                table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)) { });
+                                //table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase(string.Join(", ", Nombre), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                                //table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase(string.Join(", ", DocumentoId), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
+                                //table.AddCell(new PdfPCell(new Phrase(url, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+                                table.AddCell(new PdfPCell(new Phrase(string.Join(", ", url_tramites_en_linea), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
+
+                                table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Error al insertar tabla de validación de firma electrónica:" + ex.Message);
+                            }
+
+                            stamper.Close();
+                        }
+                    }
+                    //documento = ms.ToArray();
+                }
+
                 var binario = this._minsegpres.SignConOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
                 var persona = new Sigper();
