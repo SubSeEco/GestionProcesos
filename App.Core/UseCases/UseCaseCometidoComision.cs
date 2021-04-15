@@ -4811,13 +4811,12 @@ namespace App.Core.UseCases
                             {
                                 if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) /*validaciones de secuencia del proceso cometido con pasaje*/
                                 {
-                                    if (workflowActual.DefinicionWorkflow.Secuencia == 7) /*si cometido no tiene viatico, no pasa por las tareas de generacion cdp*/
+                                    if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                                     {
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
-                                    }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 7 && Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
-                                    {
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13); 
+                                        if(Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
+                                        else
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 && (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0))/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
                                     {
@@ -5799,7 +5798,7 @@ namespace App.Core.UseCases
                                         doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 16);
 
 
-                                    _email.NotificacionesCometido(workflow,
+                                    _email.NotificacionesCometido(workflowActual,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
                                     "Tiene el cometido N°: " + cometido.CometidoId + " " + "pendiente de compromiso",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
@@ -5853,7 +5852,7 @@ namespace App.Core.UseCases
                                     emailMsg = new List<string>();
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 13 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Jefatura Administracion
 
-                                    _email.NotificacionesCometido(workflow,
+                                    _email.NotificacionesCometido(workflowActual,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoPPto_JefaturaAdmin),
                                     "Tiene el cometido N°:" + cometido.CometidoId + " " + "para aprobación",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
