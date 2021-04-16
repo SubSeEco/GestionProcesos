@@ -8,9 +8,6 @@ using App.Model.DTO;
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
-//using iTextSharp.text.pdf;
-//using iTextSharp.text;
-//using Image = iTextSharp.text.Image;
 
 namespace App.Core.UseCases
 {
@@ -110,10 +107,13 @@ namespace App.Core.UseCases
 
             foreach (var documento in documentos)
             {
+                var pdf = documento;
+
                 using (MemoryStream ms = new MemoryStream())
 
                 {
-                    using (var reader = new PdfReader(documento))
+                    //using (var reader = new PdfReader(documento))                    
+                    using (var reader = new PdfReader(pdf))
                     {
                         using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
                         {
@@ -215,37 +215,13 @@ namespace App.Core.UseCases
                             stamper.Close();
                         }
                     }
-                    //documento = ms.ToArray();
+                    pdf = ms.ToArray();
                 }
 
-                var binario = this._minsegpres.SignConOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+                //var binario = this._minsegpres.SignConOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
+                var binario = this._minsegpres.SignConOtp(pdf, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
 
                 var persona = new Sigper();
-
-
-                ////si el documento ya tiene folio, no solicitarlo nuevamente
-                //if (string.IsNullOrWhiteSpace(model.Folio))
-                //{
-                //    try
-                //    {
-                //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
-                //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
-                //        if (_folioResponse == null)
-                //            response.Errors.Add("Error al llamar el servicio externo de folio");
-
-                //        if (_folioResponse != null && _folioResponse.status == "ERROR")
-                //            response.Errors.Add(_folioResponse.error);
-
-                //        model.Folio = _folioResponse.folio;
-
-                //        _repository.Update(model);
-                //        _repository.Save();
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        response.Errors.Add(ex.Message);
-                //    }
-                //}
 
                 if (!response.IsValid)
                     return response;
@@ -255,8 +231,7 @@ namespace App.Core.UseCases
                     model.ArchivoFirmado = binario;
 
                     DTOFileMetadata data = new DTOFileMetadata();
-                    //int tipoDoc = 0;
-                    //int IdDocto = 0;
+
                     string Name = string.Empty;
 
                     //tipoDoc = 15;
@@ -314,93 +289,6 @@ namespace App.Core.UseCases
             }
             return response;
         }
-
-        //public ResponseMessage Firma2(byte[] documento, string OTP, string tokenJWT, int id, string Rut, string Nombre, string TipoDocumento, int DocumentoId)
-        //{
-        //    var response = new ResponseMessage();
-        //    var model = _repository.GetById<FirmaDocumentoGenerico>(id);
-        //    var binario = this._minsegpres.SignSinOtp(documento, OTP, id, Rut, Nombre, TipoDocumento, DocumentoId);
-
-        //    var persona = new SIGPER();
-
-
-        //    ////si el documento ya tiene folio, no solicitarlo nuevamente
-        //    //if (string.IsNullOrWhiteSpace(model.Folio))
-        //    //{
-        //    //    try
-        //    //    {
-        //    //        //var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), firmaDocumento.TipoDocumentoCodigo, persona.SubSecretaria);
-        //    //        var _folioResponse = _folio.GetFolio(string.Join(", ", "ereyes@economia.cl"), "MEMO", "ECONOMIA");
-        //    //        if (_folioResponse == null)
-        //    //            response.Errors.Add("Error al llamar el servicio externo de folio");
-
-        //    //        if (_folioResponse != null && _folioResponse.status == "ERROR")
-        //    //            response.Errors.Add(_folioResponse.error);
-
-        //    //        model.Folio = _folioResponse.folio;
-
-        //    //        _repository.Update(model);
-        //    //        _repository.Save();
-        //    //    }
-        //    //    catch (Exception ex)
-        //    //    {
-        //    //        response.Errors.Add(ex.Message);
-        //    //    }
-        //    //}
-
-        //    if (!response.IsValid)
-        //        return response;
-
-        //    if (binario != null)
-        //    {
-        //        model.ArchivoFirmado2 = binario;
-
-        //        DTOFileMetadata data = new DTOFileMetadata();
-        //        //int tipoDoc = 0;
-        //        //int IdDocto = 0;
-        //        string Name = string.Empty;
-
-        //        //tipoDoc = 15;
-        //        Name = "Documento Genérico nro" + " " + model.FirmaDocumentoGenericoId.ToString() + ".pdf";
-
-        //        ////var email = username;
-        //        //var email = "";
-        //        ////var email = UserExtended.Email(User);
-        //        //var doc = new Documento();
-        //        //doc.Fecha = DateTime.Now;
-        //        //doc.Email = email;
-        //        //doc.FileName = Name;
-        //        //doc.File = binario;
-        //        //doc.ProcesoId = model.ProcesoId.Value;
-        //        //doc.WorkflowId = model.WorkflowId.Value;
-        //        //doc.Signed = false;
-        //        //doc.Texto = data.Text;
-        //        //doc.Metadata = data.Metadata;
-        //        //doc.Type = data.Type;
-        //        //doc.TipoPrivacidadId = 1;
-        //        //doc.TipoDocumentoId = tipoDoc;
-
-        //        //doc.Folio = model.Folio;
-        //        //doc.File = model.ArchivoFirmado;
-
-        //        //_repository.Delete(doc);
-        //        //_repository.Create(doc);
-        //        ////_repository.Update(doc);
-        //        //_repository.Save();
-
-        //        var docOld = _repository.GetById<Documento>(DocumentoId);
-        //        docOld.Fecha = DateTime.Now;
-        //        docOld.File = binario;
-        //        docOld.Signed = false;
-        //        docOld.Texto = data.Text;
-        //        docOld.Metadata = data.Metadata;
-        //        docOld.Type = data.Type;
-        //        _repository.Update(docOld);
-        //        _repository.Save();
-        //    }
-
-        //    return response;
-        //}
 
         public ResponseMessage FirmaMasiva(byte[][] documentos,  int id, string Rut, string Nombre, bool TipoDocumento, int DocumentoId)
         {

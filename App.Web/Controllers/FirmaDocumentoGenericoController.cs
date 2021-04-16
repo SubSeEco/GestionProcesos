@@ -439,8 +439,6 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<FirmaDocumentoGenerico>(id);
 
-            //permiso = persona.a
-
             var permiso = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Cometido.ToString()));
 
             var permisoEspecial = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == model.Email && q.Grupo.Nombre.Contains(App.Util.Enum.Grupo.Administrador.ToString()));
@@ -450,21 +448,10 @@ namespace App.Web.Controllers
                 permisoEspecial = model.permisoEspecial;
             }
 
-            //if (model.TiposFirmas == "DESATENDIDA")
-            //{
-            //    return RedirectToAction("FirmaDesatendida", "FirmaDocumentoGenerico", new { model.WorkflowId, id = model.FirmaDocumentoGenericoId });
-            //}
-            //else
-            //{
-            //var documasivo = new SelectList(_repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId));
-
-            //método lento
-            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
-
             var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToList();
 
-                return View(model);
-            //}
+            return View(model);
+
         }
 
         [HttpPost]
@@ -473,18 +460,11 @@ namespace App.Web.Controllers
         {
             var persona = _sigper.GetUserByEmail(User.Email());
 
-            //var doc = ConvertToByte(file);
-
             string rut = persona.Funcionario.RH_NumInte.ToString().Trim();
 
-            string nombre = persona.Funcionario.PeDatPerChq.Trim();
-           
-            //var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
+            string nombre = persona.Funcionario.PeDatPerChq.Trim(); 
          
             var docugenerico = _repository.GetFirst<Documento>(d => d.ProcesoId == model.ProcesoId);
-
-            //método lento
-            //var archivos = _repository.Get<Documento>().Where(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
             var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
