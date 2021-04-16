@@ -2,6 +2,7 @@
 using App.Model.Cometido;
 using App.Core.Interfaces;
 using App.Core.UseCases;
+using App.Model.Core;
 
 namespace App.Web.Controllers
 {
@@ -35,6 +36,7 @@ namespace App.Web.Controllers
         {
             var com = _repository.GetById<Cometido>(CometidoId);
             var destinos = _repository.Get<Destinos>(c => c.CometidoId == com.CometidoId);
+            var workflow = _repository.GetById<Workflow>(com.WorkflowId);
 
             /*Viaticos*/
             ViewBag.VtcTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre");
@@ -177,7 +179,7 @@ namespace App.Web.Controllers
                     model.VtcValorViatico = total.ToString();
                 }
                 model.VtcObligacionActual = model.VtcValorViatico;
-
+                model.Workflow = workflow;
                 return View(model);
             }
             else
@@ -254,6 +256,11 @@ namespace App.Web.Controllers
         public ActionResult Edit(int id)
         {
             var model = _repository.GetById<GeneracionCDP>(id);
+            var com = _repository.GetById<Cometido>(model.CometidoId);
+            var workflow = _repository.GetById<Workflow>(com.WorkflowId);
+
+            com.Workflow = workflow;
+            model.Cometido = com;
 
             /*Viaticos*/
             ViewBag.VtcTipoPartidaId = new SelectList(_repository.GetAll<TipoPartida>(), "TipoPartidaId", "TpaNombre",model.VtcTipoPartidaId);
@@ -306,6 +313,8 @@ namespace App.Web.Controllers
 
                     /*se traen los datos del cometido, para determinar a q tarea se debe devolver*/
                     model.Cometido = _repository.GetFirst<Cometido>(c =>c.CometidoId == model.CometidoId);
+                    var workflow = _repository.GetById<Workflow>(model.Cometido.WorkflowId);
+                    model.Cometido.Workflow = workflow;
                     if (model.Cometido.Workflow.DefinicionWorkflow.Secuencia == 8)
                     {
                         return RedirectToAction("EditPpto", "Cometido", new { model.WorkflowId, id = model.CometidoId });
@@ -342,7 +351,7 @@ namespace App.Web.Controllers
             ViewBag.PsjTipoItemId = new SelectList(_repository.GetAll<TipoItem>(), "TipoItemId", "TitNombre", model.PsjTipoItemId);
             ViewBag.PsjTipoAsignacionId = new SelectList(_repository.GetAll<TipoAsignacion>(), "TipoAsignacionId", "TasNombre", model.PsjTipoAsignacionId);
             ViewBag.PsjTipoSubAsignacionId = new SelectList(_repository.GetAll<TipoSubAsignacion>(), "TipoSubAsignacionId", "TsaNombre", model.PsjTipoSubAsignacionId);
-
+            
             return View(model);
         }
 

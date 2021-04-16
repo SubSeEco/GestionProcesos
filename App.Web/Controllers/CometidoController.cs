@@ -27,7 +27,7 @@ namespace App.Web.Controllers
 {
     [Audit]
     [Authorize]
-    [NoDirectAccess]
+    //[NoDirectAccess]
     public class CometidoController : Controller
     {
         public class DTOFilterWorkflow
@@ -611,14 +611,10 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(id);
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.CometidoId);
             model.Workflow = workflow;
+            model.Proceso = proceso;
 
-            //List<SelectListItem> tipoPagoTesoreria = new List<SelectListItem>
-            //{
-            //new SelectListItem {Text = "Pago", Value = "1"},
-            //new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
-            //new SelectListItem {Text = "No Pago", Value = "3"},
-            //};
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
@@ -693,6 +689,9 @@ namespace App.Web.Controllers
             //};
 
             model = _repository.GetById<Cometido>(model.CometidoId);
+            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            model.Proceso = proceso;
+
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagadorTesoreria = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdTipoPagoTesoreria = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPago");
@@ -701,9 +700,13 @@ namespace App.Web.Controllers
 
         public ActionResult EditSigfe(int id)
         {
-            var model = _repository.GetById<Cometido>(id);
+            //var model = _repository.GetById<Cometido>(id);
+            var model = _repository.Get<Cometido>(c => c.CometidoId == id).FirstOrDefault();
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+
             model.Workflow = workflow;
+            model.Proceso = proceso;
 
             //List<SelectListItem> tipoPago = new List<SelectListItem>
             //{
@@ -785,6 +788,13 @@ namespace App.Web.Controllers
             //};
 
             model = _repository.GetById<Cometido>(model.CometidoId);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            model.Workflow = workflow;
+            model.Proceso = proceso;
+
+
+
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");

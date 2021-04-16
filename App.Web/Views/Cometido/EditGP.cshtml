@@ -417,6 +417,7 @@
                         <p>
                             <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
                             @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
+                            @*@Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })*@
 
                             @if (Model.Workflow.DefinicionWorkflow.Secuencia == 6 && Model.ResolucionRevocatoria)
                             {
