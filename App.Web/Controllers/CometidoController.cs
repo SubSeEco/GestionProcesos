@@ -611,7 +611,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Cometido>(id);
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
-            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
             model.Workflow = workflow;
             model.Proceso = proceso;
 
@@ -689,7 +689,7 @@ namespace App.Web.Controllers
             //};
 
             model = _repository.GetById<Cometido>(model.CometidoId);
-            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
             model.Proceso = proceso;
 
             var persona = _sigper.GetUserByEmail(User.Email());
@@ -703,7 +703,7 @@ namespace App.Web.Controllers
             //var model = _repository.GetById<Cometido>(id);
             var model = _repository.Get<Cometido>(c => c.CometidoId == id).FirstOrDefault();
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
-            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
 
             model.Workflow = workflow;
             model.Proceso = proceso;
@@ -789,7 +789,7 @@ namespace App.Web.Controllers
 
             model = _repository.GetById<Cometido>(model.CometidoId);
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
-            var proceso = _repository.GetById<Proceso>(model.CometidoId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
             model.Workflow = workflow;
             model.Proceso = proceso;
 
