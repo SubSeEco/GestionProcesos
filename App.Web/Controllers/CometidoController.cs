@@ -2665,8 +2665,8 @@ namespace App.Web.Controllers
                     q.FechaCreacion.Month <= model.Hasta.Value.Month &&
                     q.FechaCreacion.Day <= model.Hasta.Value.Day);
             
-            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 82);
-
+            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 82 && q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada); /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
+            
             var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
             if (WorkflowId.Any())
                 predicateWorkflow = predicateWorkflow.And(q => WorkflowId.Contains(q.WorkflowId));
@@ -2729,11 +2729,11 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 4].Value = cometido.SolicitaViatico.ToString();// cometido.SolicitaViatico != null ? cometido.SolicitaViatico.ToString() : "S/A"; /*solicita viatico*/
                     worksheet.Cells[fila, 5].Value = cometido.TotalViatico.HasValue ? cometido.TotalViatico.ToString() : "S/A";
                     worksheet.Cells[fila, 7].Value = !string.IsNullOrEmpty(cometido.IdSigfe) ? cometido.IdSigfe : "S/A";
-                    worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToString() : "S/A";
+                    worksheet.Cells[fila, 8].Value = cometido.FechaPagoSigfe.HasValue ? cometido.FechaPagoSigfe.Value.ToShortDateString() : "S/A";
 
                     //worksheet.Cells[fila, 16].Value = !string.IsNullOrEmpty(cometido.NombreFuncionarioPagadorTesoreria) ? cometido.NombreFuncionarioPagadorTesoreria : "S/A";
                     worksheet.Cells[fila, 10].Value = !string.IsNullOrEmpty(cometido.IdSigfeTesoreria) ? cometido.IdSigfeTesoreria : "S/A";
-                    worksheet.Cells[fila, 11].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToString() : "S/A";
+                    worksheet.Cells[fila, 11].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToShortDateString() : "S/A";
 
                     /*se busca la fecha de creacion de las tareas*/
                     foreach (var w in workflow)
@@ -2762,15 +2762,15 @@ namespace App.Web.Controllers
                         }
 
                         if (w.DefinicionWorkflowId == 84)
-                            worksheet.Cells[fila, 9].Value = w.FechaCreacion != null ? w.FechaCreacion.ToString() : "S/A"; /*fecha ingreso a analista de tesorerria*/
+                            worksheet.Cells[fila, 9].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de tesorerria*/
 
                         if (w.DefinicionWorkflowId == 86)
                         {
-                            worksheet.Cells[fila, 12].Value = w.FechaTermino != null ? w.FechaTermino.ToString() : "S/A"; /*fecha termino a analista de finznzas*/
+                            worksheet.Cells[fila, 12].Value = w.FechaTermino != null ? w.FechaTermino.Value.ToShortDateString() : "S/A"; /*fecha termino a analista de finznzas*/
                             fin = w.FechaTermino != null ? w.FechaTermino.Value : DateTime.Now;
                         }
 
-                        worksheet.Cells[fila, 15].Value = w.WorkflowId;
+                        //worksheet.Cells[fila, 15].Value = w.WorkflowId;
                     }
 
                     if (inicio != null && fin != null)
@@ -2790,8 +2790,8 @@ namespace App.Web.Controllers
                         worksheet.Cells[fila, 13].Value = "S/A"; /*dias transcurridos - habiles*/
 
 
-                    worksheet.Cells[fila, 14].Value = pr.ProcesoId;
-                    
+                    //worksheet.Cells[fila, 14].Value = pr.ProcesoId;
+
                 }                
             }
 
