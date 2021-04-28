@@ -468,6 +468,8 @@ namespace App.Web.Controllers
 
             var archivos = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.File).ToArray();
 
+            var idsdocus = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId).Select(q => q.DocumentoId).ToArray();
+
             if (docugenerico != null)
             {
                 if (docugenerico.DocumentoId == docugenerico.DocumentoId)

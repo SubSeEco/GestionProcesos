@@ -68,6 +68,9 @@ namespace App.Infrastructure.Minsegpres
 
             //Testing
             var client = new RestClient("https://api.firma.cert.digital.gob.cl/firma/v2/files/tickets");
+            //Producción
+            //var client = new RestClient("https://api.firma.digital.gob.cl/firma/v2/files/tickets");
+
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("OTP", OTP);
