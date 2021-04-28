@@ -2758,7 +2758,7 @@ namespace App.Web.Controllers
                         if (w.DefinicionWorkflowId == 82)
                         {
                             worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
-                            inicio = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1) : DateTime.Now;
+                            inicio = w.FechaCreacion != null ? w.FechaCreacion.Date.AddDays(1) : DateTime.Now;
                         }
 
                         if (w.DefinicionWorkflowId == 84)
@@ -2767,7 +2767,7 @@ namespace App.Web.Controllers
                         if (w.DefinicionWorkflowId == 86)
                         {
                             worksheet.Cells[fila, 12].Value = w.FechaTermino != null ? w.FechaTermino.Value.ToShortDateString() : "S/A"; /*fecha termino a analista de finznzas*/
-                            fin = w.FechaTermino != null ? w.FechaTermino.Value : DateTime.Now;
+                            fin = w.FechaTermino != null ? w.FechaTermino.Value.Date : DateTime.Now;
                         }
 
                         //worksheet.Cells[fila, 15].Value = w.WorkflowId;
