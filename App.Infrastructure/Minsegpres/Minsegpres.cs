@@ -58,7 +58,10 @@ namespace App.Infrastructure.Minsegpres
 
             var payloadPart = Base64UrlEncoder.Encode(JsonConvert.SerializeObject(payloadNew));
 
+            //Testing
             var secret = "8d7a6d0fea8541b99b0dce110fd0d077";
+            //Producción
+            //var secret = "b8d5d75d9f1c407aa0bb4bbd0339790a";
             var sha256 = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
             var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes($"{headerPart}.{payloadPart}"));
             var hash = Base64UrlEncoder.Encode(hashBytes);
@@ -77,6 +80,8 @@ namespace App.Infrastructure.Minsegpres
             request.AddHeader("Content-Type", "application/json");
             //Testing
             request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"012edbcc-7eb7-4043-8c16-a7702f1ffc40\",\r\n\"token\":\r\n\"" + jwt + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
+            //Producción
+            //request.AddParameter("application/json", "{\r\n\r\n\"api_token_key\": \"4cc78390-d371-4456-84cf-4b15a1d4aea1\",\r\n\"token\":\r\n\"" + jwt + "\",\r\n \"files\": [\r\n {\r\n \"content-type\": \"application/pdf\",\r\n \"content\": \"" + fileContent + "\",\r\n \"description\": \"str\",\r\n \"checksum\": \"C4863E4F3CB93450C63F8BB24725E8AB8FC03B7B71619B756294BFB1E55D6507\"\r\n }\r\n ]\r\n}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
 
