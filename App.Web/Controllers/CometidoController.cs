@@ -277,9 +277,14 @@ namespace App.Web.Controllers
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
 
+            var proceso = _repository.GetById<Proceso>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
             if (model == null)
+            {
+                model.Proceso = proceso;
                 return RedirectToAction("Details", "Proceso", new { id });
+            }
+                
 
             return View(model);
         }
@@ -1983,11 +1988,18 @@ namespace App.Web.Controllers
                         q.Destinos.LastOrDefault().FechaInicio.Month <= model.FechaTermino.Value.Month &&
                         q.Destinos.LastOrDefault().FechaInicio.Day <= model.FechaTermino.Value.Day);
 
+                predicate = predicate.And(q => q.Proceso.ProcesoId == q.ProcesoId);
+
                 var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (CometidoId.Any())
-                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+                {
+                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));                    
+                }
 
                 model.Result = _repository.Get(predicate);
+
+                model.Result.FirstOrDefault().Proceso = _repository.GetById<Proceso>(model.Result.FirstOrDefault().ProcesoId);
+
             }
 
             List<SelectListItem> Estado = new List<SelectListItem>
@@ -2758,7 +2770,7 @@ namespace App.Web.Controllers
                         if (w.DefinicionWorkflowId == 82)
                         {
                             worksheet.Cells[fila, 6].Value = w.FechaCreacion != null ? w.FechaCreacion.ToShortDateString() : "S/A"; /*fecha ingreso a analista de contabilidad*/
-                            inicio = w.FechaCreacion != null ? w.FechaCreacion.AddDays(1) : DateTime.Now;
+                            inicio = w.FechaCreacion != null ? w.FechaCreacion.Date.AddDays(1) : DateTime.Now;
                         }
 
                         if (w.DefinicionWorkflowId == 84)
@@ -2767,7 +2779,7 @@ namespace App.Web.Controllers
                         if (w.DefinicionWorkflowId == 86)
                         {
                             worksheet.Cells[fila, 12].Value = w.FechaTermino != null ? w.FechaTermino.Value.ToShortDateString() : "S/A"; /*fecha termino a analista de finznzas*/
-                            fin = w.FechaTermino != null ? w.FechaTermino.Value : DateTime.Now;
+                            fin = w.FechaTermino != null ? w.FechaTermino.Value.Date : DateTime.Now;
                         }
 
                         //worksheet.Cells[fila, 15].Value = w.WorkflowId;
