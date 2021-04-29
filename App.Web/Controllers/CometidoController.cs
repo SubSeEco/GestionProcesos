@@ -277,9 +277,14 @@ namespace App.Web.Controllers
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
 
+            var proceso = _repository.GetById<Proceso>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
             if (model == null)
+            {
+                model.Proceso = proceso;
                 return RedirectToAction("Details", "Proceso", new { id });
+            }
+                
 
             return View(model);
         }
@@ -1983,11 +1988,18 @@ namespace App.Web.Controllers
                         q.Destinos.LastOrDefault().FechaInicio.Month <= model.FechaTermino.Value.Month &&
                         q.Destinos.LastOrDefault().FechaInicio.Day <= model.FechaTermino.Value.Day);
 
+                predicate = predicate.And(q => q.Proceso.ProcesoId == q.ProcesoId);
+
                 var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (CometidoId.Any())
-                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
+                {
+                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));                    
+                }
 
                 model.Result = _repository.Get(predicate);
+
+                model.Result.FirstOrDefault().Proceso = _repository.GetById<Proceso>(model.Result.FirstOrDefault().ProcesoId);
+
             }
 
             List<SelectListItem> Estado = new List<SelectListItem>
