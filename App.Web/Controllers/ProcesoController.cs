@@ -301,15 +301,15 @@ namespace App.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Dashboard()
-        {
-            ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso);
-            ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
-            ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
-            ViewBag.Totales = _repository.GetCount<Proceso>();
+        //public ActionResult Dashboard()
+        //{
+        //    ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso);
+        //    ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
+        //    ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
+        //    ViewBag.Totales = _repository.GetCount<Proceso>();
 
-            return View();
-        }
+        //    return View();
+        //}
 
         public FileResult Report()
         {
