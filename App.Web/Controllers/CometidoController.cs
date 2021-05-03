@@ -1998,7 +1998,11 @@ namespace App.Web.Controllers
 
                 model.Result = _repository.Get(predicate);
 
-                model.Result.FirstOrDefault().Proceso = _repository.GetById<Proceso>(model.Result.FirstOrDefault().ProcesoId);
+                foreach (var p in model.Result.ToList())
+                {
+                    model.Result.FirstOrDefault().Proceso = _repository.GetById<Proceso>(p.ProcesoId);
+                }
+                //model.Result.FirstOrDefault().Proceso = _repository.GetById<Proceso>(model.Result.FirstOrDefault().ProcesoId);
 
             }
 

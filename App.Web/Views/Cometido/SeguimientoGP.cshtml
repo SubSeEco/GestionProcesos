@@ -181,7 +181,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email)
+                                        @Html.DisplayFor(modelItem => item.Proceso.Workflows.LastOrDefault().Email).ToHtmlString().Replace(",","\n")
                                     }
                                 </td>
                                 <td>
