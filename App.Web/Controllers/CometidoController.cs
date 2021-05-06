@@ -2801,14 +2801,17 @@ namespace App.Web.Controllers
                         }
 
                         worksheet.Cells[fila, 13].Value = day.ToString(); /*dias transcurridos - habiles*/
+
+                        //worksheet.Cells[fila, 14].Value = inicio.Value.Date;// pr.ProcesoId;
+                        //worksheet.Cells[fila, 15].Value = fin.Value.Date;
                     }
                     else
                         worksheet.Cells[fila, 13].Value = "S/A"; /*dias transcurridos - habiles*/
 
 
                     //worksheet.Cells[fila, 14].Value = pr.ProcesoId;
-
-                }                
+                    
+                }
             }
 
 

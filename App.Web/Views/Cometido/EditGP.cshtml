@@ -91,6 +91,17 @@
                                 <strong>@Html.DisplayNameFor(m => Model.CometidoId)</strong>
                                 @Html.DisplayFor(m => Model.CometidoId)
                             </div>
+                            @if (Model.Workflow.DefinicionWorkflow.Secuencia == 6 && Model.ResolucionRevocatoria)
+                            {
+                                <div class="input-field col s12 m10 l12">
+                                    <label style="color:green">
+                                        <strong>
+                                            @Html.Raw("<span>“Este cometido ha quedado sin efecto, por lo cual requiere una resolución revocatoria”</span>")
+                                        </strong>
+                                    </label>
+                                    <br />
+                                </div>
+                            }
                         </div>
                         <div id="jQuery_accordion">
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
@@ -428,7 +439,7 @@
                 </div>
             }
         </div>
-         
+
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })

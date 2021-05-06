@@ -228,6 +228,16 @@ namespace App.Util
             new DateTime(2020,12,25),
             new DateTime(2021,01,01),
             new DateTime(2021,04,02),
+            new DateTime(2021,05,21),
+            new DateTime(2021,06,28),
+            new DateTime(2021,07,16),
+            new DateTime(2021,09,17),
+            new DateTime(2021,09,18),
+            new DateTime(2021,09,19),
+            new DateTime(2021,10,11),
+            new DateTime(2021,11,01),
+            new DateTime(2021,12,08),
+            new DateTime(2021,12,31),
         };
     }
 }

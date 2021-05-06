@@ -4813,7 +4813,7 @@ namespace App.Core.UseCases
                                 {
                                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                                     {
-                                        if(Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                        if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
                                         else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
@@ -4893,7 +4893,7 @@ namespace App.Core.UseCases
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && Cometido.CalidadDescripcion != "TITULAR")/*Despues de la firma, si no es titular continua a contabilidad*/
                                     {
-                                        if(Cometido.ResolucionRevocatoria)
+                                        if (Cometido.ResolucionRevocatoria)
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
                                         else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16);
@@ -4956,6 +4956,26 @@ namespace App.Core.UseCases
                             {
                                 definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
                             }
+                        } 
+                        else if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                        {
+                            if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                            {
+                                if (workflowActual.DefinicionWorkflow.Secuencia == 19 || workflowActual.DefinicionWorkflow.Secuencia == 20)
+                                {
+                                    if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
+                                    else
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                                }
+                            }
+                            else
+                            {
+                                if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.ReqPasajeAereo)
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1); /*Al ser rechazado va a la tarea de ingreso*/
+                                else
+                                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                            }                                
                         }
                         else
                         {
@@ -5792,7 +5812,7 @@ namespace App.Core.UseCases
                                         emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 8 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");//Analista ppto
                                     }
 
-                                    /*se valida si cometido tiene resolucion de revcatoria*/
+                                    /*se valida si cometido tiene resolucion de revocatoria*/
                                     Documento doc = null;
                                     if (cometido.ResolucionRevocatoria == true)
                                         doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 16);
