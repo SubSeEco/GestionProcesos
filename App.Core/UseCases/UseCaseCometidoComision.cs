@@ -4968,6 +4968,13 @@ namespace App.Core.UseCases
                                     else
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
                                 }
+                                else
+                                {
+                                    if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.ReqPasajeAereo)
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1); /*Al ser rechazado va a la tarea de ingreso*/
+                                    else
+                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                                }
                             }
                             else
                             {
