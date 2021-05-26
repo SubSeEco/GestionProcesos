@@ -453,6 +453,7 @@
     <Compile Include="Controllers\GeneracionCDPController.cs" />
     <Compile Include="Controllers\GeneraResolucionController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
+    <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
