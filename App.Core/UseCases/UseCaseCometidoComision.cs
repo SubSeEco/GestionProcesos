@@ -4818,12 +4818,15 @@ namespace App.Core.UseCases
                                         else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 && (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0))/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0))/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
                                     {
-                                        definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/ /*se vuelve a cambiar el sentido del flujo 21092020*/
+                                        if (Cometido.ResolucionRevocatoria)
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
+                                        else
+                                            definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/ /*se vuelve a cambiar el sentido del flujo 21092020*/
                                         //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 21 /*20*/)
                                     {
                                         definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/
                                     }

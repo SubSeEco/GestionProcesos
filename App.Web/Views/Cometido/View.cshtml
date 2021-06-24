@@ -5,6 +5,7 @@
 
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
+@Html.HiddenFor(q => q.CometidoId)
 <div class="container">
     <div class="row">
         <div class="col s12 m10 l8">
@@ -287,10 +288,15 @@
                     else if (Model.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.Terminado)
                     {
                         @*<a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn blue-gradient-button">Adjuntar Archivo</a>*@
-                        <div class="row">
+                        /*Se cambia forma de anular un proceso terminado*/
+                        @*<div class="row">
                             <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
                             @Html.Raw("<span>Adjuntar Archivo</span>")
-                        </div>
+                        </div>*@
+                        <div class="section"></div>
+                        <p>
+                            @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })                            
+                        </p>
                     }
                 </div>
             </div>

@@ -420,23 +420,32 @@
 
                             }
                             @*@if (Model.SolicitaViatico != true)
-                                {
-                                    @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                    @Html.Raw(",y al Subtítulo 22")
-                                    @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
-                                    @Html.DisplayFor(m => Model.Anno)
-                                    @Html.Raw("de la ")
-                                    @Html.DisplayFor(m => Model.Subscretaria)
-                                }*@
+                {
+                    @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                    @Html.Raw(",y al Subtítulo 22")
+                    @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
+                    @Html.DisplayFor(m => Model.Anno)
+                    @Html.Raw("de la ")
+                    @Html.DisplayFor(m => Model.Subscretaria)
+                }*@
                         </p>
                     }
                     @if (Model.SolicitaViatico != true)
                     {
+                        @*<p align="justify" style="margin-right:30px">
+                <strong>IMPÚTESE</strong>,
+                @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
+                @Html.Raw(",y al Subtítulo 22 ")
+                @Html.Raw(" por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
+                @Html.DisplayFor(m => Model.Anno)
+                @Html.Raw(" de la ")
+                @Html.DisplayFor(m => Model.Subscretaria)
+            </p>*@
+
                         <p align="justify" style="margin-right:30px">
                             <strong>IMPÚTESE</strong>,
-                            @Html.Raw("<span>el gasto por honorarios adicionales al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
-                            @Html.Raw(",y al Subtítulo 22 ")
-                            @Html.Raw(" por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año ")
+                            @Html.Raw("<span>el gasto que demande esta Resolución al Subtítulo 22 </span>")  @*@Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)*@                            
+                            @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
                             @Html.DisplayFor(m => Model.Anno)
                             @Html.Raw(" de la ")
                             @Html.DisplayFor(m => Model.Subscretaria)
@@ -452,7 +461,7 @@
                 <br />
                 <p align="center">
                     <strong>
-                        ANÓTESE, COMUNÍQUESE, REGÍSTRESE EN LA CONTRALORÍA GENERAL DE LA REPÚBLICA Y ARCHÍVESE.
+                        ANÓTESE, COMUNÍQUESE, REGÍSTRESE EN LA CONTRALORÍA GENERAL DE LA REPÚBLICA Y NOTIFÍQUESE.
                     </strong>
                     <br />
                     @*<strong>

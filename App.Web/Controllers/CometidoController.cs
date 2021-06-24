@@ -19,6 +19,7 @@ using OfficeOpenXml;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using App.Model.Sigper;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -116,6 +117,9 @@ namespace App.Web.Controllers
 
             [Display(Name = "Activo")]
             public bool Activo { get; set; }
+
+            [Display(Name = "Id Sigfe Tesoreria")]
+            public string IdSigfeTesoreria { get; set; }
 
             public IEnumerable<DTOSelect> Select { get; set; }
             public IEnumerable<Cometido> Result { get; set; }
@@ -284,9 +288,53 @@ namespace App.Web.Controllers
                 model.Proceso = proceso;
                 return RedirectToAction("Details", "Proceso", new { id });
             }
-                
-
             return View(model);
+        }
+
+        public ActionResult Reiniciar(int? CometidoId)
+        {
+            var cometido = _repository.GetById<Cometido>(CometidoId);
+            var pro = _repository.GetById<Proceso>(cometido.ProcesoId);
+            var work = _repository.GetFirst<Workflow>(c => c.WorkflowId == cometido.WorkflowId);
+            var definicionworkflowlist = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == 13).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId) ?? null;
+
+            /*se activo cometido con opcion de resolucion revocatoria*/
+            cometido.Activo = true;
+            cometido.ResolucionRevocatoria = true;
+
+            /*se debe activar proceso nuevamnete*/
+            pro.EstadoProcesoId = (int)Util.Enum.EstadoProceso.EnProceso;
+
+
+            /*se debe crear una nueva tarea de workflow, q inicie en la tarea de analista gestion personas*/
+            var workflow = new Workflow();
+            workflow.FechaCreacion = DateTime.Now;
+            workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
+            workflow.Terminada = false;
+            workflow.DefinicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); //work.DefinicionWorkflow.Secuencia;
+            workflow.ProcesoId = work.ProcesoId;
+            workflow.Mensaje = work.Observacion;
+            workflow.TareaPersonal = false;
+            workflow.Asunto = !string.IsNullOrEmpty(work.Asunto) ? work.Asunto : work.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault().CometidoId;
+
+            var persona = new Sigper();
+            persona = _sigper.GetUserByEmail(definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6).Email);
+            if (persona == null)
+                throw new Exception("No se encontró el usuario en Sigper.");
+
+            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+            workflow.TareaPersonal = true;
+
+            _repository.Update(cometido);
+            _repository.Update(pro);
+            _repository.Create(workflow);
+            _repository.Save();
+
+
+            return View();
         }
 
         public ActionResult CreaDocto(int id)
@@ -1905,8 +1953,8 @@ namespace App.Web.Controllers
             List<SelectListItem> Estado = new List<SelectListItem>
             {
             new SelectListItem {Text = "En Curso", Value = "1"},
-            new SelectListItem {Text = "Terminado", Value = "2"},
-            new SelectListItem {Text = "Anulado", Value = "3"},
+            new SelectListItem {Text = "Anulado", Value = "2"},
+            new SelectListItem {Text = "Terminado", Value = "3"},
             };
 
             /*Se busca rol de funcionario y unidad para mostrar el dropdwon de unidades en la busqueda del reporte*/
@@ -1973,6 +2021,9 @@ namespace App.Web.Controllers
                 if (model.IdUnidad.HasValue)
                     predicate = predicate.And(q => q.IdUnidad == model.IdUnidad);
 
+                if (!string.IsNullOrEmpty(model.IdSigfeTesoreria))
+                    predicate = predicate.And(q => q.IdSigfeTesoreria == model.IdSigfeTesoreria);
+
                 if (model.Destino.HasValue)
                     predicate = predicate.And(q => q.Destinos.FirstOrDefault().IdRegion == model.Destino.Value.ToString());
 
@@ -2009,8 +2060,8 @@ namespace App.Web.Controllers
             List<SelectListItem> Estado = new List<SelectListItem>
             {
                 new SelectListItem {Text = "En Curso", Value = "1"},
-                new SelectListItem {Text = "Terminado", Value = "2"},
-                new SelectListItem {Text = "Anulado", Value = "3"},
+                new SelectListItem {Text = "Anulado", Value = "2"},
+                new SelectListItem {Text = "Terminado", Value = "3"},
             };
 
             ViewBag.Estado = new SelectList(Estado, "Value", "Text");
