@@ -4666,9 +4666,17 @@ namespace App.Core.UseCases
                     {
                         if (workflowActual.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 1).FirstOrDefault().DocumentoId).Signed;
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.Resolucion).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
+
+                            /*se valida si existe una resolucion revocatoria, esta se debe firmar*/
+                            if(comet.ResolucionRevocatoria == true)
+                            {
+                                var res = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.ResolucionRevocatoriaCometido).FirstOrDefault().DocumentoId).Signed;
+                                if (res == false)
+                                    throw new Exception("El documento resolucion revocatoria debe estar firmado electronicamente");
+                            }                            
                         }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)

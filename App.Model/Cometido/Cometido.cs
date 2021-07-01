@@ -162,8 +162,8 @@ namespace App.Model.Cometido
         public string TipoReembolsoDescripcion { get; set; }
         
         [Required(ErrorMessage = "Se debe señalar el motivo del viaje")]
-        [DataType(DataType.MultilineText)]
         [Display(Name = "Detalle y motivo del viaje")]
+        [DataType(DataType.MultilineText)]
         public string CometidoDescripcion { get; set; }
 
         [Required(ErrorMessage = "Se debe señalar el nombre del cometido")]

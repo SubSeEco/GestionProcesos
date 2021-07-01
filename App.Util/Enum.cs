@@ -89,6 +89,27 @@ namespace App.Util
             Aprobada = 2,
             Rechazada = 3,
         }
+
+        public enum TipoDocumento
+        {
+            Resolucion = 1,
+            CDPViatico = 2,
+            CDPPasaje = 3,
+            Contabilidad = 4,
+            Tesoreria = 5,
+            Otros = 6,
+            RefrendacionPresupuesto = 7,
+            Memorandum = 8,
+            ProgramacionHorasExtraordinarias = 9,
+            ResoluciónProgramaciónHorasExtraordinarias = 10,
+            ComprobaciónHorasExtraordinarias = 11,
+            ResoluciónComprobaciónHorasExtraordinarias = 12,
+            ResoluciónConfirmacionHorasExtraordinariasPagadas = 13,
+            ResoluciónConfirmacionHorasExtraordinariasCompensadas = 14,
+            DocumentosGenéricos = 15,
+            ResolucionRevocatoriaCometido = 16
+        }
+
         public enum TipoEjecucion
         {
             CualquierPersonaGrupo = 1,
