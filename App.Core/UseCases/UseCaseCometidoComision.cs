@@ -4822,6 +4822,11 @@ namespace App.Core.UseCases
                                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                                     {
                                         if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                            if(Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)
+                                            {
+                                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 10);
+                                            }
+                                        else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
                                         else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);

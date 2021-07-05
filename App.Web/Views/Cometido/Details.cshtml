@@ -67,7 +67,7 @@
                             </strong>
                             @Html.DisplayFor(m => Model.CometidoId)
                         </div>
-                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 7 && Model.ResolucionRevocatoria)
+                        @if ((Model.Workflow.DefinicionWorkflow.Secuencia == 7 || Model.Workflow.DefinicionWorkflow.Secuencia == 10) && Model.ResolucionRevocatoria)
                         {
                             <div class="input-field col s12 m10 l12">
                                 <label style="color:green">
