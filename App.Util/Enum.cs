@@ -250,6 +250,7 @@ namespace App.Util
             new DateTime(2021,01,01),
             new DateTime(2021,04,02),
             new DateTime(2021,05,21),
+            new DateTime(2021,06,21),
             new DateTime(2021,06,28),
             new DateTime(2021,07,16),
             new DateTime(2021,09,17),
