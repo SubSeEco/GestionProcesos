@@ -334,7 +334,7 @@ namespace App.Web.Controllers
             _repository.Save();
 
 
-            return View();
+            return View("Index", "Workflow");
         }
 
         public ActionResult CreaDocto(int id)
@@ -3015,6 +3015,8 @@ namespace App.Web.Controllers
             List<DataPoint> _lisUnidades = new List<DataPoint>();
             List<DataPoint> _lisMeses = new List<DataPoint>();
             List<DataPoint> _lisDemora = new List<DataPoint>();
+            List<DataPoint> _lisPendienteUnidades = new List<DataPoint>();
+            List<DataPoint> _lisPendJuridica = new List<DataPoint>();
 
             /*CANTIDAD DE TAREAS ACTIVAS*/
             var tareas = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado).OrderBy(c => c.Secuencia).ToList();
@@ -3071,6 +3073,39 @@ namespace App.Web.Controllers
             }
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForDateTimeAxis(10), _jsonSetting);
             ViewBag.DataDemora = JsonConvert.SerializeObject(_lisDemora, _jsonSetting);
+
+            /*TAREAS PENDIENTES POR UNIDADES*/
+            var und = _sigper.GetUnidades();
+            var PendientesUnidades = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod != null).OrderBy(c => c.Pl_UndCod);
+            foreach (var u in und)
+            {
+                int cant = 0;
+                foreach (var pendientes in PendientesUnidades)
+                {
+                    if (pendientes.Pl_UndCod == u.Pl_UndCod)
+                        cant++; //cant + 1;                    
+                }
+                _lisPendienteUnidades.Add(new DataPoint(Convert.ToDouble(cant), u.Pl_UndDes));
+            }            
+            ViewBag.PendientesUnidades = JsonConvert.SerializeObject(_lisPendienteUnidades, _jsonSetting);
+
+            /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/
+            var userJuridica = _sigper.GetUserByUnidad(200810);
+            var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == 200810);
+            foreach (var u in userJuridica)
+            {
+                int c = 0;
+                foreach (var t in PendientesJuridica)
+                {
+                    if (t.NombreFuncionario == u.PeDatPerChq.Trim())
+                        c++;
+
+                }
+                _lisPendJuridica.Add(new DataPoint(Convert.ToDouble(c), u.PeDatPerChq.Trim()));
+            }
+            ViewBag.PendientesJuridica = JsonConvert.SerializeObject(_lisPendJuridica, _jsonSetting);
+
+
 
 
             return View();

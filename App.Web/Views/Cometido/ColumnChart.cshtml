@@ -7,17 +7,19 @@
 <input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
 <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
 <input class="waves-effect waves-light btn blue" type="button" value="Ejecucion" onclick="Demora()" />
+<input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidades" onclick="PendientesUnidades()" />
+<input class="waves-effect waves-light btn blue" type="button" value="Pendientes Juridica" onclick="PendientesJuridica()" />
 
 
-
-<h5>GRAFICOS</h5>
-
-<div id="chartContainer"></div>
-<div id="chartUnidades"></div>
-<div id="chartMeses"></div>
-<div id="chartDemora"></div>
-
-
+<div class="container-fluid">
+    <h5>GRAFICOS</h5>    
+        <div id="chartContainer"></div>
+        <div id="chartUnidades"></div>
+        <div id="chartMeses"></div>
+        <div id="chartDemora"></div>
+        <div id="chartPendientesUnidades"></div>
+        <div id="chartPendientesJuridica"></div>
+</div>
 
 <script type="text/javascript">
 
@@ -26,6 +28,7 @@
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
     /*******************GRAFICO UNO******************************************************************/
         var chart = new CanvasJS.Chart("chartContainer", {
             theme: "light2",
@@ -62,6 +65,7 @@
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Unidades = new CanvasJS.Chart("chartUnidades", {
             theme: "light2",
@@ -98,6 +102,7 @@
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Meses = new CanvasJS.Chart("chartMeses", {
             theme: "light2",
@@ -118,9 +123,10 @@
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
         /*******************GRAFICO TRES******************************************************************/
         var Demora = new CanvasJS.Chart("chartDemora", {
-            theme: "light2",
+            theme: "dark2",
             animationEnabled: true,
             title: { text: "Tiempo demora ejecucion tareas"},
             data: [
@@ -132,6 +138,52 @@
         });
         Demora.render();
     }
+
+    function PendientesUnidades() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        /*******************GRAFICO CINCO******************************************************************/
+        var PendientesUnidades = new CanvasJS.Chart("chartPendientesUnidades", {
+            theme: "dark2", // "light2", "dark1", "light1"
+            animationEnabled: true,
+            startAngle: 240,
+            title: { text: "Tareas pendientes por unidades"},
+            data: [
+            {
+                    type: "pie",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.PendientesUnidades),
+            }
+            ]
+        });
+        PendientesUnidades.render();
+    }
+
+    function PendientesJuridica() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        /*******************GRAFICO CINCO******************************************************************/
+        var PendientesJuridica = new CanvasJS.Chart("chartPendientesJuridica", {
+            theme: "dark2", // "light2", "dark1", "light1"
+            animationEnabled: true,
+            startAngle: 240,
+            title: { text: "Tareas pendientes unidad juridica"},
+            data: [
+            {
+                    type: "doughnut",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.PendientesJuridica),
+            }
+            ]
+        });
+        PendientesJuridica.render();
+    }
+
 
 </script>
 

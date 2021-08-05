@@ -4822,12 +4822,14 @@ namespace App.Core.UseCases
                                     if (workflowActual.DefinicionWorkflow.Secuencia == 7)
                                     {
                                         if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
-                                            if(Cometido.IdEscalafon == 1)// || Cometido.IdEscalafon == null)
+                                        {
+                                            if (Cometido.IdEscalafon == 1)// || Cometido.IdEscalafon == null)
                                             {
                                                 definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 10);
                                             }
-                                        else
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
+                                            else
+                                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 13);
+                                        }                                            
                                         else
                                             definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
@@ -4858,6 +4860,7 @@ namespace App.Core.UseCases
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1 /*2*/ && Cometido.ReqPasajeAereo)
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); /*si tiene pasaje se generan las tareas de solicitud de pasaje*/
+                                        #region Pasaje
                                         /*genera registro en tabla de pasajes*/
                                         //Pasaje _pasaje = new Pasaje();
                                         //_pasaje.FechaSolicitud = DateTime.Now;
@@ -4889,6 +4892,7 @@ namespace App.Core.UseCases
                                         //    _destino.ObservacionesDestinos = com.ObsDestino;
                                         //    var res = DestinosPasajesInsert(_destino);
                                         //}
+                                        #endregion
                                     }
                                     /*Si cometido corresponde al ministro se va directamente a analista de gestion personas, esto cuando no se solicita con pasaje*/
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
@@ -4918,6 +4922,10 @@ namespace App.Core.UseCases
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 11 && Cometido.GradoDescripcion == "B")/*Verifica si coemtido es del ministro se va a la aprobacion del subse*/
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 15);
+                                    }
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 20 && Cometido.ResolucionRevocatoria == true) /*si cometido posee resolucion revocatoria no va a subir certificado de pago*/
+                                    {
+                                        definicionWorkflow = null;
                                     }
                                     else
                                     {
@@ -6137,7 +6145,8 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoTesoreria_EncargadoFinanzas),
                                     "Tiene el cometido N°" + cometido.CometidoId + " " + "para aprobación",
-                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), 
+                                    !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria : "" ,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 }
@@ -6169,7 +6178,8 @@ namespace App.Core.UseCases
                                         _email.NotificacionesCometido(workflow,
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
                                         "Su cometido N°" + cometido.CometidoId + " " + "ha sido pagado",
-                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(),
+                                        !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria : "",
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                     }
 

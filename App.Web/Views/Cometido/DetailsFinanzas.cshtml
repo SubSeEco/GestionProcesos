@@ -28,7 +28,7 @@
     </div>
     @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
     <div class="row">
-        <div class="col s12 m10 l12">
+        <div class="col s12 m10 l8">
             @Html.Partial("_Message")
             @using (Html.BeginForm("DetailsFinanzas", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -616,17 +616,30 @@
                             </div>
                             <h3><span style="font-weight: bold">VIII. Registro Finanzas</span></h3>
                             <div class="row">
+                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 21)
+                                {
                                 <div class="input-field col s12 m10 l10">
-                                    <label>
-                                        @Html.CheckBoxFor(m => Model.ResolucionRevocatoria)
-                                        <span>
-                                            <strong>
-                                                @Html.DisplayNameFor(m => Model.ResolucionRevocatoria)
-                                            </strong>
-                                        </span>
-                                    </label>
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.ResolucionRevocatoria)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.ResolucionRevocatoria ? "SI" : "NO")
                                     <div class="section"></div>
                                 </div>
+                                }
+                                else
+                                {
+                                    <div class="input-field col s12 m10 l10">
+                                        <label>
+                                            @Html.CheckBoxFor(m => Model.ResolucionRevocatoria)
+                                            <span>
+                                                <strong>
+                                                    @Html.DisplayNameFor(m => Model.ResolucionRevocatoria)
+                                                </strong>
+                                            </span>
+                                        </label>
+                                        <div class="section"></div>
+                                    </div>
+                                }
                             </div>
                         </div>
                         @if (Model.Workflow.DefinicionWorkflow.Secuencia != 21)
@@ -643,10 +656,10 @@
 
         </div>
 
-        @*<div class="col s12 m6 l4">
+        <div class="col s12 m6 l4">
                 @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-                @Html.Action("History", "Workflow", new { Model.WorkflowId })
-            </div>*@
+                @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
+            </div>
     </div>
 
     @if (Model.Workflow.DefinicionWorkflow.Secuencia != 21)
