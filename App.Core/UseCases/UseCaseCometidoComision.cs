@@ -6146,7 +6146,7 @@ namespace App.Core.UseCases
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoTesoreria_EncargadoFinanzas),
                                     "Tiene el cometido N°" + cometido.CometidoId + " " + "para aprobación",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), 
-                                    !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria : "" ,
+                                    !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria + "-" + workflowActual.Observacion : "" ,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                 }
@@ -6179,7 +6179,7 @@ namespace App.Core.UseCases
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaFinanzas_Solicitante_QuienViaja),
                                         "Su cometido N°" + cometido.CometidoId + " " + "ha sido pagado",
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(),
-                                        !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria : "",
+                                        !string.IsNullOrEmpty(cometido.ObservacionesPagoSigfeTesoreria) ? cometido.ObservacionesPagoSigfeTesoreria + "-" + workflowActual.Observacion : "",
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                     }
 
