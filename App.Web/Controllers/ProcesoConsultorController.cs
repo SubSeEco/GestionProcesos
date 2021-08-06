@@ -87,7 +87,8 @@ namespace App.Web.Controllers
             {
                 using (var context = new Infrastructure.GestionProcesos.AppContext())
                 {
-                    StringBuilder query = new StringBuilder("SELECT * FROM CoreProceso WHERE 1=1");
+                    //Optimización manual para acelerar la consulta de procesos. Con EF es muy lento.
+                    StringBuilder query = new StringBuilder("SELECT ProcesoId, DefinicionProcesoId, FechaCreacion, FechaVencimiento, FechaTermino, Observacion, Terminada, Anulada, Email, RUT, EstadoProcesoId, NombreFuncionario, NULL as 'Tags', Reservado, Pl_UndCod, Pl_UndDes, JustificacionAnulacion FROM CoreProceso WHERE 1=1");
 
                     if (model.Desde.HasValue)
                         query.Append(string.Format(" AND (DAY(FechaCreacion) >= {0} AND MONTH(FechaCreacion) >= {1} AND YEAR(FechaCreacion) >= {2})", model.Desde.Value.Day, model.Desde.Value.Month, model.Desde.Value.Year));
