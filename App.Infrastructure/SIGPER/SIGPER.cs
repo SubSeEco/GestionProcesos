@@ -10,44 +10,6 @@ namespace App.Infrastructure.Sigper
     {
         private string criterioExclusionUnidad = "COMISIONADO";
 
-        //public List<PECARGOS> GetCargos()
-        //{
-        //    var returnValue = new List<PECARGOS>();
-        //    try
-        //    {
-        //        using (var context = new AppContextEconomia())
-        //        {
-        //            returnValue.AddRange(context.PECARGOS.AsNoTracking().ToList().Select(q => new PECARGOS { Pl_CodCar = q.Pl_CodCar, Pl_DesCar = q.Pl_DesCar.Trim() + " (ECONOMIA)" }));
-        //        }
-
-        //        using (var context = new AppContextTurismo())
-        //        {
-        //            returnValue.AddRange(context.PECARGOS.AsNoTracking().ToList().Select(q => new PECARGOS { Pl_CodCar = q.Pl_CodCar, Pl_DesCar = q.Pl_DesCar.Trim() + " (TURISMO)" }));
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-        //    return returnValue.OrderBy(q => q.Pl_DesCar).ToList();
-
-        //}
-        //public PECARGOS GetCargo(int codigo)
-        //{
-        //    using (AppContextEconomia context = new AppContextEconomia())
-        //    {
-        //        if (context.PECARGOS.Any(q => q.Pl_CodCar == codigo))
-        //            return context.PECARGOS.AsNoTracking().FirstOrDefault(q => q.Pl_CodCar == codigo);
-        //    }
-        //    using (AppContextTurismo context = new AppContextTurismo())
-        //    {
-        //        if (context.PECARGOS.Any(q => q.Pl_CodCar == codigo))
-        //            return context.PECARGOS.AsNoTracking().FirstOrDefault(q => q.Pl_CodCar == codigo);
-        //    }
-
-        //    return null;
-        //}
         public PLUNILAB GetUnidad(int codigo)
         {
             using (AppContextEconomia context = new AppContextEconomia())
@@ -417,7 +379,6 @@ namespace App.Infrastructure.Sigper
 
             return sigper;
         }
-
         public List<PEDATPER> GetUserByUnidad(int codigoUnidad)
         {
             var returnValue = new List<PEDATPER>();
@@ -492,44 +453,6 @@ namespace App.Infrastructure.Sigper
             return returnValue;
 
         }
-        //public List<PEDATPER> GetUserByUnidadForFirma(int Rut)
-        //{
-        //    var returnValue = new List<PEDATPER>();
-
-        //    try
-        //    {
-        //        if (Rut != 0)
-        //        {
-        //            using (var dbE = new AppContextEconomia())
-        //            {
-        //                var unid = from PE in dbE.PEFERJEFAF
-        //                           where PE.FyPFunRut == Rut
-        //                           select PE;
-
-        //                var users = from r in dbE.PEDATPER
-        //                            join PER in dbE.PEFERJEFAF on r.RH_NumInte equals PER.FyPFunRut
-        //                            where PER.PeFerJerCod == unid.FirstOrDefault().PeFerJerCod
-        //                            where r.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-        //                            select r;
-
-        //                var jefe = from p in dbE.PEDATPER
-        //                           join j in dbE.PEFERJEFAJ on p.RH_NumInte equals j.FyPFunARut
-        //                           where j.PeFerJerCod == unid.FirstOrDefault().PeFerJerCod
-        //                           where j.PeFerJerAutEst == 1
-        //                           select p;
-
-
-        //                returnValue.AddRange(users.ToList());
-        //                returnValue.AddRange(jefe.ToList());
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return returnValue;
-        //}
         public List<PEDATPER> GetAllUsers()
         {
             var returnValue = new List<PEDATPER>();
@@ -589,67 +512,6 @@ namespace App.Infrastructure.Sigper
 
             return returnValue.OrderBy(q => q.PeDatPerChq).ToList();
         }
-        //public Model.Sigper.Sigper GetJefaturaByUnidad(int codigo)
-        //{
-        //    try
-        //    {
-        //        using (var context = new AppContextEconomia())
-        //        {
-        //            //traer los usuarios de la unidad
-        //            var users = from PEDATPER in context.PEDATPER
-        //                        join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
-        //                        where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-        //                        where r.RhConUniCod == codigo
-        //                        where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-        //                                                     where ud.RH_NumInte == PEDATPER.RH_NumInte
-        //                                                     select ud.PeDatLabAdDocCor).Max()
-        //                        select PEDATPER;
-
-        //            //iterar cada usuariode la unidad
-        //            foreach (var item in users)
-        //            {
-        //                // tarer los datos del usuario
-        //                var data = GetUserByRut(item.RH_NumInte);
-
-        //                //si el usuario tiene jefatura => retornar los detalles del jefe
-        //                if (data.Funcionario != null && data.Jefatura != null)
-        //                    return GetUserByRut(data.Jefatura.RH_NumInte);
-
-        //            }
-        //        }
-        //        using (var context = new AppContextTurismo())
-        //        {
-        //            //traer los usuarios de la unidad
-        //            var users = from PEDATPER in context.PEDATPER
-        //                        join r in context.PeDatLab on PEDATPER.RH_NumInte equals r.RH_NumInte
-        //                        where PEDATPER.RH_EstLab.Equals("A", StringComparison.InvariantCultureIgnoreCase)
-        //                        where r.RhConUniCod == codigo
-        //                        where r.PeDatLabAdDocCor == (from ud in context.PeDatLab
-        //                                                     where ud.RH_NumInte == PEDATPER.RH_NumInte
-        //                                                     select ud.PeDatLabAdDocCor).Max()
-        //                        select PEDATPER;
-
-        //            //iterar cada usuariode la unidad
-        //            foreach (var item in users)
-        //            {
-        //                // tarer los datos del usuario
-        //                var data = GetUserByRut(item.RH_NumInte);
-
-        //                //si el usuario tiene jefatura => retornar los detalles del jefe
-        //                if (data.Funcionario != null && data.Jefatura != null)
-        //                    return GetUserByRut(data.Jefatura.RH_NumInte);
-
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-        //    return null;
-        //}
         public Model.Sigper.Sigper GetSecretariaByUnidad(int codigo)
         {
             using (var context = new AppContextEconomia())
