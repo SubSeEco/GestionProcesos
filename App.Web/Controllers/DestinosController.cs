@@ -7,6 +7,7 @@ using App.Model.Cometido;
 using App.Core.Interfaces;
 using App.Core.UseCases;
 using App.Model.Core;
+using App.Model.Shared;
 
 namespace App.Web.Controllers
 {
@@ -68,6 +69,12 @@ namespace App.Web.Controllers
         {
             var comunas = _sigper.GetComunasbyRegion(IdRegion);
             return Json(comunas.Select(q => new { value = q.Pl_CodCom.Trim(), text = q.Pl_DesCom.Trim() }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetLocalidad(string IdComuna)
+        {
+            var comunas = _repository .Get<Localidad>(c => c.IdComuna == IdComuna);
+            return Json(comunas.Select(q => new { value = q.LocalidadId, text = q.NombreLocalidad.Trim() }), JsonRequestBehavior.AllowGet);
         }
 
         public DtoMontos CalculoViatico(int CometidoId, int CantDias100, int CantDias60, int CantDias40, int CantDias50)
@@ -265,6 +272,7 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new List<SelectListItem>();// SelectList(Enumerable.Empty<SelectListItem>());// (_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.LocalidadId = new List<SelectListItem>();
             model.FechaInicio = DateTime.Now;
             model.FechaHasta = DateTime.Now;
             model.Dias100 = 0;
@@ -298,6 +306,7 @@ namespace App.Web.Controllers
         public ActionResult Create(Destinos model)
         {
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
@@ -333,6 +342,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new List<SelectListItem>();
+            ViewBag.LocalidadId = new List<SelectListItem>();
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion);
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(), model.IdComuna);
@@ -385,6 +395,7 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
 
             return View(model);
         }
@@ -393,6 +404,7 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
 
             model.IdRegion = model.IdRegion;
@@ -420,6 +432,7 @@ namespace App.Web.Controllers
         {
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion);
+            ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
 
 
             var modelOld = _repository.GetById<Destinos>(model.DestinoId);
@@ -459,6 +472,7 @@ namespace App.Web.Controllers
             ViewBag.IdComuna = new List<SelectListItem>();
             ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
             ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
+            ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
 
             return View(model);
         }
@@ -493,6 +507,7 @@ namespace App.Web.Controllers
 
                 ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim());
                 ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+                ViewBag.LocalidadId = new SelectList(_repository.GetAll<Localidad>(), "LocalidadId", "NombreLocalidad");
             }
             return View(model);
         }

@@ -14,6 +14,7 @@
                 @Html.HiddenFor(q => Model.EditGP)
                 @Html.HiddenFor(q => Model.IdRegion)
                 @Html.HiddenFor(q => Model.IdComuna)
+                @Html.HiddenFor(q => Model.LocalidadId)
                 @Html.HiddenFor(q => Model.RegionDescripcion)
                 @Html.HiddenFor(q => Model.ComunaDescripcion)
                 @Html.HiddenFor(q => Model.FechaInicio)
@@ -40,6 +41,9 @@
                                 @Html.DisplayNameFor(model => model.ComunaDescripcion)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.NombreLocalidad)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.FechaInicio)
                             </th>
                             <th>
@@ -53,8 +57,10 @@
                                 @Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
                             </td>
                             <td>
-                                @*@Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...")*@
                                 @Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => Model.NombreLocalidad, new { style = "width:130px"/*,disabled = "disabled" */})
                             </td>
                             <td>
                                 @Html.DisplayFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})

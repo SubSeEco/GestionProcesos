@@ -15,6 +15,9 @@
                 @Html.DisplayNameFor(model => model.ComunaDescripcion)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.NombreLocalidad)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Dias100)
             </th>
             <th>
@@ -28,29 +31,32 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaInicio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaHasta)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ComunaDescripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dias100)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dias60)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dias40)
-                </td>
-                <td>
-                    @*@Html.ActionLink("Detalles", "View", new { id = item.CometidoId })*@
-                </td>
-            </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaHasta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ComunaDescripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreLocalidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dias100)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dias60)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dias40)
+        </td>
+        <td>
+            @*@Html.ActionLink("Detalles", "View", new { id = item.CometidoId })*@
+        </td>
+    </tr>
         }
     </table>
     </div>

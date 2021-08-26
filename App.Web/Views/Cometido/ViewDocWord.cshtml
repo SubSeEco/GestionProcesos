@@ -1,23 +1,26 @@
 ﻿@model App.Model.Cometido.Cometido
+@using Enum = App.Util.Enum;
 
-@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
 
 @Html.HiddenFor(q => q.WorkflowId)
 @Html.HiddenFor(q => q.ProcesoId)
+@Html.HiddenFor(q => q.CometidoId)
 <div class="container">
     <div class="row">
-        <div class="col s12 m10 l8">
+        <div class="col s12 m10 l12">
             <div class="card">
                 <div class="card-content">
-                    @*<span class="card-title">Solicitud Cometidos</span>*@
+                    @Html.Partial("_Message")
+                    @*<span class="card-title">Cometidos</span>*@
                     <div class="row">
-                        <div class="input-field col s12 m10 l3">
+                        <div class="input-field col s12 m10 l4">
                             <strong>
                                 @Html.DisplayNameFor(m => Model.FechaSolicitud)
                             </strong>
                             @Html.DisplayFor(m => Model.FechaSolicitud)
                         </div>
-                        <div class="input-field col s12 m6 l4">
+                        <div class="input-field col s12 m10 l4">
                             <strong>
                                 @Html.DisplayNameFor(m => Model.CometidoId)
                             </strong>
@@ -25,7 +28,7 @@
                         </div>
                     </div>
                     <div id="jQuery_accordion">
-                        <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+                        <h3><span style="font-weight: bold;height:auto">I. Datos del Funcionario: </span></h3>
                         <div class="row">
                             <div class="input-field col s12 m10 l10">
                                 <strong>
@@ -117,7 +120,11 @@
                             </div>
                             <div class="input-field col s12 m10 l10">
                                 <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.SolicitaViatico)</span>
+                                    <span>
+                                        <strong style="color:green">
+                                            @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                        </strong>
+                                    </span>
                                 </strong>
                                 @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
                             </div>
@@ -159,12 +166,23 @@
                                 </strong>
                                 @Html.DisplayFor(m => Model.PlacaVehiculo)
                             </div>
+                            <div class="input-field col s12 m4 l4">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                </strong>
+                                @Html.DisplayFor(m => Model.VehiculoObservaciones)
+                            </div>
                         </div>
 
                         <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                         <div class="row">
                             <div class="input-field col s12 m10 l10">
-                                @Html.DisplayFor(m => Model.CometidoDescripcion)
+                                @Html.EditorFor(m => Model.NombreCometido)
+                                @Html.LabelFor(m => Model.NombreCometido)
+                                @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.CometidoDescripcion)
                                 @Html.LabelFor(m => Model.CometidoDescripcion)
                                 @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                             </div>
@@ -212,62 +230,115 @@
                                     </tr>
                                     @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                    </td>
-                                </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="10">
+                                                <b>
+                                                    @Html.DisplayNameFor(modelItem => Model.Destinos.ToArray()[i].ObservacionesModificacion)
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="10">
+                                                @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ObservacionesModificacion)
+
+                                            </td>
+                                        </tr>
                                     }
                                 </table>
 
                             }
                         </div>
+
+                        <h3><span style="font-weight: bold">IV. Resolucion: </span></h3>
+                        <div class="row">
+                            <div>@Html.Raw(ViewBag.WordHtml)</div>
+
+
+                            @foreach (var item in Model.Proceso.Documentos)
+                            {
+                                if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5)
+                                {
+                                    //if (item.Type.Contains("pdf"))
+                                    //{
+
+                                    //}
+
+                                    <div class="section"></div>
+                                    <embed src="@Url.Action("ShowWord", "Cometido", new { id = item.DocumentoId })" type="application/msword" width="100%" height="350px"></embed>
+                                    <div class="section"></div><hr />
+
+
+                                }
+                            }
+                        </div>
                     </div>
                     <div class="section"></div>
-                    <p>
-                        @Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
-                    </p>
+                    @*@if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.Terminada != true)*@
+                    @if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Terminado)
+                    {
+                        @*<a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>*@
+                    }
+                    //else if (Model.Proceso.Terminada == true && Model.Proceso.EstadoProcesoId == 3)
+                    else if (Model.Proceso.EstadoProcesoId == (int)Enum.EstadoProceso.Terminado)
+                    {
+                        @*<a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn blue-gradient-button">Adjuntar Archivo</a>*@
+                        /*Se cambia forma de anular un proceso terminado*/
+                        @*<div class="row">
+                            <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                            @Html.Raw("<span>Adjuntar Archivo</span>")
+                        </div>*@
+                        @*<div class="section"></div>
+                        <p>
+                            @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })                            
+                        </p>*@
+                    }
                 </div>
             </div>
         </div>
-        <div class="col s12 m6 l4">
+        @*<div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
             @Html.Action("History", "Workflow", new { Model.WorkflowId })
-        </div>
+        </div>*@
     </div>
 </div>
-
-@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -282,14 +353,19 @@
     $(function () {
         $("#jQuery_accordion").accordion({
             collapsible: true, heightStyle: true
+
         });
     });
+
+
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
-<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

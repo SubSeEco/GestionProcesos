@@ -69,6 +69,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<CotizacionDocumento> CotizacionDocumento { get; set; }
         public virtual DbSet<Pais> Pais { get; set; }
         public virtual DbSet<Ciudad> Ciudads { get; set; }
+        public virtual DbSet<Localidad> Localidad { get; set; }
         public virtual DbSet<Comisiones> Comisiones { get; set; }
         public virtual DbSet<DestinosComision> DestinosComision { get; set; }
         public virtual DbSet<GeneracionCDPComision> GeneracionCDPComision { get; set; }

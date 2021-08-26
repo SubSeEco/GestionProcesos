@@ -1550,6 +1550,7 @@ namespace App.Core.UseCases
             obj.TotalViatico = 0;
             obj.Total = 0;
         }
+
         public ResponseMessage DestinosInsert(Destinos obj)
         {
             var response = new ResponseMessage();
@@ -1951,6 +1952,16 @@ namespace App.Core.UseCases
                     response.Errors.Add("Se debe señalar la comuna de destino");
                 }
 
+                if(obj.LocalidadId.ToString() != null)
+                {
+                    var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
+                    obj.NombreLocalidad = localidad;
+                }
+                else
+                {
+                    response.Errors.Add("Se debe señalar la localidad de destino");
+                }
+
                 if (obj.IdRegion != null)
                 {
                     var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegion).Pl_DesReg.Trim();
@@ -2176,6 +2187,14 @@ namespace App.Core.UseCases
                 }
                 else
                     response.Errors.Add("Se debe señalar la comuna de destino");
+
+                if (obj.LocalidadId.ToString() != null)
+                {
+                    var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
+                    obj.NombreLocalidad = localidad;
+                }
+                else
+                    response.Errors.Add("Se debe señalar la localidad de destino");
 
 
                 if (objController.IdRegion != null)
@@ -2557,6 +2576,7 @@ namespace App.Core.UseCases
 
                     obj.IdRegion = objController.IdRegion;
                     obj.IdComuna = objController.IdComuna;
+                    obj.LocalidadId = objController.LocalidadId;
 
                     obj.ObservacionesModificacion = objController.ObservacionesModificacion;
 

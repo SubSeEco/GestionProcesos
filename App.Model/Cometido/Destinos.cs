@@ -148,5 +148,11 @@ namespace App.Model.Cometido
         [DataType(DataType.MultilineText)]
         public string ObservacionesModificacion { get; set; }
 
+        /*Modificaciones solicitadas 20082021*/
+        [Display(Name = "Id Localidad")]
+        public int? LocalidadId { get; set; } = null;
+
+        [Display(Name = "Localidad")]
+        public string NombreLocalidad { get; set; }
     }
 }

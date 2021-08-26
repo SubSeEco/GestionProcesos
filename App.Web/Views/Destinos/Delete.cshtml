@@ -35,6 +35,9 @@
                                         @Html.DisplayNameFor(model => model.ComunaDescripcion)
                                     </th>
                                     <th>
+                                        @Html.DisplayNameFor(model => model.NombreLocalidad)
+                                    </th>
+                                    <th>
                                         @Html.DisplayNameFor(model => model.FechaInicio)
                                     </th>
                                     <th>
@@ -66,6 +69,9 @@
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.LocalidadId, null, "Seleccione...", new { style = "width:100px" })
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
