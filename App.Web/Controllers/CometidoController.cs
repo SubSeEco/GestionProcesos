@@ -20,6 +20,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using App.Model.Sigper;
+using System.Text.RegularExpressions;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -177,6 +178,12 @@ namespace App.Web.Controllers
                 ActiveDirectoryUsers = AuthenticationService.GetDomainUser().ToList();
         }
 
+        public JsonResult GetUnidades()
+        {
+            var unidades = _sigper.GetUnidades(); 
+            return Json(unidades, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetUser(string term)
         {
             var result = ActiveDirectoryUsers
@@ -289,6 +296,111 @@ namespace App.Web.Controllers
                 return RedirectToAction("Details", "Proceso", new { id });
             }
             return View(model);
+        }
+
+        public ActionResult ViewDocWord(int id)
+        {
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg");
+            ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo");
+            ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(0), "RH_NumInte", "PeDatPerChq");
+
+            //var proceso = _repository.GetById<Proceso>(id);
+            //var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+            //if (model == null)
+            //{
+            //    model.Proceso = proceso;
+            //    return RedirectToAction("Details", "Proceso", new { id });
+            //}
+
+            var model = _repository.GetFirst<Cometido>(q => q.CometidoId == id);
+            var pro = _repository.GetById<Proceso>(model.ProcesoId);
+            var doc = _repository.Get<Documento>(c => c.ProcesoId == pro.ProcesoId).ToList();
+            pro.Documentos = doc;
+            model.Proceso = pro;
+
+            /*ver en word*/
+            //Read the saved Html File.
+            var docto = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+            string wordHTML = System.IO.File.ReadAllText(docto.Texto);
+
+            //Loop and replace the Image Path.
+            foreach (Match match in Regex.Matches(wordHTML, "<v:imagedata.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase))
+            {
+                wordHTML = Regex.Replace(wordHTML, match.Groups[1].Value, "Temp/" + match.Groups[1].Value);
+            }
+
+            //Delete the Uploaded Word File.
+            //System.IO.File.Delete(fileSavePath.ToString());
+
+            ViewBag.WordHtml = wordHTML;
+
+
+
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ShowWord(int id)
+        {
+            var model = _repository.GetById<Documento>(id);
+            var doc = _repository.Get<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 1).FirstOrDefault();
+
+            ////Read the saved Html File.
+            //string wordHTML = System.IO.File.ReadAllText(doc.Texto);
+
+            ////Loop and replace the Image Path.
+            //foreach (Match match in Regex.Matches(wordHTML, "<v:imagedata.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase))
+            //{
+            //    wordHTML = Regex.Replace(wordHTML, match.Groups[1].Value, "Temp/" + match.Groups[1].Value);
+            //}
+
+            ////Delete the Uploaded Word File.
+            ////System.IO.File.Delete(fileSavePath.ToString());
+
+            //ViewBag.WordHtml = wordHTML;
+            return View();
+
+
+
+
+            //if (string.IsNullOrWhiteSpace(model.Type))
+            //{
+            //    string pdfFile = @"D:\Soporte\Código de barras(0001103878152)1_20150310_115529.PDF";
+            //    string docxFile = string.Empty;
+            //    MemoryStream docxStream = new MemoryStream();
+            //    // Convert PDF to word in memory
+            //    SautinSoft.PdfFocus f = new SautinSoft.PdfFocus();
+
+            //    // Assume that we already have a PDF document as stream.
+            //    using (FileStream pdfStream = new FileStream(pdfFile, FileMode.Open, FileAccess.Read))
+            //    {
+            //        f.OpenPdf(pdfStream);
+
+            //        if (f.PageCount > 0)
+            //        {
+            //            int res = f.ToWord(docxStream);
+
+            //            // Save docxStream to a file for demonstration purposes.
+            //            if (res == 0)
+            //            {
+            //                docxFile = Path.ChangeExtension(pdfFile, ".docx");
+            //                //File.WriteAllBytes(docxFile, docxStream.ToArray());
+            //                //System.Diagnostics.Process.Start(docxFile);
+            //            }
+            //        }
+            //    }
+
+            //    //return File(docxStream, "application/msword");
+            //    //return File(model.File, System.Net.Mime.MediaTypeNames.Application.Octet, docxFile);
+            //    return File(docxStream.ToArray(), "application/msword", docxFile);
+            //}
+            //else
+            //{
+            //    return File(model.File, model.Type, model.FileName);
+            //    //return File(model.File, "application/pdf");
+            //}
         }
 
         public ActionResult Reiniciar(int? CometidoId)
@@ -1331,7 +1443,7 @@ namespace App.Web.Controllers
         //}
 
         [AllowAnonymous]
-        public ActionResult Pdf(int id)
+        public ActionResult Pdf(int id) /*Funcionarios Planta y Contrata*/
         {
             var model = _repository.GetById<Cometido>(id);
 
@@ -1630,7 +1742,7 @@ namespace App.Web.Controllers
             return View(model);
         }
         [AllowAnonymous]
-        public ActionResult Resolucion(int id)
+        public ActionResult Resolucion(int id) /*Autoridades de Gobierno*/
         {
             var model = _repository.GetById<Cometido>(id);
 
@@ -3007,7 +3119,7 @@ namespace App.Web.Controllers
         }
 
         /*Graficos*/
-        public ActionResult ColumnChart()
+        public ActionResult ColumnChart(int? Id)
         {
             //Below code can be used to include dynamic data in Chart. Check view page and uncomment the line "dataPoints: @Html.Raw(ViewBag.DataPoints)"
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForCategoryAxis(20), _jsonSetting);
@@ -3090,8 +3202,9 @@ namespace App.Web.Controllers
             ViewBag.PendientesUnidades = JsonConvert.SerializeObject(_lisPendienteUnidades, _jsonSetting);
 
             /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/
-            var userJuridica = _sigper.GetUserByUnidad(200810);
-            var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == 200810);
+            int IdUnd = 200810;// Id.HasValue ? Id.Value : 0;// 200810;
+            var userJuridica = _sigper.GetUserByUnidad(IdUnd);
+            var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == IdUnd);
             foreach (var u in userJuridica)
             {
                 int c = 0;

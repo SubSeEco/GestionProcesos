@@ -123,6 +123,7 @@
     <Compile Include="Shared\Ciudad.cs" />
     <Compile Include="Shared\Genero.cs" />
     <Compile Include="Shared\Institucion.cs" />
+    <Compile Include="Shared\Localidad.cs" />
     <Compile Include="Shared\Pais.cs" />
     <Compile Include="Shared\Programa.cs" />
     <Compile Include="Shared\Region.cs" />

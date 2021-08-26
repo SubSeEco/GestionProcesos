@@ -1,7 +1,7 @@
 ﻿@model App.Model.Cometido.Destinos
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
-<div class="container">
+<div class="container-fluid">
     <div id="card-alert" class="card blue-grey lighten-1">
         <div class="card-content white-text">
             <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
@@ -64,6 +64,9 @@
                                         @Html.DisplayNameFor(model => model.ComunaDescripcion)
                                     </th>
                                     <th>
+                                        @Html.DisplayNameFor(model => model.NombreLocalidad)
+                                    </th>
+                                    <th>
                                         @Html.DisplayNameFor(model => model.FechaInicio)
                                     </th>
                                     <th>
@@ -95,6 +98,9 @@
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.LocalidadId, null, "Seleccione...", new { style = "width:100px" })
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*, disabled = "disabled" */})
@@ -260,6 +266,30 @@
                 $('select').formSelect();
             });
     });
+
+    /*Carga dropdown de localidad*/
+    $('#IdComuna').on('change', function () {
+        var Comuna = $(this).val();
+        $.getJSON("/Destinos/GetLocalidad", { IdComuna: Comuna },
+            function (classesData) {
+                var select = $("#LocalidadId");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
+
+
 
     function CalculaViaticos() {
         var Dias100 = $("#Dias100").val();

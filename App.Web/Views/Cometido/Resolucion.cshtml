@@ -339,13 +339,18 @@
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
-                            al ítem o los ítems y asignaciones correspondientes al subtítulo 22
+                            al ítem o los ítems y asignaciones correspondientes. @*al subtítulo 22*@
                             @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                             @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
                             @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
                             ,de acuerdo a su naturaleza.
                         </p>
                     </li>
+                    @*<li>
+                        <p align="justify" style="margin-right:30px">
+                            @Html.DisplayFor(m => Model.ViaticodeVuelta)
+                        </p>
+                    </li>*@
                 </ol>
             </td>
         </tr>

@@ -1,24 +1,78 @@
-﻿
-@{
-    ViewBag.Title = "ColumnChart";
+﻿@{
+    //ViewBag.IdUnidad = IList<string.Empty>();
+    //ViewData.IdUnidad = ;
+
+    List<SelectListItem> Unidades = new List<SelectListItem>
+    {
+        //new SelectListItem {Text = "Pago", Value = "1"},
+        //new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
+        //new SelectListItem {Text = "No Pago", Value = "3"},
+    };
+
+    ViewBag.IdUnidad = Unidades;
+
 }
-
-<input type="button" value="Unidades" onclick="Unidades()" class="waves-effect waves-light btn blue" />
-<input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
-<input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
-<input class="waves-effect waves-light btn blue" type="button" value="Ejecucion" onclick="Demora()" />
-<input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidades" onclick="PendientesUnidades()" />
-<input class="waves-effect waves-light btn blue" type="button" value="Pendientes Juridica" onclick="PendientesJuridica()" />
-
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Cometidos por Unidad</span>
+                <div class="section"></div>
+                <input type="button" value="Unidades" onclick="Unidades()" class="waves-effect waves-light btn blue" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Tareas Activas Proceso Cometidos</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Solicitud de Cometidos por Meses</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tiempo Demora ejecución tareas de cometidos</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Ejecucion" onclick="Demora()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tareas pendientes por Unidades</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidades" onclick="PendientesUnidades()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tareas pendientes por Funcionarios en Unidad</span>
+                <div class="section"></div>
+                <div class="input-field">
+                    <strong>
+                        @Html.Raw("Unidad")
+                    </strong>
+                    @Html.DropDownList("IdUnidad", null, string.Empty, new { @class = "form-control" })
+                </div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidad x Funcionario" onclick="PendientesJuridica()" />
+            </div>            
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid">
-    <h5>GRAFICOS</h5>    
-        <div id="chartContainer"></div>
-        <div id="chartUnidades"></div>
-        <div id="chartMeses"></div>
-        <div id="chartDemora"></div>
-        <div id="chartPendientesUnidades"></div>
-        <div id="chartPendientesJuridica"></div>
+    <h5>GRAFICOS</h5>
+    <div id="chartContainer"></div>
+    <div id="chartUnidades"></div>
+    <div id="chartMeses"></div>
+    <div id="chartDemora"></div>
+    <div id="chartPendientesUnidades"></div>
+    <div id="chartPendientesJuridica"></div>
 </div>
 
 <script type="text/javascript">
@@ -168,21 +222,51 @@
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
         document.getElementById('chartPendientesUnidades').innerHTML = '';
-        /*******************GRAFICO CINCO******************************************************************/
+        /*******************GRAFICO SEIS******************************************************************/
+        var Und = $("#IdUnidad").val();
+        var text = $("#IdUnidad").text();
+        alert(Und);
+        
         var PendientesJuridica = new CanvasJS.Chart("chartPendientesJuridica", {
             theme: "dark2", // "light2", "dark1", "light1"
             animationEnabled: true,
             startAngle: 240,
-            title: { text: "Tareas pendientes unidad juridica"},
+            title: { text: "Tareas pendientes funcionarios unidad: " + Und },
             data: [
             {
                     type: "doughnut",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
-                dataPoints: @Html.Raw(ViewBag.PendientesJuridica),
+                    dataPoints: @Html.Raw(ViewBag.PendientesJuridica),
             }
             ]
         });
         PendientesJuridica.render();
     }
+
+
+
+    /*Habilita la visualizacion de los dropdown*/
+    $('select').formSelect();
+
+    /*Carga dropdown de unidades*/
+    $(document).ready(function () {
+        $.getJSON("/Cometido/GetUnidades",
+            function (classesData) {
+                var select = $("#IdUnidad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione Unidad..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.Pl_UndCod,
+                        text: itemData.Pl_UndDes
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
 
 
 </script>
