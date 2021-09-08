@@ -1,9 +1,5 @@
-﻿using App.Model.Core;
-using App.Core.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
+﻿using App.Core.Interfaces;
 using System.Web.Mvc;
-using App.Core.UseCases;
 
 namespace App.Web.Controllers
 {
@@ -25,6 +21,13 @@ namespace App.Web.Controllers
         public JsonResult SigperGetUsuariosDeUnidad(int id)
         {
             var result = _sigper.GetUserByUnidad(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetUserByTerm(string term)
+        {
+            var result = _sigper.GetUserByTermUnidad(term);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

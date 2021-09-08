@@ -31,13 +31,6 @@ namespace App.Model.FirmaDocumento
         [DataType(DataType.Date)]
         public DateTime? FechaFirma { get; set; }
 
-
-        //[NotMapped]
-        //[Required(ErrorMessage = "Es necesario especificar el archivo a firmar")]
-        //[Display(Name = "Documento a firmar")]
-        //[DataType(DataType.Upload)]
-        //public HttpPostedFileBase DocumentoSinFirmaFile { get; set; }
-
         [Display(Name = "Documento a firmar")]
         public byte[] DocumentoSinFirma { get; set; }
 
@@ -51,15 +44,11 @@ namespace App.Model.FirmaDocumento
         [Display(Name = "Documento firmado")]
         public string DocumentoConFirmaFilename { get; set; }
 
-
-
         [Display(Name = "Folio")]
         public string Folio { get; set; }
 
-        //[Required]
         [Display(Name = "Código tipo documento")]
         public string TipoDocumentoCodigo { get; set; }
-
 
         [Display(Name = "Tipo documento")]
         public string TipoDocumentoDescripcion { get; set; }
@@ -69,9 +58,6 @@ namespace App.Model.FirmaDocumento
 
         [Display(Name = "Firmado?")]
         public bool Firmado { get; set; }
-
-
-
 
         [Display(Name = "Proceso")]
         public int ProcesoId { get; set; }

@@ -36,13 +36,5 @@ namespace App.Infrastructure.Folio
             var returnValue = JsonConvert.DeserializeObject<Model.FirmaDocumento.DTOSolicitud>(response.Content);
             return returnValue;
         }
-
-        //public List<Model.FirmaDocumento.DTOSolicitud> GetSolicitud()
-        //{
-        //    var client = new RestClient(url + "/api/folio/get");
-        //    var response = client.Execute(new RestRequest());
-        //    var returnValue = JsonConvert.DeserializeObject<List<Model.FirmaDocumento.DTOSolicitud>>(response.Content);
-        //    return returnValue;
-        //}
     }
 }

@@ -39,5 +39,8 @@ namespace App.Model.Sigper
 
         [StringLength(60)]
         public string PeDatPerChq { get; set; }
+
+        [NotMapped]
+        public PLUNILAB PLUNILAB { get; set; }
     }
 }

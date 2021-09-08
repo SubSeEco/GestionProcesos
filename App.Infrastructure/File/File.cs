@@ -22,9 +22,9 @@ namespace App.Infrastructure.File
             try
             {
                 var extract = textExtractor.Extract(content);
+                data.Type = extract.ContentType;
                 data.Text = !string.IsNullOrWhiteSpace(extract.Text) ? extract.Text.Trim() : null;
                 data.Metadata = extract.Metadata.Any() ? string.Join(";", extract.Metadata) : null;
-                data.Type = extract.ContentType;
             }
             catch (Exception)
             {
@@ -55,22 +55,6 @@ namespace App.Infrastructure.File
                 return stream.ToArray();
             }
         }
-
-        //public byte[] CreateBarCode(string code)
-        //{
-        //    byte[] imagebyte;
-
-        //    var barcode39 = BarcodeDrawFactory.Code39WithoutChecksum;
-        //    var image = barcode39.Draw(code, 35);
-
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-        //        imagebyte = ms.ToArray();
-        //    }
-
-        //    return imagebyte;
-        //}
 
         public byte[] EstamparCodigoEnDocumento(byte[] documento, string text)
         {
