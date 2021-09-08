@@ -20,7 +20,7 @@ namespace App.Model.Sigper
         [Key]
         [Column(Order = 3)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public short RH_Correla { get; set; }
+        public int RH_Correla { get; set; }
 
         public int? RhConCar { get; set; }
 

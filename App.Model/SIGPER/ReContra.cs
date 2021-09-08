@@ -31,7 +31,7 @@ namespace App.Model.Sigper
         public Int16 RH_ContCod { get; set; }
 
         [Display(Name = "ReContraLabCor")]
-        public Int16 ReContraLabCor { get; set; }
+        public int ReContraLabCor { get; set; }
 
         [Display(Name = "Re_ConUni")]
         public Int32 Re_ConUni { get; set; }
