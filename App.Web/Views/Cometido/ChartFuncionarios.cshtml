@@ -1,0 +1,125 @@
+﻿@{
+    //ViewBag.IdUnidad = IList<string.Empty>();
+    //ViewData.IdUnidad = ;
+
+    List<SelectListItem> Unidades = new List<SelectListItem>();
+    ViewBag.IdUnidad = Unidades;
+
+}
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tareas pendientes por Funcionarios en Unidad</span>
+                <div class="section"></div>
+                <div class="input-field">
+                    <strong>
+                        @Html.Raw("UNIDADES")
+                    </strong>
+                    @Html.DropDownList("IdUnidad", null, string.Empty, new { @class = "form-control" })
+                </div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidad x Funcionario" onclick="post()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h5>GRAFICOS</h5>
+    <div id="chartPendientesJuridica"></div>
+</div>
+
+<script type="text/javascript">
+
+    function post() {
+        var Id = $("#IdUnidad").val();
+        var text = $("#IdUnidad").text();
+        alert(Id);
+
+        var miUrl = '@Url.Action("ChartFuncionarios", "Cometido", new { Id = 201910 })'
+        $.ajax({
+            url: miUrl,
+            method: "post",
+            data: Id,
+            success: function (response) {
+
+            },
+            async: true
+        });
+
+        //alert(miUrl);
+    };
+    /***************************************************************************************************************************/
+
+    /*Habilita la visualizacion de los dropdown*/
+    $('select').formSelect();
+
+    /*Carga dropdown de unidades*/
+    $(document).ready(function () {
+        $.getJSON("/Cometido/GetUnidades",
+            function (classesData) {
+                var select = $("#IdUnidad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione Unidad..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.Pl_UndCod,
+                        text: itemData.Pl_UndDes
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
+
+
+</script>
+
+<script>
+    window.onload = function () {
+
+        var dataPoints =  @Html.Raw(ViewBag.PendientesJuridica);// [];
+
+        //function addData(data) {
+        //    for (var i = 0; i < data.length; i++) {
+        //        dataPoints.push({
+        //            x: new Date(data[i].x),
+        //            y: data[i].y
+        //        });
+        //    }
+        //    chart.render();
+
+        //}
+
+
+
+        var chart = new CanvasJS.Chart("chartPendientesJuridica", {
+            animationEnabled: true,
+            theme: "dark2",
+            startAngle: 240,
+            title: {
+                text: "Tareas pendientes funcionarios unidad"
+            },
+            //axisY: {
+            //    title: "In HK$",
+            //    titleFontSize: 24
+            //},
+            data: [{
+                type: "doughnut",
+                //yValueFormatString: "HK$#,###",
+                dataPoints: dataPoints
+            }]
+        });
+        chart.render();
+
+
+
+        $.getJSON("/Cometido/ChartFuncionarios", addData);
+
+    }
+</script>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

@@ -18,7 +18,7 @@
             <div class="card-content">
                 <span class="card-title">Reporte Cometidos por Unidad</span>
                 <div class="section"></div>
-                <input type="button" value="Unidades" onclick="Unidades()" class="waves-effect waves-light btn blue" />
+                <input type="button" value="Unidades" onclick="Unidades();" class="waves-effect waves-light btn blue" />
             </div>
         </div>
         <div class="card">
@@ -32,7 +32,7 @@
             <div class="card-content">
                 <span class="card-title">Solicitud de Cometidos por Meses</span>
                 <div class="section"></div>
-                <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses()" />
+                <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses();" />
             </div>
         </div>
         <div class="card">
@@ -53,36 +53,31 @@
             <div class="card-content">
                 <span class="card-title">Tareas pendientes por Funcionarios en Unidad</span>
                 <div class="section"></div>
-                <div class="input-field">
-                    <strong>
-                        @Html.Raw("Unidad")
-                    </strong>
-                    @Html.DropDownList("IdUnidad", null, string.Empty, new { @class = "form-control" })
-                </div>
-                <input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidad x Funcionario" onclick="PendientesJuridica()" />
-            </div>            
+                @Html.ActionLink("Pendientes Unidad x Funcionario", "ChartFuncionarios", "Cometido", null, new { @class = "waves-effect waves-light btn blue" })
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container-fluid">
+<div class="container">
     <h5>GRAFICOS</h5>
     <div id="chartContainer"></div>
     <div id="chartUnidades"></div>
     <div id="chartMeses"></div>
     <div id="chartDemora"></div>
     <div id="chartPendientesUnidades"></div>
-    <div id="chartPendientesJuridica"></div>
+    @*<div id="chartPendientesJuridica"></div>*@
 </div>
 
 <script type="text/javascript">
 
     function Tareas() {
     /*limpiar div q no se muestra*/
-        document.getElementById('chartUnidades').innerHTML = '';
-        document.getElementById('chartMeses').innerHTML = '';
-        document.getElementById('chartDemora').innerHTML = '';
-        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        //document.getElementById('chartUnidades').style.visibility = "hidden";
+        //document.getElementById('chartMeses').style.visibility = "hidden";
+        //document.getElementById('chartDemora').style.visibility = "hidden";
+        //document.getElementById('chartPendientesUnidades').style.visibility = "hidden";
+        //document.getElementById('chartPendientesJuridica').style.visibility = "hidden";
     /*******************GRAFICO UNO******************************************************************/
         var chart = new CanvasJS.Chart("chartContainer", {
             theme: "light2",
@@ -120,6 +115,7 @@
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
         document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Unidades = new CanvasJS.Chart("chartUnidades", {
             theme: "light2",
@@ -157,6 +153,7 @@
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
         document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
         /*******************GRAFICO DOS******************************************************************/
         var Meses = new CanvasJS.Chart("chartMeses", {
             theme: "light2",
@@ -178,6 +175,7 @@
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
         /*******************GRAFICO TRES******************************************************************/
         var Demora = new CanvasJS.Chart("chartDemora", {
             theme: "dark2",
@@ -199,6 +197,7 @@
         document.getElementById('chartUnidades').innerHTML = '';
         document.getElementById('chartMeses').innerHTML = '';
         document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
         /*******************GRAFICO CINCO******************************************************************/
         var PendientesUnidades = new CanvasJS.Chart("chartPendientesUnidades", {
             theme: "dark2", // "light2", "dark1", "light1"
@@ -215,7 +214,24 @@
         PendientesUnidades.render();
     }
 
-    function PendientesJuridica() {
+    @*function PendientesJuridica() {
+        var Id = $("#IdUnidad").val();
+        var text = $("#IdUnidad").text();
+        alert(Id);
+
+        var miUrl = '@Url.Action("ChartFuncionarios", "Cometido")'
+        $.ajax({
+            url: miUrl,
+            method: "GET",
+            data: Id,
+            success: function (response) {
+
+            },
+            async: true
+        });
+
+        //alert(miUrl);
+
         /*limpiar div q no se muestra*/
         document.getElementById('chartContainer').innerHTML = '';
         document.getElementById('chartUnidades').innerHTML = '';
@@ -223,15 +239,12 @@
         document.getElementById('chartDemora').innerHTML = '';
         document.getElementById('chartPendientesUnidades').innerHTML = '';
         /*******************GRAFICO SEIS******************************************************************/
-        var Und = $("#IdUnidad").val();
-        var text = $("#IdUnidad").text();
-        alert(Und);
-        
+
         var PendientesJuridica = new CanvasJS.Chart("chartPendientesJuridica", {
             theme: "dark2", // "light2", "dark1", "light1"
             animationEnabled: true,
             startAngle: 240,
-            title: { text: "Tareas pendientes funcionarios unidad: " + Und },
+            title: { text: "Tareas pendientes funcionarios unidad: " + Id },
             data: [
             {
                     type: "doughnut",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
@@ -240,7 +253,7 @@
             ]
         });
         PendientesJuridica.render();
-    }
+    }*@
 
 
 

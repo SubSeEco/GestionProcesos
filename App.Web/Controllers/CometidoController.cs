@@ -3119,7 +3119,7 @@ namespace App.Web.Controllers
         }
 
         /*Graficos*/
-        public ActionResult ColumnChart(int? Id)
+        public ActionResult ColumnChart()
         {
             //Below code can be used to include dynamic data in Chart. Check view page and uncomment the line "dataPoints: @Html.Raw(ViewBag.DataPoints)"
             //ViewBag.DataPoints = JsonConvert.SerializeObject(DataService.GetRandomDataForCategoryAxis(20), _jsonSetting);
@@ -3202,7 +3202,31 @@ namespace App.Web.Controllers
             ViewBag.PendientesUnidades = JsonConvert.SerializeObject(_lisPendienteUnidades, _jsonSetting);
 
             /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/
-            int IdUnd = 200810;// Id.HasValue ? Id.Value : 0;// 200810;
+            //int IdUnd = 0;// Id.HasValue ? Id.Value : 0;// 200810 - 201910;
+            //var userJuridica = _sigper.GetUserByUnidad(IdUnd);
+            //var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == IdUnd);
+            //foreach (var u in userJuridica)
+            //{
+            //    int c = 0;
+            //    foreach (var t in PendientesJuridica)
+            //    {
+            //        if (t.NombreFuncionario == u.PeDatPerChq.Trim())
+            //            c++;
+
+            //    }
+            //    _lisPendJuridica.Add(new DataPoint(Convert.ToDouble(c), u.PeDatPerChq.Trim()));
+            //}
+            //ViewBag.PendientesJuridica = JsonConvert.SerializeObject(_lisPendJuridica, _jsonSetting);
+
+            return View();
+        }
+
+        public ActionResult ChartFuncionarios()
+        {
+            List<DataPoint> _lisPendJuridica = new List<DataPoint>();
+            /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/
+
+            int IdUnd = 0;// Id.HasValue ? Id.Value : 0;// 200810 - 201910;
             var userJuridica = _sigper.GetUserByUnidad(IdUnd);
             var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == IdUnd);
             foreach (var u in userJuridica)
@@ -3218,9 +3242,35 @@ namespace App.Web.Controllers
             }
             ViewBag.PendientesJuridica = JsonConvert.SerializeObject(_lisPendJuridica, _jsonSetting);
 
+            return View();
+        }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult ChartFuncionarios(int? Id)
+        {
+            List<DataPoint> _lisPendJuridica = new List<DataPoint>();
 
+            /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/
 
+            int IdUnd = Id.HasValue ? Id.Value : 0;// 200810 - 201910;
+            var userJuridica = _sigper.GetUserByUnidad(IdUnd);
+            var PendientesJuridica = _repository.Get<Workflow>(c => c.Terminada == false && c.Pl_UndCod == IdUnd);
+            foreach (var u in userJuridica)
+            {
+                int c = 0;
+                foreach (var t in PendientesJuridica)
+                {
+                    if (t.NombreFuncionario == u.PeDatPerChq.Trim())
+                        c++;
+
+                }
+                _lisPendJuridica.Add(new DataPoint(Convert.ToDouble(c), u.PeDatPerChq.Trim()));
+            }
+
+            ViewBag.PendientesJuridica = JsonConvert.SerializeObject(_lisPendJuridica, _jsonSetting);
+            //JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+            //return Content(JsonConvert.SerializeObject(_lisPendJuridica, _jsonSetting), "application/json");
             return View();
         }
 
