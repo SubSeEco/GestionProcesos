@@ -37,18 +37,6 @@ namespace App.Util
             Remuneraciones
         }
 
-        //public enum TipoWorkflow
-        //{
-        //    Create = 1,
-        //    Edit = 2,
-        //    Details = 3,
-        //    Sign = 4,
-        //    Validate = 5,
-        //    Evaluate = 6,
-        //    Finish = 7,
-        //    AskArchive = 8
-        //}
-
         public enum Firmas
         {
             Orden = 1,

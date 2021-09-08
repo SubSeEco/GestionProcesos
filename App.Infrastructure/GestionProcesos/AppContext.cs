@@ -10,7 +10,6 @@ using App.Model.Comisiones;
 using App.Model.FirmaDocumento;
 using App.Model.ProgramacionHorasExtraordinarias;
 using App.Model.HorasExtras;
-using App.Model.FirmaDocumentoGenerico;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -87,7 +86,7 @@ namespace App.Infrastructure.GestionProcesos
         public virtual DbSet<ProgramacionHorasExtraordinarias> ProgramacionHorasExtraordinarias { get; set; }
         public virtual DbSet<HorasExtras> HorasExtras { get; set; }
         public virtual DbSet<GeneracionResolucion> GeneracionResolucion { get; set; }
-        public virtual DbSet<FirmaDocumentoGenerico> FirmaDocumentoGenerico { get; set; }
+        //public virtual DbSet<FirmaDocumentoGenerico> FirmaDocumentoGenerico { get; set; }
         public virtual DbSet<Festivo> Festivo { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

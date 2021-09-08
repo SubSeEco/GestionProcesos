@@ -14,7 +14,6 @@ using App.Model.GestionDocumental;
 using App.Model.ProgramacionHorasExtraordinarias;
 using System;
 using App.Model.HorasExtras;
-using App.Model.FirmaDocumentoGenerico;
 using App.Model.DTO;
 
 namespace App.Web.Controllers
@@ -32,34 +31,6 @@ namespace App.Web.Controllers
         private readonly IFile _file;
         private readonly IHsm _hsm;
         private readonly IWorkflowService _workflowService;
-
-        //public class DTOWorkflow
-        //{
-        //    public DTOWorkflow()
-        //    {
-        //    }
-
-        //    public int WorkflowId { get; set; }
-        //    public DateTime FechaCreacion { get; set; }
-        //    public string Asunto { get; set; }
-        //    public string Definicion { get; set; }
-        //    public bool TareaPersonal { get; set; }
-        //    public string NombreFuncionario { get; set; }
-        //    public string Pl_UndDes { get; set; }
-        //    public string Grupo { get; set; }
-        //    public string Mensaje { get; set; }
-
-        //    public int ProcesoId { get; set; }
-        //    public DateTime? ProcesoFechaVencimiento { get; set; }
-        //    public string ProcesoDefinicion { get; set; }
-        //    public string ProcesoNombreFuncionario { get; set; }
-        //    public string ProcesoEmail { get; set; }
-        //    public string ProcesoEntidad { get; set; }
-        //    public GD GD { get; set; }
-
-        //    public bool EsPersonal { get; set; }
-
-        //}
 
         private class DTOUser
         {
@@ -345,19 +316,19 @@ namespace App.Web.Controllers
                 }
             }
 
-            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
-            {
-                var obj = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.ProcesoId == workflow.ProcesoId);
-                if (obj != null)
-                {
-                    workflow.EntityId = obj.FirmaDocumentoGenericoId;
-                    workflow.Entity = Util.Enum.Entidad.FirmaDocumentoGenerico.ToString();
-                    obj.WorkflowId = workflow.WorkflowId;
+            //if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumentoGenerico.ToString())
+            //{
+            //    var obj = _repository.GetFirst<FirmaDocumentoGenerico>(q => q.ProcesoId == workflow.ProcesoId);
+            //    if (obj != null)
+            //    {
+            //        workflow.EntityId = obj.FirmaDocumentoGenericoId;
+            //        workflow.Entity = Util.Enum.Entidad.FirmaDocumentoGenerico.ToString();
+            //        obj.WorkflowId = workflow.WorkflowId;
 
-                    _repository.Update(obj);
-                    _repository.Save();
-                }
-            }
+            //        _repository.Update(obj);
+            //        _repository.Save();
+            //    }
+            //}
 
 
             if (workflow != null && workflow.DefinicionWorkflow.Accion.Codigo == "Create" && workflow.EntityId.HasValue)

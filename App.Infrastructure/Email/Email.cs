@@ -126,6 +126,7 @@ namespace App.Infrastructure.Email
                 Send(emailMsg);
             }
         }
+
         public void NotificacionesCometido(Workflow workflow, Configuracion plantillaCorreo, string asunto, List<string> Mails, int IdCometido, string FechaSolicitud, string Observaciones, string Url, Documento documento, string Folio, string FechaFirma, string TipoActoAdm)
         {
             if (plantillaCorreo == null || (plantillaCorreo != null && string.IsNullOrWhiteSpace(plantillaCorreo.Valor)))

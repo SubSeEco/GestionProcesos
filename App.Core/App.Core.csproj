@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.2, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.13.2\lib\itextsharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -51,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Interfaces\IFolio.cs" />
     <Compile Include="Interfaces\IGestionProcesos.cs" />
-    <Compile Include="Interfaces\IMinsegpres.cs" />
     <Compile Include="Interfaces\ISigper.cs" />
     <Compile Include="Interfaces\IFile.cs" />
     <Compile Include="Interfaces\IHsm.cs" />
@@ -62,7 +55,6 @@
     <Compile Include="UseCases\UseCaseFirmaDocumento.cs" />
     <Compile Include="UseCases\UseCaseCometidoComision.cs" />
     <Compile Include="UseCases\UseCaseDocumento.cs" />
-    <Compile Include="UseCases\UseCaseFirmaDocumentoGenerico.cs" />
     <Compile Include="UseCases\UseCaseGD.cs" />
     <Compile Include="UseCases\UseCaseGeneraResolucion.cs" />
     <Compile Include="UseCases\UseCaseHorasExtras.cs" />

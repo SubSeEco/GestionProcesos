@@ -9,6 +9,7 @@ namespace App.Core.Interfaces
         Sigper GetUserByEmail(string email);
         Sigper GetUserByRut(int rut);
         List<PEDATPER> GetUserByTerm(string term);
+        List<PEDATPER> GetUserByTermUnidad(string term);
         List<PEDATPER> GetUserByUnidad(int codigo);
         List<PEDATPER> GetUserByUnidadWithoutHonorarios(int codigoUnidad);
         List<PEDATPER> GetAllUsersForCometido();

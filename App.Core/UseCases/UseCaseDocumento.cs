@@ -2,7 +2,6 @@
 using App.Model.Core;
 using App.Core.Interfaces;
 
-
 namespace App.Core.UseCases
 {
     public class UseCaseDocumento

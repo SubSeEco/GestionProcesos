@@ -100,9 +100,6 @@
     <Compile Include="DTO\DTOSelect.cs" />
     <Compile Include="DTO\DTOStateProces.cs" />
     <Compile Include="DTO\WorkflowDTO.cs" />
-    <Compile Include="FirmaDocumentoGenerico\DTOTipoDocumento.cs" />
-    <Compile Include="FirmaDocumentoGenerico\FirmaDocumentoGenerico.cs" />
-    <Compile Include="FirmaDocumentoGenerico\Root.cs" />
     <Compile Include="FirmaDocumento\DTOSolicitud.cs" />
     <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
     <Compile Include="FirmaDocumento\FirmaDocumento.cs" />

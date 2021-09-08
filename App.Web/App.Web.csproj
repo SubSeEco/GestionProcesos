@@ -449,7 +449,6 @@
     <Compile Include="Controllers\CotizacionDocumentoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\FirmaDocumentoController.cs" />
-    <Compile Include="Controllers\FirmaDocumentoGenericoController.cs" />
     <Compile Include="Controllers\GDExternoController.cs" />
     <Compile Include="Controllers\GDInternoController.cs" />
     <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
@@ -787,13 +786,8 @@
     <Content Include="Views\HorasExtras\ResolucionDescanso.cshtml" />
     <Content Include="Views\Colaborador\EditPpto.cshtml" />
     <Content Include="Views\HorasExtras\procesState.cshtml" />
-    <Content Include="Views\FirmaDocumentoGenerico\Create.cshtml" />
-    <Content Include="Views\FirmaDocumentoGenerico\Edit.cshtml" />
-    <Content Include="Views\FirmaDocumentoGenerico\Sign.cshtml" />
-    <Content Include="Views\FirmaDocumentoGenerico\FirmaAtendida.cshtml" />
     <Content Include="Views\HorasExtras\View.cshtml" />
     <Content Include="Views\Cometido\ColumnChart.cshtml" />
-    <Content Include="Views\FirmaDocumentoGenerico\View.cshtml" />
     <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.5.0.min.map" />
     <Content Include="Views\Cometido\ViewDocWord.cshtml" />
