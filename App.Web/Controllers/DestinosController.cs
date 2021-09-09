@@ -438,6 +438,7 @@ namespace App.Web.Controllers
             var modelOld = _repository.GetById<Destinos>(model.DestinoId);
             model.IdRegion = modelOld.IdRegion;
             model.IdComuna = modelOld.IdComuna;
+            model.LocalidadId = modelOld.LocalidadId;
             model.FechaInicio = model.FechaInicio;
             model.FechaHasta = model.FechaHasta;
             if (ModelState.IsValid)

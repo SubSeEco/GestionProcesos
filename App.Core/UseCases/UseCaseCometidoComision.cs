@@ -1954,8 +1954,13 @@ namespace App.Core.UseCases
 
                 if(obj.LocalidadId.ToString() != null)
                 {
-                    var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
-                    obj.NombreLocalidad = localidad;
+                    if (obj.LocalidadId != 0)
+                    {
+                        var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
+                        obj.NombreLocalidad = localidad;
+                    }
+                    else
+                        obj.NombreLocalidad = string.Empty;
                 }
                 else
                 {
@@ -2190,8 +2195,13 @@ namespace App.Core.UseCases
 
                 if (obj.LocalidadId.ToString() != null)
                 {
-                    var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
-                    obj.NombreLocalidad = localidad;
+                    if(obj.LocalidadId != 0)
+                    {
+                        var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
+                        obj.NombreLocalidad = localidad;
+                    }
+                    else
+                        obj.NombreLocalidad = string.Empty;
                 }
                 else
                     response.Errors.Add("Se debe señalar la localidad de destino");
