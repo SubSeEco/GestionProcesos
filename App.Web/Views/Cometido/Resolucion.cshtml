@@ -138,6 +138,9 @@
                     <table border="1" width="100%">
                         <tr>
                             <td style="border-style: solid; border-width: 1px; border-color: #000000;">
+                                LOCALIDAD
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000;">
                                 COMUNA
                             </td>
                             <td style="border-style: solid; border-width: 1px; border-color: #000000;">
@@ -146,17 +149,20 @@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
-                            <tr>
+                    <tr>
 
-                                @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                </td>
+                        @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
+                        </td>
 
-                            </tr>
+                    </tr>
                         }
                     </table>
                     <br />
