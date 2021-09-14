@@ -301,16 +301,6 @@ namespace App.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        //public ActionResult Dashboard()
-        //{
-        //    ViewBag.EnCurso = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.EnProceso);
-        //    ViewBag.Terminados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado);
-        //    ViewBag.Anulados = _repository.GetCount<Proceso>(q => q.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Anulado);
-        //    ViewBag.Totales = _repository.GetCount<Proceso>();
-
-        //    return View();
-        //}
-
         public FileResult Report()
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())
@@ -358,10 +348,10 @@ namespace App.Web.Controllers
                 var excel = new ExcelPackage(fileInfo);
 
                 excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(procesos);
-                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
-
                 excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(workflows);
-                excel.Workbook.Worksheets[1].Cells.AutoFitColumns();
+
+                //excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
+                //excel.Workbook.Worksheets[1].Cells.AutoFitColumns();
 
                 return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }
