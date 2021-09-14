@@ -10,7 +10,8 @@ namespace App.Web
 {
     public class AuthenticationService
     {
-        private static string LDAPServer = "maestrof.economia.cl:389";
+        //private static string LDAPServer = "maestrof.economia.cl:389";
+        private static string LDAPServer = "172.16.0.3:389";
         private static string LDAPContainer = "OU=OU,DC=economia,DC=cl";
         private static string LDAPUsername = "leer_ad";
         private static string LDAPPassword = "leer_ad";
