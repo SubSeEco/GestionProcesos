@@ -311,6 +311,10 @@ namespace App.Model.Cometido
         [Display(Name = "Resolucion Revocatoria")]
         public bool ResolucionRevocatoria { get; set; }
 
+        [Display(Name = "Parrafo Resolucion")]
+        [DataType(DataType.MultilineText)]
+        public string ParrafoResolucion { get; set; }
+
         public string GetTags()
         {
             var tag = new StringBuilder();

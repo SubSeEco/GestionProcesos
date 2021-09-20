@@ -149,6 +149,7 @@ namespace App.Model.Cometido
         public string ObservacionesModificacion { get; set; }
 
         /*Modificaciones solicitadas 20082021*/
+        [Required(ErrorMessage = "Es necesario especificar este dato - Localidad")]
         [Display(Name = "Id Localidad")]
         public int? LocalidadId { get; set; } = null;
 

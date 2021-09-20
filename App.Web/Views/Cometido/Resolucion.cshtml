@@ -19,7 +19,8 @@
     <table border="0" style="margin-top:768px">
         <tr>
             <td width="32%">
-                <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+                @*<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />*@
+                <img src="~/Content/Logo_gobierno.png" width="170px"/>
             </td>
             <td>
                 @*<p align="justify">
@@ -211,6 +212,12 @@
                         }
                         a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta).ToHtmlString().Remove(10), en la localidad antes señalada.
                     </p>
+                    @if (Model.ParrafoResolucion != null)
+                    {
+                        <p align="justify" style="margin-right:30px">
+                            @Html.DisplayFor(m => Model.ParrafoResolucion)
+                        </p>
+                    }                        
                     <br />
                     <p class="breakhere"></p>
                 </ol>

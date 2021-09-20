@@ -1960,7 +1960,10 @@ namespace App.Core.UseCases
                         obj.NombreLocalidad = localidad;
                     }
                     else
-                        obj.NombreLocalidad = string.Empty;
+                    {
+                        //obj.NombreLocalidad = string.Empty;
+                        response.Errors.Add("Se debe señalar la localidad de destino");
+                    }
                 }
                 else
                 {
@@ -2201,7 +2204,10 @@ namespace App.Core.UseCases
                         obj.NombreLocalidad = localidad;
                     }
                     else
-                        obj.NombreLocalidad = string.Empty;
+                    {
+                        //obj.NombreLocalidad = string.Empty;
+                        response.Errors.Add("Se debe señalar la localidad de destino");
+                    }   
                 }
                 else
                     response.Errors.Add("Se debe señalar la localidad de destino");

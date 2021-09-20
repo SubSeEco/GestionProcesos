@@ -19,7 +19,8 @@
     <table style="margin-top:768px">
         <tr>
             <td width="32%">
-                .<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+                @*.<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />*@
+                <img src="~/Content/Logo_gobierno.png" width="170px" />
             </td>
             <td>
                 <!--<p align="justify">
@@ -194,6 +195,12 @@
                             &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.TotalViatico).- pesos, (@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras))<br />
                             por concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
                         </p>
+                        @if (Model.ParrafoResolucion != null)
+                        {
+                            <p align="justify" style="margin-right:30px">
+                                @Html.DisplayFor(m => Model.ParrafoResolucion)
+                            </p>
+                        }
                         <br />
                         <table border="1" width="100%" style="margin-right:30px">
                             <tr>
@@ -219,11 +226,11 @@
                                     @Html.Raw("Dias 40%")
                                 </td>
                                 @*<td>
-                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40Monto)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00Monto)
-                                    </td>*@
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40Monto)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00Monto)
+                    </td>*@
                             </tr>
                             @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                             {
@@ -247,11 +254,11 @@
                                         @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
                                     </td>
                                     @*<td>
-                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Monto)
-                                        </td>*@
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Monto)
+                        </td>*@
                                 </tr>
                             }
                         </table>

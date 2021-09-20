@@ -1755,6 +1755,8 @@ namespace App.Web.Controllers
             model.Firma = false;
             model.NumeroResolucion = model.CometidoId;
             model.Destinos.FirstOrDefault().TotalViaticoPalabras = ExtensionesString.enletras(model.Destinos.FirstOrDefault().TotalViatico.ToString());
+            /*se agrega el texto adicionale la seccin resuelvo*/
+            //model.ParrafoResolucion = string.Empty;
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();
