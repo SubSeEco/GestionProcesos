@@ -269,6 +269,28 @@
         //$("#IdComuna").attr('disabled', false);
     });
 
+    /*Carga dropdown de localidad*/
+    $('#IdComuna').on('change', function () {
+        var Comuna = $(this).val();
+        $.getJSON("/Destinos/GetLocalidad", { IdComuna: Comuna },
+            function (classesData) {
+                var select = $("#LocalidadId");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
+
     function CalculaViaticos() {
         var Dias100 = $("#Dias100").val();
         var Dias60 = $("#Dias60").val();

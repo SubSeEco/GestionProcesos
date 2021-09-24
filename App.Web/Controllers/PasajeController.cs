@@ -34,7 +34,7 @@ namespace App.Web.Controllers
 
         public JsonResult GetComunas(string IdRegion)
         {
-            var comunas = _sigper.GetComunasbyRegion(IdRegion);
+            var comunas = _sigper.GetComunasbyRegion(IdRegion).OrderBy(c => c.Pl_DesCom);
             return Json(comunas.Select(q => new { value = q.Pl_CodCom.Trim(), text = q.Pl_DesCom.Trim() }), JsonRequestBehavior.AllowGet);
         }
 
