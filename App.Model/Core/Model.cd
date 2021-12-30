@@ -31,7 +31,7 @@
       <FileName>Core\DefinicionWorkflow.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="App.Model.Core.Documento">
+  <Class Name="App.Model.Core.Documento" Collapsed="true">
     <Position X="8.25" Y="2.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>ECAAAIAAASGAMQEhAAAAAIABASEEBQAgAUAACABEQD4=</HashCode>

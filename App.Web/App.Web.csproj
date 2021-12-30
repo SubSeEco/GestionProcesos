@@ -437,7 +437,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CentroCostoController.cs" />
-    <Compile Include="Controllers\ColaboradorController.cs" />
     <Compile Include="Controllers\CometidoComisionController.cs" />
     <Compile Include="Controllers\ComisionController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
@@ -462,7 +461,6 @@
     <Compile Include="Controllers\HomeController.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
@@ -470,7 +468,6 @@
     <Compile Include="Controllers\ProcesoConsultorController.cs" />
     <Compile Include="Controllers\ProcesoPersonalController.cs" />
     <Compile Include="Controllers\ProcesoController.cs" />
-    <Compile Include="Controllers\ProgramacionHorasExtraordinariasController.cs" />
     <Compile Include="Controllers\ProgramaController.cs" />
     <Compile Include="Controllers\EmpresaAerolineaController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
@@ -740,20 +737,12 @@
     <Content Include="Views\GDInterno\FEAUpload.cshtml" />
     <Content Include="Views\GDInterno\FEADocumentos.cshtml" />
     <Content Include="Views\Cometido\SignOther.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
     <Content Include="Views\GDExterno\Create.cshtml" />
     <Content Include="Views\GDExterno\Details.cshtml" />
     <Content Include="Views\GDExterno\Edit.cshtml" />
     <Content Include="Views\GDExterno\FEADocumentos.cshtml" />
     <Content Include="Views\GDExterno\FEAUpload.cshtml" />
     <Content Include="Views\GDExterno\View.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\Pdf.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\Sign.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\EditAnalista.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
-    <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
     <Content Include="Views\GDExterno\DetailsAutoridad.cshtml" />
     <Content Include="Views\GDInterno\DetailsAutoridad.cshtml" />
     <Content Include="Views\GDExterno\Workflow.cshtml" />
@@ -763,32 +752,11 @@
     <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
     <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
     <Content Include="Views\GDExterno\Report.cshtml" />
-    <Content Include="Views\HorasExtras\Create.cshtml" />
-    <Content Include="Views\Colaborador\Create.cshtml" />
-    <Content Include="Views\HorasExtras\Edit.cshtml" />
-    <Content Include="Views\Colaborador\Delete.cshtml" />
-    <Content Include="Views\Colaborador\Edit.cshtml" />
-    <Content Include="Views\HorasExtras\Details.cshtml" />
-    <Content Include="Views\HorasExtras\SignResolucion.cshtml" />
-    <Content Include="Views\HorasExtras\ResolucionProgramacion.cshtml" />
-    <Content Include="Views\HorasExtras\ResolucionServicio.cshtml" />
-    <Content Include="Views\HorasExtras\GeneraResolucion.cshtml" />
-    <Content Include="Views\HorasExtras\FirmaDocumento.cshtml" />
     <Content Include="Views\GeneraResolucion\FirmaDocumento.cshtml" />
     <Content Include="Views\GeneraResolucion\GeneraResolucion.cshtml" />
     <Content Include="Views\GeneraResolucion\ResolucionServicio.cshtml" />
     <Content Include="Views\Cometido\Finalizados.cshtml" />
-    <Content Include="Views\Colaborador\EditGP.cshtml" />
-    <Content Include="Views\HorasExtras\EditGP.cshtml" />
     <Content Include="Views\Cometido\Report.cshtml" />
-    <Content Include="Views\HorasExtras\EditConfirmacion.cshtml" />
-    <Content Include="Views\HorasExtras\ResolucionConfirmacion.cshtml" />
-    <Content Include="Views\HorasExtras\SignConfirmacion.cshtml" />
-    <Content Include="Views\HorasExtras\EditRemuneraciones.cshtml" />
-    <Content Include="Views\HorasExtras\ResolucionDescanso.cshtml" />
-    <Content Include="Views\Colaborador\EditPpto.cshtml" />
-    <Content Include="Views\HorasExtras\procesState.cshtml" />
-    <Content Include="Views\HorasExtras\View.cshtml" />
     <Content Include="Views\Cometido\ColumnChart.cshtml" />
     <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.5.0.min.map" />

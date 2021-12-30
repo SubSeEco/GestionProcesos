@@ -12,24 +12,26 @@ namespace App.Web.Controllers
     {
         private readonly IGestionProcesos _repository;
         private readonly ISigper _sigper;
+        private readonly IFile _file;
 
         public class DTOUser
         {
-            public bool IsAdmin { get; set; } 
-            public bool IsConsultor { get; set; } 
-            public bool IsCometido { get; set; } 
+            public bool IsAdmin { get; set; }
+            public bool IsConsultor { get; set; }
+            public bool IsCometido { get; set; }
 
-            public int Task { get; set; } 
+            public int Task { get; set; }
         }
 
-        public HomeController(IGestionProcesos repository, ISigper sigper)
+        public HomeController(IGestionProcesos repository, ISigper sigper, IFile file)
         {
             _sigper = sigper;
             _repository = repository;
+            _file = file;
         }
-
-        public ActionResult Index() {
-
+       
+        public ActionResult Index()
+        {
             var email = UserExtended.Email(User);
             var model = new DTOUser()
             {

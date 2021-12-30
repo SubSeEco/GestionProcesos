@@ -291,7 +291,7 @@ namespace App.Web.Controllers
 
             return RedirectToAction("Sign", "FirmaDocumento", new { id = model.FirmaDocumentoId });
         }
-
+        
         public FileResult ShowDocumentoSinFirma(int id)
         {
             var model = _repository.GetById<FirmaDocumento>(id);

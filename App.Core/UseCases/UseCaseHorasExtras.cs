@@ -321,7 +321,7 @@ namespace App.Core.UseCases
                     }
 
                     //var doc = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null,null);
-                    var docto = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
+                    var docto = _hsm.SignWSDL(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, qr);
                     documento.File = docto;
                     documento.Signed = true;
 

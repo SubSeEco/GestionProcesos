@@ -48,7 +48,6 @@ namespace App.Core.UseCases
             _hsm = hsm;
             _email = email;
         }
-
         public ResponseMessage DefinicionProcesoInsert(DefinicionProceso obj)
         {
             var response = new ResponseMessage();
@@ -122,7 +121,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage DefinicionWorkflowInsert(DefinicionWorkflow obj)
         {
             var response = new ResponseMessage();
@@ -236,7 +234,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage GrupoInsert(Grupo obj)
         {
             var response = new ResponseMessage();
@@ -307,7 +304,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage ProcesoInsert(Proceso obj)
         {
             var response = new ResponseMessage();
@@ -337,7 +333,6 @@ namespace App.Core.UseCases
                 proceso.Observacion = obj.Observacion;
                 proceso.FechaCreacion = DateTime.Now;
                 proceso.CalcularFechaVencimiento(_repository.Get<Festivo>().Select(q => q.Fecha).ToList());
-                //proceso.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionProceso.DuracionHoras);
                 proceso.FechaTermino = null;
                 proceso.Email = obj.Email.Trim();
                 proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.EnProceso;
@@ -356,7 +351,6 @@ namespace App.Core.UseCases
                 workflow.Terminada = false;
                 workflow.Proceso = proceso;
                 workflow.DefinicionWorkflow = definicionWorkflow;
-                //workflow.FechaVencimiento = DateTime.Now.AddBusinessDays(definicionWorkflow.DefinicionProceso.DuracionHoras);
                 workflow.FechaVencimiento = proceso.FechaVencimiento;
 
                 //determinar destino del workflow
@@ -458,95 +452,24 @@ namespace App.Core.UseCases
                 var obj = _repository.GetById<Proceso>(id);
                 if (response.IsValid)
                 {
-                    /*Si el proceso corresponde a cometido se deja como falso*/
-                    if (obj.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || obj.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometido)
+                    //terminar todas las tareas pendientes
+                    foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
                     {
-                        var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == obj.ProcesoId);
-                        var doc = _repository.GetFirst<Documento>(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
-                        if (cometido != null)
-                        {
-                            /*se valida que la tarea en que se encuentre el cometido permita la anulacion*/
-                            if (cometido.ReqPasajeAereo && cometido.Workflow.DefinicionWorkflow.Secuencia >= 5)
-                            {
-                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido posee pasaje aereo el cual ya fue tramitado");
-                            }
-                            else if (cometido.ReqPasajeAereo == false && (doc != null && doc.Signed)) //(cometido.Workflow.DefinicionWorkflow.Secuencia >= 13 || (doc != null && doc.Signed == true)))
-                            {
-                                response.Errors.Add("No es posible realizar anulacion solicitada, debido a que cometido ya se encuentra con su resolucion tramitada y firmada");
-                            }
-                            else
-                            {
-                                var _useCaseInteractorCometido = new UseCaseCometidoComision(_repository);
-                                _useCaseInteractorCometido.CometidoAnular(cometido.CometidoId);
-
-                                var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId);
-                                if (destino != null)
-                                    foreach (var d in destino)
-                                        _useCaseInteractorCometido.DestinosAnular(d.DestinoId);
-
-                                var cdp = _repository.Get<GeneracionCDP>(c => c.CometidoId == cometido.CometidoId);
-                                if (cdp != null)
-                                    foreach (var c in cdp)
-                                        _useCaseInteractorCometido.GeneracionCDPAnular(c.GeneracionCDPId);
-
-
-                                //terminar todas las tareas pendientes
-                                foreach (var _workflow in obj.Workflows.Where(q => !q.Terminada))
-                                {
-                                    _workflow.FechaTermino = DateTime.Now;
-                                    _workflow.Terminada = true;
-                                    _workflow.Anulada = true;
-                                }
-
-                                //terminar proceso
-                                obj.FechaTermino = DateTime.Now;
-                                obj.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Anulado;
-                                _repository.Save();
-
-                                //notificar a todos los que participaron en el proceso
-                                var workflow = obj.Workflows.FirstOrDefault();
-                                var solicitante = _repository.GetFirst<Workflow>(c => c.ProcesoId == workflow.ProcesoId && c.DefinicionWorkflow.Secuencia == 1);
-                                var QuienViaja = _sigper.GetUserByRut(cometido.Rut);
-
-                                List<string> emailMsg = new List<string>();
-                                if (solicitante != null)
-                                    emailMsg.Add(solicitante.Email.Trim());
-
-                                if (QuienViaja != null && QuienViaja.Funcionario != null)
-                                    emailMsg.Add(QuienViaja.Funcionario.Rh_Mail.Trim());
-
-                                _email.NotificacionesCometido(workflow,
-                                _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAnulacionCometido),
-                                "Se ha anulado el cometido N°: " + cometido.CometidoId,
-                                emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
-
-                            }
-                        }
+                        workflow.FechaTermino = DateTime.Now;
+                        workflow.Terminada = true;
+                        workflow.Anulada = true;
                     }
-                    else
-                    {
-                        //terminar todas las tareas pendientes
-                        foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
-                        {
-                            workflow.FechaTermino = DateTime.Now;
-                            workflow.Terminada = true;
-                            workflow.Anulada = true;
-                        }
 
-                        //terminar proceso
-                        obj.FechaTermino = DateTime.Now;
-                        //obj.Terminada = true;
-                        //obj.Anulada = true;
-                        obj.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Anulado;
-                        obj.JustificacionAnulacion = JustificacionAnulacion;
-                        _repository.Save();
+                    //terminar proceso
+                    obj.FechaTermino = DateTime.Now;
+                    obj.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Anulado;
+                    obj.JustificacionAnulacion = JustificacionAnulacion;
+                    _repository.Save();
 
-                        //notificar al dueño del proceso
-                        _email.NotificarAnulacionProceso(obj,
-                        _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_anulacion_proceso)),
-                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
-                    }
+                    //notificar al dueño del proceso
+                    _email.NotificarAnulacionProceso(obj,
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_anulacion_proceso)),
+                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
                 }
             }
             catch (Exception ex)
@@ -556,7 +479,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage WorkflowForward(Workflow obj)
         {
             var response = new ResponseMessage();
@@ -925,31 +847,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
-        //public ResponseMessage ConfiguracionInsert(Configuracion obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(obj.Nombre))
-        //            response.Errors.Add("Debe especificar el nombre");
-        //        if (string.IsNullOrEmpty(obj.Valor))
-        //            response.Errors.Add("Debe especificar el valor");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
         public ResponseMessage ConfiguracionUpdate(Configuracion obj)
         {
             var response = new ResponseMessage();
@@ -974,7 +871,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage UsuarioInsert(Usuario obj)
         {
             var response = new ResponseMessage();
@@ -1042,7 +938,6 @@ namespace App.Core.UseCases
 
             return response;
         }
-
         public ResponseMessage RubricaInsert(Rubrica obj)
         {
             var response = new ResponseMessage();
@@ -1112,37 +1007,6 @@ namespace App.Core.UseCases
             return response;
         }
 
-        //public ResponseMessage DocumentoSign(Documento obj, string firmante)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var documento = _repository.GetById<Documento>(obj.DocumentoId);
-        //        if (documento == null)
-        //            response.Errors.Add("Documento no encontrado");
-
-        //        var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
-        //        if (rubrica == null)
-        //            response.Errors.Add("No se encontraron firmas habilitadas para el usuario");
-
-        //        if (response.IsValid)
-        //        {
-        //            documento.File = _hsm.Sign(documento.File, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, null, null);
-        //            documento.Signed = true;
-
-        //            _repository.Update(documento);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
         //Sobrecarga de firma multiple con tabla de verificacion
         public ResponseMessage Sign(int id, List<string> emailsFirmantes, string firmante)
         {
@@ -1167,11 +1031,11 @@ namespace App.Core.UseCases
                     if (!string.IsNullOrWhiteSpace(email) && !_repository.GetExists<Rubrica>(q => q.Email == email && q.HabilitadoFirma))
                         response.Errors.Add("No se encontró rúbrica habilitada para el firmante " + email);
 
-            var _personaResponse = _sigper.GetUserByEmail(firmante);
-            if (_personaResponse == null)
+            var _responsePersona = _sigper.GetUserByEmail(firmante);
+            if (_responsePersona == null)
                 response.Errors.Add("No se encontró usuario firmante en sistema Sigper");
 
-            if (_personaResponse != null && string.IsNullOrWhiteSpace(_personaResponse.SubSecretaria))
+            if (_responsePersona != null && string.IsNullOrWhiteSpace(_responsePersona.SubSecretaria))
                 response.Errors.Add("No se encontró la subsecretaría del firmante");
 
 
@@ -1190,14 +1054,14 @@ namespace App.Core.UseCases
             //si el documento ya tiene folio no solicitarlo nuevamente
             if (string.IsNullOrWhiteSpace(documento.Folio))
             {
-                var _folioResponse = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma, _personaResponse.SubSecretaria);
-                if (_folioResponse == null)
+                var _responseFolio = _folio.GetFolio(string.Join(", ", emailsFirmantes), documento.TipoDocumentoFirma, _responsePersona.SubSecretaria);
+                if (_responseFolio == null)
                     response.Errors.Add("Servicio de folio no entregó respuesta");
 
-                if (_folioResponse != null && _folioResponse.status == "ERROR")
-                    response.Errors.Add(_folioResponse.error);
+                if (_responseFolio != null && _responseFolio.status == "ERROR")
+                    response.Errors.Add(_responseFolio.error);
 
-                documento.Folio = _folioResponse.folio;
+                documento.Folio = _responseFolio.folio;
 
                 _repository.Update(documento);
                 _repository.Save();
@@ -1207,13 +1071,13 @@ namespace App.Core.UseCases
                 return response;
 
             //generar código QR
-            var _qrResponse = _file.CreateQr(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
+            var _responseQR = _file.CreateQr(string.Concat(url_tramites_en_linea.Valor, "/GPDocumentoVerificacion/Details/", documento.DocumentoId));
 
             //firmar documento
-            var _hsmResponse = _hsm.Sign(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _qrResponse);
+            var _responseHSM = _hsm.SignWSDL(documento.File, idsFirma, documento.DocumentoId, documento.Folio, url_tramites_en_linea.Valor, _responseQR);
 
             //actualizar documento con contenido firmado
-            documento.File = _hsmResponse;
+            documento.File = _responseHSM;
             documento.Signed = true;
             _repository.Update(documento);
 

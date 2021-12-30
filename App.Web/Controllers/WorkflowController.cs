@@ -450,6 +450,7 @@ namespace App.Web.Controllers
 
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
+            
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
@@ -462,6 +463,7 @@ namespace App.Web.Controllers
 
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
+            
             //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.Memorandum.ToString())
             //{
             //    var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
@@ -473,17 +475,18 @@ namespace App.Web.Controllers
             //    }
             //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             //}
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
-            {
-                var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("OK");
-                }
-                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-            }
+            //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.ProgramacionHorasExtraordinarias.ToString())
+            //{
+            //    var _useCaseInteractor = new UseCaseProgramacionHorasExtraordinarias(_repository, _sigper, _file, _folio, _hsm);
+            //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+            //    if (_UseCaseResponseMessage.IsValid)
+            //    {
+            //        TempData["Success"] = "Operación terminada correctamente.";
+            //        return RedirectToAction("OK");
+            //    }
+            //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            //}
+            
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDInterno.ToString())
             {
                 var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
@@ -495,6 +498,7 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
+            
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDExterno.ToString())
             {
                 var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
@@ -506,17 +510,19 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.HorasExtras.ToString())
-            {
-                var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
-                var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
-                if (_UseCaseResponseMessage.IsValid)
-                {
-                    TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("OK");
-                }
-                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
-            }
+
+            //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.HorasExtras.ToString())
+            //{
+            //    var _useCaseInteractor = new UseCaseHorasExtras(_repository, _sigper, _file, _folio, _hsm, _email);
+            //    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model);
+            //    if (_UseCaseResponseMessage.IsValid)
+            //    {
+            //        TempData["Success"] = "Operación terminada correctamente.";
+            //        return RedirectToAction("OK");
+            //    }
+            //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+            //}
+            
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GeneraResolucion.ToString())
             {
                 var _useCaseInteractor = new UseCaseGeneraResolucion(_repository, _sigper, _email);

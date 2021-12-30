@@ -31,6 +31,7 @@ namespace App.Model.Core
         [DataType(DataType.Date)]
         public DateTime? FechaVencimiento { get; set; }
 
+
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha término")]
         [DataType(DataType.Date)]

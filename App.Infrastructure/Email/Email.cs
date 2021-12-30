@@ -17,7 +17,7 @@ namespace App.Infrastructure.Email
                 var smtpClient = new SmtpClient();
                 if (message != null)
                 {
-                    smtpClient.Send(message);
+                    //smtpClient.Send(message);
                 }
             }
             catch (Exception)
@@ -103,6 +103,7 @@ namespace App.Infrastructure.Email
                 emailMsg.Body = body;
                 emailMsg.Subject = asunto.Valor;
                 emailMsg.To.Add(proceso.Email);
+
                 Send(emailMsg);
             }
         }

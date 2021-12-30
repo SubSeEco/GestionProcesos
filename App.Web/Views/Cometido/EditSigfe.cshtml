@@ -595,7 +595,7 @@
                                     {
                                         if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 4)
                                         {
-                                            if (item.Type.Contains("pdf"))
+                                            if (item.Type != null && item.Type.Contains("pdf"))
                                             {
                                                 <div class="section"></div>
                                                 <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
