@@ -67,13 +67,13 @@ namespace App.Web.Controllers
 
         public JsonResult GetComunas(string IdRegion)
         {
-            var comunas = _sigper.GetComunasbyRegion(IdRegion);
+            var comunas = _sigper.GetComunasbyRegion(IdRegion).OrderBy(c =>c.Pl_DesCom);
             return Json(comunas.Select(q => new { value = q.Pl_CodCom.Trim(), text = q.Pl_DesCom.Trim() }), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocalidad(string IdComuna)
         {
-            var comunas = _repository .Get<Localidad>(c => c.IdComuna == IdComuna);
+            var comunas = _repository .Get<Localidad>(c => c.IdComuna == IdComuna).OrderBy(c => c.NombreLocalidad);
             return Json(comunas.Select(q => new { value = q.LocalidadId, text = q.NombreLocalidad.Trim() }), JsonRequestBehavior.AllowGet);
         }
 
@@ -270,8 +270,8 @@ namespace App.Web.Controllers
             var cometido = _repository.GetById<Cometido>(id);
             var model = new Destinos();
             ViewBag.IdComuna = new List<SelectListItem>();// SelectList(Enumerable.Empty<SelectListItem>());// (_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim()).OrderBy(c => c.Value);
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim()).OrderBy(c => c.Value);
             ViewBag.LocalidadId = new List<SelectListItem>();
             model.FechaInicio = DateTime.Now;
             model.FechaHasta = DateTime.Now;
@@ -343,9 +343,9 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Destinos>(id);
             ViewBag.IdComuna = new List<SelectListItem>();
             ViewBag.LocalidadId = new List<SelectListItem>();
-            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion);
-            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion);
-            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(), model.IdComuna);
+            ViewBag.IdRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdRegion).OrderBy(c => c.Value);
+            ViewBag.IdOrigenRegion = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim(), model.IdOrigenRegion).OrderBy(c => c.Value);
+            ViewBag.IdComuna = new SelectList(_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom".Trim(), model.IdComuna).OrderBy(c => c.Selected);
             model.Cometido = _repository.GetFirst<Cometido>(c => c.CometidoId == model.CometidoId);
 
             model.Dias100Aprobados = 0;
