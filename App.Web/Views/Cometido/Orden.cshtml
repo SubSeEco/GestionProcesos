@@ -195,7 +195,7 @@
                             &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.TotalViatico).- pesos, (@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras))<br />
                             por concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
                         </p>
-                        @if (Model.ParrafoResolucion != null)
+                        if (Model.ParrafoResolucion != null)
                         {
                             <p align="justify" style="margin-right:30px">
                                 @Html.DisplayFor(m => Model.ParrafoResolucion)

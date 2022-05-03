@@ -116,10 +116,19 @@
                     </strong>
                     <li>
                         <p align="justify" style="margin-right:30px">
-                            Que, los funcionarios públicos pueden cumplir cometidos funcionarios que los obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
+                            Que, los/as funcionarios/as públicos/as pueden cumplir cometidos funcionarios que los/as obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
                             especificas inherentes al cargo que sirven.
                         </p>
                     </li>
+                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
+                    {
+                        <li>
+                            <p align="justify" style="margin-right:30px">
+                                Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
+                                cometido de forma extemporánea.
+                            </p>
+                        </li>
+                    }
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que,
@@ -135,12 +144,11 @@
                             <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                         </p>
                     </li>
-                    <br />
                     <table border="1" width="100%">
                         <tr>
-                            <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                                LOCALIDAD
-                            </td>
+                            @*<td style="border-style: solid; border-width: 1px; border-color: #000000;">
+                    LOCALIDAD
+                </td>*@
                             <td style="border-style: solid; border-width: 1px; border-color: #000000;">
                                 COMUNA
                             </td>
@@ -150,32 +158,22 @@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
-                    <tr>
+                            <tr>
 
-                        @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                        </td>
+                                @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                                @*<td>
+                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
+                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                </td>
 
-                    </tr>
+                            </tr>
                         }
                     </table>
-                    <br />
-                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
-                    {
-                        <li>
-                            <p align="justify" style="margin-right:30px">
-                                Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
-                                cometido de forma extemporánea.
-                            </p>
-                        </li>
-                    }
                 </ol>
             </td>
         </tr>
@@ -327,7 +325,7 @@
                     {
                         <li>
                             <p>
-                                Que, el funcionario
+                                Que, el/la funcionario/a
 
                                 @if (Model.Tiempo == "Pasado")
                                 {
@@ -335,9 +333,9 @@
                                 }
                                 else
                                 {
-                                    @Html.Raw("<span>usará</span>")
+                                    @Html.Raw("<span>hará uso</span>")
                                 }
-                                como medio de transporte el @Html.DisplayFor(m => Model.TipoVehiculoDescripcion) <!--patente @Html.DisplayFor(m => Model.PlacaVehiculo).-->
+                                como medio de transporte el @Html.DisplayFor(m => Model.TipoVehiculoDescripcion) patente @Html.DisplayFor(m => Model.PlacaVehiculo).ToString().ToUpper() .
                             </p>
                         </li>
                     }
@@ -352,11 +350,11 @@
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del cometido,
-                            al ítem o los ítems y asignaciones correspondientes. @*al subtítulo 22*@
+                            al ítem o los ítems y asignaciones correspondientes @*al subtítulo 22*@
                             @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                             @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
                             @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
-                            ,de acuerdo a su naturaleza.
+                            de acuerdo a su naturaleza.
                         </p>
                     </li>
                     @*<li>
@@ -384,7 +382,7 @@
                                     @Html.Raw("<span>el gasto que demande esta Resolución al Programa </span>") @Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)
                                     if (Model.SolicitaViatico)
                                     {
-                                        @Html.Raw(", al Subtítulo")
+                                        @Html.Raw(", al Subtítulo ")
                                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
                                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
                                         @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
@@ -398,9 +396,9 @@
                                         }
                                         else
                                         {
-                                            @Html.Raw(" (Viáticos nacionales personal a")
+                                            @Html.Raw(" (Viáticos nacionales personal a ")
                                             @Html.DisplayFor(m => Model.CalidadDescripcion)
-                                            @Html.Raw(") y al subtítulo 22,")
+                                            @Html.Raw(") y al subtítulo 22, ")
                                         }
                                     }
                                     if (Model.SolicitaViatico == false)

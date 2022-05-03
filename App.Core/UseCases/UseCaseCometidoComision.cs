@@ -5485,7 +5485,10 @@ namespace App.Core.UseCases
                         persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                         if (persona == null)
                             throw new Exception("No se encontró el usuario en Sigper.");
-
+                        if (persona.Funcionario == null)
+                        {
+                            throw new Exception("No se encontró el usuario en Sigper.");
+                        }
                         workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
                         workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
                         workflow.Email = persona.Funcionario.Rh_Mail.Trim();
