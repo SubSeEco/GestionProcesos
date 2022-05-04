@@ -2,6 +2,18 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.2.0 - Cometidos] - 04-05-2022
+
+### Added
+
+- Se crea vista ProcessState.cshtml en la carpeta de Cometidos.
+
+### Changed
+
+- Se agrega metodo ProcessState al controlador de Cometido.
+- Se modifica referencia para incluir como partial View al archivo ProcessState.cshtml.
+- Se modifica el script de jquery del Edit.cshtml de Cometido para incluir verificacion de fechas origen y retorno. Aun no funcional.
+
 ## [1.2.0 - Cometidos] - 02-05-2022
 
 ### Added

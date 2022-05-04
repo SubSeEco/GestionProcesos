@@ -21,6 +21,7 @@ using System.Xml;
 using System.Xml.Linq;
 using App.Model.Sigper;
 using System.Text.RegularExpressions;
+using Enum = App.Util.Enum;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
 //using com.sun.codemodel.@internal;
@@ -1441,6 +1442,55 @@ namespace App.Web.Controllers
 
         //    return data;
         //}
+
+
+        public ActionResult ProcessState(int WorkflowId)
+        {
+            int sec = 1;
+            List<Workflow> _Workflow = new List<Workflow>();
+            List<DefinicionWorkflow> _Definicionworkflow = new List<DefinicionWorkflow>();
+            var _workflow = _repository.GetById<Workflow>(WorkflowId);
+            if (_workflow != null)
+            {
+                switch (_workflow.Entity)
+                {
+                    case "Cometido":
+                        var _cometido = _repository.GetFirst<Cometido>(c => c.WorkflowId.Value == WorkflowId);
+                        if (_cometido != null)
+                        {
+                            _cometido.Workflow = _workflow;
+                            sec = !string.IsNullOrEmpty(_cometido.Workflow.DefinicionWorkflow.Secuencia.ToString()) ? _cometido.Workflow.DefinicionWorkflow.Secuencia : 1;
+                            _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == _cometido.ProcesoId).ToList();
+                        }
+                        else
+                            _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList();
+
+                        _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado).OrderBy(c => c.Secuencia).ToList();
+
+                        break;
+                }
+            }
+
+            var Total = _Definicionworkflow.Count(c => c.Habilitado).ToString();
+
+            var por = (float.Parse(sec.ToString()) / float.Parse(Total)) * 100;
+
+            ViewBag.Secuencia = sec;
+            ViewBag.Total = Total;
+            ViewBag.Porcentaje = Math.Round((Convert.ToDouble(por)), 0);
+
+            var model = new DTOStateProces()
+            {
+                Tarea = 1,
+                Total = int.Parse(Total),
+                Porcentaje = por,
+                Secuencia = sec,
+                CantTareasRealizadas = _Workflow,
+                DefWorkflow = _Definicionworkflow,
+            };
+
+            return View(model);
+        }
 
         [AllowAnonymous]
         public ActionResult Pdf(int id) /*Funcionarios Planta y Contrata*/

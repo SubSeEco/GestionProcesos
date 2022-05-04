@@ -11,7 +11,7 @@
             </p>
         </div>
     </div>
-    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+    @Html.Action("ProcessState", "Cometido", new { Model.WorkflowId })
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
@@ -342,49 +342,49 @@
                                         </tr>
                                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                         {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                        </td>
-                                        <td>
-                                            @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                            <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
-                                        </td>
-                                        <td>
-                                            @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                            <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
-                                        </td>
-                                    </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                </td>
+                                                <td>
+                                                    @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                </td>
+                                                <td>
+                                                    @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
+                                                    <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                </td>
+                                            </tr>
                                         }
                                     </table>
 
@@ -413,7 +413,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                                 @foreach (var destinopasaje in ViewBag.DestinosPasajes)
                                                 {
                                                     <tr>
@@ -436,8 +435,6 @@
                                             </tbody>
                                         </table>
                                     }
-
-
                                 </div>
                             }
 
@@ -654,24 +651,29 @@
     /*Validacion de ingreso de los pasajes, si es q se solicitan*/
     function Pasaje() {
         if (document.getElementById("ReqPasajeAereo").checked == true) {
+
             IdRegion = document.getElementById("IdRegion").value;
+            IdRegionOrigen = document.getElementById("IdRegionOrigen").value;
+            FechaOrigen = document.getElementById("FechaOrigen").value;
+            FechaVuelta = document.getElementById("FechaVuelta").value;
+
             if (IdRegion == null || IdRegion == 0) {
                 alert("Se debe señalar la region de destino");
                 return false;
-            }
-            IdRegionOrigen = document.getElementById("IdRegionOrigen").value;
+            }            
             if (IdRegionOrigen == null || IdRegionOrigen == 0) {
                 alert("Se debe señalar la region de origen");
                 return false;
-            }            
-            FechaOrigen = document.getElementById("FechaOrigen").value;
+            }
             if (FechaOrigen == null || FechaOrigen.length == 0 || FechaOrigen == "01-01-0001 0:00:00") {
                 alert("Se debe ingresar la fecha de origen para los pasajes");
                 return false;
-            }
-            FechaVuelta = document.getElementById("FechaVuelta").value;
+            }            
             if (FechaVuelta == null || FechaVuelta.length == 0 || FechaVuelta == "01-01-0001 0:00:00") {
                 alert("Se debe ingresar la fecha de vuelta para los pasajes");
+                return false;
+            } else {
+                alert("IT WORKS!!!!")
                 return false;
             }
         }
