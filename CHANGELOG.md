@@ -2,6 +2,14 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.2.0 - Cometidos] - 16-05-2022
+
+### Changed
+
+- Se modifica en la vista Documentos, un boton para "eliminar" el documento, siempre y cuando la tarea sea de Gestion de Personas.
+- Se agrega ActionResult DeleteDocumento al controlador de Documentos.
+- Se agrega en en la vista EditGP regiones para poder visualizar mejor las secciones en codigo.
+
 ## [1.2.0 - Cometidos] - 04-05-2022
 
 ### Added

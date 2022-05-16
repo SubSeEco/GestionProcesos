@@ -104,6 +104,7 @@
                             }
                         </div>
                         <div id="jQuery_accordion">
+                            <!--#region Datos del Funcionario-->
                             <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
@@ -147,7 +148,9 @@
                                     @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
                                 </div>
                             </div>
+                            <!-- #endregion -->
 
+                            <!-- #region Datos de la Solicitud-->
                             <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m8 l12">
@@ -252,7 +255,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- #endregion -->
 
+                            <!-- #region Datos del Cometido -->
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                             <div class="row">
                                 <div class="input-field col s12 m10 l10">
@@ -429,6 +434,7 @@
                                 @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
                                 <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
+                            <!-- #endregion-->
 
                             @*<h3><span style="font-weight: bold">IV. Edicion Resolucion: </span></h3>
                             <div class="row">

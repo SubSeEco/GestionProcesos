@@ -115,6 +115,17 @@ namespace App.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DeleteDocumento(int DocumentoId)
+        {
+            var result = _repository.GetById<Documento>(DocumentoId);
+
+            result.Activo = false;
+            _repository.Update(result);
+            _repository.Save();
+
+            return Redirect(Request.UrlReferrer.PathAndQuery);
+        }
+
         public ActionResult Index()
         {
             var email = UserExtended.Email(User);
