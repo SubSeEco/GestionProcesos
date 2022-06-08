@@ -293,7 +293,7 @@ namespace App.Web.Controllers
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
             if (model == null)
             {
-                model.Proceso = proceso;
+                //model.Proceso = proceso;
                 return RedirectToAction("Details", "Proceso", new { id });
             }
             return View(model);
@@ -1412,17 +1412,28 @@ namespace App.Web.Controllers
                 else
                 {
                     var docOld = _repository.GetById<Documento>(IdDocto);
-                    if (docOld.Signed != true)
+
+                    if(!docOld.Activo)
                     {
-                        docOld.Fecha = DateTime.Now;
-                        docOld.File = pdf;
-                        docOld.Signed = false;
-                        docOld.Texto = data.Text;
-                        docOld.Metadata = data.Metadata;
-                        docOld.Type = data.Type;
+                        docOld.Activo = true;
                         _repository.Update(docOld);
                         _repository.Save();
                     }
+                    else
+                    {
+                        if (docOld.Signed != true)
+                        {
+                            docOld.Fecha = DateTime.Now;
+                            docOld.File = pdf;
+                            docOld.Signed = false;
+                            docOld.Texto = data.Text;
+                            docOld.Metadata = data.Metadata;
+                            docOld.Type = data.Type;
+                            _repository.Update(docOld);
+                            _repository.Save();
+                        }
+                    }
+
                 }
 
             }
@@ -1463,7 +1474,9 @@ namespace App.Web.Controllers
                             _Workflow = _repository.Get<Workflow>(c => c.ProcesoId == _cometido.ProcesoId).ToList();
                         }
                         else
+                        {
                             _Workflow = _repository.Get<Workflow>(c => c.WorkflowId == WorkflowId).ToList();
+                        }
 
                         _Definicionworkflow = _repository.Get<DefinicionWorkflow>(c => c.DefinicionProcesoId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje && c.Habilitado).OrderBy(c => c.Secuencia).ToList();
 

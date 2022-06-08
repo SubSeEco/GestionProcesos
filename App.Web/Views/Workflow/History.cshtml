@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-content">
         <span class="card-title">Historial</span>
-        @foreach (var item in Model.Proceso.Workflows.Where(q=>!q.Anulada).OrderBy(q => q.WorkflowId))
+        @foreach (var item in Model.Proceso.Workflows.Where(q => !q.Anulada).OrderBy(q => q.WorkflowId))
         {
             <div class="section"></div>
             <span class="card-title">

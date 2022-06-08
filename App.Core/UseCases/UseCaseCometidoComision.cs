@@ -345,6 +345,7 @@ namespace App.Core.UseCases
         public ResponseMessage CotizacionInsert(Cotizacion obj)
         {
             var response = new ResponseMessage();
+            var cotizacionDoc = new CotizacionDocumento();
 
             try
             {
@@ -360,11 +361,24 @@ namespace App.Core.UseCases
                     response.Errors.Add("Debe especificar el nombre de la empresa");
                 }
 
+                foreach (var item in obj.CotizacionDocumento)
+                {
+                    if(item.FileName==string.Empty)
+                    {
+                        response.Errors.Add("Debe agregar PDF.");
+                    }
+                    else
+                    {
+                        cotizacionDoc = item;
+                    }
+                }
+
                 if (response.IsValid)
                 {
                     obj.Seleccion = false;
 
                     _repository.Create(obj);
+                    _repository.Create(cotizacionDoc);
                     _repository.Save();
                 }
             }
@@ -4698,21 +4712,44 @@ namespace App.Core.UseCases
                             }
                         }
                     }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaPresupuesto)
+                    {
+                        if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
+                        {
+                            if (comet.GeneracionCDP.Count == 0)
+                            {
+                                throw new Exception("Falta generar Certificado de Refrendación.");
+                            }
+                        }
+                    }
+                    else if(workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto)
+                    {
+                        if(obj.TipoAprobacionId!=(int)Util.Enum.TipoAprobacion.Rechazada)
+                        {
+                            foreach(var item in comet.GeneracionCDP)
+                            {
+                                if (item.VtcIdCompromiso.IsNullOrWhiteSpace())
+                                {
+                                    throw new Exception("Falta ingresar el ID del Compromiso.");
+                                }                              
+                            }
+                        }
+                    }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
                     {
-                        if (workflowActual.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
+                        if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
                             var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.Resolucion).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
 
                             /*se valida si existe una resolucion revocatoria, esta se debe firmar*/
-                            if(comet.ResolucionRevocatoria == true)
+                            if (comet.ResolucionRevocatoria == true)
                             {
                                 var res = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.ResolucionRevocatoriaCometido).FirstOrDefault().DocumentoId).Signed;
                                 if (res == false)
                                     throw new Exception("El documento resolucion revocatoria debe estar firmado electronicamente");
-                            }                            
+                            }
                         }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
@@ -4760,14 +4797,15 @@ namespace App.Core.UseCases
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
                     {
-                        if (workflowActual.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
+                        if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
                             //Se toma valor del pasaje para validar cuantos adjuntos se solicitan
                             bool cotiza = false;
                             var Pasaje = _repository.GetFirst<Pasaje>(q => q.WorkflowId == obj.WorkflowId);
                             if (Pasaje != null)
                             {
-                                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
+                                #region OLD
+                                /*var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
                                 foreach (var c in cotizacion)
                                 {
                                     if (c != null)
@@ -4778,7 +4816,18 @@ namespace App.Core.UseCases
                                                 cotiza = true;
                                         }
                                     }
+                                }*/
+                                #endregion
+                                var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
+                                for (int i = 0; i < cotizacion.Count(); i++)
+                                {
+                                    var cotizacionDocumento = _repository.GetById<CotizacionDocumento>(cotizacion.ToArray()[i].CotizacionId);
+                                    if(cotizacionDocumento.Selected && cotizacionDocumento.Type.Contains("pdf"))
+                                    {
+                                        cotiza = true;
+                                    }
                                 }
+
                             }
 
                             if (cotiza == false)

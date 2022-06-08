@@ -2,13 +2,29 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.2.0 - Cometidos] - 08-06-2022
+
+### Changed
+
+- Se modifico el funcionamiento y el color del boton Eliminar Documento.
+- Se modifico la falla ortografica en los detalles de Cometido, cuando se debe ingresar el ID del Compromiso.
+- Se modifico la vista EditSigfe y de EditSigfeTesoreria para que mostrara el Historial.
+- Se modifico el comportamiento de el envio de las tareas para que estas pudieran rechazar o aprobar y en caso de fallar, mostrar el mensaje correspondiente.
+
+### Added
+
+- Se agrego la barra de tareas en la vista se firma de documento.
+- Se agrego una variable de proceso en el controlador de Workflow en el metodo Send.
+- Se agrego mensaje de error en la creación de la cotización.
+- Se agrego un nuevo enum, CometidoSecuencia.
+
 ## [1.2.0 - Cometidos] - 16-05-2022
 
 ### Changed
 
 - Se modifica en la vista Documentos, un boton para "eliminar" el documento, siempre y cuando la tarea sea de Gestion de Personas.
 - Se agrega ActionResult DeleteDocumento al controlador de Documentos.
-- Se agrega en en la vista EditGP regiones para poder visualizar mejor las secciones en codigo.
+- Se agrega en la vista EditGP regiones para poder visualizar mejor las secciones en codigo.
 
 ## [1.2.0 - Cometidos] - 04-05-2022
 

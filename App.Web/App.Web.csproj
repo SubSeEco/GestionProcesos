@@ -461,6 +461,7 @@
     <Compile Include="Controllers\HomeController.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Controllers\HorasExtrasController.cs" />
     <Compile Include="Controllers\InformeHSAController.cs" />
     <Compile Include="Controllers\ParametrosComisionesController.cs" />
     <Compile Include="Controllers\ParrafoComisionesController.cs" />
@@ -762,6 +763,31 @@
     <Content Include="Scripts\jquery-3.5.0.min.map" />
     <Content Include="Views\Cometido\ViewDocWord.cshtml" />
     <Content Include="Views\Cometido\ChartFuncionarios.cshtml" />
+    <Content Include="Views\HorasExtras\Create.cshtml" />
+    <Content Include="Views\HorasExtras\Details.cshtml" />
+    <Content Include="Views\HorasExtras\Edit.cshtml" />
+    <Content Include="Views\HorasExtras\EditConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\EditGP.cshtml" />
+    <Content Include="Views\HorasExtras\EditRemuneraciones.cshtml" />
+    <Content Include="Views\HorasExtras\FirmaDocumento.cshtml" />
+    <Content Include="Views\HorasExtras\GeneraResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\procesState.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionDescanso.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionServicio.cshtml" />
+    <Content Include="Views\HorasExtras\SignConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\SignResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\View.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditAnalista.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Pdf.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Sign.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
+    <Content Include="Views\Cometido\ProcessState.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

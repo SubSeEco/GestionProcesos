@@ -384,7 +384,6 @@
                             {
                                 <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
                                 <div class="row">
-
                                     @if (Model.SolicitaViatico)
                                     {
                                         <span class="card-title">Viáticos</span>
@@ -478,7 +477,6 @@
                                                 </th>
                                             </tr>
                                         </table>
-
                                     }
 
                                     @*@if (Model.ReqPasajeAereo == true)
@@ -652,7 +650,7 @@
         </div>
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
 
     </div>

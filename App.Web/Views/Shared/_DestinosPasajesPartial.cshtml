@@ -32,22 +32,21 @@
                         <th></th>
                     </tr>
                     <tr>
-                        
-                            <td>
-                                @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...")
-                            </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...",htmlAttributes: new {@id="HOLAAAA"})
+                        </td>
                         <td>
                             @Html.TextBoxFor(model => model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
                             @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
                         </td>
                         <td>
                             @Html.DropDownListFor(m => m.IdRegion, null, "Seleccione...")
+                            @*@Html.DropDownListFor(model=>model.IdRegion,new SelectList(ViewBag.IdRegion,"Value","Text",Model.IdRegion),"Seleccione...")*@
                         </td>
                         <td>
                             @Html.TextBoxFor(model => model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
                             @Html.ValidationMessageFor(m => m.FechaVuelta, "", new { @class = "red-text" })
-                        </td>
-                        
+                        </td>                        
                     </tr>
                 </table>
 

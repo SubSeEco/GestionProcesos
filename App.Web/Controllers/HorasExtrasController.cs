@@ -280,6 +280,15 @@ namespace App.Web.Controllers
             //var usuarios = new SelectList(_sigper.GetAllUsers().Where(c => c.Rh_Mail.Contains("economia")), "RH_NumInte", "PeDatPerChq");
             var model = _repository.GetById<HorasExtras>(id);
 
+            var workflowData = _repository.GetById<Workflow>(model.WorkflowId);
+
+            var deficionWorkFlowData = _repository.GetById<DefinicionWorkflow>(workflowData.DefinicionWorkflowId);
+            // var def = new SelectList(_repository.Get<DefinicionWorkflow>().Where(c => c.DefinicionWorkflowId == lala.ToList()));
+
+            ViewBag.sequence = deficionWorkFlowData.Secuencia;
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+            model.Proceso = proceso;
+
             return View(model);
         }
 
@@ -684,6 +693,9 @@ namespace App.Web.Controllers
         public ActionResult EditConfirmacion(int id)
         {
             var model = _repository.GetById<HorasExtras>(id);
+            var workflowData = _repository.GetById<Workflow>(model.WorkflowId);
+
+            var deficionWorkFlowData = _repository.GetById<DefinicionWorkflow>(workflowData.DefinicionWorkflowId);
 
             foreach (var c in model.Colaborador)
             {
@@ -712,6 +724,15 @@ namespace App.Web.Controllers
                     c.HNSigper = 0;
                 }
             }
+
+            var colaborador = _repository.Get<Colaborador>(d => d.HorasExtrasId == id);
+
+            //model.Colaborador = colaborador;
+
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+            model.Proceso = proceso;
+
+            ViewBag.sequence = deficionWorkFlowData.Secuencia;
             return View(model);
         }
 

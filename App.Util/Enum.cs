@@ -186,6 +186,23 @@ namespace App.Util
             CorreoOfPartes = 66,
         }
 
+        public enum CometidoSecuencia
+        {
+            AnalistaPresupuesto = 8,
+            EncargadoPresupuesto = 9,
+            AprobacionJuridica = 10,
+            AprobacionJefatura = 2,
+            FirmaActoAdministrativo = 13,
+            FirmaMinistro = 14,
+            FirmaSubsecretario = 15,
+            AnalistaContabilidad = 16,
+            EncargadoContabilidad = 17,
+            AnalistaTesoreria = 18,
+            EncargadoTesoreria = 19,
+            EncargadoFinanzas = 20,
+            IngresoPagoTesoreria = 21
+        }
+
         public enum DefinicionProceso
         {
             SIACIngreso = 7,

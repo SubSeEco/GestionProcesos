@@ -4,7 +4,7 @@
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
 
-    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+    @Html.Action("ProcessState", "Cometido", new { Model.WorkflowId })
 
 
     <div id="card-alert" class="card blue-grey lighten-1">
@@ -149,7 +149,6 @@
                                 </div>
                             </div>
                             <!-- #endregion -->
-
                             <!-- #region Datos de la Solicitud-->
                             <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
                             <div class="row">
@@ -256,7 +255,6 @@
                                 </div>
                             </div>
                             <!-- #endregion -->
-
                             <!-- #region Datos del Cometido -->
                             <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
                             <div class="row">
@@ -435,12 +433,11 @@
                                 <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                             </div>
                             <!-- #endregion-->
-
                             @*<h3><span style="font-weight: bold">IV. Edicion Resolucion: </span></h3>
-                            <div class="row">
-                                @Html.DisplayNameFor(modelItem => Model.ParrafoResolucion)
-                                @Html.TextAreaFor(m => Model.ParrafoResolucion,  new { rows = 10 })
-                            </div>*@
+                                <div class="row">
+                                    @Html.DisplayNameFor(modelItem => Model.ParrafoResolucion)
+                                    @Html.TextAreaFor(m => Model.ParrafoResolucion,  new { rows = 10 })
+                                </div>*@
                         </div>
                         <div class="section"></div>
                         <p>

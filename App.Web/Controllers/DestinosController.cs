@@ -73,7 +73,7 @@ namespace App.Web.Controllers
 
         public JsonResult GetLocalidad(string IdComuna)
         {
-            var comunas = _repository .Get<Localidad>(c => c.IdComuna == IdComuna).OrderBy(c => c.NombreLocalidad);
+            var comunas = _repository.Get<Localidad>(c => c.IdComuna == IdComuna).OrderBy(c => c.NombreLocalidad);
             return Json(comunas.Select(q => new { value = q.LocalidadId, text = q.NombreLocalidad.Trim() }), JsonRequestBehavior.AllowGet);
         }
 

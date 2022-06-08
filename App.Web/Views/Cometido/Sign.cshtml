@@ -30,7 +30,7 @@
             }
         </div>
     </div>
-
+    @Html.Action("ProcessState", "Cometido", new { Model.WorkflowId })
     <div class="row">
         <div class="col s12 m10 l8">
             <div class="card">
@@ -270,41 +270,41 @@
                                     </tr>
                                     @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                    </td>
-                                </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                            </td>
+                                        </tr>
                                     }
                                 </table>
 
@@ -359,7 +359,7 @@
                                             </th>
                                             <th>
                                                 @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
+                                                @*@Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))*@
                                             </th>
                                         </tr>
                                         <tr>
@@ -374,7 +374,7 @@
                                             </th>
                                             <th>
                                                 @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
+                                                @*@Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))*@
                                             </th>
                                         </tr>
                                         <tr>
@@ -389,7 +389,7 @@
                                             </th>
                                             <th>
                                                 @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
+                                                @*@Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))*@
                                             </th>
                                         </tr>
                                         <tr>
@@ -404,7 +404,7 @@
                                             </th>
                                             <th>
                                                 @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
+                                                @*@Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))*@
                                             </th>
                                         </tr>
                                     </table>
@@ -546,6 +546,7 @@
         </div>
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
 </div>

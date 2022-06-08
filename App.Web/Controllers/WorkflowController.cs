@@ -448,6 +448,45 @@ namespace App.Web.Controllers
             TryValidateModel(model);
 
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(workflow.ProcesoId);
+            /*var lista = proceso.Documentos.ToList();
+
+            var cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == proceso.ProcesoId);
+            
+            if(workflow.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.IngresoAnalistaPresupuesto)
+            {
+                if(!cometido.GeneracionCDP.Any())
+                {
+                    var _useCaseInteractor = new UseCaseCometidoComision(_repository, _email, _sigper, _file);
+                    var _UseCaseResponseMessage = _useCaseInteractor.WorkflowUpdate(model, User.Email());
+                    if(_UseCaseResponseMessage.IsValid)
+                    {
+                        TempData["Success"] = "Operación terminada correctamente.";
+                        return RedirectToAction("Index", "Workflow");
+                    }
+                    _UseCaseResponseMessage.Errors.ForEach(e => ModelState.AddModelError(string.Empty, e));
+                    *//*throw new Exception("Falta Crear el Certificado de Refrendación.");*//*
+                    
+                }
+            }
+
+
+            if (workflow.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.FirmaActoAdministrativo)
+            {
+                for (int i = 0; i < lista.Count; i++)
+                {
+                    if(workflow.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                    {
+                        if (lista[i].FileName.Contains("Orden de Pago") || lista[i].FileName.Contains("Resolucion Cometido") || lista[i].FileName.Contains("Resolucion Ministerial Exenta"))
+                    {
+                        if (!lista[i].Signed)
+                        {
+                            throw new Exception("El documento no esta firmado.");
+                        }
+                    }
+                    }                    
+                }
+            }*/            
 
             if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudPasaje)
             {

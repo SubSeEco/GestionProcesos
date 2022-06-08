@@ -152,9 +152,41 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Cotizacion model) 
         {
+            var doc = new CotizacionDocumento();
+            var pasaje = _repository.GetById<Pasaje>(model.PasajeId);
+            model.Pasaje = pasaje;
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
+                var docs = new List<CotizacionDocumento>();
+                var email = UserExtended.Email(User);
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var files = Request.Files[i];
+                    var target = new MemoryStream();
+                    files.InputStream.CopyTo(target);
+
+                    var data = _file.BynaryToText(target.ToArray());
+
+                    /*doc.CotizacionId = model.CotizacionId.Value;*/
+                    doc.Fecha = DateTime.Now;
+                    doc.Email = email;
+                    doc.FileName = files.FileName;
+                    doc.File = target.ToArray();
+                    //doc.ProcesoId = model.ProcesoId.Value;
+                    //doc.WorkflowId = model.WorkflowId.Value;
+                    doc.Signed = false;
+                    doc.Texto = data.Text;
+                    doc.Metadata = data.Metadata;
+                    doc.Type = data.Type;
+                    doc.TipoPrivacidadId = 1;
+
+                    docs.Add(doc);
+                }
+
+                model.CotizacionDocumento = docs;
+
                 var _UseCaseResponseMessage = _useCaseInteractor.CotizacionInsert(model);
                 //var _UseCaseResponseMessage2 = _useCaseInteractor.CotizacionDocumentoInsert(File);
 
@@ -164,7 +196,15 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     /*si la cotizacion se guarda ok, se guardan los archivos asociados*/
-                    var email = UserExtended.Email(User);
+                    
+                    /*foreach(var item in model.CotizacionDocumento)
+                    {
+                        item.CotizacionId = model.CotizacionId.Value;
+
+                        _repository.Create(item);
+                        _repository.Save();
+                    }*/
+                    /*var email = UserExtended.Email(User);
                     if (Request.Files.Count <= 0)
                         ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
 
@@ -176,7 +216,7 @@ namespace App.Web.Controllers
 
                         var data = _file.BynaryToText(target.ToArray());
 
-                        var doc = new CotizacionDocumento();
+                        
                         doc.CotizacionId = model.CotizacionId.Value;
                         doc.Fecha = DateTime.Now;
                         doc.Email = email;
@@ -192,7 +232,7 @@ namespace App.Web.Controllers
 
                         _repository.Create(doc);
                         _repository.Save();
-                    }
+                    }*/
 
                     TempData["Success"] = "Operación terminada correctamente.";
                     return RedirectToAction("EditAbast", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
@@ -233,6 +273,8 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Cotizacion>(id);
             ViewBag.EmpresaAerolineaId = new List<SelectListItem>();
             ViewBag.EmpresaAerolineaId = new SelectList(_repository.Get<EmpresaAerolinea>(), "EmpresaAerolineaId", "NombreEmpresa");
+
+            model.Pasaje.Workflow = _repository.GetById<Workflow>(model.Pasaje.WorkflowId);
 
             //string valor = model.TipoCambio.ToString();
             //valor.Replace(',', '.');
