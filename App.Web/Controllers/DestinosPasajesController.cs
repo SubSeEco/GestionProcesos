@@ -7,6 +7,8 @@ using App.Model.Shared;
 //using App.Model.Shared;
 using App.Core.Interfaces;
 using App.Core.UseCases;
+using App.Model.Core;
+using App.Model.Cometido;
 
 namespace App.Web.Controllers
 {
@@ -393,6 +395,9 @@ namespace App.Web.Controllers
         {
             var _useCaseInteractor = new UseCaseCometidoComision(_repository);
             var model = _repository.GetById<DestinosPasajes>(id);
+            var pasaje = _repository.GetFirst<Pasaje>(q => q.PasajeId == model.PasajeId);
+            var proceso = _repository.GetFirst<Proceso>(q => q.ProcesoId == pasaje.ProcesoId);
+            var cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId);
 
             var _UseCaseResponseMessage = _useCaseInteractor.DestinosPasajesDelete(id);
 
@@ -400,7 +405,7 @@ namespace App.Web.Controllers
             if (_UseCaseResponseMessage.IsValid)
             {
                 TempData["Success"] = "Operación terminada correctamente.";
-                return RedirectToAction("Edit", "Pasaje", new { id = model.PasajeId });
+                return RedirectToAction("Edit", "Cometido", new { id = cometido.CometidoId });
             }
 
 

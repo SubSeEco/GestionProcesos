@@ -983,6 +983,19 @@ namespace App.Web.Controllers
 
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);
 
+            //var destinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId).ToList();
+
+            /* var pasajes = _repository.Get<Pasaje>(q => q.ProcesoId == model.ProcesoId).ToList();
+             var destinosPasajes = new List<DestinosPasajes>();
+             var help = new DestinosPasajes();
+
+             foreach (var pasaje in pasajes)
+             {
+                 help = _repository.GetFirst<DestinosPasajes>(q => q.PasajeId == pasaje.PasajeId);
+                 destinosPasajes.Add(help);
+             }
+
+             model.DestinosPasajes = destinosPasajes;*/
 
             ViewBag.Pasaje = new DestinosPasajes(); //_des; //_repository.Get<DestinosPasajes>(c => c.PasajeId == 2038).FirstOrDefault(); //_repository.Get<Dest>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault().CometidoId;
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
@@ -1084,6 +1097,9 @@ namespace App.Web.Controllers
             //        .Where(y => y.Count > 0)
             //        .ToList();
             //}
+
+            ViewBag.Pasajes = model.Pasajes;
+            ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);
 
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
             //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso", model.TipoReembolsoId);

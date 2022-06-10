@@ -9,7 +9,7 @@
     @*@Html.HiddenFor(q => Model.WorkflowId)
         @Html.HiddenFor(q => Model.PasajeId)*@
 
-    @Html.ValidationSummary(true, "", new { @class = "red-text" })
+    @*@Html.ValidationSummary(true, "", new { @class = "red-text" })*@
 
 
     <div class="card-content">
@@ -18,35 +18,39 @@
                 <table class="table">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+                            <i class="small material-icons">flight_takeoff</i>@Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                            <i class="small material-icons">date_range</i>@Html.DisplayNameFor(model => model.FechaOrigen)
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...", htmlAttributes: new { @id = "HOLAAAA" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.FechaOrigen)
+                            @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="small material-icons">flight_land</i>@Html.DisplayNameFor(model => model.RegionDescripcion)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.RegionDescripcion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                            <i class="small material-icons">date_range</i>@Html.DisplayNameFor(model => model.FechaVuelta)
                         </th>
                         <th></th>
                     </tr>
                     <tr>
                         <td>
-                            @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...",htmlAttributes: new {@id="HOLAAAA"})
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
-                            @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
-                        </td>
-                        <td>
                             @Html.DropDownListFor(m => m.IdRegion, null, "Seleccione...")
                             @*@Html.DropDownListFor(model=>model.IdRegion,new SelectList(ViewBag.IdRegion,"Value","Text",Model.IdRegion),"Seleccione...")*@
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                            @Html.TextBoxFor(model => model.FechaVuelta)
                             @Html.ValidationMessageFor(m => m.FechaVuelta, "", new { @class = "red-text" })
-                        </td>                        
+                        </td>
                     </tr>
                 </table>
 

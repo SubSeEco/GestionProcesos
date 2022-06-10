@@ -4215,12 +4215,17 @@ namespace App.Core.UseCases
             try
             {
                 var obj = _repository.GetById<DestinosPasajes>(id);
+                var pasaje = _repository.GetById<Pasaje>(obj.PasajeId);
+
                 if (obj == null)
                     response.Errors.Add("Dato no encontrado");
+                if (pasaje == null)
+                    response.Errors.Add("Pasaje no encontrado");
 
                 if (response.IsValid)
                 {
                     _repository.Delete(obj);
+                    _repository.Delete(pasaje);
                     _repository.Save();
                 }
             }
@@ -4944,7 +4949,16 @@ namespace App.Core.UseCases
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1 /*2*/ && Cometido.ReqPasajeAereo)
                                     {
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); /*si tiene pasaje se generan las tareas de solicitud de pasaje*/
+                                        var pasaje = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflowActual.ProcesoId);
+                                        if(pasaje != null)
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); /*si tiene pasaje se generan las tareas de solicitud de pasaje*/
+                                        }
+                                        else
+                                        {
+                                            throw new Exception("Falta agregar pasaje");
+                                        }
+
                                         #region Pasaje
                                         /*genera registro en tabla de pasajes*/
                                         //Pasaje _pasaje = new Pasaje();

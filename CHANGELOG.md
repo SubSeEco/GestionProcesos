@@ -2,6 +2,17 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.2.0 - Cometidos] - 10-06-2022
+
+### Changed
+
+- Se modifico la vista de Pasajes en el cometido para que esta no colapsara al mostrar la falta de fecha.
+- Se modifico manejo de error cuando se elimina el pasaje.
+
+### Added
+
+- Se agrego error al enviar la tarea al siguiente flujo cuando no se agrego un pasaje al cometido.
+
 ## [1.2.0 - Cometidos] - 08-06-2022
 
 ### Changed
