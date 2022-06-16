@@ -315,6 +315,9 @@ namespace App.Model.Cometido
         [DataType(DataType.MultilineText)]
         public string ParrafoResolucion { get; set; }
 
+        [Display(Name = "Justificación de Atraso")]
+        public string JustificacionAtraso { get; set; }
+
         public string GetTags()
         {
             var tag = new StringBuilder();

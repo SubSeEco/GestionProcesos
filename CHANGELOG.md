@@ -2,6 +2,22 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.2.0 - Cometidos] - 16-06-2022
+
+### Changed
+
+- Se modifico la consulta realizada para obtener el documento de la cotización.
+- Se modifico la vista de los Documentos, ahora siempre que un perfil de analista ingrese un documento, aparecera el boton "Eliminar".
+
+### Added
+
+- Se agrego control de anulación, para que no se pueda anular un proceso una vez pase de el primero paso del flujo (Ingreso de Solicitud).
+- Se agrego formulario de justificacion junto con el dato JustificacionAtraso en la DB y el Modelo.
+- Se agrego función para validar que no falte ingresar la justificacion del atraso, en caso de estar nulo, cuando corresponde, avita que la tarea avance.
+- Se agrego SolicitudCometido al enum CometidoSecuencia.
+- Se creo funcion para validar si un cometido viene o no con atraso de 20 dias de ingreso.
+- Se agrego en las correspondientes vistas de los flujos de cometidos, el modulo de Justificacion de Atraso.
+
 ## [1.2.0 - Cometidos] - 10-06-2022
 
 ### Changed

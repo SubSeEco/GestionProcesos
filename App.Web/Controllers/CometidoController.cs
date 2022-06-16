@@ -446,8 +446,9 @@ namespace App.Web.Controllers
             _repository.Create(workflow);
             _repository.Save();
 
+            return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo,workflow.DefinicionWorkflow.Entidad.Codigo, new {workflow.WorkflowId});
 
-            return View("Index", "Workflow");
+            //return View("Index", "Workflow");
         }
 
         public ActionResult CreaDocto(int id)
@@ -995,7 +996,24 @@ namespace App.Web.Controllers
                  destinosPasajes.Add(help);
              }
 
-             model.DestinosPasajes = destinosPasajes;*/
+             model.DestinosPasajes = destinosPasajes;*/                        
+
+            ViewBag.FechaCalculo = new List<Destinos>();
+            for(int i =0; i < model.Destinos.Count; i++)
+            {
+                var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
+                var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
+
+                /*if (fecha <20)
+                {
+                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                }*/
+                if(fechahelp<20)
+                {
+                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                }
+            }
+
 
             ViewBag.Pasaje = new DestinosPasajes(); //_des; //_repository.Get<DestinosPasajes>(c => c.PasajeId == 2038).FirstOrDefault(); //_repository.Get<Dest>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault().CometidoId;
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
@@ -1097,6 +1115,22 @@ namespace App.Web.Controllers
             //        .Where(y => y.Count > 0)
             //        .ToList();
             //}
+
+            ViewBag.FechaCalculo = new List<Destinos>();
+            for (int i = 0; i < model.Destinos.Count; i++)
+            {
+                var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
+                var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
+
+                /*if (fecha <20)
+                {
+                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                }*/
+                if (fechahelp < 20)
+                {
+                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                }
+            }
 
             ViewBag.Pasajes = model.Pasajes;
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);

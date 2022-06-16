@@ -452,13 +452,26 @@ namespace App.Core.UseCases
                 var obj = _repository.GetById<Proceso>(id);
                 if (response.IsValid)
                 {
-                    //terminar todas las tareas pendientes
-                    foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
+                    if(obj.DefinicionProcesoId!=(int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                     {
-                        workflow.FechaTermino = DateTime.Now;
-                        workflow.Terminada = true;
-                        workflow.Anulada = true;
+                        foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
+                        {
+                            workflow.FechaTermino = DateTime.Now;
+                            workflow.Terminada = true;
+                            workflow.Anulada = true;
+                        }
                     }
+                    else
+                    {
+                        foreach(var workflow in obj.Workflows.Where(q => !q.Terminada))
+                        {
+                            if(workflow.DefinicionWorkflow.Secuencia!=(int)Util.Enum.CometidoSecuencia.SolicitudCometido)
+                            {
+                                throw new Exception("No se puede anular el proceso debido a que ya cuenta con aprobación de Jefatura.");
+                            }
+                        }
+                    }
+                    //terminar todas las tareas pendientes
 
                     //terminar proceso
                     obj.FechaTermino = DateTime.Now;

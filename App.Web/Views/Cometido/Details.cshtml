@@ -291,54 +291,73 @@
                                     </tr>
                                     @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)*@
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)*@
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)*@
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)*@
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
-                                    </td>
-                                    <td>
-                                        @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)*@
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                    </td>
-                                </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                            </td>
+                                            <td>
+                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)*@
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                            </td>
+                                            <td>
+                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)*@
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                            </td>
+                                            <td>
+                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)*@
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                            </td>
+                                            <td>
+                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)*@
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                            </td>
+                                            <td>
+                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)*@
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                            </td>
+                                        </tr>
                                     }
                                 </table>
 
                             }
                         </div>
+
+                        @if (Model.JustificacionAtraso != null)
+                        {
+                            <h3><span style="font-weight: bold">IV. Justificación de Atraso</span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l12">
+                                    <strong>@Html.NameFor(m => Model.JustificacionAtraso)</strong>
+                                    <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                </div>
+                            </div>
+                        }
+
                         @if (Model.GeneracionCDP.Any())
                         {
-                            <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            if (Model.JustificacionAtraso != null)
+                            {
+                                <h3><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
+                            else
+                            {
+                                <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
                             <div class="row">
 
                                 @if (Model.SolicitaViatico || Model.SolicitaViatico != true)
@@ -446,109 +465,109 @@
                                 }
 
                                 @*@if (Model.ReqPasajeAereo == true)
-                    {
-                        <span class="card-title">Pasajes</span>
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoPartidaId)
+                {
+                    <span class="card-title">Pasajes</span>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoPartidaId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjVtcTipoCapituloId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                            </th>
+                            <th>
+                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
                                 </th>
                                 <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
                                 </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjVtcTipoCapituloId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                </th>
-                                <th>
-                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                    </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCentroCostoId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubTituloId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoItemId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacionId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacionId)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
-                                </th>
-                                <th>
-                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
-                                </th>
-                            </tr>
-                        </table>
-                    }*@
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCentroCostoId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubTituloId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoItemId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacionId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacionId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
+                            </th>
+                        </tr>
+                    </table>
+                }*@
 
                                 @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
                                 {

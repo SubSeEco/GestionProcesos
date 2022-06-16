@@ -188,6 +188,7 @@ namespace App.Util
 
         public enum CometidoSecuencia
         {
+            SolicitudCometido=1,
             AnalistaPresupuesto = 8,
             EncargadoPresupuesto = 9,
             AprobacionJuridica = 10,

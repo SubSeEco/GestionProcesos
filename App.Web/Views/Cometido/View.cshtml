@@ -1,6 +1,10 @@
 ﻿@model App.Model.Cometido.Cometido
 @using Enum = App.Util.Enum;
 
+@{
+    var justificacion = Model.JustificacionAtraso != null;
+}
+
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
 @Html.HiddenFor(q => q.WorkflowId)
@@ -230,41 +234,41 @@
                                     </tr>
                                     @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                     {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                    </td>
-                                </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td colspan="10">
                                                 <b>
@@ -283,6 +287,17 @@
 
                             }
                         </div>
+
+                        @if (justificacion)
+                        {
+                            <h3><span style="font-weight: bold">IV. Justificación de Atraso</span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l12">
+                                    <strong>@Html.NameFor(m => Model.JustificacionAtraso)</strong>
+                                    <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div class="section"></div>
                     @*@if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.Terminada != true)*@
@@ -296,12 +311,12 @@
                         @*<a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn blue-gradient-button">Adjuntar Archivo</a>*@
                         /*Se cambia forma de anular un proceso terminado*/
                         @*<div class="row">
-                            <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
-                            @Html.Raw("<span>Adjuntar Archivo</span>")
-                        </div>*@
+                                <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                                @Html.Raw("<span>Adjuntar Archivo</span>")
+                            </div>*@
                         <div class="section"></div>
                         <p>
-                            @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })                            
+                            @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
                         </p>
                     }
                 </div>

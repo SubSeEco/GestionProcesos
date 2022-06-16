@@ -1,16 +1,20 @@
 ﻿@model App.Model.Cometido.Cometido
 
+@{
+    var justificacion = Model.JustificacionAtraso != null;
+}
+
 @if (Model.Workflow.DefinicionWorkflow.Secuencia == 8)
 {
-<div class="grey lighten-3 section">
-    <div class="container section">
-        <h3 class="header">Compromiso y Refrendación</h3>
-        <h5 class="light">
-            Tarea @Model.WorkflowId <text>-</text> @Model.Workflow.DefinicionWorkflow.Nombre
-        </h5>
+    <div class="grey lighten-3 section">
+        <div class="container section">
+            <h3 class="header">Compromiso y Refrendación</h3>
+            <h5 class="light">
+                Tarea @Model.WorkflowId <text>-</text> @Model.Workflow.DefinicionWorkflow.Nombre
+            </h5>
+        </div>
+        <div class="section"></div>
     </div>
-    <div class="section"></div>
-</div>
 }
 else
 {
@@ -421,7 +425,26 @@ else
                                     }
                                 </table>
                             </div>
-                            <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+
+                            @if (justificacion)
+                            {
+                                <h3><span style="font-weight: bold">IV. Justificación de Atraso</span></h3>
+                                <div class="row">
+                                    <div class="input-field col s12 m10 l12">
+                                        <strong>@Html.NameFor(m => Model.JustificacionAtraso)</strong>
+                                        <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (justificacion)
+                            {
+                                <h3><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
+                            else
+                            {
+                                <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
                             <div class="row">
                                 @if (!Model.GeneracionCDP.Any())
                                 {

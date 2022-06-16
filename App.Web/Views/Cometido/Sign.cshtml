@@ -1,5 +1,9 @@
 ﻿@model App.Model.Cometido.Cometido
 
+@{
+    var justificacion = Model.JustificacionAtraso != null;
+}
+
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
 @Html.HiddenFor(q => q.WorkflowId)
@@ -310,9 +314,26 @@
 
                             }
                         </div>
+                        @if (justificacion)
+                        {
+                            <h3><span style="font-weight: bold">IV. Justificación de Atraso</span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l12">
+                                    <strong>@Html.NameFor(m => Model.JustificacionAtraso)</strong>
+                                    <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                </div>
+                            </div>
+                        }
                         @if (Model.GeneracionCDP.Any())
                         {
-                            <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            if (justificacion)
+                            {
+                                <h3><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
+                            else
+                            {
+                                <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
+                            }
                             <div class="row">
 
                                 @if (Model.SolicitaViatico)
@@ -531,7 +552,14 @@
                                     }
                                 }
                             </div>*@
-                        <h3><span style="font-weight: bold">V. Firma Documento Acto Administrativo</span></h3>
+                        @if (justificacion)
+                        {
+                            <h3><span style="font-weight: bold">VI. Firma Documento Acto Administrativo</span></h3>
+                        }
+                        else
+                        {
+                            <h3><span style="font-weight: bold">V. Firma Documento Acto Administrativo</span></h3>
+                        }
                         <div class="row">
                             @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
                             @*@Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)*@

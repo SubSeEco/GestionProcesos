@@ -4826,7 +4826,7 @@ namespace App.Core.UseCases
                                 var cotizacion = _repository.Get<Cotizacion>(c => c.PasajeId == Pasaje.PasajeId);
                                 for (int i = 0; i < cotizacion.Count(); i++)
                                 {
-                                    var cotizacionDocumento = _repository.GetById<CotizacionDocumento>(cotizacion.ToArray()[i].CotizacionId);
+                                    var cotizacionDocumento = _repository.GetById<CotizacionDocumento>(cotizacion.ToArray()[i].CotizacionDocumento.FirstOrDefault().CotizacionDocumentoId);
                                     if(cotizacionDocumento.Selected && cotizacionDocumento.Type.Contains("pdf"))
                                     {
                                         cotiza = true;
@@ -4844,6 +4844,29 @@ namespace App.Core.UseCases
                         var com = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
                         if (!com.Destinos.Any())
                             throw new Exception("Se deben ingresar destinos al cometido.");
+
+                        var lista = new List<Destinos>();
+                        for(int i =0; i < com.Destinos.Count(); i++)
+                        {
+                            var fecha = com.Destinos[i].FechaInicio.Date.Subtract(com.FechaSolicitud.Date).Days;
+                            if(fecha<20)
+                            {
+                                lista.Add(com.Destinos[i]);
+                            }
+                        }
+
+                        if (lista.Count > 0)
+                        {
+                            if (com.JustificacionAtraso.IsNullOrWhiteSpace())
+                            {
+                                throw new Exception("Falta ingresar Justificación de Atraso");
+                            }
+                        }
+
+                        if(com.JustificacionAtraso==string.Empty)
+                        {
+                            throw new Exception("Se debe ingresar justificación de atraso");
+                        }
 
                         /*validar q se debe ingresar un documento en la solicitud.*/
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())

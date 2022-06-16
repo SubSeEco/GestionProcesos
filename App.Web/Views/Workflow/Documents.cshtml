@@ -26,7 +26,7 @@
                     <br />
                     <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
                 }
-                if (Model.DefinicionWorkflowId == 77)
+                @*if (Model.DefinicionWorkflowId == 77)
                 {
                     if (item.FileName.Contains("Orden de Pago") || item.FileName.Contains("Resolucion Cometido") || item.FileName.Contains("Resolucion Ministerial Exenta"))
                     {
@@ -34,6 +34,12 @@
                             @Ajax.ActionLink("Eliminar Documento", "DeleteDocumento", null, new { item.DocumentoId }, new AjaxOptions { UpdateTargetId = "" }, new { @class = "waves-effect waves-light btn red" })
                         </div>
                     }
+                }*@
+                if (Model.WorkflowId == item.WorkflowId)
+                {
+                    <div class="section">
+                        @Ajax.ActionLink("Eliminar Documento", "DeleteDocumento", null, new { item.DocumentoId }, new AjaxOptions { UpdateTargetId = "" }, new { @class = "waves-effect waves-light btn red" })
+                    </div>
                 }
             }
         }
