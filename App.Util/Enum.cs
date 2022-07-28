@@ -186,6 +186,13 @@ namespace App.Util
             CorreoOfPartes = 66,
         }
 
+        public enum DefinicionWorkflow
+        {
+            //Workflows Cometido
+            SolicitudCometido = 72
+
+        }
+
         public enum CometidoSecuencia
         {
             SolicitudCometido=1,

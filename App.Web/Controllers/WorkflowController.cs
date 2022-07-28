@@ -115,11 +115,20 @@ namespace App.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DeleteDocumento(int DocumentoId)
+        public ActionResult DeleteDocumento(int DocumentoId, int WorkflowId)
         {
             var result = _repository.GetById<Documento>(DocumentoId);
+            var work = _repository.GetById<Workflow>(WorkflowId);
 
-            result.Activo = false;
+            if(work.WorkflowId==(int)Util.Enum.DefinicionWorkflow.SolicitudCometido)
+            {
+                _repository.Delete(result);
+            }
+            else
+            {
+                result.Activo = false;
+            }
+
             _repository.Update(result);
             _repository.Save();
 

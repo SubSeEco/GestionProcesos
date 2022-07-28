@@ -38,7 +38,7 @@
                 if (Model.WorkflowId == item.WorkflowId)
                 {
                     <div class="section">
-                        @Ajax.ActionLink("Eliminar Documento", "DeleteDocumento", null, new { item.DocumentoId }, new AjaxOptions { UpdateTargetId = "" }, new { @class = "waves-effect waves-light btn red" })
+                        @Ajax.ActionLink("Eliminar Documento", "DeleteDocumento", null, new { item.DocumentoId, Model.WorkflowId }, new AjaxOptions { UpdateTargetId = "" }, new { @class = "waves-effect waves-light btn red" })
                     </div>
                 }
             }
@@ -58,3 +58,9 @@
         @Html.Action("Upload", "Documento", new { Model.ProcesoId, Model.WorkflowId })
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    });
+</script>

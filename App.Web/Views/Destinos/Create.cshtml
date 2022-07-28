@@ -296,7 +296,7 @@
         var Dias60 = $("#Dias60").val();
         var Dias40 = $("#Dias40").val();
         var Dias50 = $("#Dias50").val();
-        //var Total = $("#Total").val();
+        var Total = $("#Total").val();
         var cometido = $("#CometidoId").val();
         $.getJSON("/Destinos/Viatico", { CometidoId: cometido, CantDias100: Dias100, CantDias60: Dias60, CantDias40: Dias40, CantDias50: Dias50 },
             function (Data) {
@@ -314,7 +314,7 @@
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/Scripts/jquery-ui.js"></script>
-@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
 
 
 <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />

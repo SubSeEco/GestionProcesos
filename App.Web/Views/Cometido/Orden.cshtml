@@ -1,6 +1,7 @@
 ﻿@model App.Model.Cometido.Cometido
 @{
     Layout = null;
+    var justificacion = Model.JustificacionAtraso != null;
 }
 @Html.HiddenFor(q => q.WorkflowId)
 
@@ -103,14 +104,14 @@
                     <strong>
                         <br /> CONSIDERANDO:
                     </strong>
-                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
+                    @*@if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
                                 Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
                             </p>
                         </li>
-                    }
+                    }*@
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que, don/ña
@@ -134,6 +135,28 @@
                             a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
                         </p>
                     </li>
+                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now && justificacion)
+                    {
+                        @*<li>
+                <p align="justify" style="margin-right:30px">
+                    Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
+                    cometido de forma extemporánea.
+                </p>
+            </li>*@
+                        <li>
+                            <p align="justify" style="margin-right:30px">
+                                Que, en el instructivo GAB. PRES N° 004, de 25 de marzo de 2022, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo XI), Numeral 25),
+                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 20 días corridos previos a la fecha de su inicio.
+                                En caso de que no sea posible cumplir con este plazo, por razones impostergables de buen servicio, el formulario de solicitud deberá contar con la respectiva justificación y la visación del jefe/a de Servicio”
+                            </p>
+                        </li>
+                        <li>
+                            <p align="justify" style="margin-right:30px">
+                                Que, por razones impostergables de buen servicio, y en conformidad a la citada instrucción presidencial, este cometido cuenta con la visación del/la jefa/e de Gabinete Subsecretaria,
+                                en atención a la justificación efectuada a través de sistema de cometidos.
+                            </p>
+                        </li>
+                    }
                     <br />
                     <table border="1" width="100%" style="margin-right:30px">
                         <tr>
@@ -149,37 +172,37 @@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
-                    <tr>
+                            <tr>
 
-                        @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                        </td>
+                                @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                </td>
 
-                    </tr>
+                            </tr>
                         }
                     </table>
                     @*@if (Model.SolicitaViatico == false)
-                        {
-                            <li><p align="justify">
-                                Que la actividad realizada no
-                                @if (Model.Tiempo == "Pasado")
-                                {
-                                    @Html.Raw("<span>generó</span>")
-                                }
-                                else
-                                {
-                                    @Html.Raw("<span>genera</span>")
-                                }
-                                costo para esta Subsecretaría.<br />
-                            </p></li>
-                        }*@
+        {
+            <li><p align="justify">
+                Que la actividad realizada no
+                @if (Model.Tiempo == "Pasado")
+                {
+                    @Html.Raw("<span>generó</span>")
+                }
+                else
+                {
+                    @Html.Raw("<span>genera</span>")
+                }
+                costo para esta Subsecretaría.<br />
+            </p></li>
+        }*@
                 </ol>
             </td>
         </tr>

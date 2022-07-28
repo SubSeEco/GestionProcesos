@@ -143,7 +143,7 @@ namespace App.Model.Cometido
         [Display(Name = "Reembolso")]
         public bool SolicitaReembolso { get; set; }
 
-        //[Display(Name = "Tipo de vehículo")]
+        [Display(Name = "Tipo de vehículo")]
         public int? TipoVehiculoId { get; set; }
         [Display(Name = "Tipo de vehículo")]
         public string TipoVehiculoDescripcion { get; set; }

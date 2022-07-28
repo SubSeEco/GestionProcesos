@@ -33,201 +33,228 @@
                 @Html.HiddenFor(q => Model.IdPrograma)
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="input-field col s12 m10 l3">
+                                @Html.TextBoxFor(m => Model.FechaSolicitud, new { @disabled = "disabled" })
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                @Html.DisplayFor(m => Model.CometidoId)
+                                @Html.LabelFor(m => Model.CometidoId)
+                            </div>
+                        </div>
+                        <ul class="collapsible popout">
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">I. Datos del Funcionario: </span></div>
+                                <div class="collapsible-body col-12">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <i class="material-icons prefix">account_box</i>
+                                            @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                            @Html.LabelFor(m => Model.Nombre)
+                                            @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
 
-                <div class="row">
-                    <div class="input-field col s12 m10 l3">
-                        @Html.TextBoxFor(m => Model.FechaSolicitud)
-                        @Html.LabelFor(m => Model.FechaSolicitud)
-                        @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
-                    </div>
-                    <div class="input-field col s12 m6 l4">
-                        @Html.DisplayFor(m => Model.CometidoId)
-                        @Html.LabelFor(m => Model.CometidoId)
-                    </div>
-                </div>
-                <div id="jQuery_accordion">
-                    <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.UnidadDescripcion)
-                            @Html.LabelFor(m => Model.UnidadDescripcion)
-                            @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.Jefatura)
-                            @Html.LabelFor(m => Model.Jefatura)
-                            @Html.ValidationMessageFor(m => Model.Jefatura, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
-                            @Html.LabelFor(m => Model.NombreId)
-                            @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            <div class="row">
-                                <div class="col">
-                                    @Html.LabelFor(m => Model.Rut)
-                                    @Html.EditorFor(m => Model.Rut)
-                                    @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">fingerprint</i>
+                                            @Html.LabelFor(m => Model.Rut)
+                                            @Html.EditorFor(m => Model.Rut, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.DV)
+                                            @Html.EditorFor(m => Model.DV, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">group</i>
+                                            @Html.EditorFor(m => Model.Jefatura, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.LabelFor(m => Model.Jefatura)
+                                            @Html.ValidationMessageFor(m => Model.Jefatura, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">                                            
+                                            @Html.LabelFor(m => Model.UnidadDescripcion)
+                                            @Html.EditorFor(m => Model.UnidadDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">content_paste</i>
+                                            @Html.LabelFor(m => Model.CargoDescripcion)
+                                            @Html.EditorFor(m => Model.CargoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.CalidadDescripcion)
+                                            @Html.EditorFor(m => Model.CalidadDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">grade</i>
+                                            @Html.EditorFor(m => Model.GradoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.LabelFor(m => Model.GradoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.EstamentoDescripcion)
+                                            @Html.EditorFor(m => Model.EstamentoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="input-field">
+                                        @Html.TextBoxFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
+                                        @Html.LabelFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
+                                    </div>
+                                    <div class="input-field">
+                                        @Html.TextBoxFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
+                                        @Html.LabelFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    @Html.LabelFor(m => Model.DV)
-                                    @Html.EditorFor(m => Model.DV)
-                                    @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                            </li>
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">II. Datos de la Solicitud: </span></div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <p>Marque la(s) casilla(s) en la(s) opción(es) que la Subsecretaría de Economía y EMT debe gestionar y/o financiar</p>
+                                        <div class="col s12">
+                                            @Html.LabelFor(m => Model.FinanciaOrganismo)<br />
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, false)
+                                                <span>NO</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <p>Marque las opciones que SI financia el organismo invitante</p>
+                                        @*<label style="color:green">
+                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                        </label>*@
+                                        <div class="Financia input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled", @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Alojamiento)</span>
+                                            </label>
+                                        </div>
+                                        <div class="Financia input-field col s12">
+                                            <label for="Alimentacion">
+                                                @Html.CheckBoxFor(m => Model.Alimentacion, new { @disabled = "disabled", @class="filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Alimentacion)</span>
+                                            </label>
+                                        </div>
+                                        <div class="Financia input-field col s12">
+                                            <label for="Pasajes">
+                                                @Html.CheckBoxFor(m => Model.Pasajes, new { @disabled = "disabled", @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Pasajes)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.SolicitaViatico, new {@class = "filled-in" })
+                                                <span>
+                                                    <strong>@Html.LabelFor(m => Model.SolicitaViatico, new { @style = "color:#008000"})</strong>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="section"></div>
+                                        <div class="input-field col s12" style="font-weight: bold;">
+                                            <strong>
+                                                <span>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</span>
+                                            </strong>
+                                            @*<label style="color:green">
+                                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                            </label>*@
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeAereo, new { @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre, new { @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
+                                            </label>
+                                        </div>
+                                        <div id="terrestre">
+                                            <div class="input-field col s12">
+                                                <strong >
+                                                    <label style="color:green">
+                                                        “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                                    </label>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div id="divReembolso">
+                                            <div class="input-field col s12">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.SolicitaReembolso, new { @class = "filled-in" })
+                                                    <span>@Html.LabelFor(m => Model.SolicitaReembolso)</span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.Vehiculo, new { @class = "filled-in"})
+                                                <span>@Html.LabelFor(m => Model.Vehiculo)</span>
+                                            </label>
+                                            <div class="section"></div>
+                                        </div>
+                                        <div id="auto" style="display:none;">
+                                            <div class="input-field col s12">
+                                                @*@Html.LabelFor(m => Model.TipoVehiculoId)*@
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, new SelectList(ViewBag.TipoVehiculoId,"Value","Text",Model.TipoVehiculoId), "Seleccione...", htmlAttributes: new { @id = "TipoVehiculoId"@*, @type = "select"*@ })
+                                                @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "")
+                                            </div>
+                                            <div class="input-field col s12">
+                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                                @Html.LabelFor(m => Model.PlacaVehiculo)
+                                                @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                            </div>
+                                            <div class="input-field col s12">
+                                                @Html.EditorFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
+                                                @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="section"></div>*@
                                 </div>
-                            </div>
-                        </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.CargoDescripcion)
-                            @Html.LabelFor(m => Model.CargoDescripcion)
-                            @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.CalidadDescripcion)
-                            @Html.LabelFor(m => Model.CalidadDescripcion)
-                            @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.GradoDescripcion)
-                            @Html.LabelFor(m => Model.GradoDescripcion)
-                            @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.EstamentoDescripcion)
-                            @Html.LabelFor(m => Model.EstamentoDescripcion)
-                            @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
-                            @Html.LabelFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
-                        </div>
-                        <div class="input-field">
-                            @Html.TextBoxFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
-                            @Html.LabelFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
-                        </div>
-                    </div>
-                    <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
-                    <div class="col-12">
-                        <p>Marque la(s) casilla(s) en la(s) opción(es) que la Subsecretaría de Economía y EMT debe gestionar y/o financiar</p>
-
-                        <div class="col-12 m2">
-                            @Html.LabelFor(m => Model.FinanciaOrganismo)<br />
-                            <label>
-                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
-                                <span>SI</span>
-                            </label>
-                            <label>
-                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, false)
-                                <span>NO</span>
-                            </label>
-                        </div>
-                        <p></p>
-                        <div id="Financia">
-                            <label>Marque las opciones que SI financia el organismo invitante</label>
-                            @*<label style="color:green">
-                                    @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                                </label>*@
-                            <div class="col-12">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
-                                    <span>@Html.LabelFor(m => Model.Alojamiento)</span>
-                                </label>
-                            </div>
-                            <div class="col-12">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.Alimentacion, new { @disabled = "disabled" })
-                                    <span>@Html.LabelFor(m => Model.Alimentacion)</span>
-                                </label>
-                            </div>
-                            <div class="col-12">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.Pasajes, new { @disabled = "disabled" })
-                                    <span>@Html.LabelFor(m => Model.Pasajes)</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label>
-                                @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                <span>
-                                    <strong>@Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })</strong>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="section"></div>
-
-                        <div class="col-12">
-                            <label>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</label>
-                            @*<label style="color:green">
-                                    @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
-                                </label>*@
-                        </div>
-                        <div class="col-12">
-                            <label>
-                                @Html.CheckBoxFor(m => Model.ReqPasajeAereo)
-                                <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
-                            </label>
-                        </div>
-                        <div class="col-12">
-                            <label>
-                                @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre)
-                                <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
-                            </label>
-                        </div>
-                        <div id="terrestre">
-                            <div class="col-12">
-                                <strong>
-                                    <label style="color:green">
-                                        “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
-                                    </label>
-                                </strong>
-                            </div>
-                        </div>
-                        <div id="divReembolso">
-                            <div class="col-12">
-                                <label>
-                                    @Html.CheckBoxFor(m => Model.SolicitaReembolso)
-                                    <span>@Html.LabelFor(m => Model.SolicitaReembolso)</span>
-                                </label>
-                                <div class="section"></div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label>
-                                @Html.CheckBoxFor(m => Model.Vehiculo)
-                                <span>@Html.LabelFor(m => Model.Vehiculo)</span>
-                            </label>
-                            <div class="section"></div>
-                        </div>
-                        <div id="auto">
-                            <div class="col-12">
-                                @Html.LabelFor(m => Model.TipoVehiculoId)
-                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new { @id = "TipoVehiculoId", @type = "select"/*disabled = "disabled"*/ })
-                                @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "")
-                            </div>
-                            <div class="col-12">
-                                @Html.LabelFor(m => Model.PlacaVehiculo)
-                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
-                            </div>
-                            <div class="col-12">
-                                @Html.EditorFor(m => Model.VehiculoObservaciones)
-                                @Html.LabelFor(m => Model.VehiculoObservaciones)
-                            </div>
-                        </div>
-                    </div>
-                    <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
-                    <div class="col-12">
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.NombreCometido)
-                            @Html.LabelFor(m => Model.NombreCometido)
-                            @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
-                        </div>
-                        <div class="input-field">
-                            @Html.EditorFor(m => Model.CometidoDescripcion)
-                            @Html.LabelFor(m => Model.CometidoDescripcion)
-                            @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
-                        </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">III. Datos del Cometido: </span></div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            @Html.EditorFor(m => Model.NombreCometido)
+                                            @Html.LabelFor(m => Model.NombreCometido)
+                                            @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12">
+                                            @Html.EditorFor(m => Model.CometidoDescripcion, new { htmlAttributes = new {@class = "materialize-textarea" } })
+                                            @Html.LabelFor(m => Model.CometidoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <p>
@@ -241,21 +268,22 @@
 
     <script>
         $(document).ready(function () {
-            jQuery.datetimepicker.setLocale('es');
-            jQuery('#FechaSolicitud').datetimepicker({
-                i18n: {
-                    es: {
-                        months: [
-                            'Enero', 'Febrero', 'Marzo', 'Abril',
-                            'Mayo', 'Junio', 'Julio', 'Agosto',
-                            'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
-                        ]
-                    }
-                },
-                timepicker: false,
-                formatTime: 'H:i',
-                formatDate: 'd-m-Y'
-            });
+            //jQuery.datetimepicker.setLocale('es');
+            //jQuery('#FechaSolicitud').datetimepicker({
+            //    i18n: {
+            //        es: {
+            //            months: [
+            //                'Enero', 'Febrero', 'Marzo', 'Abril',
+            //                'Mayo', 'Junio', 'Julio', 'Agosto',
+            //                'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+            //            ]
+            //        }
+            //    },
+            //    timepicker: false,
+            //    formatTime: 'H:i',
+            //    formatDate: 'd-m-Y'
+            //});
+
             $('#divReembolso').hide(100); //oculta checkbox de reembolso
             $("#PlacaVehiculo").attr('disabled', true);
             $("#FechaSolicitud").attr('disabled', true);
@@ -263,19 +291,19 @@
             //$("#TipoReembolsoId").attr('disabled', true);
             $('#auto').hide(100);
             //$('#terrestre').hide(100);
-            $('#Financia').hide(100);
+            $('.Financia').hide(100);
             $('select').formSelect();
-            $('input:hidden').each(function (index, element) {
+            @*$('input:hidden').each(function (index, element) {
                 $(element).appendTo($(element).parent());
-            });
+            });*@
 
             //funcion que habilita opciones de financia organismo invitante
             $('input:radio[name="FinanciaOrganismo"]').change(function () {
                 if (document.getElementById("FinanciaOrganismo").checked == true) {
-                    $('#Financia').show();
+                    $('.Financia').show();
                 }
                 else {
-                    $('#Financia').hide(100);
+                    $('.Financia').hide(100);
                 }
             });
 
@@ -351,12 +379,12 @@
             /*Habilita tipo vehiculo*/
             if (document.getElementById("Vehiculo").checked == false) {
                 $('#auto').hide(100);
-                //$("#TipoVehiculoId").attr('disabled', true);
-                $("#PlacaVehiculo").attr('disabled', true);
+                @*$("#TipoVehiculoId").attr('disabled', true);
+                $("#PlacaVehiculo").attr('disabled', true);*@
             }
             else {
-                //$("#TipoVehiculoId").attr('disabled', false);
-                $("#PlacaVehiculo").attr('disabled', false);
+               @* $("#TipoVehiculoId").attr('disabled', false);
+                $("#PlacaVehiculo").attr('disabled', false);*@
                 $('#auto').show();
             }
 
@@ -478,21 +506,33 @@
             }
         });
 
-        $(function () {
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+        });
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+
+        @*$(function () {
             $("#jQuery_accordion").accordion({
                 collapsible: true, heightStyle: "auto"
             });
+        });*@
+
+        $('input[type="hidden"]').each(function (index, element) {
+            $(this).appendTo($(element).parent());
         });
 
     </script>
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
-    <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
-
-    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+    @*<script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+@*
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />*@
+    @*<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>*@
     <style TYPE="text/css">
         strong {
             font-weight: bolder;

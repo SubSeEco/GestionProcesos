@@ -147,12 +147,27 @@ namespace App.Web.Controllers
             if (Request.Files.Count == 0)
                 ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
 
+            var target = new MemoryStream();
+
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                var pdf = Request.Files[i];
+                target = new MemoryStream();
+                pdf.InputStream.CopyTo(target);
+
+                var meta = _file.BynaryToText(target.ToArray());
+                if (meta.Type != "application/pdf")
+                {                    
+                    ModelState.AddModelError(string.Empty, "Debe adjuntar un documento con extension PDF.");   
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
                     var file = Request.Files[i];
-                    var target = new MemoryStream();
+                    /*var target = new MemoryStream();*/
                     file.InputStream.CopyTo(target);
 
                     var doc = new Documento();
@@ -211,8 +226,27 @@ namespace App.Web.Controllers
                 TempData["Success"] = "Operación terminada correctamente.";
                 return Redirect(Request.UrlReferrer.PathAndQuery);
             }
-
-            return View(model);
+            else
+            {
+                if(Request.Files.Count==0)
+                {
+                    return View(model);
+                }
+                foreach(var error in ModelState.Values)
+                {
+                    for(int i = 0; i < error.Errors.Count; i++)
+                    {
+                        var errorModel = error.Errors[i];
+                        if (errorModel != null)
+                        {
+                            var help = new List<string>();
+                            help.Add(errorModel.ErrorMessage);
+                            TempData["Error"] = help;
+                        }
+                    }
+                }
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
         }
 
         [HttpPost]

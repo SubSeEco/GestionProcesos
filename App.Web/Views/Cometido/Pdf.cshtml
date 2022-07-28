@@ -1,6 +1,7 @@
 ﻿@model App.Model.Cometido.Cometido
 @{
     Layout = null;
+    var justificacion = Model.JustificacionAtraso != null;
 }
 @Html.HiddenFor(q => q.WorkflowId)
 
@@ -114,10 +115,32 @@
                     </strong>
                     <li>
                         <p align="justify" style="margin-right:30px">
-                            Que, los funcionarios públicos pueden cumplir cometidos funcionarios que los obliguen a   desplazarse dentro o fuera de su lugar de desempeño habitual para
-                            realizar labores especificas inherentes al cargo que sirven.
+                            Que, los/as funcionarios/as públicos/as pueden cumplir cometidos funcionarios que los/as obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
+                            especificas inherentes al cargo que sirven.
                         </p>
                     </li>
+                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now && justificacion)
+                    {
+                        @*<li>
+                <p align="justify" style="margin-right:30px">
+                    Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
+                    cometido de forma extemporánea.
+                </p>
+            </li>*@
+                        <li>
+                            <p align="justify" style="margin-right:30px">
+                                Que, en el instructivo GAB. PRES N° 004, de 25 de marzo de 2022, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo XI), Numeral 25),
+                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 20 días corridos previos a la fecha de su inicio.
+                                En caso de que no sea posible cumplir con este plazo, por razones impostergables de buen servicio, el formulario de solicitud deberá contar con la respectiva justificación y la visación del jefe/a de Servicio”
+                            </p>
+                        </li>
+                        <li>
+                            <p align="justify" style="margin-right:30px">
+                                Que, por razones impostergables de buen servicio, y en conformidad a la citada instrucción presidencial, este cometido cuenta con la visación del/la jefa/e de Gabinete Subsecretaria,
+                                en atención a la justificación efectuada a través de sistema de cometidos.
+                            </p>
+                        </li>
+                    }
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que,
@@ -129,16 +152,16 @@
                             {
                                 @Html.Raw("<span>corresponde</span>")
                             }
-                            designar en cometido funcionario a don/ña
-                            <strong> @Html.DisplayFor(m => Model.Nombre)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
+                            designar en cometido funcionario/a a don/ña
+                            <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                         </p>
                     </li>
 
-                    <table border="1" width="98%">
+                    <table border="1" width="100%">
                         <tr>
                             <td style="border-style: solid; border-width: 1px; border-color: #000000;">
                                 LOCALIDAD
-                            </td>
+                             </td>
                             <td style="border-style: solid; border-width: 1px; border-color: #000000;">
                                 COMUNA
                             </td>
@@ -148,32 +171,32 @@
                         </tr>
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
-                    <tr>
+                            <tr>
 
-                        @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                        </td>
+                                @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                </td>
 
-                    </tr>
+                            </tr>
                         }
                     </table>
-                    <p align="justify"></p>
-                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
-                    {
-                        <li>
-                            <p align="justify" style="margin-right:30px">
-                                Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar
-                                este cometido de forma extemporánea.
-                            </p>
-                        </li>
-                    }
+                    @*<p align="justify"></p>
+        @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now)
+        {
+            <li>
+                <p align="justify" style="margin-right:30px">
+                    Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar
+                    este cometido de forma extemporánea.
+                </p>
+            </li>
+        }*@
                 </ol>
             </td>
         </tr>
@@ -181,30 +204,28 @@
             @*<td></td>*@
             <td colspan="2">
                 <ol>
-                    <p align="justify">
-                        <strong>RESUELVO:</strong>
-                    </p>
+                    <strong>RESUELVO:</strong>
+                    <br />
                     <p align="justify" style="margin-right:30px">
                         @if (Model.Tiempo == "Pasado")
                         {
-                            <text>Reconócese </text>
+                            @Html.Raw("<span>Reconócese</span>")
                         }
                         else
                         {
-                            <text>Desígnese </text>
+                            @Html.Raw("<span>Desígnese</span>")
                         }
-                        en cometido funcionario, a don/ña <strong> @Model.Nombre.Trim(), </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RUN N° <strong> @Model.Rut <text>-</text> @Model.DV,</strong>
-                        @Model.UnidadDescripcion.Trim(), &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<text> </text>@Model.CalidadDescripcion.Trim(), <text> </text>@Model.CargoDescripcion.Trim(),&nbsp;&nbsp;&nbsp; grado &nbsp;&nbsp;&nbsp;<text> </text>@Model.GradoDescripcion.Trim() de la E.U.S. de la Subsecretaría de Economía y Empresas de Menor Tamaño,
-
+                        en cometido funcionario, a don/ña <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;RUN N° <strong> @Html.DisplayFor(m => Model.Rut)@Html.Raw("-")@Html.DisplayFor(m => Model.DV)</strong>,
+                        <strong>@Html.DisplayFor(m => Model.UnidadDescripcion),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayFor(m => Model.CalidadDescripcion), @Html.DisplayFor(m => Model.CargoDescripcion), grado &nbsp;&nbsp; @Html.DisplayFor(m => Model.GradoDescripcion)&nbsp;&nbsp; de la E.U.S.
+                        &nbsp;&nbsp;de la Subsecretaría de Economía y Empresas de Menor Tamaño,
                         @if (Model.Tiempo == "Pasado")
                         {
-                            <text>por haber realizado </text>
+                            @Html.Raw("<span>por haber realizado </span>")
                         }
                         else
                         {
-                            <text>para realizar</text>
+                            @Html.Raw("<span>para realizar </span>")
                         }
-
                         las labores específicas inherentes al cargo que sirve, por el plazo de @Html.DisplayFor(m => Model.Dias) día
                         @if (Model.Dias.Value != 1)
                         {
@@ -218,7 +239,8 @@
                             @Html.DisplayFor(m => Model.ParrafoResolucion)
                         </p>
                     }
-                    @*<p class="breakhere"></p>*@
+                    <br />
+                    <p class="breakhere"></p>
                 </ol>
             </td>
         </tr>
@@ -231,11 +253,11 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña <strong>@Model.Nombre.Trim(),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viático de acuerdo al siguiente esquema:
+                                Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, pagará a don/ña ;&nbsp;&nbsp;<strong>@Model.Nombre.Trim(),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>viático de acuerdo al siguiente esquema:
                                 <br />
                             </p>
                         </li>
-                        <table border="1" width="98%">
+                        <table border="1" width="100%">
                             <tr>
                                 <td>
                                     @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().ComunaDescripcion)
@@ -319,7 +341,6 @@
 
                     @if (Model.Vehiculo)
                     {
-
                         <li>
                             <p>
                                 Que, el funcionario
