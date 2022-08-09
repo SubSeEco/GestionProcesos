@@ -1138,23 +1138,7 @@ namespace App.Web.Controllers
             //    var errors = ModelState.Select(x => x.Value.Errors)
             //        .Where(y => y.Count > 0)
             //        .ToList();
-            //}
-
-            ViewBag.FechaCalculo = new List<Destinos>();
-            for (int i = 0; i < model.Destinos.Count; i++)
-            {
-                var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
-                var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
-
-                /*if (fecha <20)
-                {
-                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
-                }*/
-                if (fechahelp < 20)
-                {
-                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
-                }
-            }
+            //}            
 
             ViewBag.Pasajes = model.Pasajes;
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);

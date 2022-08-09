@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.1 - Cometidos - 09-08-2022]
+
+### Changed
+
+- Se modifico comportamiento al momento de crear un Cometido que luego de llenar los datos y guardarlos, borraba la justificacion de atraso y dejaba como False el campo Atrasado, cambiando los flujos en adelante.
+- Se cambio la validación de atraso al momento de Guardar el cometido en el primer paso.
+
 ## [1.3.0 - Cometidos - 09-08-2022]
 
 ### Added

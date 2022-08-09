@@ -1475,7 +1475,32 @@ namespace App.Core.UseCases
 
                 if (response.IsValid)
                 {
-                    obj.CometidoOk = true;
+                    obj.Atrasado = false;
+
+                    for (int i = 0; i < listaDestinosCometido.Count; i++)
+                    {
+                        var fecha = obj.FechaSolicitud.Date.Subtract(listaDestinosCometido[i].FechaInicio.Date).Days;
+                        var fechahelp = listaDestinosCometido[i].FechaInicio.Date.Subtract(obj.FechaSolicitud.Date).Days;
+
+                        /*if (fecha <20)
+                        {
+                            ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                        }*/
+                        if (fechahelp < 20)
+                        {
+                            obj.Atrasado = true;
+                        }
+                        else
+                        {
+                            obj.Atrasado = false;
+                        }
+
+                        if (obj.IdGrado == "C" || obj.IdGrado == "B")
+                        {
+                            obj.Atrasado = false;
+                        }
+                    }
+                   obj.CometidoOk = true;
 
                     _repository.Update(obj);
                     _repository.Save();
