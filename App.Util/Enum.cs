@@ -195,11 +195,16 @@ namespace App.Util
 
         public enum CometidoSecuencia
         {
-            SolicitudCometido=1,
+            SolicitudCometido=1,            
+            AprobacionJefatura = 2,
+            IngresoCotizacion = 3,
+            RevisaCotizacion = 4,
+            CompraPasaje = 5,
+            AprobacionDocGP = 6,
+            AprobacionJefaturaGP = 7,
             AnalistaPresupuesto = 8,
             EncargadoPresupuesto = 9,
             AprobacionJuridica = 10,
-            AprobacionJefatura = 2,
             FirmaActoAdministrativo = 13,
             FirmaMinistro = 14,
             FirmaSubsecretario = 15,
@@ -208,7 +213,8 @@ namespace App.Util
             AnalistaTesoreria = 18,
             EncargadoTesoreria = 19,
             EncargadoFinanzas = 20,
-            IngresoPagoTesoreria = 21
+            IngresoPagoTesoreria = 21,
+            VisacionSubsecretaria=22,
         }
 
         public enum DefinicionProceso

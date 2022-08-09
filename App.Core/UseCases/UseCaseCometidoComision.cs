@@ -2210,7 +2210,24 @@ namespace App.Core.UseCases
                 else
                     response.Errors.Add("Se debe señalar la comuna de destino");
 
-                if (obj.LocalidadId.ToString() != null)
+                if (objController.LocalidadId.ToString() != null)
+                {
+                    if (objController.LocalidadId != 0)
+                    {
+                        var localicad = _repository.GetById<Localidad>(objController.LocalidadId).NombreLocalidad.Trim();
+                        obj.NombreLocalidad = localicad;
+                    }
+                    else
+                    {
+                        response.Errors.Add("Se debe señalar la localidad de destino.");
+                    }
+                }
+                else
+                {
+                    response.Errors.Add("Se debe señalar la localidad de destino.");
+                }
+
+                /*if (obj.LocalidadId.ToString() != null)
                 {
                     if(obj.LocalidadId != 0)
                     {
@@ -2224,7 +2241,7 @@ namespace App.Core.UseCases
                     }   
                 }
                 else
-                    response.Errors.Add("Se debe señalar la localidad de destino");
+                    response.Errors.Add("Se debe señalar la localidad de destino");*/
 
 
                 if (objController.IdRegion != null)
@@ -4686,7 +4703,7 @@ namespace App.Core.UseCases
                 }
                 else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                 {
-                    if (workflowActual.DefinicionWorkflow.Secuencia == 3)
+                    if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.IngresoCotizacion)
                     {
                         if (obj.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                         {
@@ -4740,7 +4757,9 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo
+                        || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro
+                        || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario)
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
@@ -4854,18 +4873,20 @@ namespace App.Core.UseCases
                                 lista.Add(com.Destinos[i]);
                             }
                         }
-
-                        if (lista.Count > 0)
+                        if(com.GradoDescripcion != "C" && com.GradoDescripcion!="B")
                         {
-                            if (com.JustificacionAtraso.IsNullOrWhiteSpace())
+                            if (lista.Count > 0)
                             {
-                                throw new Exception("Falta ingresar Justificación de Atraso");
+                                if (com.JustificacionAtraso.IsNullOrWhiteSpace())
+                                {
+                                    throw new Exception("Falta ingresar Justificación de Atraso");
+                                }
                             }
-                        }
 
-                        if(com.JustificacionAtraso==string.Empty)
-                        {
-                            throw new Exception("Se debe ingresar justificación de atraso");
+                            if(com.JustificacionAtraso==string.Empty)
+                            {
+                                throw new Exception("Se debe ingresar justificación de atraso");
+                            }
                         }
 
                         /*validar q se debe ingresar un documento en la solicitud.*/
@@ -4948,12 +4969,26 @@ namespace App.Core.UseCases
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
                                     {
-                                        if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
-                                            definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
-                                        else if (Cometido.ResolucionRevocatoria)
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
+                                        if(Cometido.JustificacionAtraso!=null)
+                                        {
+                                            if(Cometido.ReqPasajeAereo)
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                                definicionWorkflow=definicionworkflowlist.FirstOrDefault(q=>q.Secuencia==(int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
+                                            }
+                                        }
                                         else
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16);
+                                        {
+                                            if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
+                                                definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
+                                            else if (Cometido.ResolucionRevocatoria)
+                                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
+                                            else
+                                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16);
+                                        }
                                     }
                                     //else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && Cometido.CalidadDescripcion != "TITULAR")/*Despues de la firma, si no es titular continua a contabilidad*/
                                     //{
@@ -4970,20 +5005,32 @@ namespace App.Core.UseCases
                                     {
                                         definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1 /*2*/ && Cometido.ReqPasajeAereo)
+                                    else if(workflowActual.DefinicionWorkflow.Secuencia == 22 )
+                                    {
+                                        if(Cometido.ReqPasajeAereo)
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.IngresoCotizacion);
+                                        }
+                                        else
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
+                                        }
+                                    }
+
+                                    #region Secuencia hacia Jefatura Antiguo
+                                    /*else if (workflowActual.DefinicionWorkflow.Secuencia == 1 *//*2*//* && Cometido.ReqPasajeAereo)
                                     {
                                         var pasaje = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflowActual.ProcesoId);
                                         if(pasaje != null)
                                         {
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); /*si tiene pasaje se generan las tareas de solicitud de pasaje*/
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); *//*si tiene pasaje se generan las tareas de solicitud de pasaje*//*
                                         }
                                         else
                                         {
                                             throw new Exception("Falta agregar pasaje");
-                                        }
-
-                                        #region Pasaje
-                                        /*genera registro en tabla de pasajes*/
+                                        }                                   
+                                        
+                                        //genera registro en tabla de pasajes
                                         //Pasaje _pasaje = new Pasaje();
                                         //_pasaje.FechaSolicitud = DateTime.Now;
                                         //_pasaje.Nombre = Cometido.Nombre;
@@ -4999,31 +5046,47 @@ namespace App.Core.UseCases
                                         //var resp = PasajeInsert(_pasaje);
 
                                         ///*genera resgistro en tabla destino pasaje, segun los destinos señalados en el cometido*/
-                                        //foreach (var com in Cometido.Destinos)
-                                        //{
-                                        //    DestinosPasajes _destino = new DestinosPasajes();
-                                        //    _destino.PasajeId = resp.EntityId;
-                                        //    _destino.IdRegion = com.IdRegion;
-                                        //    _destino.RegionDescripcion = com.RegionDescripcion;
-                                        //    _destino.IdRegionOrigen = com.IdOrigenRegion.ToString();
-                                        //    _destino.OrigenRegionDescripcion = com.OrigenRegion;
-                                        //    _destino.FechaIda = com.FechaInicio;
-                                        //    _destino.FechaOrigen = com.FechaOrigen.HasValue ? com.FechaOrigen.Value : DateTime.Now;
-                                        //    _destino.FechaVuelta = com.FechaHasta;
-                                        //    _destino.ObservacionesOrigen = com.ObsOrigen;
-                                        //    _destino.ObservacionesDestinos = com.ObsDestino;
-                                        //    var res = DestinosPasajesInsert(_destino);
-                                        //}
-                                        #endregion
-                                    }
+                                    //foreach (var com in Cometido.Destinos)
+                                    //{
+                                    //    DestinosPasajes _destino = new DestinosPasajes();
+                                    //    _destino.PasajeId = resp.EntityId;
+                                    //    _destino.IdRegion = com.IdRegion;
+                                    //    _destino.RegionDescripcion = com.RegionDescripcion;
+                                    //    _destino.IdRegionOrigen = com.IdOrigenRegion.ToString();
+                                    //    _destino.OrigenRegionDescripcion = com.OrigenRegion;
+                                    //    _destino.FechaIda = com.FechaInicio;
+                                    //    _destino.FechaOrigen = com.FechaOrigen.HasValue ? com.FechaOrigen.Value : DateTime.Now;
+                                    //    _destino.FechaVuelta = com.FechaHasta;
+                                    //    _destino.ObservacionesOrigen = com.ObsOrigen;
+                                    //    _destino.ObservacionesDestinos = com.ObsDestino;
+                                    //    var res = DestinosPasajesInsert(_destino);
+                                    //}
+                                    #endregion
+
                                     /*Si cometido corresponde al ministro se va directamente a analista de gestion personas, esto cuando no se solicita con pasaje*/
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 1 && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
                                     {
                                         definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 2 && Cometido.ReqPasajeAereo != true)
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 2)
                                     {
-                                        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
+                                        /*05-08-2022 - Se agrego modificacion de flujo para aprobacion de jefatura*/
+                                        // agregar if de pasajes
+                                        if (Cometido.Atrasado)
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubsecretaria);
+                                        }else
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
+                                        }
+                                        /*if(Cometido.JustificacionAtraso!=null)
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubsecretaria);
+                                        }
+                                        else
+                                        {
+                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); *//*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*//*
+                                        }*/
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == 9 && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {

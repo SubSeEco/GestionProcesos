@@ -2,6 +2,19 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.0 - Cometidos - 09-08-2022]
+
+### Added
+
+- Se creo nuevo flujo según BMPN de cometidos, ahora independiente de si es con o sin pasaje el cometido pasa por jefatura, si viene con atraso por aprobación de Gabinete y luego a Gestión de Personas o Abastecimiento si es con pasaje.
+- Se agrego nueva vista de aprobacion de GAbinete.
+- Se agrego vista parcial para un modal, el cual hasta el momento no funciona, pero se trabajo.
+
+### Changed
+
+- Se modificaron los botones en las vistas de pasaje de abasticimiento para que estuvieran a la par con Materialize.
+- Se modifico la vista del Collapsable, ahora todas ocupan Materialize y no jQuery Accordion.
+
 ## [1.2.0 - Cometidos] - 16-06-2022
 
 ### Changed

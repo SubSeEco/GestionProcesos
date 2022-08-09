@@ -110,8 +110,7 @@
                                             @Html.EditorFor(m => Model.EstamentoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
                                             @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
                                         </div>
-                                    </div>
-                                    
+                                    </div>                                    
                                     
                                     <div class="input-field">
                                         @Html.TextBoxFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
@@ -173,9 +172,9 @@
                                         </div>
                                         <div class="section"></div>
                                         <div class="input-field col s12" style="font-weight: bold;">
-                                            <strong>
+                                            
                                                 <span>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</span>
-                                            </strong>
+                                            
                                             @*<label style="color:green">
                                 @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
                             </label>*@

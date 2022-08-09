@@ -389,7 +389,7 @@ namespace App.Web.Controllers
                 var detalle = context
                     .Workflow
                     .AsNoTracking()
-                    .Where(q => q.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Anulado && idsProcesos.Contains(q.ProcesoId))
+                    .Where(q => q.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Anulado/* && idsProcesos.Contains(q.ProcesoId)*/ && q.Proceso.FechaCreacion.Year == DateTime.Now.Year)
                     .OrderBy(q => q.ProcesoId)
                     .ThenBy(q => q.WorkflowId)
                     .Select(item => new

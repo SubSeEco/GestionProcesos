@@ -791,6 +791,8 @@
     <Content Include="Views\ProgramacionHorasExtraordinarias\Sign.cshtml" />
     <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
     <Content Include="Views\Cometido\ProcessState.cshtml" />
+    <Content Include="Views\Destinos\Details.cshtml" />
+    <Content Include="Views\Cometido\ValidaSubsecretario.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -483,6 +483,20 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult ValidaSubsecretario(int id)
+        {
+            var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+
+            model.Workflow = workflow;
+            model.Proceso = proceso;
+
+
+
+            return View(model);
+        }
+
         public ActionResult DetailsDocto(int id)
         {
             var model = _repository.GetById<Cometido>(id);
@@ -996,9 +1010,11 @@ namespace App.Web.Controllers
                  destinosPasajes.Add(help);
              }
 
-             model.DestinosPasajes = destinosPasajes;*/                        
+             model.DestinosPasajes = destinosPasajes;*/
 
-            ViewBag.FechaCalculo = new List<Destinos>();
+            /*En primera instancia, se debe dejar en false hasta que se ingrese el destino para realizar el calculo de fechas.*/
+            model.Atrasado = false;
+
             for(int i =0; i < model.Destinos.Count; i++)
             {
                 var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
@@ -1010,10 +1026,18 @@ namespace App.Web.Controllers
                 }*/
                 if(fechahelp<20)
                 {
-                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
+                    model.Atrasado = true;
+                }
+                else
+                {
+                    model.Atrasado = false;
+                }
+
+                if (model.IdGrado == "C" || model.IdGrado == "B")
+                {
+                    model.Atrasado = false;
                 }
             }
-
 
             ViewBag.Pasaje = new DestinosPasajes(); //_des; //_repository.Get<DestinosPasajes>(c => c.PasajeId == 2038).FirstOrDefault(); //_repository.Get<Dest>(c => c.ProcesoId.Value == model.ProcesoId.Value).FirstOrDefault().CometidoId;
             ViewBag.IdRegionOrigen = new SelectList(_sigper.GetRegion(), "Pl_CodReg", "Pl_DesReg".Trim());
@@ -2388,7 +2412,7 @@ namespace App.Web.Controllers
                         fila++;
 
                         /*se extraen los datos asociados a las cotizaciones*/
-                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje.FirstOrDefault().PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
+                        var cotizacion = _repository.Get<Cotizacion>(p => p.PasajeId == pasaje[pas].PasajeId && p.CotizacionDocumento.FirstOrDefault().Selected == true).ToList();
                         if (cotizacion.Count > 0)
                         {
                             worksheet.Cells[fila, 16].Value = cotizacion.Count() >= 2 ? "SI" : "NO";

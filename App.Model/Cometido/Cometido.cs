@@ -318,6 +318,8 @@ namespace App.Model.Cometido
         [Display(Name = "Justificación de Atraso")]
         public string JustificacionAtraso { get; set; }
 
+        public bool Atrasado { get; set; }
+
         public string GetTags()
         {
             var tag = new StringBuilder();

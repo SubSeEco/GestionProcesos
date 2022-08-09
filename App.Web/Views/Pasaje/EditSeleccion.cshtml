@@ -414,7 +414,7 @@ else
                                                         </label>
                                                         @if (CotizacionDocumento.ToArray()[i].Selected)
                                                         {
-                                                            <a href='@Url.Action("Edit", "Cotizacion", new { id = CotizacionDocumento.ToArray()[i].CotizacionId})'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                    <a href='@Url.Action("Edit", "Cotizacion", new { id = CotizacionDocumento.ToArray()[i].CotizacionId})' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>
                                                         }
                                                     </td>
                                                 </tr>

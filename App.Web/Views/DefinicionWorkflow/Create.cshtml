@@ -272,7 +272,7 @@
         $("#NombreUsuario").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "/Contrato/GetUser/",
+                    url: "/Usuario/GetUser/",
                     data: { term: request.term },
                     type: "POST",
                     success: function (data) {

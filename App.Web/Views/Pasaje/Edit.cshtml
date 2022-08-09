@@ -142,11 +142,11 @@
                                                     }
                                                     <td>
                                                         @*@Html.ActionLink("Editar", "Edit", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId }, null)*@
-                                                        <a href='@Url.Action("Edit", "DestinosPasajes",new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })'><img src="~/Content/images/icon-edit.png"></img></a>
+                                                        <a href='@Url.Action("Edit", "DestinosPasajes",new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>
                                                     </td>
                                                     <td>
                                                         @*@Html.ActionLink("Borrar", "Delete", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId }, null)*@
-                                                        <a href='@Url.Action("Delete", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                                                        <a href='@Url.Action("Delete", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">delete_forever</i></a>
                                                     </td>
                                                 </tr>
                                                 <tr>

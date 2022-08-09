@@ -187,10 +187,9 @@
                             <li>
                                 <div class="collapsible-header"><span style="font-weight: bold">II. Datos de la Solicitud: </span></div>
                                 <div class="collapsible-body">
-                                    <div class="row">
-                                        <p>Marque la(s) casilla(s) en la(s) opción(es) que la Subsecretaría de Economía y EMT debe gestionar y/o financiar</p>
+                                    <div class="row">                                        
                                         <div class="col s12">
-                                            <span>@Html.LabelFor(m => Model.FinanciaOrganismo)</span><br />
+                                            <p style="font-weight:bold">@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</p><br />
                                             <label>
                                                 @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
                                                 <span>SI</span>
@@ -203,7 +202,7 @@
                                     </div>
                                     @*<p></p>*@
                                     <div class="row">
-                                        <p>Marque las opciones que SI financia el organismo invitante</p>
+                                        <p class="Financia">Marque las opciones que SI financia el organismo invitante</p>
                                         @*<label style="color:green">
                         @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
                     </label>*@
@@ -228,14 +227,16 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
+                                        <div class="col s12">
+                                            <p style="font-weight:bold">Marque la(s) casilla(s) en la(s) opción(es) que la Subsecretaría de Economía y EMT debe gestionar y/o financiar</p>
+                                        </div>
                                         <div class="input-field col s12">
                                             <label>
                                                 @Html.CheckBoxFor(m => Model.SolicitaViatico)
                                                 <span>
-                                                    <strong style="color:green">
-                                                        @Html.LabelFor(m => Model.SolicitaViatico)
-                                                        @*@Html.DisplayFor(m => Model.SolicitaViatico)*@
-                                                        @*@if(Model.SolicitaReembolso)
+                                                    @Html.LabelFor(m => Model.SolicitaViatico)
+                                                    @*@Html.DisplayFor(m => Model.SolicitaViatico)*@
+                                                    @*@if(Model.SolicitaReembolso)
                                     {
                                         <span>
                                             SI
@@ -247,7 +248,6 @@
                                             NO
                                         </span>
                                     }*@
-                                                    </strong>
                                                 </span>
                                             </label>
                                             <div class="section"></div>
@@ -335,7 +335,7 @@
                                     @if (Model.Destinos.Count > 0)
                                     {
                                         <div class="row" style="overflow-x:scroll;">
-                                            <table >
+                                            <table id="tablaModal">
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -388,14 +388,15 @@
                                                         </td>
                                                         <td>
                                                             @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                                        </td>
-                                                        @*<td>
-                                                            <a href="#modalTabla" class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Ver Detalles"><i class="medium material-icons">visibility</i></a>
-                                                        </td>*@
+                                                        </td>                                                        
                                                         <td>
+                                                            @*<a href='@Url.Action("Details", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="details btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Ver Detalles"><i class="medium material-icons">visibility</i></a>*@
                                                             @*<div id="modalTabla" class="modal">
+                                                                <div class="modal-footer">
+                                                                    <a class="modal-close btn-medium btn-floating modal-trigger tooltipped materialize-red" data-tooltip="Cerrar Ventana"><i class="tiny material-icons">close</i></a>
+                                                                </div>
                                                                 <div class="modal-content">*@
-                                                                    <table>
+                                                                    <table class="striped centered">
                                                                         <tr>
                                                                             <td>
                                                                                 @Html.Raw("<span>%</span>")
@@ -487,41 +488,15 @@
                                                                                 @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
                                                                             </td>
                                                                         </tr>
-                                                                    </table>@*
-                                                                </div>
+                                                                    </table>
+                                                                @*</div>
                                                             </div>*@
                                                         </td>
-                                                        @*<td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                    </td>*@
                                                         <td>
-                                                            @*@Html.ActionLink("Editar", "Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                                            <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">edit</i>@*><img src="~/Content/images/icon-edit.png"></img>*@</a>
+                                                            <a href='@Url.Action("Edit", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>
                                                         </td>
                                                         <td>
-                                                            @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                                            <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar"><i class="large material-icons">delete_forever</i>@*><img src="~/Content/images/icon-borrar.png"></img>*@</a>
+                                                            <a href='@Url.Action("Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">delete_forever</i></a>
                                                         </td>
                                                     </tr>
                                                 }
@@ -530,11 +505,10 @@
 
                                     }
                                     <div class="section"></div>
-                                    @*@Html.ActionLink("Agregar Destino", "Create", "Destinos", new { id = Model.CometidoId }, null)*@
                                     <a href='@Url.Action("Create","Destinos", new { id = Model.CometidoId })' class="btn-floating modal-trigger btn-large blue tooltipped" data-position="right" data-tooltip="Agregar destinos"><i class="large material-icons">add</i></a>
                                 </div>
                             </li>
-                            @if (ViewBag.FechaCalculo.Count != 0)
+                            @if (Model.Atrasado)
                             {
                                 <li>
                                     <div class="collapsible-header"><span style="font-weight: bold">IV. Justificación de Atraso</span></div>
@@ -627,6 +601,29 @@
 </div>
 
 <script type="text/javascript">
+    $(function () {
+        $("#tablaModal .details").click(function () {
+            var destinoId = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "GET",
+                url: "/Destinos/Details",
+                data: '{destinoId: "' + destinoId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $("#modalTabla").find(".modal-body").html(response);
+                    $("#modalTabla").modal('show');
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        })
+    });
+
     $(document).ready(function () {
         jQuery.datetimepicker.setLocale('es');
         jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({

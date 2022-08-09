@@ -174,103 +174,113 @@
                                         <strong>
                                             <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span><br />
                                         </strong>
-                                        <div class="input-field col s12 m8 l12">
-                                            <label>
-                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
-                                                <span>SI</span>
-                                            </label>
-                                        </div>
-                                        <div class="input-field col s12 m8 l12">
-                                            <label>
-                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, false)
-                                                <span>NO</span>
-                                            </label>
-                                        </div>
+                                        @if (Model.FinanciaOrganismo == true)
+                                        {
+                                            <div class="input-field col s12 m8 l12">
+                                                <label>
+                                                    @*@Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)*@
+                                                    <span>SI</span>
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="input-field col s12 m8 l12">
+                                                <label>
+                                                    @*@Html.RadioButtonFor(m => Model.FinanciaOrganismo, false)*@
+                                                    <span>NO</span>
+                                                </label>
+                                            </div>
+                                        }
+
                                     </div>
                                     <p></p>
-                                    <div id="Financia" class="input-field col s12 m4 l10">
-                                        <div class="input-field col s12 m8 l12">
-                                            <label style="color:green">
-                                                @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
-                                            </label>
-                                        </div>
-                                        <div class="input-field col s12 m8 l13">
-                                            <label>
-                                                @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
-                                                <span>@Html.LabelFor(m => Model.Alojamiento)</span>
-                                            </label>
-                                            <div class="section"></div>
-                                        </div>
-                                        <div class="input-field col s12 m8 l13">
-                                            <label>
-                                                @Html.CheckBoxFor(m => Model.Alimentacion, new { @disabled = "disabled" })
-                                                <span>@Html.LabelFor(m => Model.Alimentacion)</span>
-                                            </label>
-                                            <div class="section"></div>
-                                        </div>
-                                        <div class="input-field col s12 m8 l13">
-                                            <label>
-                                                @Html.CheckBoxFor(m => Model.Pasajes, new { @disabled = "disabled" })
-                                                <span>@Html.LabelFor(m => Model.Pasajes)</span>
-                                            </label>
-                                            <div class="section"></div>
-                                        </div>
-                                    </div>
-                                    <div class="input-field col s12 m10 l10">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.SolicitaViatico)
-                                            <span>
-                                                <strong>
-                                                    @Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })
-                                                </strong>
-                                            </span>
-                                        </label>
-                                        <div class="section"></div>
-                                    </div>
-                                    <div class="input-field col s12 m10 l10">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.ReqPasajeAereo)
-                                            <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
-                                        </label>
-                                        <div class="section"></div>
-                                    </div>
-                                    <div class="input-field col s12 m10 l10">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre)
-                                            <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
-                                        </label>
-                                        <div class="section"></div>
-                                    </div>
-                                    <div id="terrestre">
-                                        <div class="input-field col s12 m10 l10">
-                                            <strong>
+                                    <div class="row">
+                                        @if (Model.FinanciaOrganismo == true)
+                                        {
+                                            <div class="Financia input-field col s12 m8 l12">
                                                 <label style="color:green">
-                                                    “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                                    @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
                                                 </label>
-                                            </strong>
+                                            </div>
+                                            <div class="Financia input-field col s12 m8 l13">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled" })
+                                                    <span>@Html.LabelFor(m => Model.Alojamiento)</span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                            <div class="Financia input-field col s12 m8 l13">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.Alimentacion, new { @disabled = "disabled" })
+                                                    <span>@Html.LabelFor(m => Model.Alimentacion)</span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                            <div class="Financia input-field col s12 m8 l13">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.Pasajes, new { @disabled = "disabled" })
+                                                    <span>@Html.LabelFor(m => Model.Pasajes)</span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                        }
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.SolicitaViatico)
+                                                <span>
+                                                    <strong>
+                                                        @Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })
+                                                    </strong>
+                                                </span>
+                                            </label>
+                                            <div class="section"></div>
                                         </div>
-                                    </div>
-                                    <div class="input-field col s12 m10 l10">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.Vehiculo)
-                                            <span>@Html.LabelFor(m => Model.Vehiculo)</span>
-                                        </label>
-                                        <div class="section"></div>
-                                    </div>
-                                    <div id="auto">
-                                        <div class="input-field col s12 m6 l10">
-                                            @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
-                                            @Html.LabelFor(m => Model.TipoVehiculoId)
-                                            @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeAereo)
+                                                <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
+                                            </label>
+                                            <div class="section"></div>
                                         </div>
-                                        <div class="input-field col s12 m2 l10">
-                                            @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                            @Html.LabelFor(m => Model.PlacaVehiculo)
-                                            @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre)
+                                                <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
+                                            </label>
+                                            <div class="section"></div>
                                         </div>
-                                        <div class="input-field  col s12 m2 l10">
-                                            @Html.EditorFor(m => Model.VehiculoObservaciones)
-                                            @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                        <div id="terrestre">
+                                            <div class="input-field col s12 m10 l10">
+                                                <strong>
+                                                    <label style="color:green">
+                                                        “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                                    </label>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.Vehiculo)
+                                                <span>@Html.LabelFor(m => Model.Vehiculo)</span>
+                                            </label>
+                                            <div class="section"></div>
+                                        </div>
+                                        <div id="auto" style="display:none;">
+                                            <div class="input-field col s12 m6 l10">
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                                @Html.LabelFor(m => Model.TipoVehiculoId)
+                                                @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
+                                            </div>
+                                            <div class="input-field col s12 m2 l10">
+                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                                @Html.LabelFor(m => Model.PlacaVehiculo)
+                                                @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                            </div>
+                                            <div class="input-field  col s12 m2 l10">
+                                                @Html.EditorFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
+                                                @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -435,7 +445,7 @@
                                                         </td>
                                                         <td>
                                                             @*@Html.ActionLink("Editar", "EditGP", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
-                                                            <a href='@Url.Action("EditGP", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-position="up" ><i class="large material-icons">edit</i>@*><img src="~/Content/images/icon-edit.png"></img>*@</a>
+                                                            <a href='@Url.Action("EditGP", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-position="up" data-tooltip="Editar Destino"><i class="large material-icons">edit</i>@*><img src="~/Content/images/icon-edit.png"></img>*@</a>
                                                         </td>
                                                         <td>
                                                             @*@Html.ActionLink("Borrar", "Delete", "Destinos", new { id = Model.Destinos.ToArray()[i].DestinoId }, null)*@
@@ -513,9 +523,9 @@
         $("#TipoReembolsoId").attr('disabled', true);
         $('#Financia').hide(100);
         $('select').formSelect();
-        $('input:hidden').each(function (index, element) {
+        @*$('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
-        });
+        });*@
 
         //funcion que habilita opciones si se financia el organismo invitante
         $('input:radio[name="FinanciaOrganismo"]').change(function () {
@@ -670,6 +680,12 @@
 
     $(document).ready(function () {
         $('.modal').modal();
+    });
+
+    $(document).ready(function () {
+        $('input[type="hidden"]').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
     });
 
     @*$(function () {
