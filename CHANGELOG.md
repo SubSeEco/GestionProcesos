@@ -2,6 +2,12 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.2 - Cometidos - 10-08-2022]
+
+### Added
+
+- Se agregaron filtros para los viaticos ajustando el sistema al Decreto 90.
+
 ## [1.3.1 - Cometidos - 09-08-2022]
 
 ### Changed

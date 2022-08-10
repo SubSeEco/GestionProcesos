@@ -1624,36 +1624,109 @@ namespace App.Core.UseCases
                         case 1:
                             if (obj.IdComuna == "01101" || obj.IdComuna == "01107")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                if (obj.LocalidadId.Value == 3944)
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 }
                             }
                             break;
                         case 2:
-                            if (obj.IdComuna == "02101" || obj.IdComuna == "02102")
+                            if (obj.IdComuna == "02101")
+                            {
+                                if(obj.LocalidadId.Value==3945 || obj.LocalidadId.Value==3946 || obj.LocalidadId.Value == 3947 || obj.LocalidadId.Value == 3948)
+                                {
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        adyacente = true;
+                                        metodoMensaje(obj);
+                                    }
+                                }
+                            }else if(obj.IdComuna=="02102")
+                            {
+                                if (obj.LocalidadId.Value == 3949)
+                                {
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        adyacente = true;
+                                        metodoMensaje(obj);
+                                    }
+                                }
+                            }
+                            else
                             {
                                 if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    adyacente = true;
-                                    metodoMensaje(obj);
+                                    metodoMensaje(obj); adyacente = true;
                                 }
                             }
                             break;
                         case 3:
                             if (obj.IdComuna == "03101")
                             {
+                                if (obj.LocalidadId.Value == 3949 || obj.LocalidadId.Value == 3950
+                                || obj.LocalidadId.Value == 3951
+                                || obj.LocalidadId.Value == 3952
+                                || obj.LocalidadId.Value == 3953
+                                || obj.LocalidadId.Value == 3954
+                                || obj.LocalidadId.Value == 3955
+                                || obj.LocalidadId.Value == 3956
+                                || obj.LocalidadId.Value == 3957)
+                                {
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
+                                }
+                            }
+                            break;
+                        case 4:
+                            if (obj.IdComuna == "04101")
+                            {
                                 if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
                                     metodoMensaje(obj); adyacente = true;
                                 }
+                            }else if(obj.IdComuna == "04102")
+                            {
+                                if(obj.LocalidadId.Value == 3959 || obj.LocalidadId.Value==3960)
+                                {
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
+                                }
                             }
-                            break;
-                        case 4:
-                            if (obj.IdComuna == "04101" || obj.IdComuna == "04102")
+                            else
                             {
                                 if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
                                 {
@@ -1679,10 +1752,42 @@ namespace App.Core.UseCases
                                 || obj.IdComuna == "05601"
                                 || obj.IdComuna == "05606")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                if(obj.IdComuna=="05603")
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    if(obj.LocalidadId.Value==3961 || obj.LocalidadId.Value==3962)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }else if(obj.IdComuna== "05606")
+                                {
+                                    if(obj.LocalidadId.Value==3963)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 }
                             }
 
@@ -1699,25 +1804,90 @@ namespace App.Core.UseCases
                            || obj.IdComuna == "06104"
                            || obj.IdComuna == "06105")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                if(obj.IdComuna== "06108")
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    if(obj.LocalidadId.Value==3965||obj.LocalidadId.Value==3966||obj.LocalidadId.Value==3967)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }else if(obj.IdComuna == "06110")
+                                {
+                                    if (obj.LocalidadId.Value == 3968)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }else if(obj.IdComuna=="06116")
+                                {
+                                    if (obj.LocalidadId.Value == 3964)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 }
                             }
                             break;
                         case 7:
-                            if (obj.IdComuna == "07101"
-                        || obj.IdComuna == "07105"
-                        || obj.IdComuna == "07106"
-                        || obj.IdComuna == "07107"
-                        || obj.IdComuna == "07109"
-                        || obj.IdComuna == "07110")
+                            if (obj.IdComuna == "07101" || obj.IdComuna == "07105"
+                                || obj.IdComuna == "07106" || obj.IdComuna == "07107"
+                                || obj.IdComuna == "07109" || obj.IdComuna == "07110")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                if(obj.IdComuna=="07109")
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    if(obj.LocalidadId == 3969 ||
+                                        obj.LocalidadId == 3970 ||
+                                        obj.LocalidadId == 3971 ||
+                                        obj.LocalidadId == 3972 ||
+                                        obj.LocalidadId == 3973 )
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 }
                             }
                             break;
@@ -1751,17 +1921,49 @@ namespace App.Core.UseCases
                             }
                             break;
                         case 10:
-                            if (obj.IdComuna == "10101"
-                  || obj.IdComuna == "10107"
-                  || obj.IdComuna == "10105"
-                  || obj.IdComuna == "10109")
+                            if (obj.IdComuna == "10101" 
+                                || obj.IdComuna == "10107"
+                                || obj.IdComuna == "10105"
+                                || obj.IdComuna == "10109")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                if(obj.IdComuna=="10101")
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    if(obj.LocalidadId.Value == 3974 || obj.LocalidadId.Value == 3975
+                                        || obj.LocalidadId.Value == 3976 || obj.LocalidadId.Value==3977)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
                                 }
-                               
+                                else if(obj.IdComuna=="10109")
+                                {
+                                    if(obj.LocalidadId.Value == 3978 || obj.LocalidadId.Value == 3979 )
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
+                                }                               
                             }
                             break;
                         //case 11: /* hace algo*/; break;
@@ -1812,10 +2014,18 @@ namespace App.Core.UseCases
                             || obj.IdComuna == "13202"
                             || obj.IdComuna == "13301")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                // Validación para farellones, Peldehue y Colina Oriente
+                                if(obj.LocalidadId.Value == 3943 || obj.LocalidadId.Value == 3980|| obj.LocalidadId.Value == 3981)
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
+                                    response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                }
+                                else
+                                {
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 }
                             }
                             break;
