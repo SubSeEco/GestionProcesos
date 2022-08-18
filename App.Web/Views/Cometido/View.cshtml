@@ -103,85 +103,85 @@
                             <div class="collapsible-header"><span style="font-weight: bold">II. Datos de la Solicitud: </span></div>
                             <div class="collapsible-body">
                                 <div class="row">
-                            <div class="input-field col s12 m8 l12">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m8 l13">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>
-                                        <strong style="color:green">
-                                            @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                    <div class="input-field col s12 m8 l12">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
                                         </strong>
-                                    </span>
-                                </strong>
-                                @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m10 l10">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
-                                </strong>
-                                @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
-                            </div>
-                            <div id="divReembolso">
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                        @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m8 l13">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m8 l13">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m8 l13">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <span>
+                                                <strong style="color:green">
+                                                    @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                                </strong>
+                                            </span>
+                                        </strong>
+                                        @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
+                                    </div>
+                                    <div id="divReembolso">
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                        </div>
+                                    </div>
+                                    <div class="input-field col s12 m4 l4">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
+                                    </div>
+                                    <div class="input-field col s12 m4 l4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
+                                    </div>
+                                    <div class="input-field col s12 m4 l4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.PlacaVehiculo)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.PlacaVehiculo)
+                                    </div>
+                                    <div class="input-field col s12 m4 l4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.VehiculoObservaciones)
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
-                                </strong>
-                                @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
-                                </strong>
-                                @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.PlacaVehiculo)
-                                </strong>
-                                @Html.DisplayFor(m => Model.PlacaVehiculo)
-                            </div>
-                            <div class="input-field col s12 m4 l4">
-                                <strong>
-                                    @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
-                                </strong>
-                                @Html.DisplayFor(m => Model.VehiculoObservaciones)
-                            </div>
-                        </div>
                             </div>
                         </li>
                         <li>
@@ -189,12 +189,12 @@
                             <div class="collapsible-body">
                                 <div class="row">
                                     <div class="input-field col s12 m10 l10">
-                                        @Html.EditorFor(m => Model.NombreCometido, new {htmlAttributes = new {@readonly="readonly"}})
+                                        @Html.EditorFor(m => Model.NombreCometido, new { htmlAttributes = new { @readonly = "readonly" } })
                                         @Html.LabelFor(m => Model.NombreCometido)
                                         @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
                                     </div>
                                     <div class="input-field col s12 m10 l10">
-                                        @Html.EditorFor(m => Model.CometidoDescripcion, new { htmlAttributes = new { @class = "materialize-textarea", @readonly="readonly" } })
+                                        @Html.EditorFor(m => Model.CometidoDescripcion, new { htmlAttributes = new { @class = "materialize-textarea", @readonly = "readonly" } })
                                         @Html.LabelFor(m => Model.CometidoDescripcion)
                                         @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
                                     </div>
@@ -202,10 +202,10 @@
                                         <span class="card-title">Destinos</span>
                                     </div>
                                 </div>
-                                    @if (Model.Destinos.Count > 0)
-                                    {
-                                        <div class="row" style="overflow-x:scroll;">
-                                            <table class="table">
+                                @if (Model.Destinos.Count > 0)
+                                {
+                                    <div class="row" style="overflow-x:scroll;">
+                                        <table class="table">
                                             <tr>
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
@@ -294,8 +294,8 @@
                                                 </tr>
                                             }
                                         </table>
-                                        </div>
-                                    }
+                                    </div>
+                                }
                             </div>
                         </li>
                         <li>
@@ -311,9 +311,59 @@
                                             <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             }
                         </li>
+                        <!--se agregan datos de pasajes si se solicitan-->
+                        @if (Model.ReqPasajeAereo)
+                        {
+                            <li>
+                                <div class="collapsible-header">
+                                    @if (Model.Atrasado)
+                                    {
+                                        <span style="font-weight: bold;height:inherit">V. Datos del Pasaje: </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span>
+                                    }
+                                </div>
+                                <div class="collapsible-body">
+                                    @if (ViewBag.DestinosPasajes != null)
+                                    {
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Región de origen</th>
+                                                    <th>Fecha de origen</th>
+                                                    <th>Región de retorno</th>
+                                                    <th>Fecha retorno</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var destinopasaje in ViewBag.DestinosPasajes)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @destinopasaje.OrigenRegionDescripcion
+                                                            <br />
+                                                            @destinopasaje.ObservacionesOrigen
+                                                        </td>
+                                                        <td>@destinopasaje.FechaOrigen</td>
+                                                        <td>
+                                                            @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
+                                                            @destinopasaje.ObservacionesDestinos
+                                                        </td>
+                                                        <td>@destinopasaje.FechaVuelta</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </li>
+
+                        }
                     </ul>                    
                     <div class="section"></div>
                     @*@if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.Terminada != true)*@

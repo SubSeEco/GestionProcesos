@@ -375,5 +375,12 @@ namespace App.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult ShowpopUp(int id)
+        {
+            var modal = _repository.GetById<Pasaje>(id);
+
+            return PartialView("_PartialDestinos", modal);
+        }
     }
 }

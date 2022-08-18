@@ -291,6 +291,10 @@ namespace App.Web.Controllers
 
             var proceso = _repository.GetById<Proceso>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+
+
+            ViewBag.Pasajes = model.Pasajes;
+            ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);
             if (model == null)
             {
                 //model.Proceso = proceso;
@@ -1207,7 +1211,7 @@ namespace App.Web.Controllers
             //model.Destinos = ListDestino;
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
+            /*ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);*/
             //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso", model.TipoReembolsoId);
             ViewBag.FinanciaOrganismo = model.FinanciaOrganismo;
 
@@ -1218,11 +1222,17 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPpto(Cometido model)
         {
-
             if (ModelState.IsValid)
             {
+                var cometido = _repository.GetById<Cometido>(model.CometidoId);
+                var Ggp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault(q=>q.CometidoId==model.CometidoId));
+                /*model.TipoVehiculoId = cometido.TipoVehiculoId;*/
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
+
+                var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+
+                model.Workflow = workflow;
 
                 if (_UseCaseResponseMessage.Warnings.Count > 0)
                     TempData["Warning"] = _UseCaseResponseMessage.Warnings;

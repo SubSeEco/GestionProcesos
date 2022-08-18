@@ -298,6 +298,9 @@ namespace App.Web.Controllers
         public ActionResult Edit(DestinosPasajes model)
         {
             model.FechaIda = DateTime.Now;
+            var pasaje = _repository.GetFirst<Pasaje>(q => q.PasajeId == model.PasajeId);
+            var proceso = _repository.GetFirst<Proceso>(q => q.ProcesoId == pasaje.ProcesoId);
+            var cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == proceso.ProcesoId);
 
             if (ModelState.IsValid)
             {
@@ -310,7 +313,8 @@ namespace App.Web.Controllers
                 if (_UseCaseResponseMessage.IsValid)
                 {
                     TempData["Success"] = "Operación terminada correctamente.";
-                    return RedirectToAction("Edit", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
+                    return RedirectToAction("Edit", "Cometido", new { id = cometido.CometidoId });
+                    //return RedirectToAction("Edit", "Pasaje", new { model.WorkflowId, id = model.PasajeId });
                 }
 
                 foreach (var item in _UseCaseResponseMessage.Errors)

@@ -29,7 +29,7 @@
                             @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...", htmlAttributes: new { @id = "HOLAAAA" })
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.FechaOrigen)
+                            @Html.EditorFor(model => model.FechaOrigen)
                             @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
                         </td>
                     </tr>
@@ -48,7 +48,7 @@
                             @*@Html.DropDownListFor(model=>model.IdRegion,new SelectList(ViewBag.IdRegion,"Value","Text",Model.IdRegion),"Seleccione...")*@
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.FechaVuelta)
+                            @Html.EditorFor(model => model.FechaVuelta)
                             @Html.ValidationMessageFor(m => m.FechaVuelta, "", new { @class = "red-text" })
                         </td>
                     </tr>
@@ -71,7 +71,7 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    @*$(document).ready(function () {
         jQuery.datetimepicker.setLocale('es');
         jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
             i18n: {
@@ -83,13 +83,13 @@
                     ]
                 }
             },
-            timepicker: false,
+            timepicker: true,
             startDate: '+1971/05/01',
             todayButton: true,
             dayOfWeekStart: 1,
             formatDate: 'd-m-Y',
             //minDate: 0
-        });
+        });*@
         //jQuery('#HoraIda,#HoraVuelta').timepicker({ datetimepicker: false, formatTime: 'H:i', defaultTime: '08:00' });
         $('select').formSelect();
 
@@ -189,7 +189,7 @@
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>*@
 @*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
 
 

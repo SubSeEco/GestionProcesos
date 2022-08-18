@@ -205,6 +205,8 @@ namespace App.Util
             AnalistaPresupuesto = 8,
             EncargadoPresupuesto = 9,
             AprobacionJuridica = 10,
+            AprobacionSubse=11,
+            AprobacionMinistro=12,
             FirmaActoAdministrativo = 13,
             FirmaMinistro = 14,
             FirmaSubsecretario = 15,

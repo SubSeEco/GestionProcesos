@@ -28,6 +28,29 @@
     </div>
     @*@Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })*@
     @Html.Action("ProcessState", "Cometido", new { Model.WorkflowId })
+    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 21)
+    {
+        <div class="row">
+            <div class="col s12 m10 l12">
+                <div class="card">
+                    <div class="card-content">
+                        <ul class="collapsible popout">
+                            <li>
+                                <div class="collapsible-header">
+                                    <span style="font-weight: bold">Firma Documento SIGFE</span>
+                                </div>
+                                <div class="collapsible-body">
+                                    @Html.Partial("~/Views/Cometido/SignOther.cshtml")
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    }
+
     <div class="row">
         <div class="col s12 m10 l8">
             @Html.Partial("_Message")
@@ -99,556 +122,561 @@
                                 @Html.DisplayFor(m => Model.CometidoId)
                             </div>
                         </div>
-                        <div id="jQuery_accordion">
-                            <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.UnidadDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.UnidadDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                        <ul class="collapsible popout">
+                            <li>
+                                <div class="collapsible-header">
+                                    <span style="font-weight: bold">I. Datos del Funcionario: </span>
                                 </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.Nombre)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.Nombre)
-                                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l8">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.Rut)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.Rut)
-                                    @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l4">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.DV)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.DV)
-                                    @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.CargoDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.CargoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.CalidadDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.CalidadDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.GradoDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.GradoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.EstamentoDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.EstamentoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.ProgramaDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m6 l3">
-                                    @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
-                                    @Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                            </div>
-                            <h3><span style="font-weight: bold">II. Datos de la Solicitud: </span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m8 l12">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m8 l13">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m8 l13">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m8 l13">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        <span>
-                                            <strong style="color:green">
-                                                @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.UnidadDescripcion)
                                             </strong>
-                                        </span>
-                                    </strong>
-                                    @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <label style="color:green">
-                                        @Html.Raw("<span>“El cometido incluye” </span>")
-                                    </label>
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
-                                </div>
-                                <div id="divReembolso">
-                                    <div class="input-field col s12 m10 l10">
-                                        <strong>
-                                            <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
-                                        </strong>
-                                        @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                            @Html.DisplayFor(m => Model.UnidadDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.Nombre)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.Nombre)
+                                            @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l8">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.Rut)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.Rut)
+                                            @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l4">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.DV)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.DV)
+                                            @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.CargoDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.CargoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.CalidadDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.GradoDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.GradoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.EstamentoDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.EstamentoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.ProgramaDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.ProgramaDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l3">
+                                            @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
+                                            @Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.ConglomeradoDescripcion, "", new { @class = "red-text" })
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="input-field col s12 m4 l4">
-                                    <strong>
-                                        <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
-                                    </strong>
-                                    @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
+                            </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    <span style="font-weight: bold">II. Datos de la Solicitud: </span>
                                 </div>
-                                <div class="input-field col s12 m4 l4">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12 m8 l12">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m8 l13">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m8 l13">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m8 l13">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                <span>
+                                                    <strong style="color:green">
+                                                        @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                                    </strong>
+                                                </span>
+                                            </strong>
+                                            @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
+                                        </div>
+                                        @*<div class="input-field col s12 m10 l10">
+                                                <label style="color:green">
+                                                    @Html.Raw("<span>“El cometido incluye” </span>")
+                                                </label>
+                                            </div>*@
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m10 l10">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
+                                        </div>
+                                        <div id="divReembolso">
+                                            <div class="input-field col s12 m10 l10">
+                                                <strong>
+                                                    <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
+                                                </strong>
+                                                @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                            </div>
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <strong>
+                                                <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
+                                            </strong>
+                                            @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.PlacaVehiculo)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.PlacaVehiculo)
+                                        </div>
+                                        <div class="input-field col s12 m4 l4">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.VehiculoObservaciones)
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="input-field col s12 m4 l4">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.PlacaVehiculo)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.PlacaVehiculo)
+                            </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    <span style="font-weight: bold">III. Datos del Cometido: </span>
                                 </div>
-                                <div class="input-field col s12 m4 l4">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.VehiculoObservaciones)
-                                </div>
-                            </div>
-                            <h3><span style="font-weight: bold">III. Datos del Cometido: </span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>@Html.DisplayNameFor(m => Model.NombreCometido)</strong>
-                                    @Html.DisplayFor(m => Model.NombreCometido)
-                                    @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <strong>
-                                        @Html.DisplayNameFor(m => Model.CometidoDescripcion)
-                                    </strong>
-                                    @Html.DisplayFor(m => Model.CometidoDescripcion)
-                                    @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
-                                </div>
-                                <div class="input-field col s12 m10 l10">
-                                    <span class="card-title">Destinos</span>
-                                </div>
-                                @if (Model.Destinos.Count > 0)
-                                {
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                        @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                                </td>
-                                            </tr>
-                                        }
-                                    </table>
-
-                                }
-                            </div>@if (Model.GeneracionCDP.Any())
-                            {
-                                <h3><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></h3>
-                                <div class="row">
-
-                                    @if (Model.SolicitaViatico)
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12 m6 l6">
+                                            <strong>@Html.DisplayNameFor(m => Model.NombreCometido)</strong>
+                                            @Html.DisplayFor(m => Model.NombreCometido)
+                                            @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                            </strong>
+                                            @Html.DisplayFor(m => Model.CometidoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12 m10 l10">
+                                            <span class="card-title">Destinos</span>
+                                        </div>
+                                    </div>
+                                    @if (Model.Destinos.Count > 0)
                                     {
-                                        <span class="card-title">Viaticos</span>
-                                        <table class="table">
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
-                                                </th>
-                                            </tr>
-                                        </table>
-
-                                    }
-
-                                    @*@if (Model.ReqPasajeAereo == true)
-                                        {
-                                            <span class="card-title">Pasajes</span>
+                                        <div class="row" style="overflow-x:scroll;">
                                             <table class="table">
                                                 <tr>
                                                     <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoPartidaId)
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
                                                     </th>
                                                     <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
                                                     </th>
                                                     <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
                                                     </th>
                                                     <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
                                                     </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
+                                                    </th>
+                                                    <th></th>
                                                 </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjVtcTipoCapituloId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCentroCostoId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubTituloId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoItemId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacionId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjSaldo)
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacionId)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().PsjValorViatico)
-                                                    </th>
-                                                </tr>
+                                                @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                        </td>
+                                                    </tr>
+                                                }
                                             </table>
-                                        }*@
-                                </div>
-                            }
-                            <h3><span style="font-weight: bold">V. Documento: </span></h3>
-                            <div class="row">
-                                @foreach (var item in Model.Proceso.Documentos)
-                                {
-                                    if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5)
-                                    {
-                                        if (item.Type.Contains("pdf"))
-                                        {
-                                            <div class="section"></div>
-                                            <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
-                                        }
+                                        </div>
                                     }
-                                }
-                            </div>
-                            <h3><span style="font-weight: bold">VI. Registro SIGFE Contabilidad</span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.TipoPagoSIGFE.DescripcionTipoPago)
-                                    @Html.LabelFor(m => Model.TipoPagoSIGFE.DescripcionTipoPago)
                                 </div>
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.NombreFuncionarioPagador)
-                                    @Html.LabelFor(m => Model.NombreFuncionarioPagador)
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.DisplayFor(m => Model.IdSigfe)
-                                    @Html.LabelFor(m => Model.IdSigfe)
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.DisplayFor(m => Model.FechaPagoSigfe)
-                                    @Html.LabelFor(m => Model.FechaPagoSigfe)
-                                </div>
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.ObservacionesPagoSigfe)
-                                    @Html.LabelFor(m => Model.ObservacionesPagoSigfe)
-                                </div>
-                            </div>
-                            <h3><span style="font-weight: bold">VII. Registro SIGFE Tesoreria</span></h3>
-                            <div class="row">
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.TipoPagoSIGFETesoreria.DescripcionTipoPago)
-                                    @Html.LabelFor(m => Model.TipoPagoSIGFETesoreria.DescripcionTipoPago)
-                                </div>
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.NombreFuncionarioPagadorTesoreria)
-                                    @Html.LabelFor(m => Model.NombreFuncionarioPagadorTesoreria)
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.DisplayFor(m => Model.IdSigfeTesoreria)
-                                    @Html.LabelFor(m => Model.IdSigfeTesoreria)
-                                </div>
-                                <div class="input-field col s12 m6 l6">
-                                    @Html.DisplayFor(m => Model.FechaPagoSigfeTesoreria)
-                                    @Html.LabelFor(m => Model.FechaPagoSigfeTesoreria)
-                                </div>
-                                <div class="input-field col s12 m10 l12">
-                                    @Html.DisplayFor(m => Model.ObservacionesPagoSigfeTesoreria)
-                                    @Html.LabelFor(m => Model.ObservacionesPagoSigfeTesoreria)
-                                </div>
-                            </div>
-                            <h3><span style="font-weight: bold">VIII. Registro Finanzas</span></h3>
-                            <div class="row">
-                                @if (Model.Workflow.DefinicionWorkflow.Secuencia == 21)
+                            </li>
+                            @if (Model.Atrasado)
+                            {
+                                <li>
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">IV. Justificación de Atraso</span>
+                                    </div>
+                                    <div class="collapsible-body">
+                                        <div class="row">
+                                            <div class="input-field col s12 m10 l12">
+                                                <strong>@Html.NameFor(m => Model.JustificacionAtraso)</strong>
+                                                <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            <li>
+                                @if (Model.GeneracionCDP.Any())
                                 {
-                                    <div class="input-field col s12 m10 l10">
-                                        <strong>
-                                            <span>@Html.DisplayNameFor(m => Model.ResolucionRevocatoria)</span>
-                                        </strong>
-                                        @string.Format("{0}", Model.ResolucionRevocatoria ? "SI" : "NO")
-                                        <div class="section"></div>
+                                    if (Model.Atrasado)
+                                    {
+                                        <div class="collapsible-header">
+                                            <span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="collapsible-header">
+                                            <span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span>
+                                        </div>
+                                    }
+                                    <div class="collapsible-body">
+                                        <div class="row">
+                                            @if (Model.SolicitaViatico)
+                                            {
+                                                <span class="card-title">Viaticos</span>
+                                                <table class="table">
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
+                                                        </th>
+                                                    </tr>
+                                                </table>
+
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </li>
+                            <li>
+                                @if (Model.Atrasado)
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VI. Documento: </span>
                                     </div>
                                 }
                                 else
                                 {
-                                    <div class="input-field col s12 m10 l10">
-                                        <label>
-                                            @Html.CheckBoxFor(m => Model.ResolucionRevocatoria)
-                                            <span>
-                                                <strong>
-                                                    @Html.DisplayNameFor(m => Model.ResolucionRevocatoria)
-                                                </strong>
-                                            </span>
-                                        </label>
-                                        <div class="section"></div>
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">V. Documento: </span>
                                     </div>
                                 }
-                            </div>
-                        </div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        @foreach (var item in Model.Proceso.Documentos)
+                                        {
+                                            if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5)
+                                            {
+                                                if (item.Type.Contains("pdf"))
+                                                {
+                                                    <div class="section"></div>
+                                                    <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                @if (Model.Atrasado)
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VII. Registro SIGFE Contabilidad</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VI. Registro SIGFE Contabilidad</span>
+                                    </div>
+                                }
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.TipoPagoSIGFE.DescripcionTipoPago)
+                                            @Html.LabelFor(m => Model.TipoPagoSIGFE.DescripcionTipoPago)
+                                        </div>
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.NombreFuncionarioPagador)
+                                            @Html.LabelFor(m => Model.NombreFuncionarioPagador)
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayFor(m => Model.IdSigfe)
+                                            @Html.LabelFor(m => Model.IdSigfe)
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayFor(m => Model.FechaPagoSigfe)
+                                            @Html.LabelFor(m => Model.FechaPagoSigfe)
+                                        </div>
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.ObservacionesPagoSigfe)
+                                            @Html.LabelFor(m => Model.ObservacionesPagoSigfe)
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                @if (Model.Atrasado)
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VIII. Registro SIGFE Tesoreria</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VII. Registro SIGFE Tesoreria</span>
+                                    </div>
+                                }
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.TipoPagoSIGFETesoreria.DescripcionTipoPago)
+                                            @Html.LabelFor(m => Model.TipoPagoSIGFETesoreria.DescripcionTipoPago)
+                                        </div>
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.NombreFuncionarioPagadorTesoreria)
+                                            @Html.LabelFor(m => Model.NombreFuncionarioPagadorTesoreria)
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayFor(m => Model.IdSigfeTesoreria)
+                                            @Html.LabelFor(m => Model.IdSigfeTesoreria)
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayFor(m => Model.FechaPagoSigfeTesoreria)
+                                            @Html.LabelFor(m => Model.FechaPagoSigfeTesoreria)
+                                        </div>
+                                        <div class="input-field col s12 m10 l12">
+                                            @Html.DisplayFor(m => Model.ObservacionesPagoSigfeTesoreria)
+                                            @Html.LabelFor(m => Model.ObservacionesPagoSigfeTesoreria)
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                @if (Model.Atrasado)
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">IX. Registro Finanzas</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="collapsible-header">
+                                        <span style="font-weight: bold">VIII. Registro Finanzas</span>
+                                    </div>
+                                }
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        @if (Model.Workflow.DefinicionWorkflow.Secuencia == 21)
+                                        {
+                                            <div class="input-field col s12 m10 l10">
+                                                <strong>
+                                                    <span>@Html.DisplayNameFor(m => Model.ResolucionRevocatoria)</span>
+                                                </strong>
+                                                @string.Format("{0}", Model.ResolucionRevocatoria ? "SI" : "NO")
+                                                <div class="section"></div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="input-field col s12 m10 l10">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.ResolucionRevocatoria)
+                                                    <span>
+                                                        <strong>
+                                                            @Html.DisplayNameFor(m => Model.ResolucionRevocatoria)
+                                                        </strong>
+                                                    </span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                         @if (Model.Workflow.DefinicionWorkflow.Secuencia != 21)
                         {
                             <div class="section"></div>
@@ -668,20 +696,6 @@
             @*@Html.Action("History", "Workflow", new { Model.WorkflowId })*@
         </div>
     </div>
-
-    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 21)
-    {
-        <div class="col s12 m10 l8">
-            <div id="jQuery_accordion2">
-                <h3><span style="font-weight: bold">Firma Documento SIGFE</span></h3>
-                <div class="row">
-                    @Html.Partial("~/Views/Cometido/SignOther.cshtml")
-                </div>
-            </div>
-        </div>
-    }
-
-
 </div>
 
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
@@ -709,6 +723,7 @@
             $(element).appendTo($(element).parent());
         });
 
+        $('.collapsible').collapsible();
         $('.modal').modal();
         $('.tooltipped').tooltip();
     });

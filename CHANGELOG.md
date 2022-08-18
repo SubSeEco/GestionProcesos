@@ -2,6 +2,14 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.3 - Cometidos - 18-08-2022]
+
+### Changed
+
+- Se ajustaron las vistas de Tesoreria y Contabilidad para ajustarse al estilo elegido para Cometidos.
+- Se modifico flujo erroneo desde Visación si este tenia pasajes.
+- Se modifico Resolucion y Orden para que ahora muestren los parrafos que corresponden según bool de Atraso.
+
 ## [1.3.2 - Cometidos - 10-08-2022]
 
 ### Added

@@ -135,7 +135,7 @@
                             a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
                         </p>
                     </li>
-                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now && justificacion)
+                    @if (Model.Atrasado)
                     {
                         @*<li>
                 <p align="justify" style="margin-right:30px">

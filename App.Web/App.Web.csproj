@@ -793,6 +793,7 @@
     <Content Include="Views\Cometido\ProcessState.cshtml" />
     <Content Include="Views\Destinos\Details.cshtml" />
     <Content Include="Views\Cometido\ValidaSubsecretario.cshtml" />
+    <Content Include="Views\Shared\_PartialDestinos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

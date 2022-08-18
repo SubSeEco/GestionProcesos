@@ -229,8 +229,8 @@
                                             <label>
                                                 @Html.CheckBoxFor(m => Model.SolicitaViatico)
                                                 <span>
-                                                    <strong>
-                                                        @Html.LabelFor(m => Model.SolicitaViatico, new { style = "color:#008000" })
+                                                    <strong style="color:#008000">
+                                                        @Html.DisplayNameFor(m => Model.SolicitaViatico)
                                                     </strong>
                                                 </span>
                                             </label>
@@ -239,7 +239,7 @@
                                         <div class="input-field col s12 m10 l10">
                                             <label>
                                                 @Html.CheckBoxFor(m => Model.ReqPasajeAereo)
-                                                <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
+                                                <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
                                             </label>
                                             <div class="section"></div>
                                         </div>
@@ -262,7 +262,7 @@
                                         <div class="input-field col s12 m10 l10">
                                             <label>
                                                 @Html.CheckBoxFor(m => Model.Vehiculo)
-                                                <span>@Html.LabelFor(m => Model.Vehiculo)</span>
+                                                <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
                                             </label>
                                             <div class="section"></div>
                                         </div>

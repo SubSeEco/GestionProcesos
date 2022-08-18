@@ -28,23 +28,24 @@
                 @Html.HiddenFor(q => Model.Nombre)
                 @Html.HiddenFor(q => Model.Rut)
                 @Html.HiddenFor(q => Model.DV)
+                @Html.HiddenFor(q => Model.Jefatura)
                 @Html.HiddenFor(q => Model.CargoDescripcion)
                 @Html.HiddenFor(q => Model.CalidadDescripcion)
                 @Html.HiddenFor(q => Model.GradoDescripcion)
                 @Html.HiddenFor(q => Model.EstamentoDescripcion)
                 @Html.HiddenFor(q => Model.ConglomeradoDescripcion)
                 @Html.HiddenFor(q => Model.ProgramaDescripcion)
-                @Html.HiddenFor(q => Model.IdPrograma)
                 @Html.HiddenFor(q => Model.IdCargo)
                 @Html.HiddenFor(q => Model.IdUnidad)
-                @Html.HiddenFor(q => Model.IdCargo)
                 @Html.HiddenFor(q => Model.IdCalidad)
                 @Html.HiddenFor(q => Model.IdGrado)
                 @Html.HiddenFor(q => Model.IdEstamento)
+                @Html.HiddenFor(q => Model.IdPrograma)
                 @Html.HiddenFor(q => Model.FinanciaOrganismo)
+                @Html.HiddenFor(q => Model.Pasajes)
+                @Html.HiddenFor(q => Model.IdCargo)
                 @Html.HiddenFor(q => Model.Alojamiento)
                 @Html.HiddenFor(q => Model.Alimentacion)
-                @Html.HiddenFor(q => Model.Pasajes)
                 @*@Html.HiddenFor(q => Model.ReqPasajeAereo)
                     @Html.HiddenFor(q => Model.ReqPasajeTerrestre)*@
                 @Html.HiddenFor(q => Model.Vehiculo)
@@ -52,9 +53,9 @@
                     @Html.HiddenFor(q => Model.TipoVehiculoDescripcion)*@
                 @*@Html.HiddenFor(q => Model.PlacaVehiculo)*@
                 @Html.HiddenFor(q => Model.CometidoOk)
-                @Html.HiddenFor(q => Model.Jefatura)
                 @Html.HiddenFor(q => Model.IdEscalafon)
                 @Html.HiddenFor(q => Model.EscalafonDescripcion)
+                @Html.HiddenFor(q => Model.Atrasado)
 
 
                 <div class="card">
@@ -557,19 +558,41 @@
                                                                 <br />
                                                                 @destinopasaje.ObservacionesOrigen
                                                             </td>
-                                                            <td>@destinopasaje.FechaOrigen</td>
+                                                            <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaOrigen)</td>
                                                             <td>
                                                                 @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
                                                                 @destinopasaje.ObservacionesDestinos
                                                             </td>
-                                                            <td>@destinopasaje.FechaVuelta</td>
+                                                            <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaVuelta)</td>
                                                             <td>
-                                                                <a href='@Url.Action("Edit", "Pasaje", new { id = destinopasaje.PasajeId })' class="btn-large btn-floating modal-trigger tooltipped blue"><i class="large material-icons">edit</i>@*><img src="~/Content/images/icon-edit.png"></img>*@</a>
+                                                                <a href='@Url.Action("Edit", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar Pasaje"><i class="large material-icons">edit</i>><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                @*<a class="btn btn-default" id="@destinopasaje.PasajeId" onclick="Test(this.id)">TEST</a>*@
+                                                            </td>
+                                                            <td>
+                                                                <a href='@Url.Action("Delete", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar Pasaje"><i class="large material-icons">delete_forever</i>><img src="~/Content/images/icon-edit.png"></img></a>
                                                             </td>
                                                         </tr>
                                                     }
                                                 </tbody>
                                             </table>
+                                            //Desarrollando Mejoras de modal
+                                            <!--<div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <input type="button" class="close" data-dismiss="modal" />-->
+                                                        @*Agregando MODAL!*@
+                                                        <!--<h4>
+
+                                                        </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input type="button" class="btn btn-default"/>
+                                                    </div>
+                                                </div>
+                                            </div>-->
                                         }
                                     </div>
                                 </li>
@@ -601,6 +624,18 @@
 </div>
 
 <script type="text/javascript">
+    @*function Test(id) {
+        $.get("@Url.Action("ShowpopUp","Pasaje")/" + id,
+            function (data) {
+                $('.modal-body').html(data);
+            });
+
+        var detalle = document.getElementById('myModal');
+
+        detalle.modal("show");
+    }*@
+
+
     $(function () {
         $("#tablaModal .details").click(function () {
             var destinoId = $(this).closest("tr").find("td").eq(0).html();
@@ -625,7 +660,7 @@
     });
 
     $(document).ready(function () {
-        jQuery.datetimepicker.setLocale('es');
+        @*jQuery.datetimepicker.setLocale('es');
         jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
             i18n: {
                 es: {
@@ -646,7 +681,7 @@
             dayOfWeekStart: 1,
             //formatDate: 'd-m-Y',
             //minDate: 0
-        });
+        });*@
 
         $("#PlacaVehiculo").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);

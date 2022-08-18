@@ -119,7 +119,7 @@
                             especificas inherentes al cargo que sirven.
                         </p>
                     </li>
-                    @if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now && justificacion)
+                    @if (Model.Atrasado)
                     {
                         @*<li>
                 <p align="justify" style="margin-right:30px">
