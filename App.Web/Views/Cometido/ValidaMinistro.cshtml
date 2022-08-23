@@ -191,18 +191,18 @@
                                     @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
                                 </div>
                                 @*@if (Model.SolicitaViatico)
-                                {
+                                    {
+                                        <div class="input-field">
+                                            <label style="color:green">
+                                                @Html.Raw("<span>“El cometido incluye” </span>")
+                                            </label>
+                                        </div>
+                                    }
                                     <div class="input-field">
                                         <label style="color:green">
                                             @Html.Raw("<span>“El cometido incluye” </span>")
                                         </label>
-                                    </div>
-                                }
-                                <div class="input-field">
-                                    <label style="color:green">
-                                        @Html.Raw("<span>“El cometido incluye” </span>")
-                                    </label>
-                                </div>*@
+                                    </div>*@
                                 <div class="input-field">
                                     <strong>
                                         <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
@@ -393,7 +393,7 @@
                                     </div>
                                 </div>
                             </li>
-                        }                        
+                        }
                         <li>
                         </li>
                     </ul>

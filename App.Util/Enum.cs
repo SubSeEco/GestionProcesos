@@ -217,6 +217,7 @@ namespace App.Util
             EncargadoFinanzas = 20,
             IngresoPagoTesoreria = 21,
             VisacionSubsecretaria=22,
+            VisacionMinistro=23,
         }
 
         public enum DefinicionProceso

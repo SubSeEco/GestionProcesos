@@ -29,8 +29,10 @@
                             @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...", htmlAttributes: new { @id = "HOLAAAA" })
                         </td>
                         <td>
-                            @Html.EditorFor(model => model.FechaOrigen)
-                            @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
+                            <div class="input-field">
+                                @Html.EditorFor(model => Model.FechaOrigen)
+                                @Html.ValidationMessageFor(m => m.FechaOrigen, "", new { @class = "red-text" })
+                            </div>
                         </td>
                     </tr>
                     <tr>

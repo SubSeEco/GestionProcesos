@@ -487,6 +487,18 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult ValidaMinistro(int id)
+        {
+            var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+
+            model.Workflow = workflow;
+            model.Proceso = proceso;
+
+            return View(model);
+        }
+
         public ActionResult ValidaSubsecretario(int id)
         {
             var model = _repository.GetById<Cometido>(id);
@@ -1019,27 +1031,31 @@ namespace App.Web.Controllers
             /*En primera instancia, se debe dejar en false hasta que se ingrese el destino para realizar el calculo de fechas.*/
             model.Atrasado = false;
 
-            for(int i =0; i < model.Destinos.Count; i++)
+            //variable para contar fechas.
+            var helper = new List<int>();
+
+            for (int i = 0; i < model.Destinos.Count; i++)
             {
                 var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
                 var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
-
-                /*if (fecha <20)
+                                
+                if (fechahelp < 20)
                 {
-                    ViewBag.FechaCalculo.Add(model.Destinos[i]);
-                }*/
-                if(fechahelp<20)
-                {
-                    model.Atrasado = true;
+                    helper.Add(fechahelp);
                 }
                 else
                 {
                     model.Atrasado = false;
                 }
 
-                if (model.IdGrado == "C" || model.IdGrado == "B")
+                /*if (model.IdGrado == "C" || model.IdGrado == "B")
                 {
                     model.Atrasado = false;
+                }*/
+
+                if (helper.Any())
+                {
+                    model.Atrasado = true;
                 }
             }
 

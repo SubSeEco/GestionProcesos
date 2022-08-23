@@ -2,6 +2,17 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.4 - Cometidos - 23-08-2022]
+
+### Added
+
+- Se agrego nuevo flujo, Visación Ministro.
+- Se creo nueva vista y nuevo ActionResult en el controlador de Cometido
+
+### Changed
+
+- Se cambiaron vistas en las tablas que se desbordaban, EditGP, EditAbast donde se reemplazo la grilla por un modal.
+
 ## [1.3.3 - Cometidos - 18-08-2022]
 
 ### Changed

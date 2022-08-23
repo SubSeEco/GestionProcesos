@@ -25,7 +25,7 @@
                                         </div>
                                         <div class="input-field col s12 m6 l6">
                                             @Html.DisplayNameFor(model => model.FechaOrigen)
-                                            @Html.EditorFor(model => model.FechaOrigen)
+                                            @Html.EditorFor(model => model.FechaOrigen, new { htmlAttributes = new {@class="datepicker"}})
                                             @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
                                         </div>
                                     </div>
@@ -35,7 +35,7 @@
                                             @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
                                         </div>
                                         <div class="input-field col s12 m6 l6">
-                                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                                            @Html.LabelFor(model => model.FechaVuelta)
                                             @Html.EditorFor(model => Model.FechaVuelta)
                                             @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
                                         </div>
@@ -61,7 +61,7 @@
                                             @Html.DropDownListFor(m => Model.IdPaisOrigen, null, "Seleccione...")
                                         </div>
                                         <div class="input-field col s12 m6 l6">
-                                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                                            @Html.LabelFor(model => model.FechaOrigen)
                                             @Html.EditorFor(model => model.FechaOrigen)
                                             @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
                                         </div>
@@ -124,7 +124,9 @@
             //formatDate: 'd-m-Y',
             //minDate: 0
         });*@
-        $('.datepicker').datepicker();
+        $('.datepicker').datepicker({
+            selectMonths: true,
+        });
         $('select').formSelect();
     });
 </script>
