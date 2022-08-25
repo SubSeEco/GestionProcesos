@@ -2,6 +2,12 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.4 - Cometidos - 25-08-2022]
+
+## Changed
+
+- Se modifico control de errores en caso de no llenar el la justificacion de atraso cuando es Ministro/a o Subsecretaria/o.
+
 ## [1.3.4 - Cometidos - 23-08-2022]
 
 ### Added

@@ -5095,14 +5095,26 @@ namespace App.Core.UseCases
                                 throw new Exception("Se debe seleccionar una cotizacion para los pasajes solicitados.");
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 1)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.SolicitudCometido)
                     {
                         var com = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
                         var pasaje = _repository.GetFirst<Pasaje>(q=> q.WorkflowId == obj.WorkflowId);
                         if (!com.Destinos.Any())
                             throw new Exception("Se deben ingresar destinos al cometido.");
 
-                        var lista = new List<Destinos>();
+                        if(com.Atrasado)
+                        {
+                            if(com.JustificacionAtraso.IsNullOrWhiteSpace())
+                            {
+                                throw new Exception("Falta ingresar Justificación de Atraso.");
+                            }
+                            if(com.JustificacionAtraso==null)
+                            {
+                                throw new Exception("Falta ingresar Justificación de Atraso.");
+                            }
+                        }
+
+                        /*var lista = new List<Destinos>();
                         for(int i =0; i < com.Destinos.Count(); i++)
                         {
                             var fecha = com.Destinos[i].FechaInicio.Date.Subtract(com.FechaSolicitud.Date).Days;
@@ -5125,7 +5137,7 @@ namespace App.Core.UseCases
                             {
                                 throw new Exception("Se debe ingresar justificación de atraso");
                             }
-                        }
+                        }*/
 
                         if(com.ReqPasajeAereo && pasaje==null)
                         {
