@@ -218,6 +218,7 @@ namespace App.Util
             IngresoPagoTesoreria = 21,
             VisacionSubsecretaria=22,
             VisacionMinistro=23,
+            VisacionSubseMinistro=24,
         }
 
         public enum DefinicionProceso

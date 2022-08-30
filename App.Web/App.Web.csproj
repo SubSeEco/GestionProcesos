@@ -795,6 +795,7 @@
     <Content Include="Views\Cometido\ValidaSubsecretario.cshtml" />
     <Content Include="Views\Shared\_PartialDestinos.cshtml" />
     <Content Include="Views\Cometido\ValidaMinistro.cshtml" />
+    <Content Include="Views\Cometido\ValidaSubseAlMinistro.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

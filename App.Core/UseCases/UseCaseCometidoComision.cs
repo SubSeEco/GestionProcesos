@@ -5344,6 +5344,10 @@ namespace App.Core.UseCases
                                             {
                                                 definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionMinistro);
                                             }
+                                            else if (Cometido.GradoDescripcion == "B")
+                                            {
+                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubseMinistro);
+                                            }
                                             else
                                             {
                                                 definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubsecretaria);

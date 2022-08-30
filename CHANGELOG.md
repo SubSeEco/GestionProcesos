@@ -2,9 +2,16 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.4 - Cometidos - 30-08-2022]
+
+### Added
+
+- Se creo nueva tarea al proceso de cometidos, la numero 24 Visación de Subsecretaria, es una tarea exclusiva de aprobacion para el Ministro en caso de atraso.
+- Se agrego modal de detalles en EditSigfe y EditSigfeTesoreria.
+
 ## [1.3.4 - Cometidos - 25-08-2022]
 
-## Changed
+### Changed
 
 - Se modifico control de errores en caso de no llenar el la justificacion de atraso cuando es Ministro/a o Subsecretaria/o.
 

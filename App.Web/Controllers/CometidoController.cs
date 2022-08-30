@@ -487,6 +487,18 @@ namespace App.Web.Controllers
             return View(model);
         }
 
+        public ActionResult ValidaSubseAlMinistro(int id)
+        {
+            var model = _repository.GetById<Cometido>(id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(model.ProcesoId);
+
+            model.Workflow = workflow;
+            model.Proceso = proceso;
+
+            return View(model);
+        }
+
         public ActionResult ValidaMinistro(int id)
         {
             var model = _repository.GetById<Cometido>(id);
@@ -1152,16 +1164,22 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
 
-            }
-            //else
-            //{
-            //    var errors = ModelState.Select(x => x.Value.Errors)
-            //        .Where(y => y.Count > 0)
-            //        .ToList();
-            //}            
+            }else
+            {
+                var help = _repository.Get<Destinos>(q => q.CometidoId == model.CometidoId);
+                if(help != null)
+                {
+                    foreach(var dest in help)
+                    {
+                        model.Destinos.Add(dest);
+                    }
+                }
+            }          
+
 
             ViewBag.Pasajes = model.Pasajes;
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);
+            
 
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
             //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso", model.TipoReembolsoId);
