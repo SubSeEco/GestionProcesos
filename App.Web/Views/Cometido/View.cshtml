@@ -31,7 +31,7 @@
                             @Html.DisplayFor(m => Model.CometidoId)
                         </div>
                     </div>
-                    <ul class="collapsible">
+                    <ul class="collapsible popout">
                         <li>
                             <div class="collapsible-header"><span style="font-weight: bold;height:auto">I. Datos del Funcionario: </span></div>
                             <div class="collapsible-body">
@@ -204,44 +204,23 @@
                                 </div>
                                 @if (Model.Destinos.Count > 0)
                                 {
-                                    <div class="row" style="overflow-x:scroll;">
-                                        <table class="table">
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
-                                                </th>
-                                                <th></th>
-                                            </tr>
+                                    <div class="row">
+                                        <table id="tablaModal">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
+                                                    </th>
+                                                    <th>Detalle</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
                                             @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                                             {
                                                 <tr>
@@ -255,46 +234,131 @@
                                                         @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="10">
-                                                        <b>
-                                                            @Html.DisplayNameFor(modelItem => Model.Destinos.ToArray()[i].ObservacionesModificacion)
-                                                        </b>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="10">
-                                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ObservacionesModificacion)
-
+                                                        <a href='#modalTabla-@Model.Destinos.ToArray()[i].DestinoId' class="details btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Ver Detalles"><i class="medium material-icons">visibility</i></a>
+                                                        <div id="modalTabla-@Model.Destinos.ToArray()[i].DestinoId" class="modal">
+                                                            <div class="modal-footer">
+                                                                <a class="modal-close btn-medium btn-floating modal-trigger tooltipped materialize-red" data-tooltip="Cerrar Ventana"><i class="tiny material-icons">close</i></a>
+                                                            </div>
+                                                            <div class="modal-content">
+                                                                <h3 style="text-align:center">Detalles Destino - @Model.Destinos.ToArray()[i].DestinoId</h3>
+                                                                <table class="striped centered">
+                                                                    <tr>
+                                                                        <td>
+                                                                            @Html.DisplayNameFor(modelItem => Model.Destinos.ToArray()[i].FechaInicio)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayNameFor(modelItem => Model.Destinos.ToArray()[i].FechaHasta)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>%</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Días 100 %</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Días 60 %</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Días 40 %</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Días 50 %</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Días 00 %</span>")
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaInicio)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].FechaHasta)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Solicitados</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Aprobados</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>Monto</span>")
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias100Monto)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias60Monto)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias50Monto)
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Monto)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            @Html.Raw("<span>TOTAL</span>")
+                                                                        </td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td>
+                                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             }
                                         </table>
-                                    </div>
+                                    </div>                                    
                                 }
                             </div>
                         </li>
@@ -367,7 +431,7 @@
                     </ul>                    
                     <div class="section"></div>
                     @*@if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.Terminada != true)*@
-                    @if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Terminado)
+                    @if (/*Model.Proceso.Anulada != true ||*/ Model.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Terminado && Model.Workflow.DefinicionWorkflowId == (int)Enum.DefinicionWorkflow.SolicitudCometido)
                     {
                         <a href='@Url.Action("Delete","Proceso", new { id = Model.Proceso.ProcesoId })' class="btn red">Anular Cometido</a>
                     }
@@ -409,20 +473,20 @@
         $('#divReembolso').hide(100); //oculta checkbox de reembolso
     });
 
-    $(function () {
+    @*$(function () {
         $("#jQuery_accordion").accordion({
             collapsible: true, heightStyle: true
 
         });
-    });
+    });*@
 
 
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+@*<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
 <style TYPE="text/css">
     strong {
         font-weight: bolder;

@@ -291,6 +291,7 @@ namespace App.Web.Controllers
 
             var proceso = _repository.GetById<Proceso>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
 
 
             ViewBag.Pasajes = model.Pasajes;
