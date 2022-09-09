@@ -4985,12 +4985,19 @@ namespace App.Core.UseCases
                     {
                         if(obj.TipoAprobacionId!=(int)Util.Enum.TipoAprobacion.Rechazada)
                         {
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c=>c.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto).FirstOrDefault().DocumentoId).Signed;
+
                             foreach(var item in comet.GeneracionCDP)
                             {
                                 if (item.VtcIdCompromiso.IsNullOrWhiteSpace())
                                 {
                                     throw new Exception("Falta ingresar el ID del Compromiso.");
-                                }                              
+                                }
+                            }
+                            //TODO Validar documento de Firma de Encargado                            
+                            if (!doc)
+                            {
+                                throw new Exception("Falta firmar Documento de Refrendación Presupuestaria.");
                             }
                         }
                     }
@@ -5098,7 +5105,10 @@ namespace App.Core.UseCases
                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.SolicitudCometido)
                     {
                         var com = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
-                        var pasaje = _repository.GetFirst<Pasaje>(q=> q.WorkflowId == obj.WorkflowId);
+                        var pasajes = _repository.Get<Pasaje>(q => q.ProcesoId == com.ProcesoId).ToList();
+                        var pasaje = _repository.GetFirst<Pasaje>(q=> q.ProcesoId== com.ProcesoId);
+
+                        
                         if (!com.Destinos.Any())
                             throw new Exception("Se deben ingresar destinos al cometido.");
 
@@ -5139,7 +5149,7 @@ namespace App.Core.UseCases
                             }
                         }*/
 
-                        if(com.ReqPasajeAereo && pasaje==null)
+                        if(com.ReqPasajeAereo && pasajes.Count<0)
                         {
                             throw new Exception("Se debe completar el formulario Datos del Pasaje.");
                         }                        
@@ -5222,9 +5232,11 @@ namespace App.Core.UseCases
                                         else
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 8); //10 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15)
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo
+                                            || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro
+                                            || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario)
                                     {
-                                        if(Cometido.JustificacionAtraso!=null)
+                                        /*if(Cometido.JustificacionAtraso!=null)
                                         {
                                             if(Cometido.ReqPasajeAereo)
                                             {
@@ -5236,14 +5248,14 @@ namespace App.Core.UseCases
                                             }
                                         }
                                         else
-                                        {
+                                        {*/
                                             if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
                                                 definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
                                             else if (Cometido.ResolucionRevocatoria)
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
+                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoFinanzas);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
                                             else
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 16);
-                                        }
+                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad);
+                                        //}
                                     }
                                     //else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && Cometido.CalidadDescripcion != "TITULAR")/*Despues de la firma, si no es titular continua a contabilidad*/
                                     //{
@@ -5270,7 +5282,7 @@ namespace App.Core.UseCases
                                         {
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
                                         }
-                                    }else if(workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionMinistro)
+                                    }/*else if(workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionMinistro)
                                     {
                                         if(Cometido.ReqPasajeAereo)
                                         {
@@ -5280,7 +5292,7 @@ namespace App.Core.UseCases
                                         {
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
                                         }
-                                    }
+                                    }*/
 
                                     #region Secuencia hacia Jefatura Antiguo
                                     /*else if (workflowActual.DefinicionWorkflow.Secuencia == 1 *//*2*//* && Cometido.ReqPasajeAereo)
@@ -5340,13 +5352,16 @@ namespace App.Core.UseCases
                                         // agregar if de pasajes
                                         if (Cometido.Atrasado)
                                         {
-                                            if (Cometido.GradoDescripcion == "C")
+                                            if (Cometido.GradoDescripcion == "C" || Cometido.GradoDescripcion == "B")
                                             {
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionMinistro);
-                                            }
-                                            else if (Cometido.GradoDescripcion == "B")
-                                            {
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubseMinistro);
+                                                if(Cometido.ReqPasajeAereo)
+                                                {
+                                                    definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.IngresoCotizacion);
+                                                }
+                                                else
+                                                {
+                                                    definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
+                                                }                                                
                                             }
                                             else
                                             {
@@ -5414,12 +5429,12 @@ namespace App.Core.UseCases
                                 {
                                     if (workflowActual.DefinicionWorkflow.Secuencia ==(int)Util.Enum.CometidoSecuencia.AprobacionJefatura && Cometido.SolicitaViatico != true)
                                     {
-                                        definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 6); //8 /*workflowActual.DefinicionWorkflow.Secuencia*/);
+                                        definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP/*6*/); //8 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia ==(int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo && Cometido.SolicitaViatico != true)
                                     {
                                         //definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/
-                                        definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 16); //15 /*workflowActual.DefinicionWorkflow.Secuencia*/);
+                                        definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad/*16*/); //15 /*workflowActual.DefinicionWorkflow.Secuencia*/);
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia ==(int)Util.Enum.CometidoSecuencia.EncargadoFinanzas)
                                     {

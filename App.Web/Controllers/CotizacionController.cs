@@ -110,7 +110,7 @@ namespace App.Web.Controllers
             ViewBag.EmpresaAerolineaId = new List<SelectListItem>();
             ViewBag.EmpresaAerolineaId = new SelectList(_repository.Get<EmpresaAerolinea>(), "EmpresaAerolineaId", "NombreEmpresa");// (_sigper.GetDGCOMUNAs(), "Pl_CodCom", "Pl_DesCom");
 
-            var valor = GetDolar();
+            var valor = "0";
 
             //DTODolar dolar = new DTODolar();
             //dolar.Fecha = DateTime.Now.ToShortDateString();

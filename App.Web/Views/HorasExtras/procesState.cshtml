@@ -15,7 +15,7 @@
                     <strong>
                         @*<a>@def.Nombre</a>*@
                         @*<a>@def.Secuencia</a>*@
-                        <a style="color:red;font-size:20px" href="#" data-toggle="tooltip" title="@def.Nombre">@def.Secuencia</a>
+                        <a style="color:red; font-size:20px" class="tooltipped" href="#" data-position="bottom" data-tooltip="@def.Nombre">@def.Secuencia</a>
                     </strong>
                 </li>
             }
@@ -23,7 +23,7 @@
             {
                 <li>
                     @*<a>@def.Nombre</a>*@
-                    <a href="#" data-toggle="tooltip" title="@def.Nombre">@def.Secuencia</a>
+                    <a href="#" class="tooltipped" data-position="bottom" data-tooltip="@def.Nombre">@def.Secuencia</a>
 
                 </li>
             }
@@ -74,6 +74,6 @@
 </style>
 <script>
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('.tooltipped').tooltip();
     });
 </script>

@@ -35,7 +35,7 @@
                     {
                         <div class="section"></div>
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
-                        <a class="waves-effect" href='@Url.Action("DeleteDoc", "Cometido", new { id = item.DocumentoId })'><img style="margin-left:550px" src="~/Content/images/icon-borrar.png"></img></a>
+                        <a href='@Url.Action("DeleteDoc", "Cometido", new { id = item.DocumentoId })'class="btn-large waves-effect waves-light btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">delete_forever</i></a>@*><img style="margin-left:550px" src="~/Content/images/icon-borrar.png"></img></a>*@
                         
                     }
                     else

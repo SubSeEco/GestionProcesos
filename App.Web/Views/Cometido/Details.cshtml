@@ -44,6 +44,18 @@
                 </p>
             </div>
         </div>
+
+        if (Model.GradoDescripcion == "C" || Model.GradoDescripcion == "B" && Model.Atrasado)
+        {
+            <div class="card blue-grey lighten-1">
+                <div class="card-content white-text">
+                <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion, Cometido atrasado.</span>
+                    <p>
+                        Al aprobar el cometido tambien se estará aprobando la Visación por justificación de Atraso.
+                    </p>
+                </div>
+            </div>
+        }
     }
 
     @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
@@ -109,7 +121,7 @@
                                             @Html.DisplayNameFor(m => Model.DV)
                                         </strong>
                                         @Html.DisplayFor(m => Model.DV)
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s4">
@@ -190,19 +202,19 @@
                                     </strong>
                                     @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
                                 </div>
-                                @*@if (Model.SolicitaViatico) 
-                                { 
+                                @*@if (Model.SolicitaViatico)
+                                    {
+                                        <div class="input-field">
+                                            <label style="color:green">
+                                                @Html.Raw("<span>“El cometido incluye” </span>")
+                                            </label>
+                                        </div>
+                                    }
                                     <div class="input-field">
                                         <label style="color:green">
                                             @Html.Raw("<span>“El cometido incluye” </span>")
                                         </label>
-                                    </div>
-                                }
-                                <div class="input-field">
-                                    <label style="color:green">
-                                        @Html.Raw("<span>“El cometido incluye” </span>")
-                                    </label>
-                                </div>*@
+                                    </div>*@
                                 <div class="input-field">
                                     <strong>
                                         <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
@@ -286,7 +298,7 @@
                                                     <th>
                                                         @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
                                                     </th>
-                                                    <th>Detalle</th>                                                    
+                                                    <th>Detalle</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -372,7 +384,7 @@
                                                                     </table>
                                                                 </div>
                                                             </div>
-                                                        </td>                                                        
+                                                        </td>
                                                     </tr>
                                                 }
                                             </tbody>
@@ -395,179 +407,179 @@
                                 </div>
                             </li>
                         }
-                    <li>
-                        @if (Model.GeneracionCDP.Any())
-                        {
-                            if (Model.Atrasado)
+                        <li>
+                            @if (Model.GeneracionCDP.Any())
                             {
-                                <div class="collapsible-header"><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></div>
-                            }
-                            else
-                            {
-                                <div class="collapsible-header"><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></div>
-                            }
-                            <div class="collapsible-body col-12">
-
-                                @if (Model.SolicitaViatico || Model.SolicitaViatico != true)
+                                if (Model.Atrasado)
                                 {
-                                    <span class="card-title">Viáticos</span>
-                                    if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
-                                    {
-                                        <strong>
-                                            <label style="color:green">
-                                                “Recuerde que debe ingresar el Id de Compromiso.”
-                                            </label>
-                                        </strong>
-                                    }
-                                    <table class="table">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
-                                            </th>
-                                            <th>
-                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
-                                            </th>
-                                            <th>
-                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
-                                            </th>
-                                            <th>
-                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
-                                            </th>
-                                            <th>
-                                                @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
-                                                @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
-                                            </th>
-                                        </tr>
-                                    </table>
+                                    <div class="collapsible-header"><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></div>
                                 }
-
-                                @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
+                                else
                                 {
+                                    <div class="collapsible-header"><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></div>
+                                }
+                                <div class="collapsible-body col-12">
 
-                                    foreach (var item in Model.Proceso.Documentos)
+                                    @if (Model.SolicitaViatico || Model.SolicitaViatico != true)
                                     {
-                                        if (item.TipoDocumentoId == 7 && item.Activo)
+                                        <span class="card-title">Viáticos</span>
+                                        if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
                                         {
-                                            Model.DocumentoRefrendacion = true;
+                                            <strong>
+                                                <label style="color:green">
+                                                    “Recuerde que debe ingresar el Id de Compromiso.”
+                                                </label>
+                                            </strong>
                                         }
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
+                                                </th>
+                                            </tr>
+                                        </table>
                                     }
 
-                                    if (Model.DocumentoRefrendacion != true)
+                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
                                     {
-                                        <div class="row">
-                                            <br />
-                                            @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, new { @class = "waves-effect waves-light btn blue" })
-                                        </div>
-                                        @*<div class="section"></div>*@
-                                        <div class="row">
-                                            @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
-                                        </div>
 
-                                        if (Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso != null)
+                                        foreach (var item in Model.Proceso.Documentos)
+                                        {
+                                            if (item.TipoDocumentoId == 7 && item.Activo)
+                                            {
+                                                Model.DocumentoRefrendacion = true;
+                                            }
+                                        }
+
+                                        if (Model.DocumentoRefrendacion != true)
                                         {
                                             <div class="row">
-                                                <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
-                                                @Html.Raw("<span>Subir archivo refrendación</span>")
+                                                <br />
+                                                @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, new { @class = "waves-effect waves-light btn blue" })
                                             </div>
-                                            @*@Html.ActionLink("Adjuntar", "Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId },null)*@
+                                            @*<div class="section"></div>*@
+                                            <div class="row">
+                                                @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
+                                            </div>
+
+                                            if (Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso != null)
+                                            {
+                                                <div class="row">
+                                                    <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                                                    @Html.Raw("<span>Subir archivo refrendación</span>")
+                                                </div>
+                                                @*@Html.ActionLink("Adjuntar", "Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId },null)*@
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+                                                @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId },new { @class = "waves-effect waves-light btn blue" })
+                                            </div>
                                         }
                                     }
-                                    else
-                                    {
-                                        <div class="row">
-                                            @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
-                                            @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        }
-                    </li>
+                                </div>
+                            }
+                        </li>
                         <li>
 
                         </li>
 
                     </ul>
                     @*<div class="section"></div>
-        <p>
-            @Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
-        </p>*@
+                        <p>
+                            @Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
+                        </p>*@
                 </div>
             </div>
         </div>
         <div class="col s12 m6 l4">
             @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
-            @Html.Action("History", "Workflow", new { Model.WorkflowId })          
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
         </div>
     </div>
     @*<div id="modalAttach" class="modal">

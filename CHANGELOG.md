@@ -2,6 +2,14 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.5 - Cometidos - 09-09-2022]
+
+### Changed
+
+- Se modifico el flujo de Aprobacion de jefatura en el caso del ministro y la subsecretaria cuando el cometido viene con atraso. La visación ahora se autoriza al momento de aprobar la jefatura.
+- se modifico la validacion de firma de documento para el Encargado de Presupuesto.
+- Cambios visuales del boton de eliminar y Generar documento en Refrendacion.
+
 ## [1.3.4 - Cometidos - 30-08-2022]
 
 ### Added
