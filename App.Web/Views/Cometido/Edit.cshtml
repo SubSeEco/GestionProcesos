@@ -528,68 +528,70 @@
                                             <span style="font-weight: bold;height:inherit">IV. Datos del Pasaje: </span>
                                         }
                                     </div>
-                                    <div class="collapsible-body">
-                                        @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
+                                    @if(Model.Destinos.Count>0)
+                                    {
+                                        <div class="collapsible-body">
+                                            @Html.Partial("_DestinosPasajesPartial", (App.Model.Pasajes.DestinosPasajes)ViewBag.Pasaje)
 
-                                        @if (ViewBag.DestinosPasajes != null)
-                                        {
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Región de origen</th>
-                                                        <th>Fecha de origen</th>
-                                                        <th>Región de retorno</th>
-                                                        <th>Fecha retorno</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var destinopasaje in ViewBag.DestinosPasajes)
-                                                    {
+                                            @if (ViewBag.DestinosPasajes != null)
+                                            {
+                                                <table class="table">
+                                                    <thead>
                                                         <tr>
-                                                            <td>
-                                                                @destinopasaje.OrigenRegionDescripcion
-                                                                <br />
-                                                                @destinopasaje.ObservacionesOrigen
-                                                            </td>
-                                                            <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaOrigen)</td>
-                                                            <td>
-                                                                @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
-                                                                @destinopasaje.ObservacionesDestinos
-                                                            </td>
-                                                            <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaVuelta)</td>
-                                                            <td>
-                                                                <a href='@Url.Action("Edit", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar Pasaje"><i class="large material-icons">edit</i>><img src="~/Content/images/icon-edit.png"></img></a>
-                                                                @*<a class="btn btn-default" id="@destinopasaje.PasajeId" onclick="Test(this.id)">TEST</a>*@
-                                                            </td>
-                                                            <td>
-                                                                <a href='@Url.Action("Delete", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar Pasaje"><i class="large material-icons">delete_forever</i>><img src="~/Content/images/icon-edit.png"></img></a>
-                                                            </td>
+                                                            <th>Región de origen</th>
+                                                            <th>Fecha de origen</th>
+                                                            <th>Región de retorno</th>
+                                                            <th>Fecha retorno</th>
                                                         </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                            //Desarrollando Mejoras de modal
-                                            <!--<div class="modal fade" id="myModal" role="dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <input type="button" class="close" data-dismiss="modal" />-->
-                                                        @*Agregando MODAL!*@
-                                                        <!--<h4>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var destinopasaje in ViewBag.DestinosPasajes)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @destinopasaje.OrigenRegionDescripcion
+                                                                    <br />
+                                                                    @destinopasaje.ObservacionesOrigen
+                                                                </td>
+                                                                <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaOrigen)</td>
+                                                                <td>
+                                                                    @destinopasaje.RegionDescripcion @destinopasaje.PaisDescripcion <br />
+                                                                    @destinopasaje.ObservacionesDestinos
+                                                                </td>
+                                                                <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaVuelta)</td>
+                                                                <td>
+                                                                    <a href='@Url.Action("Edit", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar Pasaje"><i class="large material-icons">edit</i>><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                    @*<a class="btn btn-default" id="@destinopasaje.PasajeId" onclick="Test(this.id)">TEST</a>*@
+                                                                </td>
+                                                                <td>
+                                                                    <a href='@Url.Action("Delete", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar Pasaje"><i class="large material-icons">delete_forever</i>><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                //Desarrollando Mejoras de modal
+                                                <!--<div class="modal fade" id="myModal" role="dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <input type="button" class="close" data-dismiss="modal" />-->
+                                                                                @*Agregando MODAL!*@
+                                                                                <!--<h4>
 
-                                                        </h4>
-                                                    </div>
-                                                    <div class="modal-body">
+                                                            </h4>
+                                                        </div>
+                                                        <div class="modal-body">
 
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input type="button" class="btn btn-default"/>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-footer">
-                                                        <input type="button" class="btn btn-default"/>
-                                                    </div>
-                                                </div>
-                                            </div>-->
-                                        }
-                                    </div>
+                                                </div>-->
+                                            }
+                                        </div>
+                                    }                                    
                                 </li>
-
                             }
 
                         </ul>

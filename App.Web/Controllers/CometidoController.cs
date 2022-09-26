@@ -1132,7 +1132,7 @@ namespace App.Web.Controllers
                             _destino.OrigenRegionDescripcion = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == DesPasajes.IdRegionOrigen).Pl_DesReg.Trim();
                             _destino.FechaIda = DesPasajes.FechaOrigen;
                             _destino.FechaVuelta = DesPasajes.FechaVuelta;
-                            _destino.FechaOrigen = DateTime.Now;
+                            _destino.FechaOrigen = DesPasajes.FechaOrigen;
                             _destino.ObservacionesOrigen = DesPasajes.ObservacionesOrigen;
                             _destino.ObservacionesDestinos = DesPasajes.ObservacionesDestinos;
                             res = _useCaseInteractor.DestinosPasajesInsert(_destino);

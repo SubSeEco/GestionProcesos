@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [1.3.6 - Cometidos - 26-06-2022]
+
+### Changed
+
+- Se corrige error de fecha al momento de agregar un pasaje en el primer paso.
+- Se corrige comportamiento del boton "Eliminar Documento" cuando este esta firmado.
+
 ## [1.3.5 - Cometidos - 09-09-2022]
 
 ### Changed

@@ -24,10 +24,25 @@ namespace App.Core.UseCases
 
                 if (response.IsValid)
                 {
-                    obj.Activo = false;
+                    if(!obj.Signed)
+                    {
+                        if(obj.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto)
+                        {
+                            _repository.Delete(obj);
+                            _repository.Save();
+                        }
+                        else
+                        {
+                            obj.Activo = false;
+                            _repository.Update(obj);
+                            _repository.Save();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("No se puede eliminar un documento ya firmado.");
+                    }
 
-                    _repository.Update(obj);
-                    _repository.Save();
                 }
             }
             catch (Exception ex)

@@ -115,26 +115,26 @@ namespace App.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DeleteDocumento(int DocumentoId, int WorkflowId)
-        {
-            var result = _repository.GetById<Documento>(DocumentoId);
-            var work = _repository.GetById<Workflow>(WorkflowId);
+        //public ActionResult DeleteDocumento(int DocumentoId, int WorkflowId)
+        //{
+        //    var result = _repository.GetById<Documento>(DocumentoId);
+        //    var work = _repository.GetById<Workflow>(WorkflowId);
 
-            if(work.DefinicionWorkflowId==(int)Util.Enum.DefinicionWorkflow.SolicitudCometido)
-            {
-                _repository.Delete(result);
-                _repository.Save();
-            }
-            else
-            {
-                result.Activo = false;
-                _repository.Save();
-            }
+        //    if(work.DefinicionWorkflowId==(int)Util.Enum.DefinicionWorkflow.SolicitudCometido)
+        //    {
+        //        _repository.Delete(result);
+        //        _repository.Save();
+        //    }
+        //    else
+        //    {
+        //        result.Activo = false;
+        //        _repository.Save();
+        //    }
 
-            //_repository.Update(result);
+        //    //_repository.Update(result);
 
-            return Redirect(Request.UrlReferrer.PathAndQuery);
-        }
+        //    return Redirect(Request.UrlReferrer.PathAndQuery);
+        //}
 
         public ActionResult Index()
         {
