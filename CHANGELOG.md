@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.0.1 - Cometidos - 29-09-2022]
+
+### Changed
+
+- Se cambio el comportamiento al anular el cometido el cual era anulado pero seguia siendo visualizable en la Bandeja de Tareas.
+- Se descomento la query de busqueda en el Proceso Consultor.
+
 ## [1.3.6 - Cometidos - 26-06-2022]
 
 ### Changed

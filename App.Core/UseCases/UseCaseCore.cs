@@ -469,6 +469,12 @@ namespace App.Core.UseCases
                             {
                                 throw new Exception("No se puede anular el proceso debido a que ya cuenta con aprobación de Jefatura.");
                             }
+                            else
+                            {
+                                workflow.FechaTermino = DateTime.Now;
+                                workflow.Terminada = true;
+                                workflow.Anulada = true;
+                            }
                         }
                     }
                     //terminar todas las tareas pendientes
