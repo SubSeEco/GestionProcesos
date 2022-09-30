@@ -153,7 +153,7 @@
                                 @Html.Raw("<span>corresponde</span>")
                             }
                             designar en cometido funcionario/a a don/ña
-                            <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
+                            <strong> @Html.DisplayFor(m => Model.Nombre), </strong>&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                         </p>
                     </li>
 
@@ -233,14 +233,14 @@
                         }
                         a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta).ToHtmlString().Remove(10), en la localidad antes señalada.
                     </p>
-                    @if (Model.ParrafoResolucion != null)
+                    @*@if (Model.ParrafoResolucion != null)
                     {
                         <p align="justify" style="margin-right:30px">
                             @Html.DisplayFor(m => Model.ParrafoResolucion)
                         </p>
-                    }
-                    <br />
-                    <p class="breakhere"></p>
+                    }*@
+                    @*<br />
+                    <p class="breakhere"></p>*@
                 </ol>
             </td>
         </tr>

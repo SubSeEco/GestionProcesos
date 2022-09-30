@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.0.1.1 - Cometidos - 30-09-2022]
+
+### Changed
+
+- Se modifico salto de linea aplicado a en las resoluciones de cometidos para personal a contrata.
+- Se habilito smtp para envio de correos en Gestion Documental.
+
 ## [2.0.1 - Cometidos - 29-09-2022]
 
 ### Changed
