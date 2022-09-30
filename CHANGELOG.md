@@ -9,6 +9,10 @@ este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.c
 - Se modifico salto de linea aplicado a en las resoluciones de cometidos para personal a contrata.
 - Se habilito smtp para envio de correos en Gestion Documental.
 
+### Added
+
+- Se agrego validacion para falta de documento en la tarea Encargado de Presupuestos
+
 ## [2.0.1 - Cometidos - 29-09-2022]
 
 ### Changed

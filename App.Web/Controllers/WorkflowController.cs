@@ -390,7 +390,18 @@ namespace App.Web.Controllers
             model.DesactivarDestinoEnRechazo = model.DefinicionWorkflow.DesactivarDestinoEnRechazo;
             model.Reservado = model.Proceso.Reservado;
             model.Mensaje = string.Empty;
-
+            /* Fix para evitar envio de tarea por falta de documento de refrendacion en tarea Encargado de Presupuesto.
+            if(model.DefinicionWorkflow.DefinicionProcesoId==13)
+            {
+                if (model.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto)
+                {
+                    var docs = model.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.RefrendacionPresupuesto).ToList();
+                    if (docs.Count == 0)
+                    {
+                        throw new Exception("Se debe adjuntar Archivo de Refrendación");
+                    }
+                }
+            }*/
             //si va a otra unidad => preseleccionar unidad destino
             if (model.ToPl_UndCod.HasValue)
             {

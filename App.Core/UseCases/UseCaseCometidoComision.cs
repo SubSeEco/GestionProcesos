@@ -4985,8 +4985,14 @@ namespace App.Core.UseCases
                     {
                         if(obj.TipoAprobacionId!=(int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c=>c.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto).FirstOrDefault().DocumentoId).Signed;
+                            var docs = workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.RefrendacionPresupuesto).ToList();
+                            
+                            if(docs.Count == 0)
+                            {
+                                throw new Exception("Se debe adjuntar Archivo de Refrendación");
+                            }
 
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c=>c.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto).FirstOrDefault().DocumentoId).Signed;
                             foreach(var item in comet.GeneracionCDP)
                             {
                                 if (item.VtcIdCompromiso.IsNullOrWhiteSpace())
