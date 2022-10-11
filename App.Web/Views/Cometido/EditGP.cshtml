@@ -1,9 +1,5 @@
 ﻿@model App.Model.Cometido.Cometido
 
-@{ 
-    var justificacion = Model.JustificacionAtraso != null;
-}
-
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 <div class="container">
 
@@ -382,10 +378,10 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <th>
-                                                                                @Html.DisplayFor(model => model.Destinos.FirstOrDefault().FechaInicio)
+                                                                                @Html.DisplayFor(model => model.Destinos.ToArray()[i].FechaInicio)
                                                                             </th>
                                                                             <th>
-                                                                                @Html.DisplayFor(model => model.Destinos.FirstOrDefault().FechaHasta)
+                                                                                @Html.DisplayFor(model => model.Destinos.ToArray()[i].FechaHasta)
                                                                             </th>
                                                                             <td>
                                                                                 @Html.Raw("<span>Solicitados</span>")
@@ -492,7 +488,7 @@
                             </li>    
                             <!-- #endregion-->                           
 
-                            @if(justificacion)
+                            @if(Model.Atrasado)
                             {
                                 <li>
                                     <div class="collapsible-header">
@@ -501,7 +497,7 @@
                                     <div class="collapsible-body">
                                         <p>
                                             <strong>@Html.DisplayNameFor(m => Model.JustificacionAtraso)</strong>
-                                            <h5>@Html.DisplayTextFor(m => Model.JustificacionAtraso)</h5>
+                                            <h5>@Html.EditorFor(m => Model.JustificacionAtraso)</h5>
                                         </p>
                                     </div>
                                 </li>

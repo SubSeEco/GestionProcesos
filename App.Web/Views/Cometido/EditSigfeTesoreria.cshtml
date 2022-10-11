@@ -590,7 +590,7 @@
                                     <div class="row">
                                 @foreach (var item in Model.Proceso.Documentos)
                                 {
-                                    if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5)
+                                    if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5 || item.TipoDocumentoId == 4)
                                     {
                                         if (item.Type.Contains("pdf"))
                                         {
@@ -660,7 +660,7 @@
                                 else
                                 {
                                     <div class="collapsible-header">
-                                        <h3><span style="font-weight: bold">VII. Registro SIGFE Tesoreria</span></h3>
+                                        <span style="font-weight: bold">VII. Registro SIGFE Tesoreria</span>
                                     </div>
                                 }
                                 <div class="collapsible-body">

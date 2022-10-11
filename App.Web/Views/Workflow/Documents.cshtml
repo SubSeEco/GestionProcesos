@@ -5,7 +5,21 @@
 
 <div class="card">
     <div class="card-content">
-        <span class="card-title">Documentos</span>
+        <div class="row">
+            <div class="col l9">
+                <span class="card-title">Documentos</span>
+            </div>
+            <div class="col l3">
+                <div class="switch">
+                    <label>
+                        @Html.CheckBox("Preview",true)
+                        <span class="lever"></span>
+                        Previsualizar
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
         @foreach (var item in Model.Proceso.Documentos.Where(q => q.Activo))
         {
             if (item.Activo)
@@ -21,11 +35,13 @@
                     <strong>Proceso de origen:</strong> @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
                     <strong>Tarea de origen:</strong> @item.Workflow.DefinicionWorkflow.Nombre
                 </p>
-                if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf") && item.File != null)
-                {
-                    <br />
-                    <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
-                }
+                <div class="pdfPreview">
+                    @if (!string.IsNullOrWhiteSpace(item.Type) && item.Type.Contains("pdf") && item.File != null)
+                    {
+                        <br />
+                        <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
+                    }
+                </div>
                 if (Model.WorkflowId == item.WorkflowId && !item.Signed)
                 {
                     <div class="section">
@@ -54,5 +70,8 @@
 <script>
     $(document).ready(function () {
         $('.collapsible').collapsible();
+    });
+    $("#Preview").change(function () {
+        $(".pdfPreview").attr('hidden', !this.checked);
     });
 </script>

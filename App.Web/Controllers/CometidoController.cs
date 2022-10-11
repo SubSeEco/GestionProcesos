@@ -1198,6 +1198,34 @@ namespace App.Web.Controllers
             model.Workflow = workflow;
 
             var persona = _sigper.GetUserByEmail(User.Email());
+
+            var helper = new List<int>();
+
+            for (int i = 0; i < model.Destinos.Count; i++)
+            {
+                var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
+                var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
+
+                if (fechahelp < 20)
+                {
+                    helper.Add(fechahelp);
+                }
+                else
+                {
+                    model.Atrasado = false;
+                }
+
+                /*if (model.IdGrado == "C" || model.IdGrado == "B")
+                {
+                    model.Atrasado = false;
+                }*/
+
+                if (helper.Any())
+                {
+                    model.Atrasado = true;
+                }
+            }
+
             ViewBag.NombreId = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
             ViewBag.FinanciaOrganismo = model.FinanciaOrganismo;
