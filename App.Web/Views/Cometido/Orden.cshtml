@@ -134,15 +134,39 @@
                             }
                             a contar de @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) y hasta @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta.Date).ToHtmlString().Remove(10), en la:
                         </p>
+                        <table border="1" width="100%" style="margin-right:30px">
+                            <tr>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000;">
+                                    LOCALIDAD
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000;">
+                                    COMUNA
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000;">
+                                    REGION
+                                </td>
+                            </tr>
+                            @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                            {
+                                <tr>
+
+                                    @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                    </td>
+
+                                </tr>
+                            }
+                        </table>
                     </li>
                     @if (Model.Atrasado)
                     {
-                        @*<li>
-                <p align="justify" style="margin-right:30px">
-                    Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este
-                    cometido de forma extemporánea.
-                </p>
-            </li>*@
                         <li>
                             <p align="justify" style="margin-right:30px">
                                 Que, en el instructivo GAB. PRES N° 004, de 25 de marzo de 2022, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo XI), Numeral 25),
@@ -158,56 +182,10 @@
                         </li>
                     }
                     <br />
-                    <table border="1" width="100%" style="margin-right:30px">
-                        <tr>
-                            <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                                LOCALIDAD
-                            </td>
-                            <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                                COMUNA
-                            </td>
-                            <td style="border-style: solid; border-width: 1px; border-color: #000000;">
-                                REGION
-                            </td>
-                        </tr>
-                        @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
-                        {
-                            <tr>
-
-                                @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].RegionDescripcion)
-                                </td>
-
-                            </tr>
-                        }
-                    </table>
-                    @*@if (Model.SolicitaViatico == false)
-        {
-            <li><p align="justify">
-                Que la actividad realizada no
-                @if (Model.Tiempo == "Pasado")
-                {
-                    @Html.Raw("<span>generó</span>")
-                }
-                else
-                {
-                    @Html.Raw("<span>genera</span>")
-                }
-                costo para esta Subsecretaría.<br />
-            </p></li>
-        }*@
                 </ol>
             </td>
         </tr>
         <tr>
-            @*<td></td>*@
             <td colspan="2">
                 <ol>
                     @if (Model.SolicitaViatico)
@@ -248,12 +226,6 @@
                                     @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
                                     @Html.Raw("Dias 40%")
                                 </td>
-                                @*<td>
-                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40Monto)
-                    </td>
-                    <td>
-                        @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00Monto)
-                    </td>*@
                             </tr>
                             @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                             {
@@ -276,12 +248,6 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Aprobados)
                                     </td>
-                                    @*<td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias40Monto)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].Dias00Monto)
-                        </td>*@
                                 </tr>
                             }
                         </table>
@@ -291,7 +257,6 @@
             </td>
         </tr>
         <tr>
-            @*<td></td>*@
             <td colspan="2">
                 <ol>
                     <strong>DÉJASE CONSTANCIA:</strong>
@@ -327,11 +292,7 @@
                         <p align="justify" style="margin-right:30px">
                             Que, la Subsecretaría de Economía y Empresas de Menor Tamaño, reembolsará los gastos que se irroguen a consecuencia de los servicios prestados, así como también otros gastos derivados,
                             siempre y cuando se encuentren debidamente justificados y documentados, de acuerdo a la normativa interna que regule esta materia y al contrato de prestaciones de servicios respectivo,
-                            con cargo al ítem o los ítems y asignaciones correspondientes, @*al subtítulo 22*@
-                            @*@Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)@Html.Raw(".")
-                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)@Html.Raw(".")
-                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)*@
-                            de acuerdo a su naturaleza.
+                            con cargo al ítem o los ítems y asignaciones correspondientes, de acuerdo a su naturaleza.
                         </p>
                     </li>
                     <p align="justify"></p>

@@ -21,10 +21,11 @@
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
                     <p>
-                        Fecha creación: @item.Fecha<br />
-                        Autor: @item.Email<br />
-                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
+                        <strong>Fecha creación: </strong>@item.Fecha<br />
+                        <strong>Autor: </strong>@item.Email<br />
+                        <strong>ID: </strong>@item.DocumentoId <br />
+                        <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                        <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
                     </p>
 
                     if (item.Type.Contains("pdf"))
@@ -74,6 +75,7 @@
                     <p>
                         Fecha creación: @item.Fecha<br />
                         Autor: @item.Email<br />
+                        ID: @item.DocumentoId
                         Tipo documento: @item.TipoDocumento.Nombre<br />
                         Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
                         Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
@@ -153,11 +155,11 @@
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
                     <p>
-                        Fecha creación: @item.Fecha<br />
-                        Autor: @item.Email<br />
-                        Id Documento: @item.DocumentoId<br />
-                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
+                        <strong>Fecha creación: </strong>@item.Fecha<br />
+                        <strong>Autor: </strong>@item.Email<br />
+                        <strong>ID: </strong>@item.DocumentoId <br />
+                        <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                        <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
                     </p>
 
                     if (item.Type.Contains("pdf"))
@@ -205,10 +207,11 @@
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
                     <p>
-                        Fecha creación: @item.Fecha<br />
-                        Autor: @item.Email<br />
-                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
+                        <strong>Fecha creación: </strong>@item.Fecha<br />
+                        <strong>Autor: </strong>@item.Email<br />
+                        <strong>ID: </strong>@item.DocumentoId <br />
+                        <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                        <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
                     </p>
 
                     if (item.Type.Contains("pdf"))
@@ -256,10 +259,11 @@
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
                     <p>
-                        Fecha creación: @item.Fecha<br />
-                        Autor: @item.Email<br />
-                        Proceso de origen: @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                        Tarea de origen: @item.Workflow.DefinicionWorkflow.Nombre
+                        <strong>Fecha creación: </strong>@item.Fecha<br />
+                        <strong>Autor: </strong>@item.Email<br />
+                        <strong>ID: </strong>@item.DocumentoId <br />
+                        <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                        <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
                     </p>
 
                     if (item.Type.Contains("pdf"))

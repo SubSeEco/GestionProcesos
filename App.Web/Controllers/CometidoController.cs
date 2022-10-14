@@ -292,7 +292,18 @@ namespace App.Web.Controllers
             var proceso = _repository.GetById<Proceso>(id);
             var model = _repository.GetFirst<Cometido>(q => q.ProcesoId == id);
             var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            var mail = UserExtended.Email(User);
 
+            var user = new HomeController.DTOUser()
+            {
+                IsCometido = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == mail && q.Grupo.Nombre.Contains(Enum.Grupo.Cometido.ToString())),
+                /*IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == mail && q.Grupo.Nombre.Contains(Enum.Grupo.Administrador.ToString()))*/
+            };
+
+            if(user.IsAdmin || user.IsCometido)
+            {
+                ViewBag.User = user;
+            }
 
             ViewBag.Pasajes = model.Pasajes;
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);

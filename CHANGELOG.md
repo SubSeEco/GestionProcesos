@@ -2,6 +2,32 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.1.1 - Cometidos - 14-09-2022]
+
+### Changed
+
+- Se ajusto la grilla de las resoluciones para que quedaran en el punto 1.
+- Se ajusto el salto de linea generado cuando hay mas de 3 destinos y el cometido es con atraso, lo que generaba una 3ra hoja.
+- Se cambio la vista de Detalles Finanzas ajustando los modulos VII y VIII junto con el modulo de Destinos para ajustar la visualizacion de los detalles.
+- Se modifico el boton de reinicio de proceso, para que este solo sea visible para Gestión de Personas y Administradores.
+
+### Added
+
+- Se agrego Historial en la vista de Finanzas.
+
+## [2.1 - Cometidos - 12-09-2022]
+
+### Changed
+
+- Se modifico la fecha en la sección Detalles de los Destinos en la vista de Gestion de Personas.
+- Se modifico la vista de los documentos en Finanzas.
+- Se modifico en area de presupuestos, la visualizacion del modulo Destinos.
+
+### Added
+
+- Se agrego boton switch para poder ocultar o mostrar los documentos del modulo de documentos adjuntos.
+- Se agrego validación de atraso en la tarea de Aprobacion y Generación Documento Gestión Personas.
+
 ## [2.0.1.1 - Cometidos - 30-09-2022]
 
 ### Changed

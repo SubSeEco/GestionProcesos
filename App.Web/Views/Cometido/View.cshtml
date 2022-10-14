@@ -1,9 +1,6 @@
 ﻿@model App.Model.Cometido.Cometido
 @using Enum = App.Util.Enum;
 
-@{
-    var justificacion = Model.JustificacionAtraso != null;
-}
 
 @Html.Action("Header", "Workflow", new { Model.WorkflowId })
 
@@ -445,9 +442,12 @@
                                 @Html.Raw("<span>Adjuntar Archivo</span>")
                             </div>*@
                         <div class="section"></div>
-                        <p>
-                            @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
-                        </p>
+                        if(ViewBag.User != null)
+                        {
+                            <p>
+                                @Html.ActionLink("Reiniciar Proceso", "Reiniciar", "Cometido", new { CometidoId = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
+                            </p>
+                        }
                     }
                 </div>
             </div>

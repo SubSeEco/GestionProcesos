@@ -4,7 +4,7 @@
 <div class="container">
 
     <div class="row">
-        <div class="col s12 m6 l8">
+        <div class="col s12">
             @Html.Partial("_Message")
             @using (Html.BeginForm())
             {
@@ -54,19 +54,19 @@
                         <tr>
                             <td>
                                 @Html.HiddenFor(m => Model.IdRegion)
-                                @Html.DisplayFor(model => Model.RegionDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
+                                @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
                             </td>
                             <td>
-                                @Html.DisplayFor(model => Model.ComunaDescripcion, new { style = "width:130px"/*,disabled = "disabled" */})
+                                @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
                             </td>
                             <td>
-                                @Html.DisplayFor(model => Model.NombreLocalidad, new { style = "width:130px"/*,disabled = "disabled" */})
+                                @Html.DropDownListFor(m => Model.LocalidadId, null, "Seleccione...", new { style = "width:100px" })
                             </td>
                             <td>
-                                @Html.DisplayFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
+                                @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
                             </td>
                             <td>
-                                @Html.DisplayFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
                             </td>
                         </tr>
                     </table>
@@ -182,7 +182,7 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                @Html.EditorFor(m => Model.ObservacionesModificacion)
+                                @Html.EditorFor(m => Model.ObservacionesModificacion, new { htmlAttributes = new { @type = "textarea", @class = "materialize-textarea" } })
                             </td>
                         </tr>
                     </table>

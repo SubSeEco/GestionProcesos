@@ -43,6 +43,25 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.FechaHasta)
                                     </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.LocalidadId, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:100%"/*,disabled = "disabled" */})
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:100%"/*, disabled = "disabled" */})
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th>
                                         @Html.DisplayNameFor(m => Model.Dias100)
                                     </th>
@@ -65,21 +84,6 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(m => Model.IdComuna, null, "Seleccione...", new { style = "width:100px" })
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(m => Model.LocalidadId, null, "Seleccione...", new { style = "width:100px" })
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
-                                    </td>
-                                    <td>
                                         @Html.TextBoxFor(m => Model.Dias100, new { style = "width:50px" })
                                     </td>
                                     <td>
@@ -100,10 +104,10 @@
                                 </tr>
                             </table>
                         </div>
+                        <button class="waves-effect waves-light btn blue" type="submit">Borrar</button>
                     </div>
                     <div class="section"></div>
                     <p>
-                        <button class="waves-effect waves-light btn blue" type="submit">Borrar</button>
                     </p>
                 </div>
             }
