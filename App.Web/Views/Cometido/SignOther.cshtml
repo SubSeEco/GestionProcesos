@@ -85,7 +85,7 @@
                     {
                         <div class="section"></div>
                         <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
-                        }
+                    }
 
                         if (!item.Signed)
                     {
@@ -202,52 +202,52 @@
             {
                 if (item.TipoDocumentoId == 5)
                 {
-                    <h6>
-                        <i class="material-icons ">attach_file</i>
-                        <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
-                    </h6>
-                    <p>
-                        <strong>Fecha creación: </strong>@item.Fecha<br />
-                        <strong>Autor: </strong>@item.Email<br />
-                        <strong>ID: </strong>@item.DocumentoId <br />
-                        <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
-                        <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
-                    </p>
-
                     if (item.Type.Contains("pdf"))
                     {
+                        <h6>
+                            <i class="material-icons ">attach_file</i>
+                            <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
+                        </h6>
+                        <p>
+                            <strong>Fecha creación: </strong>@item.Fecha<br />
+                            <strong>Autor: </strong>@item.Email<br />
+                            <strong>ID: </strong>@item.DocumentoId <br />
+                            <strong>Proceso de origen: </strong>@item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                            <strong>Tarea de origen: </strong>@item.Workflow.DefinicionWorkflow.Nombre
+                        </p>
+
                         <div class="section"></div>
                         <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
-                    }
+                        
+                        <!-- Modal Structure -->
+                        <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
+                            <div class="modal-content">
+                                <h4>Confirma Operacion de Firma</h4>
+                                @using (Html.BeginForm("SignOther", "Cometido", new {item.DocumentoId }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => item.DocumentoId)
+                                    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                                }
+                            </div>
 
-                    if (!item.Signed)
-                    {
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                            </div>
+                        </div>
+                        if (!item.Signed)
+                        {
+                            <div class="section"></div>
+                            <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
+                        }
+                        else
+                        {
+                            <i class="material-icons large secondary-content green-text">check</i>
+                        }
                         <div class="section"></div>
-                        <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
+                        <div class="divider"></div>
                     }
-                    else
-                    {
-                        <i class="material-icons large secondary-content green-text">check</i>
-                    }
-                    <div class="section"></div>
-                    <div class="divider"></div>
 
-                    <!-- Modal Structure -->
-                    <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
-                        <div class="modal-content">
-                            <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("SignOther", "Cometido", new {item.DocumentoId }, FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.HiddenFor(model => item.DocumentoId)
-                                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
-                            }
-                        </div>
-
-                        <div class="modal-footer">
-                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-                        </div>
-                    </div>
                 }
             }
             else if (Model.Workflow.DefinicionWorkflow.Secuencia == 8 || Model.Workflow.DefinicionWorkflow.Secuencia == 13 || Model.Workflow.DefinicionWorkflow.Secuencia == 14 || Model.Workflow.DefinicionWorkflow.Secuencia == 15)

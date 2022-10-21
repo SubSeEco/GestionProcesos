@@ -518,8 +518,13 @@ namespace App.Web.Controllers
                     TempData["Success"] = "Operación terminada correctamente.";
                     return RedirectToAction("Index", "Workflow");
                 }
+                else
+                {
+                    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
+                    TempData["Error"] = _UseCaseResponseMessage.Errors;
+                    return RedirectToAction("Send", "Workflow");
+                }
 
-                _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
             
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString())
@@ -682,6 +687,7 @@ namespace App.Web.Controllers
                 funcionarios.Add(new { Email = "fvial@economia.cl", Nombre = "FELIPE VIAL TAGLE" });
                 ViewBag.Funcionario = new SelectList(funcionarios.OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", model.Email);
             }
+
             return View(model);
         }
 

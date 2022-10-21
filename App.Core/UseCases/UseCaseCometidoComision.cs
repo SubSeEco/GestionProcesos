@@ -5026,17 +5026,12 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 16)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.AnalistaContabilidad)
                     {
                         if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 4 && c.TipoDocumentoId != null))
                             throw new Exception("Debe adjuntar documentos en la tarea de analista de contabilidad.");
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 18)
-                    {
-                        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
-                            throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
-                    }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 17)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.EncargadoContabilidad)
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
@@ -5045,16 +5040,21 @@ namespace App.Core.UseCases
                                 throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 19)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.AnalistaTesoreria)
+                    {
+                        if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any(c => c.TipoDocumentoId.Value == 5 && c.TipoDocumentoId != null))
+                            throw new Exception("Debe adjuntar documentos en la tarea de analista tesoreria.");
+                    }
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.EncargadoTesoreria)
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5).FirstOrDefault().DocumentoId).Signed;
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5 && c.Type== "application/pdf").FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 20)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.EncargadoFinanzas)
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
@@ -5069,7 +5069,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
+                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)App.Util.Enum.CometidoSecuencia.RevisaCotizacion)
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
@@ -5952,8 +5952,9 @@ namespace App.Core.UseCases
                     }
 
                     //guardar información
-                    _repository.Create(workflow);
-                    _repository.Save();
+                     _repository.Create(workflow);
+                    /*
+                    _repository.Save();*/
 
                     //notificar actualización del estado al dueño
                     if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
@@ -6097,6 +6098,8 @@ namespace App.Core.UseCases
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
+                                _repository.Save();
+
                                 break;
                             case 2:/*Aprobación/Rechazo de cometido de la jefatura*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6156,6 +6159,8 @@ namespace App.Core.UseCases
                                      _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
 
+                                _repository.Save();
+
                                 break;
                             case 3:/*Notifica para selección de pasajes*/
                                 /*A jefatura para selección de cotización de pasajes*/
@@ -6177,7 +6182,9 @@ namespace App.Core.UseCases
                                 "Su jefatura tiene una cotización de pasajes pendiente",
                                 emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
-
+                                
+                                _repository.Save();
+                                
                                 break;
                             case 4:/*Jefatura revisa cotizaciones*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6246,7 +6253,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 5:/*Analista de Abastecimiento compra pasajes y adjunta documentación*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6286,7 +6293,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 6:/*Generación de documento por Analista Unidad de Gestión y Desarrollo de Personas*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6314,7 +6321,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 7:/*Encargado(a) Unidad de Gestión y Desarrollo de Personas --> Jefatura GP*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6362,7 +6369,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 8:/*Analista de Presupuesto genera CDP*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6389,7 +6396,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 9:/*Encargado(a) de Presupuesto firma CDP*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6431,7 +6438,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 13: /*Encargado(a) Departamento Administrativo firma de acto administrativo*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6512,7 +6519,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 16: /*Analista contabilidad devenga*/
                                 /*Devenga y envía a aprobación de Encargado(a) de Contabilidad*/
@@ -6565,7 +6572,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 17: /*Encargado(a) de Contabilidad revisa devengo*/
                                 /*Aprueba devengo y envía a Analista de Tesorería*/
@@ -6592,6 +6599,8 @@ namespace App.Core.UseCases
                                 "Tiene el cometido N°:" + cometido.CometidoId + " " + "para pago",
                                 emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+
+                                _repository.Save();
                                 break;
 
                             case 18:/*Analista de Tesorería ingresa pago*/
@@ -6627,7 +6636,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 19: /*Encargado(a) de Tesorería revisa pago*/
                                 /*Aprueba pago y envía a Encargado(a) de Unidad de Finanzas */
@@ -6657,7 +6666,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                             case 20:/*Encargado(a) de Unidad de Finanzas revisa devengo y pago*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
@@ -6705,7 +6714,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
-
+                                _repository.Save();
                                 break;
                         }
                     }

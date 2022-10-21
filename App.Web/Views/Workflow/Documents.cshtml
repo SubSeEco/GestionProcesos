@@ -1,5 +1,7 @@
 ﻿@model App.Model.Core.Workflow
+@using Enum = App.Util.Enum
 @{
+    
     Layout = null;
 }
 
@@ -42,7 +44,7 @@
                         <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="200px"></embed>
                     }
                 </div>
-                if (Model.DefinicionWorkflowId == item.Workflow.DefinicionWorkflowId && !item.Signed)
+                if (Model.DefinicionWorkflowId == item.Workflow.DefinicionWorkflowId && !item.Signed && Model.Proceso.EstadoProcesoId != (int)Enum.EstadoProceso.Terminado)
                 {
                     <div class="section">
                         @*<a href='@Url.Action("DeleteDoc", "Cometido", new { id = item.DocumentoId })' class="btn waves-effect waves-light  modal-trigger tooltipped red" data-tooltip="Eliminar">Eliminar Documento</a>*@

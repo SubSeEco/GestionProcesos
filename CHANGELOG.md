@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.1.1 - Cometidos - 21-10-2022]
+
+### Changed
+
+- Se corrigio duplicidad de tareas en al momento de mandar los correos pese a que no encontraba a los usuarios para notificar, ahora en caso de fallar, no se crea la nueva tarea mostrando un mensaje de error.
+- Se ajusto la vista de Tesoreria y Contabilidad para mostrar los documentos que los encargados deben firmar siendo solo estos los pdf.
+
 ## [2.1.1 - Cometidos - 14-09-2022]
 
 ### Changed
