@@ -14,7 +14,7 @@
             <div class="col l3">
                 <div class="switch">
                     <label>
-                        @Html.CheckBox("Preview",true)
+                        @Html.CheckBox("Preview", true)
                         <span class="lever"></span>
                         Previsualizar
                     </label>
@@ -30,6 +30,12 @@
                     <i class="material-icons ">attach_file</i>
                     <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                 </h6>
+                if (item.Signed)
+                {
+                    <h6>
+                        <i class="material-icons medium right green-text">lock_outline</i>
+                    </h6>
+                }
                 <p>
                     <strong>Id: </strong>@item.DocumentoId<br />
                     <strong>Fecha creación: </strong>@item.Fecha<br />
@@ -52,6 +58,7 @@
                     </div>
                 }
             }
+            <div class="divider"></div>
         }
     </div>
 </div>

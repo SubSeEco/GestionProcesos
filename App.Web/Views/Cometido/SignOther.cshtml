@@ -20,6 +20,12 @@
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
+                    if (item.Signed)
+                    {
+                        <h6>
+                            <i class="material-icons large right green-text">lock_outline</i>
+                        </h6>
+                    }
                     <p>
                         <strong>Fecha creación: </strong>@item.Fecha<br />
                         <strong>Autor: </strong>@item.Email<br />
@@ -38,10 +44,6 @@
                     {
                         <div class="section"></div>
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
-                    }
-                    else
-                    {
-                        <i class="material-icons large secondary-content green-text">check</i>
                     }
                     <div class="section"></div>
                     <div class="divider"></div>
@@ -72,6 +74,12 @@
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
+                    if (item.Signed)
+                    {
+                        <h6>
+                            <i class="material-icons large right green-text">lock_outline</i>
+                        </h6>
+                    }
                     <p>
                         Fecha creación: @item.Fecha<br />
                         Autor: @item.Email<br />
@@ -87,7 +95,7 @@
                         <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
                     }
 
-                        if (!item.Signed)
+                    if (!item.Signed)
                     {
                         <div class="section"></div>
                         @*<a class="waves-effect waves-light btn modal-trigger blue" href="@String.Concat("#modal", item.DocumentoId)">Firmar documento</a>*@
@@ -98,10 +106,6 @@
                         </button>*@
 
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
-                    }
-                    else
-                    {
-                        <i class="material-icons large secondary-content green-text">check</i>
                     }
                     <div class="section"></div>
                     <div class="divider"></div>
@@ -132,7 +136,7 @@
                     <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("SignOther", "Cometido", new {item.DocumentoId }, FormMethod.Post))
+                            @using (Html.BeginForm("SignOther", "Cometido", new { item.DocumentoId }, FormMethod.Post))
                             {
                                 @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)
@@ -154,6 +158,12 @@
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
+                    if (item.Signed)
+                    {
+                        <h6>
+                            <i class="material-icons large right green-text">lock_outline</i>
+                        </h6>
+                    }
                     <p>
                         <strong>Fecha creación: </strong>@item.Fecha<br />
                         <strong>Autor: </strong>@item.Email<br />
@@ -173,10 +183,6 @@
                         <div class="section"></div>
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal17", item.DocumentoId)">Firmar</a>
                     }
-                    else
-                    {
-                        <i class="material-icons large secondary-content green-text">check</i>
-                    }
                     <div class="section"></div>
                     <div class="divider"></div>
 
@@ -184,7 +190,7 @@
                     <div id="@String.Concat("#modal17", item.DocumentoId)" class="modal">
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
-                            @using (Html.BeginForm("SignOther", "Cometido", new {item.DocumentoId }, FormMethod.Post))
+                            @using (Html.BeginForm("SignOther", "Cometido", new { item.DocumentoId }, FormMethod.Post))
                             {
                                 @*@Html.AntiForgeryToken()*@
                                 @Html.HiddenFor(model => item.DocumentoId)
@@ -208,6 +214,12 @@
                             <i class="material-icons ">attach_file</i>
                             <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                         </h6>
+                        if (item.Signed)
+                        {
+                            <h6>
+                                <i class="material-icons large right green-text">lock_outline</i>
+                            </h6>
+                        }
                         <p>
                             <strong>Fecha creación: </strong>@item.Fecha<br />
                             <strong>Autor: </strong>@item.Email<br />
@@ -218,12 +230,12 @@
 
                         <div class="section"></div>
                         <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="350px"></embed>
-                        
+
                         <!-- Modal Structure -->
                         <div id="@String.Concat("#modal", item.DocumentoId)" class="modal">
                             <div class="modal-content">
                                 <h4>Confirma Operacion de Firma</h4>
-                                @using (Html.BeginForm("SignOther", "Cometido", new {item.DocumentoId }, FormMethod.Post))
+                                @using (Html.BeginForm("SignOther", "Cometido", new { item.DocumentoId }, FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
                                     @Html.HiddenFor(model => item.DocumentoId)
@@ -240,10 +252,6 @@
                             <div class="section"></div>
                             <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                         }
-                        else
-                        {
-                            <i class="material-icons large secondary-content green-text">check</i>
-                        }
                         <div class="section"></div>
                         <div class="divider"></div>
                     }
@@ -258,6 +266,12 @@
                         <i class="material-icons ">attach_file</i>
                         <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
                     </h6>
+                    if (item.Signed)
+                    {
+                        <h6>
+                            <i class="material-icons large right green-text">lock_outline</i>
+                        </h6>
+                    }
                     <p>
                         <strong>Fecha creación: </strong>@item.Fecha<br />
                         <strong>Autor: </strong>@item.Email<br />
@@ -277,10 +291,6 @@
                         <div class="section"></div>
                         <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", item.DocumentoId)">Firmar</a>
                     }
-                    else
-                    {
-                        <i class="material-icons large secondary-content green-text">check</i>
-                    }
                     <div class="section"></div>
                     <div class="divider"></div>
 
@@ -289,7 +299,7 @@
                         <div class="modal-content">
                             <h4>Confirma Operacion de Firma</h4>
                             @*@using (Html.BeginForm("Sign", "Documento", new { DocumentoId = item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))*@
-                            @using (Html.BeginForm("SignResolucion", "Cometido", new {item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))
+                            @using (Html.BeginForm("SignResolucion", "Cometido", new { item.DocumentoId }, FormMethod.Post, new { id = item.DocumentoId, enctype = "multipart/form-data" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => item.DocumentoId)

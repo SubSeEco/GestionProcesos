@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.2.0 - Cometidos - 27-10-2022]
+
+### Changed
+
+- Se realizaron cambios visuales en la firma de documentos.
+- Se cambio la vista del modulo Documentos en Tesoria y Contabilidad.
+
 ## [2.1.1 - Cometidos - 21-10-2022]
 
 ### Changed
