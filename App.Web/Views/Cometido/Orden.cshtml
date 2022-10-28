@@ -314,12 +314,12 @@
                                 gastos de honorario adicional para la Subsecretaría de Economía y Empresas de Menor Tamaño.
                             </p>
                         </li>
-                    }                    
+                    }
                     @*<li>
-                        <p align="justify" style="margin-right:30px">
-                            Que, no se pagará viático por el día 27  de noviembre de 2020, por motivo de encontrarse en viaje de regreso.
-                        </p>
-                    </li>*@
+            <p align="justify" style="margin-right:30px">
+                Que, no se pagará viático por el día 27  de noviembre de 2020, por motivo de encontrarse en viaje de regreso.
+            </p>
+        </li>*@
 
 
                     <p align="justify"></p>
@@ -331,7 +331,11 @@
                             </p>
                         </li>
                     }
-                    <p class="breakhere"></p>
+                    @if (Model.Tiempo == "Pasado" && Model.Destinos.Count < 3)
+                    {
+                        <p class="breakhere"></p>
+                    }
+                    @*<p class="breakhere"></p>*@
                 </ol>
             </td>
         </tr>
