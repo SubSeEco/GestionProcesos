@@ -180,7 +180,19 @@ namespace App.Util
             Plantilla_Memo_Firmado = 63,
             PlantillaAnulacionCometido = 62,
             JefeGabineteMinistro = 64,
-
+            PlantillaAprobacionCometidoJustificacionAtraso = 67,
+            PlantillaRechazoCometidoJustificacionAtraso = 68,
+            PlantillaAprobacionJuridica = 69,
+            PlantillaRechazoJuridica = 70,
+            PlantillaAprobacionGabineteSubsecretario = 73,
+            PlantillaRechazoGabineteSubsecretario = 74,
+            PlantillaAprobacionGabineteMinistro = 75,
+            PlantillaRechazoGabineteMinistro = 76,
+            PlantillaAprobacionFirmaMinistro = 77,
+            PlantillaRechazoFirmaMinistro = 78,
+            PlantillaAprobacionFirmaSubsecretario = 78,
+            PlantillaRechazoFirmaSubsecretario = 80,
+            
             /*Plantillas de correo --> horas extras*/
             PlantillaHorasExtras = 65,
             CorreoOfPartes = 66,

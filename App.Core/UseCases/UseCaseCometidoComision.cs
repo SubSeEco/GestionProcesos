@@ -4981,6 +4981,18 @@ namespace App.Core.UseCases
                             }
                         }
                     }
+                    else if(workflowActual.DefinicionWorkflow.Secuencia==(int)Util.Enum.CometidoSecuencia.AprobacionDocGP)
+                    {
+                        if(obj.TipoAprobacionId!=(int)Util.Enum.TipoAprobacion.Rechazada)
+                        {
+                            var docs = workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.Resolucion).ToList();
+
+                            if(docs.Count == 0)
+                            {
+                                throw new Exception("Se debe generar Documento de Acto Administrativo");
+                            }
+                        }
+                    }
                     else if(workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto)
                     {
                         if(obj.TipoAprobacionId!=(int)Util.Enum.TipoAprobacion.Rechazada)
@@ -6347,9 +6359,10 @@ namespace App.Core.UseCases
 
                                     /*se valida si cometido tiene resolucion de revocatoria*/
                                     Documento doc = null;
-                                    if (cometido.ResolucionRevocatoria == true)
+                                    if (cometido.ResolucionRevocatoria)
+                                    { 
                                         doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 16);
-
+                                    }
 
                                     _email.NotificacionesCometido(workflowActual,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEncargadoGP_AnalistaPpto),
@@ -6440,6 +6453,91 @@ namespace App.Core.UseCases
                                 }
                                 _repository.Save();
                                 break;
+                            case 10:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    //Tipo C
+                                    if(cometido.GradoDescripcion == "C")
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionMinistro && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                        _email.NotificacionesCometido(workflow,
+                                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionJuridica),
+                                            "Tiene el cometido N°:" + cometido.CometidoId + " " + "para aprobación.",
+                                            emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    }
+                                    //Tipo B
+                                    if(cometido.GradoDescripcion == "B")
+                                    {
+                                        emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionSubse && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                        _email.NotificacionesCometido(workflow,
+                                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionJuridica),
+                                            "Tiene el cometido N°:" + cometido.CometidoId + " " + "para aprobación.",
+                                            emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                    }
+                                }
+
+                                if(workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoJuridica),
+                                        "El Cometido N°: " + cometido.CometidoId + " fue rechazado por parte de Juridica, favor revisar las OBSERVACIONES",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+
+                                _repository.Save();
+                                break;
+                            case 11:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionGabineteSubsecretario),
+                                        "El cometido N°: " + cometido.CometidoId + " fue aprobado por parte de el(la) Jefe(a) de Gabinete de el(la) Subsecretario(a).",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJuridica && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoGabineteSubsecretario),
+                                        "El cometido N°: " + cometido.CometidoId + " fue rechazado por parte de el(la) Jefe(a) de Gabinete de el(la) Subsecretario(a), favor revisar las OBSERVACIONES.",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+
+                                _repository.Save();
+                                break;
+                            case 12:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");                                    
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionGabineteMinistro),
+                                        "El cometido N°: " + cometido.CometidoId + " fue firmado por parte de el(la) Jefe(a) de Gabinete de el(la) Ministro(a).",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJuridica && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoGabineteMinistro),
+                                        "El cometido N°: " + cometido.CometidoId + " fue rechazado por parte de el(la) Jefe(a) de Gabinete de el(la) Ministro(a), favor revisar las OBSERVACIONES.",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+
+                                _repository.Save();
+                                break;
                             case 13: /*Encargado(a) Departamento Administrativo firma de acto administrativo*/
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
@@ -6497,6 +6595,7 @@ namespace App.Core.UseCases
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                                 }
+
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                                 {
                                     /*Rechaza y notifica a Encargado(a) de Presupuesto (si cometido irroga gasto)*/
@@ -6518,6 +6617,50 @@ namespace App.Core.UseCases
                                     "Su solicitud de cometido N°:" + cometido.CometidoId + " " + "ha sido devuelta",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                 _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                _repository.Save();
+                                break;
+                            case 14:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionFirmaMinistro),
+                                        "El cometido N°: " + cometido.CometidoId + " fue firmado por parte de el(la) Ministro(a).",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionSubse && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoFirmaMinistro),
+                                        "El cometido N°: " + cometido.CometidoId + " fue rechazado por parte de el(la) Ministro(a), favor revisar las OBSERVACIONES.",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                _repository.Save();
+                                break;
+                            case 15:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoFirmaSubsecretario),
+                                        "El cometido N°: " + cometido.CometidoId + " fue firmado por parte de el(la) Subsecretario(a).",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionMinistro && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoFirmaSubsecretario),
+                                        "El cometido N°: " + cometido.CometidoId + " fue rechazado por parte de el(la) Subsecretario(a), favor reisar las OBSERVACIONES.",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }
                                 _repository.Save();
                                 break;
@@ -6711,6 +6854,59 @@ namespace App.Core.UseCases
                                     _email.NotificacionesCometido(workflow,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaFinanzasRechazo_EncargadoTesoreria),
                                     "El pago del cometido N° " + cometido.CometidoId + "ha sido rechazado por el Encargado(a) de Finanzas",
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                _repository.Save();
+                                break;
+                            case 21:
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(QuienViaja);
+                                    emailMsg.Add(solicitante.Trim());
+
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEnvíoSolicitudCometido),
+                                        "Se adjunto Comprobante de pago al cometido N° " + cometido.CometidoId + " por parte de el/la Encargado/a de Tesorería.",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+
+                                if(workflowActual.TipoAprobacionId==(int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg = new List<string>();
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == 20 && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
+
+                                    _email.NotificacionesCometido(workflow,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaEnvíoSolicitudCometido),
+                                        "Su cometido N° " + cometido.CometidoId + " tiene OBSERVACIONES para adjuntar el Comprobante de Pago",
+                                        emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+                                break;
+                            case 22:
+                                emailMsg = new List<string>();
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                                {
+                                    emailMsg.Add(QuienViaja);//quien viaja
+                                    emailMsg.Add(solicitante.Trim()); //solicitante
+
+                                    _email.NotificacionesCometido(workflow,
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionCometidoJustificacionAtraso),
+                                    "Fue aprobada la justificación del cometido N° " + cometido.CometidoId + " " + " por la Jefa de Gabinete",
+                                    emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                }
+
+                                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
+                                {
+                                    emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJefatura && 
+                                        workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "mmontoya@economia.cl");
+
+                                    _email.NotificacionesCometido(workflow,
+                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoCometidoJustificacionAtraso),
+                                    "Fue rechazada la justificación de cometido N° " + cometido.CometidoId + " por la Jefa de Gabinete",
                                     emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
                                     _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                 }

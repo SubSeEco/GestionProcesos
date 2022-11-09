@@ -2,6 +2,18 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.2.2 - Cometidos - 09-11-2022]
+
+### Changed
+
+- Se hizo un refactor del metodo de notificacion y avance de las tareas.
+- Se actualizo el package "System.Drawing.Common" el cual presentaba problemas de vulnerabilidad.
+- Se cambio la vista en Workflow/Sign.
+
+### Added
+
+- Se agregaron plantillas de notificacion en la base de datos y en el Enum.cs.
+
 ## [2.2.0 - Cometidos - 27-10-2022]
 
 ### Changed
