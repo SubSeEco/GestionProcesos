@@ -750,8 +750,9 @@ else
                                                 </tr>
                                             </table>
                                         }
+                                        <br />
                                         <div class="row">
-                                            @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, null)
+                                            @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, new { @class = "waves-effect waves-light btn blue" })
                                         </div>
                                     }
                                 </div>

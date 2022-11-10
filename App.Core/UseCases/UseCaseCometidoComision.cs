@@ -5253,27 +5253,13 @@ namespace App.Core.UseCases
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo
                                             || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro
                                             || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario)
-                                    {
-                                        /*if(Cometido.JustificacionAtraso!=null)
-                                        {
-                                            if(Cometido.ReqPasajeAereo)
-                                            {
-
-                                            }
-                                            else
-                                            {
-                                                definicionWorkflow=definicionWorkflowList.FirstOrDefault(q=>q.Secuencia==(int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
-                                            }
-                                        }
+                                    {                                       
+                                        if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
+                                            definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
+                                        else if (Cometido.ResolucionRevocatoria)
+                                            definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoFinanzas);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
                                         else
-                                        {*/
-                                            if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
-                                                definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
-                                            else if (Cometido.ResolucionRevocatoria)
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoFinanzas);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
-                                            else
-                                                definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad);
-                                        //}
+                                            definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad);   
                                     }
                                     //else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && Cometido.CalidadDescripcion != "TITULAR")/*Despues de la firma, si no es titular continua a contabilidad*/
                                     //{
@@ -5949,18 +5935,33 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
                     {
-                        persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
-                        if (persona == null)
-                            throw new Exception("No se encontró el usuario en Sigper.");
-                        if (persona.Funcionario == null)
+                        // TODO Mejorar cambio de ejecutante si el jefe de servicio es el funcionario que viaja.
+                        if(comet.Nombre.Trim() != "PAULA NABILA CATTAN CASTILLO")
                         {
-                            throw new Exception("No se encontró el usuario en Sigper.");
+                            #region Funcion Original de ejecucion para acto administrativo
+                            persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
+                            if (persona == null)
+                                throw new Exception("No se encontró el usuario en Sigper.");
+                            if (persona.Funcionario == null)
+                            {
+                                throw new Exception("No se encontró el usuario en Sigper.");
+                            }
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.TareaPersonal = true;
+                            #endregion
                         }
-                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-                        workflow.TareaPersonal = true;
+                        else
+                        {
+                            persona = _sigper.GetUserByEmail("gjorqueras@economia.cl");
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.TareaPersonal = true;
+                        }
                     }
 
                     //guardar información
