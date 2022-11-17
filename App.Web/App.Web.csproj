@@ -796,6 +796,15 @@
     <Content Include="Views\Shared\_PartialDestinos.cshtml" />
     <Content Include="Views\Cometido\ValidaMinistro.cshtml" />
     <Content Include="Views\Cometido\ValidaSubseAlMinistro.cshtml" />
+    <Content Include="Views\Workflow\_IndexGestionDocumentalPersonal.cshtml" />
+    <Content Include="Views\Workflow\_IndexHSA.cshtml" />
+    <Content Include="Views\Workflow\_IndexCometidosPersonal.cshtml" />
+    <Content Include="Views\Workflow\_IndexFirmaDocumentosPersonal.cshtml" />
+    <Content Include="Views\Workflow\_TareaPersonal.cshtml" />
+    <Content Include="Views\Workflow\_TareaGrupal.cshtml" />
+    <Content Include="Views\Workflow\_IndexCometidosGrupal.cshtml" />
+    <Content Include="Views\Workflow\_IndexFirmaDocumentosGrupal.cshtml" />
+    <Content Include="Views\Workflow\_IndexGestionDocumentalGrupal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

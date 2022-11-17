@@ -1,0 +1,172 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+@using App.Util
+
+<ul class="collection">
+    @foreach (var item in Model.TareasPersonales.Where(q => q.FechaCreacion <= DateTime.Now && q.GD != null).OrderByDescending(q => q.WorkflowId))
+    {
+        <li class="collection-item avatar section">
+
+            <p class="right truncate grey-text ultra-small">Creada el @item.FechaCreacion</p>
+
+            @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date > item.ProcesoFechaVencimiento.Value.Date)
+            {
+                <i class="material-icons circle red large tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso fuera de plazo. Venció el {0}",item.ProcesoFechaVencimiento)"></i>
+            }
+            @if (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date == item.ProcesoFechaVencimiento.Value.Date)
+            {
+                <i class="material-icons circle amber accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+            }
+            @if (item.ProcesoFechaVencimiento == null || (item.ProcesoFechaVencimiento.HasValue && DateTime.Now.Date < item.ProcesoFechaVencimiento.Value.Date))
+            {
+                <i class="material-icons circle green accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="@string.Format("Proceso dentro del plazo. Vencerá el {0}",item.ProcesoFechaVencimiento)"></i>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(item.Asunto))
+            {
+                @Html.ActionLink(item.Asunto, "Execute", new { id = item.WorkflowId })
+                <br />
+                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+            }
+            else
+            {
+                @Html.ActionLink("Tarea " + item.WorkflowId + ": " + item.Definicion, "Execute", new { id = item.WorkflowId })
+            }
+
+            <p class="truncate ultra-small">
+                Proceso @Html.DisplayFor(modelItem => item.ProcesoId): @Html.DisplayFor(modelItem => item.ProcesoDefinicion), iniciado por
+
+                @if (!string.IsNullOrWhiteSpace(item.ProcesoNombreFuncionario))
+                {
+                    @Html.DisplayFor(modelItem => item.ProcesoNombreFuncionario)
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.ProcesoEmail)
+                }
+
+            </p>
+            <p class="truncate ultra-small">
+                Asignada a:
+
+                @if (item.TareaPersonal)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.NombreFuncionario))
+                    {
+                        @Html.DisplayFor(modelItem => item.NombreFuncionario)<text>, </text>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.ProcesoEmail)<text>, </text>
+                    }
+                }
+
+                @if (!string.IsNullOrWhiteSpace(item.Pl_UndDes))
+                {
+                    @Html.DisplayFor(modelItem => item.Pl_UndDes)
+                }
+                @if (item.Grupo != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Grupo)
+                }
+
+            </p>
+
+            @if (item.ProcesoEntidad.Contains("GD"))
+            {
+                <br />
+                @*@Html.Action("Row", "GDExterno", new { item.ProcesoId })*@
+
+                if (item.GD != null)
+                {
+                    <table class="striped">
+                        <tbody>
+                            @if (item.GD.FechaIngreso.HasValue)
+                            {
+                                <tr>
+                                    <td width="200">Fecha creación:</td>
+                                    <td>@item.GD.Fecha</td>
+                                </tr>
+                            }
+                            @if (item.GD.GDOrigen != null)
+                            {
+                                <tr>
+                                    <td width="200">Origen:</td>
+                                    <td>@item.GD.GDOrigen.Descripcion</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.Materia))
+                            {
+                                <tr>
+                                    <td width="200">Materia:</td>
+                                    <td>@item.GD.Materia</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.NumeroExterno))
+                            {
+                                <tr>
+                                    <td width="200">Número externo:</td>
+                                    <td>@item.GD.NumeroExterno</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.Referencia))
+                            {
+                                <tr>
+                                    <td width="200">Referencia:</td>
+                                    <td>@item.GD.Referencia</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.Observacion))
+                            {
+                                <tr>
+                                    <td width="200">Observación:</td>
+                                    <td>@item.GD.Observacion</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.DestinoUnidadDescripcion))
+                            {
+                                <tr>
+                                    <td width="200">Destino 1:</td>
+                                    <td>
+                                        @item.GD.DestinoUnidadDescripcion
+                                        @if (!string.IsNullOrWhiteSpace(item.GD.DestinoFuncionarioNombre))
+                                        {
+                                            <text>-</text> @item.GD.DestinoFuncionarioNombre
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.GD.DestinoUnidadDescripcion2))
+                            {
+                                <tr>
+                                    <td width="200">Destino 2:</td>
+                                    <td>
+                                        @item.GD.DestinoUnidadDescripcion2
+                                        @if (!string.IsNullOrWhiteSpace(item.GD.DestinoFuncionarioNombre2))
+                                        {
+                                            <text>-</text> @item.GD.DestinoFuncionarioNombre2
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            }
+
+            @if (!string.IsNullOrWhiteSpace(@item.Mensaje))
+            {
+                <div class="section">
+                    <p class="ultra-small title red-text"> Comentario: @item.Mensaje</p>
+                </div>
+            }
+
+        </li>
+    }
+</ul>
+
+<script>
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    })
+</script>

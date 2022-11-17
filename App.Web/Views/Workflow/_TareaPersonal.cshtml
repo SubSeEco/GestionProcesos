@@ -1,0 +1,94 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+@using Enum = App.Util.Enum;
+@{
+    var gd = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDInterno ||
+               q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDOficParte).Count();
+    var firmaDoc = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudFirma).Count();
+    var cometidos = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje).Count();
+    var hsa = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.InformeHSA).Count();
+}
+<ul class="collapsible popout">
+
+    <li class="">
+        <div class="collapsible-header">
+            <span style="font-weight: bold">
+                Gestion Documental
+            </span>
+            <span class="new badge turquoise" data-badge-caption="" style="font-weight:bold; font-size:1.1rem">
+                @gd
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (gd > 0)
+            {
+                @Html.Partial("_IndexGestionDocumentalPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight: bold">Cometidos</span>
+            <span class="new badge blue" data-badge-caption="" style="font-weight:bold; font-size:1.1rem">
+                @cometidos
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (cometidos > 0)
+            {
+                @Html.Partial("_IndexCometidosPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight: bold">Informes HSA</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#1621CC; font-weight:bold; font-size:1.1rem">
+                @hsa
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (hsa > 0)
+            {
+                @Html.Partial("_IndexHSA", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Firma Documentos</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @firmaDoc
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (firmaDoc > 0)
+            {
+                @Html.Partial("_IndexFirmaDocumentosPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+</ul>
+
+<script>
+    $(document).ready(function () {
+        $('.tooltipped').tooltip();
+        $('.tabs').tabs();
+        $('.collapsible').collapsible();
+    });
+</script>

@@ -17,6 +17,8 @@ namespace App.Model.DTO
 
         public int ProcesoId { get; set; }
         public DateTime? ProcesoFechaVencimiento { get; set; }
+
+        public int ProcesoDefinicionId { get; set; }
         public string ProcesoDefinicion { get; set; }
         public string ProcesoNombreFuncionario { get; set; }
         public string ProcesoEmail { get; set; }

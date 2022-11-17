@@ -235,15 +235,18 @@ namespace App.Util
 
         public enum DefinicionProceso
         {
+            InformeHSA = 1,
+            GDInterno = 4,
+            GDOficParte = 5,
             SIACIngreso = 7,
+            SolicitudCometido = 10,
             SolicitudPasaje = 11,
             SolicitudCometidoPasaje = 13,
             Memorandum = 15,
-            SolicitudCometido = 10,
-            InformeHSA = 1,
             ProgramacionHorasExtraordinarias = 16,
             HorasExtras = 19,
             GeneraResolucionHE = 20,
+            SolicitudFirma = 1013,
         }
 
      
