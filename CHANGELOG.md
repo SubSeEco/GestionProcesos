@@ -2,6 +2,19 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.2.3 - Cometidos - 17-11-2022]
+
+## Changed
+
+- Se cambio link para crear certificado en presupuesto por un boton.
+- Se corrigio el flujo desde jefa de servicio a gabinete en caso de que viaje la primera y el rechazo de este paso ya que se derivaba de forma erronea.
+
+## [2.0.1 - Gestion Documental - 17-11-2022]
+
+## Changed
+
+- Se modifico la lsita de la tabla de workflow para que ahora se muestre, por defecto, de forma descendente por el ID.
+
 ## [2.2.2 - Cometidos - 10-11-2022]
 
 ### Added

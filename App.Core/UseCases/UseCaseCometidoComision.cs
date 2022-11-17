@@ -5395,6 +5395,10 @@ namespace App.Core.UseCases
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo);
+                                        /*if(comet.Nombre.Trim() == "PAULA NABILA CATTAN CASTILLO")
+                                        {
+                                            definicionWorkflow.Email = "gjorqueras@economia.cl";
+                                        }*/
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJuridica && Cometido.GradoDescripcion == "C")/*Verifica si coemtido es del subse se va a la aprobacion de ministro*/
                                     {
@@ -5485,9 +5489,13 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.ReqPasajeAereo)
+                                    {
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 1); /*Al ser rechazado va a la tarea de ingreso*/
+                                    }
                                     else
+                                    {
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+                                    }
                                 }
                             }
                             else
@@ -5936,32 +5944,29 @@ namespace App.Core.UseCases
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
                     {
                         // TODO Mejorar cambio de ejecutante si el jefe de servicio es el funcionario que viaja.
-                        if(comet.Nombre.Trim() != "PAULA NABILA CATTAN CASTILLO")
+                        
+                        #region Funcion Original de ejecucion para acto administrativo
+                        if(definicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo && comet.Nombre.Trim() == "PAULA NABILA CATTAN CASTILLO")
                         {
-                            #region Funcion Original de ejecucion para acto administrativo
-                            persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
-                            if (persona == null)
-                                throw new Exception("No se encontró el usuario en Sigper.");
-                            if (persona.Funcionario == null)
-                            {
-                                throw new Exception("No se encontró el usuario en Sigper.");
-                            }
-                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-                            workflow.TareaPersonal = true;
-                            #endregion
+                            persona = _sigper.GetUserByEmail("gjorqueras@economia.cl");
                         }
                         else
                         {
-                            persona = _sigper.GetUserByEmail("gjorqueras@economia.cl");
-                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
-                            workflow.TareaPersonal = true;
+                            persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
                         }
+
+                        if (persona == null)
+                            throw new Exception("No se encontró el usuario en Sigper.");
+                        if (persona.Funcionario == null)
+                        {
+                            throw new Exception("No se encontró el usuario en Sigper.");
+                        }
+                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                        workflow.TareaPersonal = true;
+                        #endregion
                     }
 
                     //guardar información

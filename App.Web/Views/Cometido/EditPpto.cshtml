@@ -650,7 +650,7 @@ else
                                     @if (!Model.GeneracionCDP.Any())
                                     {
                                         <div class="row">
-                                            @Html.ActionLink("Crear Certificado de Refrendación", "Create", "GeneracionCDP", new { Model.CometidoId }, null)
+                                            @Html.ActionLink("Crear Certificado de Refrendación", "Create", "GeneracionCDP", new { Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
                                         </div>
                                     }
                                     else

@@ -35,7 +35,7 @@
             </thead>
             <tbody>
 
-                @foreach (var item in Model)
+                @foreach (var item in Model.OrderByDescending(q=>q.WorkflowId))
                 {
                     <tr>
                         <td>
