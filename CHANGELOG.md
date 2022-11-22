@@ -2,6 +2,16 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.2.5 - Gestion Procesos - 22-11-2022]
+
+## Added
+
+- Se agrego vista Informe HSA en Tareas Grupales.
+
+## Changed
+
+- Se modifico libreria a su version 6.0.0 ya que la anterior estaba deprecada.
+
 ## [2.2.4 - Gestion Procesos - 17-11-2022]
 
 ## Added
