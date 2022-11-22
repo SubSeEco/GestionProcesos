@@ -47,7 +47,7 @@
             }
         </div>
     </li>
-    @*<li>
+    <li>
         <div class="collapsible-header">
             <span style="font-weight: bold">Informes HSA</span>
             <span class="new badge green" data-badge-caption="" style="font-weight:bold; font-size:1.1rem">
@@ -57,14 +57,14 @@
         <div class="collapsible-body">
             @if (hsa > 0)
             {
-                @Html.Partial("_IndexHSA", Model)
+                @Html.Partial("_IndexHSAGrupal", Model)
             }
             else
             {
                 <p>No existen tareas pendientes</p>
             }
         </div>
-    </li>*@
+    </li>
     <li>
         <div class="collapsible-header">
             <span style="font-weight:bold">Firma Documentos</span>

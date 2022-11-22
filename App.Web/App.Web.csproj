@@ -805,6 +805,7 @@
     <Content Include="Views\Workflow\_IndexCometidosGrupal.cshtml" />
     <Content Include="Views\Workflow\_IndexFirmaDocumentosGrupal.cshtml" />
     <Content Include="Views\Workflow\_IndexGestionDocumentalGrupal.cshtml" />
+    <Content Include="Views\Workflow\_IndexHSAGrupal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
