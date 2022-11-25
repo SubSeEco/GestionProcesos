@@ -26,7 +26,8 @@ namespace App.Core.UseCases
                 {
                     if(!obj.Signed)
                     {
-                        if(obj.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto)
+                        if(obj.TipoDocumentoId==(int)Util.Enum.TipoDocumento.RefrendacionPresupuesto ||
+                            obj.TipoDocumentoId==(int)Util.Enum.TipoDocumento.Resolucion)
                         {
                             _repository.Delete(obj);
                             _repository.Save();

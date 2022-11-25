@@ -1,8 +1,10 @@
 ﻿@model App.Web.Controllers.WorkflowController.DTOFilter
-@using App.Util
+@using Enum = App.Util.Enum
 
 <ul class="collection">
-    @foreach (var item in Model.TareasPersonales.Where(q => q.FechaCreacion <= DateTime.Now && q.GD != null).OrderByDescending(q => q.WorkflowId))
+    @foreach (var item in Model.TareasPersonales.Where(q => q.FechaCreacion <= DateTime.Now &&
+    q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDInterno ||
+    q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDOficParte).OrderByDescending(q => q.WorkflowId))
     {
         <li class="collection-item avatar section">
 

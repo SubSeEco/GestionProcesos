@@ -2,6 +2,16 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.5.6 - Cometidos - 25-11-2022]
+
+## Changed
+
+- Se modifica carga de la vista en Tareas Grupales
+
+## Added
+
+- Se agregaron patentes a las resoluciones faltantes dejandolas en Mayusculas.
+
 ## [2.2.5 - Gestion Procesos - 22-11-2022]
 
 ## Added

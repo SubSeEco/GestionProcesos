@@ -6502,12 +6502,13 @@ namespace App.Core.UseCases
                                 emailMsg = new List<string>();
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
+                                    Documento doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");
                                     _email.NotificacionesCometido(workflow,
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionGabineteSubsecretario),
                                         "El cometido N°: " + cometido.CometidoId + " fue aprobado por parte de el(la) Jefe(a) de Gabinete de el(la) Subsecretario(a).",
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                                 {
@@ -6525,12 +6526,13 @@ namespace App.Core.UseCases
                                 emailMsg = new List<string>();
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
                                 {
+                                    Documento doc = cometido.Proceso.Documentos.FirstOrDefault(d => d.ProcesoId == cometido.ProcesoId && d.TipoDocumentoId == 1);
                                     emailMsg.Add(workflow.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro && workflow.DefinicionWorkflow.Email != null ? workflow.DefinicionWorkflow.Email : "irocha@economia.cl");                                    
                                     _email.NotificacionesCometido(workflow,
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobacionGabineteMinistro),
                                         "El cometido N°: " + cometido.CometidoId + " fue firmado por parte de el(la) Jefe(a) de Gabinete de el(la) Ministro(a).",
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, doc, "", "", "");
                                 }
                                 if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                                 {
