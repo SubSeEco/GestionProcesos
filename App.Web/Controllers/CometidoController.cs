@@ -1249,6 +1249,8 @@ namespace App.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditGP(Cometido model)
         {
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
+            model.Workflow = workflow;
 
             if (ModelState.IsValid)
             {

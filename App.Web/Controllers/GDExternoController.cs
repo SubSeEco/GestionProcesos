@@ -243,51 +243,77 @@ namespace App.Web.Controllers
             var email = User.Email();
 
             if (Request.Files.Count == 0)
+            {
                 ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
+            }
+
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                var documento = new Documento();
+                documento.Fecha = DateTime.Now;
+                documento.Email = email;
+                documento.ProcesoId = model.ProcesoId;
+                documento.WorkflowId = model.WorkflowId;
+                documento.TipoPrivacidadId = (int)Enum.Privacidad.Privado;
+                documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
+                documento.EsOficial = model.EsOficial;
+                documento.Signed = model.TieneFirmaElectronica;
+                documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
+                documento.FirmanteUnidad = model.FirmanteUnidadCodigo;
+                documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.FirmanteEmail) ? model.FirmanteEmail.Trim() : null;
+                documento.Descripcion = model.Descripcion;
+
+                //contenido
+                var file = Request.Files[i];
+                if (file != null)
+                {
+                    var target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+                    documento.FileName = file.FileName;
+                    documento.File = target.ToArray();
+
+                    //metadata
+                    var metadata = _file.BynaryToText(target.ToArray());
+                    if (metadata != null)
+                    {
+                        documento.Texto = metadata.Text;
+                        documento.Metadata = metadata.Metadata;
+                        documento.Type = metadata.Type;
+                    }
+                    
+                    var size = target.Length;
+                    if (size > 52428800)
+                    {
+                        ModelState.AddModelError(string.Empty, "El archivo " + file.FileName + " excede el maximo de 50 MB.");
+                    }
+                }
+
+                _repository.Create(documento);
+            }
 
             if (ModelState.IsValid)
             {
-                for (int i = 0; i < Request.Files.Count; i++)
-                {
-                    var documento = new Documento();
-                    documento.Fecha = DateTime.Now;
-                    documento.Email = email;
-                    documento.ProcesoId = model.ProcesoId;
-                    documento.WorkflowId = model.WorkflowId;
-                    documento.TipoPrivacidadId = (int)Enum.Privacidad.Privado;
-                    documento.TipoDocumentoFirma = model.TipoDocumentoCodigo;
-                    documento.EsOficial = model.EsOficial;
-                    documento.Signed = model.TieneFirmaElectronica;
-                    documento.RequiereFirmaElectronica = model.RequiereFirmaElectronica;
-                    documento.FirmanteUnidad = model.FirmanteUnidadCodigo;
-                    documento.FirmanteEmail = !string.IsNullOrWhiteSpace(model.FirmanteEmail) ? model.FirmanteEmail.Trim() : null;
-                    documento.Descripcion = model.Descripcion;
-
-                    //contenido
-                    var file = Request.Files[i];
-                    if (file != null)
-                    {
-                        var target = new MemoryStream();
-                        file.InputStream.CopyTo(target);
-                        documento.FileName = file.FileName;
-                        documento.File = target.ToArray();
-
-                        //metadata
-                        var metadata = _file.BynaryToText(target.ToArray());
-                        if (metadata != null)
-                        {
-                            documento.Texto = metadata.Text;
-                            documento.Metadata = metadata.Metadata;
-                            documento.Type = metadata.Type;
-                        }
-                    }
-
-                    _repository.Create(documento);
-                    _repository.Save();
-                }
-
+                _repository.Save();
                 TempData["Success"] = "Operación terminada correctamente.";
                 return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+            else
+            {
+                foreach (var error in ModelState.Values)
+                {
+                    for (int i = 0; i < error.Errors.Count; i++)
+                    {
+                        var errorModel = error.Errors[i];
+                        if (errorModel != null)
+                        {
+                            var help = new List<string>();
+                            help.Add(errorModel.ErrorMessage);
+                            TempData["Error"] = help;
+                        }
+                    }
+                }
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+
             }
 
             return View(model);

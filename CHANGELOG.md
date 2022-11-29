@@ -2,6 +2,16 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.5.7 - Cometidos y Gestion Procesos - 29-11-2022]
+
+## Added
+
+- Se creo validación de limite de tamaño para los documentos subidos los sistemas.
+
+## Changed
+
+- Se modifico web.config para que soporte como maximo 100MB.
+
 ## [2.5.6 - Cometidos - 25-11-2022]
 
 ## Changed

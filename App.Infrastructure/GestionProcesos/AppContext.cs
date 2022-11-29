@@ -25,6 +25,7 @@ namespace App.Infrastructure.GestionProcesos
         public AppContext() : base("name=GestionProcesos")
         {
             System.Diagnostics.Debug.WriteLine("New AppContext...");
+            this.Database.CommandTimeout = 180;
         }
 
         public virtual DbSet<Configuracion> Configuracion { get; set; }

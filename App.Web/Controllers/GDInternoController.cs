@@ -186,8 +186,6 @@ namespace App.Web.Controllers
             if (Request.Files.Count == 0)
                 ModelState.AddModelError(string.Empty, "Debe adjuntar un archivo.");
 
-            if (ModelState.IsValid)
-            {
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
                     var documento = new Documento();
@@ -221,13 +219,38 @@ namespace App.Web.Controllers
                             documento.Metadata = metadata.Metadata;
                             documento.Type = metadata.Type;
                         }
+
+                    var size = target.Length;
+                    if(size> 52428800)
+                    {
+                        ModelState.AddModelError(string.Empty, "El archivo " + file.FileName + " excede el maximo de 50 MB.");
+                    }
                     }
 
                     _repository.Create(documento);
-                    _repository.Save();
                 }
 
+            if (ModelState.IsValid)
+            {
+                _repository.Save();
                 TempData["Success"] = "Operación terminada correctamente.";
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+            else
+            {
+                foreach (var error in ModelState.Values)
+                {
+                    for (int i = 0; i < error.Errors.Count; i++)
+                    {
+                        var errorModel = error.Errors[i];
+                        if (errorModel != null)
+                        {
+                            var help = new List<string>();
+                            help.Add(errorModel.ErrorMessage);
+                            TempData["Error"] = help;
+                        }
+                    }
+                }
                 return Redirect(Request.UrlReferrer.PathAndQuery);
             }
 

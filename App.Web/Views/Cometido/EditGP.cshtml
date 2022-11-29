@@ -537,7 +537,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //$('.datepicker').datepicker();
-        $("#PlacaVehiculo").attr('disabled', true);
+        //$("#PlacaVehiculo").attr('disabled', true);
         $("#TipoVehiculoId").attr('disabled', true);
         $("#TipoReembolsoId").attr('disabled', true);
         $('#Financia').hide(100);
@@ -616,7 +616,7 @@
         }
 
         //Habilita tipo vehiculo
-        $('input:checkbox[name="Vehiculo"]').change(function () {
+        /*$('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
@@ -627,7 +627,7 @@
                 $("#VehiculoObservaciones").attr('disabled', true);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
-        });
+        });*/
 
         /*funcion que bloquea pasajes*/
         if (document.getElementById("ReqPasajeAereo").checked == true) {
@@ -666,7 +666,7 @@
 
     /**************************************************************************************************/
     /*Habilita tipo vehiculo*/
-    $('input:checkbox[name="Vehiculo"]').change(function () {
+    /*$('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
             $('#auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
@@ -676,7 +676,7 @@
             $('#auto').show();
 
         }
-    });
+    });*/
 
     /*Muestra texto de pasaje terrestre*/
     $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
