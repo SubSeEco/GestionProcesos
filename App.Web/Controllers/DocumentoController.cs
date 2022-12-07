@@ -161,7 +161,7 @@ namespace App.Web.Controllers
                 {                    
                     ModelState.AddModelError(string.Empty, "Debe adjuntar un documento con extension PDF.");   
                 }
-                if (size > 52428800) 
+                if (size > 62914560) 
                 {
                     ModelState.AddModelError(string.Empty, "El archivo debe ser de maximo 50 MB.");
                 }

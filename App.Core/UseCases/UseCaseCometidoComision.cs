@@ -1320,7 +1320,7 @@ namespace App.Core.UseCases
                         response.Errors.Add("Se debe señalar el tipo de vehiculo.");
                     }
 
-                    if (string.IsNullOrEmpty(obj.PlacaVehiculo.Trim()))
+                    if (string.IsNullOrEmpty(obj.PlacaVehiculo))
                         response.Errors.Add("Se debe señalar la placa patente del vehiculo.");
                 }
 
@@ -1465,8 +1465,8 @@ namespace App.Core.UseCases
                         response.Errors.Add("Se debe señalar el tipo de vehiculo.");
                     }
 
-                    if (obj.PlacaVehiculo.IsNullOrWhiteSpace())
-                        response.Errors.Add("Se debe señalar la placa patente del vehiculo.");
+                    /*if (obj.PlacaVehiculo.IsNullOrWhiteSpace())
+                        response.Errors.Add("Se debe señalar la placa patente del vehiculo.");*/
                 }
 
                 if (!string.IsNullOrEmpty(obj.GradoDescripcion))
@@ -4997,10 +4997,10 @@ namespace App.Core.UseCases
                                 throw new Exception("Se debe generar Documento de Acto Administrativo");
                             }
 
-                            if(comet.Vehiculo && comet.PlacaVehiculo.Trim().IsNullOrWhiteSpace())
+                            /*if(comet.Vehiculo && comet.PlacaVehiculo.Trim().IsNullOrWhiteSpace())
                             {
                                 response.Errors.Add("Falta ingresar Patente del " + comet.TipoVehiculoDescripcion);
-                            }
+                            }*/
 
                         }
                     }
@@ -5153,10 +5153,10 @@ namespace App.Core.UseCases
                             }
                         }
 
-                        if(com.Vehiculo && com.PlacaVehiculo.IsNullOrWhiteSpace())
+                        /*if(com.Vehiculo && com.PlacaVehiculo.IsNullOrWhiteSpace())
                         {
                             response.Errors.Add("Falta agregar Patente del Vehiculo.");
-                        }
+                        }*/
 
                         /*var lista = new List<Destinos>();
                         for(int i =0; i < com.Destinos.Count(); i++)

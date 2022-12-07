@@ -219,12 +219,11 @@ namespace App.Web.Controllers
                             documento.Metadata = metadata.Metadata;
                             documento.Type = metadata.Type;
                         }
-
-                    var size = target.Length;
-                    if(size> 52428800)
-                    {
-                        ModelState.AddModelError(string.Empty, "El archivo " + file.FileName + " excede el maximo de 50 MB.");
-                    }
+                        var size = target.Length;
+                        if(size> 62914560)
+                        {
+                            ModelState.AddModelError(string.Empty, "El archivo " + file.FileName + " excede el maximo de 50 MB.");
+                        }
                     }
 
                     _repository.Create(documento);

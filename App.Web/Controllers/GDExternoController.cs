@@ -282,7 +282,7 @@ namespace App.Web.Controllers
                     }
                     
                     var size = target.Length;
-                    if (size > 52428800)
+                    if (size > 62914560)
                     {
                         ModelState.AddModelError(string.Empty, "El archivo " + file.FileName + " excede el maximo de 50 MB.");
                     }

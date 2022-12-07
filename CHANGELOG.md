@@ -2,6 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.5.7.1 - Cometidos y Gestión Procesos - 07-12-2022]
+
+## Changed
+
+- Se aumento el tamaño de los documentos adjuntos, tanto en GD interno, GD externo como en Cometidos.
+- Se elimino la validacion de la patente.
+
 ## [2.5.7 - Cometidos y Gestion Procesos - 29-11-2022]
 
 ## Added
