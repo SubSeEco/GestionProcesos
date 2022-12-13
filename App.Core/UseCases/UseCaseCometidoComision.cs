@@ -1626,12 +1626,13 @@ namespace App.Core.UseCases
                 //bool adyacente = true;
                 if (cometido != null)
                 {
+                    var localidad = obj.LocalidadId.Value;
                     switch (cometido.IdConglomerado.Value)
                     {
                         case 1:
                             if (obj.IdComuna == "01101" || obj.IdComuna == "01107")
                             {
-                                if (obj.LocalidadId.Value == 3944)
+                                if (localidad == 3944)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1648,7 +1649,8 @@ namespace App.Core.UseCases
                         case 2:
                             if (obj.IdComuna == "02101")
                             {
-                                if(obj.LocalidadId.Value==3945 || obj.LocalidadId.Value==3946 || obj.LocalidadId.Value == 3947 || obj.LocalidadId.Value == 3948)
+                                if (localidad == 13 || localidad == 3945 || localidad == 3946 ||
+                                    localidad == 3947 || localidad == 3948)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1663,7 +1665,7 @@ namespace App.Core.UseCases
                                 }
                             }else if(obj.IdComuna=="02102")
                             {
-                                if (obj.LocalidadId.Value == 3949)
+                                if (localidad == 3949)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1689,14 +1691,12 @@ namespace App.Core.UseCases
                         case 3:
                             if (obj.IdComuna == "03101")
                             {
-                                if (obj.LocalidadId.Value == 3949 || obj.LocalidadId.Value == 3950
-                                || obj.LocalidadId.Value == 3951
-                                || obj.LocalidadId.Value == 3952
-                                || obj.LocalidadId.Value == 3953
-                                || obj.LocalidadId.Value == 3954
-                                || obj.LocalidadId.Value == 3955
-                                || obj.LocalidadId.Value == 3956
-                                || obj.LocalidadId.Value == 3957)
+                                if (localidad == 3949 || localidad == 3950 || 
+                                    localidad == 3951 || localidad == 3952 || 
+                                    localidad == 3953 || localidad == 3954 || 
+                                    localidad == 3955 || localidad == 3956 || 
+                                    localidad == 3957 || localidad == 52 ||
+                                    localidad == 1578)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1720,7 +1720,7 @@ namespace App.Core.UseCases
                                 }
                             }else if(obj.IdComuna == "04102")
                             {
-                                if(obj.LocalidadId.Value == 3959 || obj.LocalidadId.Value==3960)
+                                if(localidad == 3959 || localidad==3960)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1743,25 +1743,19 @@ namespace App.Core.UseCases
                             }
                             break;
                         case 5:
-                            if (obj.IdComuna == "05101"
-                                || obj.IdComuna == "05109"
-                                || obj.IdComuna == "05103"
-                                || obj.IdComuna == "05801"
-                                || obj.IdComuna == "05804"
-                                || obj.IdComuna == "05802"
-                                || obj.IdComuna == "05803"
-                                || obj.IdComuna == "05501"
-                                || obj.IdComuna == "05107"
-                                || obj.IdComuna == "05602"
-                                || obj.IdComuna == "05603"
-                                || obj.IdComuna == "05604"
-                                || obj.IdComuna == "05605"
-                                || obj.IdComuna == "05601"
-                                || obj.IdComuna == "05606")
+                            if (obj.IdComuna == "05101" || obj.IdComuna == "05109" ||
+                                obj.IdComuna == "05103" || obj.IdComuna == "05801" ||
+                                obj.IdComuna == "05804" || obj.IdComuna == "05802" || 
+                                obj.IdComuna == "05803" || obj.IdComuna == "05501" || 
+                                obj.IdComuna == "05107" || obj.IdComuna == "05602" ||
+                                obj.IdComuna == "05603" || obj.IdComuna == "05604" || 
+                                obj.IdComuna == "05605" || obj.IdComuna == "05601" ||
+                                obj.IdComuna == "05606")
                             {
                                 if(obj.IdComuna=="05603")
                                 {
-                                    if(obj.LocalidadId.Value==3961 || obj.LocalidadId.Value==3962)
+                                    if (localidad == 3961 || localidad == 3962 ||
+                                        localidad == 2206 || localidad == 2203)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1775,7 +1769,7 @@ namespace App.Core.UseCases
                                     }
                                 }else if(obj.IdComuna== "05606")
                                 {
-                                    if(obj.LocalidadId.Value==3963)
+                                    if (localidad == 3963 || localidad == 284)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1800,20 +1794,17 @@ namespace App.Core.UseCases
 
                             break;
                         case 6:
-                            if (obj.IdComuna == "06101"
-                           || obj.IdComuna == "06108"
-                           || obj.IdComuna == "06102"
-                           || obj.IdComuna == "06110"
-                           || obj.IdComuna == "06106"
-                           || obj.IdComuna == "06111"
-                           || obj.IdComuna == "06116"
-                           || obj.IdComuna == "06103"
-                           || obj.IdComuna == "06104"
-                           || obj.IdComuna == "06105")
+                            if (obj.IdComuna == "06101" || obj.IdComuna == "06108" ||
+                                obj.IdComuna == "06102" || obj.IdComuna == "06110" ||
+                                obj.IdComuna == "06106" || obj.IdComuna == "06111" ||
+                                obj.IdComuna == "06116" || obj.IdComuna == "06103" ||
+                                obj.IdComuna == "06104" || obj.IdComuna == "06105")
                             {
                                 if(obj.IdComuna== "06108")
                                 {
-                                    if(obj.LocalidadId.Value==3965||obj.LocalidadId.Value==3966||obj.LocalidadId.Value==3967)
+                                    if (localidad == 3965 || localidad == 3966 ||
+                                        localidad == 3967 || localidad == 2508 ||
+                                        localidad == 388)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1827,7 +1818,7 @@ namespace App.Core.UseCases
                                     }
                                 }else if(obj.IdComuna == "06110")
                                 {
-                                    if (obj.LocalidadId.Value == 3968)
+                                    if (localidad == 3968)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1841,7 +1832,7 @@ namespace App.Core.UseCases
                                     }
                                 }else if(obj.IdComuna=="06116")
                                 {
-                                    if (obj.LocalidadId.Value == 3964)
+                                    if (localidad == 3964)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1865,17 +1856,17 @@ namespace App.Core.UseCases
                             }
                             break;
                         case 7:
-                            if (obj.IdComuna == "07101" || obj.IdComuna == "07105"
-                                || obj.IdComuna == "07106" || obj.IdComuna == "07107"
-                                || obj.IdComuna == "07109" || obj.IdComuna == "07110")
+                            if (obj.IdComuna == "07101" || obj.IdComuna == "07105" || 
+                                obj.IdComuna == "07106" || obj.IdComuna == "07107" || 
+                                obj.IdComuna == "07109" || obj.IdComuna == "07110")
                             {
                                 if(obj.IdComuna=="07109")
                                 {
-                                    if(obj.LocalidadId == 3969 ||
-                                        obj.LocalidadId == 3970 ||
-                                        obj.LocalidadId == 3971 ||
-                                        obj.LocalidadId == 3972 ||
-                                        obj.LocalidadId == 3973 )
+                                    if (localidad == 3969 || localidad == 3970 ||
+                                        localidad == 3971 || localidad == 3972 ||
+                                        localidad == 3973 || localidad == 896 ||
+                                        localidad == 882 || localidad == 895 ||
+                                        localidad == 3121)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1899,16 +1890,11 @@ namespace App.Core.UseCases
                             }
                             break;
                         case 8:
-                            if (obj.IdComuna == "08101"
-                             || obj.IdComuna == "08108"
-                             || obj.IdComuna == "08103"
-                             || obj.IdComuna == "08107"
-                             || obj.IdComuna == "08110"
-                             || obj.IdComuna == "08112"
-                             || obj.IdComuna == "08102"
-                             || obj.IdComuna == "08106"
-                             || obj.IdComuna == "08401"
-                             || obj.IdComuna == "08406")
+                            if (obj.IdComuna == "08101" || obj.IdComuna == "08108"|| 
+                                obj.IdComuna == "08103" || obj.IdComuna == "08107"|| 
+                                obj.IdComuna == "08110" || obj.IdComuna == "08112"|| 
+                                obj.IdComuna == "08102" || obj.IdComuna == "08106"|| 
+                                obj.IdComuna == "08401" || obj.IdComuna == "08406")
                             {
                                 if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
                                 {
@@ -1928,15 +1914,14 @@ namespace App.Core.UseCases
                             }
                             break;
                         case 10:
-                            if (obj.IdComuna == "10101" 
-                                || obj.IdComuna == "10107"
-                                || obj.IdComuna == "10105"
-                                || obj.IdComuna == "10109")
+                            if (obj.IdComuna == "10101" || obj.IdComuna == "10107" || 
+                                obj.IdComuna == "10105" || obj.IdComuna == "10109")
                             {
                                 if(obj.IdComuna=="10101")
                                 {
-                                    if(obj.LocalidadId.Value == 3974 || obj.LocalidadId.Value == 3975
-                                        || obj.LocalidadId.Value == 3976 || obj.LocalidadId.Value==3977)
+                                    if (localidad == 3974 || localidad == 3975 ||
+                                        localidad == 3976 || localidad == 3977 ||
+                                        localidad == 1251 || localidad == 1254)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1951,7 +1936,7 @@ namespace App.Core.UseCases
                                 }
                                 else if(obj.IdComuna=="10109")
                                 {
-                                    if(obj.LocalidadId.Value == 3978 || obj.LocalidadId.Value == 3979 )
+                                    if(localidad == 3978 || localidad == 3979 )
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1976,53 +1961,32 @@ namespace App.Core.UseCases
                         //case 11: /* hace algo*/; break;
                         //case 12: /* hace algo*/; break;
                         case 13:
-                            if (obj.IdComuna == "13101"
-                            || obj.IdComuna == "13130"
-                            || obj.IdComuna == "13129"
-                            || obj.IdComuna == "13131"
-                            || obj.IdComuna == "13109"
-                            || obj.IdComuna == "13401"
-                            || obj.IdComuna == "13201"
-                            || obj.IdComuna == "13111"
-                            || obj.IdComuna == "13112"
-                            || obj.IdComuna == "13110"
-                            || obj.IdComuna == "13122"
-                            || obj.IdComuna == "13118"
-                            || obj.IdComuna == "13120"
-                            || obj.IdComuna == "13113"
-                            || obj.IdComuna == "13114"
-                            || obj.IdComuna == "13123"
-                            || obj.IdComuna == "13104"
-                            || obj.IdComuna == "13125"
-                            || obj.IdComuna == "13128"
-                            || obj.IdComuna == "13117"
-                            || obj.IdComuna == "13103"
-                            || obj.IdComuna == "13126"
-                            || obj.IdComuna == "13124"
-                            || obj.IdComuna == "13106"
-                            || obj.IdComuna == "13119"
-                            || obj.IdComuna == "13102"
-                            || obj.IdComuna == "13105"
-                            || obj.IdComuna == "13127"
-                            || obj.IdComuna == "13132"
-                            || obj.IdComuna == "13116"
-                            || obj.IdComuna == "13108"
-                            || obj.IdComuna == "13121"
-                            || obj.IdComuna == "13107"
-                            || obj.IdComuna == "13115"
-                            || obj.IdComuna == "13302"
-                            || obj.IdComuna == "13403"
-                            || obj.IdComuna == "13604"
-                            || obj.IdComuna == "13605"
-                            || obj.IdComuna == "13602"
-                            || obj.IdComuna == "13603"
-                            || obj.IdComuna == "13402"
-                            || obj.IdComuna == "13404"
-                            || obj.IdComuna == "13202"
-                            || obj.IdComuna == "13301")
+                            if (obj.IdComuna == "13101" || obj.IdComuna == "13130" || 
+                                obj.IdComuna == "13129" || obj.IdComuna == "13131" || 
+                                obj.IdComuna == "13109" || obj.IdComuna == "13401" || 
+                                obj.IdComuna == "13201" || obj.IdComuna == "13111" || 
+                                obj.IdComuna == "13112" || obj.IdComuna == "13110" || 
+                                obj.IdComuna == "13122" || obj.IdComuna == "13118" || 
+                                obj.IdComuna == "13120" || obj.IdComuna == "13113" || 
+                                obj.IdComuna == "13114" || obj.IdComuna == "13123" || 
+                                obj.IdComuna == "13104" || obj.IdComuna == "13125" || 
+                                obj.IdComuna == "13128" || obj.IdComuna == "13117" || 
+                                obj.IdComuna == "13103" || obj.IdComuna == "13126" || 
+                                obj.IdComuna == "13124" || obj.IdComuna == "13106" || 
+                                obj.IdComuna == "13119" || obj.IdComuna == "13102" || 
+                                obj.IdComuna == "13105" || obj.IdComuna == "13127" || 
+                                obj.IdComuna == "13132" || obj.IdComuna == "13116" || 
+                                obj.IdComuna == "13108" || obj.IdComuna == "13121" || 
+                                obj.IdComuna == "13107" || obj.IdComuna == "13115" || 
+                                obj.IdComuna == "13302" || obj.IdComuna == "13403" || 
+                                obj.IdComuna == "13604" || obj.IdComuna == "13605" || 
+                                obj.IdComuna == "13602" || obj.IdComuna == "13603" || 
+                                obj.IdComuna == "13402" || obj.IdComuna == "13404" || 
+                                obj.IdComuna == "13202" || obj.IdComuna == "13301")
                             {
                                 // Validación para farellones, Peldehue y Colina Oriente
-                                if(obj.LocalidadId.Value == 3943 || obj.LocalidadId.Value == 3980|| obj.LocalidadId.Value == 3981)
+                                if (localidad == 3943 || localidad == 3980 ||
+                                    localidad == 3981 || localidad == 1313)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
