@@ -1649,8 +1649,10 @@ namespace App.Core.UseCases
                         case 2:
                             if (obj.IdComuna == "02101")
                             {
-                                if (localidad == 13 || localidad == 3945 || localidad == 3946 ||
-                                    localidad == 3947 || localidad == 3948)
+                                if (localidad == 12 || localidad == 13 || localidad == 3945 ||
+                                    localidad == 3946 || localidad == 3947 || localidad == 3948 ||
+                                    localidad == 1550 || localidad == 1551 || localidad == 1552 ||
+                                    localidad == 1553 || localidad == 1554)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1692,11 +1694,9 @@ namespace App.Core.UseCases
                             if (obj.IdComuna == "03101")
                             {
                                 if (localidad == 3949 || localidad == 3950 || 
-                                    localidad == 3951 || localidad == 3952 || 
-                                    localidad == 3953 || localidad == 3954 || 
-                                    localidad == 3955 || localidad == 3956 || 
-                                    localidad == 3957 || localidad == 52 ||
-                                    localidad == 1578)
+                                    localidad == 3951 || localidad == 3952 || localidad == 3953 ||
+                                    localidad == 3954 || localidad == 3955 || localidad == 3956 || 
+                                    localidad == 3957 || localidad == 52 || localidad == 1578)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -1800,7 +1800,37 @@ namespace App.Core.UseCases
                                 obj.IdComuna == "06116" || obj.IdComuna == "06103" ||
                                 obj.IdComuna == "06104" || obj.IdComuna == "06105")
                             {
-                                if(obj.IdComuna== "06108")
+                                if(obj.IdComuna == "06102")
+                                {
+                                    if(localidad == 2396)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }
+                                else if (obj.IdComuna == "06104")
+                                {
+                                    if (localidad == 2419 || localidad == 2420)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
+                                    }
+                                    else
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    }
+                                }
+                                else if(obj.IdComuna== "06108")
                                 {
                                     if (localidad == 3965 || localidad == 3966 ||
                                         localidad == 3967 || localidad == 2508 ||
@@ -1818,7 +1848,7 @@ namespace App.Core.UseCases
                                     }
                                 }else if(obj.IdComuna == "06110")
                                 {
-                                    if (localidad == 3968)
+                                    if (localidad == 3968 || localidad == 403)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1919,9 +1949,9 @@ namespace App.Core.UseCases
                             {
                                 if(obj.IdComuna=="10101")
                                 {
-                                    if (localidad == 3974 || localidad == 3975 ||
-                                        localidad == 3976 || localidad == 3977 ||
-                                        localidad == 1251 || localidad == 1254)
+                                    if (localidad == 3974 || localidad == 3975 || localidad == 3976 || 
+                                        localidad == 3977 || localidad == 1251 || localidad == 1254 ||
+                                        localidad == 1248)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1936,7 +1966,8 @@ namespace App.Core.UseCases
                                 }
                                 else if(obj.IdComuna=="10109")
                                 {
-                                    if(localidad == 3978 || localidad == 3979 )
+                                    if(localidad == 3978 || localidad == 3979 || localidad == 1256 ||
+                                       localidad == 1258)
                                     {
                                         response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                     }
@@ -1986,7 +2017,7 @@ namespace App.Core.UseCases
                             {
                                 // Validación para farellones, Peldehue y Colina Oriente
                                 if (localidad == 3943 || localidad == 3980 ||
-                                    localidad == 3981 || localidad == 1313)
+                                    localidad == 3981 || localidad == 1313 || localidad == 3982)
                                 {
                                     response.Warnings.Add("El destino señalado es una localidad adyacente exceptuada por el Decreto 90.");
                                 }
@@ -2491,23 +2522,23 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         case 2:
                             if (objController.IdComuna == "02101" || objController.IdComuna == "02102")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
-                                {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    adyacente = true;
-                                    metodoMensaje(obj);
-                                }
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        adyacente = true;
+                                        metodoMensaje(obj);
+                                    }
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         case 3:
                             if (objController.IdComuna == "03101")
@@ -2521,8 +2552,8 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         case 4:
                             if (objController.IdComuna == "04101" || objController.IdComuna == "04102")
@@ -2536,8 +2567,8 @@ namespace App.Core.UseCases
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         case 5:
                             if (objController.IdComuna == "05101"
@@ -2556,16 +2587,16 @@ namespace App.Core.UseCases
                                 || objController.IdComuna == "05601"
                                 || objController.IdComuna == "05606")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
-                                {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
-                                }
-                                else
-                                {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
+                                    else
+                                    {
                                     adyacente = false;
-                                }
-                            }
+                                        }
+                                    }
 
                             break;
                         case 6:
@@ -2580,11 +2611,11 @@ namespace App.Core.UseCases
                            || objController.IdComuna == "06104"
                            || objController.IdComuna == "06105")
                             {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
-                                {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
-                                }
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
                                 else
                                 {
                                     adyacente = false;
@@ -2598,17 +2629,17 @@ namespace App.Core.UseCases
                         || objController.IdComuna == "07107"
                         || objController.IdComuna == "07109"
                         || objController.IdComuna == "07110")
-                            {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
-                                {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
-                                }
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         case 8:
                             if (objController.IdComuna == "08101"
@@ -2641,28 +2672,28 @@ namespace App.Core.UseCases
                                     response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
                                     metodoMensaje(obj); adyacente = true;
                                 }
-                                else
-                                {
+                                    else
+                                    {
                                     adyacente = false;
                                 }
-                            }
+                                    }
                             break;
                         case 10:
                             if (obj.IdComuna == "10101"
                   || objController.IdComuna == "10107"
                   || objController.IdComuna == "10105"
                   || objController.IdComuna == "10109")
-                            {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
-                                {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
-                                }
+                                    {
+                                        if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                        {
+                                            response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                            metodoMensaje(obj); adyacente = true;
+                                        }
                                 else
                                 {
                                     adyacente = false;
+                                    }
                                 }
-                            }
                             break;
                         //case 11: /* hace algo*/; break;
                         //case 12: /* hace algo*/; break;
@@ -2711,12 +2742,12 @@ namespace App.Core.UseCases
                             || objController.IdComuna == "13404"
                             || objController.IdComuna == "13202"
                             || objController.IdComuna == "13301")
-                            {
-                                if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
                                 {
-                                    response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
-                                    metodoMensaje(obj); adyacente = true;
-                                }
+                                    if (obj.Dias100 + obj.Dias60 + obj.Dias40 > 0)
+                                    {
+                                        response.Warnings.Add("El destino señalado es una localidad adyacente, por lo tanto no le corresponde viatico");
+                                        metodoMensaje(obj); adyacente = true;
+                                    }
                                 else
                                 {
                                     adyacente = false;
