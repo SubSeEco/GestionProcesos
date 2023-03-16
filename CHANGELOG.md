@@ -2,64 +2,72 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.5.7.2 - GP Reportes - 16-03-2023]
+
+### Changed
+
+- Se agregaron localidades segun el decreto 90 y lo indicado por Control de Gestión.
+- Se optimizo la insercion de Destinos en Cometidos.
+- Se optimizo la consulta al reporte CDC Finanzas.
+
 ## [2.5.7.1 - Cometidos y Gestión Procesos - 07-12-2022]
 
-## Changed
+### Changed
 
 - Se aumento el tamaño de los documentos adjuntos, tanto en GD interno, GD externo como en Cometidos.
 - Se elimino la validacion de la patente.
 
 ## [2.5.7 - Cometidos y Gestion Procesos - 29-11-2022]
 
-## Added
+### Added
 
 - Se creo validación de limite de tamaño para los documentos subidos los sistemas.
 
-## Changed
+### Changed
 
 - Se modifico web.config para que soporte como maximo 100MB.
 
 ## [2.5.6 - Cometidos - 25-11-2022]
 
-## Changed
+### Changed
 
 - Se modifica carga de la vista en Tareas Grupales
 
-## Added
+### Added
 
 - Se agregaron patentes a las resoluciones faltantes dejandolas en Mayusculas.
 
 ## [2.2.5 - Gestion Procesos - 22-11-2022]
 
-## Added
+### Added
 
 - Se agrego vista Informe HSA en Tareas Grupales.
 
-## Changed
+### Changed
 
 - Se modifico libreria a su version 6.0.0 ya que la anterior estaba deprecada.
 
 ## [2.2.4 - Gestion Procesos - 17-11-2022]
 
-## Added
+### Added
 
 - Se crearon vistas parciales para los modulos del collapse del Home de la bandeja de tareas.
 - Se crearon nuevos valores en Enum DefinicionProcesos.
 
-## Changed
+### Changed
 
 - Se cambio la vista del home de Workflow para que ahora sea mas modular y facil de mantener.
 
 ## [2.2.3 - Cometidos - 17-11-2022]
 
-## Changed
+### Changed
 
 - Se cambio link para crear certificado en presupuesto por un boton.
 - Se corrigio el flujo desde jefa de servicio a gabinete en caso de que viaje la primera y el rechazo de este paso ya que se derivaba de forma erronea.
 
 ## [2.0.1 - Gestion Documental - 17-11-2022]
 
-## Changed
+### Changed
 
 - Se modifico la lsita de la tabla de workflow para que ahora se muestre, por defecto, de forma descendente por el ID.
 

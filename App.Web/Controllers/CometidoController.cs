@@ -3053,7 +3053,10 @@ namespace App.Web.Controllers
                     q.FechaCreacion.Month <= model.Hasta.Value.Month &&
                     q.FechaCreacion.Day <= model.Hasta.Value.Day);
             
-            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 82 && q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada); /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
+            /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
+            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 84 &&
+            q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada &&
+            !q.Anulada); 
             
             var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
             if (WorkflowId.Any())
@@ -3088,9 +3091,11 @@ namespace App.Web.Controllers
             List<Cometido> ListCom = new List<Cometido>();
             foreach (var _com in model.Result.ToList())
             {
-                var _cometido = _repository.Get<Cometido>().Where(c => c.ProcesoId == _com.ProcesoId);
-                if(_cometido.FirstOrDefault().Activo == true)
-                    ListCom.AddRange(_cometido);
+                var _cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == _com.ProcesoId);
+                if(_cometido.Activo == true)
+                {
+                    ListCom.Add(_cometido);
+                }
             }
             var result = ListCom;
 
@@ -3106,7 +3111,10 @@ namespace App.Web.Controllers
                 var pr = _repository.GetById<Proceso>(cometido.ProcesoId);
                 if(pr.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                 {
-                    var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                    //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
+                    var work = pr.Workflows.Where(q => q.DefinicionWorkflowId == 82 ||
+                    q.DefinicionWorkflowId == 84 || q.DefinicionWorkflowId == 86);
+
                     DateTime? inicio = null;
                     DateTime? fin = null;
 
@@ -3124,7 +3132,7 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 11].Value = cometido.FechaPagoSigfeTesoreria.HasValue ? cometido.FechaPagoSigfeTesoreria.Value.ToShortDateString() : "S/A";
 
                     /*se busca la fecha de creacion de las tareas*/
-                    foreach (var w in workflow)
+                    foreach (var w in work)
                     {
                         /*se solicita validacion q las tarea posterior a las 16.00 hrs, se cuenten para el dia sgte*/
                         //if (w.DefinicionWorkflowId == 82)
