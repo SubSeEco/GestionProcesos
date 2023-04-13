@@ -3193,9 +3193,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    //TODO
-                    #region Falta Confirmación de estas locales
-                    /*else if(dest.IdComuna=="06204")
+                    else if(dest.IdComuna=="06204")
                     {
                         if (local == 2731 || local == 2732 || local == 2733 || local == 2734 || local == 2735 ||
                             local == 2736 || local == 2737 || local == 2738 || local == 2739 || local == 2740 ||
@@ -3254,8 +3252,7 @@ namespace App.Core.UseCases
                                 metodoMensaje(dest);
                             }
                         }
-                    }*/
-                    #endregion
+                    }
                     else if (dest.IdComuna == "06301")
                     {
                         if (local == 563 || local == 564 || local == 565 || local == 566 || local == 567 ||

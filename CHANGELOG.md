@@ -2,6 +2,12 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6 - GP - 13-04-2023]
+
+### Changed
+
+- Se descomento la falta de confirmación de las localidad de Navidad, Paredones y Marchihue, dejandolas activas.
+
 ## [2.5.7.2 - GP Reportes - 16-03-2023]
 
 ### Changed
