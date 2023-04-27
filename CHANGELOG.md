@@ -2,6 +2,12 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6 - Cometidos - 27-04-2023]
+
+### Changed
+
+- Se modifico el JavaScript en Edit y EditGP para que cargue por defecto al momento de cargar la pagina.
+
 ## [2.6 - GP - 13-04-2023]
 
 ### Changed

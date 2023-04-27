@@ -262,18 +262,18 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
-                                        <div id="auto" style="display:none;">
-                                            <div class="input-field col s12 m6 l10">
+                                        <div id="datosVehiculo">                                            
+                                            <div class="auto input-field col s12 m6 l10">
                                                 @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
                                                 @Html.LabelFor(m => Model.TipoVehiculoId)
                                                 @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="input-field col s12 m2 l10">
+                                            <div class="auto input-field col s12 m2 l10">
                                                 @Html.TextBoxFor(m => Model.PlacaVehiculo)
                                                 @Html.LabelFor(m => Model.PlacaVehiculo)
                                                 @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="input-field  col s12 m2 l10">
+                                            <div class="auto input-field  col s12 m2 l10">
                                                 @Html.EditorFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
                                                 @Html.LabelFor(m => Model.VehiculoObservaciones)
                                             </div>
@@ -535,6 +535,22 @@
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
 <script type="text/javascript">
+
+    window.onload = function () {
+        var vehiculo = document.getElementById("Vehiculo");
+        var datosVehiculo = document.getElementById("datosVehiculo");
+        if (vehiculo.checked) {
+            $("#datosVehiculo").show();
+            datosVehiculo.style.display = "block";
+            $("#PlacaVehiculo").attr('disabled', false);
+            console.log("EXISTE PATENTE!")
+        } else {
+            $("#datosVehiculo").hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
+            console.log("MEH!")
+        }
+    };
+
     $(document).ready(function () {
         //$('.datepicker').datepicker();
         //$("#PlacaVehiculo").attr('disabled', true);
@@ -642,12 +658,14 @@
         /*Habilita tipo vehiculo*/
         $('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == false) {
-                $('#auto').hide(100);
+                $('#datosVehiculo').hide(100);
+                $('.auto').hide(100);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
             else {
                 $("#PlacaVehiculo").attr('disabled', false);
-                $('#auto').show();
+                $('#datosVehiculo').show();
+                $('.auto').show();
 
             }
         });

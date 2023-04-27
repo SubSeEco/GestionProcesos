@@ -289,7 +289,7 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
-                                        <div>
+                                        <div id="datosVehiculo">
                                             <div class="auto input-field col s12">
                                                 @*@Html.LabelFor(m => Model.TipoVehiculoId)*@
                                                 @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
@@ -619,18 +619,7 @@
 </div>
 
 <script type="text/javascript">
-    @*function Test(id) {
-        $.get("@Url.Action("ShowpopUp","Pasaje")/" + id,
-            function (data) {
-                $('.modal-body').html(data);
-            });
-
-        var detalle = document.getElementById('myModal');
-
-        detalle.modal("show");
-    }*@
-
-
+    
     $(function () {
         $("#tablaModal .details").click(function () {
             var destinoId = $(this).closest("tr").find("td").eq(0).html();
@@ -652,7 +641,20 @@
                 }
             })
         })
-    });
+    });    
+
+    window.onload=function() {
+        var vehiculo = document.getElementById("Vehiculo");
+        var datosVehiculo = document.getElementById("datosVehiculo");
+        if (vehiculo.checked) {
+            $("#datosVehiculo").show();
+            datosVehiculo.style.display = "block";
+            $("#PlacaVehiculo").attr('disabled', false);
+        } else {
+            $("#datosVehiculo").hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
+        }
+    };
 
     $(document).ready(function () {
         @*jQuery.datetimepicker.setLocale('es');
@@ -678,14 +680,13 @@
             //minDate: 0
         });*@
 
-        $("#PlacaVehiculo").attr('disabled', true);
         //$("#TipoVehiculoId").attr('disabled', true);
         //$('#auto').hide(100);
         $('.Financia').hide(100);
         $('select').formSelect();
         @*$('input:hidden').each(function (index, element) {
             $(element).appendTo($(element).parent());
-        });*@
+        });*@        
 
         //funcion que habilita opciones si se financia el organismo invitante
         $('input:radio[name="FinanciaOrganismo"]').change(function () {
@@ -772,15 +773,7 @@
         }
 
         /*Habilita tipo vehiculo*/
-        if (document.getElementById("Vehiculo").checked == false){
-            $('.auto').hide(100);
-            $("#PlacaVehiculo").attr('disabled', true);
-        }
-        if (document.getElementById("Vehiculo").checked == true) {
-            $("#PlacaVehiculo").attr('disabled', false);
-            $('.auto').show();
-        }
-
+        
         /*Muestra texto de pasaje terrestre*/
         if (document.getElementById("ReqPasajeTerrestre").checked == false) {
             $('#terrestre').hide(100);
@@ -828,6 +821,7 @@
     /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
+            $('#datosVehiculo').hide(100);
             $('.auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
             $("#VehiculoObservaciones").attr('disabled', true);
@@ -835,6 +829,7 @@
         else {
             $("#PlacaVehiculo").attr('disabled', false);
             $("#VehiculoObservaciones").attr('disabled', false);
+            $('#datosVehiculo').show();
             $('.auto').show();
         }
     });
