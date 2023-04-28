@@ -643,10 +643,11 @@
         })
     });    
 
-    window.onload=function() {
+    window.onload = function () {
         var vehiculo = document.getElementById("Vehiculo");
         var datosVehiculo = document.getElementById("datosVehiculo");
-        if (vehiculo.checked) {
+        
+        if (vehiculo.value="true") {
             $("#datosVehiculo").show();
             datosVehiculo.style.display = "block";
             $("#PlacaVehiculo").attr('disabled', false);

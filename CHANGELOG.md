@@ -2,7 +2,13 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
-## [2.6 - Cometidos - 27-04-2023]
+## [2.6.0.1 - Cometidos]
+
+### Changed
+
+- Se termino de modificar el Edit y EditGP para el modulo de patentes de Cometidos.
+
+## [2.6.0.1 - Cometidos - 27-04-2023]
 
 ### Changed
 

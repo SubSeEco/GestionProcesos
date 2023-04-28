@@ -264,18 +264,18 @@
                                         </div>
                                         <div id="datosVehiculo">                                            
                                             <div class="auto input-field col s12 m6 l10">
-                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new {@disabled="disabled"})
                                                 @Html.LabelFor(m => Model.TipoVehiculoId)
                                                 @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
                                             </div>
                                             <div class="auto input-field col s12 m2 l10">
-                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
-                                                @Html.LabelFor(m => Model.PlacaVehiculo)
+                                                <strong>@Html.DisplayNameFor(m => Model.PlacaVehiculo)</strong>
+                                                @Html.DisplayFor(m => Model.PlacaVehiculo)
                                                 @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                             </div>
                                             <div class="auto input-field  col s12 m2 l10">
-                                                @Html.EditorFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
-                                                @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                                <strong>@Html.DisplayNameFor(m => Model.VehiculoObservaciones)</strong>
+                                                @Html.DisplayFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea"} })
                                             </div>
                                         </div>
                                     </div>
