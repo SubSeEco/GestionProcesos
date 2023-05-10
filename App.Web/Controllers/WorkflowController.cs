@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using App.Core.Interfaces;
+using App.Core.UseCases;
+using App.Model.Cometido;
+using App.Model.Comisiones;
+using App.Model.Core;
+using App.Model.DTO;
+using App.Model.FirmaDocumento;
+using App.Model.GestionDocumental;
+using App.Model.HorasExtras;
+using App.Model.InformeHSA;
+using App.Model.Pasajes;
+using App.Model.ProgramacionHorasExtraordinarias;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
-using App.Model.Core;
-using App.Model.Pasajes;
-using App.Core.Interfaces;
-using App.Model.Cometido;
-using App.Model.Comisiones;
-using App.Model.FirmaDocumento;
-using App.Core.UseCases;
-using App.Model.InformeHSA;
-using App.Model.GestionDocumental;
-using App.Model.ProgramacionHorasExtraordinarias;
-using System;
-using App.Model.HorasExtras;
-using App.Model.DTO;
 
 namespace App.Web.Controllers
 {
@@ -182,6 +182,35 @@ namespace App.Web.Controllers
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra terminada");
             if (workflow != null && workflow.Anulada)
                 ModelState.AddModelError(string.Empty, "La tarea no se puede ejecutar ya que se encuentra anulada");
+
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.ConsultaIntegridad.ToString())
+            {
+                var obj = _repository.GetFirst<Consulta>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.ConsultaId;
+                    workflow.Entity = Util.Enum.Entidad.ConsultaIntegridad.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
+
+            //Denuncia Integridad
+            if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.DenunciaIntegridad.ToString())
+            {
+                var obj = _repository.GetFirst<Denuncia>(q => q.ProcesoId == workflow.ProcesoId);
+                if (obj != null)
+                {
+                    workflow.EntityId = obj.DenunciaIntegridadId;
+                    workflow.Entity = Util.Enum.Entidad.DenunciaIntegridad.ToString();
+                    obj.WorkflowId = workflow.WorkflowId;
+
+                    _repository.Update(obj);
+                    _repository.Save();
+                }
+            }
 
             if (workflow != null && workflow.DefinicionWorkflow.Entidad.Codigo == Util.Enum.Entidad.Cometido.ToString())
             {
@@ -507,7 +536,7 @@ namespace App.Web.Controllers
                     }
                     }                    
                 }
-            }*/            
+            }*/
 
             if (workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje || workflow.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudPasaje)
             {
@@ -526,7 +555,7 @@ namespace App.Web.Controllers
                 }
 
             }
-            
+
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString())
             {
                 var _useCaseInteractor = new UseCaseFirmaDocumento(_repository, _sigper, _file, _folio, _hsm, _email);
@@ -539,7 +568,7 @@ namespace App.Web.Controllers
 
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            
+
             //else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.Memorandum.ToString())
             //{
             //    var _useCaseInteractor = new UseCaseMemorandum(_repository, _sigper, _file, _folio, _hsm, _email);
@@ -562,7 +591,7 @@ namespace App.Web.Controllers
             //    }
             //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             //}
-            
+
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDInterno.ToString())
             {
                 var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
@@ -574,7 +603,7 @@ namespace App.Web.Controllers
                 }
                 _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             }
-            
+
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GDExterno.ToString())
             {
                 var _useCaseInteractor = new UseCaseGD(_repository, _file, _sigper, _email);
@@ -598,7 +627,7 @@ namespace App.Web.Controllers
             //    }
             //    _UseCaseResponseMessage.Errors.ForEach(q => ModelState.AddModelError(string.Empty, q));
             //}
-            
+
             else if (workflow.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.GeneraResolucion.ToString())
             {
                 var _useCaseInteractor = new UseCaseGeneraResolucion(_repository, _sigper, _email);

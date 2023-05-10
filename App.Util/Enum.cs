@@ -26,6 +26,8 @@ namespace App.Util
             HorasExtras,
             GeneraResolucion,
             FirmaDocumentoGenerico,
+            DenunciaIntegridad,
+            ConsultaIntegridad
         }
 
         public enum Grupo

@@ -104,10 +104,10 @@ namespace App.Web.Controllers
                     if (DefinicionProcesoId.Any())
                         query.Append(string.Format(" AND DefinicionProcesoId IN ({0})", string.Join(",", DefinicionProcesoId)));
 
-                    //if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                    //    for (int i = 0; i < model.TextSearch.Split().Count(); i++)
-                    //        if (!string.IsNullOrWhiteSpace(model.TextSearch.Split()[i]))
-                    //            query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i].Trim()));
+                    if (!string.IsNullOrWhiteSpace(model.TextSearch))
+                        for (int i = 0; i < model.TextSearch.Split().Count(); i++)
+                            if (!string.IsNullOrWhiteSpace(model.TextSearch.Split()[i]))
+                                query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i].Trim()));
 
                     var email = UserExtended.Email(User);
 
