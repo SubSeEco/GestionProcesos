@@ -431,6 +431,29 @@
     <Content Include="Views\Usuario\Details.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Workflow\Documents.cshtml" />
+    <Content Include="Views\Workflow\Execute.cshtml" />
+    <Content Include="Views\Workflow\Footer.cshtml" />
+    <Content Include="Views\Workflow\Forward.cshtml" />
+    <Content Include="Views\Workflow\Header.cshtml" />
+    <Content Include="Views\Workflow\History.cshtml" />
+    <Content Include="Views\Workflow\Index.cshtml" />
+    <Content Include="Views\Workflow\OK.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexCometidosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexConsultaIntegridadGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexDenunciaIntegridadGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexFirmaDocumentosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexGestionDocumentalGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexHSAPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexHSAGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_TareaGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexCometidosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexConsultaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexDenunciaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexFirmaDocumentosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexGestionDocumentalPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_TareaPersonal.cshtml" />
+    <Content Include="Views\Workflow\Send.cshtml" />
     <Content Include="Views\Workflow\Sign.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -442,7 +465,9 @@
     <Compile Include="Controllers\CentroCostoController.cs" />
     <Compile Include="Controllers\CometidoComisionController.cs" />
     <Compile Include="Controllers\ComisionController.cs" />
+    <Compile Include="Controllers\ConsultaIntegridadController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
+    <Compile Include="Controllers\DenunciaIntegridadController.cs" />
     <Compile Include="Controllers\DestinosPasajesController.cs" />
     <Compile Include="Controllers\DestinosComisionController.cs" />
     <Compile Include="Controllers\DestinosController.cs" />
@@ -520,7 +545,6 @@
     <Content Include="Views\Proceso\Delete.cshtml" />
     <Content Include="Views\Proceso\Details.cshtml" />
     <Content Include="Views\Proceso\Index.cshtml" />
-    <Content Include="Views\Workflow\Send.cshtml" />
     <Content Include="Views\Configuracion\Details.cshtml" />
     <Content Include="Views\Configuracion\Edit.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
@@ -552,14 +576,12 @@
     <Content Include="Views\Programa\Details.cshtml" />
     <Content Include="Views\Programa\Edit.cshtml" />
     <Content Include="Views\Programa\Index.cshtml" />
-    <Content Include="Views\Workflow\Documents.cshtml" />
     <Content Include="Views\Documento\Sign.cshtml" />
     <Content Include="Views\Rubrica\Create.cshtml" />
     <Content Include="Views\Rubrica\Delete.cshtml" />
     <Content Include="Views\Rubrica\Details.cshtml" />
     <Content Include="Views\Rubrica\Edit.cshtml" />
     <Content Include="Views\Rubrica\Index.cshtml" />
-    <Content Include="Views\Workflow\Footer.cshtml" />
     <Content Include="Views\Documento\Index.cshtml" />
     <Content Include="Views\Documento\Details.cshtml" />
     <Content Include="Views\Cometido\Create.cshtml" />
@@ -665,15 +687,12 @@
     <Content Include="Views\InformeHSA\Pdf.cshtml" />
     <Content Include="Views\InformeHSA\Sign.cshtml" />
     <Content Include="Views\InformeHSA\View.cshtml" />
-    <Content Include="Views\Workflow\Execute.cshtml" />
     <Content Include="Views\Region\Create.cshtml" />
     <Content Include="Views\Region\Delete.cshtml" />
     <Content Include="Views\Region\Details.cshtml" />
     <Content Include="Views\Region\Edit.cshtml" />
     <Content Include="Views\Region\Index.cshtml" />
     <Content Include="Views\Shared\_Message.cshtml" />
-    <Content Include="Views\Workflow\Header.cshtml" />
-    <Content Include="Views\Workflow\Forward.cshtml" />
     <Content Include="Views\Viatico\Index.cshtml" />
     <Content Include="Views\Viatico\Create.cshtml" />
     <Content Include="Views\Viatico\Details.cshtml" />
@@ -723,16 +742,13 @@
     <Content Include="Views\Shared\_Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
-    <Content Include="Views\Workflow\OK.cshtml" />
     <Content Include="Views\Proceso\Header.cshtml" />
-    <Content Include="Views\Workflow\History.cshtml" />
     <Content Include="Views\ProcesoPersonal\Delete.cshtml" />
     <Content Include="Views\ProcesoPersonal\Details.cshtml" />
     <Content Include="Views\ProcesoPersonal\Index.cshtml" />
     <Content Include="Views\Proceso\View.cshtml" />
     <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
     <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
-    <Content Include="Views\Workflow\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\GDInterno\Create.cshtml" />
     <Content Include="Views\GDInterno\Details.cshtml" />
@@ -796,16 +812,25 @@
     <Content Include="Views\Shared\_PartialDestinos.cshtml" />
     <Content Include="Views\Cometido\ValidaMinistro.cshtml" />
     <Content Include="Views\Cometido\ValidaSubseAlMinistro.cshtml" />
-    <Content Include="Views\Workflow\_IndexGestionDocumentalPersonal.cshtml" />
-    <Content Include="Views\Workflow\_IndexHSA.cshtml" />
-    <Content Include="Views\Workflow\_IndexCometidosPersonal.cshtml" />
-    <Content Include="Views\Workflow\_IndexFirmaDocumentosPersonal.cshtml" />
-    <Content Include="Views\Workflow\_TareaPersonal.cshtml" />
-    <Content Include="Views\Workflow\_TareaGrupal.cshtml" />
-    <Content Include="Views\Workflow\_IndexCometidosGrupal.cshtml" />
-    <Content Include="Views\Workflow\_IndexFirmaDocumentosGrupal.cshtml" />
-    <Content Include="Views\Workflow\_IndexGestionDocumentalGrupal.cshtml" />
-    <Content Include="Views\Workflow\_IndexHSAGrupal.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\Create.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\Edit.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaAbogado.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaCoordinador.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaJefatura.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\View.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\Create.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\Edit.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaAbogado.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaCoordinador.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaInvestigador.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaJefatura.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaSubsecretario.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\View.cshtml" />
+    <Content Include="Views\Workflow\Archive.cshtml" />
+    <Content Include="Views\Workflow\Details.cshtml" />
+    <Content Include="Views\Workflow\Index_old.cshtml" />
+    <Content Include="Views\Workflow\Next.cshtml" />
+    <Content Include="Views\Workflow\Validate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -838,6 +863,7 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

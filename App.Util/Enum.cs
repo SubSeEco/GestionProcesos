@@ -62,7 +62,7 @@ namespace App.Util
             FirmanteHEPag = 22,
             CargoFirmanteHEPag = 23,
             DistribucionHEPag = 24,
-            VistosHEPag = 25, 
+            VistosHEPag = 25,
             OrdenHECom = 26,
             FirmanteHECom = 27,
             CargoFirmanteHECom = 28,
@@ -107,7 +107,7 @@ namespace App.Util
             EjecutaGrupoEspecifico = 5,
             EjecutaUsuarioEspecifico = 6,
             EjecutaPorJefaturaDeQuienEjecutoTareaAnterior = 7,
-//            EjecutaDestinoGD = 8,
+            //            EjecutaDestinoGD = 8,
             EjecutaJefaturaDeFuncionarioQueViaja = 9,
             EjecutaSecretariaUnidadOrigen = 10,
             EjecutaSecretariaUnidadDestino = 11
@@ -192,7 +192,7 @@ namespace App.Util
             PlantillaRechazoFirmaMinistro = 78,
             PlantillaAprobacionFirmaSubsecretario = 78,
             PlantillaRechazoFirmaSubsecretario = 80,
-            
+
             /*Plantillas de correo --> horas extras*/
             PlantillaHorasExtras = 65,
             CorreoOfPartes = 66,
@@ -207,7 +207,7 @@ namespace App.Util
 
         public enum CometidoSecuencia
         {
-            SolicitudCometido=1,            
+            SolicitudCometido = 1,
             AprobacionJefatura = 2,
             IngresoCotizacion = 3,
             RevisaCotizacion = 4,
@@ -217,8 +217,8 @@ namespace App.Util
             AnalistaPresupuesto = 8,
             EncargadoPresupuesto = 9,
             AprobacionJuridica = 10,
-            AprobacionSubse=11,
-            AprobacionMinistro=12,
+            AprobacionSubse = 11,
+            AprobacionMinistro = 12,
             FirmaActoAdministrativo = 13,
             FirmaMinistro = 14,
             FirmaSubsecretario = 15,
@@ -228,9 +228,9 @@ namespace App.Util
             EncargadoTesoreria = 19,
             EncargadoFinanzas = 20,
             IngresoPagoTesoreria = 21,
-            VisacionSubsecretaria=22,
-            VisacionMinistro=23,
-            VisacionSubseMinistro=24,
+            VisacionSubsecretaria = 22,
+            VisacionMinistro = 23,
+            VisacionSubseMinistro = 24,
         }
 
         public enum DefinicionProceso
@@ -246,10 +246,17 @@ namespace App.Util
             ProgramacionHorasExtraordinarias = 16,
             HorasExtras = 19,
             GeneraResolucionHE = 20,
+            #region Desarrollo
+            //SolicitudFirma = 14,
+            //ConsultaIntegridad = 36,
+            //DenunciaIntegridad = 37,
+            #endregion
             SolicitudFirma = 1013,
+            DenunciaIntegridad = 1016,
+            ConsultaIntegridad = 1017
         }
 
-     
+
         //public enum Cometidos
         //{
         //    DiasAnticipacionIngreso = 7,

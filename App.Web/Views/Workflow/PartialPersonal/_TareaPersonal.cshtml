@@ -5,6 +5,8 @@
                q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDOficParte).Count();
     var firmaDoc = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudFirma).Count();
     var cometidos = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje).Count();
+    var consultaIntegridad = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.ConsultaIntegridad).Count();
+    var denunciaIntegridad = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.DenunciaIntegridad).Count();
     var hsa = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.InformeHSA).Count();
 }
 <ul class="collapsible popout">
@@ -21,7 +23,7 @@
         <div class="collapsible-body">
             @if (gd > 0)
             {
-                @Html.Partial("_IndexGestionDocumentalPersonal", Model)
+                @Html.Partial("PartialPersonal/_IndexGestionDocumentalPersonal", Model)
             }
             else
             {
@@ -39,7 +41,7 @@
         <div class="collapsible-body">
             @if (cometidos > 0)
             {
-                @Html.Partial("_IndexCometidosPersonal", Model)
+                @Html.Partial("PartialPersonal/_IndexCometidosPersonal", Model)
             }
             else
             {
@@ -57,7 +59,7 @@
         <div class="collapsible-body">
             @if (hsa > 0)
             {
-                @Html.Partial("_IndexHSA", Model)
+                @Html.Partial("PartialPersonal/_IndexHSAPersonal", Model)
             }
             else
             {
@@ -75,7 +77,43 @@
         <div class="collapsible-body">
             @if (firmaDoc > 0)
             {
-                @Html.Partial("_IndexFirmaDocumentosPersonal", Model)
+                @Html.Partial("PartialPersonal/_IndexFirmaDocumentosPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Consulta Integridad</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @consultaIntegridad
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (consultaIntegridad > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexConsultaIntegridadPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Denuncia Integridad</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @denunciaIntegridad
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (denunciaIntegridad > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexDenunciaIntegridadPersonal", Model)
             }
             else
             {

@@ -2,31 +2,153 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
-## [2.6.0.1 - Cometidos]
+## [2.6.1 - Cometidos - 08-05-2023]
 
 ### Changed
 
-- Se termino de modificar el Edit y EditGP para el modulo de patentes de Cometidos.
+- Se modifico el comportamiento de las vistas de EditGP y Edit para el modulo de patentes.
 
-## [2.6.0.1 - Cometidos - 27-04-2023]
-
-### Changed
-
-- Se modifico el JavaScript en Edit y EditGP para que cargue por defecto al momento de cargar la pagina.
-
-## [2.6 - GP - 13-04-2023]
+## [2.6.1 - Integridad - 05-05-2023]
 
 ### Changed
 
-- Se descomento la falta de confirmación de las localidad de Navidad, Paredones y Marchihue, dejandolas activas.
+- Se modificaron las vistas del flujo de Denuncia Integridad.
+- Se modificaron los checkbox y radiobuttons de l a vista create y edit de Denuncia
 
-## [2.5.7.2 - GP Reportes - 16-03-2023]
+### Added
+
+- Se agregaron nuevas columnas en la tabla Denuncia.
+- Se agrego al web.config conexión a DB Local de Gestion de Procesos.
+
+## [2.6.1 - Integridad - 27-04-2023]
 
 ### Changed
 
-- Se agregaron localidades segun el decreto 90 y lo indicado por Control de Gestión.
-- Se optimizo la insercion de Destinos en Cometidos.
-- Se optimizo la consulta al reporte CDC Finanzas.
+- Se realizan cambios visuales en Valida: Abogado, Coordinador, Jefatura y vista View del Proceso Consulta Integridad.
+
+## [2.6.1 - Integridad - 26-04-2023]
+
+### Changed
+
+- Se realizan cambios visuales en Create de Consulta.
+- Se modifica ingreso de Consultas y Denuncias para que estas sean siempre Procesos Reservados.
+
+## [2.5.9 Beta - GP Completo - 14-03-2023]
+
+### Added
+
+- Se creo Reporte Génerico GD, el cual solo mostrara los procesos y tareas que sean Gestion Documental.
+- Se crearon las vistas "View" en Consulta y Denuncia de Integridad ya que al inspeccionar el proceso en el buscador de procesos, arrojaba error ya que la vista no existia.
+
+### Changed
+
+- Se modifico el reporte Génerico, agregando la unidad como selector y cambio el nombre a "Reporte Procesos Génerico".
+- Se cambiaron las referencias a variables no ocupadas en el flujo de las vistas de Denuncia Integridad.
+
+## [2.5.9 Alpha - GP Core - 27-02-2023]
+
+### Added
+
+- Se agrego el proyecto de Integridad al core de GP.
+
+### Changed
+
+- Se cambio la ruta de las vistas parciales a carpetas individuales para que sea mas facil encontrarlas.
+
+## [2.5.9 Alpha - Gestión Procesos - 10-03-2023]
+
+### Changed
+
+- Se realizaron cambios visuales con los colores de los badge y los circulos de los estados en GD.
+
+## [2.5.9 Alpha - Gestion Procesos - 09-03-2023]
+
+### Added
+
+- Se creo filtro de tareas en el Home para Gestion Documental, tanto personal como grupal.
+- Se creo boton de plazo para los documentos que requieren firma.
+
+### Changed
+
+- Se modifico, en GD Oficina de partes, el modulo para que si un documento que es oficial requiere plazo de tramitación.
+
+## [2.5.9.1 Alpha - Cometidos - 07-03-2023]
+
+### Changed
+
+- Se realizo corrección al reporte CDCFinanzas, cambiando la llamada de las tareas por la lista de tareas dentro del proceso.
+
+## [2.5.9 - GP - 21-02-2023]
+
+### Added
+
+- Se creo nuevo modulo de Reportes de procesos por unidad.
+- Se creo reporte por unidad segun el usuario que esta conectado.
+- Se creo reporte de procesos pendientes por unidad segun el usuario conectado.
+
+## [2.5.9.1 - Cometidos - 17-02-2023]
+
+### Added
+
+- Se agregaron las localidades entregadas por Procesos en Excel a las cuales les corresponde viatico según Decreto 90.
+
+## [2.5.9.1 Alpha - Cometidos - 22-02-2023]
+
+### Added
+
+- Se creo metodo SwitchLocalidad, con la finalidad de hacer mas modular la insercion de las localidades.
+
+### Changed
+
+- Se modifico y corrigio el bug del switch del DestinoInsert para que no agregara todos los destinos como adjacentes.
+- Se modifico DestinoUpdate agregandose el nuevo metodo creado, SwitchLocalidad.
+
+## [2.5.9 Alpha - Cometidos - 15-02-2023]
+
+### Added
+
+- Se agregaron al UseCase de cometidos lo metodos post para Edit, Create y Delete.
+
+### Changed
+
+- Se modificaron los modal de Create y Delete para que funcionen como vista modal desde el index.
+- Por problemas configuración del DropdownList, se dejo el Edit como una vista externa y no como modal.
+- Se agrego Codigo para poder hacer referencia del ID de Región.
+- Se modifico la vista de Horas Extra para que los botones fueran con el mismo estilo que el resto de GP.
+
+## [2.5.8 Alpha - Cometidos - 05-01-2023]
+
+### Added
+
+- Se creo vista del la configuracion de patentes.
+
+### Changed
+
+- Se modifico el controlador de la configuracion de las patentes. Ahora llama a la base de dato y carga los datos en la vista.
+- Se cambio el nombre de la carpeta, y archivos de configuracion Patente por PatenteVehiculo.
+- Se cambio la ruta de la configuracion de patentes.
+
+## [2.5.8 Alpha - Cometidos - 03-01-2023]
+
+### Added
+
+- Se creo modulo de mantencion de patentes.
+- Se creo consulta JSON para obtener las patentes y cargalas de manera "dinamica" en Create, Edit y EditGP.
+- Se creo tabla PatenteVehiculo y sus respectivos modelos y llamadas.
+
+## [2.5.8 - Cometidos-GP - 19-01-2023]
+
+## Changed
+
+- Se modifico DestinoController para que aceptara el grado 5R.
+- Se modifico lista de tareas de GDExterno y GDInterno para que no desplegara las tareas anuladas.
+
+## [2.5.7.2 - Cometidos - 18-01-2023]
+
+## Changed
+
+- Se modifico la query del Reporte de Finanzas, optimizando el tiempo de ejecución.
+- Se modifico la ejecucion del reporte de contraloria, agregando el filtro al index de reportes.
 
 ## [2.5.7.1 - Cometidos y Gestión Procesos - 07-12-2022]
 

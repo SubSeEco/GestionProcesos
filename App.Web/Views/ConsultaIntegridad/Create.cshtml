@@ -1,0 +1,196 @@
+﻿@model App.Model.Core.Consulta
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="container">
+    @Html.Partial("_Message")
+
+    <div class="row">
+        <div class="col s12 m10 l8">
+            @using (Html.BeginForm("Create", "ConsultaIntegridad", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.ConsultaId)
+                @Html.HiddenFor(m => m.ProcesoId)
+                @Html.HiddenFor(m => m.WorkflowId)
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <strong>
+                                    @Html.DisplayNameFor(m => Model.Fecha)
+                                </strong>
+                                @Html.DisplayFor(m => Model.Fecha)
+                            </div>
+                            @*<div class="input-field col s12 m6 l6">
+                                <strong></strong>
+                            </div>*@
+                        </div>
+                        <ul class="collapsible popout">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">account_box</i>
+                                    <span style="font-weight: bold">Informacion Funcionario</span>
+                                </div>
+                                <div class="collapsible-body">
+                                    <p>
+                                        <strong>@Html.DisplayNameFor(m => m.Nombre)</strong>
+                                        @Html.TextBoxFor(m => m.Nombre)
+                                    </p>
+                                    <div class="row">
+                                        <p class="col s6">
+                                            <strong>@Html.DisplayNameFor(m => m.Rut)</strong>
+                                            @Html.TextBoxFor(m => m.Rut)
+                                        </p>
+                                        <p class="col s2">
+                                            <strong>@Html.DisplayNameFor(m => m.DV)</strong>
+                                            @Html.TextBoxFor(m => m.DV)
+                                        </p>
+                                    </div>
+                                    <p>
+                                        <strong>@Html.DisplayNameFor(m => m.Unidad)</strong>
+                                        @Html.TextBoxFor(m => m.Unidad)
+                                    </p>
+                                    <p>
+                                        <strong>@Html.DisplayNameFor(m => m.Email)</strong>
+                                        @Html.TextBoxFor(m => m.Email)
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">assignment</i>
+                                    <span style="font-weight: bold">Datos de Consulta</span>
+                                </div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <p><strong>@Html.DisplayNameFor(m => m.CampoPrivacidad)</strong></p>
+                                            <label>
+                                                @Html.RadioButtonFor(m => m.CampoPrivacidad, true)
+                                                <span>Si</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => m.CampoPrivacidad, false)
+                                                <span>No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <p><strong>@Html.DisplayNameFor(m => m.TipoRespuesta)</strong></p>
+                                            <label>
+                                                @*<input class="with-gap" name="TRespuesta" type="radio" value="CorreoElectronico" />*@
+                                                @Html.RadioButtonFor(m => m.CorreoElectronico, true)
+                                                <span>CORREO ELECTRÓNICO</span>
+                                            </label>
+                                            <label>
+                                                @*<input class="with-gap" name="TRespuesta" type="radio" value="CorreoPostal" />*@
+                                                @Html.RadioButtonFor(m => m.CorreoPostal, true)
+                                                <span>CORREO POSTAL</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="postal">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <strong>@Html.DisplayNameFor(m => m.Direccion)</strong>
+                                                @Html.TextBoxFor(m => m.Direccion)
+                                            </div>
+                                            <div class="col s12">
+                                                <strong>@Html.DisplayNameFor(m => m.Numero)</strong>
+                                                @Html.TextBoxFor(m => m.Numero)
+                                            </div>
+                                            <div class="col s12">
+                                                <strong>@Html.DisplayNameFor(m => m.DeptoOficina)</strong>
+                                                @Html.TextBoxFor(m => m.DeptoOficina)
+                                            </div>
+                                            <div class="col s12">
+                                                <strong>@Html.DisplayNameFor(m => m.Comuna)</strong>
+                                                @Html.TextBoxFor(m => m.Comuna)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="correo">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <strong>
+                                                    @Html.DisplayNameFor(m => m.Email)
+                                                </strong>
+                                                @Html.EditorFor(m =>m.Email)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <strong>
+                                                @Html.DisplayNameFor(m => m.ConsultaIntegridad)
+                                            </strong>
+                                            @Html.TextAreaFor(m => m.ConsultaIntegridad, new { @class = "materialize-textarea" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+    @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+</div>
+
+<script type="text/javascript">
+
+    $('.correo').hide(100);
+    $('.postal').hide(100);
+
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    });
+
+    if (document.getElementById("CorreoElectronico").checked == true) {
+        $('.postal').hide(100);
+        $('.correo').show();
+        document.getElementById("CorreoPostal").checked = false;
+    }
+
+    if (document.getElementById("CorreoPostal").checked == true) {
+        $('.postal').show();
+        $('.correo').hide(100);
+        document.getElementById("CorreoElectronico").checked = false;
+    }
+
+    $('input:radio[name="CorreoElectronico"]').change(function () {
+        if (document.getElementById("CorreoElectronico").checked == true) {
+            $('.postal').hide(100);
+            $('.correo').show();
+            document.getElementById("CorreoPostal").checked = false;
+        }
+    });
+
+    $('input:radio[name="CorreoPostal"]').change(function () {
+        if (document.getElementById("CorreoPostal").checked == true) {
+            $('.postal').show();
+            $('.correo').hide(100);
+            document.getElementById("CorreoElectronico").checked = false;
+        }
+    });
+    $(document).ready(function () {
+
+    });
+
+</script>
+
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

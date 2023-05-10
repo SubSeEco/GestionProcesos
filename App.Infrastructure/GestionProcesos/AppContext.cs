@@ -1,15 +1,15 @@
+using App.Model.Cometido;
+using App.Model.Comisiones;
+using App.Model.Core;
+using App.Model.FirmaDocumento;
+using App.Model.GestionDocumental;
+using App.Model.HorasExtras;
+using App.Model.InformeHSA;
+using App.Model.Pasajes;
+using App.Model.ProgramacionHorasExtraordinarias;
+using App.Model.Shared;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using App.Model.Core;
-using App.Model.InformeHSA;
-using App.Model.GestionDocumental;
-using App.Model.Cometido;
-using App.Model.Pasajes;
-using App.Model.Shared;
-using App.Model.Comisiones;
-using App.Model.FirmaDocumento;
-using App.Model.ProgramacionHorasExtraordinarias;
-using App.Model.HorasExtras;
 
 namespace App.Infrastructure.GestionProcesos
 {
@@ -28,6 +28,8 @@ namespace App.Infrastructure.GestionProcesos
             this.Database.CommandTimeout = 180;
         }
 
+        public virtual DbSet<Consulta> Consulta { get; set; }
+        public virtual DbSet<Denuncia> Denuncia { get; set; }
         public virtual DbSet<Configuracion> Configuracion { get; set; }
         public virtual DbSet<DefinicionProceso> DefinicionProceso { get; set; }
         public virtual DbSet<DefinicionWorkflow> DefinicionWorkflow { get; set; }

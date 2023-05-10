@@ -62,6 +62,7 @@
     <Compile Include="UseCases\UseCaseGeneraResolucion.cs" />
     <Compile Include="UseCases\UseCaseHorasExtras.cs" />
     <Compile Include="UseCases\UseCaseInformeHSA.cs" />
+    <Compile Include="UseCases\UseCaseIntegridad.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

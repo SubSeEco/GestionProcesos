@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+﻿using App.Core.Interfaces;
 using App.Model.Core;
-using App.Core.Interfaces;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using System.Web.Mvc;
 
 namespace App.Web.Controllers
 {
@@ -66,7 +66,8 @@ namespace App.Web.Controllers
         {
             ViewBag.EstadoProcesoId = new SelectList(_repository.Get<EstadoProceso>(), "EstadoProcesoId", "Descripcion");
 
-            var model = new DTOFilter() {
+            var model = new DTOFilter()
+            {
                 Select = _repository.Get<DefinicionProceso>(q => q.Habilitado).OrderBy(q => q.Nombre).ToList().Select(q => new Model.DTO.DTOSelect() { Id = q.DefinicionProcesoId, Descripcion = q.Nombre, Selected = false }),
             };
 
@@ -103,10 +104,10 @@ namespace App.Web.Controllers
                     if (DefinicionProcesoId.Any())
                         query.Append(string.Format(" AND DefinicionProcesoId IN ({0})", string.Join(",", DefinicionProcesoId)));
 
-                    if (!string.IsNullOrWhiteSpace(model.TextSearch))
-                        for (int i = 0; i < model.TextSearch.Split().Count(); i++)
-                            if (!string.IsNullOrWhiteSpace(model.TextSearch.Split()[i]))
-                                query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i].Trim()));
+                    //if (!string.IsNullOrWhiteSpace(model.TextSearch))
+                    //    for (int i = 0; i < model.TextSearch.Split().Count(); i++)
+                    //        if (!string.IsNullOrWhiteSpace(model.TextSearch.Split()[i]))
+                    //            query.Append(string.Format(" AND CONTAINS(Tags,'{0}')", model.TextSearch.Split()[i].Trim()));
 
                     var email = UserExtended.Email(User);
 

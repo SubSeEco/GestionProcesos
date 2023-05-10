@@ -1,4 +1,12 @@
-﻿using System;
+﻿using App.Core.Interfaces;
+using App.Model.Cometido;
+using App.Model.Comisiones;
+using App.Model.Core;
+using App.Model.Pasajes;
+using App.Model.Shared;
+using App.Model.Sigper;
+using App.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

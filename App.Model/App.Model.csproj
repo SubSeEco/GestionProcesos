@@ -80,8 +80,10 @@
     <Compile Include="Core\Accion.cs" />
     <Compile Include="Core\BaseEntity.cs" />
     <Compile Include="Core\Configuracion.cs" />
+    <Compile Include="Core\Consulta.cs" />
     <Compile Include="Core\DefinicionProceso.cs" />
     <Compile Include="Core\DefinicionWorkflow.cs" />
+    <Compile Include="Core\Denuncia.cs" />
     <Compile Include="Core\Documento.cs" />
     <Compile Include="Core\Entidad.cs" />
     <Compile Include="Core\Festivo.cs" />
