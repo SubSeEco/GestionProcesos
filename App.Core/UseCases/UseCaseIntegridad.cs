@@ -60,9 +60,19 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
 
+            if (!obj.AcosoLaboral && !obj.AcosoSexual &&
+                !obj.MaltratoLaboral && !obj.DelitoFinanciero && !obj.FaltaProbidad)
+            {
+                response.Errors.Add("Debe seleccionar un Tipo de Atentado.");
+            }
+
+            if (obj.NivelJerarquico.IsNullOrWhiteSpace())
+            {
+                response.Errors.Add("Debe seleccionar Nivel Jerarquico.");
+            }
+
             try
             {
-
                 if (response.IsValid)
                 {
                     _repository.Update(obj);

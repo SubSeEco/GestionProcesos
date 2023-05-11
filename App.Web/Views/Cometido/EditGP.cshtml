@@ -262,20 +262,20 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
-                                        <div id="datosVehiculo">                                            
-                                            <div class="auto input-field col s12 m6 l10">
-                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new {@disabled="disabled"})
+                                        <div id="auto" style="display:none;">                                            
+                                            <div class="input-field col s12 m6 l10">
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
                                                 @Html.LabelFor(m => Model.TipoVehiculoId)
                                                 @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="auto input-field col s12 m2 l10">
-                                                <strong>@Html.DisplayNameFor(m => Model.PlacaVehiculo)</strong>
-                                                @Html.DisplayFor(m => Model.PlacaVehiculo)
+                                            <div class="input-field col s12 m2 l10">
+                                                <strong>@Html.LabelFor(m => Model.PlacaVehiculo)</strong>
+                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
                                                 @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="auto input-field  col s12 m2 l10">
-                                                <strong>@Html.DisplayNameFor(m => Model.VehiculoObservaciones)</strong>
-                                                @Html.DisplayFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea"} })
+                                            <div class="input-field  col s12 m2 l10">
+                                                <strong>@Html.LabelFor(m => Model.VehiculoObservaciones)</strong>
+                                                @Html.TextBoxFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea"} })
                                             </div>
                                         </div>
                                     </div>
@@ -536,7 +536,7 @@
 
 <script type="text/javascript">
 
-    window.onload = function () {
+    /*window.onload = function () {
         var vehiculo = document.getElementById("Vehiculo");
         var datosVehiculo = document.getElementById("datosVehiculo");
         if (vehiculo.checked) {
@@ -549,7 +549,7 @@
             $("#PlacaVehiculo").attr('disabled', true);
             console.log("MEH!")
         }
-    };
+    };*/
 
     $(document).ready(function () {
         //$('.datepicker').datepicker();
@@ -632,7 +632,7 @@
         }
 
         //Habilita tipo vehiculo
-        /*$('input:checkbox[name="Vehiculo"]').change(function () {
+        $('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
@@ -643,7 +643,7 @@
                 $("#VehiculoObservaciones").attr('disabled', true);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
-        });*/
+        });
 
         /*funcion que bloquea pasajes*/
         if (document.getElementById("ReqPasajeAereo").checked == true) {
@@ -658,15 +658,12 @@
         /*Habilita tipo vehiculo*/
         $('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == false) {
-                $('#datosVehiculo').hide(100);
-                $('.auto').hide(100);
+                $('#auto').hide(100);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
             else {
                 $("#PlacaVehiculo").attr('disabled', false);
-                $('#datosVehiculo').show();
-                $('.auto').show();
-
+                $('#auto').show();
             }
         });
 
@@ -684,7 +681,7 @@
 
     /**************************************************************************************************/
     /*Habilita tipo vehiculo*/
-    /*$('input:checkbox[name="Vehiculo"]').change(function () {
+    $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
             $('#auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
@@ -694,7 +691,7 @@
             $('#auto').show();
 
         }
-    });*/
+    });
 
     /*Muestra texto de pasaje terrestre*/
     $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {

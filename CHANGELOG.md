@@ -2,6 +2,29 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6.2.1 - Cometidos - 11-05-2023]
+
+### Deleted
+
+- Se eliminan los cambios realizados en patentes de cometidos que se pasaron por error a produccion.
+
+## [2.6.2 - Integridad - 10-05-2023]
+
+### Changed
+
+- Se modificaron los dropdownlist en Edit y Create.
+
+## [2.6.2 - Integridad - 09-05-2023]
+
+### Changed
+
+- Se modifico la vista de Edit para que tome la fecha en Fecha Hecho.
+- Se modifico el Modelo Denuncia.
+
+### Added
+
+- Se agrego validacion de Nivel Jerarquico y Tipo Atentado.
+
 ## [2.6.1 - Cometidos - 08-05-2023]
 
 ### Changed

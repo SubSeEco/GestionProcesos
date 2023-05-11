@@ -289,7 +289,7 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
-                                        <div id="datosVehiculo">
+                                        <div>
                                             <div class="auto input-field col s12">
                                                 @*@Html.LabelFor(m => Model.TipoVehiculoId)*@
                                                 @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
@@ -643,19 +643,19 @@
         })
     });    
 
-    window.onload = function () {
-        var vehiculo = document.getElementById("Vehiculo");
-        var datosVehiculo = document.getElementById("datosVehiculo");
+    //window.onload = function () {
+    //    var vehiculo = document.getElementById("Vehiculo");
+    //    var datosVehiculo = document.getElementById("datosVehiculo");
         
-        if (vehiculo.value="true") {
-            $("#datosVehiculo").show();
-            datosVehiculo.style.display = "block";
-            $("#PlacaVehiculo").attr('disabled', false);
-        } else {
-            $("#datosVehiculo").hide(100);
-            $("#PlacaVehiculo").attr('disabled', true);
-        }
-    };
+    //    if (vehiculo.value="true") {
+    //        $("#datosVehiculo").show();
+    //        datosVehiculo.style.display = "block";
+    //        $("#PlacaVehiculo").attr('disabled', false);
+    //    } else {
+    //        $("#datosVehiculo").hide(100);
+    //        $("#PlacaVehiculo").attr('disabled', true);
+    //    }
+    //};
 
     $(document).ready(function () {
         @*jQuery.datetimepicker.setLocale('es');
@@ -774,7 +774,14 @@
         }
 
         /*Habilita tipo vehiculo*/
-        
+        if (document.getElementById("Vehiculo").checked == false) {
+            $('.auto').hide(100);
+            $("#PlacaVehiculo").attr('disabled', true);
+        }
+        if (document.getElementById("Vehiculo").checked == true) {
+            $("#PlacaVehiculo").attr('disabled', false);
+            $('.auto').show();
+        }
         /*Muestra texto de pasaje terrestre*/
         if (document.getElementById("ReqPasajeTerrestre").checked == false) {
             $('#terrestre').hide(100);
@@ -802,10 +809,15 @@
         if (document.getElementById("ReqPasajeAereo").checked == true) {
             $("#ReqPasajeTerrestre").attr('disabled', true);
             $("#Vehiculo").attr('disabled', true);
+            document.getElementById("Vehiculo").checked = false;
+            $('.auto').hide(100); 
         }
         else {
             $("#ReqPasajeTerrestre").attr('disabled', false);
             $("#Vehiculo").attr('disabled', false);
+            if (document.getElementById("Vehiculo").checked == true) {
+                $('.auto').show();
+            }
         }
     });
 
@@ -822,7 +834,7 @@
     /*Habilita tipo vehiculo*/
     $('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
-            $('#datosVehiculo').hide(100);
+            //$('#datosVehiculo').hide(100);
             $('.auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
             $("#VehiculoObservaciones").attr('disabled', true);
@@ -830,7 +842,7 @@
         else {
             $("#PlacaVehiculo").attr('disabled', false);
             $("#VehiculoObservaciones").attr('disabled', false);
-            $('#datosVehiculo').show();
+            //$('#datosVehiculo').show();
             $('.auto').show();
         }
     });

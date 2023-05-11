@@ -18,11 +18,17 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <div class="input-field cols 12 m6 l6">
+                            <div class="input-field col s12 m6 l6">
                                 <strong>
                                     @Html.DisplayNameFor(m=>m.Fecha)
                                 </strong>
                                 @Html.DisplayFor(m=>m.Fecha)
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <strong>
+                                    @Html.DisplayNameFor(m=>Model.DenunciaIntegridadId)
+                                </strong>
+                                @Html.DisplayFor(m=>Model.DenunciaIntegridadId)
                             </div>
                         </div>
                         <ul class="collapsible popout">
@@ -94,18 +100,6 @@
                                                 <span>Nivel Inferior</span>
                                             </label>
                                         </div>
-                                        @*<label>
-            <input class="with-gap" name="NivelJerarquico" type="radio" value="NivelSuperior" />
-            <span>Nivel Superior</span>
-        </label>
-        <label>
-            <input class="with-gap" name="NivelJerarquico" type="radio" value="IgualNivelJerarquico" />
-            <span>Igual Nivel Jerarquico</span>
-        </label>
-        <label>
-            <input class="with-gap" name="NivelJerarquico" type="radio" value="NivelInferior" />
-            <span>Nivel Inferior</span>
-        </label>*@
                                     </div>
                                     <div class="divider"></div>
                                     <br />
@@ -113,12 +107,16 @@
                                         <strong>@Html.DisplayNameFor(m => m.EsJefatura)</strong>
                                         <br />
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.EsJefatura, true)
-                                            <span>SI</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.EsJefatura, true)
+                                                <span>SI</span>
+                                            </label>
                                         </div>
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.EsJefatura,false)
-                                            <span>NO</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.EsJefatura,false)
+                                                <span>NO</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="divider"></div>
@@ -127,12 +125,16 @@
                                         <strong>@Html.DisplayNameFor(m => m.TrabajaDirecto)</strong>
                                         <br />
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.TrabajaDirecto,true)
-                                            <span>SI</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.TrabajaDirecto,true)
+                                                <span>SI</span>
+                                            </label>
                                         </div>
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.TrabajaDirecto,false)
-                                            <span>NO</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.TrabajaDirecto,false)
+                                                <span>NO</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="divider"></div>
@@ -141,12 +143,16 @@
                                         <strong>@Html.DisplayNameFor(m => m.EsDeConocimiento)</strong>
                                         <br />
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.EsDeConocimiento,true)
-                                            <span>SI</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.EsDeConocimiento,true)
+                                                <span>SI</span>
+                                            </label>
                                         </div>
                                         <div class="col s4">
-                                            @Html.RadioButtonFor(m=>m.EsDeConocimiento,false)
-                                            <span>NO</span>
+                                            <label>
+                                                @Html.RadioButtonFor(m=>m.EsDeConocimiento,false)
+                                                <span>NO</span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -192,19 +198,15 @@
                                     <div>
                                         <div id="divDestino">
                                             <div class="row">
-                                                <div class="col s12 m12 l12">
-                                                </div>
-                                                <div class="col s12 m12 l12">
-                                                    <strong>@Html.DisplayNameFor(m => m.DescripcionUnidadDenunciado)</strong>
-                                                    @Html.DropDownListFor(m => Model.DescripcionUnidadDenunciado, new SelectList(ViewBag.IdUnidadDenunciado, "Value", "Text", Model.IdUnidadDenunciado), "Seleccione...")
-                                                    @Html.DropDownList("UnidadDenunciado", null, "Seleccione...", new { @class = "browser-default", @id = "ddlUnidad" })
-                                                    @Html.ValidationMessageFor(m => Model.DescripcionUnidadDenunciado, "", new { @class = "red-text" })
+                                                <div class="input-field col s12 m12 l12">
+                                                    <strong>@Html.DisplayNameFor(m => m.IdUnidadDenunciado)</strong>
+                                                    @Html.DropDownListFor(m => Model.IdUnidadDenunciado, null, "Seleccione...", new { @class = "browser-default" })
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col s12 m12 l12">
+                                                <div class="input-field col s12 m12 l12">
                                                     <strong>@Html.DisplayNameFor(m => m.NombreDenunciado)</strong>
-                                                    @Html.DropDownList("NombreDenunciado", null, "Seleccione...", new { @class = "browser-default" })
+                                                    @Html.DropDownListFor(m => Model.NombreDenunciado, null, "Seleccione...", new { @class = "browser-default" })
                                                     @Html.ValidationMessageFor(m => Model.NombreDenunciado, "", new { @class = "red-text" })
                                                 </div>
                                             </div>
@@ -219,7 +221,7 @@
                                 </div>
                                 <div class="collapsible-body">
                                     <div class="row">
-                                        <div class="input-field col s12">
+                                        <div class="col s6 m6 l6">
                                             <strong>@Html.DisplayNameFor(m => Model.FechaHecho)</strong>
                                             @Html.EditorFor(m=>Model.FechaHecho)
                                         </div>
@@ -277,11 +279,11 @@
             });
     });
 
-    $("#ddlUnidad2").change(function () {
+    $("#IdUnidadDenunciado").change(function () {
         var Pl_UndCod = $(this).val();
         $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
             function (classesData) {
-                var select = $("#NombreDenunciante");
+                var select = $("#NombreDenunciado");
                 select.empty();
                 select.append($('<option/>', {
                     value: "",
@@ -304,9 +306,15 @@
 
     $(document).ready(function () {
         $('.collapsible').collapsible();
+        $('select').formSelect();
     });
 
 </script>
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<style TYPE="text/css">
+    strong {
+        font-weight: bolder;
+    }
+</style>

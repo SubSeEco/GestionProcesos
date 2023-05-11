@@ -67,7 +67,7 @@ namespace App.Web.Controllers
                 DvVictima = persona.Funcionario.RH_DvNuInt.ToInt(),
                 IdUnidadVictima = persona.Contrato.Re_ConUni,
             };
-            List<SelectListItem> Regiones = new List<SelectListItem>
+            /*List<SelectListItem> Regiones = new List<SelectListItem>
             {
             new SelectListItem {Text = "Tarapacá", Value = "Tarapacá"},
             new SelectListItem {Text = "Antofagasta", Value = "Antofagasta"},
@@ -86,15 +86,18 @@ namespace App.Web.Controllers
             new SelectListItem {Text = "Arica y Parinacota", Value = "Arica y Parinacota"},
             new SelectListItem {Text = "Ñuble", Value = "Ñuble"},
             };
-            ViewBag.Regiones = Regiones;
+            ViewBag.Regiones = Regiones;*/
             ViewBag.Fecha = DateTime.Now.ToString("dd-MM-yyyy");
 
 
-            ViewBag.UnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
+            ViewBag.IdUnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
+            //ViewBag.UnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
             ViewBag.NombreDenunciado = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
+            //ViewBag.NombreDenunciado = new SelectList(new List<PEDATPER>().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).ToList(), "Email", "Nombre").OrderBy(q => q.Text);
 
+            /*ViewBag.IdUnidadDenunciante = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
             ViewBag.UnidadDenunciante = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
-            ViewBag.NombreDenunciante = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
+            ViewBag.NombreDenunciante = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");*/
 
 
             return View(model);
@@ -105,17 +108,23 @@ namespace App.Web.Controllers
         public ActionResult Create(Denuncia model)
         {
             var _useCaseInteractor = new UseCaseIntegridad(_repository, _sigper, _file, _folio, _hsm, _email);
+
+            if (model.DescripcionUnidadDenunciado.IsNullOrWhiteSpace())
+            {
+                model.DescripcionUnidadDenunciado = _sigper.GetUnidad(model.IdUnidadDenunciado.Value).Pl_UndDes;
+            }
             var _UseCaseResponseMessage = _useCaseInteractor.DenunciaInsert(model);
             if (_UseCaseResponseMessage.IsValid)
             {
                 return RedirectToAction("Edit", "DenunciaIntegridad", new { id = model.DenunciaIntegridadId });
             }
 
-            ViewBag.UnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
+
+            ViewBag.IdUnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
             ViewBag.NombreDenunciado = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
 
-            ViewBag.UnidadDenunciante = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
-            ViewBag.NombreDenunciante = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
+            //ViewBag.UnidadDenunciante = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
+            //ViewBag.NombreDenunciante = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
             return View(model);
         }
 
@@ -126,8 +135,12 @@ namespace App.Web.Controllers
             var model = _repository.GetById<Denuncia>(id);
             //ViewBag.Fecha = DateTime.Now.ToString("dd-MM-yyyy");
 
-            ViewBag.IdUnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.IdUnidadDenunciado);
-            ViewBag.UnidadDenunciado = new SelectList(_sigper.GetUnidades()/*.Where(q => q.Pl_UndCod.ToString() == model.UnidadDenunciado)*/, "Pl_UndCod", "Pl_UndDes", model.DescripcionUnidadDenunciado);
+            ViewBag.IdUnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", "Seleccione...");
+            //ViewBag.NombreDenunciado = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Email", "Nombre", "Seleccione");
+
+
+            //ViewBag.IdUnidadDenunciado = new SelectList(_sigper.GetUnidades(), "Pl_UndCod", "Pl_UndDes", model.IdUnidadDenunciado);
+            //ViewBag.UnidadDenunciado = new SelectList(_sigper.GetUnidades()/*.Where(q => q.Pl_UndCod.ToString() == model.UnidadDenunciado)*/, "Pl_UndCod", "Pl_UndDes", model.DescripcionUnidadDenunciado);
             ViewBag.NombreDenunciado = new SelectList(_sigper.GetAllUsers().Select(c => new { Email = c.Rh_Mail.Trim(), Nombre = c.PeDatPerChq.Trim() }).OrderBy(q => q.Nombre).Distinct().ToList(), "Nombre", "Nombre", model.NombreDenunciado);
 
             //ViewBag.UnidadDenunciante = new SelectList(_sigper.GetUnidades()/*.Where(q => q.Pl_UndCod.ToString() == model.UnidadDenunciado)*/, "Pl_UndCod", "Pl_UndDes", model.UnidadDenunciante);
@@ -140,33 +153,6 @@ namespace App.Web.Controllers
         [HttpPost]
         public ActionResult Edit(Denuncia model)
         {
-            //Por alguna razon no me captura el dato desde los radio button para los campos bit en la bd
-            /*if (model.EsJefatura)
-            {
-                model.EsJefatura = Convert.ToBoolean(1);
-            }
-            else
-            {
-                model.EsJefatura = Convert.ToBoolean(0);
-            }
-            if (model.TrabajaDirecto)
-            {
-                model.TrabajaDirecto = Convert.ToBoolean(1);
-            }
-            else
-            {
-                model.TrabajaDirecto = Convert.ToBoolean(0);
-            }
-            if (model.EsDeConocimiento)
-            {
-                model.EsDeConocimiento = Convert.ToBoolean(1);
-            }
-            else
-            {
-                model.EsDeConocimiento = Convert.ToBoolean(0);
-            }*/
-
-
             if (ModelState.IsValid)
             {
                 var _useCaseInteractor = new UseCaseIntegridad(_repository, _sigper, _file, _folio, _hsm, _email);
