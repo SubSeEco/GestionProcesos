@@ -2,6 +2,16 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6.2.2 - Cometidos - 16-05-2023]
+
+### Changed
+
+- Se cambiron los mensajes tramitación del Cometido de 20 a 7 dias.
+
+### Added
+
+- Cambios de visualizacion de patentes en Edit y EditGP.
+
 ## [2.6.2.1 - Cometidos - 11-05-2023]
 
 ### Deleted

@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿//using App.Model.Shared;
+using App.Core.Interfaces;
+using App.Core.UseCases;
 using App.Model.Cometido;
-using App.Model.Pasajes;
+using App.Model.Comisiones;
 using App.Model.Core;
 using App.Model.DTO;
-//using App.Model.Shared;
-using App.Core.Interfaces;
+using App.Model.Pasajes;
 using App.Model.Shared;
+using App.Model.Sigper;
 using App.Util;
 using Newtonsoft.Json;
-using App.Core.UseCases;
-using App.Model.Comisiones;
+using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using OfficeOpenXml;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
-using App.Model.Sigper;
-using System.Text.RegularExpressions;
 using Enum = App.Util.Enum;
 //using com.sun.corba.se.spi.ior;
 //using System.Net.Mail;
@@ -181,7 +181,7 @@ namespace App.Web.Controllers
 
         public JsonResult GetUnidades()
         {
-            var unidades = _sigper.GetUnidades(); 
+            var unidades = _sigper.GetUnidades();
             return Json(unidades, JsonRequestBehavior.AllowGet);
         }
 
@@ -300,7 +300,7 @@ namespace App.Web.Controllers
                 /*IsAdmin = _repository.GetExists<Usuario>(q => q.Habilitado && q.Email == mail && q.Grupo.Nombre.Contains(Enum.Grupo.Administrador.ToString()))*/
             };
 
-            if(user.IsAdmin || user.IsCometido)
+            if (user.IsAdmin || user.IsCometido)
             {
                 ViewBag.User = user;
             }
@@ -462,7 +462,7 @@ namespace App.Web.Controllers
             _repository.Create(workflow);
             _repository.Save();
 
-            return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo,workflow.DefinicionWorkflow.Entidad.Codigo, new {workflow.WorkflowId});
+            return RedirectToAction(workflow.DefinicionWorkflow.Accion.Codigo, workflow.DefinicionWorkflow.Entidad.Codigo, new { workflow.WorkflowId });
 
             //return View("Index", "Workflow");
         }
@@ -494,7 +494,7 @@ namespace App.Web.Controllers
                 model.GeneracionCDP.Add(cdp);
             }
 
-            
+
 
             return View(model);
         }
@@ -547,7 +547,7 @@ namespace App.Web.Controllers
         public ActionResult DetailsFinanzas(int id)
         {
             var model = _repository.GetById<Cometido>(id);
-            var workflow = _repository.GetById<Workflow>(model.WorkflowId);            
+            var workflow = _repository.GetById<Workflow>(model.WorkflowId);
             var proceso = _repository.GetById<Proceso>(model.ProcesoId);
             model.Proceso = proceso;
             model.Workflow = workflow;
@@ -562,7 +562,7 @@ namespace App.Web.Controllers
             {
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _hsm, _file, _folio, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
-                var doc = _repository.GetFirst<Documento>(c =>c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5);
+                var doc = _repository.GetFirst<Documento>(c => c.ProcesoId == model.ProcesoId && c.TipoDocumentoId == 5);
                 var user = User.Email();
                 //var _UseCaseResponseMessage = _useCaseInteractor.DocumentoSign(doc, user,null);
 
@@ -938,7 +938,7 @@ namespace App.Web.Controllers
 
             var persona = _sigper.GetUserByEmail(User.Email());
             ViewBag.IdFuncionarioPagador = new SelectList(_sigper.GetUserByUnidad(persona.Unidad.Pl_UndCod), "RH_NumInte", "PeDatPerChq");
-            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");            
+            ViewBag.IdTipoPago = new SelectList(_repository.Get<TipoPagoSIGFE>(q => q.TipoActivo == true), "TipoPagoSIGFEId", "DescripcionTipoPagoContabilidad");
             return View(model);
         }
 
@@ -1062,8 +1062,8 @@ namespace App.Web.Controllers
             {
                 var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
                 var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
-                                
-                if (fechahelp < 20)
+
+                if (fechahelp < 7)
                 {
                     helper.Add(fechahelp);
                 }
@@ -1176,22 +1176,23 @@ namespace App.Web.Controllers
                     ModelState.AddModelError(string.Empty, item);
                 }
 
-            }else
+            }
+            else
             {
                 var help = _repository.Get<Destinos>(q => q.CometidoId == model.CometidoId);
-                if(help != null)
+                if (help != null)
                 {
-                    foreach(var dest in help)
+                    foreach (var dest in help)
                     {
                         model.Destinos.Add(dest);
                     }
                 }
-            }          
+            }
 
 
             ViewBag.Pasajes = model.Pasajes;
             ViewBag.DestinosPasajes = _repository.Get<DestinosPasajes>(q => q.Pasaje.ProcesoId == model.ProcesoId);
-            
+
 
             ViewBag.TipoVehiculoId = new SelectList(_repository.Get<SIGPERTipoVehiculo>().OrderBy(q => q.SIGPERTipoVehiculoId), "SIGPERTipoVehiculoId", "Vehiculo", model.TipoVehiculoId);
             //ViewBag.TipoReembolsoId = new SelectList(_repository.Get<SIGPERTipoReembolso>().OrderBy(q => q.SIGPERTipoReembolsoId), "SIGPERTipoReembolsoId", "Reembolso", model.TipoReembolsoId);
@@ -1217,7 +1218,7 @@ namespace App.Web.Controllers
                 var fecha = model.FechaSolicitud.Date.Subtract(model.Destinos[i].FechaInicio.Date).Days;
                 var fechahelp = model.Destinos[i].FechaInicio.Date.Subtract(model.FechaSolicitud.Date).Days;
 
-                if (fechahelp < 20)
+                if (fechahelp < 7)
                 {
                     helper.Add(fechahelp);
                 }
@@ -1301,7 +1302,7 @@ namespace App.Web.Controllers
             if (ModelState.IsValid)
             {
                 var cometido = _repository.GetById<Cometido>(model.CometidoId);
-                var Ggp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault(q=>q.CometidoId==model.CometidoId));
+                var Ggp = _repository.GetById<GeneracionCDP>(model.GeneracionCDP.FirstOrDefault(q => q.CometidoId == model.CometidoId));
                 /*model.TipoVehiculoId = cometido.TipoVehiculoId;*/
                 var _useCaseInteractor = new UseCaseCometidoComision(_repository, _sigper);
                 var _UseCaseResponseMessage = _useCaseInteractor.CometidoUpdate(model);
@@ -1557,7 +1558,7 @@ namespace App.Web.Controllers
                 {
                     var docOld = _repository.GetById<Documento>(IdDocto);
 
-                    if(!docOld.Activo)
+                    if (!docOld.Activo)
                     {
                         docOld.Activo = true;
                         _repository.Update(docOld);
@@ -2365,7 +2366,7 @@ namespace App.Web.Controllers
                 var CometidoId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
                 if (CometidoId.Any())
                 {
-                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));                    
+                    predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
                 }
 
                 model.Result = _repository.Get(predicate);
@@ -2472,7 +2473,7 @@ namespace App.Web.Controllers
             foreach (var com in cometido.OrderByDescending(r => r.CometidoId).ToList())
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == com.ProcesoId);
-                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();               
+                var pasaje = _repository.Get<Pasaje>(p => p.ProcesoId == com.ProcesoId).ToList();
 
                 if (pasaje.Count > 0)
                 {
@@ -2609,7 +2610,7 @@ namespace App.Web.Controllers
             var model = new DTOFilterCometido();
             //ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             //ViewBag.Ejecutor = new SelectList(_repository.GetAll<DefinicionWorkflow>().Where(c => c.DefinicionProcesoId == 13 && c.NombreUsuario != null).ToList(), "NombreUsuario", "NombreUsuario");
-            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x =>x.First()).ToList(), "Email", "Email");
+            ViewBag.Ejecutor = new SelectList(_repository.Get<Workflow>(c => c.Proceso.DefinicionProcesoId == 13 && c.Email != null).GroupBy(c => c.Email).Select(x => x.First()).ToList(), "Email", "Email");
             return View(model);
         }
 
@@ -3052,12 +3053,12 @@ namespace App.Web.Controllers
                     q.FechaCreacion.Year <= model.Hasta.Value.Year &&
                     q.FechaCreacion.Month <= model.Hasta.Value.Month &&
                     q.FechaCreacion.Day <= model.Hasta.Value.Day);
-            
+
             /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
             predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 84 &&
             q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada &&
-            !q.Anulada); 
-            
+            !q.Anulada);
+
             var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
             if (WorkflowId.Any())
                 predicateWorkflow = predicateWorkflow.And(q => WorkflowId.Contains(q.WorkflowId));
@@ -3092,7 +3093,7 @@ namespace App.Web.Controllers
             foreach (var _com in model.Result.ToList())
             {
                 var _cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == _com.ProcesoId);
-                if(_cometido.Activo == true)
+                if (_cometido.Activo == true)
                 {
                     ListCom.Add(_cometido);
                 }
@@ -3109,7 +3110,7 @@ namespace App.Web.Controllers
             foreach (var cometido in result.ToList())//.Where(c => c.Proceso.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)) //.OrderByDescending(c => c.CometidoId))
             {
                 var pr = _repository.GetById<Proceso>(cometido.ProcesoId);
-                if(pr.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
+                if (pr.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                 {
                     //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
                     var work = pr.Workflows.Where(q => q.DefinicionWorkflowId == 82 ||
@@ -3190,7 +3191,7 @@ namespace App.Web.Controllers
 
 
                     //worksheet.Cells[fila, 14].Value = pr.ProcesoId;
-                    
+
                 }
             }
 
@@ -3415,7 +3416,7 @@ namespace App.Web.Controllers
                         cant++; //cant + 1;                    
                 }
                 _lisPendienteUnidades.Add(new DataPoint(Convert.ToDouble(cant), u.Pl_UndDes));
-            }            
+            }
             ViewBag.PendientesUnidades = JsonConvert.SerializeObject(_lisPendienteUnidades, _jsonSetting);
 
             /*TAREAS PENDIENTES POR FUNCIONARIOS - UNIDAD JURIDICA*/

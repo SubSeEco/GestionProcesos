@@ -262,20 +262,25 @@
                                             </label>
                                             <div class="section"></div>
                                         </div>
-                                        <div id="auto" style="display:none;">                                            
-                                            <div class="input-field col s12 m6 l10">
-                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...")
+                                        <div id="datosVehiculo">
+                                            <div class="auto input-field col s12 m6 l10">
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, null, "Seleccione...", new { @disabled = "disabled" })
                                                 @Html.LabelFor(m => Model.TipoVehiculoId)
                                                 @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="input-field col s12 m2 l10">
-                                                <strong>@Html.LabelFor(m => Model.PlacaVehiculo)</strong>
-                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                            <div class="auto input-field col s12 m2 l10">
+                                                <strong>@Html.DisplayNameFor(m => Model.PlacaVehiculo)</strong>
+                                                <div class="input-field col s12 m12 l12">
+                                                    @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                                </div>
                                                 @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
                                             </div>
-                                            <div class="input-field  col s12 m2 l10">
-                                                <strong>@Html.LabelFor(m => Model.VehiculoObservaciones)</strong>
-                                                @Html.TextBoxFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea"} })
+                                            <div class="auto input-field  col s12 m2 l10">
+                                                <strong>@Html.DisplayNameFor(m => Model.VehiculoObservaciones)</strong>
+                                                
+                                                <div class="input-field col s12 m12 l12">
+                                                    @Html.DisplayFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
+                                                </div
                                             </div>
                                         </div>
                                     </div>
@@ -535,21 +540,22 @@
 @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
 
 <script type="text/javascript">
-
-    /*window.onload = function () {
-        var vehiculo = document.getElementById("Vehiculo");
-        var datosVehiculo = document.getElementById("datosVehiculo");
-        if (vehiculo.checked) {
-            $("#datosVehiculo").show();
-            datosVehiculo.style.display = "block";
-            $("#PlacaVehiculo").attr('disabled', false);
-            console.log("EXISTE PATENTE!")
-        } else {
-            $("#datosVehiculo").hide(100);
-            $("#PlacaVehiculo").attr('disabled', true);
-            console.log("MEH!")
-        }
-    };*/
+    $('#TipoVehiculoId').on('change',
+        function () {
+            var TipoVehiculoId = $(this).val();
+            if (TipoVehiculoId == 5) {
+                var Rut = document.getElementById('Rut').value;
+                //alert(TipoVehiculoId)
+                $.getJSON("/Cometido/GetPatente",
+                    {
+                        TipoVehiculoId: TipoVehiculoId,
+                        Rut: Rut
+                    },
+                    function (classesData) {
+                        document.getElementById('PlacaVehiculo').value = classesData["Patente"]
+                    })
+            }
+        })
 
     $(document).ready(function () {
         //$('.datepicker').datepicker();
@@ -632,7 +638,7 @@
         }
 
         //Habilita tipo vehiculo
-        $('input:checkbox[name="Vehiculo"]').change(function () {
+        /*$('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == true) {
                 $("#IdTipoVehiculo").attr('disabled', false);
                 $("#PlacaVehiculo").attr('disabled', false);
@@ -643,27 +649,47 @@
                 $("#VehiculoObservaciones").attr('disabled', true);
                 $("#PlacaVehiculo").attr('disabled', true);
             }
-        });
+        });*/
 
         /*funcion que bloquea pasajes*/
-        if (document.getElementById("ReqPasajeAereo").checked == true) {
-            $("#ReqPasajeTerrestre").attr('disabled', true);
-            $("#Vehiculo").attr('disabled', true);
-        }
-        else {
-            $("#ReqPasajeTerrestre").attr('disabled', false);
-            $("#Vehiculo").attr('disabled', false);
-        }
+        $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
+            if (document.getElementById("ReqPasajeAereo").checked == true) {
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+                $("#Vehiculo").attr('disabled', true);
+                document.getElementById("Vehiculo").checked = false;
+                $('.auto').hide(100);
+            }
+            else {
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+                $("#Vehiculo").attr('disabled', false);
+                if (document.getElementById("Vehiculo").checked == true) {
+                    $('.auto').show();
+                }
+            }
+        });
 
         /*Habilita tipo vehiculo*/
         $('input:checkbox[name="Vehiculo"]').change(function () {
             if (document.getElementById("Vehiculo").checked == false) {
-                $('#auto').hide(100);
+                $('.auto').hide(100);
                 $("#PlacaVehiculo").attr('disabled', true);
+                $("#VehiculoObservaciones").attr('disabled', true);
             }
             else {
                 $("#PlacaVehiculo").attr('disabled', false);
-                $('#auto').show();
+                $("#VehiculoObservaciones").attr('disabled', false);
+                $('.auto').show();
+            }
+        });
+
+        $(document).ready(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('.auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            if (document.getElementById("Vehiculo").checked == true) {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('.auto').show();
             }
         });
 
@@ -681,7 +707,7 @@
 
     /**************************************************************************************************/
     /*Habilita tipo vehiculo*/
-    $('input:checkbox[name="Vehiculo"]').change(function () {
+    /*$('input:checkbox[name="Vehiculo"]').change(function () {
         if (document.getElementById("Vehiculo").checked == false) {
             $('#auto').hide(100);
             $("#PlacaVehiculo").attr('disabled', true);
@@ -691,7 +717,7 @@
             $('#auto').show();
 
         }
-    });
+    });*/
 
     /*Muestra texto de pasaje terrestre*/
     $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
