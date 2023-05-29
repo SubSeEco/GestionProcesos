@@ -2,6 +2,17 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6.2.3 - Cometidos - 26-05-2023]
+
+### Changed
+
+- Se modificaron los vistos y otros parrafos segun lo indicado por Nikol Riveros.
+- Se corrigio la falta de ortografia en el push anterior.
+
+### Added
+
+- Se agregaron localidades faltantes en la XI Región.
+
 ## [2.6.2.2 - Cometidos - 16-05-2023]
 
 ### Changed

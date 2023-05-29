@@ -5459,7 +5459,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "11201")
                     {
-                        if (local == 3857 || local == 3858)
+                        if (local == 1273 || local == 1274 || local == 1275 || local == 3857 || local == 3858)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
