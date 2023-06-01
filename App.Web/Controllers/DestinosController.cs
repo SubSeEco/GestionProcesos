@@ -1,13 +1,13 @@
-﻿using System;
+﻿//using App.Model.Shared;
+using App.Core.Interfaces;
+using App.Core.UseCases;
+using App.Model.Cometido;
+using App.Model.Core;
+using App.Model.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using App.Model.Cometido;
-//using App.Model.Shared;
-using App.Core.Interfaces;
-using App.Core.UseCases;
-using App.Model.Core;
-using App.Model.Shared;
 
 namespace App.Web.Controllers
 {
@@ -67,7 +67,7 @@ namespace App.Web.Controllers
 
         public JsonResult GetComunas(string IdRegion)
         {
-            var comunas = _sigper.GetComunasbyRegion(IdRegion).OrderBy(c =>c.Pl_DesCom);
+            var comunas = _sigper.GetComunasbyRegion(IdRegion).OrderBy(c => c.Pl_DesCom);
             return Json(comunas.Select(q => new { value = q.Pl_CodCom.Trim(), text = q.Pl_DesCom.Trim() }), JsonRequestBehavior.AllowGet);
         }
 

@@ -4682,7 +4682,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "09116")
                     {
-                        if (local == 1206)
+                        if (local == 1206 || local == 1207)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -4714,7 +4714,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "09118")
                     {
-                        if (local == 1211)
+                        if (local == 1211 || local == 3824)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
