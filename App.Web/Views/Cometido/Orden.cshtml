@@ -20,14 +20,12 @@
     <table style="margin-top:768px">
         <tr>
             <td width="32%">
-                @*.<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />*@
                 <img src="~/Content/Logo_gobierno.png" width="170px" />
             </td>
             <td>
                 <!--<p align="justify">
                     <strong>
                         ORDEN DE PAGO N°  @Html.DisplayFor(m => Model.Folio)-->
-                @*@Html.DisplayFor(m => Model.NumeroResolucion)*@
                 <!--</strong>
                     <br /><br />
                           <strong>
@@ -65,12 +63,12 @@
                     <tr>
                         <td>
                             <h6>
-                                ID @*/ CODIGO*@
+                                ID
                             </h6>
                         </td>
                         <td>
                             <h6>
-                                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso) @*/ @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcCodCompromiso)*@
+                                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
                             </h6>
                         </td>
                     </tr>
@@ -90,7 +88,7 @@
             </td>
             <td>
                 <strong>
-                    <br /><br /><br /><br /><br /> VISTO:
+                    <br /><br /><br /><br /><br /> VISTOS:
                 </strong>
                 <p align="justify" style="margin-right:30px">
                     @Html.DisplayFor(m => Model.Vistos)
@@ -98,20 +96,12 @@
             </td>
         </tr>
         <tr>
-            @*<td></td>*@
             <td colspan="2">
                 <ol>
+                    <br />
                     <strong>
-                        <br /> CONSIDERANDO:
+                        CONSIDERANDO:
                     </strong>
-                    @*@if (Model.Destinos.FirstOrDefault().FechaInicio < DateTime.Now) /*Tiempoo pasado*/
-                    {
-                        <li>
-                            <p align="justify" style="margin-right:30px">
-                                Que, por efectuada la solicitud fuera de los plazos establecidos en procedimientos internos de la Subsecretaría de Economía y Empresas de Menor Tamaño, se debe tramitar este cometido de forma extemporánea.
-                            </p>
-                        </li>
-                    }*@
                     <li>
                         <p align="justify" style="margin-right:30px">
                             Que, don/ña
@@ -169,8 +159,8 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, en el instructivo GAB. PRES N° 001, de 18 de abril de 2023, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo V), Numeral 21),
-                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 7 días corridos previos a la fecha de su inicio.
+                                Que, en el instructivo GAB. PRES N° 004, de 25 de marzo de 2022, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo XI), Numeral 25),
+                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 20 días corridos previos a la fecha de su inicio.
                                 En caso de que no sea posible cumplir con este plazo, por razones impostergables de buen servicio, el formulario de solicitud deberá contar con la respectiva justificación y la visación del jefe/a de Servicio”
                             </p>
                         </li>
@@ -181,7 +171,6 @@
                             </p>
                         </li>
                     }
-                    <br />
                 </ol>
             </td>
         </tr>
@@ -191,7 +180,6 @@
                     @if (Model.SolicitaViatico)
                     {
                         <p align="justify" style="margin-right:30px">
-                            <br />
                             <strong>ORDÉNESE EL PAGO</strong>
                             &nbsp; ascendente a la suma de $@Html.DisplayFor(m => Model.TotalViatico).- pesos, (@Html.DisplayFor(m => Model.Destinos.FirstOrDefault().TotalViaticoPalabras))<br />
                             por concepto de honorario adicional, producto de labores específicas inherentes a los servicios establecidos en su contrato de prestación de servicios, de acuerdo al siguiente detalle:
@@ -215,15 +203,12 @@
                                     @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().FechaHasta)
                                 </td>
                                 <td>
-                                    @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)*@
                                     @Html.Raw("Dias 100%")
                                 </td>
                                 <td>
-                                    @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)*@
                                     @Html.Raw("Dias 60%")
                                 </td>
                                 <td>
-                                    @*@Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)*@
                                     @Html.Raw("Dias 40%")
                                 </td>
                             </tr>
@@ -315,13 +300,6 @@
                             </p>
                         </li>
                     }
-                    @*<li>
-            <p align="justify" style="margin-right:30px">
-                Que, no se pagará viático por el día 27  de noviembre de 2020, por motivo de encontrarse en viaje de regreso.
-            </p>
-        </li>*@
-
-
                     <p align="justify"></p>
                     @if (Model.ReqPasajeAereo)
                     {
@@ -331,17 +309,15 @@
                             </p>
                         </li>
                     }
-                    @if (Model.Tiempo == "Pasado" && Model.Destinos.Count < 3)
+                    @if (Model.Tiempo == "Pasado" && Model.Destinos.Count > 3)
                     {
                         <p class="breakhere"></p>
                     }
-                    @*<p class="breakhere"></p>*@
                 </ol>
             </td>
         </tr>
         <tr><td></td><td></td></tr>
         <tr>
-            @*<td></td>*@
             <td colspan="2">
                 <ol>
                     @if (Model.GeneracionCDP.Count > 0 && Model.GeneracionCDP.FirstOrDefault().VtcValorViatico != "0")
@@ -397,15 +373,6 @@
                                     @Html.DisplayFor(m => Model.Subscretaria)
                                 }
                             }
-                            @*@if (Model.SolicitaViatico != true)
-                                {
-                                    @Html.Raw("<span>el gasto por honorarios adicionales al Programa</span>") @Html.DisplayFor(m => Model.ProgramaDescripcion)
-                                    @Html.Raw(",y al Subtítulo 22")
-                                    @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones inherentes a las funciones establecidas en su contrato, de acuerdo a su naturaleza, del presupuesto para el año")
-                                    @Html.DisplayFor(m => Model.Anno)
-                                    @Html.Raw("de la ")
-                                    @Html.DisplayFor(m => Model.Subscretaria)
-                                }*@
                         </p>
                     }
                     @if (Model.SolicitaViatico != true)
@@ -443,7 +410,6 @@
             <td>
                 <strong>
                     <p align="center">
-                        @*@Html.DisplayFor(m => Model.Firmante)*@
                         <br />
                         @Html.DisplayFor(m => Model.CargoFirmante)
                         <br />

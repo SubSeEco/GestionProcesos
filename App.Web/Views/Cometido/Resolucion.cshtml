@@ -20,10 +20,7 @@
     <table border="0" style="margin-top:768px">
         <tr>
             <td width="32%">
-                @*<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />*@
-                <img src="~/Content/Logo_gobierno.png" width="170px" />
-            </td>
-            <td>
+                <img src="~/Content/Logo_gobierno.png" width="170px"/>
             </td>
         </tr>
         <tr>
@@ -74,7 +71,7 @@
             </td>
             <td>
                 <strong>
-                    <br /><br /><br /><br /><br /> VISTO:
+                    <br /><br /><br /><br /><br /> VISTOS:
                 </strong>
                 <p align="justify" style="margin-right:30px">
                     @if (Model.GradoDescripcion.Trim() == "C" || Model.GradoDescripcion.Trim() == "B")
@@ -91,12 +88,14 @@
         <tr>
             <td colspan="2">
                 <ol>
+                    <br />
+                    <br />
                     <strong>
                         CONSIDERANDO:
                     </strong>
                     <li>
                         <p align="justify" style="margin-right:30px">
-                            Que, los/as funcionarios/as públicos/as pueden cumplir cometidos funcionarios que los/as obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
+                            Que, los/as funcionarios/as públicos/as pueden cumplir cometidos funcionarios que los obliguen a desplazarse dentro o fuera de su lugar de desempeño habitual para realizar labores
                             especificas inherentes al cargo que sirven.
                         </p>
                     </li>
@@ -104,14 +103,14 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, en el instructivo GAB. PRES N° 001, de 18 de abril de 2023, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo V), Numeral 21),
-                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 7 días corridos previos a la fecha de su inicio.
+                                Que, en el instructivo GAB. PRES N° 004, de 25 de marzo de 2022, por el cual se imparten orientaciones sobre buen uso de los recursos fiscales, en particular, en su párrafo XI), Numeral 25), 
+                                referido a cometidos funcionarios se dispone que: “Toda comisión o cometido de servicios deberá ser tramitada con un plazo mínimo de antelación de 20 días corridos previos a la fecha de su inicio. 
                                 En caso de que no sea posible cumplir con este plazo, por razones impostergables de buen servicio, el formulario de solicitud deberá contar con la respectiva justificación y la visación del jefe/a de Servicio”
                             </p>
                         </li>
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, por razones impostergables de buen servicio, y en conformidad a la citada instrucción presidencial, este cometido cuenta con la visación del/la jefa/e de Gabinete Subsecretaria,
+                                Que, por razones impostergables de buen servicio, y en conformidad a la citada instrucción presidencial, este cometido cuenta con la visación del/la jefa/e de Gabinete Subsecretaria, 
                                 en atención a la justificación efectuada a través de sistema de cometidos.
                             </p>
                         </li>
@@ -127,7 +126,7 @@
                             {
                                 @Html.Raw("<span>corresponde</span>")
                             }
-                            designar en cometido funcionario/a a don/ña
+                            designar en cometido funcionario a don/ña
                             <strong> @Html.DisplayFor(m => Model.Nombre),</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;funcionario/a de la Subsecretaría de Economía y Empresas de Menor Tamaño, en la:
                         </p>
                     </li>
@@ -146,10 +145,8 @@
                         @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
                         {
                             <tr>
+
                                 @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].NombreLocalidad)
-                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => Model.Destinos.ToArray()[i].ComunaDescripcion)
                                 </td>
@@ -195,7 +192,7 @@
                         }
                         a contar del @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10) hasta el @Html.DisplayFor(m => Model.Destinos.LastOrDefault().FechaHasta).ToHtmlString().Remove(10), en la localidad antes señalada.
                     </p>
-                    <br />
+                    @*<p class="breakhere"></p>*@
                 </ol>
             </td>
         </tr>
@@ -261,7 +258,7 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, la presente Resolución no
+                                Que, la presente resolución no
                                 @if (Model.Tiempo == "Pasado")
                                 {
                                     @Html.Raw("<span>irrogó</span>")
@@ -305,7 +302,7 @@
                     {
                         <li>
                             <p align="justify" style="margin-right:30px">
-                                Que, por razones impostergables de buen servicio, se dio inicio al presente cometido funcionario, en la fecha antes señalada, sin esperar la total tramitación de esta resolución.
+                               Que, por razones impostergables de buen servicio, se dio inicio al presente cometido funcionario, en la fecha antes señalada, sin esperar la total tramitación de esta resolución.
                             </p>
                         </li>
                     }
@@ -386,14 +383,14 @@
                                     @Html.DisplayFor(m => Model.Subscretaria)
                                 }
 
-                            }
+                            }                            
                         </p>
                     }
                     @if (Model.SolicitaViatico != true)
                     {
                         <p align="justify" style="margin-right:30px">
                             <strong>IMPÚTESE</strong>,
-                            @Html.Raw("<span>el gasto que demande esta Resolución al Subtítulo 22 </span>")  @*@Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)*@
+                            @Html.Raw("<span>el gasto que demande esta Resolución al Subtítulo 22 </span>")  @*@Html.DisplayFor(m => Model.ProgramaDescripcion).ToString().Substring(1, 2)*@                            
                             @Html.Raw("por los gastos que se irroguen a consecuencia del desempeño de funciones con motivo del Cometido Funcionario, de acuerdo a su naturaleza, del presupuesto para el año ")
                             @Html.DisplayFor(m => Model.Anno)
                             @Html.Raw(" de la ")
@@ -404,8 +401,6 @@
             </td>
         </tr>
     </table>
-    <p class="breakhere"></p>
-    <p class="breakhere"></p>
     <table align="center" border="0">
         <tr>
             <td>
