@@ -54,10 +54,10 @@
                     @Html.DisplayFor(modelItem => item.Documento)
                 </td>
                 <td>
-                    <a href='@Url.Action("Edit", "Parrafos", new { id = item.ParrafosId})'><img src="~/Content/images/icon-edit.png"></img></a>                    
+                    <a href='@Url.Action("Edit", "Parrafos", new { id = item.ParrafosId})' class="btn-large btn-floating modal-trigger tooltipped blue" data-position="up" data-tooltip="Editar Destino"><i class="large material-icons">edit</i></a>
                 </td>
                 <td>
-                    <a href='@Url.Action("Delete", "Parrafos", new { id = item.ParrafosId })'><img src="~/Content/images/icon-borrar.png"></img></a>
+                    <a href='@Url.Action("Delete", "Parrafos", new { id = item.ParrafosId })' class="btn-large btn-floating modal-trigger btn tooltipped blue" data-position="up" data-tooltip="Eliminar Destino"><i class="large material-icons">delete</i></a>
                 </td>
             </tr>
                 }

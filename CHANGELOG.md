@@ -8,6 +8,7 @@ este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.c
 
 - Se cambiaron parrafos donde se menciona 20 dias para tramitación a 7 dias.
 - Se cambio en testing y en produccion el parrafo de Visto.
+- Se cambio el formato del boton de editar y eliminar en Parrafos.
 
 ## [2.6.2.7 - Cometidos - 07-06-2023]
 

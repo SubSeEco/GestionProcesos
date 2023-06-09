@@ -560,11 +560,11 @@
                                                                 </td>
                                                                 <td>@string.Format("{0:dd-MM-yyyy}", destinopasaje.FechaVuelta)</td>
                                                                 <td>
-                                                                    <a href='@Url.Action("Edit", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar Pasaje"><i class="large material-icons">edit</i>><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                    <a href='@Url.Action("Edit", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar Pasaje"><i class="large material-icons">edit</i></a>
                                                                     @*<a class="btn btn-default" id="@destinopasaje.PasajeId" onclick="Test(this.id)">TEST</a>*@
                                                                 </td>
                                                                 <td>
-                                                                    <a href='@Url.Action("Delete", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar Pasaje"><i class="large material-icons">delete_forever</i>><img src="~/Content/images/icon-edit.png"></img></a>
+                                                                    <a href='@Url.Action("Delete", "DestinosPasajes", new { id = destinopasaje.DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar Pasaje"><i class="large material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
                                                         }
