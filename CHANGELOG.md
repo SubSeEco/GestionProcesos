@@ -2,16 +2,50 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
-## [2.6.2.3 - Cometidos - 26-05-2023]
+## [2.6.3 - Cometidos - 09-06-2023]
 
 ### Changed
 
-- Se modificaron los vistos y otros parrafos segun lo indicado por Nikol Riveros.
-- Se corrigio la falta de ortografia en el push anterior.
+- Se cambiaron parrafos donde se menciona 20 dias para tramitación a 7 dias.
+- Se cambio en testing y en produccion el parrafo de Visto.
+
+## [2.6.2.7 - Cometidos - 07-06-2023]
 
 ### Added
 
-- Se agregaron localidades faltantes en la XI Región.
+- Se agregaron localidades faltantes según el excel entregado por Procesos
+
+### Changed
+
+- Se cambio, en el metodo DestinoUpdate, de consultar a la DB a una lista para optimizacion de recursos
+
+## [2.6.2.6 - Cometidos - 05-06-2023]
+
+### Changed
+
+- Se modificaron los parrafos de las resoluciones según cambios indicados por Juridica y Procesos.
+
+## [2.6.2.5 - Integridad - 19-05-2023]
+
+### Changed
+
+- Se modifico como se muestra la fecha en Edit Denuncia.
+
+### Added
+
+- Se agregaron validaciones en Insert y Update de Denuncia.
+
+## [2.6.2.4 - GP Completo - 19-05-2023]
+
+### Changed
+
+- Se resolvieron problemas post merge, el cual elimino ciertas referencias de algunos modelos, clases y controladores.
+
+## [2.6.2.3 - Integridad - 18-05-2023]
+
+### Added
+
+- Se agrego cambio de ejecutor de tarea cuando se denuncia al Coordinador o Jefe de Juridica.
 
 ## [2.6.2.2 - Cometidos - 16-05-2023]
 
