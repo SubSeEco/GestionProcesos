@@ -46,6 +46,103 @@ namespace App.Core.UseCases
             _file = file;
         }
 
+        //public ResponseMessage PatenteVehiculoInsert(PatenteVehiculo obj)
+        //{
+        //    var response = new ResponseMessage();
+
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(obj.PlacaPatente))
+        //        {
+        //            response.Errors.Add("Debe especificar la Patente del Vehiculo.");
+        //        }
+        //        if (obj.PlacaPatente.Count() > 6 || obj.PlacaPatente.Count() < 6)
+        //        {
+        //            response.Errors.Add("La patente debe contener 6 caracteres minimo o maximo, en formato ABCD12");
+        //        }
+        //        if (!obj.SIGPERTipoVehiculoId.HasValue)
+        //        {
+        //            response.Errors.Add("Debe especificar el tipo de vehiculo.");
+        //        }
+        //        if (string.IsNullOrEmpty(obj.Codigo))
+        //        {
+        //            response.Errors.Add("Debe especificar la Región del Vehiculo.");
+        //        }
+
+        //        if (response.IsValid)
+        //        {
+        //            _repository.Create(obj);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
+        //    return response;
+        //}
+
+        //public ResponseMessage PatenteVehiculoDelete(int id)
+        //{
+        //    var response = new ResponseMessage();
+        //    try
+        //    {
+        //        var obj = _repository.GetById<PatenteVehiculo>(id);
+        //        if (obj == null)
+        //        {
+        //            response.Errors.Add("Dato de Vehiculo no encontrado.");
+        //        }
+
+        //        if (response.IsValid)
+        //        {
+        //            _repository.Delete(obj);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
+        //    return response;
+        //}
+
+        //public ResponseMessage PatenteVehiculoUpdate(PatenteVehiculo obj)
+        //{
+        //    var response = new ResponseMessage();
+
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(obj.PlacaPatente))
+        //        {
+        //            response.Errors.Add("Debe especificar la Patente del Vehiculo.");
+        //        }
+        //        if (obj.PlacaPatente.Count() > 6 || obj.PlacaPatente.Count() < 6)
+        //        {
+        //            response.Errors.Add("La patente debe contener 6 caracteres minimo o maximo, en formato ABCD12");
+        //        }
+        //        if (!obj.SIGPERTipoVehiculoId.HasValue)
+        //        {
+        //            response.Errors.Add("Debe especificar el tipo de vehiculo.");
+        //        }
+        //        if (string.IsNullOrEmpty(obj.Codigo))
+        //        {
+        //            response.Errors.Add("Debe especificar la Región del Vehiculo.");
+        //        }
+
+        //        if (response.IsValid)
+        //        {
+        //            _repository.Update(obj);
+        //            _repository.Save();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Errors.Add(ex.Message);
+        //    }
+
+        //    return response;
+        //}
+
         public ResponseMessage RegionInsert(Region obj)
         {
             var response = new ResponseMessage();
@@ -1601,7 +1698,7 @@ namespace App.Core.UseCases
             {
                 case 1:
                     #region Primera Region
-                    if (dest.IdComuna == "01101" || dest.IdComuna == "01107")
+                    if (dest.IdComuna == "01101")
                     {
                         if (local == 3944)
                         {
@@ -1669,12 +1766,12 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "01404")
                     {
-                        if (local == 4 || local == 1523 || local == 1524 || local == 1525 ||
+                        if (local == 5 || local == 1523 || local == 1524 || local == 1525 ||
                             local == 1526 || local == 1527 || local == 1528 || local == 1529 ||
                             local == 1530 || local == 1531 || local == 1532 || local == 1533 ||
                             local == 1534 || local == 1535 || local == 1536 || local == 1537 ||
                             local == 1538 || local == 1539 || local == 1540 || local == 1541 ||
-                            local == 1542)
+                            local == 1542 || local == 1543 || local == 1544 || local == 1545)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -1689,7 +1786,8 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "01405")
                     {
-                        if (local == 6 || local == 8)
+                        if (local == 6 || local == 8 || local == 1546 ||
+                            local == 1547 || local == 1548 || local == 1549)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -1708,10 +1806,8 @@ namespace App.Core.UseCases
                     #region Segunda Región
                     if (dest.IdComuna == "02101")
                     {
-                        if (local == 12 || local == 13 || local == 3945 ||
-                            local == 3946 || local == 3947 || local == 3948 ||
-                            local == 1550 || local == 1551 || local == 1552 ||
-                            local == 1553 || local == 1554)
+                        if (local == 13 || local == 3945 ||
+                            local == 3946 || local == 3947 || local == 3948)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -1809,22 +1905,6 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if (dest.IdComuna == "02202")
-                    {
-                        if (local == 27)
-                        {
-                            response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
-                        }
-                        else
-                        {
-                            if (dest.Dias100 + dest.Dias60 + dest.Dias40 > 0)
-                            {
-                                response.Warnings.Add("El destino señalado es una local adyacente, por lo tanto no le corresponde viatico");
-                                adyacente = true;
-                                metodoMensaje(dest);
-                            }
-                        }
-                    }
                     else if (dest.IdComuna == "02203")
                     {
                         if (local == 28 || local == 29 || local == 30 ||
@@ -1890,10 +1970,9 @@ namespace App.Core.UseCases
                     #region Tercera Región
                     if (dest.IdComuna == "03101")
                     {
-                        if (local == 3950 || local == 3951 || local == 3952 ||
-                            local == 3953 || local == 3954 || local == 3955 ||
-                            local == 3956 || local == 3957 || local == 52 ||
-                            local == 1578)
+                        if (local == 52 || local == 1578 || local == 3950 || local == 3951 ||
+                            local == 3952 || local == 3953 || local == 3954 || local == 3955 ||
+                            local == 3956 || local == 3957 || local == 52 || local == 1578)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -1908,7 +1987,8 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "03102")
                     {
-                        if (local == 1580 || local == 1581 || local == 1582 ||
+                        if (local == 45 || local == 46 || local == 47 ||
+                            local == 1580 || local == 1581 || local == 1582 ||
                             local == 1583 || local == 1584 || local == 1585 ||
                             local == 1586 || local == 1587 || local == 1588 ||
                             local == 1589 || local == 1590 || local == 1591)
@@ -1945,7 +2025,8 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "03201")
                     {
-                        if (local == 1596 || local == 1597 || local == 1598 ||
+                        if (local == 38 || local == 39 || local == 40 || local == 41 ||
+                            local == 1596 || local == 1597 || local == 1598 ||
                             local == 1599 || local == 1600 || local == 1601 ||
                             local == 1601)
                         {
@@ -2472,7 +2553,8 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "05301")
                     {
-                        if (local == 2050 || local == 2051 || local == 2052 || local == 2053 ||
+                        if (local == 195 || local == 196 || local == 197 || local == 198 ||
+                            local == 2050 || local == 2051 || local == 2052 || local == 2053 ||
                             local == 2054 || local == 2055 || local == 2056 || local == 2057 ||
                             local == 2058 || local == 2059 || local == 2060)
                         {
@@ -3480,7 +3562,9 @@ namespace App.Core.UseCases
                     #region Septima Región
                     if (dest.IdComuna == "07102")
                     {
-                        if (local == 3017 || local == 3018 || local == 3019 || local == 3020 || local == 3021 ||
+                        if (local == 810 || local == 811 || local == 812 || local == 813 || local == 814 ||
+                            local == 815 || local == 816 || local == 817 || local == 818 || local == 819 ||
+                            local == 3017 || local == 3018 || local == 3019 || local == 3020 || local == 3021 ||
                             local == 3022 || local == 3023 || local == 3024 || local == 3025 || local == 3026 ||
                             local == 3027 || local == 3028 || local == 3029 || local == 3030 || local == 3031 ||
                             local == 3032 || local == 3033 || local == 3034 || local == 3035 || local == 3036 ||
@@ -3503,7 +3587,9 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "07103")
                     {
-                        if (local == 3054 || local == 3055 || local == 3056 ||
+                        if (local == 820 || local == 821 || local == 822 || local == 823 || local == 824 ||
+                            local == 825 || local == 826 || local == 827 || local == 828 || local == 829 ||
+                            local == 3054 || local == 3055 || local == 3056 ||
                             local == 3057 || local == 3058 || local == 3059)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
@@ -3520,7 +3606,8 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "07104")
                     {
-                        if (local == 3060 || local == 3061 || local == 3062 || local == 3063)
+                        if (local == 830 || local == 831 || local == 832 ||
+                            local == 3060 || local == 3061 || local == 3062 || local == 3063)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -3536,11 +3623,14 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "07108")
                     {
-                        if (local == 3101 || local == 3102 || local == 3103 || local == 3104 || local == 3105 ||
+                        if (local == 862 || local == 863 || local == 864 || local == 865 || local == 866 ||
+                            local == 867 || local == 868 || local == 869 || local == 870 || local == 871 ||
+                            local == 872 || local == 873 || local == 874 || local == 875 || local == 876 ||
+                            local == 877 || local == 878 || local == 879 || local == 880 ||
+                            local == 3101 || local == 3102 || local == 3103 || local == 3104 || local == 3105 ||
                             local == 3106 || local == 3107 || local == 3108 || local == 3109 || local == 3110 ||
                             local == 3111 || local == 3112 || local == 3113 || local == 3114 || local == 3115 ||
-                            local == 3116 || local == 3117 || local == 3118 || local == 3119 || local == 3120 ||
-                            local == 869)
+                            local == 3116 || local == 3117 || local == 3118 || local == 3119 || local == 3120)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -3942,7 +4032,8 @@ namespace App.Core.UseCases
                             local == 3528 || local == 3529 || local == 3530 || local == 3531 || local == 3532 ||
                             local == 3533 || local == 3534 || local == 3535 || local == 3536 || local == 3537 ||
                             local == 3538 || local == 3539 || local == 3540 || local == 3541 || local == 3542 ||
-                            local == 3543 || local == 3544 || local == 3545 || local == 3546 || local == 3547)
+                            local == 3543 || local == 3544 || local == 3545 || local == 3546 || local == 3547 ||
+                            local == 911)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -4714,7 +4805,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "09118")
                     {
-                        if (local == 1211 || local == 3824)
+                        if (local == 1211)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -5459,7 +5550,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "11201")
                     {
-                        if (local == 1273 || local == 1274 || local == 1275 || local == 3857 || local == 3858)
+                        if (local == 3857 || local == 3858)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }
@@ -5971,6 +6062,23 @@ namespace App.Core.UseCases
                             }
                         }
                     }
+                    else if (dest.IdComuna == "14201")
+                    {
+                        if (local == 1360 || local == 1361 || local == 1362 || local == 1363 ||
+                            local == 1364 || local == 1365 || local == 1366)
+                        {
+                            response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
+                        }
+                        else
+                        {
+                            if (dest.Dias100 + dest.Dias60 + dest.Dias40 > 0)
+                            {
+                                response.Warnings.Add("El destino señalado es una local adyacente, por lo tanto no le corresponde viatico");
+                                adyacente = true;
+                                metodoMensaje(dest);
+                            }
+                        }
+                    }
                     else if (dest.IdComuna == "14202")
                     {
                         if (local == 1355 || local == 1356 || local == 1357 || local == 1358 || local == 1359)
@@ -6462,6 +6570,7 @@ namespace App.Core.UseCases
 
             }
         }
+
         public ResponseMessage DestinosInsert(Destinos obj)
         {
             var response = new ResponseMessage();
@@ -6519,7 +6628,6 @@ namespace App.Core.UseCases
                     var mes = obj.FechaInicio.Month; //DateTime.Now.Month;
                     var year = obj.FechaInicio.Year; //DateTime.Now.Year;
                     var ListaDestino = _repository.Get<Destinos>(d => d.Cometido != null);
-                    //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId != null))
                     foreach (var destinos in ListaDestino)
                     {
                         var solicitanteDestino = ListaCometidos.FirstOrDefault(q => q.CometidoId == destinos.CometidoId).NombreId;
@@ -6554,6 +6662,8 @@ namespace App.Core.UseCases
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90) + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
                     }
                 }
+
+                //var DestinosActivos = _repository.Get<Destinos>(d => d.CometidoId != null && d.DestinoActivo == true);
 
                 /*se valida que los rangos de fecha no se topen con otros destinos*/
                 //var ListaDestinos = _repository.Get<Destinos>(c => c.CometidoId == obj.CometidoId).ToList();
@@ -6799,14 +6909,21 @@ namespace App.Core.UseCases
                 /*Se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
                 if (obj.Dias100 > 0)
                 {
+                    var listaCometido = _repository.GetAll<Cometido>();
+
                     int Totaldias100Mes = 0;
                     int Totaldias100Ano = 0;
                     var mes = obj.FechaInicio.Month; //DateTime.Now.Month;
-                    var year = obj.FechaInicio.Year; //DateTime.Now.Year;                                           
+                    var year = obj.FechaInicio.Year; //DateTime.Now.Year;
                     foreach (var destinos in des)
                     {
-                        var solicitanteDestino = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
-                        var solicitante = _repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
+                        var solicitanteDestino = listaCometido.FirstOrDefault(q => q.CometidoId == destinos.CometidoId).NombreId;
+
+                        //_repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
+
+                        var solicitante = listaCometido.FirstOrDefault(q => q.CometidoId == obj.CometidoId).NombreId;
+
+                        //_repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
 
                         if (solicitanteDestino == solicitante)
                         {
@@ -6977,6 +7094,7 @@ namespace App.Core.UseCases
                 {
                     var localidad = objController.LocalidadId.Value;
                     SwitchLocalidad(com.IdConglomerado.Value, localidad, response, objController, adyacente);
+
                 }
 
                 /*Se valida que la cantidad de dias solicitados correspondan con los viaticos*/
