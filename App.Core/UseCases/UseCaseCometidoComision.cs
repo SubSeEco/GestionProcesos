@@ -1580,7 +1580,7 @@ namespace App.Core.UseCases
                     var fecha = obj.FechaSolicitud.Date.Subtract(listaDestinosCometido[i].FechaInicio.Date).Days;
                     var fechahelp = listaDestinosCometido[i].FechaInicio.Date.Subtract(obj.FechaSolicitud.Date).Days;
 
-                    if (fechahelp < 20)
+                    if (fechahelp < 7)
                     {
                         helper.Add(fecha);
                     }
@@ -3273,9 +3273,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    //TODO
-                    #region Falta Confirmación de estas locales
-                    /*else if(dest.IdComuna=="06204")
+                    else if (dest.IdComuna == "06204")
                     {
                         if (local == 2731 || local == 2732 || local == 2733 || local == 2734 || local == 2735 ||
                             local == 2736 || local == 2737 || local == 2738 || local == 2739 || local == 2740 ||
@@ -3293,7 +3291,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if(dest.IdComuna=="06205")
+                    else if (dest.IdComuna == "06205")
                     {
                         if (local == 2974 || local == 2975 || local == 2976 || local == 2977 || local == 2978 ||
                             local == 2979 || local == 2980 || local == 2981 || local == 2982 || local == 2983 ||
@@ -3314,7 +3312,7 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    else if(dest.IdComuna=="06206")
+                    else if (dest.IdComuna == "06206")
                     {
                         if (local == 2745 || local == 2746 || local == 2747 || local == 2748 || local == 2749 ||
                             local == 2750 || local == 2751 || local == 2752 || local == 2753 || local == 2754 ||
@@ -3334,8 +3332,7 @@ namespace App.Core.UseCases
                                 metodoMensaje(dest);
                             }
                         }
-                    }*/
-                    #endregion
+                    }
                     else if (dest.IdComuna == "06301")
                     {
                         if (local == 563 || local == 564 || local == 565 || local == 566 || local == 567 ||
@@ -4805,7 +4802,7 @@ namespace App.Core.UseCases
                     }
                     else if (dest.IdComuna == "09118")
                     {
-                        if (local == 1211)
+                        if (local == 1211 || local == 3824)
                         {
                             response.Warnings.Add("El destino señalado es una local adyacente exceptuada por el Decreto 90.");
                         }

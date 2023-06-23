@@ -3287,7 +3287,7 @@ namespace App.Web.Controllers
                 var destino = _repository.GetAll<Destinos>().Where(d => d.CometidoId == cometido.CometidoId).ToList();
                 if (destino.Count > 0)
                 {
-                    if ((destino.FirstOrDefault().FechaInicio.Date - cometido.FechaSolicitud.Date).Days < 20)
+                    if ((destino.FirstOrDefault().FechaInicio.Date - cometido.FechaSolicitud.Date).Days < 7)
                     {
                         fila++;
                         worksheet.Cells[fila, 1].Value = cometido.UnidadDescripcion;

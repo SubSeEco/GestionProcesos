@@ -2,6 +2,17 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.6.4 - Cometidos - 23-06-2023]
+
+### Changed
+
+- Se modificaron los parrafos faltantes donde se indicaba 20 dias a 7 dias.
+- Se modifico CometidoUpdate dejandolo en 7 la validacion de las fechas.
+
+### Added
+
+- se ingresaron localidades faltantes, las cuales fueron agregadas en develop [2.6.2.9].
+
 ## [2.6.3 - Cometidos - 09-06-2023]
 
 ### Changed
