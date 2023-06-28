@@ -831,6 +831,8 @@
     <Content Include="Views\Workflow\Index_old.cshtml" />
     <Content Include="Views\Workflow\Next.cshtml" />
     <Content Include="Views\Workflow\Validate.cshtml" />
+    <Content Include="Views\Proceso\ReporteProceso.cshtml" />
+    <Content Include="Views\InformeHSA\ReporteHSA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

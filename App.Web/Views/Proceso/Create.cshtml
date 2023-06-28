@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col s12 m10 l8">
                         @Html.LabelFor(m => Model.DefinicionProcesoId)
-                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...", new { @class = "input-field validate" })
+                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...", new { @class = "input-field validate", @id="definicionProcesoId" })
                         @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
                     </div>
                 </div>
@@ -38,9 +38,9 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="reservadoRow">
                     <div class="input-field col s12 m10 l8">
-                        <div class="switch">
+                        <div class="switch" id="reservado">
                             <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si desea ocultar los detalles de su proceso a los demás usuarios del sistema">
 
                                 @Html.CheckBoxFor(m => Model.Reservado)
@@ -60,6 +60,20 @@
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#reservadoRow').hide();
+
+        $('#definicionProcesoId').change(function () {
+            var selectedValue = $(this).val();
+            console.log(selectedValue);
+            if (selectedValue === '5' || selectedValue === '4' || selectedValue==='14') {
+                $('#reservadoRow').show();
+            } else {
+                $('#reservadoRow').hide();
+            }
+        })
+    })
+
     $(document).ready(function () {
         $("input[type='hidden']").each(function (index, element) {
             $(this).appendTo($(element).parent());

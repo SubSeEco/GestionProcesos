@@ -142,9 +142,11 @@ namespace App.Web.Controllers
             var user = _sigper.GetUserByEmail(email);
             var result = _workflowService.GetPendingTask(user);
 
-            var model = new DTOFilter();
-            model.TareasPersonales = result.Where(q => q.TareaPersonal).ToList();
-            model.TareasGrupales = result.Where(q => !q.TareaPersonal).ToList();
+            var model = new DTOFilter()
+            {
+                TareasPersonales = result.Where(q => q.TareaPersonal).ToList(),
+                TareasGrupales = result.Where(q => !q.TareaPersonal).ToList()
+            };
 
             return View(model);
         }

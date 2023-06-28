@@ -2,6 +2,20 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.7.0 - Cometidos - 28-06-2023]
+
+### Added
+
+- Se creo reporte de Informe HSA con vista y filtro de fechas.
+- Se agrego filtro de fecha para Reporte Contraloria.
+- Se agrego DTOFilter a Workflow para poder diferenciar que procesos son reservados en las vistas del Home.
+
+### Changed
+
+- Se modifico header compartido para mostrar si el proceso es o no reservado.
+- Se modifico vista de reportes.
+- Se modifico el formato de las resoluciones.
+
 ## [2.6.4 - Cometidos - 23-06-2023]
 
 ### Changed

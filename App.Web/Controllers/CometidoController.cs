@@ -11,6 +11,7 @@ using App.Model.Sigper;
 using App.Util;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using Rotativa.Core.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -195,6 +196,20 @@ namespace App.Web.Controllers
                .ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        //public JsonResult GetPatente(int TipoVehiculoId, int Rut)
+        //{
+        //    var per = _sigper.GetUserByRut(Rut);
+        //    var vehiculo = _repository.GetById<SIGPERTipoVehiculo>(TipoVehiculoId);
+
+        //    var patente = _repository.Get<PatenteVehiculo>().Where(q => q.SIGPERTipoVehiculoId == vehiculo.SIGPERTipoVehiculoId && q.RegionId == per.Contrato.ReContraSed);
+
+        //    return Json(new
+        //    {
+        //        Vehiculo = vehiculo,
+        //        Patente = patente.First().PlacaPatente,
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult GetUsuario(int Rut)
         {
@@ -1468,6 +1483,8 @@ namespace App.Web.Controllers
                 {
                     //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                     Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Resolucion", new { id = model.CometidoId }) { FileName = "Resolucion Ministerial Exenta" + ".pdf" };
+                    resultPdf.PageMargins = new Rotativa.Options.Margins(15, 15, 15, 15);
+                    resultPdf.PageSize = (Rotativa.Options.Size?)Size.Executive;
                     pdf = resultPdf.BuildFile(ControllerContext);
                     //data = GetBynary(pdf);
                     data = _file.BynaryToText(pdf);
@@ -1482,6 +1499,8 @@ namespace App.Web.Controllers
                         //{
                         //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                         Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Orden", new { id = model.CometidoId }) { FileName = "Orden_Pago" + ".pdf" };
+                        resultPdf.PageMargins = new Rotativa.Options.Margins(15, 15, 15, 15);
+                        resultPdf.PageSize = (Rotativa.Options.Size?)Size.Executive;
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
@@ -1509,6 +1528,8 @@ namespace App.Web.Controllers
                     {
                         //Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf", Cookies = cookieCollection, FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName };
                         Rotativa.ActionAsPdf resultPdf = new Rotativa.ActionAsPdf("Pdf", new { id = model.CometidoId }) { FileName = "Resolucion" + ".pdf" };
+                        resultPdf.PageMargins = new Rotativa.Options.Margins(15, 15, 15, 15);
+                        resultPdf.PageSize = (Rotativa.Options.Size?)Size.Executive;
                         pdf = resultPdf.BuildFile(ControllerContext);
                         //data = GetBynary(pdf);
                         data = _file.BynaryToText(pdf);
@@ -2659,15 +2680,38 @@ namespace App.Web.Controllers
                     predicate = predicate.And(q => CometidoId.Contains(q.CometidoId));
 
                 model.Result = _repository.Get(predicate);
+
+                foreach (var pro in model.Result)
+                {
+                    pro.Proceso = _repository.GetById<Proceso>(pro.ProcesoId);
+                }
             }
 
             ViewBag.Ejecutor = new SelectList(_sigper.GetAllUsers(), "RH_NumInte", "PeDatPerChq");
             return View(model);
         }
 
-        public FileResult DownloadSeguimiento()
+        public FileResult DownloadSeguimiento(DTOFilterCometido model)
         {
-            var result = _repository.GetAll<Cometido>();
+            var predicateCometido = PredicateBuilder.True<Cometido>();
+
+            if (model.Desde.HasValue)
+            {
+                predicateCometido = predicateCometido.And(q =>
+                q.FechaSolicitud.Year >= model.Desde.Value.Year &&
+                q.FechaSolicitud.Month >= model.Desde.Value.Month &&
+                q.FechaSolicitud.Day >= model.Desde.Value.Day);
+            }
+
+            if (model.Hasta.HasValue)
+            {
+                predicateCometido = predicateCometido.And(q =>
+                q.FechaSolicitud.Year <= model.Hasta.Value.Year &&
+                q.FechaSolicitud.Month <= model.Hasta.Value.Month &&
+                q.FechaSolicitud.Day <= model.Hasta.Value.Day);
+            }
+
+            var result = _repository.Get(predicateCometido);
 
             var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\SeguimientoUnidades.xlsx");
             var fileInfo = new FileInfo(file);
@@ -2676,7 +2720,7 @@ namespace App.Web.Controllers
 
             var fila = 1;
             var worksheet = excelPackageSeguimientoUnidades.Workbook.Worksheets[0];
-            foreach (var cometido in result.ToList().OrderByDescending(c => c.CometidoId))
+            foreach (var cometido in result.OrderBy(c => c.FechaSolicitud))
             {
                 var workflow = _repository.Get<Workflow>(w => w.ProcesoId == cometido.ProcesoId);
                 var destino = _repository.Get<Destinos>(d => d.CometidoId == cometido.CometidoId).ToList();
@@ -2696,12 +2740,12 @@ namespace App.Web.Controllers
                     worksheet.Cells[fila, 8].Value = w.FechaTermino.HasValue ? w.FechaTermino.Value.ToShortDateString().Trim() : "Pendiente";
                     if (w.FechaTermino.HasValue)
                     {
-                        worksheet.Cells[fila, 9].Value = w.FechaCreacion.Day - w.FechaTermino.Value.Day;
+                        worksheet.Cells[fila, 9].Value = w.FechaTermino.Value - w.FechaCreacion;
                     }
                     else
                     {
                         var hoy = DateTime.Now;
-                        worksheet.Cells[fila, 9].Value = w.FechaCreacion.Day - hoy.Day;
+                        worksheet.Cells[fila, 9].Value = hoy.Day - w.FechaCreacion.Day;
                     }
                     //fila++;
                 }
@@ -2978,7 +3022,7 @@ namespace App.Web.Controllers
             writer.WriteRaw(xmldoc.InnerXml);
             writer.Close();
             stream.Position = 0;
-            var fileStreamResult = File(stream, "application/xml", "ReporteContraloria.xml");
+            var fileStreamResult = File(stream, "application/xml", "ReporteContraloria - " + DateTime.Now.ToString("dd-MM-yyyy HH:mm") + ".xml");
             return fileStreamResult;
         }
 
@@ -3054,10 +3098,9 @@ namespace App.Web.Controllers
                     q.FechaCreacion.Month <= model.Hasta.Value.Month &&
                     q.FechaCreacion.Day <= model.Hasta.Value.Day);
 
-            /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
-            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 84 &&
-            q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada &&
-            !q.Anulada);
+            predicateWorkflow = predicateWorkflow.And(q => q.DefinicionWorkflowId == 84
+            /*|| q.DefinicionWorkflowId == 84 || q.DefinicionWorkflowId == 86*/
+            && q.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada && !q.Anulada); /*se valida que el flujo tenga la tarae de aprobacion analista contabilidad y quer esta este aprobada*/
 
             var WorkflowId = model.Select.Where(q => q.Selected).Select(q => q.Id).ToList();
             if (WorkflowId.Any())
@@ -3092,11 +3135,8 @@ namespace App.Web.Controllers
             List<Cometido> ListCom = new List<Cometido>();
             foreach (var _com in model.Result.ToList())
             {
-                var _cometido = _repository.GetFirst<Cometido>(c => c.ProcesoId == _com.ProcesoId);
-                if (_cometido.Activo == true)
-                {
-                    ListCom.Add(_cometido);
-                }
+                var _cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == _com.ProcesoId);
+                ListCom.Add(_cometido);
             }
             var result = ListCom;
 
@@ -3112,10 +3152,12 @@ namespace App.Web.Controllers
                 var pr = _repository.GetById<Proceso>(cometido.ProcesoId);
                 if (pr.EstadoProcesoId == (int)Util.Enum.EstadoProceso.Terminado)
                 {
-                    //var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);
-                    var work = pr.Workflows.Where(q => q.DefinicionWorkflowId == 82 ||
-                    q.DefinicionWorkflowId == 84 || q.DefinicionWorkflowId == 86);
+                    //var halp = model.Result.ToList().FindAll(q => q.ProcesoId == cometido.ProcesoId);
+                    //var help = model.Result.Where(q => q.ProcesoId == pr.ProcesoId);
+                    var work = pr.Workflows.Where(q => q.DefinicionWorkflowId == 82 || q.DefinicionWorkflowId == 84 || q.DefinicionWorkflowId == 86);
+                    work = work.Where(q => !q.Anulada);
 
+                    /*var workflow = _repository.GetAll<Workflow>().Where(w => w.ProcesoId == cometido.ProcesoId);*/
                     DateTime? inicio = null;
                     DateTime? fin = null;
 

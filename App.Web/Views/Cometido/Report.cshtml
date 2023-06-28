@@ -25,14 +25,14 @@
             @Html.AntiForgeryToken()
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Reporte Seguimiento Gestión de Personas</span>
+                    <span class="card-title">Reporte Cometidos Gestión de Personas</span>
                     <div class="section"></div>
                     <button class="waves-effect waves-light btn blue">Ir</button>
                 </div>
             </div>
         }
 
-        using (Html.BeginForm("FueraPlazo", null, FormMethod.Get))
+        @*using (Html.BeginForm("FueraPlazo", null, FormMethod.Get))
         {
             @Html.AntiForgeryToken()
             <div class="card">
@@ -53,13 +53,13 @@
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
     }
 
     @if (@ViewBag.Grupo == "4" || @ViewBag.Grupo == "7" || @ViewBag.Grupo == "6" || @ViewBag.Grupo == "5" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
     {
 
-        using (Html.BeginForm("Caigg", null))
+        @*using (Html.BeginForm("Caigg", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
@@ -80,9 +80,9 @@
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
 
-        using (Html.BeginForm("SeguimientoFinanzas", null))
+        @*using (Html.BeginForm("SeguimientoFinanzas", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
@@ -92,7 +92,7 @@
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
 
         using (Html.BeginForm("CDCFinanzas", null))
         {
@@ -117,19 +117,30 @@
             </div>
         }
 
-        using (Html.BeginForm("SeguimientoUnidades", null))
+        @*using (Html.BeginForm("DownloadSeguimiento", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Reporte Seguimiento Unidades</span>
-                    <div class="section"></div>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "ted-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "ted-text" })
+                        </div>
+                    </div>
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
 
-        using (Html.BeginForm("SolicitudTransparencia", null))
+        @*using (Html.BeginForm("SolicitudTransparencia", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
@@ -139,9 +150,9 @@
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
 
-        using (Html.BeginForm("ReportePresupuesto", null))
+        @*using (Html.BeginForm("ReportePresupuesto", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
@@ -151,30 +162,30 @@
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
-        }
+        }*@
     }
 
     @if (ViewBag.Grupo == "20" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
     {
-        using (Html.BeginForm("AjusteAsistencia", null))
-        {
-            @Html.AntiForgeryToken()
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Reporte Ajuste de Asistencia</span>
-                    <div class="section"></div>
-                    <button class="waves-effect waves-light btn blue">Descargar</button>
-                </div>
-            </div>
-        }
 
         using (Html.BeginForm("ReporteContraloria", null))
         {
             @Html.AntiForgeryToken()
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Reporte Contraloria</span>
-                    <div class="section"></div>
+                    <span class="card-title">Reporte XML Contraloria</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.FechaInicio)
+                            @Html.EditorFor(m => Model.FechaInicio)
+                            @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "ted-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.FechaTermino)
+                            @Html.EditorFor(m => Model.FechaTermino)
+                            @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "ted-text" })
+                        </div>
+                    </div>
                     <button class="waves-effect waves-light btn blue">Descargar</button>
                 </div>
             </div>
@@ -195,5 +206,16 @@
             </div>
         }
 
+        using (Html.BeginForm("AjusteAsistencia", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Ajuste de Asistencia</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }
     }
 </div>

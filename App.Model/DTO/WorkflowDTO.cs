@@ -25,6 +25,8 @@ namespace App.Model.DTO
         public string ProcesoEntidad { get; set; }
         public GD GD { get; set; }
 
+        public bool ProcesoReservado { get; set; }
+
         public bool EsPersonal { get; set; }
     }
 }

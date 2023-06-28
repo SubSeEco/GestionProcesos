@@ -1,14 +1,15 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using App.Core.Interfaces;
+using App.Core.UseCases;
 using App.Model.Core;
 using App.Model.InformeHSA;
-using App.Core.Interfaces;
-using Rotativa.MVC;
-using App.Core.UseCases;
-using System.Linq;
-using System.IO;
 using OfficeOpenXml;
+using Rotativa.MVC;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace App.Web.Controllers
 {
@@ -73,6 +74,31 @@ namespace App.Web.Controllers
         private readonly IFile _file;
         private readonly IEmail _email;
 
+        public class DTOFilter
+        {
+            public DTOFilter()
+            {
+                TextSearch = string.Empty;
+                Select = new HashSet<Model.DTO.DTOSelect>();
+                Result = new HashSet<InformeHSA>();
+            }
+
+            [Display(Name = "Texto de búsqueda")]
+            public string TextSearch { get; set; }
+
+            [Display(Name = "Desde")]
+            [DataType(DataType.Date)]
+            public DateTime? Desde { get; set; }
+
+            [Display(Name = "Hasta")]
+            [DataType(DataType.Date)]
+            public DateTime? Hasta { get; set; }
+
+            [Display(Name = "Tipos de Proceso")]
+            public IEnumerable<Model.DTO.DTOSelect> Select { get; set; }
+            public IEnumerable<InformeHSA> Result { get; set; }
+        }
+
         public InformeHSAController(IGestionProcesos repository, ISigper sigper, IFile file, IEmail email)
         {
             _repository = repository;
@@ -129,6 +155,15 @@ namespace App.Web.Controllers
                 TempData["Error"] = _UseCaseResponseMessage.Errors;
             }
 
+            return View(model);
+        }
+
+        public ActionResult ReporteHSA()
+        {
+            var model = new DTOFilter()
+            {
+
+            };
             return View(model);
         }
 
@@ -326,38 +361,70 @@ namespace App.Web.Controllers
             return Json(new { ok = true, error = "", DTOInformeHSA }, JsonRequestBehavior.AllowGet);
         }
 
-        public FileResult Report()
+        public ActionResult Report(DTOFilter model)
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                var result = context
-                    .InformeHSA
-                    .AsNoTracking()
-                    .Where(q => q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado).Select(hsa => new
+                if (model.Desde == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Desde.");
+                }
+                if (model.Hasta == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Hasta.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var result = context
+                        .InformeHSA
+                        .AsNoTracking()
+                        .Where(q => q.Proceso.FechaCreacion >= model.Desde && q.Proceso.FechaCreacion <= model.Hasta &&
+                        q.Proceso.EstadoProcesoId != (int)Util.Enum.EstadoProceso.Anulado).Select(hsa => new
+                        {
+                            hsa.ProcesoId,
+                            hsa.Proceso.EstadoProceso.Descripcion,
+                            hsa.FechaSolicitud,
+                            hsa.FechaDesde,
+                            hsa.FechaHasta,
+                            hsa.RUT,
+                            hsa.Nombre,
+                            hsa.Unidad,
+                            hsa.NombreJefatura,
+                            ConJornada = hsa.ConJornada ? "SI" : "NO",
+                            hsa.Funciones,
+                            hsa.Actividades,
+                            hsa.Observaciones,
+                            hsa.FechaBoleta,
+                            hsa.NumeroBoleta,
+                        });
+
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
+                    excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
+                    excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
+
+                    return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, "Reporte HSA " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + ".xlsx");
+                }
+                else
+                {
+                    var errors = new List<string>();
+                    errors.Add("En Reporte Informe HSA: ");
+                    foreach (var error in ModelState.Values)
                     {
-                        hsa.ProcesoId,
-                        hsa.Proceso.EstadoProceso.Descripcion,
-                        hsa.FechaSolicitud,
-                        hsa.FechaDesde,
-                        hsa.FechaHasta,
-                        hsa.RUT,
-                        hsa.Nombre,
-                        hsa.Unidad,
-                        hsa.NombreJefatura,
-                        ConJornada = hsa.ConJornada ? "SI" : "NO",
-                        hsa.Funciones,
-                        hsa.Actividades,
-                        hsa.Observaciones,
-                        hsa.FechaBoleta,
-                        hsa.NumeroBoleta,
-                    });
+                        for (int i = 0; i < error.Errors.Count; i++)
+                        {
+                            var errorModel = error.Errors[i];
+                            if (errorModel != null)
+                            {
+                                errors.Add(errorModel.ErrorMessage);
+                                TempData["Error"] = errors;
+                            }
+                        }
+                    }
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
 
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                var excel = new ExcelPackage(new FileInfo(string.Concat(Request.PhysicalApplicationPath, @"App_Data\HSA.xlsx")));
-                excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(result);
-                excel.Workbook.Worksheets[0].Cells.AutoFitColumns();
-
-                return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet, DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx");
             }
         }
     }

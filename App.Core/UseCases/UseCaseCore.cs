@@ -1,12 +1,12 @@
 ﻿
-using System;
-using System.Linq;
-using App.Model.Core;
 using App.Core.Interfaces;
+using App.Model.Cometido;
+using App.Model.Core;
 using App.Model.Sigper;
 using App.Util;
-using App.Model.Cometido;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace App.Core.UseCases
 {
@@ -337,7 +337,15 @@ namespace App.Core.UseCases
                 proceso.Email = obj.Email.Trim();
                 proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.EnProceso;
                 proceso.NombreFuncionario = persona != null && persona.Funcionario != null ? persona.Funcionario.PeDatPerChq.Trim() : null;
-                proceso.Reservado = obj.Reservado;
+                if (obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.ConsultaIntegridad ||
+                    obj.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.DenunciaIntegridad)
+                {
+                    proceso.Reservado = true;
+                }
+                else
+                {
+                    proceso.Reservado = obj.Reservado;
+                }
                 if (persona.Unidad != null)
                 {
                     proceso.Pl_UndCod = persona.Unidad.Pl_UndCod;
@@ -450,9 +458,12 @@ namespace App.Core.UseCases
             try
             {
                 var obj = _repository.GetById<Proceso>(id);
+                var cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == obj.ProcesoId);
+                var listaDestinos = _repository.GetAll<Destinos>().Where(q => q.CometidoId == cometido.CometidoId).ToList();
+
                 if (response.IsValid)
                 {
-                    if(obj.DefinicionProcesoId!=(int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
+                    if (obj.DefinicionProcesoId != (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                     {
                         foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
                         {
@@ -463,9 +474,9 @@ namespace App.Core.UseCases
                     }
                     else
                     {
-                        foreach(var workflow in obj.Workflows.Where(q => !q.Terminada))
+                        foreach (var workflow in obj.Workflows.Where(q => !q.Terminada))
                         {
-                            if(workflow.DefinicionWorkflow.Secuencia!=(int)Util.Enum.CometidoSecuencia.SolicitudCometido)
+                            if (workflow.DefinicionWorkflow.Secuencia != (int)Util.Enum.CometidoSecuencia.SolicitudCometido)
                             {
                                 throw new Exception("No se puede anular el proceso debido a que ya cuenta con aprobación de Jefatura.");
                             }
@@ -474,6 +485,11 @@ namespace App.Core.UseCases
                                 workflow.FechaTermino = DateTime.Now;
                                 workflow.Terminada = true;
                                 workflow.Anulada = true;
+
+                                foreach (var dest in listaDestinos)
+                                {
+                                    dest.DestinoActivo = false;
+                                }
                             }
                         }
                     }
