@@ -526,7 +526,7 @@
                                     @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
                                     {
 
-                                        foreach (var item in Model.Proceso.Documentos)
+                                        foreach (var item in Model.Proceso.Documentos.Where(q=>q.Activo))
                                         {
                                             if (item.TipoDocumentoId == 7 && item.Activo)
                                             {

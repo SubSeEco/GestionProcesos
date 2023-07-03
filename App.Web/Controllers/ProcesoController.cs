@@ -7,6 +7,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -335,7 +336,7 @@ namespace App.Web.Controllers
                     var fileInfo = new FileInfo(file);
                     var excel = new ExcelPackage(fileInfo);
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
+                    model.Hasta = model.Hasta.Value.AddDays(1).AddTicks(-1);
                     if (model.UnidadCodigo.IsNullOrWhiteSpace())
                     {
                         var procesos = context
@@ -538,6 +539,7 @@ namespace App.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    model.Hasta = model.Hasta.Value.AddDays(1).AddTicks(-1);
                     var procesos = context
                         .Proceso
                         .AsNoTracking()
@@ -630,6 +632,7 @@ namespace App.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    model.Hasta = model.Hasta.Value.AddDays(1).AddTicks(-1);
                     var procesos = context
                         .Proceso
                         .AsNoTracking()

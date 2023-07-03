@@ -9,9 +9,8 @@
     <div class="card-content ">
         @*<span class="card-title">Documentos</span>*@
 
-        @foreach (var item in Model.Proceso.Documentos)
+        @foreach (var item in Model.Proceso.Documentos.Where(q=>q.Activo))
         {
-
             if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
             {
                 if (item.TipoDocumentoId == 7) //(item.TipoDocumentoId == 2)

@@ -28,7 +28,7 @@
                     <div id="jQuery_accordion">
                         <h3><span style="font-weight: bold">Documento: </span></h3>
                         <div class="row">
-                            @foreach (var item in Model.Proceso.Documentos)
+                            @foreach (var item in Model.Proceso.Documentos.Where(q=>q.Activo))
                             {
                                 @*<p>
                         Fecha creación: @item.Fecha<br />

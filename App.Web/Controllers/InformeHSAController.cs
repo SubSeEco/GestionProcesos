@@ -376,6 +376,7 @@ namespace App.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    model.Hasta = model.Hasta.Value.AddDays(1).AddTicks(-1);
                     var result = context
                         .InformeHSA
                         .AsNoTracking()

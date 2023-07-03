@@ -2,6 +2,14 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.7.0.1 - Cometidos - GP 03-07-2023]
+
+### Changed
+
+- Se modifico el titulo de las casillas del Excel "Procesos".
+- Se modificaron las consultas de LINQ en la generación de algunos reportes para considerar la fecha hasta el ultimo dia indicado agregando la hora.
+- Se modifico la vista de las tareas con firmas de cometido para que muestre solo los documentos que estan activos.
+
 ## [2.7.0 - Cometidos - 28-06-2023]
 
 ### Added

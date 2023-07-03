@@ -588,7 +588,7 @@
                                 }
                                 <div class="collapsible-body">
                                     <div class="row">
-                                        @foreach (var item in Model.Proceso.Documentos)
+                                        @foreach (var item in Model.Proceso.Documentos.Where(q=>q.Activo))
                                         {
                                             if (item.TipoDocumentoId == 1 || item.TipoDocumentoId == 2 || item.TipoDocumentoId == 5 || item.TipoDocumentoId == 4)
                                             {
