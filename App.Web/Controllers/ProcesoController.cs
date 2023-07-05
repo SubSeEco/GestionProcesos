@@ -321,14 +321,14 @@ namespace App.Web.Controllers
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())
             {
-                if (model.Desde == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Desde.");
-                }
-                if (model.Hasta == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Hasta.");
-                }
+                //if (model.Desde == null)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Desde.");
+                //}
+                //if (model.Hasta == null)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Debe ingresar fecha Hasta.");
+                //}
 
                 if (ModelState.IsValid)
                 {
@@ -336,13 +336,13 @@ namespace App.Web.Controllers
                     var fileInfo = new FileInfo(file);
                     var excel = new ExcelPackage(fileInfo);
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                    model.Hasta = model.Hasta.Value.AddDays(1).AddTicks(-1);
+                    model.Hasta = DateTime.Today.AddDays(1).AddTicks(-1);
                     if (model.UnidadCodigo.IsNullOrWhiteSpace())
                     {
                         var procesos = context
                         .Proceso
                         .AsNoTracking()
-                        .Where(q => q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta)
+                        .Where(q => model.Hasta >= q.FechaCreacion)
                         .Select(proceso => new
                         {
                             proceso.ProcesoId,
@@ -360,7 +360,7 @@ namespace App.Web.Controllers
                         var workflows = context
                             .Workflow
                             .AsNoTracking()
-                            .Where(q => q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta)
+                            .Where(q => model.Hasta >= q.FechaCreacion)
                             .Select(workflow => new
                             {
                                 workflow.Proceso.ProcesoId,
@@ -390,7 +390,7 @@ namespace App.Web.Controllers
                         var procesos = context
                         .Proceso
                         .AsNoTracking()
-                        .Where(q => q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta && q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
+                        .Where(q => model.Hasta >= q.FechaCreacion && q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
                         .Select(proceso => new
                         {
                             proceso.ProcesoId,
@@ -408,7 +408,7 @@ namespace App.Web.Controllers
                         var workflows = context
                             .Workflow
                             .AsNoTracking()
-                            .Where(q => q.FechaCreacion >= model.Desde && q.FechaCreacion <= model.Hasta && q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
+                            .Where(q => model.Hasta >= q.FechaCreacion && q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
                             .Select(workflow => new
                             {
                                 workflow.Proceso.ProcesoId,
@@ -456,7 +456,71 @@ namespace App.Web.Controllers
                 }
             }
         }
+        #region Desarrollo Reportes Pendientes a la Fecha
 
+        //public ActionResult ReportePendientesFecha(DTOFilter model)
+        //{
+        //    using (var context = new Infrastructure.GestionProcesos.AppContext())
+        //    {
+        //        var file = string.Concat(Request.PhysicalApplicationPath, @"App_Data\PROCESOS.xlsx");
+        //        var fileInfo = new FileInfo(file);
+        //        var excel = new ExcelPackage(fileInfo);
+        //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        //        model.Hasta = DateTime.Today.AddDays(1).AddTicks(-1);
+        //        var help = model.UnidadCodigo;
+
+        //        var procesos = context
+        //            .Proceso
+        //            .AsNoTracking()
+        //            .Where(q => model.Hasta >= q.FechaCreacion && q.EstadoProcesoId == (int)App.Util.Enum.EstadoProceso.EnProceso &&
+        //            q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
+        //            .Select(proceso => new
+        //            {
+        //                proceso.ProcesoId,
+        //                proceso.DefinicionProceso.Nombre,
+        //                proceso.FechaCreacion,
+        //                proceso.FechaVencimiento,
+        //                proceso.FechaTermino,
+        //                procesoEmail = proceso.Reservado ? "" : proceso.Email,
+        //                proceso.EstadoProceso.Descripcion,
+        //                Observacion = proceso.Reservado ? "" : proceso.Observacion,
+        //                Reservado = proceso.Reservado ? "SI" : "NO"
+        //            })
+        //            .ToList();
+
+        //        var workflows = context
+        //            .Workflow
+        //            .AsNoTracking()
+        //            .Where(q => model.Hasta >= q.FechaCreacion && !q.Anulada && !q.Terminada && q.Pl_UndCod.Value.ToString() == model.UnidadCodigo)
+        //            .Select(workflow => new
+        //            {
+        //                workflow.Proceso.ProcesoId,
+        //                workflow.Proceso.DefinicionProceso.Nombre,
+        //                workflow.Proceso.FechaCreacion,
+        //                workflow.Proceso.FechaVencimiento,
+        //                workflow.Proceso.FechaTermino,
+        //                workflowProcesoEmail = workflow.Proceso.Reservado ? "" : workflow.Proceso.Email,
+        //                workflow.Proceso.EstadoProceso.Descripcion,
+        //                observacion = workflow.Proceso.Reservado ? "" : workflow.Proceso.Email,
+        //                workflow.WorkflowId,
+        //                WorkflowDefinicion = workflow.DefinicionWorkflow.Nombre,
+        //                Pl_UndDes = workflow.Proceso.Reservado ? "" : workflow.Pl_UndDes,
+        //                WorkflowEmail = workflow.Proceso.Reservado ? "" : workflow.Email,
+        //                WorkflowFechaCreacion = workflow.FechaCreacion,
+        //                WorkflowFechaCreacionFechaTermino = workflow.FechaTermino,
+        //                WorkflowTipoAprobacion = workflow.Proceso.Reservado ? "" : workflow.TipoAprobacion.Nombre,
+        //                WorkflowObservacion = workflow.Proceso.Reservado ? "" : workflow.Observacion,
+        //            })
+        //            .ToList();
+
+        //        excel.Workbook.Worksheets[0].Cells[2, 1].LoadFromCollection(procesos);
+        //        excel.Workbook.Worksheets[1].Cells[2, 1].LoadFromCollection(workflows);
+
+        //        return File(excel.GetAsByteArray(), System.Net.Mime.MediaTypeNames.Application.Octet,
+        //            "Reporte Pendientes " + DateTime.Now.ToString("yyy-MM-dd HHmmss") + ".xlsx");
+        //    }
+        //}
+        #endregion
         public FileResult ReporteGenericoGD(DTOFilter model)
         {
             using (var context = new Infrastructure.GestionProcesos.AppContext())

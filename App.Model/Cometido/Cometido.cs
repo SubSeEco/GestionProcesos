@@ -1,12 +1,12 @@
-﻿using System;
+﻿using App.Model.Core;
+using App.Model.Shared;
+using ExpressiveAnnotations.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using App.Model.Core;
-using App.Model.Shared;
-using ExpressiveAnnotations.Attributes;
 
 namespace App.Model.Cometido
 {
@@ -40,7 +40,7 @@ namespace App.Model.Cometido
         public string Nombre { get; set; }
         [Display(Name = "Nombre Id")]
         public int? NombreId { get; set; }
-        
+
         [Required(ErrorMessage = "Se debe señalar el RUT del funcionario")]
         //[RegularExpression(@"\d{8}", ErrorMessage = "Excede el largo maximo (8)")]
         [Display(Name = "Rut")]
@@ -73,7 +73,7 @@ namespace App.Model.Cometido
 
         [Required(ErrorMessage = "Se debe señalar el Grado del funcionario")]
         [Display(Name = "Grado E.U.S.")]
-        public string GradoDescripcion { get; set; }       
+        public string GradoDescripcion { get; set; }
 
         //[Required(ErrorMessage = "Es necesario especificar este dato")]
         [Display(Name = "Grado de contratación (en caso de HSA se debe homologr a un grado de la E.U.S)")]
@@ -86,16 +86,16 @@ namespace App.Model.Cometido
         [Required(ErrorMessage = "Se debe señalar el Cargo del funcionario")]
         [Display(Name = "Cargo")]
         public string CargoDescripcion { get; set; }
-                
+
         [Display(Name = "Estamento")]
         public int? IdEstamento { get; set; }
-        
+
         [Display(Name = "Estamento")]
         public string EstamentoDescripcion { get; set; }
-        
+
         [Display(Name = "Escalafon")]
         public int? IdEscalafon { get; set; }
-        
+
         [Display(Name = "Escalafon")]
         public string EscalafonDescripcion { get; set; }
 
@@ -127,8 +127,8 @@ namespace App.Model.Cometido
 
         [Display(Name = "Pasajes")]
         public bool Pasajes { get; set; }
-                
-        [Display(Name = "El cometido incluye pago de viatico?")]        
+
+        [Display(Name = "El cometido incluye pago de viatico?")]
         public bool SolicitaViatico { get; set; }
 
         [Display(Name = "El cometido incluye pago de pasaje aéreo?")]
@@ -148,7 +148,7 @@ namespace App.Model.Cometido
         [Display(Name = "Tipo de vehículo")]
         public string TipoVehiculoDescripcion { get; set; }
 
-        [StringLength(6,ErrorMessage="Se acepta un maximo de 6 caracteres", MinimumLength = 1)]
+        [StringLength(6, ErrorMessage = "Se acepta un maximo de 6 caracteres", MinimumLength = 1)]
         [Display(Name = "Placa Vehículo")]
         public string PlacaVehiculo { get; set; }
 
@@ -160,7 +160,7 @@ namespace App.Model.Cometido
         public int? TipoReembolsoId { get; set; }
         [Display(Name = "Tipo Reembolso")]
         public string TipoReembolsoDescripcion { get; set; }
-        
+
         [Required(ErrorMessage = "Se debe señalar el motivo del viaje")]
         [Display(Name = "Detalle y motivo del viaje")]
         [DataType(DataType.MultilineText)]
@@ -187,7 +187,7 @@ namespace App.Model.Cometido
         public string Tiempo { get; set; }
 
         [NotMapped]
-        [Display(Name = "Anno")] 
+        [Display(Name = "Anno")]
         public string Anno { get; set; }
 
         [NotMapped]
@@ -226,6 +226,14 @@ namespace App.Model.Cometido
         [NotMapped]
         [Display(Name = "DejaseConstancia")]
         public string DejaseConstancia { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Parrafo Atraso")]
+        public string ParrafoAtraso { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Segundo Parrafo Atraso")]
+        public string SegundoParrafoAtraso { get; set; }
 
         [Display(Name = "Cometido Ok")]
         public bool? CometidoOk { get; set; } = false;

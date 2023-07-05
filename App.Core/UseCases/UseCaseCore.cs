@@ -459,7 +459,11 @@ namespace App.Core.UseCases
             {
                 var obj = _repository.GetById<Proceso>(id);
                 var cometido = _repository.GetFirst<Cometido>(q => q.ProcesoId == obj.ProcesoId);
-                var listaDestinos = _repository.GetAll<Destinos>().Where(q => q.CometidoId == cometido.CometidoId).ToList();
+                var listaDestinos = new List<Destinos>();
+                if (cometido != null)
+                {
+                    listaDestinos = _repository.GetAll<Destinos>().Where(q => q.CometidoId == cometido.CometidoId).ToList();
+                }
 
                 if (response.IsValid)
                 {

@@ -1699,6 +1699,11 @@ namespace App.Web.Controllers
 
                 /*se traen los datos de la tabla parrafos*/
                 var parrafos = _repository.GetAll<Parrafos>();
+                if (model.Atrasado)
+                {
+                    model.ParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.ParrafoAtraso).FirstOrDefault().ParrafoTexto;
+                    model.SegundoParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.SegundoParrafoAtraso).FirstOrDefault().ParrafoTexto;
+                }
                 switch (model.IdGrado)
                 {
                     case "B":/*Firma Subsecretario*/
@@ -1863,6 +1868,11 @@ namespace App.Web.Controllers
             model.Firmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.Firmante).FirstOrDefault().ParrafoTexto;
             model.CargoFirmante = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.CargoFirmante).FirstOrDefault().ParrafoTexto;
             model.Vistos = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.VistoOP).FirstOrDefault().ParrafoTexto;
+            if (model.Atrasado)
+            {
+                model.ParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.ParrafoAtraso).FirstOrDefault().ParrafoTexto;
+                model.SegundoParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.SegundoParrafoAtraso).FirstOrDefault().ParrafoTexto;
+            }
 
             foreach (var p in parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.DejaseConstancia))
             {
@@ -1989,6 +1999,11 @@ namespace App.Web.Controllers
 
             /*se traen los datos de la tabla parrafos*/
             var parrafos = _repository.GetAll<Parrafos>();
+            if (model.Atrasado)
+            {
+                model.ParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.ParrafoAtraso).FirstOrDefault().ParrafoTexto;
+                model.SegundoParrafoAtraso = parrafos.Where(p => p.ParrafosId == (int)Util.Enum.Firmas.SegundoParrafoAtraso).FirstOrDefault().ParrafoTexto;
+            }
             switch (model.IdGrado)
             {
                 case "B":/*Firma Subsecretario*/

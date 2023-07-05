@@ -2,6 +2,17 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
+## [2.7.0.2 - Cometidos - GP 05-07-2023]
+
+### Changed
+
+- Se modificaron las resoluciones de cometidos para que la edicion de estos sea mas modular.
+- Se modifico las vistas para incluir los parrafos de atraso desde la DB.
+
+### Added
+
+- Se agrego al Enum las casillas para las parrafos de atraso.
+
 ## [2.7.0.1 - Cometidos - GP 03-07-2023]
 
 ### Changed

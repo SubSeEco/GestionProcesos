@@ -55,6 +55,9 @@ namespace App.Util
             VistoOP = 13,
             DejaseConstancia = 14,
             ViaticodeVuelta = 15,
+            ParrafoAtraso = 16,
+            SegundoParrafoAtraso = 17,
+            #region Desarrollo
             OrdenHEProg = 16,
             FirmanteHEProg = 17,
             CargoFirmanteHEProg = 18,
@@ -72,6 +75,7 @@ namespace App.Util
             VistosHECom = 30,
             InicialesRHPagadas = 31,
             InicialesRHCompensadas = 32,
+            #endregion
         }
         public enum TipoAprobacion
         {
