@@ -165,7 +165,7 @@
         }*@
     }
 
-    @if (ViewBag.Grupo == "20" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
+    @if (@ViewBag.Grupo == "20" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
     {
 
         using (Html.BeginForm("ReporteContraloria", null))
@@ -205,7 +205,11 @@
                 </div>
             </div>
         }
+        
+    }
 
+    @if(@ViewBag.Grupo =="1"||@ViewBag.Grupo=="8")
+    {
         using (Html.BeginForm("AjusteAsistencia", null))
         {
             @Html.AntiForgeryToken()

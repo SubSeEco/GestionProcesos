@@ -9364,14 +9364,14 @@ namespace App.Core.UseCases
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.Resolucion).FirstOrDefault().DocumentoId).Signed;
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.Resolucion && c.Activo).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento del acto administrativo debe estar firmado electronicamente");
 
                             /*se valida si existe una resolucion revocatoria, esta se debe firmar*/
                             if (comet.ResolucionRevocatoria == true)
                             {
-                                var res = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.ResolucionRevocatoriaCometido).FirstOrDefault().DocumentoId).Signed;
+                                var res = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == (int)Util.Enum.TipoDocumento.ResolucionRevocatoriaCometido && c.Activo).FirstOrDefault().DocumentoId).Signed;
                                 if (res == false)
                                     throw new Exception("El documento resolucion revocatoria debe estar firmado electronicamente");
                             }
@@ -9386,7 +9386,7 @@ namespace App.Core.UseCases
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4).FirstOrDefault().DocumentoId).Signed;
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 4 && c.Activo).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento cargado por el analista de contabilidad debe estar firmado electronicamente");
                         }
@@ -9400,7 +9400,7 @@ namespace App.Core.UseCases
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5 && c.Type == "application/pdf").FirstOrDefault().DocumentoId).Signed;
+                            var doc = _repository.GetById<Documento>(workflowActual.Proceso.Documentos.Where(c => c.TipoDocumentoId == 5 && c.Type == "application/pdf" && c.Activo).FirstOrDefault().DocumentoId).Signed;
                             if (doc == false)
                                 throw new Exception("El documento cargado por el analista de tesorería debe estar firmado electronicamente");
                         }
