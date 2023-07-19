@@ -6846,6 +6846,7 @@ namespace App.Core.UseCases
         {
             var response = new ResponseMessage();
             Destinos obj = _repository.GetFirst<Destinos>(q => q.DestinoId == objController.DestinoId);
+            var listaCometido = _repository.GetAll<Cometido>();
             try
             {
                 obj.Dias100 = objController.Dias100;
@@ -6906,8 +6907,6 @@ namespace App.Core.UseCases
                 /*Se valida la cantidad de dias al 100% dentro del mes, no puede superar los 10 dias. Y dentro del año no puede superar los 90 dias*/
                 if (obj.Dias100 > 0)
                 {
-                    var listaCometido = _repository.GetAll<Cometido>();
-
                     int Totaldias100Mes = 0;
                     int Totaldias100Ano = 0;
                     var mes = obj.FechaInicio.Month; //DateTime.Now.Month;
@@ -6956,10 +6955,12 @@ namespace App.Core.UseCases
                     var year = obj.FechaInicio.Year; //DateTime.Now.Year;                                           
                     foreach (var destinos in des)
                     {
-                        var solicitanteDestino = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
-                        var solicitante = _repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
+                        var solicitanteDestinoHelp = listaCometido.FirstOrDefault(c => c.CometidoId == destinos.CometidoId).NombreId;
+                        var solicitanteHelp = listaCometido.FirstOrDefault(c => c.CometidoId == objController.CometidoId).NombreId;
+                        //var solicitanteDestinoHelp = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
+                        //var solicitanteHelp = _repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
 
-                        if (solicitanteDestino == solicitante)
+                        if (solicitanteDestinoHelp == solicitanteHelp)
                         {
                             if (destinos.FechaInicio.Month == mes && destinos.Dias100Aprobados != 0 && destinos.Dias100Aprobados != null)
                                 Totaldias100MesAprobados += destinos.Dias100Aprobados.Value;
@@ -7003,7 +7004,8 @@ namespace App.Core.UseCases
                     obj.Total = 0;
                 }
 
-                var com = _repository.GetFirst<Cometido>(c => c.CometidoId == obj.CometidoId);
+                //var com = _repository.GetFirst<Cometido>(c => c.CometidoId == obj.CometidoId);
+                var com = listaCometido.First(c => c.CometidoId == obj.CometidoId);
                 if (com.SolicitaViatico == false)
                 {
                     response.Warnings.Add("Este cometido tendrá un viático de $0");
@@ -7120,10 +7122,11 @@ namespace App.Core.UseCases
                 /*se valida que los rangos de fecha no se topen con otros destinos esto no aplica en la tarea de edit GP*/
                 if (objController.EditGP != true)
                 {
-                    foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId != null && d.DestinoActivo == true))
+                    foreach (var destinos in des.FindAll(d => d.CometidoId != null && d.DestinoActivo == true)
+                        /*_repository.Get<Destinos>(d => d.CometidoId != null && d.DestinoActivo == true)*/)
                     {
-                        var solicitanteDestino = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
-                        var solicitante = _repository.Get<Cometido>(c => c.CometidoId == obj.CometidoId).FirstOrDefault().NombreId;
+                        var solicitanteDestino = listaCometido.First(q => q.CometidoId == destinos.CometidoId).NombreId;
+                        var solicitante = listaCometido.First(c => c.CometidoId == obj.CometidoId).NombreId;
 
                         if (solicitanteDestino == solicitante)
                         {
