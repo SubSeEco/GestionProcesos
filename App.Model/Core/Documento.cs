@@ -64,14 +64,14 @@ namespace App.Model.Core
         public string Ubicacion { get; set; }
 
         [Display(Name = "Firmado")]
-        public bool Signed { get; set; } 
+        public bool Signed { get; set; }
 
         [Display(Name = "Código")]
         public string Codigo { get; set; }
 
         [Display(Name = "Código de barra")]
         public byte[] BarCode { get; set; }
-        
+
         [Display(Name = "Hash md5")]
         public string Md5 { get; set; }
 
@@ -80,7 +80,7 @@ namespace App.Model.Core
 
         [Display(Name = "Activo")]
         public bool Activo { get; set; } = true;
-        
+
 
 
         [Display(Name = "Tipo documento (foliador)")]
@@ -96,14 +96,20 @@ namespace App.Model.Core
         public string FirmanteUnidad { get; set; }
 
         [Display(Name = "Usuario firmante")]
-        public string FirmanteEmail  { get; set; }
+        public string FirmanteEmail { get; set; }
 
         [Display(Name = "Descripción")]
-        public string Descripcion  { get; set; }
+        public string Descripcion { get; set; }
 
         [Display(Name = "Código estampado?")]
         public bool CodigoEstampado { get; set; } = false;
 
+        [Display(Name = "Anulado Por: ")]
+        public string AnuladoPor { get; set; }
+
+        [Display(Name = "Fecha Anulacion")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
+        public DateTime? FechaAnulacion { get; set; }
 
         [NotMapped]
         [Display(Name = "Autorizado para firmar documentos?")]

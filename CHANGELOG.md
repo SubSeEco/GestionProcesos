@@ -2,7 +2,19 @@
 
 este archivo esta basado en el formato Keep a Changelog(https://keepachangelog.com/es-ES/1.0.0/)
 
-## [2.7.0.2 - Cometidos - GP 05-07-2023]
+## [2.7.0.3 - Cometidos - GP - 21-07-2023]
+
+### Changed
+
+- Se corrigio el desborde de la grilla de la firma en las resoluciones de cometidos.
+- Se corrigio bug que consideraba los documentos anulados, en el metodo EstamparCodigoBarra
+- Se modifico metodo de eliminar documentos agregando el usuario que lo anulo y la fecha de anulación.
+
+### Added
+
+- Se agregaron 2 campos nuevos en la tabla Documentos, AnuladorPor y FechaAnulacion.
+
+## [2.7.0.2 - Cometidos - GP - 05-07-2023]
 
 ### Changed
 

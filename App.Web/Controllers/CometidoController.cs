@@ -3376,7 +3376,8 @@ namespace App.Web.Controllers
         {
             var model = _repository.GetById<Documento>(Id);
             var _useCaseInteractor = new UseCaseDocumento(_repository);// (_repository, _file, _folio);
-            var _UseCaseResponseMessage = _useCaseInteractor.DeleteActivo(model.DocumentoId);
+            var mail = UserExtended.Email(User);
+            var _UseCaseResponseMessage = _useCaseInteractor.DeleteActivo(model.DocumentoId, mail);
 
             if (_UseCaseResponseMessage.IsValid)
             {
