@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using App.Core.Interfaces;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
+﻿using App.Core.Interfaces;
 using App.Infrastructure.FirmaElock;
 using App.Util;
-using System.Collections.Generic;
-using System.Linq;
-using RestSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Newtonsoft.Json;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace App.Infrastructure.HSM
 {
@@ -75,9 +75,9 @@ namespace App.Infrastructure.HSM
                     var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
                     var fontBold = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
                     var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
-                    var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+                    var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 85 };
 
-                    table.TotalWidth = 520f;
+                    table.TotalWidth = 480f;
                     table.SetWidths(new[] { 8f, 25f, 6f });
                     table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
                     table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);

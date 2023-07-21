@@ -1,10 +1,10 @@
-﻿using System;
+﻿using App.Core.Interfaces;
 using App.Model.Core;
 using App.Model.GestionDocumental;
-using App.Core.Interfaces;
 using App.Model.Sigper;
-using System.Linq;
 using App.Util;
+using System;
+using System.Linq;
 
 namespace App.Core.UseCases
 {
@@ -1125,7 +1125,7 @@ namespace App.Core.UseCases
                 q.ProcesoId == procesoid
                 && q.Type.Contains("pdf")
                 && !q.CodigoEstampado
-                && !q.Signed);
+                && !q.Signed && q.Activo);
 
             //si existen documentos procesarlos
             if (documentos.Any())
