@@ -1,0 +1,102 @@
+﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
+
+<h3>Búsqueda Cometidos</h3>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m12 l3">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Filtros</span>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextBoxFor(m => Model.TextSearch)
+                                @Html.LabelFor(m => Model.TextSearch)
+                                @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.Desde)
+                                @Html.LabelFor(m => Model.Desde)
+                                @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.Hasta)
+                                @Html.LabelFor(m => Model.Hasta)
+                                @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                            </div>
+                            @*<div class="col s12 m12 l12">
+                                    @Html.EditorFor(q => q.Select)
+                                </div>*@
+                        </div>
+                        <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m12 l9">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Cometidos</span>
+                    <table class="table bordered">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().CometidoId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaSolicitud)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Result.FirstOrDefault().UnidadDescripcion)
+                            </th>
+
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CometidoId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnidadDescripcion)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Detalles", "ResultSearch", new { id = item.CometidoId })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

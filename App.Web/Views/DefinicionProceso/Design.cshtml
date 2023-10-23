@@ -1,0 +1,121 @@
+﻿@model App.Core.Entities.DefinicionProceso
+
+<h3>Diseño del proceso</h3>
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">@Html.DisplayFor(m => Model.Nombre)</span>
+
+        @if (!Model.DefinicionWorkflows.Any())
+        {
+            <p>No existen tareas para este proceso. Agregue tareas presionando el boton agregar.</p>
+        }
+
+        <ul class="stepper" id="sortable">
+            @foreach (var item in Model.DefinicionWorkflows)
+            {
+                <li class="step">
+                    <div class="step-title waves-effect">@string.Format("Id: {0} {1}, grupo {2}", @item.DefinicionWorkflowId, @item.Nombre, item.Grupo.Nombre)</div>
+                    <div class="step-content">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowId)</strong><br />
+                            @Html.DisplayFor(m => item.DefinicionWorkflowId)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.Nombre)</strong><br />
+                            @Html.DisplayFor(m => item.Nombre)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.Descripcion)</strong><br />
+                            @Html.DisplayFor(m => item.Descripcion)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.Entidad)</strong><br />
+                            @Html.DisplayFor(m => item.Entidad)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.Accion)</strong><br />
+                            @Html.DisplayFor(m => item.Accion)
+                        </div>
+
+                        @if (item.Usuario != null)
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.Usuario.Nombre)</strong><br />
+                                @Html.DisplayFor(m => item.Usuario.Nombre)
+                            </div>
+                        }
+                        @if (item.DefinicionWorkflowRechazo != null)
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowRechazoId)</strong><br />
+                                @Html.DisplayFor(m => item.DefinicionWorkflowRechazo.Nombre)
+                            </div>
+                        }
+                        @if (item.DefinicionWorkflowDependeDeId.HasValue)
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.DefinicionWorkflowDependeDeId)</strong><br />
+                                @Html.DisplayFor(m => item.DefinicionWorkflowDependeDeId)
+                            </div>
+                        }
+
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.NotificarCorreo)</strong><br />
+                            @string.Format("{0}", @item.NotificarCorreo ? "SI" : "NO")
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => item.Habilitado)</strong><br />
+                            @string.Format("{0}", @item.Habilitado ? "SI" : "NO")
+                        </div>
+
+                        @if (item.FechaRecordatorio.HasValue)
+                        {
+                            <div class="input-field col s12 m10">
+                                <strong>@Html.DisplayNameFor(m => item.FechaRecordatorio)</strong><br />
+                                @Html.DisplayFor(m => item.FechaRecordatorio)
+                            </div>
+                        }
+
+
+
+                        <p>
+                            <a href='@Url.Action("Edit", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="btn blue">Editar</a>
+                            <a href='@Url.Action("Delete", "DefinicionWorkflow", new { id = item.DefinicionWorkflowId })' class="btn red">Eliminar</a>
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="~/Content/materialize-stepper.min.css">
+<script src="~/Scripts/materialize-stepper.min.js"></script>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    <a href='@Url.Action("Create", "DefinicionWorkflow", new { Model.DefinicionProcesoId })' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+
+
+
+<script>
+    $(function () {
+        $("#sortable").sortable({
+            stop: function (event, ui) {
+                var map = Function.prototype.call.bind([].map)
+                var list = document.querySelectorAll("li");
+                $("#ids").val(map(list, function (x) { return x.id; }));
+            }
+        });
+        $("#sortable").disableSelection();
+    });
+    $(document).ready(function () {
+        $('.tooltipped').tooltip({ delay: 50 });
+        $('.stepper').activateStepper();
+    });
+</script>

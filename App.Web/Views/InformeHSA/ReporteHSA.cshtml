@@ -1,0 +1,35 @@
+﻿@model App.Web.Controllers.InformeHSAController.DTOFilter
+@{
+    ViewBag.Title = "Reporte HSA";
+    ViewBag.SubTitle = "Reporte Informes HSA";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+        @*@ViewBag.User<br />@ViewBag.Grupo*@
+    </div>
+</div>
+<div class="section"></div>
+<div class="container">
+    @using (Html.BeginForm("Report", null))
+    {
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Informes HSA</span>
+                <div class="row">
+                    <div class="col s12 m2 l2">
+                        @Html.LabelFor(m=>Model.Desde)
+                        @Html.EditorFor(m=>Model.Desde)
+                    </div>
+                    <div class="col s12 m2 l2">
+                        @Html.LabelFor(m=>Model.Hasta)
+                        @Html.EditorFor(m=>Model.Hasta)
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }
+</div>

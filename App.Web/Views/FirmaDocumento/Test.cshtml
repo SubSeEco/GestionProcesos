@@ -1,0 +1,7 @@
+﻿@using (Html.BeginForm("Test", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="file" name="fileUpload" />
+    <input type="submit" value="Firmar" class="btn btn-primary" />
+}

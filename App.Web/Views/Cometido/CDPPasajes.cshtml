@@ -1,0 +1,267 @@
+﻿@model App.Model.Cometido.Cometido
+@{
+    Layout = null;
+}
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body style="font-size: 8px">
+    <table>
+        <tr>
+            <td>
+                <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+            </td>
+            <td></td>
+            <td colspan="4" align="center">
+                <strong>
+                    CERTIFICADO DE DISPONIBILIDAD PRESUPUESTARIA<br />
+                    SUBSECRETARÍA DE ECONOMÍA
+                </strong>
+            </td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>Nro. Cometido</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.CometidoId)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>ID Compromiso</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjIdCompromiso)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"></td>
+            <td>
+                <span>Código Compromiso</span>
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjCodCompromiso)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td colspan="8">
+                <br />
+                <br />
+                <strong>Detalle</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Nombre Funcionario
+            </td>
+            <td colspan="7">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.Nombre)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Ciudad
+            </td>
+            <td colspan="7">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().ComunaDescripcion)
+            </td>
+        </tr>
+        <tr>
+            <td>Desde</td>
+            <td colspan="7">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaInicio).ToHtmlString().Remove(10)
+            </td>
+        </tr>
+        <tr>
+            <td>Hasta</td>
+            <td colspan="7">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.Destinos.FirstOrDefault().FechaHasta).ToHtmlString().Remove(10)
+            </td>
+        </tr>
+        <tr>
+            <td>Descripción</td>
+            <td colspan="7">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.CometidoDescripcion)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br />
+                <br />
+                <br />
+            </td>
+        </tr>
+    </table>
+    <table border="1" width="100%">
+        <tr>
+            <td>
+                Partida
+            </td>
+            <td colspan="3">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoPartida.TpaNombre)
+            </td>
+            <td>
+                Subtítulo
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoSubTitulo.TstNombre)
+            </td>
+        <tr>
+            <td>
+                Capítulo
+            </td>
+            <td colspan="3">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoCapitulo.TcaNombre)
+            </td>
+            <td>
+                Ítem
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoItem.TitNombre)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Programa
+            </td>
+            <td colspan="3">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.ProgramaDescripcion)
+            </td>
+            <td>
+                Asignación
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoAsignacion.TasNombre)
+            </td>
+        </tr>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+            <td>
+                Subasignación
+            </td>
+            <td>
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjTipoSubAsignacion.TsaNombre)
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Presupuesto Total
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjPptoTotal)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Compromiso
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjCompromisoAcumulado)
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size:10px">
+                <strong>
+                    Obligación Actual
+                </strong>
+            </td>
+            <td colspan="2" style="font-size:10px">
+                <span>: </span>
+                <strong>
+                    @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjObligacionActual)
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Saldo
+            </td>
+            <td colspan="2">
+                <span>: </span>
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().PsjSaldo)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+            </td>
+        </tr>
+        <tr>
+            @*<td align="center">
+                <strong>Encargado(a) de Administración y Finanzas</strong>
+            </td>
+            <td></td>*@
+            <td align="center">
+                <strong>Encargado(a) de Presupuestos</strong>
+            </td>
+        </tr>
+        @*<tr>
+            <td align="center">
+                <img src="~/Content/images/FirmaGato.png" />
+            </td>
+            <td></td>
+            <td align="center">
+                <img src="~/Content/images/FirmaGato.png" />
+            </td>
+        </tr>*@
+        <tr>
+            <td align="center" colspan="3">
+                @Html.DisplayFor(m => Model.GeneracionCDP.FirstOrDefault().FechaFirma).ToHtmlString().Remove(10)
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

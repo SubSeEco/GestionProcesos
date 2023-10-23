@@ -1,0 +1,92 @@
+﻿@model App.Web.Controllers.DocumentoController.DTOFilter
+
+<h3>Búsqueda documentos</h3>
+<div class="row">
+    <div class="col s12 m12 l3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Filtros</span>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="input-field col s12 m12 l12">
+                            @Html.TextBoxFor(m => Model.TextSearch)
+                            @Html.LabelFor(m => Model.TextSearch)
+                            @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m12 l12">
+                            @Html.EditorFor(q => q.Select)
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m12 l9">
+        <div class="row">
+            @foreach (var item in Model.Result)
+            {
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col s12 m9">
+                                <div class="card-content">
+                                    <span class="card-title">@item.FileName</span>
+                                    <p>
+                                        <strong>Id:</strong> @item.DocumentoId<br />
+                                        <strong>Fecha creación:</strong> @item.Fecha<br />
+                                        <strong>Autor:</strong> @item.Email<br />
+                                        <strong>Proceso de origen:</strong> @item.Proceso.DefinicionProceso.Nombre, Id @item.ProcesoId<br />
+                                        <strong>Tarea de origen:</strong> @item.Workflow.DefinicionWorkflow.Nombre<br />
+                                        <strong>Firmado electrónicamente:</strong> @string.Format("{0}", @item.Signed ? "SI" : "NO")<br />
+                                        <strong>Tipo documento:</strong> @item.Type<br />
+                                        <strong>Ubicación física: </strong> @item.Ubicacion<br />
+                                    </p>
+                                    <div class="section"></div>
+                                    <a href="@Url.Action("Details", "Documento", new { id = item.DocumentoId })" target="_blank" class="waves-effect waves-light btn blue">Ver detalles</a>
+                                </div>
+                            </div>
+                            <div class="col s12 m3">
+                                @if (item.Type.Contains("pdf"))
+                                {
+                                    <div class="card-image">
+                                        <embed src="@Url.Action("Show", "Documento", new { id = item.DocumentoId })" type="application/pdf" width="100%" height="308px"></embed>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

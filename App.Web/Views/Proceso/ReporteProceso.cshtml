@@ -1,0 +1,132 @@
+﻿@model App.Web.Controllers.ProcesoController.DTOFilter
+@{
+    ViewBag.Title = "Reporte Gestion de Personas";
+    ViewBag.SubTitle = "Reporte Procesos";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+        @*@ViewBag.User<br />@ViewBag.Grupo*@
+    </div>
+</div>
+<div class="section"></div>
+<div class="container">
+    @Html.Partial("_Message")
+    @using (Html.BeginForm("ReporteGenerico", null))
+    {
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Procesos Génerico</span>
+                <div class="row">
+                    @*<div class="col s12 m2 l2">
+                        @Html.LabelFor(m => Model.Desde)
+                        @Html.EditorFor(m => Model.Desde)
+                    </div>
+                    <div class="col s12 m2 l2">
+                        @Html.LabelFor(m => Model.Hasta)
+                        @Html.EditorFor(m => Model.Hasta)
+                    </div>*@
+                    <div class="col s12 m8 l8">
+                        @Html.LabelFor(m => Model.UnidadCodigo)
+                        @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }
+
+    @*@using(Html.BeginForm("ReportePendientesFecha",null))
+    {
+        @Html.HiddenFor(m=>m.UnidadCodigo)
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Procesos Pendientes</span>
+                <div class="row">
+                    <div class="col s12 m8 l8">
+                        @Html.LabelFor(m => Model.UnidadCodigo)
+                        @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }*@
+
+    @*@using(Html.BeginForm("ReporteGenericoGD",null))
+        {
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Génerico Gestión Documental</span>
+                    <div class="row">
+                        <div class="col s12 m2 l2">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                        </div>
+                        <div class="col s12 m2 l2">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                        </div>
+                        <div class="col s12 m8 l8">
+                            @Html.LabelFor(m => Model.UnidadCodigo)
+                            @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+    @*@using (Html.BeginForm("ReporteUnidad", null))
+        {
+            @Html.HiddenFor(m => m.UnidadCodigo)
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte por Unidad</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                        </div>
+                        @*<div class="col s12 m2 l3">
+                                @Html.LabelFor(m => Model.UnidadCodigo)
+                                @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                            </div>
+                            <div class="col s12 m2 l3">
+                                <input type="text" id="autocomplete-input" class="autocomplete" />
+                                @Html.LabelFor(m => Model.UnidadCodigo, new { @for = "autocomplete-input" })
+                            </div>
+
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+    @*@using (Html.BeginForm("ReportePendientes", null))
+        {
+            @Html.HiddenFor(m => m.UnidadCodigo)
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Procesos Pendientes en la Unidad</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+</div>

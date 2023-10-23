@@ -1,0 +1,17 @@
+﻿@model HandleErrorInfo
+
+<div class="red lighten-1 section">
+    <div class="section container ">
+        <h3 class="header white-text">Problema detectado</h3>
+        <h5 class="header light white-text">Ocurrió un problema inesperado con el siguiente detalle:</h5>
+        <div class="section"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section"></div>
+    <h5 class="header light red-text">@Model.Exception.Message</h5>
+    <div class="section"></div>
+    <a href="javascript:void(0);" onclick="history.go(-1);">Volver a página anterior</a> | <a href='@Url.Action("Index", "Home")'>Ir al inicio</a>
+</div>
+

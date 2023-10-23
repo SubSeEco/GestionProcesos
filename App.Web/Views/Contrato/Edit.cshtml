@@ -1,0 +1,317 @@
+﻿@model App.Model.Contrato.Contrato
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.ContratoId)
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.EmailJefeSolicitante)
+                @Html.AntiForgeryToken()
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Contrato</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.ProgramaId, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.ProgramaId)
+                                @Html.ValidationMessageFor(m => Model.ProgramaId, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">I. Identificación responsable de la solicitud</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.NombreJefeSolicitante)
+                                @Html.LabelFor(m => Model.NombreJefeSolicitante)
+                                @Html.ValidationMessageFor(m => Model.NombreJefeSolicitante, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.FechaJefeSolicitante)
+                                @Html.LabelFor(m => Model.FechaJefeSolicitante)
+                                @Html.ValidationMessageFor(m => Model.FechaJefeSolicitante, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">II. Persona propuesta</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.NombreCompleto)
+                                @Html.LabelFor(m => Model.NombreCompleto)
+                                @Html.ValidationMessageFor(m => Model.NombreCompleto, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.RUT)
+                                @Html.LabelFor(m => Model.RUT)
+                                @Html.ValidationMessageFor(m => Model.RUT, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.ProfesionOcupacion)
+                                @Html.LabelFor(m => Model.ProfesionOcupacion)
+                                @Html.ValidationMessageFor(m => Model.ProfesionOcupacion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.DomicilioParticular)
+                                @Html.LabelFor(m => Model.DomicilioParticular)
+                                @Html.ValidationMessageFor(m => Model.DomicilioParticular, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.TelefonoContacto)
+                                @Html.LabelFor(m => Model.TelefonoContacto)
+                                @Html.ValidationMessageFor(m => Model.TelefonoContacto, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">III. Condiciones propuestas</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.Pl_UndCod, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Pl_UndCod)
+                                @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.DropDownListFor(m => Model.Pl_CodCar, null, "Seleccione...")
+                                @Html.LabelFor(m => Model.Pl_CodCar)
+                                @Html.ValidationMessageFor(m => Model.Pl_CodCar, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.Grado)
+                                @Html.LabelFor(m => Model.Grado)
+                                @Html.ValidationMessageFor(m => Model.Grado, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.FuncionCritica)
+                                    <span>@Html.LabelFor(m => Model.FuncionCritica)</span>
+                                </label>
+                                <div class="section"></div>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.AgentePublico)
+                                    <span>@Html.LabelFor(m => Model.AgentePublico)</span>
+                                </label>
+                                <div class="section"></div>
+                                <div class="section"></div>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.FechaDesde)
+                                @Html.LabelFor(m => Model.FechaDesde)
+                                @Html.ValidationMessageFor(m => Model.FechaDesde, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.EditorFor(m => Model.FechaHasta)
+                                @Html.LabelFor(m => Model.FechaHasta)
+                                @Html.ValidationMessageFor(m => Model.FechaHasta, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.MontoMensual)
+                                @Html.LabelFor(m => Model.MontoMensual)
+                                @Html.ValidationMessageFor(m => Model.MontoMensual, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.NumeroCuotas)
+                                @Html.LabelFor(m => Model.NumeroCuotas)
+                                @Html.ValidationMessageFor(m => Model.NumeroCuotas, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.ConAsistencia)
+                                    <span>@Html.LabelFor(m => Model.ConAsistencia)</span>
+                                </label>
+                                <div class="section"></div>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                <label>
+                                    @Html.CheckBoxFor(m => Model.CuentaRed)
+                                    <span>@Html.LabelFor(m => Model.CuentaRed)</span>
+                                </label>
+                                <div class="section"></div>
+                                <div class="section"></div>
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.Poliza)
+                                @Html.LabelFor(m => Model.Poliza)
+                                @Html.ValidationMessageFor(m => Model.Poliza, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">IV. Señalar si presta servicios en otra repartición pública</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.ServiciosOtrasInstitucionesPublicas, new { @class = "materialize-textarea" })
+                                @Html.ValidationMessageFor(m => Model.ServiciosOtrasInstitucionesPublicas, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">V. Breve justificación de la contratación</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.JustificacionContratacion, new { @class = "materialize-textarea" })
+                                @Html.ValidationMessageFor(m => Model.JustificacionContratacion, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">VI. Funciones a realizar (en caso de honorarios, cuando la contratación sea para asesoría o estudio especifico, se deben señalar los productos identificables para los informes mensuales)</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.Funciones, new { @class = "materialize-textarea" })
+                                @Html.ValidationMessageFor(m => Model.Funciones, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">VII. Documentos obligatorios a adjuntar</span>
+
+                        @Html.LabelFor(m => Model.CurriculumVitaeFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.CurriculumVitaeFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CurriculumVitaeFile, "", new { @class = "red-text" })
+                        </div>
+
+                        @Html.LabelFor(m => Model.CedulaIdentidadFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.CedulaIdentidadFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CedulaIdentidadFile, "", new { @class = "red-text" })
+                        </div>
+
+                        @Html.LabelFor(m => Model.CertificadoTituloFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.CertificadoTituloFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CertificadoTituloFile, "", new { @class = "red-text" })
+                        </div>
+
+                        @Html.LabelFor(m => Model.LicenciaEnsenanzaMediaFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.LicenciaEnsenanzaMediaFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.LicenciaEnsenanzaMediaFile, "", new { @class = "red-text" })
+                        </div>
+
+                        @Html.LabelFor(m => Model.CertificadoExpertoFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.CertificadoExpertoFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CertificadoExpertoFile, "", new { @class = "red-text" })
+                        </div>
+
+                        @Html.LabelFor(m => Model.CartaPresentacionFile)
+                        <div class="file-field input-field">
+                            <div class="btn grey">
+                                <i class="material-icons">attach_file</i>
+                                @Html.TextBoxFor(m => Model.CartaPresentacionFile, null, new { @type = "file" })
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                            @Html.ValidationMessageFor(model => model.CartaPresentacionFile, "", new { @class = "red-text" })
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">VIII. Area de finanzas</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.MontoTotalcomprometido)
+                                @Html.LabelFor(m => Model.MontoTotalcomprometido)
+                                @Html.ValidationMessageFor(m => Model.MontoTotalcomprometido, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.ImputacionPresupuestaria)
+                                @Html.LabelFor(m => Model.ImputacionPresupuestaria)
+                                @Html.ValidationMessageFor(m => Model.ImputacionPresupuestaria, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextBoxFor(m => Model.DisponibilidadPresupuestoSolicitud)
+                                @Html.LabelFor(m => Model.DisponibilidadPresupuestoSolicitud)
+                                @Html.ValidationMessageFor(m => Model.DisponibilidadPresupuestoSolicitud, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <span class="card-title">IX. Otras observaciones gestión y desarrollo de personas</span>
+                        <div class="row">
+                            <div class="input-field col s12 m10 l10">
+                                @Html.TextAreaFor(m => Model.OtrasObservaciones, new { @class = "materialize-textarea" })
+                                @Html.ValidationMessageFor(m => Model.OtrasObservaciones, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+
+        $("#NombreJefeSolicitante").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Contrato/GetUser/",
+                    data: { term: request.term },
+                    type: "POST",
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { id: item.id, value: item.value };
+                            }));
+                    }
+                });
+            },
+
+            select: function (event, ui) {
+                $("#EmailJefeSolicitante").val(ui.item.id);
+                $("#NombreJefeSolicitante").val(ui.item.value);
+                return false;
+            }
+        });
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

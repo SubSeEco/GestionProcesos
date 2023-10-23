@@ -1,0 +1,98 @@
+﻿@model App.Model.HorasExtras.Colaborador
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @Html.Partial("_Message")
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.ColaboradorId)
+                @Html.HiddenFor(q => Model.HorasExtrasId)
+                @Html.HiddenFor(q => Model.NombreId)
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th style="width:25%">
+                                        @Html.DisplayNameFor(model => model.NombreId)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.HDPago)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.HDCompensar)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(model => model.HNPago)
+                                    </th>
+                                    <th style="width:80px">
+                                        @Html.DisplayNameFor(m => Model.HNCompensar)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Nombre)
+                                        @*@Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")*@
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.HDPago, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.HDCompensar, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.HNPago, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.HNCompensar, new { style = "width:50px" })
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Descripcion)
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        @Html.EditorFor(m => Model.Descripcion)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+    //$("#NombreId").attr('disabled', true);
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+
+<style>
+    textarea {
+        height:10rem;
+    }
+</style>

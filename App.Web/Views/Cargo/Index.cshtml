@@ -1,0 +1,38 @@
+﻿@model IEnumerable<App.Model.Shared.Cargo>
+
+<h3>Genero</h3>
+<div class="card">
+    <div class="card-content">
+        @*<span class="card-title">Tipos de workflow</span>*@
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Codigo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.ActionLink("Detalles", "Details", new { id = item.CargoId })
+                </td>
+            </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<App.Model.Cometido.Parrafos>
+<div class="container">
+    <h3>Parrafos</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafosId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoTexto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoActivo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DefinicionProcesoId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoDocumentoId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Documento)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParrafosId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParrafoTexto)
+                </td>
+                <td>
+                    @if (item.ParrafoActivo)
+                    {
+                        <p>True</p>
+                    }
+                    else
+                    {
+                        <p>False</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoDocumento.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Documento)
+                </td>
+                <td>
+                    <a href='@Url.Action("Edit", "Parrafos", new { id = item.ParrafosId})' class="btn-large btn-floating modal-trigger tooltipped blue" data-position="up" data-tooltip="Editar Destino"><i class="large material-icons">edit</i></a>
+                </td>
+                <td>
+                    <a href='@Url.Action("Delete", "Parrafos", new { id = item.ParrafosId })' class="btn-large btn-floating modal-trigger btn tooltipped blue" data-position="up" data-tooltip="Eliminar Destino"><i class="large material-icons">delete</i></a>
+                </td>
+            </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+@*<br />
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

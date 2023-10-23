@@ -1,0 +1,188 @@
+﻿@model App.Model.GestionDocumental.GD
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="container">
+
+    @Html.Partial("_Message")
+
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.GDId)
+                @Html.HiddenFor(q => Model.IngresoExterno)
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Información del ingreso externo</span>
+                        <h3>ID @Model.ProcesoId</h3>
+                        <div class="row">
+                            <div class="col s12 m6 l4">
+                                @Html.LabelFor(m => Model.FechaIngreso)
+                                @Html.EditorFor(m => Model.FechaIngreso)
+                                @Html.ValidationMessageFor(m => Model.FechaIngreso, "", new { @class = "red-text" })
+                            </div>
+                            <div class="col s12 m6 l8">
+                                @Html.LabelFor(m => Model.GDOrigenId)
+                                @Html.DropDownListFor(model => model.GDOrigenId, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.GDOrigenId, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Materia)
+                                @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.EditorFor(m => Model.NumeroExterno)
+                                @Html.LabelFor(m => Model.NumeroExterno)
+                                @Html.ValidationMessageFor(m => Model.NumeroExterno, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Referencia, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Referencia)
+                                @Html.ValidationMessageFor(m => Model.Referencia, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                                @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                                @Html.LabelFor(m => Model.Observacion)
+                                @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                            </div>
+                            <div class="col s12 m12 l12">
+                                @Html.LabelFor(m => Model.DestinoUnidadCodigo)
+                                @Html.DropDownListFor(m => Model.DestinoUnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                                <em class="grey-text">En caso de solo seleccionar la unidad, la tarea será asignada a la secretaría</em><br />
+                                @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                            </div>
+                            <div class="col s12 m12 l12">
+                                @Html.LabelFor(m => Model.DestinoFuncionarioEmail)
+                                @Html.DropDownListFor(model => model.DestinoFuncionarioEmail, null, "Seleccione...", new { @class = "browser-default" })
+                                @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                            </div>
+                            <div class="input-field col s6 m6 l6">
+                                <div class="switch">
+                                    <label class="tooltipped" data-position="top" data-tooltip="Active esta opción si requiere enviar copia del ingreso a otro funcionario para su aprobación">
+                                        @Html.CheckBoxFor(m => Model.SegundoDestino)
+                                        <span class="lever"></span>
+                                        @Html.LabelFor(m => Model.SegundoDestino)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m12 l12">
+                            </div>
+                            <div id="divSegundoDestino">
+                                <div class="col s12 m12 l12">
+                                    @Html.LabelFor(m => Model.DestinoUnidadCodigo2)
+                                    @Html.DropDownListFor(m => Model.DestinoUnidadCodigo2, null, "Seleccione...", new { @class = "browser-default" })
+                                    <em class="grey-text">En caso de solo seleccionar la unidad, la tarea será asignada a la secretaría</em><br />
+                                    @Html.ValidationMessageFor(m => Model.DestinoUnidadCodigo2, "", new { @class = "red-text" })
+                                </div>
+                                <div class="input-field col s12 m12 l12">
+                                </div>
+                                <div class="col s12 m12 l12">
+                                    @Html.LabelFor(m => Model.DestinoFuncionarioEmail2)
+                                    @Html.DropDownListFor(model => model.DestinoFuncionarioEmail2, null, "Seleccione...", new { @class = "browser-default" })
+                                    @Html.ValidationMessageFor(m => Model.DestinoFuncionarioEmail2, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                        </div>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("FEADocumentos", "GDExterno", new {Model.ProcesoId })
+        </div>
+        <div class="col s12 m12 l12">
+            @Html.Action("Workflow", "GDExterno", new { Model.ProcesoId })
+        </div>
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+
+<div id="modalUpload" class="modal">
+    <div class="modal-content" style="background-color:white">
+        <h4>Adjuntar documento</h4>
+        @Html.Action("FEAUpload", new { Model.ProcesoId, Model.WorkflowId })
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+        $('.tooltipped').tooltip();
+
+        $("input[type='hidden']").each(function (index, element) {
+            $(this).appendTo($(element).parent());
+        });
+        $("#divSegundoDestino").hide();
+
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#DestinoUnidadCodigo").change(function () {
+
+        var select = $("#DestinoFuncionarioEmail");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
+
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#DestinoUnidadCodigo2").change(function () {
+
+        var select = $("#DestinoFuncionarioEmail2");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
+
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+
+    $('#SegundoDestino').change(function () {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $("#divSegundoDestino").show();
+        }
+        else {
+            $("#divSegundoDestino").hide();
+        }
+    });
+
+</script>

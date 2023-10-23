@@ -1,0 +1,464 @@
+﻿using App.Core.Interfaces;
+using App.Model.Core;
+using App.Model.FirmaDocumento;
+using App.Model.Sigper;
+using App.Util;
+using System;
+using System.Linq;
+
+namespace App.Core.UseCases
+{
+    public class UseCaseIntegridad
+    {
+
+        private readonly IGestionProcesos _repository;
+        private readonly IHsm _hsm;
+        private readonly ISigper _sigper;
+        private readonly IEmail _email;
+        private readonly IFolio _folio;
+        private readonly IFile _file;
+        //private IGestionProcesos repository;
+        //private ISIGPER sigper;
+
+        public UseCaseIntegridad(IGestionProcesos repository)
+        {
+            _repository = repository;
+        }
+        public UseCaseIntegridad(IGestionProcesos repository, ISigper sigper, IFile file, IFolio folio, IHsm hsm, IEmail email)
+        {
+            _repository = repository;
+            _sigper = sigper;
+            _file = file;
+            _folio = folio;
+            _hsm = hsm;
+            _email = email;
+        }
+
+        public UseCaseIntegridad(IGestionProcesos repository, ISigper sigper)
+        {
+            _repository = repository;
+            _sigper = sigper;
+        }
+
+        public ResponseMessage DenunciaInsert(Denuncia obj)
+        {
+            var response = new ResponseMessage();
+
+            if (obj.DescripcionUnidadDenunciado.IsNullOrWhiteSpace())
+            {
+                if (obj.IdUnidadDenunciado == null)
+                {
+                    response.Errors.Add("Debe seleccionar Unidad de Denunciado.");
+                }
+                else
+                {
+                    obj.DescripcionUnidadDenunciado = _sigper.GetUnidad(obj.IdUnidadDenunciado.Value).Pl_UndDes;
+                }
+            }
+
+            try
+            {
+                if (response.IsValid)
+                {
+                    _repository.Create(obj);
+                    _repository.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public ResponseMessage DenunciaUpdate(Denuncia obj)
+        {
+            var response = new ResponseMessage();
+
+            if (!obj.AcosoLaboral && !obj.AcosoSexual &&
+                !obj.MaltratoLaboral && !obj.DelitoFinanciero && !obj.FaltaProbidad)
+            {
+                response.Errors.Add("Debe seleccionar un Tipo de Atentado.");
+            }
+
+            if (obj.NivelJerarquico.IsNullOrWhiteSpace())
+            {
+                response.Errors.Add("Debe seleccionar Nivel Jerarquico.");
+            }
+
+            if (obj.DescripcionUnidadDenunciado.IsNullOrWhiteSpace())
+            {
+                if (obj.IdUnidadDenunciado == null)
+                {
+                    response.Errors.Add("Debe seleccionar Unidad de Denunciado.");
+                }
+                else
+                {
+                    obj.DescripcionUnidadDenunciado = _sigper.GetUnidad(obj.IdUnidadDenunciado.Value).Pl_UndDes;
+                }
+            }
+
+            try
+            {
+                if (response.IsValid)
+                {
+                    _repository.Update(obj);
+                    _repository.Save();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
+
+            return response;
+
+        }
+
+        public ResponseMessage ConsultaInsert(Consulta obj)
+        {
+            var response = new ResponseMessage();
+            try
+            {
+                if (obj.CorreoElectronico == null && obj.CorreoPostal == null ||
+                    !obj.CorreoElectronico.Value && !obj.CorreoPostal.Value)
+                {
+                    response.Errors.Add("Falto seleccionar Tipo de Respuesta");
+                }
+                if (obj.ConsultaIntegridad.IsNullOrWhiteSpace())
+                {
+                    response.Errors.Add("Falto ingresar Consulta");
+                }
+                if (response.IsValid)
+                {
+                    _repository.Create(obj);
+                    _repository.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public ResponseMessage ConsultaUpdate(Consulta obj)
+        {
+            var response = new ResponseMessage();
+
+            try
+            {
+                if (obj.CorreoElectronico == null && obj.CorreoPostal == null ||
+                    !obj.CorreoElectronico.Value && !obj.CorreoPostal.Value)
+                {
+                    response.Errors.Add("Falto seleccionar Tipo de Respuesta");
+                }
+                if (obj.ConsultaIntegridad.IsNullOrWhiteSpace())
+                {
+                    response.Errors.Add("Falto ingresar Consulta");
+                }
+                if (response.IsValid)
+                {
+                    _repository.Update(obj);
+                    _repository.Save();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
+
+            return response;
+
+        }
+
+        public ResponseMessage WorkflowUpdate(Workflow obj)
+        {
+            var response = new ResponseMessage();
+            var persona = new Sigper();
+
+            var workflowHelper = _repository.GetById<Workflow>(obj.WorkflowId);
+            var proceso = _repository.GetById<Proceso>(workflowHelper.ProcesoId);
+            var denuncia = _repository.Get<Denuncia>(q => q.ProcesoId == proceso.ProcesoId).FirstOrDefault();
+            try
+            {
+                if (obj == null)
+                    throw new Exception("Debe especificar un workflow.");
+                var workflowActual = _repository.GetFirst<Workflow>(q => q.WorkflowId == obj.WorkflowId) ?? null;
+                if (workflowActual == null)
+                    throw new Exception("No se encontró el workflow.");
+                var definicionworkflowlist = _repository.Get<DefinicionWorkflow>(q => q.Habilitado && q.DefinicionProcesoId == workflowActual.Proceso.DefinicionProcesoId).OrderBy(q => q.Secuencia).ThenBy(q => q.DefinicionWorkflowId) ?? null;
+                if (!definicionworkflowlist.Any())
+                    throw new Exception("No se encontró la definición de tarea del proceso asociado al workflow.");
+                if (string.IsNullOrWhiteSpace(obj.Email))
+                    throw new Exception("No se encontró el usuario que ejecutó el workflow.");
+                if (workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar && (obj.TipoAprobacionId == null || obj.TipoAprobacionId == 0 || obj.TipoAprobacionId == 1))
+                    throw new Exception("Es necesario aceptar o rechazar la tarea.");
+
+                //si ingreso esta ok y firmador aprueba sin firma...
+                if (workflowActual.DefinicionWorkflow.DefinicionProceso.Entidad.Codigo == Util.Enum.Entidad.FirmaDocumento.ToString() && workflowActual.DefinicionWorkflow.Secuencia == 2)
+                {
+                    var firma = _repository.GetFirst<FirmaDocumento>(q => q.WorkflowId == obj.WorkflowId);
+                    if (firma == null)
+                        throw new Exception("No se encontró el ingreso de documento.");
+
+                    if (firma != null && firma.DocumentoConFirma == null && obj.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                        throw new Exception("No se puede aprobar un documento no firmado.");
+                }
+
+                //terminar workflow actual
+                workflowActual.FechaTermino = DateTime.Now;
+                workflowActual.Observacion = obj.Observacion;
+                workflowActual.Terminada = true;
+                workflowActual.Pl_UndCod = obj.Pl_UndCod;
+                workflowActual.GrupoId = obj.GrupoId;
+                workflowActual.Email = obj.Email;
+                workflowActual.To = obj.To;
+
+                if (workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+                    workflowActual.TipoAprobacionId = obj.TipoAprobacionId;
+
+                if (!workflowActual.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+                    workflowActual.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.Aprobada;
+
+                //determinar siguiente tarea en base a estado y definicion de proceso
+                DefinicionWorkflow definicionWorkflow = null;
+
+                //si permite multiple evaluacion generar la misma tarea
+                if (workflowActual.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                    definicionWorkflow = _repository.GetById<DefinicionWorkflow>(workflowActual.DefinicionWorkflowId);
+
+                if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Aprobada)
+                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
+                else
+                    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
+
+                //en el caso de no existir mas tareas, cerrar proceso
+                if (definicionWorkflow == null)
+                {
+                    workflowActual.Proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Terminado;
+                    //workflowActual.Proceso.Terminada = true;
+                    workflowActual.Proceso.FechaTermino = DateTime.Now;
+                    _repository.Save();
+
+                    //notificar al dueño del proceso
+                    _email.NotificarFinProceso(workflowActual.Proceso,
+                    _repository.GetFirst<Configuracion>(q => q.Nombre == nameof(Util.Enum.Configuracion.plantilla_fin_proceso)),
+                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                }
+
+                //en el caso de existir mas tareas, crearla
+                if (definicionWorkflow != null)
+                {
+                    var workflow = new Workflow();
+                    workflow.FechaCreacion = DateTime.Now;
+                    workflow.TipoAprobacionId = (int)Util.Enum.TipoAprobacion.SinAprobacion;
+                    workflow.Terminada = false;
+                    workflow.DefinicionWorkflow = definicionWorkflow;
+                    workflow.ProcesoId = workflowActual.ProcesoId;
+                    workflow.Mensaje = obj.Observacion;
+                    //workflow.TareaPersonal = false;
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
+                    {
+                        if (obj.Pl_UndCod.HasValue)
+                        {
+                            var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
+                            if (unidad == null)
+                                throw new Exception("No se encontró la unidad en Sigper.");
+
+                            workflow.Pl_UndCod = unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = unidad.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+
+                        }
+
+                        if (!string.IsNullOrEmpty(obj.To))
+                        {
+                            persona = _sigper.GetUserByEmail(obj.To);
+                            if (persona == null)
+                                throw new Exception("No se encontró el usuario en Sigper.");
+
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.TareaPersonal = true;
+                        }
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaDestinoInicial)
+                    {
+                        var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && (q.To != null || q.Pl_UndCod != null) && q.WorkflowId != workflowActual.WorkflowId).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
+                        if (workflowInicial == null)
+                            throw new Exception("No se encontró el workflow inicial.");
+
+                        if (workflowInicial.Pl_UndCod.HasValue)
+                        {
+                            var unidad = _sigper.GetUnidad(workflowInicial.Pl_UndCod.Value);
+                            if (unidad == null)
+                                throw new Exception("No se encontró la unidad en Sigper.");
+
+                            workflow.Pl_UndCod = unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = unidad.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+                        }
+
+                        if (!string.IsNullOrEmpty(workflowInicial.To))
+                        {
+                            persona = _sigper.GetUserByEmail(workflowInicial.To);
+                            if (persona == null)
+                                throw new Exception("No se encontró el usuario en Sigper.");
+
+                            workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                            workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                            workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                            workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                            workflow.TareaPersonal = true;
+                        }
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
+                    {
+                        persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
+                        if (persona == null)
+                            throw new Exception("No se encontró el usuario en Sigper.");
+                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                        workflow.TareaPersonal = true;
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienIniciaProceso)
+                    {
+                        persona = _sigper.GetUserByEmail(workflowActual.Proceso.Email);
+                        if (persona == null)
+                            throw new Exception("No se encontró el usuario en Sigper.");
+
+                        var jefatura = _sigper.GetUserByEmail(persona.Jefatura.Rh_Mail.Trim());
+                        if (jefatura == null)
+                            throw new Exception("No se encontró la jefatura en Sigper.");
+                        workflow.Email = jefatura.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = jefatura.Funcionario.PeDatPerChq.Trim();
+                        workflow.Pl_UndCod = jefatura.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = jefatura.Unidad.Pl_UndDes;
+
+                        workflow.TareaPersonal = true;
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaPorJefaturaDeQuienEjecutoTareaAnterior)
+                    {
+                        persona = _sigper.GetUserByEmail(obj.Email);
+                        if (persona == null)
+                            throw new Exception("No se encontró el usuario en Sigper.");
+                        workflow.Email = persona.Jefatura.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes;
+                        workflow.TareaPersonal = true;
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
+                    {
+                        if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
+                            throw new Exception("No se especificó la unidad o grupo de destino.");
+
+                        if (definicionWorkflow.Pl_UndCod.HasValue)
+                        {
+                            var unidad = _sigper.GetUnidad(definicionWorkflow.Pl_UndCod.Value);
+                            if (unidad == null)
+                                throw new Exception("No se encontró la unidad destino en Sigper.");
+                            workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
+                            workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
+                            workflow.TareaPersonal = false;
+                            var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+                        }
+                        if (definicionWorkflow.GrupoId.HasValue)
+                        {
+                            var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
+                            if (grupo == null)
+                                throw new Exception("No se encontró el grupo de destino.");
+                            workflow.GrupoId = definicionWorkflow.GrupoId;
+                            workflow.Pl_UndCod = null;
+                            workflow.Pl_UndDes = null;
+                            workflow.TareaPersonal = false;
+                            var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
+                            if (emails.Any())
+                                workflow.Email = string.Join(";", emails);
+                        }
+
+                    }
+
+                    if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaUsuarioEspecifico)
+                    {
+                        persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
+                        var denunciado = _sigper.GetAllUsers().FirstOrDefault(q => q.PeDatPerChq.Trim() == denuncia.NombreDenunciado.Trim()).PeDatPerChq.Trim();
+
+                        //var denunciado2 = denunciado.FirstOrDefault(q => q.RH_NomFunCap == "").PLUNILAB.Pl_UndDes;
+                        if (persona == null)
+                            throw new Exception("No se encontró el usuario en Sigper.");
+
+                        if (persona.Funcionario.PeDatPerChq.Trim() == denunciado)
+                        {
+                            if (definicionWorkflow.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.ValidacionCoordinador)
+                            {
+                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.ValidacionCoordinadorSup);
+                            }
+                            else if (definicionWorkflow.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.ValidacionJefeJuridica)
+                            {
+                                definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == (int)Util.Enum.DefinicionWorkflow.ValidacionJefeJuridicaSup);
+                            }
+
+                            persona = _sigper.GetUserByEmail(definicionWorkflow.Email);
+                        }
+
+                        workflow.Pl_UndCod = persona.Unidad.Pl_UndCod;
+                        workflow.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
+                        workflow.Email = persona.Funcionario.Rh_Mail.Trim();
+                        workflow.NombreFuncionario = persona.Funcionario.PeDatPerChq.Trim();
+                        workflow.TareaPersonal = true;
+                    }
+
+                    if (response.Errors.Count == 0)
+                    {
+                        //guardar información
+
+                        _repository.Create(workflow);
+                        _repository.Save();
+
+                        //notificar por email al ejecutor de proxima tarea
+                        //se adjunta copia al autor
+
+                        if (workflow.DefinicionWorkflow.NotificarAsignacion)
+                            _email.NotificarNuevoWorkflow(workflow,
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaNuevaTarea),
+                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.AsuntoCorreoNotificacion));
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+            }
+
+            return response;
+        }
+    }
+}

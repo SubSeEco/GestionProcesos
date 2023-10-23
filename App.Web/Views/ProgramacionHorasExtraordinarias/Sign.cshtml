@@ -1,0 +1,57 @@
+﻿@model App.Model.ProgramacionHorasExtraordinarias.ProgramacionHorasExtraordinarias
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+
+<div class="container">
+    @*@Html.Partial("_Message")*@
+
+    @*@if (!Model.TieneFirma)
+        {
+            <p class="red-text">Usted no posee una firma electrónica configurada.</p>
+        }*@
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="row">
+                <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+                @*<embed src="@Url.Action("Show", "Documento", new { id = 773})" type="application/pdf" width="100%" height="650px"></embed>*@
+            </div>
+            <a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)">Firmar</a>
+            @*<a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", 773)">Firmar</a>*@
+        </div>
+
+        <div id="@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)" class="modal">
+            @*<div id="@String.Concat("#modal", 773)" class="modal">*@
+            <div class="modal-content">
+                <h4>Confirma Firma de Memorandum</h4>
+                @using (Html.BeginForm("Sign", "ProgramacionHorasExtraordinarias", new { DocumentoId = Model.ProgramacionHorasExtraordinariasId }, FormMethod.Post, new { id = Model.ProgramacionHorasExtraordinariasId, enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.HiddenFor(model => Model.Proceso.Documentos.FirstOrDefault().DocumentoId)*@
+                    @Html.HiddenFor(model => Model.ProgramacionHorasExtraordinariasId)
+                    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            </div>
+        </div>
+
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+    });
+</script>
+
+
+

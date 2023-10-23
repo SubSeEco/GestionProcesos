@@ -1,0 +1,274 @@
+﻿@model App.Model.ProgramacionHorasExtraordinarias.ProgramacionHorasExtraordinarias
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="row">
+        <div class="left">
+            <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" /><br />
+            <h6><b>UNIDAD GESTIÓN Y</b></h6>
+            <h6><b>DESARROLLO DE PERSONAS</b></h6>
+        </div>
+    </div>
+<div style="text-align: center;" >
+    <p class="flow-text">
+        <h5><b>PROGRAMACIÓN DE TRABAJOS EXTRAORDINARIOS MES DE : <br/> @Html.DisplayFor(m => Model.Mes) @Html.DisplayFor(m => Model.Annio)</b></h5>
+    </p>
+</div>
+<table>
+        <tr>
+            <td></td>
+            <td>
+                <br />
+                <table border="1" width="100%">
+                    <tr>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%; background-color: #d0cece">
+                            <h6><b>I</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:95%; background-color: #d0cece">
+                            <h6><b>SOLICITANTE : </b>Sólo pueden realizar el requerimiento : Ministro y Subsecretario (Jefe de Gabinetes), Jefes o Encargados de División, Departamento, Unidad, Encargados de Programas y SEREMIS.</h6>
+                        </td>
+                    </tr>
+                    @*@for (int i = 0; i < Model.Email.ToArray().Length; i++)
+                    {
+                        <tr>
+
+                            @Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)
+                            @Html.HiddenFor(q => Model.Email.ToArray()[i])
+                            <td>
+                                    @Html.DisplayFor(modelItem => Model.TareaFunc1.ToArray()[i])
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.TareaFunc1.ToArray()[i])
+                                </td>
+
+                        </tr>
+                    }*@
+                </table>
+                <table border="1" width="100%">
+                    <tr>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                            <h6><b>Jefatura (Nombre)</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:40%">
+                            <h6><b>@Html.DisplayFor(m => Model.NombreChqRem)</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                            <h6><b>Fecha</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                            <h6><b>@Html.DisplayFor(m => Model.Fecha)</b></h6>
+                        </td>
+                    </tr>
+                </table><br /><br />
+                <table border="1" width="100%">
+                    <tr>
+                        <td @*style="border-style: solid; border-width: 1px; border-color: #000000; width:5%; background-color: #d0cece"*@>
+                            <h7><b>Nota : </b></h7><br />
+                            <h7><b>1. Hora al 25%: Hora extraordinaria desarrollada a continuación de la jornada de trabajo y hasta las 21:00 horas. </b></h7><br />
+                            <h7><b>2. Hora al 50%: Hora extraordinaria desarrollada entre las 21:00 hrs. y las 07:00 hrs. del día siguiente, sábados y domingos. </b></h7><br />
+                            <h7><b>3. De acuerdo a instrucciones presupuestarias, mensualmente sólo se pueden pagar hasta 40 horas extraordinarias diurnas.</b></h7><br />
+                            <h7><b>4. Esta solicitud debe ser enviada con 15 días hábiles de anticipación al inicio del mes que se programa.</b></h7>
+                        </td>
+                    </tr>
+                    @for (int i = 0; i < Model.TareaFunc1.ToArray().Length; i++)
+                    {
+                        <tr>
+
+                            @*@Html.HiddenFor(q => Model.Destinos.ToArray()[i].DestinoId)*@
+                            @Html.HiddenFor(q => Model.TareaFunc1.ToArray()[i])
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => Model.TareaFunc1.ToArray()[i])
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.TareaFunc1.ToArray()[i])
+                                </td>*@
+
+                        </tr>
+                    }
+                </table><br />
+                <table border="1" width="100%">
+                    <tr>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%; background-color: #d0cece">
+                            <h6><b>II</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:90%; background-color: #d0cece">
+                            <h6><b>TRABAJOS EXTRAORDINARIOS A REALIZAR EN EL MES DE : @Html.DisplayFor(m => Model.Fecha) </b></h6>
+                        </td>
+                    </tr>
+                </table>
+                <table border="1" width="100%">
+                    <tr>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                            <h6><b></b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                            <h6><b></b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%; background-color: #d0cece">
+                            <h6><b>N° De Horas Diurnas</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%; background-color: #d0cece">
+                            <h6><b>N° De Horas Nocturnas</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                            <h6><b></b></h6>
+                        </td>
+                    </tr>
+                </table>
+                <table border="1" width="100%">
+                    <tr>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                            <h6><b></b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                            <h6><b>Nombre</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                            <h6><b>N° De Horas a Pagos </b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                            <h6><b>N° De Horas a Compensar</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                            <h6><b>N° De Horas a Pagos</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                            <h6><b>N° De Horas a Compensar</b></h6>
+                        </td>
+                        <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                            <h6><b>Tareas a realizar. (Precisar<br />claramente actividades)</b></h6>
+                        </td>
+                    </tr>
+                    @if (!string.IsNullOrWhiteSpace(Model.NombreChqFunc1) && Model.TipoHoraFunc1 == "N° de Horas a Pago (Diurnas)")
+                    {
+                        <table border="1" width="100%">
+
+            </table>
+                        <tr>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                                <h6><b>1</b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                                <h6><b>@Html.DisplayFor(m => Model.NombreFunc1)</b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                <h6><b>@Html.DisplayFor(m => Model.HorasFunc1)</b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                <h6><b></b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                <h6><b></b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                <h6><b></b></h6>
+                            </td>
+                            <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                                <h6><b>@Html.DisplayFor(m => Model.TareaFunc1)</b></h6>
+                            </td>
+                        </tr>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.NombreChqFunc1) && Model.TipoHoraFunc1 == "N° de Horas a Compensar (Diurnas)")
+                    {
+                        <table border="1" width="100%">
+                            <tr>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                                    <h6><b>1</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                                    <h6><b>@Html.DisplayFor(m => Model.NombreChqFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b>@Html.DisplayFor(m => Model.HorasFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                                    <h6><b>@Html.DisplayFor(m => Model.TareaFunc1)</b></h6>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.NombreChqFunc1) && Model.TipoHoraFunc1 == "N° de Horas a Pago (Nocturnas)")
+                    {
+                        <table border="1" width="100%">
+                            <tr>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                                    <h6><b>1</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                                    <h6><b>@Html.DisplayFor(m => Model.NombreChqFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b>@Html.DisplayFor(m => Model.HorasFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                                    <h6><b>@Html.DisplayFor(m => Model.TareaFunc1)</b></h6>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.NombreChqFunc1) && Model.TipoHoraFunc1 == "N° de Horas a Compensar (Nocturnas)")
+                    {
+                        <table border="1" width="100%">
+                            <tr>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:5%">
+                                    <h6><b>1</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:25%">
+                                    <h6><b>@Html.DisplayFor(m => Model.NombreChqFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b></b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:10%">
+                                    <h6><b>@Html.DisplayFor(m => Model.HorasFunc1)</b></h6>
+                                </td>
+                                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:30%">
+                                    <h6><b>@Html.DisplayFor(m => Model.TareaFunc1)</b></h6>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+

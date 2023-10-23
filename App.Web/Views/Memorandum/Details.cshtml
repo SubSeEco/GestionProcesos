@@ -1,0 +1,556 @@
+﻿@model App.Model.Memorandum.Memorandum
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Formulario Memorandum</span>
+                    <div class="row">
+                        <div class="col s12 m6 l12">
+                            <div class="row">
+                                <embed src="@Url.Action("Show", "Documento", new { id = Model.Proceso.Documentos.FirstOrDefault().DocumentoId })" type="application/pdf" width="100%" height="650px"></embed>
+                            </div>
+                            @*<a class="waves-effect waves-light btn modal-trigger" href="#@String.Concat("#modal", Model.Proceso.Documentos.FirstOrDefault().DocumentoId)">Firmar</a>*@
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Proceso : </strong>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.FechaSolicitud)
+                            @Html.DisplayFor(m => Model.FechaSolicitud)
+                            @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                        </div><br />
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.NumDocumento)
+                            @Html.TextBoxFor(m => Model.NumDocumento)
+                            @Html.ValidationMessageFor(m => Model.NumDocumento, "", new { @class = "red-text" })
+                        </div><br>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.NumMemoRef)
+                            @Html.TextBoxFor(m => Model.NumMemoRef)
+                            @Html.ValidationMessageFor(m => Model.NumMemoRef, "", new { @class = "red-text" })
+                        </div><br />
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Remitente :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.UnidadDescripcion)
+                            @Html.LabelFor(m => Model.UnidadDescripcion)
+                            @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreId)
+                            @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m6 l6">
+                            @Html.EditorFor(m => Model.CargoDescripcion)
+                            @Html.LabelFor(m => Model.CargoDescripcion)
+                            @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Datos del Destinatario :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.TextBoxFor(m => Model.UnidadDescripcionDest)
+                            @Html.LabelFor(m => Model.UnidadDescripcionDest)
+                            @Html.ValidationMessageFor(m => Model.UnidadDescripcionDest, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdDest, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdDest)
+                            @Html.ValidationMessageFor(m => Model.NombreIdDest, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m6 l6">
+                            @Html.EditorFor(m => Model.CargoDescripcionDest)
+                            @Html.LabelFor(m => Model.CargoDescripcionDest)
+                            @Html.ValidationMessageFor(m => Model.CargoDescripcionDest, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdSecre, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdSecre)
+                            @Html.ValidationMessageFor(m => Model.NombreIdSecre, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Cuerpo del Documento : </strong>
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.Asunto)
+                            @Html.TextBoxFor(m => Model.Asunto)
+                            @Html.ValidationMessageFor(m => Model.Asunto, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.Antecedentes)
+                            @Html.TextAreaFor(m => Model.Antecedentes, new { @class = "materialize-textarea" })
+                            @Html.ValidationMessageFor(m => Model.Antecedentes, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            @Html.LabelFor(m => Model.Materia)
+                            @Html.TextAreaFor(m => Model.Materia, new { @class = "materialize-textarea" })
+                            @Html.ValidationMessageFor(m => Model.Materia, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Firmante 1 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdAutorizaFirma1, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdAutorizaFirma1)
+                            @Html.ValidationMessageFor(m => Model.NombreIdAutorizaFirma1, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Firmante 2 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdAutorizaFirma2, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdAutorizaFirma2)
+                            @Html.ValidationMessageFor(m => Model.NombreIdAutorizaFirma2, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Firmante 3 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdAutorizaFirma3, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdAutorizaFirma3)
+                            @Html.ValidationMessageFor(m => Model.NombreIdAutorizaFirma3, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 1 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa1, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa1)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa1, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 2 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa2, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa2)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa2, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 3 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa3, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa3)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa3, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 4 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa4, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa4)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa4, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 5 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa5, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa5)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa5, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 6 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa6, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa6)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa6, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 7 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa7, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa7)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa7, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 8 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa8, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa8)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa8, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 9 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa9, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa9)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa9, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Visador 10 :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdVisa10, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdVisa10)
+                            @Html.ValidationMessageFor(m => Model.NombreIdVisa10, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m10 l10">
+                            <strong>Información del Analista :</strong>
+                        </div>
+                        <div class="input-field col s12 m10 l8">
+                            @Html.DropDownListFor(m => Model.NombreIdAna, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.NombreIdAna)
+                            @Html.ValidationMessageFor(m => Model.NombreIdAna, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreId').on('change', function () {
+        var Rut = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuario", { Rut: Rut },
+            function (classesData) {
+                //alert(classesData["IdUnidad"]);
+                document.getElementById('Rut').value = classesData["Rut"];
+                document.getElementById('DV').value = classesData["DV"];
+                document.getElementById('EmailRem').value = classesData["EmailRem"];
+                document.getElementById('NombreChqRem').value = classesData["NombreChqRem"];
+                document.getElementById('IdCargo').value = classesData["IdCargo"];
+                document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                document.getElementById('IdCalidad').value = classesData["IdCalidad"];
+                document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                document.getElementById('IdUnidad').value = classesData["IdUnidad"];
+                document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdDest').on('change', function () {
+        var RutDest = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioDest", { RutDest: RutDest },
+            function (classesData) {
+                //alert(classesData["IdUnidadDest"]);
+                document.getElementById('RutDest').value = classesData["RutDest"];
+                document.getElementById('DVDest').value = classesData["DVDest"];
+                document.getElementById('EmailDest').value = classesData["EmailDest"];
+                document.getElementById('NombreChqDest').value = classesData["NombreChqDest"];
+                document.getElementById('IdCargoDest').value = classesData["IdCargoDest"];
+                document.getElementById('CargoDescripcionDest').value = classesData["CargoDest"];
+                document.getElementById('IdCalidadDest').value = classesData["IdCalidadDest"];
+                document.getElementById('CalidadDescripcionDest').value = classesData["CalidadJuridicaDest"];
+                document.getElementById('IdUnidadDest').value = classesData["IdUnidadDest"];
+                document.getElementById('UnidadDescripcionDest').value = classesData["UnidadDest"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdSecre').on('change', function () {
+        var RutSecre = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioSecre", { RutSecre: RutSecre },
+            function (classesData) {
+                //alert(classesData["IdUnidadSecre"]);
+                document.getElementById('RutSecre').value = classesData["RutSecre"];
+                document.getElementById('DVSecre').value = classesData["DVSecre"];
+                document.getElementById('EmailSecre').value = classesData["EmailSecre"];
+                document.getElementById('NombreChqSecre').value = classesData["NombreChqSecre"];
+                document.getElementById('IdCargoSecre').value = classesData["IdCargoSecre"];
+                document.getElementById('CargoDescripcionSecre').value = classesData["CargoSecre"];
+                document.getElementById('IdCalidadSecre').value = classesData["IdCalidadSecre"];
+                document.getElementById('CalidadDescripcionSecre').value = classesData["CalidadJuridicaSecre"];
+                document.getElementById('IdUnidadSecre').value = classesData["IdUnidadSecre"];
+                document.getElementById('UnidadDescripcionSecre').value = classesData["UnidadSecre"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa1').on('change', function () {
+        var RutVisa1 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa1", { RutVisa1: RutVisa1 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa1"]);
+                document.getElementById('RutVisa1').value = classesData["RutVisa1"];
+                document.getElementById('DVVisa1').value = classesData["DVVisa1"];
+                document.getElementById('EmailVisa1').value = classesData["EmailVisa1"];
+                document.getElementById('NombreChqVisa1').value = classesData["NombreChqVisa1"];
+                //document.getElementById('IdCargoVisa1').value = classesData["IdCargoVisa1"];
+                //document.getElementById('CargoDescripcionVisa1').value = classesData["CargoVisa1"];
+                //document.getElementById('IdCalidadVisa1').value = classesData["IdCalidadVisa1"];
+                //document.getElementById('CalidadDescripcionVisa1').value = classesData["CalidadJuridicaVisa1"];
+                document.getElementById('IdUnidadVisa1').value = classesData["IdUnidadVisa1"];
+                document.getElementById('UnidadDescripcionVisa1').value = classesData["UnidadVisa1"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa2').on('change', function () {
+        var RutVisa2 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa2", { RutVisa2: RutVisa2 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa2').value = classesData["RutVisa2"];
+                document.getElementById('DVVisa2').value = classesData["DVVisa2"];
+                document.getElementById('EmailVisa2').value = classesData["EmailVisa2"];
+                document.getElementById('NombreChqVisa2').value = classesData["NombreChqVisa2"];
+                //document.getElementById('IdCargoVisa2').value = classesData["IdCargoVisa2"];
+                //document.getElementById('CargoDescripcionVisa2').value = classesData["CargoVisa2"];
+                //document.getElementById('IdCalidadVisa2').value = classesData["IdCalidadVisa2"];
+                //document.getElementById('CalidadDescripcionVisa2').value = classesData["CalidadJuridicaVisa2"];
+                document.getElementById('IdUnidadVisa2').value = classesData["IdUnidadVisa2"];
+                document.getElementById('UnidadDescripcionVisa2').value = classesData["UnidadVisa2"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa3').on('change', function () {
+        var RutVisa3 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa3", { RutVisa3: RutVisa3 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa3').value = classesData["RutVisa3"];
+                document.getElementById('DVVisa3').value = classesData["DVVisa3"];
+                document.getElementById('EmailVisa3').value = classesData["EmailVisa3"];
+                document.getElementById('NombreChqVisa3').value = classesData["NombreChqVisa3"];
+                //document.getElementById('IdCargoVisa3').value = classesData["IdCargoVisa3"];
+                //document.getElementById('CargoDescripcionVisa3').value = classesData["CargoVisa3"];
+                //document.getElementById('IdCalidadVisa3').value = classesData["IdCalidadVisa3"];
+                //document.getElementById('CalidadDescripcionVisa3').value = classesData["CalidadJuridicaVisa3"];
+                document.getElementById('IdUnidadVisa3').value = classesData["IdUnidadVisa3"];
+                document.getElementById('UnidadDescripcionVisa3').value = classesData["UnidadVisa3"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa4').on('change', function () {
+        var RutVisa4 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa4", { RutVisa4: RutVisa4 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa4').value = classesData["RutVisa4"];
+                document.getElementById('DVVisa4').value = classesData["DVVisa4"];
+                document.getElementById('EmailVisa4').value = classesData["EmailVisa4"];
+                document.getElementById('NombreChqVisa4').value = classesData["NombreChqVisa4"];
+                //document.getElementById('IdCargoVisa4').value = classesData["IdCargoVisa4"];
+                //document.getElementById('CargoDescripcionVisa4').value = classesData["CargoVisa4"];
+                //document.getElementById('IdCalidadVisa4').value = classesData["IdCalidadVisa4"];
+                //document.getElementById('CalidadDescripcionVisa4').value = classesData["CalidadJuridicaVisa4"];
+                document.getElementById('IdUnidadVisa4').value = classesData["IdUnidadVisa4"];
+                document.getElementById('UnidadDescripcionVisa4').value = classesData["UnidadVisa4"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa5').on('change', function () {
+        var RutVisa5 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa5", { RutVisa5: RutVisa5 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa5').value = classesData["RutVisa5"];
+                document.getElementById('DVVisa5').value = classesData["DVVisa5"];
+                document.getElementById('EmailVisa5').value = classesData["EmailVisa5"];
+                document.getElementById('NombreChqVisa5').value = classesData["NombreChqVisa5"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa5').value = classesData["IdUnidadVisa5"];
+                document.getElementById('UnidadDescripcionVisa5').value = classesData["UnidadVisa5"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa6').on('change', function () {
+        var RutVisa6 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa6", { RutVisa6: RutVisa6 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa6').value = classesData["RutVisa6"];
+                document.getElementById('DVVisa6').value = classesData["DVVisa6"];
+                document.getElementById('EmailVisa6').value = classesData["EmailVisa6"];
+                document.getElementById('NombreChqVisa6').value = classesData["NombreChqVisa6"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa6').value = classesData["IdUnidadVisa6"];
+                document.getElementById('UnidadDescripcionVisa6').value = classesData["UnidadVisa6"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa7').on('change', function () {
+        var RutVisa7 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa7", { RutVisa7: RutVisa7 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa7').value = classesData["RutVisa7"];
+                document.getElementById('DVVisa7').value = classesData["DVVisa7"];
+                document.getElementById('EmailVisa7').value = classesData["EmailVisa7"];
+                document.getElementById('NombreChqVisa7').value = classesData["NombreChqVisa7"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa7').value = classesData["IdUnidadVisa7"];
+                document.getElementById('UnidadDescripcionVisa7').value = classesData["UnidadVisa7"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa8').on('change', function () {
+        var RutVisa8 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa8", { RutVisa8: RutVisa8 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa8').value = classesData["RutVisa8"];
+                document.getElementById('DVVisa8').value = classesData["DVVisa8"];
+                document.getElementById('EmailVisa8').value = classesData["EmailVisa8"];
+                document.getElementById('NombreChqVisa8').value = classesData["NombreChqVisa8"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa8').value = classesData["IdUnidadVisa8"];
+                document.getElementById('UnidadDescripcionVisa8').value = classesData["UnidadVisa8"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa9').on('change', function () {
+        var RutVisa9 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa9", { RutVisa9: RutVisa9 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa9').value = classesData["RutVisa9"];
+                document.getElementById('DVVisa9').value = classesData["DVVisa9"];
+                document.getElementById('EmailVisa9').value = classesData["EmailVisa9"];
+                document.getElementById('NombreChqVisa9').value = classesData["NombreChqVisa9"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa9').value = classesData["IdUnidadVisa9"];
+                document.getElementById('UnidadDescripcionVisa9').value = classesData["UnidadVisa9"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdVisa10').on('change', function () {
+        var RutVisa10 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioVisa10", { RutVisa10: RutVisa10 },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutVisa10').value = classesData["RutVisa10"];
+                document.getElementById('DVVisa10').value = classesData["DVVisa10"];
+                document.getElementById('EmailVisa10').value = classesData["EmailVisa10"];
+                document.getElementById('NombreChqVisa10').value = classesData["NombreChqVisa10"];
+                //document.getElementById('IdCargoVisa5').value = classesData["IdCargoVisa5"];
+                //document.getElementById('CargoDescripcionVisa5').value = classesData["CargoVisa5"];
+                //document.getElementById('IdCalidadVisa5').value = classesData["IdCalidadVisa5"];
+                //document.getElementById('CalidadDescripcionVisa5').value = classesData["CalidadJuridicaVisa5"];
+                document.getElementById('IdUnidadVisa10').value = classesData["IdUnidadVisa10"];
+                document.getElementById('UnidadDescripcionVisa10').value = classesData["UnidadVisa10"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAna').on('change', function () {
+        var RutAna = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAna", { RutAna: RutAna },
+            function (classesData) {
+                //alert(classesData["IdUnidadVisa2"]);
+                document.getElementById('RutAna').value = classesData["RutAna"];
+                document.getElementById('DVAna').value = classesData["DVAna"];
+                document.getElementById('EmailAna').value = classesData["EmailAna"];
+                document.getElementById('NombreChqAna').value = classesData["NombreChqAna"];
+                //document.getElementById('IdCargoAna').value = classesData["IdCargoAna"];
+                //document.getElementById('CargoDescripcionAna').value = classesData["CargoAna"];
+                //document.getElementById('IdCalidadAna').value = classesData["IdCalidadAna"];
+                //document.getElementById('CalidadDescripcionAna').value = classesData["CalidadJuridicaAna"];
+                document.getElementById('IdUnidadAna').value = classesData["IdUnidadAna"];
+                document.getElementById('UnidadDescripcionAna').value = classesData["UnidadAna"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma1').on('change', function () {
+        var RutAutorizaFirma1 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma1", { RutAutorizaFirma1: RutAutorizaFirma1 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma1"]);
+                document.getElementById('RutAutorizaFirma1').value = classesData["RutAutorizaFirma1"];
+                document.getElementById('DVAutorizaFirma1').value = classesData["DVAutorizaFirma1"];
+                document.getElementById('EmailAutorizaFirma1').value = classesData["EmailAutorizaFirma1"];
+                document.getElementById('NombreChqAutorizaFirma1').value = classesData["NombreChqAutorizaFirma1"];
+                //document.getElementById('IdCargoAutorizaFirma1').value = classesData["IdCargoAutorizaFirma1"];
+                //document.getElementById('CargoDescripcionAutorizaFirma1').value = classesData["CargoAutorizaFirma1"];
+                //document.getElementById('IdCalidadAutorizaFirma1').value = classesData["IdCalidadAutorizaFirma1"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma1').value = classesData["CalidadJuridicaAutorizaFirma1"];
+                document.getElementById('IdUnidadAutorizaFirma1').value = classesData["IdUnidadAutorizaFirma1"];
+                document.getElementById('UnidadDescripcionAutorizaFirma1').value = classesData["UnidadAutorizaFirma1"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma2').on('change', function () {
+        var RutAutorizaFirma2 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma2", { RutAutorizaFirma2: RutAutorizaFirma2 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma2"]);
+                document.getElementById('RutAutorizaFirma2').value = classesData["RutAutorizaFirma2"];
+                document.getElementById('DVAutorizaFirma2').value = classesData["DVAutorizaFirma2"];
+                document.getElementById('EmailAutorizaFirma2').value = classesData["EmailAutorizaFirma2"];
+                document.getElementById('NombreChqAutorizaFirma2').value = classesData["NombreChqAutorizaFirma2"];
+                //document.getElementById('IdCargoAutorizaFirma2').value = classesData["IdCargoAutorizaFirma2"];
+                //document.getElementById('CargoDescripcionAutorizaFirma2').value = classesData["CargoAutorizaFirma2"];
+                //document.getElementById('IdCalidadAutorizaFirma2').value = classesData["IdCalidadAutorizaFirma2"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma2').value = classesData["CalidadJuridicaAutorizaFirma2"];
+                document.getElementById('IdUnidadAutorizaFirma2').value = classesData["IdUnidadAutorizaFirma2"];
+                document.getElementById('UnidadDescripcionAutorizaFirma2').value = classesData["UnidadAutorizaFirma2"];
+            });
+    });
+
+    /*Carga usuario por seleccion de dropdown*/
+    $('#NombreIdAutorizaFirma3').on('change', function () {
+        var RutAutorizaFirma3 = $(this).val(); /*alert(Rut);*/
+        $.getJSON("/Memorandum/GetUsuarioAutorizaFirma3", { RutAutorizaFirma3: RutAutorizaFirma3 },
+            function (classesData) {
+                //alert(classesData["IdUnidadAutorizaFirma3"]);
+                document.getElementById('RutAutorizaFirma3').value = classesData["RutAutorizaFirma3"];
+                document.getElementById('DVAutorizaFirma3').value = classesData["DVAutorizaFirma3"];
+                document.getElementById('EmailAutorizaFirma3').value = classesData["EmailAutorizaFirma3"];
+                document.getElementById('NombreChqAutorizaFirma3').value = classesData["NombreChqAutorizaFirma3"];
+                //document.getElementById('IdCargoAutorizaFirma3').value = classesData["IdCargoAutorizaFirma3"];
+                //document.getElementById('CargoDescripcionAutorizaFirma3').value = classesData["CargoAutorizaFirma3"];
+                //document.getElementById('IdCalidadAutorizaFirma3').value = classesData["IdCalidadAutorizaFirma3"];
+                //document.getElementById('CalidadDescripcionAutorizaFirma3').value = classesData["CalidadJuridicaAutorizaFirma3"];
+                document.getElementById('IdUnidadAutorizaFirma3').value = classesData["IdUnidadAutorizaFirma3"];
+                document.getElementById('UnidadDescripcionAutorizaFirma3').value = classesData["UnidadAutorizaFirma3"];
+            });
+    });
+
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />

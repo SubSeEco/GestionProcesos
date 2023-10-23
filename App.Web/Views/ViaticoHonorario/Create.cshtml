@@ -1,0 +1,82 @@
+﻿@model App.Model.Cometido.ViaticoHonorario
+<div class="container">
+
+    <h3>Crear Viatico Honorario</h3>
+
+    <div class="card">
+        <div class="card-content">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Año, new { @placeholder = "Ingrese valor para el Año" })
+                    @Html.LabelFor(m => Model.Año)
+                    @Html.ValidationMessageFor(m => Model.Año, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Desde, new { @placeholder = "Ingrese valor para el campo Desde" })
+                    @Html.LabelFor(m => Model.Desde)
+                    @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Hasta, new { @placeholder = "Ingrese valor para el campo Hasta" })
+                    @Html.LabelFor(m => Model.Hasta)
+                    @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Porcentaje100, new { @placeholder = "Ingrese valor para el campo Porcentaje 100%" })
+                    @Html.LabelFor(m => Model.Porcentaje100)
+                    @Html.ValidationMessageFor(m => Model.Porcentaje100, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Porcentaje60, new { @placeholder = "Ingrese valor para el campo Porcentaje 60%" })
+                    @Html.LabelFor(m => Model.Porcentaje60)
+                    @Html.ValidationMessageFor(m => Model.Porcentaje60, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Porcentaje40, new { @placeholder = "Ingrese valor para el campo Porcentaje 40%" })
+                    @Html.LabelFor(m => Model.Porcentaje40)
+                    @Html.ValidationMessageFor(m => Model.Porcentaje40, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Porcentaje50, new { @placeholder = "Ingrese valor para el campo el campo Porcentaje 50%" })
+                    @Html.LabelFor(m => Model.Porcentaje50)
+                    @Html.ValidationMessageFor(m => Model.Porcentaje50, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Tramo, new { @placeholder = "Ingrese valor para el campo Tramo" })
+                    @Html.LabelFor(m => Model.Tramo)
+                    @Html.ValidationMessageFor(m => Model.Tramo, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.Activo)
+                        <span>@Html.LabelFor(m => Model.Activo)</span>
+                    </label>
+                </div>
+                <br />
+                <div class="section"></div>
+                <p>
+                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                </p>
+            }
+        </div>
+
+
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

@@ -1,0 +1,39 @@
+﻿@model App.Model.Comisiones.GeneracionCDPComision
+<div class="container">
+    <h3>Eliminar Tipo Asignacion</h3>
+
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Confirmar eliminación</span>*@
+            <div class="row">
+                <div class="input-field col s12 m10">
+                    <strong>@Html.DisplayNameFor(m => Model.VtcTipoPartida)</strong>
+                    <p>@Html.DisplayFor(m => Model.VtcTipoPartida)</p>
+                </div>
+            </div>
+            <br />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(q => Model.GeneracionCDPComisionId)
+
+                <button class="waves-effect waves-light btn red" type="submit">Confirmar eliminación</button>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

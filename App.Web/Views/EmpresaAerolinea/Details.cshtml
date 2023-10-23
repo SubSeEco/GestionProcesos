@@ -1,0 +1,32 @@
+﻿@model App.Model.Pasajes.EmpresaAerolinea
+
+<div class="container">
+    <h2>Detalle Empresa Aerolinea</h2>
+
+    <div>
+        @*<h4>EmpresaAerolinea</h4>
+            <hr />*@
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.NombreEmpresa)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NombreEmpresa)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ActivoEmpresa)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ActivoEmpresa)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.EmpresaAerolineaId }) |*@
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

@@ -1,0 +1,29 @@
+﻿@model App.Model.Core.Workflow
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@using (Html.BeginForm("Archive", "Workflow", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.WorkflowId)
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Archivar tarea</span>
+            <div class="row">
+                <div class="input-field col s12 m8 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn red" type="submit">Archivar</button>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

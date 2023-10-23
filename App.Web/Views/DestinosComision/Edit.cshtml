@@ -1,0 +1,240 @@
+﻿@model App.Model.Comisiones.DestinosComision
+
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+<div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            <p>
+                <strong>
+                    La solicitud de cometido se debe realizar con una anticipacion de: 7 días.
+                </strong>
+            </p>
+            <p>
+                “Si está en cometido o comisión en las siguientes situaciones, se asignará viático si:
+                <ol>
+                    <ul>Corresponde 40% de viático si se encuentra en el lugar antes del almorzar y se va antes de pernoctar</ul>
+                    <ul>Corresponde 60% si la persona llega a pernoctar después de almuerzo</ul>
+                    <ul>Corresponde 100% si la persona se encuentra en el lugar antes de almorzar y pernocta en el lugar</ul>
+                </ol>
+                No corresponde asignar viático si está:
+                <ol>
+                    <ul>Desde el comienzo del día hasta antes de almuerzo</ul>
+                    <ul>Desde después de almuerzo hasta antes de pernoctar</ul>
+                </ol>
+            </p>
+            <p>
+                <strong>Lo anterior, en los casos que no cuenta con invitación de comida y alojamiento, dado que en esos casos no correspondería asignar viático por alimentación/pernoctación, según corresponda.”</strong>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @using (Html.BeginForm())
+            {
+                @*@Html.HiddenFor(q => Model.WorkflowId)*@
+                @Html.HiddenFor(q => Model.DestinosComisionId)
+                @Html.HiddenFor(q => Model.ComisionesId)
+
+                @*@Html.HiddenFor(q => Model.FechaInicio)
+                    @Html.HiddenFor(q => Model.FechaHasta)
+                    @Html.HiddenFor(q => Model.Dias50)
+                    @Html.HiddenFor(q => Model.Dias50Aprobados)
+                    @Html.HiddenFor(q => Model.Dias50Monto)
+                    @Html.HiddenFor(q => Model.Dias00)
+                    @Html.HiddenFor(q => Model.Dias00Aprobados)
+                    @Html.HiddenFor(q => Model.Dias00Monto)*@
+                @Html.HiddenFor(q => Model.Total)
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Destinos Cometidos</span>
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.PaisDescripcion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CiudadDescripcion)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FechaInicio)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FechaHasta)
+                                    </th>
+                                    <th style="width:20px">
+                                        @Html.DisplayNameFor(m => Model.Dias100)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias60)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias40)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias00)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Dias50)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => Model.Total)
+                                        @Html.ValidationMessageFor(m => Model.Total, "", new { @class = "red-text" })
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => Model.IdCiudad, null, "Seleccione...", new { style = "width:100px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaInicio, new { style = "width:130px"/*,disabled = "disabled" */})
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => Model.FechaHasta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias100, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias60, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias40, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias00, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Dias50, new { style = "width:50px" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model.Total, "{0:G29}", new { style = "width:80px" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="section"></div>
+                    <p>
+                        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaInicio,#FechaHasta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            //format: 'd-m-Y H:i',
+            //formatTime: 'H:i',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y H:i',
+            //onChangeDateTime: function () {
+            //    var inicio = document.getElementById('#FechaInicio').value();
+            //    alert(inicio);
+            //}
+        });
+
+        //$("#Dias50").attr('disabled', true);
+        //$("#Dias00").attr('disabled', true);
+        //$("#Total").attr('disabled', true);
+        $('select').formSelect();
+        //$('input:hidden').each(function (index, element) {
+        //    $(element).appendTo($(element).parent());
+        //});
+
+        /*Calcular monto del viatico para 50%*/
+        $('#Dias50').on('change', function () {
+            CalculaViaticos();
+        });
+
+        /*Calcular monto total de los viaticos%*/
+        $('#Dias00').on('change', function () {
+            CalculaViaticos();
+        });
+
+        /*Calcular monto del viatico para 100%*/
+        $('#Dias100').on('change', function () {
+            CalculaViaticos();
+        });
+
+        /*Calcular monto del viatico para 60%*/
+        $('#Dias60').on('change', function () {
+            CalculaViaticos();
+        });
+
+        /*Calcular monto del viatico para 40%*/
+        $('#Dias40').on('change', function () {
+            CalculaViaticos();
+        });
+
+    });
+
+    /*Carga dropdown de ciudades*/
+    $('#IdPais').on('change', function () {
+        var Pais = $(this).val();
+        $.getJSON("/DestinosComision/GetCiudad", { IdPais: Pais },
+            function (classesData) {
+                var select = $("#IdCiudad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.value,
+                        text: itemData.text
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
+
+    function CalculaViaticos() {
+        var Dias100 = $("#Dias100").val();
+        var Dias60 = $("#Dias60").val();
+        var Dias40 = $("#Dias40").val();
+        var Dias50 = $("#Dias50").val();
+        var IdCiudad = $("#IdCiudad").val();
+        var comision = $("#ComisionesId").val();
+        $.getJSON("/DestinosComision/Viatico", { ComisionId: comision, CantDias100: Dias100, CantDias60: Dias60, CantDias40: Dias40, CantDias50: Dias50, CiudadId: IdCiudad },
+            function (Data) {
+                var valor = Data.DiasTotal;
+                var res = (valor).toString().replace('.', ',');
+                document.getElementById('Total').value = res;
+            });
+    }
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

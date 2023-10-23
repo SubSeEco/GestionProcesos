@@ -1,0 +1,155 @@
+﻿@model App.Model.ProgramacionHorasExtraordinarias.ProgramacionHorasExtraordinarias
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="row">
+        <div class="left">
+            <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" /><br />
+            <h6><b>DEPTO. ADMINISTRATIVO</b></h6>
+            <h6><b>UNIDAD DE GESTIÓN Y DESARROLLO</b></h6>
+            <h6><b>DE PERSONAS</b></h6>
+            <h6><b>ÁREA PERSONAS</b></h6>
+            <h6><b>MSF/PCM/BCJ</b></h6>
+            <h6><b>R.A.EX</b></h6>
+        </div>
+    </div>
+<div style="text-align: center;" >
+    <p class="flow-text">
+        <h5><b>REGULARÍCESE PROGRAMACIÓN DE HORAS EXTRAORDINARIAS,  MAYO  DE 2020.</b></h5>
+        <h5><b>SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO.</b></h5>
+    </p>
+</div><br /><br />
+
+    <p class="flow-text">
+        <h6>
+            <b>VISTOS : </b>Ley  Nº  21.192, de presupuestos del sector público correspondiente al año 2020; D. L. Nº 249 de 1974; artículo Nº 66 del D. F. L. N° 29/2004 del Ministerio de Hacienda, que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; artículo 9º de la Ley Nº 19.104 de 1991; Resolución Nº 6, de 2019, de la Contraloría General de la República; Resolución Administrativa Exenta N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+        </h6>
+    </p>
+
+    <p class="flow-text">
+        <h6>
+            <b>CONSIDERANDO : </b><br /><br />1.	Que, se debe regularizar programación de horas extraordinarias del mes de mayo, en una fecha posterior, en atención a contingencia por COVID-19 o  caso fortuito, lo que constituye una situación de excepción que, en diversos textos normativos permite adoptar medidas especiales, liberar de responsabilidad, eximir de cumplimiento de ciertas obligaciones y plazos, o establecer modalidades especiales de desempeño, entre otras consecuencias que en situaciones normales no serían permitidas por el ordenamiento jurídico.
+        </h6>
+    </p>
+
+    <p class="flow-text">
+        <h6>
+            2.  Que, se hace necesario programar las horas extraordinarias del mes de mayo de 2020, de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño.
+        </h6>
+    </p>
+
+    <p class="flow-text">
+        <h6>
+            <b>RESUELVO : </b>
+        </h6>
+    </p>
+
+    <p class="flow-text">
+        <h6>
+            <b>REGULARÍCESE, </b>Ley  Nº  21.192, de presupuestos del sector público correspondiente al año 2020; D. L. Nº 249 de 1974; artículo Nº 66 del D. F. L. N° 29/2004 del Ministerio de Hacienda, que fija el texto refundido, coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; artículo 9º de la Ley Nº 19.104 de 1991; Resolución Nº 6, de 2019, de la Contraloría General de la República; Resolución Administrativa Exenta N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+        </h6>
+    </p><br />
+
+        <table border="1" width="100%">
+            <tr>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>RUT</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:40%">
+                    <h6><b>NOMBRE</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>N° DE HORAS PROGRAMADAS DIURNAS </b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>N° DE HORAS PROGRAMADAS NOCTURNAS</b></h6>
+                </td>
+            </tr>
+            <tr>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b></b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:40%">
+                    @*<h6><b>@Html.DisplayFor(m => Model.Pl_UndDes)</b></h6>*@
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b></b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b></b></h6>
+                </td>
+            </tr>
+            @if (!string.IsNullOrWhiteSpace(Model.ToFunc1)&& Model.TipoHoraFunc1 == "N° de Horas a Pago (Diurnas)")
+{
+        <table border="1" width="100%">
+            <tr>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>@Html.DisplayFor(m => Model.RutFunc1) - @Html.DisplayFor(m => Model.DVFunc1)</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:40%">
+                    <h6><b>@Html.DisplayFor(m => Model.NombreFunc1)</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>@Html.DisplayFor(m => Model.HorasFunc1) </b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b></b></h6>
+                </td>
+            </tr>
+        </table>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ToFunc1)&& Model.TipoHoraFunc1 == "N° de Horas a Pago (Nocturnas)")
+        {
+        <table border="1" width="100%">
+            <tr>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>@Html.DisplayFor(m => Model.RutFunc1) - @Html.DisplayFor(m => Model.DVFunc1)</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:40%">
+                    <h6><b>@Html.DisplayFor(m => Model.NombreFunc1)</b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b>@Html.DisplayFor(m => Model.HorasFunc1) </b></h6>
+                </td>
+                <td style="border-style: solid; border-width: 1px; border-color: #000000; width:20%">
+                    <h6><b></b></h6>
+                </td>
+            </tr>
+        </table>
+            }
+        </table>
+
+    <p class="flow-text">
+        @*@Html.Raw(Model.Antecedentes.Trim().Replace(Environment.NewLine, "<br/>"))*@
+    </p>
+
+    <div class="container">
+        <table border="1" width="60%">
+            <tr>
+                <td @*style="border-style: solid; border-width: 1px; border-color: #000000; width:5%; background-color: #d0cece"*@>
+                    <h7>La Unidad de Gestión y Desarrollo de Personas elaborará el acto administrativo con las horas debidamente trabajadas por los funcionarios autorizados en la presente Resolución Administrativa Exenta, estableciendo como tope la máxima de horas programadas, las que serán compensadas con descanso complementario o bien con incremento de remuneraciones, siempre y cuando exista disponibilidad presupuestaria para ello.</h7><br />
+                </td>
+            </tr>
+        </table><br />
+    </div>
+
+
+
+</body>
+</html>
+
+
+
+
+

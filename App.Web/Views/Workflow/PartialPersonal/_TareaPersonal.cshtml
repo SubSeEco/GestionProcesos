@@ -1,0 +1,167 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+@using Enum = App.Util.Enum;
+@{
+    var gd = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDInterno ||
+               q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDOficParte).Count();
+    var firmaDoc = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudFirma).Count();
+    var cometidos = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.SolicitudCometidoPasaje).Count();
+    var hsa = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.InformeHSA).Count();
+    var consultaIntegridad = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.ConsultaIntegridad).Count();
+    var denunciaIntegridad = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.DenunciaIntegridad).Count();
+    var gdPro = Model.TareasPersonales.Where(q => q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDInterno ||
+               q.ProcesoDefinicionId == (int)Enum.DefinicionProceso.GDOficParte);
+}
+<ul class="collapsible popout">
+
+    <li class="">
+        <div class="collapsible-header">
+            <span style="font-weight: bold">
+                Gestion Documental
+            </span>
+            @{
+                var conTiempo = 0;
+                var sinPlazo = 0;
+                var conTiempoExtra = 0;
+                var vencidos = 0;
+                foreach (var item in gdPro.Where(q=>q.GD !=null))
+                {
+                    if (item.GD.FechaPlazo == null)
+                    {
+                        sinPlazo++;
+                    }
+                    else if ((item.GD.FechaPlazo.Value.Date - DateTime.Now.Date).TotalDays >= 0 && (item.GD.FechaPlazo.Value.Date - DateTime.Now.Date).TotalDays <= 10)
+                    {
+                        conTiempo++;
+                    }
+                    else if ((item.GD.FechaPlazo.Value.Date - DateTime.Now.Date).TotalDays > 10)
+                    {
+                        conTiempoExtra++;
+                    }
+                    else if((item.GD.FechaPlazo.Value.Date - DateTime.Now.Date).TotalDays<0)
+                    {
+                        vencidos++;
+                    }
+                }
+
+                var libre = 0;
+                foreach (var iten in gdPro.Where(q=>q.GD==null))
+                {
+                    libre++;
+                }
+            }
+            <span class="new badge red tooltipped" data-tooltip="Procesos Vencidos." data-badge-caption="">@vencidos</span>
+            <span class="new badge amber tooltipped" data-tooltip="Procesos proximos a vencer." data-badge-caption="">@conTiempo</span>
+            <span class="new badge light-green tooltipped" data-tooltip="Procesos con más de 10 días." data-badge-caption="">@conTiempoExtra</span>
+            <span class="new badge grey tooltipped" data-tooltip="Procesos sin Plazo." data-badge-caption="">@(libre+sinPlazo)</span>
+            <span class="new badge turquoise" data-tooltip="Total de Procesos" data-badge-caption="" style="font-weight:bold; font-size:1.1rem">@gd</span>
+        </div>
+        <div class="collapsible-body">
+            @if (gd > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexGestionDocumentalPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight: bold">Cometidos</span>
+            <span class="new badge blue" data-badge-caption="" style="font-weight:bold; font-size:1.1rem">
+                @cometidos
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (cometidos > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexCometidosPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight: bold">Informes HSA</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#1621CC; font-weight:bold; font-size:1.1rem">
+                @hsa
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (hsa > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexHSAPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Firma Documentos</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @firmaDoc
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (firmaDoc > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexFirmaDocumentosPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Consulta Integridad</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @consultaIntegridad
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (consultaIntegridad > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexConsultaIntegridadPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header">
+            <span style="font-weight:bold">Denuncia Integridad</span>
+            <span class="new badge" data-badge-caption="" style="background-color:#531da2; font-weight:bold; font-size:1.1rem">
+                @denunciaIntegridad
+            </span>
+        </div>
+        <div class="collapsible-body">
+            @if (denunciaIntegridad > 0)
+            {
+                @Html.Partial("PartialPersonal/_IndexDenunciaIntegridadPersonal", Model)
+            }
+            else
+            {
+                <p>No existen tareas pendientes</p>
+            }
+        </div>
+    </li>
+</ul>
+
+<script>
+    $(document).ready(function () {
+        $('.tooltipped').tooltip();
+        $('.tabs').tabs();
+        $('.collapsible').collapsible();
+    });
+</script>

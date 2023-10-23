@@ -1,0 +1,45 @@
+﻿@model IEnumerable<App.Model.InformeHSA.InformeHSA>
+
+<h3>
+    Informes HSA
+</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RUT)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDesde)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaHasta)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RUT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDesde)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaHasta)
+        </td>
+        <td>
+            @Html.ActionLink("Detalles", "View", new { id = item.InformeHSAId })
+        </td>
+    </tr>
+    }
+
+</table>

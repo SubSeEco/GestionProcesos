@@ -1,0 +1,84 @@
+﻿@model App.Model.Core.Proceso
+@{
+    ViewBag.Title = "Iniciar nuevo proceso";
+    ViewBag.SubTitle = "Iniciar nuevo proceso";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+
+<div class="container">
+    @Html.Partial("_Message")
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Nuevo proceso</span>
+
+                <div class="row">
+                    <div class="col s12 m10 l8">
+                        @Html.LabelFor(m => Model.DefinicionProcesoId)
+                        @Html.DropDownListFor(m => Model.DefinicionProcesoId, null, "Seleccione...", new { @class = "input-field validate", @id="definicionProcesoId" })
+                        @Html.ValidationMessageFor(m => Model.DefinicionProcesoId, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m10 l8">
+                        @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                        @Html.LabelFor(m => Model.Observacion)
+                        @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                    </div>
+                </div>
+
+                <div class="row" id="reservadoRow">
+                    <div class="input-field col s12 m10 l8">
+                        <div class="switch" id="reservado">
+                            <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si desea ocultar los detalles de su proceso a los demás usuarios del sistema">
+
+                                @Html.CheckBoxFor(m => Model.Reservado)
+                                <span class="lever"></span>
+                                El proceso es reservado?
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#reservadoRow').hide();
+
+        $('#definicionProcesoId').change(function () {
+            var selectedValue = $(this).val();
+            console.log(selectedValue);
+            if (selectedValue === '5' || selectedValue === '4' || selectedValue==='14') {
+                $('#reservadoRow').show();
+            } else {
+                $('#reservadoRow').hide();
+            }
+        })
+    })
+
+    $(document).ready(function () {
+        $("input[type='hidden']").each(function (index, element) {
+            $(this).appendTo($(element).parent());
+        });
+        $('select').formSelect();
+    });
+</script>
+

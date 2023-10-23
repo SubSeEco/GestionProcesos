@@ -1,0 +1,250 @@
+﻿@model IEnumerable<App.Model.Core.Proceso>
+
+<h3>Dashboard</h3>
+
+<meta http-equiv="refresh" content="30">
+
+<div class="row">
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Procesos totales</span>
+                <h2>@ViewBag.Totales</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Procesos terminados</span>
+                <h2>@ViewBag.Terminados</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Procesos en curso</span>
+                <h2>@ViewBag.EnCurso</h2>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Procesos por tipo</span>
+                <canvas id="ProcesosPorTipoPie"></canvas>
+                <div class="section"></div>
+                <canvas id="ProcesosPorTipoBar"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tiempo de ejecución por tipo</span>
+                <canvas id="ProcesosPorTiempoEjecucionPie"></canvas>
+                <div class="section"></div>
+                <canvas id="ProcesosPorTiempoEjecucionBar"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tiempo de ejecución por grupo</span>
+                <canvas id="TiempoRespuestaGrupoPie"></canvas>
+                <div class="section"></div>
+                <canvas id="TiempoRespuestaGrupoBar"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="col s12 l12">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="ProcesosPorDia"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Scripts/Chart.js"></script>
+<script src="~/Scripts/Common.js"></script>
+<script>
+
+    var c = document.getElementById("ProcesosPorTipoPie");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/ProcesosPorTipo");
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Número de procesos por tipo"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
+            }
+    });
+
+    var c = document.getElementById("ProcesosPorTiempoEjecucionPie");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/ProcesosPorTiempoEjecucion");
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Tiempo promedio (días) de ejecución de procesos por tipo"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
+            }
+
+    });
+
+    var c = document.getElementById("TiempoRespuestaGrupoPie");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/TiempoRespuestaGrupo");
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Tiempo de respuesta promedio por grupo"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
+            }
+    });
+
+
+
+
+
+
+    var c = document.getElementById("ProcesosPorTipoBar");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/ProcesosPorTipo");
+    var myPieChart = new Chart(ctx, {
+        type: 'bar',
+        type: 'horizontalBar',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Número de procesos por tipo"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
+            }
+    });
+
+    var c = document.getElementById("ProcesosPorTiempoEjecucionBar");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/ProcesosPorTiempoEjecucion");
+    var myPieChart = new Chart(ctx, {
+        type: 'bar',
+        type: 'horizontalBar',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Tiempo promedio (días) de ejecución de procesos por tipo"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
+            }
+
+    });
+
+    var c = document.getElementById("TiempoRespuestaGrupoBar");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/TiempoRespuestaGrupo");
+    var myPieChart = new Chart(ctx, {
+        type: 'bar',
+        type: 'horizontalBar',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Tiempo de respuesta promedio por grupo"
+                    },
+                responsive: true,
+                legend: {
+                    display: false
+                },
+            }
+    });
+
+
+
+
+    var c = document.getElementById("ProcesosPorDia");
+    var ctx = c.getContext("2d");
+    var tData = $.getValues("/Proceso/ProcesosPorDia");
+    var myPieChart = new Chart(ctx, {
+        type: 'bar',
+        data: tData,
+        options:
+            {
+                title:
+                    {
+                        display: true,
+                        text: "Número de procesos por día"
+                    },
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+    });
+
+
+
+
+</script>

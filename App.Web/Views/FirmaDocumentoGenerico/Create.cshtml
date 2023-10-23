@@ -1,0 +1,124 @@
+﻿@model App.Model.FirmaDocumentoGenerico.FirmaDocumentoGenerico
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<style>
+    .container {
+        width: 85%;
+    }
+</style>
+
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="row">
+        <div class="col s12 m8 l8">
+            @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.TipoDocumentos)
+                @Html.AntiForgeryToken()
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="container">
+                            <header class="jumbotron my-4">
+                                <h1 class="display-4">¡¡¡ ATENCIÓN !!!</h1>
+                                <p class="lead">
+                                    <h5>TODO DOCUMENTO REALIZADO POR MEDIO DE ESTA PLATAFORMA, SERÁ DE CARÁCTER PÚBLICO.</h5>
+                                </p>
+                            </header>
+                        </div><br />
+                        <span class="card-title">Ingreso de documento</span>
+                        <div class="section"></div>
+                        <div class="input-field col s12 m10 l12">
+                            <div class="row">
+                                <span>@Html.LabelFor(m => Model.TipoDocumento)</span><br />
+
+                                <label>
+                                    @Html.RadioButtonFor(m => Model.TipoDocumento, true)
+                                    <span>OTROS</span>
+                                </label>
+                                <label>
+                                    @Html.RadioButtonFor(m => Model.TipoDocumento, false)
+                                    <span>MEMORANDUM</span>
+                                </label>
+                                @Html.ValidationMessageFor(m => Model.TipoDocumento, "", new { @class = "red-text" })
+                            </div>
+                        </div><br />
+                        <div class="section"></div>
+                        @*<div class="form-group">*@
+                        <div class="control-label col-md-2">
+                            @*<div class="input-field col s12 m10 l12">
+                @Html.DropDownListFor(m => m.TiposFirmas, new List<SelectListItem>
+                { new SelectListItem { Text = "ATENDIDA", Value = "ATENDIDA"},
+                  new SelectListItem { Text = "DESATENDIDA", Value = "DESATENDIDA"}})
+                @Html.ValidationMessageFor(m => Model.TipoDocumentos, "", new { @class = "red-text" })
+            </div><br />*@
+                            @*<div class="input-field col s12 m10 l12">
+                @Html.DropDownListFor(m => m.TipoDocumentos, new List<SelectListItem>
+                { new SelectListItem { Text = "OTROS", Value = "OTROS"},
+                  new SelectListItem { Text = "MEMORANDUM", Value = "MEMORANDUM"}})
+                @Html.ValidationMessageFor(m => Model.TipoDocumentos, "", new { @class = "red-text" })
+            </div><br />*@
+                            <div class="file-field input-field">
+                                <div class="btn grey">
+                                    <i class="material-icons">attach_file</i>
+                                    @Html.TextBoxFor(model => model.File, "", new { @type = "file", @multiple = "multiple"})
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                                </div>
+                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "red-text" })
+                            </div>
+                            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                            <div class="section"></div>
+
+                            @*@if (Model.TipoFirma == false)
+            {
+                <div class="input-field col s12 m10 l12">
+                    @Html.DropDownListFor(m => m.TipoDocumentos, new List<SelectListItem>
+                    { new SelectListItem { Text = "OTROS", Value = "OTROS"},
+                      new SelectListItem { Text = "RESOLUCIÓN", Value = "RESOLUCIÓN"},
+                      new SelectListItem { Text = "MEMORANDUM", Value = "MEMORANDUM"}})
+                    @Html.ValidationMessageFor(m => Model.TipoDocumentos, "", new { @class = "red-text" })
+                </div><br />
+                <div class="file-field input-field">
+                    <div class="btn grey">
+                        <i class="material-icons">attach_file</i>
+                        @Html.TextBoxFor(model => model.File, "", new { @type = "file", @multiple = "multiple"})
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                    </div>
+                    @Html.ValidationMessageFor(model => model.File, "", new { @class = "red-text" })
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+                <div class="section"></div>
+            }*@
+                        </div>
+                        @*<div class="row">
+            <input type="file" name="file" />
+        </div>
+        <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>*@
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col s12 m4 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+        $('.tooltipped').tooltip();
+    });
+</script>
+

@@ -1,0 +1,26 @@
+﻿@model App.Model.Persona.Persona
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="row" align="center" >
+    <div class="col s12 m12">
+        <div class="card purple darken-4" >
+            <div class="card-content white-text">
+                <span class="card-title">Detalles de la persona</span>
+                <dd>
+                   Nombre:  @Html.DisplayFor(model => model.nombre)
+                </dd>
+                <dd>
+                   Apellido:  @Html.DisplayFor(model => model.apellido)
+                </dd>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>
+     |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

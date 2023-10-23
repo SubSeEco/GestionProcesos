@@ -1,0 +1,85 @@
+﻿@model App.Web.Controllers.WorkflowController.DTOFilter
+@{
+    ViewBag.Title = "Bandeja de tareas";
+    ViewBag.SubTitle = "Listado de tareas pendientes";
+}
+@using Enum = App.Util.Enum;
+
+
+<style>
+    .tabs .tab a {
+        color: rgb(33, 150, 243)
+    }
+
+        .tabs .tab a:hover {
+            color: #2196f3;
+        }
+
+        .tabs .tab a:focus.active {
+            color: #2196f3;
+            background-color: rgba(33, 150, 243, 0.10);
+        }
+
+    .tabs .indicator {
+        background-color: #0094ff;
+    }
+
+    .tabs .tab a:hover, .tabs .tab a.active {
+        color: #0094ff;
+    }
+</style>
+
+@*<meta http-equiv="refresh" content="120">*@
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+
+<div class="container">
+    @Html.Partial("_Message")
+    <p class="right truncate grey-text ultra-small">Actualizado al @DateTime.Now</p>
+
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab">
+            <a class="active" href="#test1">Tareas personales (@Model.TareasPersonales.Count())</a>
+        </li>
+        <li class="tab">
+            <a href="#test2">Tareas grupales (@Model.TareasGrupales.Count())</a>
+        </li>
+    </ul>
+
+    <div id="test1" class="col s12">
+        @if (!Model.TareasPersonales.Any())
+        {
+            <p>No existen tareas pendientes</p>
+        }
+        else
+        {
+            @Html.Partial("PartialPersonal/_TareaPersonal",Model)
+        }
+    </div>
+    <div id="test2" class="col s12">
+        @if (!Model.TareasGrupales.Any())
+        {
+            <p>No existen tareas pendientes</p>
+        }
+        else
+        {
+            @Html.Partial("PartialGrupal/_TareaGrupal",Model)
+        }
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create", "Proceso")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Iniciar nuevo proceso"><i class="large material-icons">add</i></a>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.tooltipped').tooltip();
+        $('.tabs').tabs();
+        $('.collapsible').collapsible();
+    });
+</script>

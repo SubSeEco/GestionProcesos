@@ -1,0 +1,140 @@
+﻿@model App.Model.Pasajes.DestinosPasajes
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @Html.Partial("_Message")
+            @using (Html.BeginForm())
+            {
+                @*@Html.HiddenFor(q => Model.WorkflowId)*@
+                @Html.HiddenFor(q => Model.DestinosPasajesId)
+                @Html.HiddenFor(q => Model.PasajeId)
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Destinos Pasajes</span>
+                        <div class="row">
+                            @if (Model.Pasaje.TipoDestino == true)
+                            {
+                                <div id="divNacional">
+                                    <div class="row">
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+                                            @Html.DropDownListFor(m => m.IdRegionOrigen, null, "Seleccione...")
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.FechaOrigen)
+                                            @Html.EditorFor(model => model.FechaOrigen, new { htmlAttributes = new {@class="datepicker"}})
+                                            @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.RegionDescripcion)
+                                            @Html.DropDownListFor(m => Model.IdRegion, null, "Seleccione...")
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.LabelFor(model => model.FechaVuelta)
+                                            @Html.EditorFor(model => Model.FechaVuelta)
+                                            @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l6">
+                                            @Html.TextBoxFor(m => Model.ObservacionesDestinos)
+                                            @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                        </div>
+                                        <div class="input-field col s12 m10 l6">
+                                            @Html.TextBoxFor(m => Model.ObservacionesOrigen)
+                                            @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="divInternacional">
+                                    <div class="row">
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.PaisDescripcion)
+                                            @Html.DropDownListFor(m => Model.IdPaisOrigen, null, "Seleccione...")
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.LabelFor(model => model.FechaOrigen)
+                                            @Html.EditorFor(model => model.FechaOrigen)
+                                            @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.PaisDescripcion)
+                                            @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
+                                        </div>
+                                        <div class="input-field col s12 m6 l6">
+                                            @Html.DisplayNameFor(model => model.FechaVuelta)
+                                            @Html.EditorFor(model => Model.FechaVuelta)
+                                            @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l6">
+                                            @Html.TextBoxFor(m => Model.ObservacionesDestinos)
+                                            @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                        </div>
+                                        <div class="input-field col s12 m10 l6">
+                                            @Html.TextBoxFor(m => Model.ObservacionesOrigen)
+                                            @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                        </div>
+                                    </div>
+                                </div>                                
+                            }
+                        </div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit" onclick="valida">Guardar</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        @*jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            //datepicker: false,
+            //format: 'H:i',
+            timepicker: true,
+            format: 'd-m-Y',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            //formatDate: 'd-m-Y',
+            //minDate: 0
+        });*@
+        $('.datepicker').datepicker({
+            selectMonths: true,
+        });
+        $('select').formSelect();
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>*@
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

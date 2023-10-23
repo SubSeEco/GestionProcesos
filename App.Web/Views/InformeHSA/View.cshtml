@@ -1,0 +1,91 @@
+﻿@model App.Model.InformeHSA.InformeHSA
+
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
+
+<div class="container">
+    @Html.Partial("_Message")
+
+    <div class="row">
+        <div class="col s12 m6 l6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Informe HSA</span>
+                    <div class="row">
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaDesde)</strong><br />
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaHasta)</strong><br />
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong><br />
+                            @Html.DisplayFor(m => Model.Nombre)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.RUT)</strong><br />
+                            @Html.DisplayFor(m => Model.RUT)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Unidad)</strong><br />
+                            @Html.DisplayFor(m => Model.Unidad)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NombreJefatura)</strong><br />
+                            @Html.DisplayFor(m => Model.NombreJefatura)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.ConJornada)</strong><br />
+                            @string.Format("{0}", Model.ConJornada ? "SI" : "NO")
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Funciones)</strong><br />
+                            @if (!string.IsNullOrWhiteSpace(Model.Funciones))
+                            {
+                                @Html.Raw(Model.Funciones.Replace(Environment.NewLine, "<br/>"))
+                            }
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Actividades)</strong><br />
+                            @if (!string.IsNullOrWhiteSpace(Model.Actividades))
+                            {
+                                @Html.Raw(Model.Actividades.Replace(Environment.NewLine, "<br/>"))
+                            }
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.Observaciones)</strong><br />
+                            @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                            {
+                                @Html.Raw(Model.Observaciones.Replace(Environment.NewLine, "<br/>"))
+                            }
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.FechaBoleta)</strong><br />
+                            @string.Format("{0:dd-MM-yyyy}", Model.FechaBoleta)
+                        </div>
+                        <div class="input-field col s12 m10">
+                            <strong>@Html.DisplayNameFor(m => Model.NumeroBoleta)</strong><br />
+                            @Html.DisplayFor(m => Model.NumeroBoleta)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l6">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+        $('.tooltipped').tooltip();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

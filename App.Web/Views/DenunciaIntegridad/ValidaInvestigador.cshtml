@@ -1,0 +1,323 @@
+﻿@model App.Model.Core.Denuncia
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="container">
+    @Html.Partial("_Message")
+
+    <div class="row">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ProcesoId)
+        @Html.HiddenFor(m => m.WorkflowId)
+        @Html.HiddenFor(m => m.DenunciaIntegridadId)
+
+        <div class="col s12 m10 l8">
+
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="input-field col s12 m6 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => m.Fecha)
+                            </strong>
+                            @Html.DisplayFor(m => m.Fecha)
+                        </div>
+                        <div class="input-field col s12 m6 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.DenunciaIntegridadId)
+                            </strong>
+                            @Html.DisplayFor(m => Model.DenunciaIntegridadId)
+                        </div>
+                    </div>
+                    <ul class="collapsible popout">
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">assignment</i>
+                                <span style="font-weight: bold">Información Denuncia: </span>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <strong>Tipo Atentado</strong>
+                                    <div class="row">
+                                        <div class="input-field col s4 m4 l4">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.MaltratoLaboral, new { @disabled = "disabled" })
+                                                <span>@Html.LabelFor(m => m.MaltratoLaboral)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s4 m4 l4">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.AcosoLaboral, new { @disabled = "disabled" })
+                                                <span>@Html.LabelFor(m => m.AcosoLaboral)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s4 m4 l4">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.AcosoSexual, new { @disabled = "disabled" })
+                                                <span>@Html.LabelFor(m => m.AcosoSexual)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.DelitoFinanciero, new { @disabled = "disabled" })
+                                                <span>@Html.LabelFor(m => m.DelitoFinanciero)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l10">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.FaltaProbidad, new { @disabled = "disabled" })
+                                                <span>@Html.LabelFor(m => m.FaltaProbidad)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="divider"></div>
+                                <br />
+                                <div class="row">
+                                    <strong>@Html.DisplayNameFor(m => m.NivelJerarquico)</strong>
+                                    <br />
+                                    <div>
+                                        @Html.DisplayFor(m => m.NivelJerarquico)
+                                    </div>
+                                    @*<label>
+                                            <input class="with-gap" name="NivelJerarquico" type="radio" value="NivelSuperior" />
+                                            <span>Nivel Superior</span>
+                                        </label>
+                                        <label>
+                                            <input class="with-gap" name="NivelJerarquico" type="radio" value="IgualNivelJerarquico" />
+                                            <span>Igual Nivel Jerarquico</span>
+                                        </label>
+                                        <label>
+                                            <input class="with-gap" name="NivelJerarquico" type="radio" value="NivelInferior" />
+                                            <span>Nivel Inferior</span>
+                                        </label>*@
+                                </div>
+                                <div class="divider"></div>
+                                <br />
+                                <div class="row">
+                                    <strong>@Html.DisplayNameFor(m => m.EsJefatura)</strong>
+                                    <br />
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.EsJefatura, true, new { @disabled = "disabled" })
+                                        <span>SI</span>
+                                    </div>
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.EsJefatura, false, new { @disabled = "disabled" })
+                                        <span>NO</span>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <br />
+                                <div class="row">
+                                    <strong>@Html.DisplayNameFor(m => m.TrabajaDirecto)</strong>
+                                    <br />
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.TrabajaDirecto, true, new { @disabled = "disabled" })
+                                        <span>Si</span>
+                                    </div>
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.TrabajaDirecto, false, new { @disabled = "disabled" })
+                                        <span>No</span>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <br />
+                                <div class="row">
+                                    <strong>@Html.DisplayNameFor(m => m.EsDeConocimiento)</strong>
+                                    <br />
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.EsDeConocimiento, true, new { @disabled = "disabled" })
+                                        <span>Si</span>
+                                    </div>
+                                    <div class="col s4">
+                                        @Html.RadioButtonFor(m => m.EsDeConocimiento, false, new { @disabled = "disabled" })
+                                        <span>No</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">person</i>
+                                <span style="font-weight: bold">Datos Personales de la Victima: </span>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <strong>@Html.DisplayNameFor(m => m.NombreVictima)</strong>
+                                        <div class="input-field col s12">
+                                            @Html.DisplayFor(m => m.NombreVictima)
+                                        </div>
+                                    </div>
+                                    @*<div>
+                                            <div class="input-field col s8">
+                                                <strong>@Html.DisplayNameFor(m => m.RutVictima)</strong>
+                                                @Html.TextBoxFor(m => m.RutVictima)
+                                            </div>
+                                            <div class="input-field col s4">
+                                                <strong>@Html.DisplayNameFor(m => m.DvVictima)</strong>
+                                                @Html.TextBoxFor(m => m.DvVictima)
+                                            </div>
+                                        </div>*@
+                                    @*<div class="input-field col s12">
+                                            <strong>@Html.DisplayNameFor(m => m.CorreoVictima)</strong>
+                                            @Html.TextBoxFor(m => m.CorreoVictima)
+                                        </div>*@
+                                    @*<div class="input-field col s12">
+                                            <strong>@Html.DisplayNameFor(m => m.DescripcionUnidadVictima)</strong>
+                                            @Html.TextBoxFor(m => m.DescripcionUnidadVictima)
+                                        </div>*@
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">person</i>
+                                <span style="font-weight: bold">Datos Personales del Denunciado/Victimario: </span>
+                            </div>
+                            <div class="collapsible-body">
+                                @*<p>
+                                        <strong>@Html.DisplayNameFor(m => m.NombreDenunciado)</strong>
+                                        @Html.TextBoxFor(m => m.NombreDenunciado)
+                                    </p>*@
+                                <div class="row">
+                                    <div id="divDestino">
+                                        @*<div class="row">
+                                                <div class="col s12 m12 l12">
+                                                    <strong>@Html.DisplayNameFor(m => m.DescripcionUnidadDenunciado)</strong>
+                                                    @Html.DropDownList("UnidadDenunciado", null, "Seleccione...", new { @class = "browser-default", @id = "ddlUnidad" })
+                                                    @Html.ValidationMessageFor(m => Model.DescripcionUnidadDenunciado, "", new { @class = "red-text" })
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12 m12 l12">
+                                                    <strong>@Html.DisplayNameFor(m => m.NombreDenunciado)</strong>
+                                                    @Html.DropDownList("NombreDenunciado", null, "Seleccione...", new { @class = "browser-default" })
+                                                    @Html.ValidationMessageFor(m => Model.NombreDenunciado, "", new { @class = "red-text" })
+                                                </div>
+                                                <div class="col s12 m12 l12">
+                                                    @Html.DisplayFor(m => m.NombreDenunciado)
+                                                </div>
+                                            </div>*@
+                                        <div class="row">
+                                            <div class="input-field col s12 m12 l12">
+                                                <strong>@Html.DisplayNameFor(m => m.NombreDenunciado)</strong>
+                                                <div class="input-field col s12 m12 l12">
+                                                    @Html.DisplayFor(m => m.NombreDenunciado)
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m12 l12">
+                                                <strong>@Html.DisplayNameFor(m => m.DescripcionUnidadDenunciado)</strong>
+                                                <div class="input-field col s12 m12 l12">
+                                                    @Html.DisplayFor(m => m.DescripcionUnidadDenunciado)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<p>
+                                        <strong>@Html.DisplayNameFor(m => m.CargoDenunciado)</strong>
+                                        @Html.TextBoxFor(m => m.CargoDenunciado)
+                                    </p>*@
+                                @*<p>
+                                        <strong>@Html.DisplayNameFor(m => m.UnidadDenunciado)</strong>
+                                        @Html.TextBoxFor(m => m.UnidadDenunciado)
+                                    </p>*@
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">chat</i>
+                                <span style="font-weight: bold">Narración Circunstanciada de los Hechos: </span>
+                            </div>
+                            <div class="collapsible-body">
+                                <div class="row">
+
+                                    <div class="input-field col s12">
+                                        <strong>@Html.DisplayNameFor(m => m.FechaHecho)</strong>
+                                        @Html.DisplayFor(m => Model.FechaHecho)
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <strong>@Html.DisplayNameFor(m => m.Hechos)</strong>
+                                        <div class="input-field col s12 m12 l12">
+                                            @Html.DisplayFor(m => m.Hechos, new { @style = "min-height: 400px; resize: none", @title = "Aquí va la descripción de los hechos" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <div class="col s4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+    @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+</div>
+<script>
+    $("#ddlUnidad").change(function () {
+        var Pl_UndCod = $(this).val();
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+            function (classesData) {
+                var select = $("#NombreDenunciado");
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Nombre,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+    $("#ddlUnidad2").change(function () {
+        var Pl_UndCod = $(this).val();
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+            function (classesData) {
+                var select = $("#NombreDenunciante");
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Nombre,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, options);
+    });
+
+
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    });
+
+    $(document).ready(function () {
+        $('input[type="hidden"]').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

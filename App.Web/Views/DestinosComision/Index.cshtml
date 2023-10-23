@@ -1,0 +1,62 @@
+﻿@model IEnumerable<App.Model.Comisiones.DestinosComision>
+
+<div class="container">
+    <h3>Destinos Comision</h3>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaHasta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaisDescripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CiudadDescripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dias100)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dias60)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dias40)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaHasta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaisDescripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CiudadDescripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dias100)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dias60)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dias40)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Detalles", "View", new { id = item.ComisionesId })*@
+                </td>
+            </tr>
+        }
+    </table>
+</div>

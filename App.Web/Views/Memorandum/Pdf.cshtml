@@ -1,0 +1,172 @@
+﻿@model App.Model.Memorandum.Memorandum
+
+@{
+    Layout = null;
+}
+@Html.HiddenFor(q => q.WorkflowId)
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="row">
+        <div class="left">
+            .<img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="170px" />
+        </div>
+        @*<div class="right">
+                <img src="data:image;base64,@System.Convert.ToBase64String(Model.QR)" width="170px" />
+            </div>*@
+    </div>
+<div style="text-align: center;" >
+    <p class="flow-text">
+        @*<h5><b>INFORME DE DESEMPEÑO Y AUTORIZACION DE PAGO <br />PERSONAL CONTRATADO A HONORARIOS A SUMA ALZADA</b></h5>*@
+        <h5><b>MEMORANDUM <br/>N° @Html.DisplayFor(m => Model.Folio)</b></h5>
+    </p>
+    <p class="flow-text">
+        @*Desde el @string.Format("{0:dd-MM-yyyy}", Model.FechaDesde) y el @string.Format("{0:dd-MM-yyyy}", Model.FechaHasta)*@
+    </p>
+</div><br /><br />
+
+    <p class="flow-text">
+        <h6><b>A : @Html.DisplayFor(m => Model.NombreChqDest)</b></h6>
+        <h6><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.DisplayFor(m => Model.UnidadDescripcionDest)</b></h6>
+    </p>
+    <p class="flow-text">
+        <h6><b>DE : @Html.DisplayFor(m => Model.NombreChqRem)</b></h6>
+        <h6><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.DisplayFor(m => Model.UnidadDescripcion)</b></h6>
+    </p>
+    <p class="flow-text">
+        <h6><b><font style="text-transform: uppercase;">REF : @Html.DisplayFor(m => Model.Asunto)</font></b></h6>
+    </p>
+    <p class="flow-text">
+        <h6><b>FECHA : @Html.DisplayFor(m => Model.FechaSolicitud)</b></h6>
+    </p>
+    <p class="flow-text">
+        @*<b>I. ANTECEDENTES PERSONALES</b>*@
+        <table>
+            <tbody>
+                <tr>
+                    <td width="250"><b> </b></td>
+                    <td> </td>
+                </tr>
+                @*<tr>
+                        <td width="250"><b>@Html.DisplayNameFor(m => Model.RUT)</b></td>
+                        <td> @Html.DisplayFor(m => Model.RUT)</td>
+                    </tr>*@
+                @*<tr>
+                        <td width="250"><b>@Html.DisplayNameFor(m => Model.Unidad)</b></td>
+                        <td>  @Html.DisplayFor(m => Model.Unidad)</td>
+                    </tr>*@
+                @*<tr>
+                        <td width="250"><b>@Html.DisplayNameFor(m => Model.NombreJefatura)</b></td>
+                        <td> @Html.DisplayFor(m => Model.NombreJefatura)</td>
+                    </tr>*@
+                @*<tr>
+                        <td width="250"><b>@Html.DisplayNameFor(m => Model.ConJornada)</b></td>
+                        <td> @string.Format("{0}", Model.ConJornada ? "CON JORNADA" : "SIN JORNADA")</td>
+                    </tr>*@
+            </tbody>
+        </table>
+    </p><br />
+
+    <p class="flow-text"><h6><b>I.- ANTECEDENTES</b></h6></p>
+    @if (!string.IsNullOrWhiteSpace(Model.Antecedentes))
+    {
+        <p class="flow-text">
+            @Html.Raw(Model.Antecedentes.Trim().Replace(Environment.NewLine, "<br/>"))
+        </p>
+    }
+
+    <p class="flow-text"><h6><b>II.- MATERIA</b></h6></p>
+    @if (!string.IsNullOrWhiteSpace(Model.Materia))
+    {
+        <p class="flow-text">
+            @Html.Raw(Model.Materia.Trim().Replace(Environment.NewLine, "<br/>"))
+        </p>
+    }
+
+    @*<p class="flow-text"><b>II. FUNCIONES ESTABLECIDAS EN EL CONTRATO, NUMERADAS</b></p>
+        @if (!string.IsNullOrWhiteSpace(Model.Materia))
+        {
+            <p class="flow-text">
+                @Html.Raw(Model.Materia.Trim().Replace(Environment.NewLine, "<br/>"))
+            </p>
+        }*@
+
+    @*<p class="flow-text"><b>III. ACTIVIDADES DESARROLLADAS EN EL PERIODO</b></p>
+        @if (!string.IsNullOrWhiteSpace(Model.Materia))
+        {
+            <p class="flow-text">
+                @Html.Raw(Model.Materia.Trim().Replace(Environment.NewLine, "<br/>"))
+            </p>
+        }*@
+
+    @*<p class="flow-text"><b>IV. OBSERVACIONES</b></p>
+        @if (!string.IsNullOrWhiteSpace(Model.Materia))
+        {
+            <p class="flow-text">
+                @Html.Raw(Model.Materia.Trim().Replace(Environment.NewLine, "<br/>"))
+            </p>
+        }*@
+
+    @*<p class="flow-text"><b>V. INFORMACIÓN DEL PAGO</b></p>*@
+
+    <table>
+        <tbody>
+            @*<tr>
+                    <td width="250"><b>@Html.DisplayNameFor(m => Model.NumeroBoleta)</b></td>
+                    <td>@Html.DisplayFor(m => Model.NumeroBoleta)</td>
+                </tr>*@
+            @*<tr>
+                    <td width="250"><b>@Html.DisplayNameFor(m => Model.FechaBoleta)</b></td>
+                    <td> @string.Format("{0:dd-MM-yyyy}", Model.FechaBoleta)</td>
+                </tr>*@
+        </tbody>
+    </table>
+
+    <div class="section"></div>
+    <div class="section"></div>
+    <div class="section"></div>
+
+    <footer>
+        <div style="text-align: center;" >
+            <img src="~/Content/LogoPieFirma.png" width="220px" />
+        </div>
+        <div style="text-align: center;" >
+            <p class="flow-text">
+                <h6></h6><b>@Model.NombreChqRem</b><br/>
+                <b>@Model.UnidadDescripcion</b>
+            </p>
+        </div>
+    </footer>
+    @*<center>
+            <img src="~/Content/LogoPieFirma.png" width="220px" />
+        </center>*@
+    @*<center>
+            <p class="flow-text">
+                <b>
+                    @Model.NombreChqRem<br />
+                    @Model.UnidadDescripcion
+                </b>
+            </p>
+        </center>*@
+    @*<div class="section"></div>*@
+    @*<p class="flow-text center grey-text text-darken-2">Se certifica el cumplimiento de las funciones encomendadas y se aprueba el presente Informe, autorizándose el pago correspondiente.</p>*@
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+﻿@model App.Model.Cometido.PatenteVehiculo
+@{
+    //Layout = null;
+    ViewBag.Title = "Editar Datos Vehiculo";
+    ViewBag.SubTitle = "Permite editar los datos de los vehiculos del Ministerio";
+}
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="container">
+    @Html.Partial("_Message")
+    @using (Html.BeginForm("Edit",null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m=>Model.PatenteVehiculoId)
+        @*@Html.HiddenFor(m=>Model.SIGPERTipoVehiculoId)
+        @Html.HiddenFor(m=>Model.PatenteVehiculoId)
+        @Html.HiddenFor(m=>Model.RegionId)
+        @Html.HiddenFor(m=>Model.Codigo)*@
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-field col s3">
+                        @Html.EditorFor(m => Model.PlacaPatente)
+                        @Html.LabelFor(m => Model.PlacaPatente)
+                        @Html.ValidationMessageFor(m => Model.PlacaPatente, "", new { @class = "red-text" })
+                    </div>
+                    <div class="input-field col s9">
+                        @Html.DropDownListFor(m => Model.Codigo, new SelectList(ViewBag.ListaRegion, "Value", "Text", Model.RegionId), "Seleccione...")
+                        @*@Html.DropDownListFor(m => Model.RegionId, new SelectList(ViewBag.ListaRegion, "Value", "Text"), "Seleccione...")*@
+                        @Html.LabelFor(m => Model.Codigo)
+                        @Html.ValidationMessageFor(m => Model.Codigo)
+                    </div>
+                    <div class="input-field col m12">
+                        @Html.DropDownListFor(m => Model.SIGPERTipoVehiculoId, new SelectList(ViewBag.TipoVehiculo, "Value", "Text", Model.SIGPERTipoVehiculoId), "Seleccione...")
+                        @Html.LabelFor(m => Model.SIGPERTipoVehiculoId)
+                        @Html.ValidationMessageFor(m => Model.SIGPERTipoVehiculoId, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Guardar Cambios</button>
+                <a href="javascript:void(0);" onclick="history.go(-1);" class="modal-close waves-effect waves-light btn red" style="float:inline-end">Cancelar</a>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+</script>

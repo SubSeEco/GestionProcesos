@@ -1,0 +1,51 @@
+﻿@model App.Model.Core.Grupo
+
+<h3>Detalle grupo</h3>
+<div class="card">
+    <div class="card-content">
+        <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
+            <p>@Html.DisplayFor(m => Model.Nombre)</p>
+        </div>
+        <br />
+        <a href='@Url.Action("Edit", new { id = Model.GrupoId })' class="btn blue">Editar</a>
+        <a href='@Url.Action("Delete", new { id = Model.GrupoId })' class="btn red">Eliminar</a>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Usuarios</span>
+        <table class="table bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Usuarios.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Usuarios.FirstOrDefault().Nombre)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Usuarios.Where(q=>q.Active))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Grupo.Nombre)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Detalles", "Details", new { id = item.UsuarioId })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>

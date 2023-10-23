@@ -1,0 +1,52 @@
+﻿@model App.Model.Persona.Persona
+
+@{
+    ViewBag.Title = "Create";
+}
+    <h2>Inscripción de personas</h2>
+        <div class="row">
+            <div class="col s12 m8">
+             <div class="card" >
+                
+
+                 @using (Html.BeginForm())
+                {
+                 @Html.AntiForgeryToken()
+
+                 <div class="form-horizontal">
+
+                     <hr />
+                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                     <div class="form-group">
+                         @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                         <div class="col-md-10">
+                             @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                             @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+                         </div>
+                     </div>
+
+                     <div class="form-group">
+                         @Html.LabelFor(model => model.apellido, htmlAttributes: new { @class = "control-label col-md-2" })
+                         <div class="col-md-10">
+                             @Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control" } })
+                             @Html.ValidationMessageFor(model => model.apellido, "", new { @class = "text-danger" })
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <div class="col-md-offset-2 col-md-10">
+                             <input type="submit" value="Crear" class="btn btn-default" />
+                         </div>
+                     </div>
+
+
+                 </div>
+            }
+            </div>
+           </div>
+        </div>
+
+    
+
+        <div>
+            @Html.ActionLink("Volver al inicio", "Index")
+        </div>

@@ -1,0 +1,45 @@
+﻿@model App.Model.Cometido.PatenteVehiculo
+@{
+    Layout = null;
+    ViewBag.Title = "TEST";
+    ViewBag.SubTitle = "SUB-TEST";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+    </div>
+</div>
+<div class="container">
+    @Html.Partial("_Message")
+    @using (Html.BeginForm("Delete", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-field">
+                        <strong>
+                            @Html.DisplayNameFor(m => Model.PlacaPatente)
+                        </strong>
+                        @Html.DisplayFor(m => Model.PlacaPatente)
+                    </div>
+                    <div class="input-field">
+                        <strong>
+                            @Html.DisplayNameFor(m=>Model.RegionId)
+                        </strong>
+                        @Html.DisplayFor(m=>Model.RegionId)
+                    </div>
+                    <div class="input-field">
+                        <strong>
+                            @Html.DisplayNameFor(m=>Model.SIGPERTipoVehiculoId)
+                        </strong>
+                        @Html.DisplayFor(m=>Model.TipoVehiculo.Vehiculo)
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Eliminar</button>
+                <a class="modal-close waves-effect waves-light btn red" style="float:inline-end">Cancelar</a>
+            </div>
+        </div>
+    }
+</div>

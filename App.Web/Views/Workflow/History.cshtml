@@ -1,0 +1,81 @@
+﻿@model App.Model.Core.Workflow
+
+@{ Layout = null;}
+
+@if (!Model.DefinicionWorkflow.PermitirVerDetalles)
+{
+    return;
+}
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Historial</span>
+        @foreach (var item in Model.Proceso.Workflows.Where(q => !q.Anulada).OrderBy(q => q.WorkflowId))
+        {
+            <div class="section"></div>
+            <span class="card-title">
+                Tarea @item.WorkflowId: @item.DefinicionWorkflow.Nombre<br />
+            </span>
+            <h6 class="caption grey-text">
+                @String.Format("{0} días, {1} horas, {2} minutos, {3} segundos", item.Span.Days, item.Span.Hours, item.Span.Minutes, item.Span.Seconds)
+            </h6>
+
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    @if (item.TipoAprobacionId == 1)
+                    {
+                        <i class="material-icons large secondary-content grey-text">history</i>
+                    }
+
+                    @if (item.TipoAprobacionId == 2)
+                    {
+                        <i class="material-icons large secondary-content green-text">check</i>
+                        <p class="secondary-content">
+
+                        </p>
+                    }
+                    @if (item.TipoAprobacionId == 3)
+                    {
+                        <i class="material-icons large secondary-content red-text">clear</i>
+                    }
+
+                    <strong>@Html.DisplayNameFor(m => item.Pl_UndDes):</strong>
+                    @Html.DisplayFor(m => item.Pl_UndDes)
+                    <br />
+
+                    @if (item.DefinicionWorkflowId != 251)
+                    {
+                        if (item.DefinicionWorkflowId != 261)
+                        {
+                            <strong>@Html.DisplayNameFor(m => item.Email):</strong>
+                            @Html.DisplayFor(m => item.Email)
+                            <br />
+                        }
+                    }
+
+                    <strong>@Html.DisplayNameFor(m => item.FechaCreacion):</strong>
+                    @Html.DisplayFor(m => item.FechaCreacion)
+                    <br />
+
+                    <strong>@Html.DisplayNameFor(m => item.FechaTermino):</strong>
+                    @Html.DisplayFor(m => item.FechaTermino)
+                    <br />
+
+                    <strong>@Html.DisplayNameFor(m => item.TipoAprobacionId):</strong>
+                    @Html.DisplayFor(m => item.TipoAprobacion.Nombre)
+                    <br />
+
+
+                    @if (!string.IsNullOrWhiteSpace(item.Observacion))
+                    {
+                        <strong>@Html.DisplayNameFor(m => item.Observacion):</strong>
+                        @Html.DisplayFor(m => item.Observacion)
+                        <br />
+                    }
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>

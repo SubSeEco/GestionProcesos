@@ -1,0 +1,172 @@
+﻿@model IEnumerable<App.Model.HorasExtras.HorasExtras>
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(q => q.FirstOrDefault().WorkflowId)
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style TYPE="text/css">
+    .breakhere {
+        page-break-after: always
+    }
+</style>
+<head>
+</head>
+<body style="font-family: Calibri;font-style:italic;margin-top:768px;
+        padding: 0px;
+        margin: 0px;
+        text-align: justify">
+    <div class="left">
+        <img src="http://cdc.economia.cl/Styles/images/logo_gobierno_membrete.png" width="150px" /><br />
+        <b>DEPTO. ADMINISTRATIVO</b><br />
+        <b>UNIDAD DE GESTIÓN Y DESARROLLO</b><br />
+        <b>DE PERSONAS</b><br />
+        <b>ÁREA PERSONAS</b><br />
+        <b>MSF/PCM/BCJ</b><br />
+        <b>R.A.EX</b><br />
+    </div>
+<div style="text-align: center;" >
+    <b>REGULARÍCESE PROGRAMACIÓN DE HORAS EXTRAORDINARIAS,  @Html.DisplayFor(m => Model.FirstOrDefault().Mes).ToString().ToUpper()  DE @Html.DisplayFor(m => Model.FirstOrDefault().Annio).</b><br/>
+    <b style="text-decoration: underline;">SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO.</b>
+</div>
+<ol>
+        <p>
+            <b>VISTOS :</b>Ley  Nº  21.192, de presupuestos del sector público correspondiente al año 2020; D. L. Nº 249 de 1974; artículo Nº 66 del D. F. L. N° 29/2004 del Ministerio de Hacienda, que fija el texto refundido,
+            coordinado y sistematizado de la Ley 18.834, sobre Estatuto Administrativo; artículo 9º de la Ley Nº 19.104 de 1991; Resolución Nº 6, de 2019, de la Contraloría General de la República; Resolución
+            Administrativa Exenta N° 33, de 2020, de la Subsecretaría de Economía y Empresas de Menor Tamaño y antecedentes que se acompañan.
+        </p>
+    </ol>
+    <ol>
+        <p>
+
+            <b>CONSIDERANDO : </b><br />
+        <li>
+            Que, se debe regularizar programación de horas extraordinarias del mes de mayo, en una fecha posterior, en atención a contingencia por COVID-19 o  caso fortuito, lo que
+            constituye una situación de excepción que, en diversos textos normativos permite adoptar medidas especiales, liberar de responsabilidad, eximir de cumplimiento de ciertas obligaciones y plazos, o establecer
+            modalidades especiales de desempeño, entre otras consecuencias que en situaciones normales no serían permitidas por el ordenamiento jurídico.
+        </li>
+        </p>
+        <p>
+        <li>
+            Que, se hace necesario programar las horas extraordinarias del mes de mayo de 2020, de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño.
+        </li>
+
+        </p>
+    </ol>
+    <ol>
+        <p>
+            <b>RESUELVO : </b><br />
+            <b>REGULARÍCESE</b>,&nbsp;&nbsp;&nbsp;programación de horas extraordinarias para el mes de mayo de 2020, de los funcionarios(as) y prestadores de servicio, de la Subsecretaría de Economía y Empresas de Menor Tamaño, que se
+            detalla a continuación:
+        </p>
+    </ol>
+    <br />
+    <ol>
+        <table width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;border-color:#ddd;">
+            <tr>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.Colaborador.FirstOrDefault().Nombre)*@
+                    @Html.Raw("RUT")
+                </td>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.FirstOrDefault().Nombre)*@
+                    @Html.Raw("Nombre")
+                </td>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.FirstOrDefault().Colaborador.FirstOrDefault().HDPago)*@
+                    @Html.Raw("Pagadas")
+                </td>
+                <td>
+                    @*@Html.DisplayNameFor(m => Model.FirstOrDefault().Colaborador.FirstOrDefault().HNPago)*@
+                    @Html.Raw("Noct Pagas")
+                </td>
+            </tr>
+
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td colspan="4" align="center">
+                        <b>
+                            @Html.DisplayFor(modelItem => item.Unidad)
+                        </b>
+                    </td>
+                </tr>
+
+                foreach(var t in item.Colaborador)
+                {
+                    <tr>
+                        <td>                            
+                            @Html.DisplayFor(modelItem => t.NombreId)-@Html.DisplayFor(modelItem => t.DV)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => t.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => t.HDPago)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => t.HNPago)
+                        </td>
+                    </tr>
+                }
+            }
+
+
+        </table>
+    </ol>
+    <p class="breakhere"></p>
+    <ol>
+        <p>
+            La Unidad de Gestión y Desarrollo de Personas elaborará el acto administrativo con las horas debidamente trabajadas por los funcionarios autorizados en la presente Resolución Administrativa Exenta, estableciendo como tope la máxima de horas programadas, las que serán compensadas con descanso complementario o bien con incremento de remuneraciones, siempre y cuando exista disponibilidad presupuestaria para ello.
+        </p>
+    </ol>
+    <table align="center" border="0">
+        <tr>
+            <td>
+                <br />
+                <p align="center">
+                    <strong>
+                        ANÓTESE, COMUNÍQUESE, NOTIFÍQUESE Y ARCHÍVESE.
+                    </strong>
+                    <br />
+                    <strong>
+                        POR ORDEN DEL SUBSECRETARIO
+                    </strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>
+                    <p align="center">
+                        LISSY CORRALES REVILLA
+                        <br />
+                        ENCARGADA DEPARTAMENTO ADMINISTRATIVO
+                        <br />
+                        SUBSECRETARÍA DE ECONOMÍA Y EMPRESAS DE MENOR TAMAÑO
+                    </p>
+                </strong>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <br /><br />
+    <table border="0" align="left" width="25%">
+        <tr>
+            <td>DISTRIBUCIÓN</td>
+        </tr>
+        <tr><td>-	Unidad de Gestión y Desarrollo de Personas (Personas - Remuneraciones)</td></tr>
+        <tr><td>-	Departamento Administrativo</td></tr>
+        <tr><td>-	Finanzas</td></tr>
+    </table>
+</body>
+</html>
+
+
+
+
+

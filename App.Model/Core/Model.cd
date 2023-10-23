@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="App.Model.Core.Workflow" Collapsed="true">
+    <Position X="4.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GEAAAIRQIKcQYGJAIANAAAAACAAIAIAAIRAGIAYFAKI=</HashCode>
+      <FileName>Core\Workflow.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefinicionWorkflow" />
+      <Property Name="TipoAprobacion" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Documentos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="App.Model.Core.DefinicionProceso" Collapsed="true">
+    <Position X="1.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAQAAAAAAAAAAAAABAgAABEAAQABBAAAAAAAAIIAA=</HashCode>
+      <FileName>Core\DefinicionProceso.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="DefinicionWorkflows" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="App.Model.Core.DefinicionWorkflow" Collapsed="true">
+    <Position X="1.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BEExCAFQACCwUWAAEABEgAAAAAAQCTAAAIgEQAQkYCQ=</HashCode>
+      <FileName>Core\DefinicionWorkflow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="App.Model.Core.Documento" Collapsed="true">
+    <Position X="8.25" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ECAAAIAAASGAMQEhAAAAAIABASEEBQAgAUAACABEQD4=</HashCode>
+      <FileName>Core\Documento.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="App.Model.Core.Proceso" Collapsed="true">
+    <Position X="4.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAkEAYKEASCAAAAIAAAAEAAAQAEAAAQAAIAIBAAI=</HashCode>
+      <FileName>Core\Proceso.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefinicionProceso" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Workflows" />
+      <Property Name="Documentos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="App.Model.Core.TipoAprobacion" Collapsed="true">
+    <Position X="1.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\TipoAprobacion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,38 @@
+﻿@model App.Model.Pasajes.EmpresaAerolinea
+
+<div class="container">
+    <h2>Borrar Empresa Aerolinea</h2>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.NombreEmpresa)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NombreEmpresa)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ActivoEmpresa)
+            </dt>
+
+            <dd>
+                <label>
+                    @Html.CheckBoxFor(m => m.ActivoEmpresa, new { @disabled = "disabled" })
+                    <span>@Html.LabelFor(m => Model.ActivoEmpresa)</span>
+                </label>
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Borrar" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</div>

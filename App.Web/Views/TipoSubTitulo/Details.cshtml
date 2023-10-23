@@ -1,0 +1,39 @@
+﻿@model App.Model.Cometido.TipoSubTitulo
+
+<h3>Tipo SubTitulo</h3>
+<div class="card">
+    <div class="card-content">
+        <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.TipoSubTituloId)</strong>
+            <p>@Html.DisplayFor(m => Model.TipoSubTituloId)</p>
+        </div>
+        <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.TstNombre)</strong>
+            <p>@Html.DisplayFor(m => Model.TstNombre)</p>
+        </div>
+        <div class="input-field col s12 m10 l10">
+            <label>
+                @Html.CheckBoxFor(m => m.TstActivo)
+                <span>@Html.LabelFor(m => Model.TstActivo)</span>
+            </label>
+        </div>
+            <br />
+            <a href='@Url.Action("Edit", new { id = Model.TipoSubTituloId })' class="btn blue">Editar</a>
+            <a href='@Url.Action("Delete", new { id = Model.TipoSubTituloId })' class="btn red">Eliminar</a>
+        </div>
+    
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

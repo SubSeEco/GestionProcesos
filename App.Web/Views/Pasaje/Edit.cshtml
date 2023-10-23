@@ -1,0 +1,310 @@
+﻿@model App.Model.Pasajes.Pasaje
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="container">
+    @*<h3>Editar Pasajes</h3>*@
+
+    <div class="row">
+        <div class="col s12 m10 l8">
+            @Html.Partial("_Message")
+            @using (Html.BeginForm("Edit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.IdCalidad)
+                @Html.HiddenFor(q => Model.FechaSolicitud)
+                @Html.HiddenFor(q => Model.PasajeId)
+                @Html.HiddenFor(q => Model.NombreId)
+                @Html.HiddenFor(q => Model.Nombre)
+                @Html.HiddenFor(q => Model.Rut)
+                @Html.HiddenFor(q => Model.DV)
+                @Html.HiddenFor(q => Model.PasajeId)
+                @Html.HiddenFor(q => Model.TipoDestino)
+                @Html.HiddenFor(q => Model.PasajeDescripcion)
+                @Html.HiddenFor(q => Model.CalidadDescripcion)
+                @Html.HiddenFor(q => Model.IdCalidad)
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+
+                <div class="card">
+                    <div class="card-content">
+                        @*<span class="card-title">Pasajes</span>*@
+                        <div class="row">
+                            <div class="input-field col s12 m10 l3">
+                                @Html.DisplayFor(m => Model.FechaSolicitud)
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                @Html.LabelFor(m => Model.PasajeId)
+                                @Html.DisplayFor(m => Model.PasajeId)
+                            </div>
+                        </div>
+                        <div id="jQuery_accordion">
+                            <h3><span style="font-weight: bold">I. Datos del Funcionario: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m6 l8">
+                                    @Html.DisplayNameFor(m => Model.Nombre)
+                                    @Html.DisplayFor(m => Model.Nombre)
+                                </div>
+                                <div class="input-field col s12 m6 l8">
+                                    @Html.DisplayNameFor(m => Model.Rut)
+                                    @Html.DisplayFor(m => Model.Rut)
+                                </div>
+                                <div class="input-field col s12 m6 l4">
+                                    @Html.DisplayNameFor(m => Model.DV)
+                                    @Html.DisplayFor(m => Model.DV)
+                                </div>
+                                <div class="input-field col s12 m6 l6">
+                                    @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                    @Html.DisplayFor(m => Model.CalidadDescripcion)
+                                </div>
+                            </div>
+                            <h3><span style="font-weight: bold">II. Justificacion del Viaje: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m10 l10">
+                                    @Html.EditorFor(m => Model.PasajeDescripcion)
+                                    @Html.LabelFor(m => Model.PasajeDescripcion)
+                                    @Html.ValidationMessageFor(m => Model.PasajeDescripcion, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                            <h3><span style="font-weight: bold">III. Datos del Destino: </span></h3>
+                            <div class="row">
+                                <div class="input-field col s12 m6 l4">
+                                    @*<div class="row">
+                                        <span>@Html.LabelFor(m => Model.TipoDestino)</span><br />
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDestino, true)
+                                            <span>SI</span>
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => Model.TipoDestino, false)
+                                            <span>NO</span>
+                                        </label>
+                                    </div>*@
+                                </div>
+                                <div class="row">
+                                    @if (Model.DestinosPasajes.Count > 0)
+                                    {
+                                        <table class="table">
+                                            <tr>
+                                                @if (Model.TipoDestino == true)
+                                                {
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenRegionDescripcion)</th>
+
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().RegionDescripcion)
+                                                    </th>
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
+                                                }
+                                                else
+                                                {
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().OrigenPaisDescripcion)</th>
+
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaOrigen)</th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().PaisDescripcion)
+                                                    </th>
+                                                    <th>@Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().FechaVuelta)</th>
+                                                }
+                                                <th></th>
+                                            </tr>
+                                            @for (int i = 0; i < Model.DestinosPasajes.ToArray().Length; i++)
+                                            {
+                                                <tr>
+                                                    @if (Model.TipoDestino == true)
+                                                    {
+                                                        <th>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].OrigenRegionDescripcion)</th>
+
+                                                        <th>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                        </th>
+                                                        <td>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].RegionDescripcion)
+                                                        </td>
+                                                        <th>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                        </th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th>@Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].OrigenPaisDescripcion)</th>
+
+                                                        <th>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                        </th>
+                                                        <td>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].PaisDescripcion)
+                                                        </td>
+                                                        <th>
+                                                            @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                        </th>
+                                                    }
+                                                    <td>
+                                                        @*@Html.ActionLink("Editar", "Edit", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId }, null)*@
+                                                        <a href='@Url.Action("Edit", "DestinosPasajes",new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>
+                                                    </td>
+                                                    <td>
+                                                        @*@Html.ActionLink("Borrar", "Delete", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId }, null)*@
+                                                        <a href='@Url.Action("Delete", "DestinosPasajes", new { id = Model.DestinosPasajes.ToArray()[i].DestinosPasajesId })' class="btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">delete_forever</i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().ObservacionesOrigen)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].ObservacionesOrigen)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayNameFor(model => model.DestinosPasajes.FirstOrDefault().ObservacionesDestinos)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(model => Model.DestinosPasajes.ToArray()[i].ObservacionesDestinos)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <hr />
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        </table>
+                                    }
+
+
+                                    @Html.ActionLink("Agregar Destino", "Create", "DestinosPasajes", new { id = Model.PasajeId }, null)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                        </p>
+                    </div>
+                </div>
+
+                if (Model.PasajeOk == true)
+                {
+                    @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+                }
+            }
+        </div>
+
+
+        <div class="col s12 m6 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+
+@*<div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@
+
+<script>
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaSolicitud,#FechaIda,#FechaVuelta,#FechaOrigen').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            timepicker: false,
+            formatTime: 'H:i',
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y',
+            //minDate: 0
+        });
+        /*Seteo calendario para los valores de hora*/
+        //jQuery.datetimepicker.setLocale('es');
+        //jQuery('#HoraIda,#HoraVuelta,#HoraOrigen').timepicker({ datetimepicker: false, formatTime: 'H:i' });
+        //$('#divNacional').hide(100);
+        //$('#mydiv').hide(100);
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+
+        //funcion modal popup
+        $(function () {
+            $('.Create').click(function () {
+                $('modal').appendTo('body').dialog({
+                    close: function (event, ui) {
+                        dialog.remove();
+                    },
+                    modal: true
+                }).load(this.href, {});
+
+                return false;
+            });
+        });
+
+        ////funcion que habilita opciones si es viaje nacional o inyternacvional
+        //$('input:radio[name="TipoDestino"]').change(function () {
+        //    if (document.getElementById("TipoDestino").checked == true) {
+        //        $('#mydiv').hide(100);
+        //        $('#divNacional').show();
+        //    }
+        //    else {
+        //        $('#divNacional').hide(100);
+        //        $('#mydiv').show();
+        //    }
+        //});
+
+        /*Carga usuario por seleccion de dropdown*/
+        $('#NombreId').on('change', function () {
+            var Rut = $(this).val(); /*alert(Rut);*/
+            $.getJSON("/Cometido/GetUsuario", { Rut: Rut },
+                function (classesData) {
+                    document.getElementById('Rut').value = classesData["Rut"];
+                    document.getElementById('DV').value = classesData["DV"];
+                    //document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                    document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                    //document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+                    //document.getElementById('GradoDescripcion').value = classesData["Grado"];
+                    //document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
+                    //document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
+                    //document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
+                });
+        });
+    });
+
+    ////funcion que habilita opciones si es viaje nacional o inyternacvional
+    //$('input:radio[name="TipoDestino"]').change(function () {
+    //    if (document.getElementById("TipoDestino").checked == true) {
+    //        $('#mydiv').hide(100);
+    //        $('#divNacional').show();
+    //    }
+    //    else {
+    //        $('#divNacional').hide(100);
+    //        $('#mydiv').show();
+    //    }
+    //});
+
+    $(function () {
+        $("#jQuery_accordion").accordion({
+            collapsible: true, heightStyle: true
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

@@ -1,0 +1,629 @@
+﻿@model App.Model.Cometido.Cometido
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+@Html.HiddenFor(q => q.WorkflowId)
+@Html.HiddenFor(q => q.ProcesoId)
+@Html.HiddenFor(q => q.SolicitaViatico)
+<div class="container">
+    @if (Model.Workflow.DefinicionWorkflow.Secuencia == 7 || Model.Workflow.DefinicionWorkflow.Secuencia == 9 || Model.Workflow.DefinicionWorkflow.Secuencia == 10 || Model.Workflow.DefinicionWorkflow.Secuencia == 11 || Model.Workflow.DefinicionWorkflow.Secuencia == 12)
+    {
+        <div id="card-alert" class="card blue-grey lighten-1">
+            <div class="card-content white-text">
+                <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+                @if (Model.Destinos.Any())
+                {
+                    if ((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days < 0)
+                    {
+                        <p>
+                            El cometido se realizó hace @((DateTime.Now - Model.Destinos.FirstOrDefault().FechaInicio).Days) dias.
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            Faltan  @((Model.Destinos.FirstOrDefault().FechaInicio - DateTime.Now).Days + 1) días para el viaje. Recuerde que el acto administrativo debe tramitarse al menos 7 días corridos previo a su inicio.
+                        </p>
+                    }
+                }
+                else
+                {
+                    <p>No existen destinos asociados al cometido</p>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="card-alert" class="card blue-grey lighten-1">
+            <div class="card-content white-text">
+                <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+                <p>
+                    Toda solicitud deberá ser tramitada con al menos 7 días corridos previos a su inicio, según lo indicado en el Instructivo de Buen Uso de Recursos Fiscales (GAB.PRES.N001), de lo contrario, deberá contar con la respectiva justificación y la visación del Jefe de Servicio.
+                    Además, siempre deberá adjuntar el itinerario de desplazamiento y el programa de actividades a realizar. Toda documentación adjuntada que deba ser firmada, debe ser un archivo PDF.
+                </p>
+            </div>
+        </div>
+
+        if (Model.GradoDescripcion == "C" || Model.GradoDescripcion == "B" && Model.Atrasado)
+        {
+            <div class="card blue-grey lighten-1">
+                <div class="card-content white-text">
+                <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion, Cometido atrasado.</span>
+                    <p>
+                        Al aprobar el cometido tambien se estará aprobando la Visación por justificación de Atraso.
+                    </p>
+                </div>
+            </div>
+        }
+    }
+
+    @Html.Action("procesState", "HorasExtras", new { Model.WorkflowId })
+
+    <div class="row">
+        <div class="col s12 m10 l8">
+            <div class="card">
+                <div class="card-content">
+                    @Html.Partial("_Message")
+                    @*<span class="card-title">Aprobación de disponibilidad presupuestaria y refrendación</span>*@
+                    <div class="row">
+                        <div class="input-field col s12 m6 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.FechaSolicitud)
+                            </strong>
+                            @Html.DisplayFor(m => Model.FechaSolicitud)
+                        </div>
+                        <div class="input-field col s12 m10 l6">
+                            <strong>
+                                @Html.DisplayNameFor(m => Model.CometidoId)
+                            </strong>
+                            @Html.DisplayFor(m => Model.CometidoId)
+                        </div>
+                        @if ((Model.Workflow.DefinicionWorkflow.Secuencia == 7 || Model.Workflow.DefinicionWorkflow.Secuencia == 10) && Model.ResolucionRevocatoria)
+                        {
+                            <div class="input-field col s12 m10 l12">
+                                <label style="color:green">
+                                    <strong>
+                                        @Html.Raw("<span>“Este cometido ha quedado sin efecto, por lo cual requiere una resolución revocatoria”</span>")
+                                    </strong>
+                                </label>
+                                <br />
+                            </div>
+                        }
+                    </div>
+                    <ul class="collapsible popout">
+                        <li>
+                            <div class="collapsible-header"><span style="font-weight: bold">I. Datos del Funcionario: </span></div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.Nombre)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.Nombre)
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.UnidadDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.UnidadDescripcion)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.Rut)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.Rut)
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.DV)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.DV)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.CargoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.CargoDescripcion)
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.CalidadDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.CalidadDescripcion)
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.GradoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.GradoDescripcion)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.EstamentoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.EstamentoDescripcion)
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.ProgramaDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.ProgramaDescripcion)
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.ConglomeradoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.ConglomeradoDescripcion)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><span style="font-weight: bold">II. Datos de la Solicitud: </span></div>
+                            <div class="collapsible-body col-12">
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.FinanciaOrganismo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.FinanciaOrganismo.Value ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Alojamiento)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Alojamiento ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Alimentacion)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Alimentacion ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Pasajes)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Pasajes ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>
+                                            <strong style="color:green">
+                                                @Html.DisplayNameFor(m => Model.SolicitaViatico)
+                                            </strong>
+                                        </span>
+                                    </strong>
+                                    @string.Format("{0}", Model.SolicitaViatico ? "SI" : "NO")
+                                </div>
+                                @*@if (Model.SolicitaViatico)
+                                    {
+                                        <div class="input-field">
+                                            <label style="color:green">
+                                                @Html.Raw("<span>“El cometido incluye” </span>")
+                                            </label>
+                                        </div>
+                                    }
+                                    <div class="input-field">
+                                        <label style="color:green">
+                                            @Html.Raw("<span>“El cometido incluye” </span>")
+                                        </label>
+                                    </div>*@
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeAereo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.ReqPasajeAereo ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.ReqPasajeTerrestre)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.ReqPasajeTerrestre ? "SI" : "NO")
+                                </div>
+                                <div id="divReembolso">
+                                    <div class="input-field">
+                                        <strong>
+                                            <span>@Html.DisplayNameFor(m => Model.SolicitaReembolso)</span>
+                                        </strong>
+                                        @string.Format("{0}", Model.SolicitaReembolso ? "SI" : "NO")
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        <span>@Html.DisplayNameFor(m => Model.Vehiculo)</span>
+                                    </strong>
+                                    @string.Format("{0}", Model.Vehiculo ? "SI" : "NO")
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.TipoVehiculoDescripcion)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.TipoVehiculoDescripcion)
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.PlacaVehiculo)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.PlacaVehiculo)
+                                </div>
+                                <div class="input-field">
+                                    <strong>
+                                        @Html.DisplayNameFor(m => Model.VehiculoObservaciones)
+                                    </strong>
+                                    @Html.DisplayFor(m => Model.VehiculoObservaciones)
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><span style="font-weight: bold">III. Datos del Cometido: </span></div>
+                            <div class="collapsible-body col-12">
+                                <div class="row">
+                                    <div class="input-field col s12 m10 l10">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.NombreCometido)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.NombreCometido)
+                                        @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l12">
+                                        <strong>
+                                            @Html.DisplayNameFor(m => Model.CometidoDescripcion)
+                                        </strong>
+                                        @Html.DisplayFor(m => Model.CometidoDescripcion, new { @disabled = "disabled", rows = 10, @class = "materialize-textarea" })
+                                        @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                    </div>
+                                    <div class="input-field col s12 m10 l10">
+                                        <span class="card-title">Destinos</span>
+                                    </div>
+                                </div>
+                                @if (Model.Destinos.Count > 0)
+                                {
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().RegionDescripcion)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().ComunaDescripcion)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().NombreLocalidad)
+                                                    </th>
+                                                    <th>Detalle</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int i = 0; i < Model.Destinos.ToArray().Length; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].RegionDescripcion)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].ComunaDescripcion)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(m => Model.Destinos.ToArray()[i].NombreLocalidad)
+                                                        </td>
+                                                        <td>
+                                                            <a href="#modalTabla-@Model.Destinos.ToArray()[i].DestinoId" class="details btn-large btn-floating modal-trigger tooltipped blue" data-tooltip="Ver Detalles"><i class="medium material-icons">visibility</i></a>
+                                                            <div id="modalTabla-@Model.Destinos.ToArray()[i].DestinoId" class="modal">
+                                                                <div class="modal-footer">
+                                                                    <a class="modal-close btn-medium btn-floating modal-trigger tooltipped materialize-red" data-tooltip="Cerrar Ventana"><i class="tiny material-icons">close</i></a>
+                                                                </div>
+                                                                <div class="modal-content">
+                                                                    <h3 style="text-align:center">Detalles Destino - @Model.Destinos.ToArray()[i].DestinoId</h3>
+                                                                    <table class="striped centered">
+                                                                        <tr>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaInicio)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(model => model.Destinos.FirstOrDefault().FechaHasta)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias100)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias60)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias40)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias00)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Dias50)
+                                                                            </th>
+                                                                            <th>
+                                                                                @Html.DisplayNameFor(m => Model.Destinos.FirstOrDefault().Total)
+                                                                            </th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaInicio)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(model => Model.Destinos.ToArray()[i].FechaHasta)
+                                                                            </td>
+                                                                            <td>
+                                                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100)*@
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias100Aprobados)
+                                                                            </td>
+                                                                            <td>
+                                                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60)*@
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias60Aprobados)
+                                                                            </td>
+                                                                            <td>
+                                                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40)*@
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias40Aprobados)
+                                                                            </td>
+                                                                            <td>
+                                                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00)*@
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias00Aprobados)
+                                                                            </td>
+                                                                            <td>
+                                                                                @*@Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50)*@
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Dias50Aprobados)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DisplayFor(m => Model.Destinos.ToArray()[i].Total)
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </li>
+                        @if (Model.Atrasado)
+                        {
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">IV. Justificación de Atraso</span></div>
+                                <div class="collapsible-body col-12">
+                                    <div class="row">
+                                        <div class="input-field col s12 m10 l12">
+                                            <strong>@Html.DisplayNameFor(m => Model.JustificacionAtraso)</strong>
+                                            <h5>@Html.DisplayFor(m => Model.JustificacionAtraso)</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        <li>
+                            @if (Model.GeneracionCDP.Any())
+                            {
+                                if (Model.Atrasado)
+                                {
+                                    <div class="collapsible-header"><span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span></div>
+                                }
+                                else
+                                {
+                                    <div class="collapsible-header"><span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span></div>
+                                }
+                                <div class="collapsible-body col-12">
+
+                                    @if (Model.SolicitaViatico || Model.SolicitaViatico != true)
+                                    {
+                                        <span class="card-title">Viáticos</span>
+                                        if (Model.Workflow.DefinicionWorkflow.Secuencia == 9)
+                                        {
+                                            <strong>
+                                                <label style="color:green">
+                                                    “Recuerde que debe ingresar el Id de Compromiso.”
+                                                </label>
+                                            </strong>
+                                        }
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
+                                                </th>
+                                                <th>
+                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
+                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    }
+
+                                    @if (Model.Workflow.DefinicionWorkflow.Secuencia != 10 && Model.Workflow.DefinicionWorkflow.Secuencia != 11 && Model.Workflow.DefinicionWorkflow.Secuencia != 12)
+                                    {
+
+                                        foreach (var item in Model.Proceso.Documentos.Where(q=>q.Activo))
+                                        {
+                                            if (item.TipoDocumentoId == 7 && item.Activo)
+                                            {
+                                                Model.DocumentoRefrendacion = true;
+                                            }
+                                        }
+
+                                        if (Model.DocumentoRefrendacion != true)
+                                        {
+                                            <div class="row">
+                                                <br />
+                                                @Html.ActionLink("Editar Certificado de Refrendación", "Edit", "GeneracionCDP", new { id = Model.GeneracionCDP.FirstOrDefault().GeneracionCDPId }, new { @class = "waves-effect waves-light btn blue" })
+                                            </div>
+                                            @*<div class="section"></div>*@
+                                            <div class="row">
+                                                @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, new { @class = "waves-effect waves-light btn blue" })
+                                            </div>
+
+                                            if (Model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso != null)
+                                            {
+                                                <div class="row">
+                                                    <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-tooltip="Adjuntar archivo"><i class="large material-icons">attach_file</i></a>
+                                                    @Html.Raw("<span>Subir archivo refrendación</span>")
+                                                </div>
+                                                @*@Html.ActionLink("Adjuntar", "Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId },null)*@
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                @Html.Action("Sign", "Workflow", new { Model.WorkflowId })
+                                                @Html.ActionLink("Generar Documento Acto Administrativo", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId },new { @class = "waves-effect waves-light btn blue" })
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </li>
+                        <li>
+
+                        </li>
+
+                    </ul>
+                    @*<div class="section"></div>
+                        <p>
+                            @Html.ActionLink("Crear Documento", "GeneraDocumento", "Cometido", new { Id = Model.CometidoId }, null)
+                        </p>*@
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+    @*<div id="modalAttach" class="modal">
+            <div class="modal-content">
+                <h4>Adjuntar documento</h4>
+                @Html.Action("Create", "Documento", new { ProcesoId = Model.Proceso.ProcesoId, WorkflowId = Model.Workflow.WorkflowId })
+            </div>
+        </div>*@
+</div>
+
+        @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.datepicker').datepicker();
+                $('select').formSelect();
+                $('input:hidden').each(function (index, element) {
+                    $(element).appendTo($(element).parent());
+                });
+                $('#divReembolso').hide(100); //oculta checkbox de reembolso
+
+                $('.modal').modal();
+                $('.tooltipped').tooltip();
+                $('.collapsible').collapsible();
+            });
+
+            @*$(function () {
+                $("#jQuery_accordion").accordion({
+                    collapsible: true, heightStyle: true
+                });
+            });*@
+        </script>
+
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        @*<script src="~/Scripts/jquery-ui.js"></script>
+        <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+        <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+        <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+        <style TYPE="text/css">
+            strong {
+                font-weight: bolder;
+            }
+            .ui-widget-content a{
+                color:#fff;
+            }
+        </style>

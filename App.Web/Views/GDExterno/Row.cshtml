@@ -1,0 +1,77 @@
+﻿@model App.Model.GestionDocumental.GD
+
+@if (Model != null)
+{
+    <table class="striped">
+        <tbody>
+            @if (Model.FechaIngreso.HasValue)
+            {
+                <tr>
+                    <td width="200">Fecha creación:</td>
+                    <td>@Model.Fecha</td>
+                </tr>
+            }
+            @if (Model.GDOrigen != null)
+            {
+                <tr>
+                    <td width="200">Origen:</td>
+                    <td>@Model.GDOrigen.Descripcion</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Materia))
+            {
+                <tr>
+                    <td width="200">Materia:</td>
+                    <td>@Model.Materia</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.NumeroExterno))
+            {
+                <tr>
+                    <td width="200">Número externo:</td>
+                    <td>@Model.NumeroExterno</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Referencia))
+            {
+                <tr>
+                    <td width="200">Referencia:</td>
+                    <td>@Model.Referencia</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Observacion))
+            {
+                <tr>
+                    <td width="200">Observación:</td>
+                    <td>@Model.Observacion</td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion))
+            {
+                <tr>
+                    <td width="200">Destino 1:</td>
+                    <td>
+                        @Model.DestinoUnidadDescripcion
+                        @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre))
+                        {
+                            <text>-</text> @Model.DestinoFuncionarioNombre
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.DestinoUnidadDescripcion2))
+            {
+                <tr>
+                    <td width="200">Destino 2:</td>
+                    <td>
+                        @Model.DestinoUnidadDescripcion2
+                        @if (!string.IsNullOrWhiteSpace(Model.DestinoFuncionarioNombre2))
+                        {
+                            <text>-</text> @Model.DestinoFuncionarioNombre2
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

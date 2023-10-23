@@ -1,0 +1,57 @@
+﻿@model App.Model.HorasExtras.HorasExtras
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+<div class="grey lighten-3">
+    <div class="container">
+        <div class="section">
+            <h3 class="header">Generacion de Resolucion</h3>
+            <br />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Filtros</span>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="input-field col s12 m12 l12">
+                            @Html.DropDownListFor(m => Model.Annio, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Annio)
+                            @Html.ValidationMessageFor(m => Model.Annio, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m12 l12">
+                            @Html.DropDownListFor(m => Model.Mes, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Mes)
+                            @Html.ValidationMessageFor(m => Model.Mes, "", new { @class = "red-text" })
+                        </div>
+                        <div class="section"></div>
+                        <p>
+                            <button class="waves-effect waves-light btn blue" type="submit">Generar</button>
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

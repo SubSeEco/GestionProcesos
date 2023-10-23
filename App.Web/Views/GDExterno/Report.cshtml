@@ -1,0 +1,96 @@
+﻿@model App.Web.Controllers.GDExternoController.DTOReport
+
+@{
+    ViewBag.Title = "Reportes gestión documental";
+    ViewBag.SubTitle = "Reportes gestión documental";
+}
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+
+<div class="container">
+    @Html.Partial("_Message")
+
+    @using (Html.BeginForm("ReportGenerico", null))
+    {
+        @Html.AntiForgeryToken()
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte genérico de ingresos</span>
+                <div class="section"></div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("ReportMinutaDocumentosOP", null))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Minuta de documentos oficina de partes</span>
+                <div class="row">
+                    <div class="col s12 m2 l3">
+                        @Html.LabelFor(m => Model.Desde)
+                        @Html.EditorFor(m => Model.Desde)
+                        @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                    </div>
+                    <div class="col s12 m6 l6">
+                        @Html.LabelFor(m => Model.UnidadCodigo)
+                        @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                        @Html.ValidationMessageFor(m => Model.UnidadCodigo, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("ReportPermanencia", null))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card my-3">
+            <div class="card-content">
+                <span class="card-title">Reporte de permanencia</span>
+                <div class="row">
+                    <div class="col s12 m12 l6">
+                        @Html.LabelFor(m => Model.UnidadCodigo)
+                        @Html.DropDownListFor(model => model.UnidadCodigo, null, "Seleccione...", new { @class = "browser-default" })
+                        @Html.ValidationMessageFor(m => Model.UnidadCodigo, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m2 l3">
+                        @Html.LabelFor(m => Model.Desde)
+                        @Html.EditorFor(m => Model.Desde)
+                        @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                    </div>
+                    <div class="col s12 m2 l3">
+                        @Html.LabelFor(m => Model.Hasta)
+                        @Html.EditorFor(m => Model.Hasta)
+                        @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue">Descargar</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input.autocomplete').autocomplete({
+            data: {
+
+            },
+        });
+    });
+</script>

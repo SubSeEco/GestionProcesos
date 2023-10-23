@@ -1,0 +1,130 @@
+﻿@model App.Web.Controllers.ProcesoController.DTOFilter
+
+@{
+    ViewBag.Title = "Administrar procesos";
+    ViewBag.SubTitle = "Administrar procesos";
+}
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Filtros</span>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col s12 m6 l6">
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => Model.TextSearch)
+                            @Html.LabelFor(m => Model.TextSearch)
+                            @Html.ValidationMessageFor(m => Model.TextSearch, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field">
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field">
+                        </div>
+                        <div class="col">
+                            @Html.LabelFor(m => Model.EstadoProcesoId)
+                            @Html.DropDownListFor(m => Model.EstadoProcesoId, null, "Seleccione...", new { @class = "browser-default" })
+                            @Html.ValidationMessageFor(m => Model.EstadoProcesoId, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6">
+                        @Html.LabelFor(m => Model.Select)<br /><br />
+                        @Html.EditorFor(q => q.Select)
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Buscar</button>
+            }
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Procesos</span>*@
+            <table class="table bordered" id="dt">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().ProcesoId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FechaCreacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().DefinicionProceso.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Observacion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Result.FirstOrDefault().EstadoProceso.Descripcion)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Result.OrderByDescending(q => q.ProcesoId))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProcesoId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DefinicionProceso.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EstadoProceso.Descripcion)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Detalles", "Details", new { id = item.ProcesoId })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

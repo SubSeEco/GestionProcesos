@@ -1,0 +1,53 @@
+﻿@model IEnumerable<App.Model.Core.Documento>
+@{
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Documentos</span>
+
+
+        <table class="table table-responsive bordered" id="dt">
+            <thead>
+                <tr>
+                    <th>
+                        Archivo
+                    </th>
+                    <th>
+                        Fecha
+                    </th>
+                    <th>
+                        Autor
+                    </th>
+                    <th>
+                        Descripción
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.Where(q => q.Activo))
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Download", "Documento", new { id = item.DocumentoId })">@item.FileName</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fecha)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem=>item.FechaPlazo)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

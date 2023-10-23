@@ -1,0 +1,22 @@
+﻿@model App.Model.Core.Shared.Region
+
+<h3>Región</h3>
+<div class="card">
+    <div class="card-content">
+        <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.Codigo)</strong>
+            <p>@Html.DisplayFor(m => Model.Codigo)</p>
+        </div>
+        <div class="input-field col s12 m10">
+            <strong>@Html.DisplayNameFor(m => Model.Nombre)</strong>
+            <p>@Html.DisplayFor(m => Model.Nombre)</p>
+        </div>
+        <br />
+        <a href='@Url.Action("Edit", new { id = Model.RegionId })' class="btn blue">Editar</a>
+        <a href='@Url.Action("Delete", new { id = Model.RegionId })' class="btn red">Eliminar</a>
+
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>

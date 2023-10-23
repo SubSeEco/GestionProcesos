@@ -1,0 +1,154 @@
+﻿@model IEnumerable<App.Model.Cometido.PatenteVehiculo>
+
+<div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i><strong>Vehiculos Ministerio de Economia</strong></span>
+            <p>
+                <strong>
+                    Información de las patentes pertenecientes al Ministerio de Economia.
+                </strong>
+        </div>
+    </div>
+    @Html.Partial("_Message")
+    <div class="card">
+        <div class="card-content">
+            <table class="table" id="patentes">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.PlacaPatente)
+                        <input type="text" id="patente" onkeyup="FiltroPatente()" placeholder="Patente..." class="input-field col s6 m5 l3" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.SIGPERTipoVehiculoId)
+                        <input type="text" id="tipovehiculo" onkeypress="FiltroTipoVehiculo()" placeholder="Tipo Vehiculo..." class="input-field col s6 m5 l3" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.RegionId)
+                        <input type="text" id="region" onkeydown="FiltroRegion()" placeholder="Región..." class="input-field col s6 m5 l3" />
+                    </th>
+                    <th></th>
+                </tr>
+                @for (int i = 0; i < Model.ToArray().Length; i++)
+                {
+                    @Html.HiddenFor(q => Model.ToArray()[i].PatenteVehiculoId)
+                    <tr>
+                        <td>@Model.ToArray()[i].PlacaPatente</td>
+                        <td>@Model.ToArray()[i].TipoVehiculo.Vehiculo</td>
+                        <td>@Model.ToArray()[i].Region.Nombre</td>
+                        <td>
+                            @*<a href="#modalEdit-@Model.ToArray()[i].PatenteVehiculoId" class="btn-large btn-floating modal-trigger btn tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>*@
+                            <a href='@Url.Action("Edit","PatenteVehiculo", new { id = Model.ToArray()[i].PatenteVehiculoId })' class="btn-large btn-floating modal-trigger btn tooltipped blue" data-tooltip="Editar"><i class="large material-icons">edit</i></a>
+                        </td>
+                        <td>
+                            <a href="#modalDelete-@Model.ToArray()[i].PatenteVehiculoId" class="btn-large btn-floating modal-trigger btn tooltipped blue" data-tooltip="Eliminar"><i class="large material-icons">delete</i></a>
+                        </td>
+                    </tr>
+                    @*<div class="modal" id="modalEdit-@Model.ToArray()[i].PatenteVehiculoId">
+                        <div class="modal-content">
+                            @Html.Action("Edit", new { id = Model.ToArray()[i].PatenteVehiculoId })
+                        </div>
+                    </div>*@
+                    <div class="modal" id="modalDelete-@Model.ToArray()[i].PatenteVehiculoId">
+                        <div class="modal-content">
+                            @Html.Action("Delete", new { id = Model.ToArray()[i].PatenteVehiculoId })
+                        </div>
+                    </div>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="#modalCreate" class="btn-floating modal-trigger btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+<div id="modalCreate" class="modal">
+    <div class="modal-footer">
+        <a class="modal-close btn-medium btn-floating modal-trigger tooltipped materialize-red" data-tooltip="Cerrar Ventana"><i class="tiny material-icons">close</i></a>
+    </div>
+    <div class="modal-content">
+        @Html.Action("Create")
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('select').formSelect();
+    });
+
+    function FiltroPatente() {
+        var input = document.getElementById("patente");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("patentes");
+        var tr = document.getElementsByTagName("tr");
+        var txtValue;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }/*
+    function FiltroVehiculo() {
+        var input = document.getElementById("vehiculo");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("patentes");
+        var tr = document.getElementsByTagName("tr");
+        var txtValue;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }*/
+    function FiltroTipoVehiculo() {
+        var input = document.getElementById("tipovehiculo");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("patentes");
+        var tr = document.getElementsByTagName("tr");
+        var txtValue;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function FiltroRegion() {
+        var input = document.getElementById("region");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("patentes");
+        var tr = document.getElementsByTagName("tr");
+        var txtValue;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

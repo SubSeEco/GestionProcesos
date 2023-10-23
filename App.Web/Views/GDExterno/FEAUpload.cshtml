@@ -1,0 +1,186 @@
+﻿@model App.Web.Controllers.GDExternoController.DTOFileUploadFEA
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("FEAUpload", "GDExterno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ProcesoId)
+    @Html.HiddenFor(model => model.WorkflowId)
+    @Html.HiddenFor(q => q.FirmanteUnidadCodigo)
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label>
+                    @Html.CheckBoxFor(m => Model.EsOficial)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.EsOficial)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si el documento ya viene con firma electrónica">
+                    @Html.CheckBoxFor(m => Model.TieneFirmaElectronica)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.TieneFirmaElectronica)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="RequiereFirmaElectronicaDivCheck">
+        <div class="col s12 m12 l12">
+            <div class="switch">
+                <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si el documento será firmado electrónicamente. Solo se pueden firmar archivos pdf">
+                    @Html.CheckBoxFor(m => Model.RequiereFirmaElectronica)
+                    <span class="lever"></span>
+                    @Html.LabelFor(m => Model.RequiereFirmaElectronica)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @*@Html.LabelFor(m => Model.TipoDocumentoCodigo)*@
+            @Html.DropDownListFor(m => Model.TipoDocumentoCodigo, null, "Seleccione tipo documento...", new { @class = "browser-default" })
+            @Html.ValidationMessageFor(m => Model.TipoDocumentoCodigo, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @Html.LabelFor(m => Model.File)<br />
+            @Html.TextBoxFor(model => Model.File, "", new { @type = "file", @id = "FileInput", @accept = ".*" })<br />
+            @Html.ValidationMessageFor(model => Model.File, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <div id="RequiereFirmaElectronicaDivUser">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                @*@Html.LabelFor(m => Model.FirmanteUnidadCodigo)<br />*@
+                @Html.DropDownListFor(m => Model.FirmanteUnidadCodigo, null, "Seleccione unidad...", new { @class = "browser-default", @id = "ddlFirmanteUnidadCodigo" })
+                @Html.ValidationMessageFor(m => Model.FirmanteUnidadCodigo, "", new { @class = "red-text" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12 l12">
+                @*                @Html.LabelFor(m => Model.FirmanteEmail)<br />*@
+                @Html.DropDownListFor(model => Model.FirmanteEmail, null, "Seleccione funcionario...", new { @class = "browser-default" })
+                @Html.ValidationMessageFor(m => Model.FirmanteEmail, "", new { @class = "red-text" })
+            </div>
+        </div>
+    </div>
+    <div id="DivDocOficial">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="switch">
+                    <label class="tooltipped" data-position="right" data-tooltip="Active esta opción si el documento debe tener un plazo de firma.">
+                        @Html.CheckBoxFor(m=>Model.PlazoEstablecido)
+                        <span class="lever"></span>
+                        @Html.LabelFor(m=>Model.PlazoEstablecido)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="FechaPlazo">
+                <div class="col s12 m12 l12">
+                    @Html.DisplayNameFor(m=>Model.FechaPlazo)
+                    @Html.EditorFor(m=>Model.FechaPlazo)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            @*@Html.LabelFor(m => Model.Descripcion)*@
+            @Html.TextAreaFor(m => Model.Descripcion, new { @class = "materialize-textarea", @placeholder = "Ingrese descripción del documento" }) 
+            @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+        </div>
+    </div>
+    <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#RequiereFirmaElectronicaDivUser').toggle(false);
+        $('#DivDocOficial').toggle(false);
+    });
+
+    //si el documento ya tiene firma, desactivar
+    $('#TieneFirmaElectronica').change(function () {
+        $("#FileInput").val('');
+        $('#RequiereFirmaElectronicaDivUser').toggle(false);
+
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#RequiereFirmaElectronicaDivCheck').toggle(false);
+            $("#RequiereFirmaElectronica").prop("checked", false);
+            $('#FileInput').attr("accept", ".pdf");
+        }
+        else {
+            $('#RequiereFirmaElectronicaDivCheck').show();
+            $('#FileInput').attr("accept", ".*");
+        }
+    });
+
+
+    $('#EsOficial').change(function () {
+        //$('#DivDocOficial').toggle(false);
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#DivDocOficial').toggle(true);
+            $('#FechaPlazo').hide();
+            document.getElementById('PlazoEstablecido').checked = false;
+        } else {
+            $('#DivDocOficial').hide();
+        }
+    })
+    /*$('#FechaPlazo').hide();*/
+    $('#PlazoEstablecido').change(function () {
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#FechaPlazo').show();
+        } else {
+            $('#FechaPlazo').hide();
+        }
+    })
+
+    //si requiere firma electrónica, mostrar destino y filtrar solo documentos pdf
+    $('#RequiereFirmaElectronica').change(function () {
+        $("#FileInput").val('');
+        var isChecked = $(this).is(':checked');
+        if (isChecked) {
+            $('#RequiereFirmaElectronicaDivUser').toggle(true);
+            $('#FileInput').attr("accept", ".pdf");
+        }
+        else {
+            $('#RequiereFirmaElectronicaDivUser').toggle(false);
+            $('#FileInput').attr("accept", ".*");
+        }
+    });
+
+    //Al cambiar unidad traer funcionarios
+    $("#ddlFirmanteUnidadCodigo").change(function () {
+        var select = $("#FirmanteEmail");
+        select.empty();
+        select.append($('<option/>', {
+            value: "",
+            text: "Seleccione..."
+        }));
+
+        $.getJSON("/Workflow/GetUserFirmanteByUnidad", { Pl_UndCod: $(this).val() },
+            function (classesData) {
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+</script>

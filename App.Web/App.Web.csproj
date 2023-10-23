@@ -1,0 +1,941 @@
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.3.5.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.3.5.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{884F9A95-FE15-4FD5-B412-60270DC227DD}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>App.Web</RootNamespace>
+    <AssemblyName>App.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <MvcBuildViews>true</MvcBuildViews>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.78\lib\net461\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="DapperExtensions, Version=1.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DapperExtensions.1.6.3\lib\net45\DapperExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=5.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.1.1\lib\net45\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="ErrorHandlerMvc, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ErrorHandlerMvc.1.1.5\lib\net451\ErrorHandlerMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressiveAnnotations, Version=2.7.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.EF6, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.EF6.1.6.5\lib\net45\Glimpse.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.6.8.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.6.8.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="RestSharp, Version=106.11.7.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.11.7\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.Core.2.0.2.1\lib\net45\Rotativa.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.MVC.2.0.3\lib\net45\Rotativa.MVC.dll</HintPath>
+    </Reference>
+    <Reference Include="SautinSoft.PdfFocus, Version=8.0.6.21, Culture=neutral, PublicKeyToken=0b79b934109b3e9e, processorArchitecture=MSIL">
+      <HintPath>..\packages\sautinsoft.pdffocus.8.0.6.21\lib\net461\SautinSoft.PdfFocus.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.4.9.2\lib\net45\SimpleInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector.Integration.Web, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.Integration.Web.4.9.2\lib\net40\SimpleInjector.Integration.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector.Integration.Web.Mvc, Version=4.9.2.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.Integration.Web.Mvc.4.9.2\lib\net40\SimpleInjector.Integration.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.8.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="TikaOnDotNet, Version=1.17.1.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.1\lib\TikaOnDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="TikaOnDotNet.TextExtraction, Version=1.17.1.0, Culture=neutral, PublicKeyToken=fd70f0f601f583f3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TikaOnDotnet.TextExtractor.1.17.1\lib\TikaOnDotNet.TextExtraction.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\PROCESOS.xlsx" />
+    <Content Include="App_Readme\Elmah.SqlServer.sql" />
+    <Content Include="App_Readme\Elmah.SqlServer.txt" />
+    <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="Content\images\FirmaGato.png" />
+    <Content Include="Content\images\icon-borrar.png" />
+    <Content Include="Content\images\icon-edit.png" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui-git.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\jquery.datetimepicker.css" />
+    <Content Include="Content\logo.png" />
+    <Content Include="Content\LogoPieFirma.png" />
+    <Content Include="Content\custom.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Logo_gobierno.png" />
+    <Content Include="Content\materialize.css" />
+    <Content Include="Content\materialize.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="App_Data\COMETIDOS.xlsx" />
+    <Content Include="App_Data\CAIGG.xlsx" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Common.js" />
+    <Content Include="App_Data\SeguimientoUnidades.xlsx" />
+    <Content Include="App_Data\SeguimientoGP.xlsx" />
+    <Content Include="App_Data\AjusteAsistencia.xlsx" />
+    <Content Include="App_Data\ReportePresupuesto.xlsx" />
+    <Content Include="App_Data\SolicitudTransparencia.xlsx" />
+    <Content Include="App_Data\HSA.xlsx" />
+    <Content Include="App_Data\SeguimientoFinanzas.xlsx" />
+    <Content Include="App_Data\GDGenerico.xlsx" />
+    <Content Include="App_Data\GDMinutaDocumentosOP.xlsx" />
+    <Content Include="App_Data\GDPermanencia.xlsx" />
+    <Content Include="App_Data\FueraPlazo.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\CDCFinanzas.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="App_Data\PROCESOSUNIDAD.xlsx" />
+    <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Producción.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <None Include="Properties\PublishProfiles\Testing.pubxml" />
+    <Content Include="Scripts\expressive.annotations.validate.js" />
+    <Content Include="Scripts\expressive.annotations.validate.min.js" />
+    <Content Include="Scripts\init.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <None Include="Scripts\jquery-3.5.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.5.0.js" />
+    <Content Include="Scripts\jquery-3.5.0.min.js" />
+    <Content Include="Scripts\jquery-3.5.0.slim.js" />
+    <Content Include="Scripts\jquery-3.5.0.slim.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\materialize-stepper.min.js" />
+    <Content Include="Scripts\materialize.js" />
+    <Content Include="Scripts\materialize.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\GDExterno\Row.cshtml" />
+    <Content Include="Views\InformeHSA\Details.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DTOSelect.cshtml" />
+    <Content Include="Views\Usuario\Create.cshtml" />
+    <Content Include="Views\Usuario\Delete.cshtml" />
+    <Content Include="Views\Usuario\Details.cshtml" />
+    <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Workflow\Documents.cshtml" />
+    <Content Include="Views\Workflow\Execute.cshtml" />
+    <Content Include="Views\Workflow\Footer.cshtml" />
+    <Content Include="Views\Workflow\Forward.cshtml" />
+    <Content Include="Views\Workflow\Header.cshtml" />
+    <Content Include="Views\Workflow\History.cshtml" />
+    <Content Include="Views\Workflow\Index.cshtml" />
+    <Content Include="Views\Workflow\OK.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexCometidosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexConsultaIntegridadGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexDenunciaIntegridadGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexFirmaDocumentosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexGestionDocumentalGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexHSAPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexHSAGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_TareaGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexCometidosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexConsultaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexDenunciaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexFirmaDocumentosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexGestionDocumentalPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_TareaPersonal.cshtml" />
+    <Content Include="Views\Workflow\Send.cshtml" />
+    <Content Include="Views\Workflow\Sign.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CentroCostoController.cs" />
+    <Compile Include="Controllers\CometidoComisionController.cs" />
+    <Compile Include="Controllers\ComisionController.cs" />
+    <Compile Include="Controllers\ConsultaIntegridadController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
+    <Compile Include="Controllers\DenunciaIntegridadController.cs" />
+    <Compile Include="Controllers\DestinosPasajesController.cs" />
+    <Compile Include="Controllers\DestinosComisionController.cs" />
+    <Compile Include="Controllers\DestinosController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
+    <Compile Include="Controllers\CometidoController.cs" />
+    <Compile Include="Controllers\DefinicionProcesoController.cs" />
+    <Compile Include="Controllers\DefinicionWorkflowController.cs" />
+    <Compile Include="Controllers\CotizacionDocumentoController.cs" />
+    <Compile Include="Controllers\DocumentoController.cs" />
+    <Compile Include="Controllers\FirmaDocumentoController.cs" />
+    <Compile Include="Controllers\GDExternoController.cs" />
+    <Compile Include="Controllers\GDInternoController.cs" />
+    <Compile Include="Controllers\GeneracionCDPComisionController.cs" />
+    <Compile Include="Controllers\GeneracionCDPController.cs" />
+    <Compile Include="Controllers\GeneraResolucionController.cs" />
+    <Compile Include="Controllers\GeneroController.cs" />
+    <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\GrupoController.cs" />
+    <Compile Include="Controllers\HomeController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Controllers\HorasExtrasController.cs" />
+    <Compile Include="Controllers\InformeHSAController.cs" />
+    <Compile Include="Controllers\ParametrosComisionesController.cs" />
+    <Compile Include="Controllers\ParrafoComisionesController.cs" />
+    <Compile Include="Controllers\PasajeController.cs" />
+    <Compile Include="Controllers\PatenteVehiculoController.cs" />
+    <Compile Include="Controllers\ProcesoConsultorController.cs" />
+    <Compile Include="Controllers\ProcesoPersonalController.cs" />
+    <Compile Include="Controllers\ProcesoController.cs" />
+    <Compile Include="Controllers\ProgramaController.cs" />
+    <Compile Include="Controllers\EmpresaAerolineaController.cs" />
+    <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\ParrafosController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\TipoSubTituloController.cs" />
+    <Compile Include="Controllers\TipoSubAsignacionController.cs" />
+    <Compile Include="Controllers\TipoPartidaController.cs" />
+    <Compile Include="Controllers\TipoItemController.cs" />
+    <Compile Include="Controllers\TipoCapituloController.cs" />
+    <Compile Include="Controllers\TipoAsignacionController.cs" />
+    <Compile Include="Controllers\ViaticoHonorarioController.cs" />
+    <Compile Include="Controllers\ViaticoController.cs" />
+    <Compile Include="Controllers\RubricaController.cs" />
+    <Compile Include="Controllers\SubsecretariaController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\ViaticoInternacionalController.cs" />
+    <Compile Include="Controllers\WorkflowController.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\AuditAttribute.cs" />
+    <Compile Include="Helper\AuthenticationService.cs" />
+    <Compile Include="Helper\NoDirectAccessAttribute.cs" />
+    <Compile Include="Helper\UserExtended.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\DefinicionProceso\Create.cshtml" />
+    <Content Include="Views\DefinicionProceso\Delete.cshtml" />
+    <Content Include="Views\DefinicionProceso\Details.cshtml" />
+    <Content Include="Views\DefinicionProceso\Edit.cshtml" />
+    <Content Include="Views\DefinicionProceso\Index.cshtml" />
+    <Content Include="Views\DefinicionWorkflow\Create.cshtml" />
+    <Content Include="Views\DefinicionWorkflow\Delete.cshtml" />
+    <Content Include="Views\DefinicionWorkflow\EditRunningTaskDefinition.cshtml" />
+    <Content Include="Views\Proceso\Create.cshtml" />
+    <Content Include="Views\Proceso\Delete.cshtml" />
+    <Content Include="Views\Proceso\Details.cshtml" />
+    <Content Include="Views\Proceso\Index.cshtml" />
+    <Content Include="Views\Configuracion\Details.cshtml" />
+    <Content Include="Views\Configuracion\Edit.cshtml" />
+    <Content Include="Views\Configuracion\Index.cshtml" />
+    <Content Include="Views\DefinicionWorkflow\Edit.cshtml" />
+    <Content Include="Views\Genero\Create.cshtml" />
+    <Content Include="Views\Genero\Delete.cshtml" />
+    <Content Include="Views\Genero\Details.cshtml" />
+    <Content Include="Views\Genero\Edit.cshtml" />
+    <Content Include="Views\Genero\Index.cshtml" />
+    <Content Include="Views\Cargo\Create.cshtml" />
+    <Content Include="Views\Cargo\Delete.cshtml" />
+    <Content Include="Views\Cargo\Details.cshtml" />
+    <Content Include="Views\Cargo\Edit.cshtml" />
+    <Content Include="Views\Cargo\Index.cshtml" />
+    <Content Include="Views\Subsecretaria\Create.cshtml" />
+    <Content Include="Views\Subsecretaria\Delete.cshtml" />
+    <Content Include="Views\Subsecretaria\Details.cshtml" />
+    <Content Include="Views\Subsecretaria\Edit.cshtml" />
+    <Content Include="Views\Subsecretaria\Index.cshtml" />
+    <Content Include="Views\Grupo\Create.cshtml" />
+    <Content Include="Views\Grupo\Delete.cshtml" />
+    <Content Include="Views\Grupo\Details.cshtml" />
+    <Content Include="Views\Grupo\Edit.cshtml" />
+    <Content Include="Views\Grupo\Index.cshtml" />
+    <Content Include="Views\ProcesoConsultor\Index.cshtml" />
+    <Content Include="Views\Documento\Create.cshtml" />
+    <Content Include="Views\Programa\Create.cshtml" />
+    <Content Include="Views\Programa\Delete.cshtml" />
+    <Content Include="Views\Programa\Details.cshtml" />
+    <Content Include="Views\Programa\Edit.cshtml" />
+    <Content Include="Views\Programa\Index.cshtml" />
+    <Content Include="Views\Documento\Sign.cshtml" />
+    <Content Include="Views\Rubrica\Create.cshtml" />
+    <Content Include="Views\Rubrica\Delete.cshtml" />
+    <Content Include="Views\Rubrica\Details.cshtml" />
+    <Content Include="Views\Rubrica\Edit.cshtml" />
+    <Content Include="Views\Rubrica\Index.cshtml" />
+    <Content Include="Views\Documento\Index.cshtml" />
+    <Content Include="Views\Documento\Details.cshtml" />
+    <Content Include="Views\Cometido\Create.cshtml" />
+    <Content Include="Views\Cometido\Index.cshtml" />
+    <Content Include="Views\Cometido\Edit.cshtml" />
+    <Content Include="Views\Cometido\Details.cshtml" />
+    <Content Include="Views\Cometido\View.cshtml" />
+    <Content Include="Views\Destinos\Create.cshtml" />
+    <Content Include="Views\Destinos\Index.cshtml" />
+    <Content Include="Views\Destinos\Edit.cshtml" />
+    <Content Include="Views\Cometido\Menu.cshtml" />
+    <Content Include="Views\GeneracionCDP\Index.cshtml" />
+    <Content Include="Views\GeneracionCDP\Create.cshtml" />
+    <Content Include="Views\GeneracionCDP\Delete.cshtml" />
+    <Content Include="Views\GeneracionCDP\Details.cshtml" />
+    <Content Include="Views\GeneracionCDP\Edit.cshtml" />
+    <Content Include="Views\CentroCosto\Index.cshtml" />
+    <Content Include="Views\CentroCosto\Create.cshtml" />
+    <Content Include="Views\CentroCosto\Delete.cshtml" />
+    <Content Include="Views\CentroCosto\Details.cshtml" />
+    <Content Include="Views\CentroCosto\Edit.cshtml" />
+    <Content Include="Views\Cometido\Pdf.cshtml" />
+    <Content Include="Views\Cometido\EditGP.cshtml" />
+    <Content Include="Views\Destinos\EditGP.cshtml" />
+    <Content Include="Views\Cometido\EditPpto.cshtml" />
+    <Content Include="Views\Cometido\Sign.cshtml" />
+    <Content Include="Views\Cometido\Orden.cshtml" />
+    <Content Include="Views\Cometido\Resolucion.cshtml" />
+    <Content Include="Views\Parrafos\Create.cshtml" />
+    <Content Include="Views\Parrafos\Delete.cshtml" />
+    <Content Include="Views\Parrafos\Details.cshtml" />
+    <Content Include="Views\Parrafos\Edit.cshtml" />
+    <Content Include="Views\Parrafos\Index.cshtml" />
+    <Content Include="Views\Cometido\CDPViatico.cshtml" />
+    <Content Include="Views\Cometido\CDPPasajes.cshtml" />
+    <Content Include="Views\Pasaje\Index.cshtml" />
+    <Content Include="Views\Pasaje\Create.cshtml" />
+    <Content Include="Views\Pasaje\Delete.cshtml" />
+    <Content Include="Views\Pasaje\Details.cshtml" />
+    <Content Include="Views\Pasaje\Edit.cshtml" />
+    <Content Include="Views\Destinos\Delete.cshtml" />
+    <Content Include="Views\EmpresaAerolinea\Create.cshtml" />
+    <Content Include="Views\EmpresaAerolinea\Edit.cshtml" />
+    <Content Include="Views\EmpresaAerolinea\Details.cshtml" />
+    <Content Include="Views\EmpresaAerolinea\Delete.cshtml" />
+    <Content Include="Views\EmpresaAerolinea\Index.cshtml" />
+    <Content Include="Views\Pasaje\Menu.cshtml" />
+    <Content Include="Views\Cotizacion\Create.cshtml" />
+    <Content Include="Views\Cotizacion\Delete.cshtml" />
+    <Content Include="Views\Cotizacion\Edit.cshtml" />
+    <Content Include="Views\Pasaje\EditAbast.cshtml" />
+    <Content Include="Views\Pasaje\EditSeleccion.cshtml" />
+    <Content Include="Views\Cometido\DetailsDocto.cshtml" />
+    <Content Include="Views\Comision\Menu.cshtml" />
+    <Content Include="Views\ParrafoComisiones\Create.cshtml" />
+    <Content Include="Views\ParrafoComisiones\Delete.cshtml" />
+    <Content Include="Views\ParrafoComisiones\Details.cshtml" />
+    <Content Include="Views\ParrafoComisiones\Edit.cshtml" />
+    <Content Include="Views\ParrafoComisiones\Index.cshtml" />
+    <Content Include="Views\ParametrosComisiones\Create.cshtml" />
+    <Content Include="Views\ParametrosComisiones\Delete.cshtml" />
+    <Content Include="Views\ParametrosComisiones\Details.cshtml" />
+    <Content Include="Views\ParametrosComisiones\Edit.cshtml" />
+    <Content Include="Views\ParametrosComisiones\Index.cshtml" />
+    <Content Include="Views\GeneracionCDPComision\Create.cshtml" />
+    <Content Include="Views\GeneracionCDPComision\Delete.cshtml" />
+    <Content Include="Views\GeneracionCDPComision\Details.cshtml" />
+    <Content Include="Views\GeneracionCDPComision\Edit.cshtml" />
+    <Content Include="Views\GeneracionCDPComision\Index.cshtml" />
+    <Content Include="Views\DestinosComision\Index.cshtml" />
+    <Content Include="Views\DestinosComision\Create.cshtml" />
+    <Content Include="Views\DestinosComision\Delete.cshtml" />
+    <Content Include="Views\DestinosComision\Edit.cshtml" />
+    <Content Include="Views\DestinosComision\EditGP.cshtml" />
+    <Content Include="Views\Comision\Index.cshtml" />
+    <Content Include="Views\Comision\Details.cshtml" />
+    <Content Include="Views\Comision\View.cshtml" />
+    <Content Include="Views\Comision\Edit.cshtml" />
+    <Content Include="Views\Comision\Create.cshtml" />
+    <Content Include="Views\Cometido\CreaDocto.cshtml" />
+    <Content Include="Views\Cometido\EditSigfe.cshtml" />
+    <Content Include="Views\Cometido\EditSigfeTesoreria.cshtml" />
+    <Content Include="Views\Cometido\DetailsFinanzas.cshtml" />
+    <Content Include="Views\Comision\EditGP.cshtml" />
+    <Content Include="Views\DestinosPasajes\Create.cshtml" />
+    <Content Include="Views\DestinosPasajes\Delete.cshtml" />
+    <Content Include="Views\DestinosPasajes\Edit.cshtml" />
+    <Content Include="Views\DestinosPasajes\EditGP.cshtml" />
+    <Content Include="Views\DestinosPasajes\Index.cshtml" />
+    <Content Include="Views\Shared\_CometidosPartial.cshtml" />
+    <Content Include="Views\Shared\_DestinosPasajesPartial.cshtml" />
+    <Content Include="Views\FirmaDocumento\Create.cshtml" />
+    <Content Include="Views\FirmaDocumento\Edit.cshtml" />
+    <Content Include="Views\FirmaDocumento\Sign.cshtml" />
+    <Content Include="Views\FirmaDocumento\View.cshtml" />
+    <Content Include="Views\CometidoComision\Index.cshtml" />
+    <Content Include="Views\Cometido\ResultSearch.cshtml" />
+    <Content Include="Views\Cometido\Search.cshtml" />
+    <Content Include="Views\Cometido\SeguimientoUnidades.cshtml" />
+    <Content Include="Views\Cometido\SolicitudesTransparencia.cshtml" />
+    <Content Include="Views\InformeHSA\Create.cshtml" />
+    <Content Include="Views\InformeHSA\Edit.cshtml" />
+    <Content Include="Views\InformeHSA\Pdf.cshtml" />
+    <Content Include="Views\InformeHSA\Sign.cshtml" />
+    <Content Include="Views\InformeHSA\View.cshtml" />
+    <Content Include="Views\Region\Create.cshtml" />
+    <Content Include="Views\Region\Delete.cshtml" />
+    <Content Include="Views\Region\Details.cshtml" />
+    <Content Include="Views\Region\Edit.cshtml" />
+    <Content Include="Views\Region\Index.cshtml" />
+    <Content Include="Views\Shared\_Message.cshtml" />
+    <Content Include="Views\Viatico\Index.cshtml" />
+    <Content Include="Views\Viatico\Create.cshtml" />
+    <Content Include="Views\Viatico\Details.cshtml" />
+    <Content Include="Views\Viatico\Delete.cshtml" />
+    <Content Include="Views\Viatico\Edit.cshtml" />
+    <Content Include="Views\ViaticoHonorario\Index.cshtml" />
+    <Content Include="Views\ViaticoHonorario\Create.cshtml" />
+    <Content Include="Views\ViaticoHonorario\Delete.cshtml" />
+    <Content Include="Views\ViaticoHonorario\Details.cshtml" />
+    <Content Include="Views\ViaticoHonorario\Edit.cshtml" />
+    <Content Include="Views\TipoAsignacion\Index.cshtml" />
+    <Content Include="Views\TipoAsignacion\Create.cshtml" />
+    <Content Include="Views\TipoAsignacion\Details.cshtml" />
+    <Content Include="Views\TipoAsignacion\Edit.cshtml" />
+    <Content Include="Views\TipoAsignacion\Delete.cshtml" />
+    <Content Include="Views\TipoCapitulo\Index.cshtml" />
+    <Content Include="Views\TipoCapitulo\Edit.cshtml" />
+    <Content Include="Views\TipoCapitulo\Details.cshtml" />
+    <Content Include="Views\TipoCapitulo\Delete.cshtml" />
+    <Content Include="Views\TipoCapitulo\Create.cshtml" />
+    <Content Include="Views\TipoItem\Index.cshtml" />
+    <Content Include="Views\TipoItem\Edit.cshtml" />
+    <Content Include="Views\TipoItem\Details.cshtml" />
+    <Content Include="Views\TipoItem\Delete.cshtml" />
+    <Content Include="Views\TipoItem\Create.cshtml" />
+    <Content Include="Views\TipoPartida\Index.cshtml" />
+    <Content Include="Views\TipoPartida\Edit.cshtml" />
+    <Content Include="Views\TipoPartida\Details.cshtml" />
+    <Content Include="Views\TipoPartida\Delete.cshtml" />
+    <Content Include="Views\TipoPartida\Create.cshtml" />
+    <Content Include="Views\TipoSubAsignacion\Create.cshtml" />
+    <Content Include="Views\TipoSubAsignacion\Delete.cshtml" />
+    <Content Include="Views\TipoSubAsignacion\Details.cshtml" />
+    <Content Include="Views\TipoSubAsignacion\Edit.cshtml" />
+    <Content Include="Views\TipoSubAsignacion\Index.cshtml" />
+    <Content Include="Views\TipoSubTitulo\Create.cshtml" />
+    <Content Include="Views\TipoSubTitulo\Delete.cshtml" />
+    <Content Include="Views\TipoSubTitulo\Details.cshtml" />
+    <Content Include="Views\TipoSubTitulo\Edit.cshtml" />
+    <Content Include="Views\TipoSubTitulo\Index.cshtml" />
+    <Content Include="Views\ViaticoInternacional\Create.cshtml" />
+    <Content Include="Views\ViaticoInternacional\Delete.cshtml" />
+    <Content Include="Views\ViaticoInternacional\Details.cshtml" />
+    <Content Include="Views\ViaticoInternacional\Edit.cshtml" />
+    <Content Include="Views\ViaticoInternacional\Index.cshtml" />
+    <Content Include="Views\Cometido\Anular.cshtml" />
+    <Content Include="Views\Shared\_Error.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Proceso\Header.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Delete.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Details.cshtml" />
+    <Content Include="Views\ProcesoPersonal\Index.cshtml" />
+    <Content Include="Views\Proceso\View.cshtml" />
+    <Content Include="Views\Cometido\SeguimientoGP.cshtml" />
+    <Content Include="Views\Cometido\ReporteContraloria.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\GDInterno\Create.cshtml" />
+    <Content Include="Views\GDInterno\Details.cshtml" />
+    <Content Include="Views\GDInterno\Edit.cshtml" />
+    <Content Include="Views\GDInterno\View.cshtml" />
+    <Content Include="Views\GDInterno\FEAUpload.cshtml" />
+    <Content Include="Views\GDInterno\FEADocumentos.cshtml" />
+    <Content Include="Views\Cometido\SignOther.cshtml" />
+    <Content Include="Views\GDExterno\Create.cshtml" />
+    <Content Include="Views\GDExterno\Details.cshtml" />
+    <Content Include="Views\GDExterno\Edit.cshtml" />
+    <Content Include="Views\GDExterno\FEADocumentos.cshtml" />
+    <Content Include="Views\GDExterno\FEAUpload.cshtml" />
+    <Content Include="Views\GDExterno\View.cshtml" />
+    <Content Include="Views\GDExterno\DetailsAutoridad.cshtml" />
+    <Content Include="Views\GDInterno\DetailsAutoridad.cshtml" />
+    <Content Include="Views\GDExterno\Workflow.cshtml" />
+    <Content Include="Views\GDInterno\Workflow.cshtml" />
+    <Content Include="Views\GDExterno\Documents.cshtml" />
+    <Content Include="Views\GDInterno\Documents.cshtml" />
+    <Content Include="Views\GDExterno\WorkflowAutoridad.cshtml" />
+    <Content Include="Views\GDInterno\WorkflowAutoridad.cshtml" />
+    <Content Include="Views\GDExterno\Report.cshtml" />
+    <Content Include="Views\GeneraResolucion\FirmaDocumento.cshtml" />
+    <Content Include="Views\GeneraResolucion\GeneraResolucion.cshtml" />
+    <Content Include="Views\GeneraResolucion\ResolucionServicio.cshtml" />
+    <Content Include="Views\Cometido\Finalizados.cshtml" />
+    <Content Include="Views\Cometido\Report.cshtml" />
+    <Content Include="Views\Cometido\ColumnChart.cshtml" />
+    <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.5.0.min.map" />
+    <Content Include="Views\Cometido\ViewDocWord.cshtml" />
+    <Content Include="Views\Cometido\ChartFuncionarios.cshtml" />
+    <Content Include="Views\HorasExtras\Create.cshtml" />
+    <Content Include="Views\HorasExtras\Details.cshtml" />
+    <Content Include="Views\HorasExtras\Edit.cshtml" />
+    <Content Include="Views\HorasExtras\EditConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\EditGP.cshtml" />
+    <Content Include="Views\HorasExtras\EditRemuneraciones.cshtml" />
+    <Content Include="Views\HorasExtras\FirmaDocumento.cshtml" />
+    <Content Include="Views\HorasExtras\GeneraResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\procesState.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionDescanso.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\HorasExtras\ResolucionServicio.cshtml" />
+    <Content Include="Views\HorasExtras\SignConfirmacion.cshtml" />
+    <Content Include="Views\HorasExtras\SignResolucion.cshtml" />
+    <Content Include="Views\HorasExtras\View.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Create.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Edit.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditAnalista.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\EditVisador.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Pdf.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\ResolucionProgramacion.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\Sign.cshtml" />
+    <Content Include="Views\ProgramacionHorasExtraordinarias\SignResolucion.cshtml" />
+    <Content Include="Views\Cometido\ProcessState.cshtml" />
+    <Content Include="Views\Destinos\Details.cshtml" />
+    <Content Include="Views\Cometido\ValidaSubsecretario.cshtml" />
+    <Content Include="Views\Shared\_PartialDestinos.cshtml" />
+    <Content Include="Views\Cometido\ValidaMinistro.cshtml" />
+    <Content Include="Views\Cometido\ValidaSubseAlMinistro.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexGestionDocumentalPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexHSAPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexCometidosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexFirmaDocumentosPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_TareaPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_TareaGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexCometidosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexFirmaDocumentosGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexGestionDocumentalGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexHSAGrupal.cshtml" />
+    <Content Include="Views\PatenteVehiculo\Index.cshtml" />
+    <Content Include="Views\PatenteVehiculo\Create.cshtml" />
+    <Content Include="Views\PatenteVehiculo\Delete.cshtml" />
+    <Content Include="Views\PatenteVehiculo\Edit.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\Create.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\Edit.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaAbogado.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaCoordinador.cshtml" />
+    <Content Include="Views\ConsultaIntegridad\ValidaJefatura.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\Create.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\Edit.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaAbogado.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaCoordinador.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaInvestigador.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaJefatura.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\ValidaSubsecretario.cshtml" />
+    <Content Include="Views\Persona\Create.cshtml" />
+    <Content Include="Views\Persona\Delete.cshtml" />
+    <Content Include="Views\Persona\Details.cshtml" />
+    <Content Include="Views\Persona\Edit.cshtml" />
+    <Content Include="Views\Persona\Index.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexConsultaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialPersonal\_IndexDenunciaIntegridadPersonal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexDenunciaIntegridadGrupal.cshtml" />
+    <Content Include="Views\Workflow\PartialGrupal\_IndexConsultaIntegridadGrupal.cshtml" />
+    <Content Include="Views\GDExterno\PlazoGD.cshtml" />
+    <Content Include="Views\Proceso\ReporteProceso.cshtml" />
+    <Content Include="Views\DenunciaIntegridad\View.cshtml" />
+    <Content Include="Views\Workflow\Archive.cshtml" />
+    <Content Include="Views\Workflow\Details.cshtml" />
+    <Content Include="Views\Workflow\Index_old.cshtml" />
+    <Content Include="Views\Workflow\Next.cshtml" />
+    <Content Include="Views\Workflow\Validate.cshtml" />
+    <Content Include="Views\Proceso\ReporteProceso.cshtml" />
+    <Content Include="Views\InformeHSA\ReporteHSA.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App.Core\App.Core.csproj">
+      <Project>{3325f871-6960-4787-b291-a1408a337c8d}</Project>
+      <Name>App.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj">
+      <Project>{4966979d-b29f-44ad-9ec9-31289385877b}</Project>
+      <Name>App.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\App.Model\App.Model.csproj">
+      <Project>{f007fee7-ee3c-4a51-a77a-2260956b7477}</Project>
+      <Name>App.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\App.Util\App.Util.csproj">
+      <Project>{ab0a6e1a-d5e3-4957-b4bb-9fb4f750f66e}</Project>
+      <Name>App.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>65530</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:65530/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.3.5.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.3.5.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

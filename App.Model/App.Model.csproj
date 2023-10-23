@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F007FEE7-EE3C-4A51-A77A-2260956B7477}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>App.Model</RootNamespace>
+    <AssemblyName>App.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExpressiveAnnotations, Version=2.7.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressiveAnnotations.MvcUnobtrusive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=d3e372f3c1e83cec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExpressiveAnnotations.2.9.6\lib\net45\ExpressiveAnnotations.MvcUnobtrusive.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cometido\CentroCosto.cs" />
+    <Compile Include="Cometido\Cometido.cs" />
+    <Compile Include="Cometido\DataPoint.cs" />
+    <Compile Include="Cometido\Destinos.cs" />
+    <Compile Include="Cometido\GeneracionCDP.cs" />
+    <Compile Include="Cometido\Mantenedor.cs" />
+    <Compile Include="Cometido\Parrafos.cs" />
+    <Compile Include="Cometido\PatenteVehiculo.cs" />
+    <Compile Include="Cometido\TipoAsignacion.cs" />
+    <Compile Include="Cometido\TipoCapitulo.cs" />
+    <Compile Include="Cometido\TipoItem.cs" />
+    <Compile Include="Cometido\TipoPartida.cs" />
+    <Compile Include="Cometido\TipoSubAsignacion.cs" />
+    <Compile Include="Cometido\TipoSubTitulo.cs" />
+    <Compile Include="Cometido\Viatico.cs" />
+    <Compile Include="Cometido\ViaticoHonorario.cs" />
+    <Compile Include="Comisiones\Comision.cs" />
+    <Compile Include="Comisiones\DestinosComision.cs" />
+    <Compile Include="Comisiones\GeneracionCDPComision.cs" />
+    <Compile Include="Comisiones\ParametrosComisiones.cs" />
+    <Compile Include="Comisiones\ParrafoComisiones.cs" />
+    <Compile Include="Comisiones\ViaticoInternacional.cs" />
+    <Compile Include="Core\Accion.cs" />
+    <Compile Include="Core\BaseEntity.cs" />
+    <Compile Include="Core\Configuracion.cs" />
+    <Compile Include="Core\Consulta.cs" />
+    <Compile Include="Core\DefinicionProceso.cs" />
+    <Compile Include="Core\DefinicionWorkflow.cs" />
+    <Compile Include="Core\Denuncia.cs" />
+    <Compile Include="Core\Documento.cs" />
+    <Compile Include="Core\Entidad.cs" />
+    <Compile Include="Core\Festivo.cs" />
+    <Compile Include="Core\Estado.cs" />
+    <Compile Include="Core\Grupo.cs" />
+    <Compile Include="Core\CoreLog.cs" />
+    <Compile Include="Core\Proceso.cs" />
+    <Compile Include="Core\ResponseMessage.cs" />
+    <Compile Include="Core\Rubrica.cs" />
+    <Compile Include="Core\TipoAprobacion.cs" />
+    <Compile Include="Core\TipoDocumento.cs" />
+    <Compile Include="Core\TipoEjecucion.cs" />
+    <Compile Include="Core\TipoPrivacidad.cs" />
+    <Compile Include="Core\Usuario.cs" />
+    <Compile Include="Core\Workflow.cs" />
+    <Compile Include="DTO\DTODomainUser.cs" />
+    <Compile Include="DTO\DTOImputacion.cs" />
+    <Compile Include="DTO\DTOMetadata.cs" />
+    <Compile Include="DTO\DTOSelect.cs" />
+    <Compile Include="DTO\DTOStateProces.cs" />
+    <Compile Include="DTO\WorkflowDTO.cs" />
+    <Compile Include="FirmaDocumento\DTOSolicitud.cs" />
+    <Compile Include="FirmaDocumento\DTOTipoDocumento.cs" />
+    <Compile Include="FirmaDocumento\FirmaDocumento.cs" />
+    <Compile Include="GestionDocumental\GDOrigen.cs" />
+    <Compile Include="GestionDocumental\GD.cs" />
+    <Compile Include="HorasExtras\Colaborador.cs" />
+    <Compile Include="HorasExtras\GeneracionResolucion.cs" />
+    <Compile Include="HorasExtras\HorasExtras.cs" />
+    <Compile Include="Persona\Persona.cs" />
+    <Compile Include="ProgramacionHorasExtraordinarias\ProgramacionHorasExtraordinarias.cs" />
+    <Compile Include="InformeHSA\InformeHSA.cs" />
+    <Compile Include="Pasajes\Cotizacion.cs" />
+    <Compile Include="Pasajes\CotizacionDocumento.cs" />
+    <Compile Include="Pasajes\DestinosPasajes.cs" />
+    <Compile Include="Pasajes\EmpresaAerolinea.cs" />
+    <Compile Include="Pasajes\Pasaje.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\Cargo.cs" />
+    <Compile Include="Shared\Ciudad.cs" />
+    <Compile Include="Shared\Genero.cs" />
+    <Compile Include="Shared\Institucion.cs" />
+    <Compile Include="Shared\Localidad.cs" />
+    <Compile Include="Shared\Pais.cs" />
+    <Compile Include="Shared\Programa.cs" />
+    <Compile Include="Shared\Region.cs" />
+    <Compile Include="Shared\RegionComunaContraloria.cs" />
+    <Compile Include="Shared\Subsecretaria.cs" />
+    <Compile Include="Shared\TipoPagoSIGFE.cs" />
+    <Compile Include="Sigper\DGCOMUNAS.cs" />
+    <Compile Include="Sigper\DGCONTRATOS.cs" />
+    <Compile Include="Sigper\DGESCALAFONES.cs" />
+    <Compile Include="Sigper\DGESTAMENTOS.cs" />
+    <Compile Include="Sigper\DGREGIONES.cs" />
+    <Compile Include="Sigper\LREMREP1Level1.cs" />
+    <Compile Include="Sigper\MARCACIONES.cs" />
+    <Compile Include="Sigper\PECARGOS.cs" />
+    <Compile Include="Sigper\PeDatLab.cs" />
+    <Compile Include="Sigper\PEDATPER.cs" />
+    <Compile Include="Sigper\PEFERJEFAF.cs" />
+    <Compile Include="Sigper\PEFERJEFAJ.cs" />
+    <Compile Include="Sigper\PLUNILAB.cs" />
+    <Compile Include="Sigper\ReContra.cs" />
+    <Compile Include="Sigper\RePagHisDet.cs" />
+    <Compile Include="Sigper\REPYT.cs" />
+    <Compile Include="Sigper\Sigper.cs" />
+    <Compile Include="Comisiones\SIGPERTipoVehiculo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Core\Model.cd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-3.5.1.min.map" />
+    <None Include="Scripts\jquery-3.5.1.slim.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App.Util\App.Util.csproj">
+      <Project>{ab0a6e1a-d5e3-4957-b4bb-9fb4f750f66e}</Project>
+      <Name>App.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\expressive.annotations.validate.js" />
+    <Content Include="Scripts\expressive.annotations.validate.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.5.1.js" />
+    <Content Include="Scripts\jquery-3.5.1.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.2\build\Microsoft.CodeAnalysis.Analyzers.targets')" />
+</Project>

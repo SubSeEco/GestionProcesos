@@ -1,0 +1,225 @@
+﻿@model App.Web.Controllers.CometidoController.DTOFilterCometido
+
+@{
+    ViewBag.Title = "Reportes Cometidos";
+    ViewBag.SubTitle = "Reportes Cometidos";
+}
+
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+        @*@ViewBag.User<br />@ViewBag.Grupo*@
+    </div>
+</div>
+<div class="section"></div>
+
+<div class="container">
+    @Html.Partial("_Message")
+
+    @if (@ViewBag.Grupo == "0" || @ViewBag.Grupo == "4" || @ViewBag.Grupo == "7" || @ViewBag.Grupo == "6" || @ViewBag.Grupo == "5" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8" || @ViewBag.Grupo == "3")
+    {
+        using (Html.BeginForm("SeguimientoGP", null, FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Cometidos Gestión de Personas</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Ir</button>
+                </div>
+            </div>
+        }
+
+        @*using (Html.BeginForm("FueraPlazo", null, FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Cometidos Fuera de Plazo</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+    }
+
+    @if (@ViewBag.Grupo == "4" || @ViewBag.Grupo == "7" || @ViewBag.Grupo == "6" || @ViewBag.Grupo == "5" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
+    {
+
+        @*using (Html.BeginForm("Caigg", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte CAIGG</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+        @*using (Html.BeginForm("SeguimientoFinanzas", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Seguimiento Finanzas</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+        using (Html.BeginForm("CDCFinanzas", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte CDC Finanzas</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "red-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }
+
+        @*using (Html.BeginForm("DownloadSeguimiento", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Seguimiento Unidades</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Desde)
+                            @Html.EditorFor(m => Model.Desde)
+                            @Html.ValidationMessageFor(m => Model.Desde, "", new { @class = "ted-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.Hasta)
+                            @Html.EditorFor(m => Model.Hasta)
+                            @Html.ValidationMessageFor(m => Model.Hasta, "", new { @class = "ted-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+        @*using (Html.BeginForm("SolicitudTransparencia", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Solicitudes Transparencia</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+
+        @*using (Html.BeginForm("ReportePresupuesto", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Presupuesto</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }*@
+    }
+
+    @if (@ViewBag.Grupo == "20" || @ViewBag.Grupo == "1" || @ViewBag.Grupo == "8")
+    {
+
+        using (Html.BeginForm("ReporteContraloria", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte XML Contraloria</span>
+                    <div class="row">
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.FechaInicio)
+                            @Html.EditorFor(m => Model.FechaInicio)
+                            @Html.ValidationMessageFor(m => Model.FechaInicio, "", new { @class = "ted-text" })
+                        </div>
+                        <div class="col s12 m2 l3">
+                            @Html.LabelFor(m => Model.FechaTermino)
+                            @Html.EditorFor(m => Model.FechaTermino)
+                            @Html.ValidationMessageFor(m => Model.FechaTermino, "", new { @class = "ted-text" })
+                        </div>
+                    </div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }
+    }
+
+    @if (@ViewBag.Grupo == "1")
+    {
+        using (Html.BeginForm("ColumnChart", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Estadistica</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Ir</button>
+                </div>
+            </div>
+        }
+        
+    }
+
+    @if(@ViewBag.Grupo =="1"||@ViewBag.Grupo=="8")
+    {
+        using (Html.BeginForm("AjusteAsistencia", null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Reporte Ajuste de Asistencia</span>
+                    <div class="section"></div>
+                    <button class="waves-effect waves-light btn blue">Descargar</button>
+                </div>
+            </div>
+        }
+    }
+</div>

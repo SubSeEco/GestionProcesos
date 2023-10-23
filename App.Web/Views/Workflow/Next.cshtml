@@ -1,0 +1,159 @@
+﻿@model App.Model.Core.Workflow
+
+<h3>Enviar tarea</h3>
+
+@using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.WorkflowId)
+
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.Nombre)
+    @Html.HiddenFor(q => Model.DefinicionWorkflow.Secuencia)
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Evaluar y enviar</span>
+            <div class="row">
+                @if (Model.DefinicionWorkflow.RequiereAprobacionAlEnviar)
+                {
+                    <div class="input-field col s12 m8 l8">
+                        @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @onchange = "onchangeevent();", @id = "TipoAprobacionId" })
+                        @Html.LabelFor(m => Model.TipoAprobacionId)
+                        @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
+                    </div>
+                }
+                @if (Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                {
+                    <div id="GrupoId">
+                        <div class="input-field col s12 m8 l8">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m8 l8">
+
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.To)
+                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m8 l8">
+                            @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.GrupoId)
+                            @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                }
+
+                <div class="input-field col s12 m8 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+
+        </div>
+    </div>
+
+    
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Reenviar tarea</span>
+            <div class="row">
+                @if (Model.DefinicionWorkflow.PermitirMultipleEvaluacion)
+                {
+                    <div id="GrupoId">
+                        <div class="input-field col s12 m8 l8">
+                            @Html.DropDownListFor(m => m.Pl_UndCod, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.Pl_UndCod)
+                            @Html.ValidationMessageFor(m => Model.Pl_UndCod, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m8 l8">
+
+                            @Html.DropDownListFor(model => model.To, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.To)
+                            @Html.ValidationMessageFor(m => Model.To, "", new { @class = "red-text" })
+                        </div>
+                        <div class="input-field col s12 m8 l8">
+                            @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...")
+                            @Html.LabelFor(m => Model.GrupoId)
+                            @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                        </div>
+                    </div>
+                }
+
+                <div class="input-field col s12 m8 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Archivar tarea</span>
+            <div class="row">
+                <div class="input-field col s12 m8 l8">
+                    @Html.TextAreaFor(m => Model.Observacion, new { @type = "textarea ", @class = "materialize-textarea" })
+                    @Html.LabelFor(m => Model.Observacion)
+                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+                </div>
+            </div>
+
+            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+
+        </div>
+    </div>
+
+}
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+
+        $("#Pl_UndCod").change(function () {
+            var Pl_UndCod = $(this).val();
+            $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+                function (classesData) {
+                    var select = $("#To");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: "",
+                        text: "Seleccione..."
+                    }));
+                    $.each(classesData, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Email,
+                            text: itemData.Nombre
+                        }));
+                    });
+                    $('#To').formSelect();
+                });
+        });
+    });
+
+                        //function onchangeevent() {
+                        //    var TipoAprobacionId = document.getElementById('TipoAprobacionId').value;
+
+                        //    if (TipoAprobacionId != 2) {
+                        //        $("#GrupoId").show();
+                        //    }
+                        //    else {
+                        //        $("#GrupoId").hide();
+                        //    }
+                        //}
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

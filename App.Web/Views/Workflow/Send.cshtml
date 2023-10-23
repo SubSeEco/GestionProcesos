@@ -1,0 +1,177 @@
+﻿@model App.Model.Core.Workflow
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="container">
+
+    @if (Model.EsAprobacionCometidoCompraPasaje)
+    {
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">Notas:</span>
+                <p>
+                    <strong>
+                        Al APROBAR está autorizando simultáneamente el cometido y la compra de pasajes.
+                    </strong>
+                </p>
+                <p>
+                    <strong>
+                        Recuerde que se debe seleccionar el pasaje más económico.
+                    </strong>
+                    La Circular 02/19, obliga a solicitar el pasaje aéreo más económico, en el caso de no elegirlo, la jefatura debe justificar detalladamente el por qué y será responsable de esta selección en caso de auditoría o investigación sumaria.
+                </p>
+            </div>
+        </div>
+    }
+
+    @Html.Partial("_Message")
+
+    <div class="row">
+        <div class="col s12 m6 l6">
+            @if (Model.PermitirTerminar)
+            {
+                using (Html.BeginForm("Send", "Workflow", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(q => Model.WorkflowId)
+                    @Html.HiddenFor(q => Model.RequiereAprobacionAlEnviar)
+                    @Html.HiddenFor(q => Model.PermitirMultipleEvaluacion)
+                    @Html.HiddenFor(q => Model.PermitirSeleccionarUnidadDestino)
+                    @Html.HiddenFor(q => Model.PermitirSeleccionarPersonasMismaUnidad)
+                    @Html.HiddenFor(q => Model.PermitirSeleccionarGrupoEspecialDestino)
+                    @Html.HiddenFor(q => Model.PermitirTerminar)
+                    @Html.HiddenFor(q => Model.Reservado)
+                    @*@Html.HiddenFor(q => Model.Pl_UndCod)*@
+                    @Html.HiddenFor(q => Model.DesactivarDestinoEnRechazo)
+
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Enviar proceso</span>
+                            @if (Model.RequiereAprobacionAlEnviar)
+                            {
+                                <div class="row">
+                                    <div class="col s12 m12 l12">
+                                        @Html.LabelFor(m => Model.TipoAprobacionId)
+                                        @Html.DropDownListFor(model => model.TipoAprobacionId, null, "Seleccione...", new { @class = "browser-default", @id = "dllTipoAprobacionId" })
+                                        @Html.ValidationMessageFor(m => Model.TipoAprobacionId, "", new { @class = "red-text" })
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(q => Model.TipoAprobacionId)
+                            }
+
+                            @if (Model.PermitirSeleccionarUnidadDestino)
+                            {
+                                <div id="divDestino">
+                                    @if (!Model.PermitirSeleccionarPersonasMismaUnidad)
+                                    {
+                                        <div class="row">
+                                            <div class="col s12 m12 l12">
+                                                @Html.LabelFor(m => Model.Unidad)
+                                                @Html.DropDownListFor(m => m.Unidad, null, "Seleccione...", new { @class = "browser-default", @id = "ddlUnidad" })
+                                                @Html.ValidationMessageFor(m => Model.Unidad, "", new { @class = "red-text" })
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row">
+                                        <div class="col s12 m12 l12">
+                                            @Html.LabelFor(m => Model.Funcionario)
+                                            @Html.DropDownListFor(model => model.Funcionario, null, "Seleccione...", new { @class = "browser-default" })
+                                            @Html.ValidationMessageFor(m => Model.Funcionario, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.PermitirSeleccionarGrupoEspecialDestino)
+                            {
+                                <div class="row">
+                                    <div class="col s12 m12 l12">
+                                        @Html.LabelFor(m => Model.GrupoId)
+                                        @Html.DropDownListFor(model => model.GrupoId, null, "Seleccione...", new { @class = "browser-default" })
+                                        @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="input-field col s12 m12 l12">
+                                    @Html.TextAreaFor(m => Model.Observacion, new { @class = "materialize-textarea" })
+                                    @Html.LabelFor(m => Model.Observacion)
+                                    @Html.ValidationMessageFor(m => Model.Observacion, "", new { @class = "red-text" })
+
+                                </div>
+                            </div>
+                            <button class="waves-effect waves-light btn blue" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col s12 m6 l6">
+            @if (Model.PermitirFinalizarProceso)
+            {
+                using (Html.BeginForm("Stop", "Workflow", FormMethod.Post))
+                {
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Finalizar proceso</span>
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(q => Model.WorkflowId)
+                            @Html.HiddenFor(q => Model.TipoAprobacionId)
+
+                            <div class="row">
+                                <div class="col s12 m8 l10">
+                                    @Html.LabelFor(m => Model.Mensaje)
+                                    @Html.TextAreaFor(m => Model.Mensaje, new { @type = "textarea ", @class = "materialize-textarea" })
+                                    @Html.ValidationMessageFor(m => Model.Mensaje, "", new { @class = "red-text" })
+                                </div>
+                            </div>
+                            <button class="waves-effect waves-light btn red" type="submit">Finalizar</button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back(-2)" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>
+</div>
+
+<script>
+    $("#ddlUnidad").change(function () {
+        var Pl_UndCod = $(this).val();
+        $.getJSON("/Workflow/GetUserByUnidad", { Pl_UndCod: Pl_UndCod },
+            function (classesData) {
+                var select = $("#Funcionario");
+                select.empty();
+                select.append($('<option/>', {
+                    value: "",
+                    text: "Seleccione..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Email,
+                        text: itemData.Nombre
+                    }));
+                });
+            });
+    });
+
+    $("#dllTipoAprobacionId").change(function () {
+
+        var DesactivarDestinoEnRechazo = $("#DesactivarDestinoEnRechazo").val();;
+        if (DesactivarDestinoEnRechazo) {
+            var TipoAprobacionId = $(this).val();
+            if (TipoAprobacionId == 3) {
+                $('#divDestino').toggle(false);
+            }
+            else {
+                $('#divDestino').toggle(true);
+            }
+        }
+    });
+
+</script>

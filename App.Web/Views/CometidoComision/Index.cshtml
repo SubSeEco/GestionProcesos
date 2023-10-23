@@ -1,0 +1,78 @@
+﻿@model App.Web.Controllers.HomeController.DTOUser
+
+@{
+    ViewBag.Title = "Cometido-comisiones";
+    ViewBag.SubTitle = "Cometido-comisiones";
+}
+
+<div class="grey lighten-3">
+    <div class="section container ">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <br />
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m4 l4">
+            <div class="card hoverable" style="height:380px">
+                <div class="card-content">
+                    <span class="card-title">Cometidos</span>
+                </div>
+                <div class="card-action">
+                    <a href='@Url.Action("Index", "Viatico")' class="waves-effect waves-light blue-text">Viatico</a><br />
+                    <a href='@Url.Action("Index", "ViaticoHonorario")' class="waves-effect waves-light blue-text">Viatico Honorario</a><br />
+                    <a href='@Url.Action("Index", "TipoAsignacion")' class="waves-effect waves-light blue-text">Tipo Asignacion</a><br />
+                    <a href='@Url.Action("Index", "TipoCapitulo")' class="waves-effect waves-light blue-text">Tipo Capitulo</a><br />
+                    <a href='@Url.Action("Index", "TipoItem")' class="waves-effect waves-light blue-text">Tipo Item</a><br />
+                    <a href='@Url.Action("Index", "TipoPartida")' class="waves-effect waves-light blue-text">Tipo Partida</a><br />
+                    <a href='@Url.Action("Index", "TipoSubAsignacion")' class="waves-effect waves-light blue-text">Tipo SubAsignacion</a><br />
+                    <a href='@Url.Action("Index", "TipoSubTitulo")' class="waves-effect waves-light blue-text">Tipo SubTitulo</a><br />
+                    <a href='@Url.Action("Index", "CentroCosto")' class="waves-effect waves-light blue-text">Centro Costo</a><br />
+                    <a href='@Url.Action("Index", "Parrafos")' class="waves-effect waves-light blue-text">Parrafos</a><br />
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m4 l4">
+            <div class="card hoverable" style="height:380px">
+                <div class="card-content">
+                    <span class="card-title">Comisiones</span>
+                </div>
+                <div class="card-action">
+                    <a href='@Url.Action("Index", "ViaticoInternacional")' class="waves-effect waves-light blue-text">Viatico Internacional</a><br />
+                    <a href='@Url.Action("Index", "ParrafoComisiones")' class="waves-effect waves-light blue-text">Parrafo Comisiones</a><br />
+                    <a href='@Url.Action("Index", "ParametrosComisiones")' class="waves-effect waves-light blue-text">Parametros Comisiones</a><br />
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4 l4">
+            <div class="card hoverable" style="height:380px">
+                <div class="card-content">
+                    <span class="card-title">Pasajes</span>
+                </div>
+                <div class="card-action">
+                    <a href='@Url.Action("Index", "EmpresaAerolinea")' class="waves-effect waves-light blue-text">Empresa Aerolinea</a><br />
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4 l4">
+            <div class="card hoverable" style="height:300px">
+                <div class="card-content">
+                    <span class="card-title">Reportes</span>
+                </div>
+                <div class="card-action">
+                    <a href='@Url.Action("Caigg", "Cometido")' class="waves-effect waves-light blue-text">CAIGG (Excel)</a><br />
+                    <a href='@Url.Action("SeguimientoGP", "Cometido")' class="waves-effect waves-light blue-text">Seguimiento Gestion Personas</a><br />
+                    <a href='@Url.Action("SeguimientoFinanzas", "Cometido")' class="waves-effect waves-light blue-text">Seguimiento Finanzas</a><br />
+                    <a href='@Url.Action("SeguimientoUnidades", "Cometido")' class="waves-effect waves-light blue-text">Seguimiento Unidades</a><br />
+                    <a href='@Url.Action("SolicitudTransparencia", "Cometido")' class="waves-effect waves-light blue-text">Solicitudes Transparencia (Excel)</a><br />
+                    <a href='@Url.Action("ReportePresupuesto", "Cometido")' class="waves-effect waves-light blue-text">Reporte Presupuesto (Excel)</a><br />
+                    <a href='@Url.Action("AjusteAsistencia", "Cometido")' class="waves-effect waves-light blue-text">Ajuste de Asistencia (Excel)</a><br />
+                    <a href='@Url.Action("ReporteContraloria", "Cometido")' class="waves-effect waves-light blue-text">Reporte Contraloria (XML)</a><br />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

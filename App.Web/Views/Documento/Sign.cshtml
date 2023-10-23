@@ -1,0 +1,40 @@
+﻿@model App.Model.Core.Documento
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("Sign", "Document", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ProcesoId)
+    @Html.HiddenFor(model => model.WorkflowId)
+    @Html.HiddenFor(model => model.DocumentoId)
+    @Html.HiddenFor(model => model.SerialNumber)
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <strong>@Html.DisplayNameFor(m => Model.FileName)</strong><br />
+        @Html.DisplayFor(m => Model.FileName)
+        <br />
+        <strong>@Html.DisplayNameFor(m => Model.Fecha)</strong><br />
+        @Html.DisplayFor(m => Model.Fecha)
+        <br />
+        <strong>@Html.DisplayNameFor(m => Model.Email)</strong><br />
+        @Html.DisplayFor(m => Model.Email)
+        <br />
+        <strong>@Html.DisplayNameFor(m => Model.Workflow.DefinicionWorkflow.Nombre)</strong><br />
+        @Html.DisplayFor(m => Model.Workflow.DefinicionWorkflow.Nombre)
+    </div>
+
+    <button class="waves-effect waves-light btn blue" type="submit">Firmar documento</button>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

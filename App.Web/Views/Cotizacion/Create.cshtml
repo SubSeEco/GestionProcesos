@@ -1,0 +1,136 @@
+﻿@model App.Model.Pasajes.Cotizacion
+
+<div class="container">
+    <div class="section"></div>
+
+    @using (Html.BeginForm("Create", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(q => Model.PasajeId)
+        @Html.HiddenFor(q => Model.TipoCambio)
+        @Html.HiddenFor(q => Model.FechaTipoCambio)
+
+        <div class="row">
+            <div class="col s12 m6 l12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Agregar Cotizacion</span>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            @if (Model.Pasaje.TipoDestino != true)
+                            {
+                                <div id="divInterNacional">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TipoCambio, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.TipoCambio, new { htmlAttributes = new { @class = "form-control"/*, disabled = "disabled" */} })
+                                            @Html.ValidationMessageFor(model => model.TipoCambio, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FechaTipoCambio, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.FechaTipoCambio, new { htmlAttributes = new { @class = "form-control"/*, disabled = "disabled"*/ } })
+                                        @Html.ValidationMessageFor(model => model.FechaTipoCambio, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ValorPasaje, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ValorPasaje, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ValorPasaje, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NombreEmpresa, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @*@Html.EditorFor(model => model.NombreEmpresa, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.DropDownListFor(m => Model.EmpresaAerolineaId, null, "Seleccione...")
+                                    @Html.ValidationMessageFor(model => model.NombreEmpresa, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VencimientoCotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.VencimientoCotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VencimientoCotizacion, "", htmlAttributes: new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <label style="color:green">
+                                @Html.Raw("<span>“La cotizacion a adjuntar debe ser en formato PDF”</span>")
+                            </label>
+                            <div class="file-field input-field">
+
+                                <div class="btn grey">
+                                    <i class="material-icons">attach_file</i>
+                                    @Html.TextBoxFor(model => model.CotizacionDocumento.FirstOrDefault().File, "", new { @type = "file", @multiple = "multiple", accept = ".pdf" })
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Buscar archivo...">
+                                </div>
+                                @Html.ValidationMessageFor(model => model.CotizacionDocumento.FirstOrDefault().File, "", new { @class = "red-text" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_Message")
+        <p>
+            <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+        </p>
+    }
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaTipoCambio,#VencimientoCotizacion').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y H:i',
+            //minDate: 0,
+            timepicker: false
+        });
+
+        $('select').formSelect();
+    });
+
+    /*funcion valida subida de archivo pdf*/
+    $('input[type="file"]').on('change', function () {
+        var ext = $(this).val().split('.').pop();
+        if (ext != "pdf") {
+            alert("Extensión no permitida: " + ext);
+            return false;
+        }
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

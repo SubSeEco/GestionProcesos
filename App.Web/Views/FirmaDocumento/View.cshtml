@@ -1,0 +1,79 @@
+﻿@model App.Model.FirmaDocumento.FirmaDocumento
+
+@Html.Action("Header", "Proceso", new { Model.ProcesoId })
+
+<style>
+    .container {
+        width: 85%;
+    }
+</style>
+
+<div class="container">
+    @Html.Partial("_Message")
+
+    <div class="row">
+        <div class="col s12 m8 l8">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Firma de documento</span>
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.TipoDocumentoDescripcion)</strong><br />
+                        @Html.DisplayFor(m => Model.TipoDocumentoDescripcion)
+                    </div>
+
+                    <div class="input-field truncate">
+                        <strong>@Html.DisplayNameFor(m => Model.URL)</strong><br />
+                        @if (!string.IsNullOrWhiteSpace(Model.URL))
+                        {
+                            <a href="@Model.URL" target="_blank">@Model.URL</a>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(m => Model.URL)
+                        }
+                    </div>
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.Autor)</strong><br />
+                        @Html.DisplayFor(m => Model.Autor)
+                    </div>
+
+                    <div class="input-field">
+                        <strong>@Html.DisplayNameFor(m => Model.FechaCreacion)</strong><br />
+                        @Html.DisplayFor(m => Model.FechaCreacion)
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Folio))
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.Folio)</strong><br />
+                            @Html.DisplayFor(m => Model.Folio)
+                        </div>
+                    }
+
+                    @if (Model.DocumentoSinFirma != null)
+                    {
+                        <div class="input-field">
+                            <strong>@Html.DisplayNameFor(m => Model.DocumentoSinFirma)</strong>
+                            <embed src="@Url.Action("ShowDocumentoSinFirma", "FirmaDocumento", new { id = Model.FirmaDocumentoId })" type="application/pdf" width="100%" height="300px"></embed>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4 l4">
+            @Html.Action("Documents", "Workflow", new { Model.WorkflowId })
+            @Html.Action("History", "Workflow", new { Model.WorkflowId })
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('.tooltipped').tooltip();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<App.Model.Core.Workflow>
+@using Enum = App.Util.Enum;
+@{
+    Layout = null;
+
+
+}
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Historial</span>
+
+        <table class="table table-responsive bordered" id="dt">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Tarea
+                    </th>
+                    <th>
+                        Inicio
+                    </th>
+                    <th>
+                        Término
+                    </th>
+                    <th>
+                        Funcionario
+                    </th>
+                    <th>
+                        Estado
+                    </th>
+                    <th>
+                        Observación
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.Where(q=>!q.Anulada).OrderByDescending(q=>q.WorkflowId))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WorkflowId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DefinicionWorkflow.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaTermino)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreFuncionario) <br />
+                            <span class="grey-text">@Html.DisplayFor(modelItem => item.Pl_UndDes)</span><br />
+                        </td>
+                        <td>
+                            @if (item.TipoAprobacionId == (int)Enum.TipoAprobacion.SinAprobacion)
+                            {
+                                @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.TipoAprobacion.Nombre)
+                                if (item.EsTareaCierre)
+                                {
+                                    <p> y cerrada</p>
+                                }
+                                else
+                                {
+                                    <p> y reenviada</p>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

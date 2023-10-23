@@ -1,0 +1,94 @@
+﻿@model App.Model.Core.DefinicionWorkflow
+
+<h3>Editar tarea</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.DefinicionWorkflowId)
+    @Html.HiddenFor(q => Model.DefinicionProcesoId)
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Nombre)
+                    @Html.LabelFor(m => Model.Nombre)
+                    @Html.ValidationMessageFor(m => Model.Nombre, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Descripcion)
+                    @Html.LabelFor(m => Model.Descripcion)
+                    @Html.ValidationMessageFor(m => Model.Descripcion, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Secuencia)
+                    @Html.LabelFor(m => Model.Secuencia)
+                    @Html.ValidationMessageFor(m => Model.Secuencia, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Entidad)
+                    @Html.LabelFor(m => Model.Entidad)
+                    @Html.ValidationMessageFor(m => Model.Entidad, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.Accion)
+                    @Html.LabelFor(m => Model.Accion)
+                    @Html.ValidationMessageFor(m => Model.Accion, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.DropDownListFor(m => Model.GrupoId, null, "Seleccione...", new { @class = "browser-default" })
+                    @Html.LabelFor(m => Model.GrupoId)
+                    @Html.ValidationMessageFor(m => Model.GrupoId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.DropDownListFor(m => Model.DefinicionWorkflowRechazoId, null, "Seleccione...", new { @class = "browser-default" })
+                    @Html.LabelFor(m => Model.DefinicionWorkflowRechazoId)
+                    @Html.ValidationMessageFor(m => Model.DefinicionWorkflowRechazoId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.DropDownListFor(m => Model.DefinicionWorkflowDependeDeId, null, "Seleccione...", new { @class = "browser-default" })
+                    @Html.LabelFor(m => Model.DefinicionWorkflowDependeDeId)
+                    @Html.ValidationMessageFor(m => Model.DefinicionWorkflowDependeDeId, "", new { @class = "red-text" })
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    @Html.TextBoxFor(m => Model.DuracionDias, new { @type = "number" })
+                    @Html.LabelFor(m => Model.DuracionDias)
+                    @Html.ValidationMessageFor(m => Model.DuracionDias, "", new { @class = "red-text" })
+                </div>
+
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.Habilitado)
+                        <span>@Html.LabelFor(m => Model.Habilitado)</span>
+                    </label>
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.NotificarCorreo)
+                        <span>@Html.LabelFor(m => Model.NotificarCorreo)</span>
+                    </label>
+                </div>
+                <div class="input-field col s12 m10 l10">
+                    <label>
+                        @Html.CheckBoxFor(m => m.RequiereAprobacion)
+                        <span>@Html.LabelFor(m => Model.RequiereAprobacion)</span>
+                    </label>
+                </div>
+
+            </div>
+            <br />
+            <button class="waves-effect waves-light btn blue" type="submit">Aceptar</button>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

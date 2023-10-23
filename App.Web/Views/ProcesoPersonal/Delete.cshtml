@@ -1,0 +1,38 @@
+﻿@model App.Web.Controllers.ProcesoPersonalController.DTODelete
+
+@{
+    ViewBag.Title = "Anular proceso";
+    ViewBag.SubTitle = "Confirmación de la anulación";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+<div class="container">
+    @Html.Partial("_Message")
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(q => Model.ProcesoId)
+
+        <div class="row">
+            <div class="input-field col s12 m12 l12">
+                @Html.TextAreaFor(m => Model.JustificacionAnulacion, new { @class = "materialize-textarea" })
+                @Html.LabelFor(m => Model.JustificacionAnulacion)
+                @Html.ValidationMessageFor(m => Model.JustificacionAnulacion, "", new { @class = "red-text" })
+
+            </div>
+        </div>
+
+        <button class="waves-effect waves-light btn red" type="submit">Confirmar anulación</button>
+    }
+</div>
+
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>

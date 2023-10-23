@@ -1,0 +1,154 @@
+﻿@model App.Model.Pasajes.DestinosPasajes
+@*@Html.Action("Header", "Workflow", new { Model.WorkflowId })*@
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 l12">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @*@Html.HiddenFor(q => Model.WorkflowId)*@
+                @Html.HiddenFor(q => Model.DestinosPasajesId)
+                @Html.HiddenFor(q => Model.PasajeId)
+
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Destinos Pasajes</span>
+                        <div class="row">
+                            @if (Model.Pasaje.TipoDestino == true)
+                            {
+                                <div id="divNacional">
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OrigenRegionDescripcion)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FechaOrigen)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.RegionDescripcion)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FechaVuelta)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.OrigenRegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.FechaOrigen)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => Model.RegionDescripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(model => Model.FechaVuelta)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="input-field col s12 m10 l3">
+                                        @Html.DisplayNameFor(m => Model.ObservacionesDestinos)
+                                        @Html.DisplayFor(m => Model.ObservacionesDestinos)
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        @Html.DisplayNameFor(m => Model.ObservacionesOrigen)
+                                        @Html.DisplayFor(m => Model.ObservacionesOrigen)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="mydiv">
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OrigenPaisDescripcion)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FechaOrigen)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.PaisDescripcion)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FechaVuelta)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DropDownListFor(m => Model.IdPaisOrigen, null, "Seleccione...")
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => Model.FechaOrigen, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                @Html.ValidationMessageFor(m => Model.FechaOrigen, "", new { @class = "red-text" })
+                                            </td>
+                                            <td>
+                                                @Html.DropDownListFor(m => Model.IdPais, null, "Seleccione...")
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => Model.FechaVuelta, new { style = "width:130px"/*, disabled = "disabled" */})
+                                                @Html.ValidationMessageFor(m => Model.FechaVuelta, "", new { @class = "red-text" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="input-field col s12 m10 l3">
+                                        @Html.TextBoxFor(m => Model.ObservacionesDestinos)
+                                        @Html.LabelFor(m => Model.ObservacionesDestinos)
+                                    </div>
+                                    <div class="input-field col s12 m10 l3">
+                                        @Html.TextBoxFor(m => Model.ObservacionesOrigen)
+                                        @Html.LabelFor(m => Model.ObservacionesOrigen)
+                                    </div>
+                                </div>
+                            }
+                            <div class="section"></div>
+                            <p>
+                                <button class="waves-effect waves-light btn blue" type="submit" onclick="valida">Borrar</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="fixed-action-btn">
+    <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.datetimepicker.setLocale('es');
+        jQuery('#FechaOrigen,#FechaVuelta').datetimepicker({
+            i18n: {
+                es: {
+                    months: [
+                        'Enero', 'Febrero', 'Marzo', 'Abril',
+                        'Mayo', 'Junio', 'Julio', 'Agosto',
+                        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+                    ]
+                }
+            },
+            timepicker: false,
+            todayButton: true,
+            dayOfWeekStart: 1,
+            formatDate: 'd-m-Y',
+            //minDate:0
+        });
+
+        $('select').formSelect();
+
+    });
+</script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+@*<link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+
+<link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<App.Model.Comisiones.ParrafoComisiones>
+<div class="container">
+    <h3>Parrafos</h3>
+    <div class="card">
+        <div class="card-content">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoComisionesId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoTexto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParrafoActivo)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParrafoComisionesId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParrafoTexto)
+                        </td>
+                        <td>
+                            @if (item.ParrafoActivo)
+                            {
+                                <p>True</p>
+                            }
+                            else
+                            {
+                                <p>False</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detalles", "Details", new { id = item.ParrafoComisionesId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn">
+    <a href='@Url.Action("Create")' class="btn-floating btn-large blue tooltipped" data-position="left" data-delay="500" data-tooltip="Agregar nuevo elemento"><i class="large material-icons">add</i></a>
+</div>
+@*<br />
+    <div class="fixed-action-btn">
+        <a href="javascript:history.back()" class="btn-floating btn-large grey"><i class="large material-icons">chevron_left</i></a>
+    </div>*@
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input:hidden').each(function (index, element) {
+            $(element).appendTo($(element).parent());
+        });
+    });
+</script>

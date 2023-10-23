@@ -1,0 +1,560 @@
+﻿@model App.Model.Cometido.Cometido
+
+@Html.Action("Header", "Workflow", new { Model.WorkflowId })
+
+<div class="container">
+    <div id="card-alert" class="card blue-grey lighten-1">
+        <div class="card-content white-text">
+            <span class="card-title white-text darken-1"><i class="mdi-social-notifications"></i>Atencion.!</span>
+            <p>
+                Toda solicitud deberá ser tramitada con al menos 7 días corridos previos a su inicio, según lo indicado en el Instructivo de Buen Uso de Recursos Fiscales (GAB.PRES.N001), de lo contrario, deberá contar con la respectiva justificación y la visación del Jefe de Servicio.
+                Además, siempre deberá adjuntar el itinerario de desplazamiento y el programa de actividades a realizar. Toda documentación adjuntada que deba ser firmada, debe ser un archivo PDF.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 l12">
+            @Html.Partial("_Message")
+            @using (Html.BeginForm("Create", "Cometido", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(q => Model.WorkflowId)
+                @Html.HiddenFor(q => Model.ProcesoId)
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdUnidad)
+                @Html.HiddenFor(q => Model.IdCargo)
+                @Html.HiddenFor(q => Model.IdCalidad)
+                @Html.HiddenFor(q => Model.IdGrado)
+                @Html.HiddenFor(q => Model.IdEstamento)
+                @Html.HiddenFor(q => Model.IdPrograma)
+                @Html.HiddenFor(q => Model.IdConglomerado)
+                @Html.HiddenFor(q => Model.FinanciaOrganismo)
+                @Html.HiddenFor(q => Model.IdEscalafon)
+                @Html.HiddenFor(q => Model.EscalafonDescripcion)
+                @Html.HiddenFor(q => Model.IdPrograma)
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "red-text" })
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="input-field col s12 m10 l3">
+                                @Html.TextBoxFor(m => Model.FechaSolicitud, new { @disabled = "disabled" })
+                                @Html.LabelFor(m => Model.FechaSolicitud)
+                                @Html.ValidationMessageFor(m => Model.FechaSolicitud, "", new { @class = "red-text" })
+                            </div>
+                            <div class="input-field col s12 m6 l4">
+                                @Html.DisplayFor(m => Model.CometidoId)
+                                @Html.LabelFor(m => Model.CometidoId)
+                            </div>
+                        </div>
+                        <ul class="collapsible popout">
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">I. Datos del Funcionario: </span></div>
+                                <div class="collapsible-body col-12">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <i class="material-icons prefix">account_box</i>
+                                            @Html.DropDownListFor(m => Model.NombreId, null, "Seleccione...")
+                                            @Html.LabelFor(m => Model.Nombre)
+                                            @Html.ValidationMessageFor(m => Model.NombreId, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">fingerprint</i>
+                                            @Html.LabelFor(m => Model.Rut)
+                                            @Html.EditorFor(m => Model.Rut, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.Rut, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.DV)
+                                            @Html.EditorFor(m => Model.DV, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.DV, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">group</i>
+                                            @Html.EditorFor(m => Model.Jefatura, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.LabelFor(m => Model.Jefatura)
+                                            @Html.ValidationMessageFor(m => Model.Jefatura, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">                                            
+                                            @Html.LabelFor(m => Model.UnidadDescripcion)
+                                            @Html.EditorFor(m => Model.UnidadDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.UnidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">content_paste</i>
+                                            @Html.LabelFor(m => Model.CargoDescripcion)
+                                            @Html.EditorFor(m => Model.CargoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.CargoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.CalidadDescripcion)
+                                            @Html.EditorFor(m => Model.CalidadDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.CalidadDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <i class="material-icons prefix">grade</i>
+                                            @Html.EditorFor(m => Model.GradoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.LabelFor(m => Model.GradoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.GradoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s6">
+                                            @Html.LabelFor(m => Model.EstamentoDescripcion)
+                                            @Html.EditorFor(m => Model.EstamentoDescripcion, null, new { htmlAttributes = new { @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(m => Model.EstamentoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>                                    
+                                    
+                                    <div class="input-field">
+                                        @Html.TextBoxFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
+                                        @Html.LabelFor(m => Model.ProgramaDescripcion, new { style = "display:none" })
+                                    </div>
+                                    <div class="input-field">
+                                        @Html.TextBoxFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
+                                        @Html.LabelFor(m => Model.ConglomeradoDescripcion, new { style = "display:none" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">II. Datos de la Solicitud: </span></div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <p>Marque la(s) casilla(s) en la(s) opción(es) que la Subsecretaría de Economía y EMT debe gestionar y/o financiar</p>
+                                        <div class="col s12">
+                                            @Html.LabelFor(m => Model.FinanciaOrganismo)<br />
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, true)
+                                                <span>SI</span>
+                                            </label>
+                                            <label>
+                                                @Html.RadioButtonFor(m => Model.FinanciaOrganismo, false)
+                                                <span>NO</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <p>Marque las opciones que SI financia el organismo invitante</p>
+                                        @*<label style="color:green">
+                            @Html.Raw("<span>“Marque las opciones que SI financia el organismo invitante” </span>")
+                        </label>*@
+                                        <div class="Financia input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.Alojamiento, new { @disabled = "disabled", @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Alojamiento)</span>
+                                            </label>
+                                        </div>
+                                        <div class="Financia input-field col s12">
+                                            <label for="Alimentacion">
+                                                @Html.CheckBoxFor(m => Model.Alimentacion, new { @disabled = "disabled", @class="filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Alimentacion)</span>
+                                            </label>
+                                        </div>
+                                        <div class="Financia input-field col s12">
+                                            <label for="Pasajes">
+                                                @Html.CheckBoxFor(m => Model.Pasajes, new { @disabled = "disabled", @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.Pasajes)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.SolicitaViatico, new {@class = "filled-in" })
+                                                <span>
+                                                    <strong>@Html.LabelFor(m => Model.SolicitaViatico, new { @style = "color:#008000"})</strong>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="section"></div>
+                                        <div class="input-field col s12" style="font-weight: bold;">
+                                            
+                                                <span>Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:</span>
+                                            
+                                            @*<label style="color:green">
+                                @Html.Raw("<span>“Si su cometido incluye la compra de un pasaje por parte de la Subsecretaría, marque la opción que corresponda:” </span>")
+                            </label>*@
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeAereo, new { @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.ReqPasajeAereo)</span>
+                                            </label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.ReqPasajeTerrestre, new { @class = "filled-in" })
+                                                <span>@Html.LabelFor(m => Model.ReqPasajeTerrestre)</span>
+                                            </label>
+                                        </div>
+                                        <div id="terrestre">
+                                            <div class="input-field col s12">
+                                                <strong >
+                                                    <label style="color:green">
+                                                        “Si desea solicitar el monto del pasaje terrestre antes del viaje, debe hacerlo a través de un memorándum dirigido a la Encargada de Abastecimiento, para lo que se deberá presentar el boleto original una vez que viaje.”
+                                                    </label>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div id="divReembolso">
+                                            <div class="input-field col s12">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => Model.SolicitaReembolso, new { @class = "filled-in" })
+                                                    <span>@Html.LabelFor(m => Model.SolicitaReembolso)</span>
+                                                </label>
+                                                <div class="section"></div>
+                                            </div>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => Model.Vehiculo, new { @class = "filled-in"})
+                                                <span>@Html.LabelFor(m => Model.Vehiculo)</span>
+                                            </label>
+                                            <div class="section"></div>
+                                        </div>
+                                        <div id="auto" style="display:none;">
+                                            <div class="input-field col s12">
+                                                @*@Html.LabelFor(m => Model.TipoVehiculoId)*@
+                                                @Html.DropDownListFor(m => Model.TipoVehiculoId, new SelectList(ViewBag.TipoVehiculoId,"Value","Text",Model.TipoVehiculoId), "Seleccione...", htmlAttributes: new { @id = "TipoVehiculoId"@*, @type = "select"*@ })
+                                                @Html.ValidationMessageFor(m => Model.TipoVehiculoId, "")
+                                            </div>
+                                            <div class="input-field col s12">
+                                                @Html.TextBoxFor(m => Model.PlacaVehiculo)
+                                                @Html.LabelFor(m => Model.PlacaVehiculo)
+                                                @Html.ValidationMessageFor(m => Model.PlacaVehiculo, "", new { @class = "red-text" })
+                                            </div>
+                                            <div class="input-field col s12">
+                                                @Html.EditorFor(m => Model.VehiculoObservaciones, new { htmlAttributes = new { @class = "materialize-textarea" } })
+                                                @Html.LabelFor(m => Model.VehiculoObservaciones)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="section"></div>*@
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header"><span style="font-weight: bold">III. Datos del Cometido: </span></div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            @Html.EditorFor(m => Model.NombreCometido)
+                                            @Html.LabelFor(m => Model.NombreCometido)
+                                            @Html.ValidationMessageFor(m => Model.NombreCometido, "", new { @class = "red-text" })
+                                        </div>
+                                        <div class="input-field col s12">
+                                            @Html.EditorFor(m => Model.CometidoDescripcion, new { htmlAttributes = new {@class = "materialize-textarea" } })
+                                            @Html.LabelFor(m => Model.CometidoDescripcion)
+                                            @Html.ValidationMessageFor(m => Model.CometidoDescripcion, "", new { @class = "red-text" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p>
+                    <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+                </p>
+            }
+        </div>
+    </div>
+
+    @Html.Action("Footer", "Workflow", new { Model.WorkflowId })
+
+    <script>
+        $(document).ready(function () {
+            //jQuery.datetimepicker.setLocale('es');
+            //jQuery('#FechaSolicitud').datetimepicker({
+            //    i18n: {
+            //        es: {
+            //            months: [
+            //                'Enero', 'Febrero', 'Marzo', 'Abril',
+            //                'Mayo', 'Junio', 'Julio', 'Agosto',
+            //                'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+            //            ]
+            //        }
+            //    },
+            //    timepicker: false,
+            //    formatTime: 'H:i',
+            //    formatDate: 'd-m-Y'
+            //});
+
+            $('#divReembolso').hide(100); //oculta checkbox de reembolso
+            //$("#PlacaVehiculo").attr('disabled', true);
+            $("#FechaSolicitud").attr('disabled', true);
+            //$("#TipoVehiculoId").attr('disabled', true);
+            //$("#TipoReembolsoId").attr('disabled', true);
+            $('#auto').hide(100);
+            //$('#terrestre').hide(100);
+            $('.Financia').hide(100);
+            $('select').formSelect();
+            @*$('input:hidden').each(function (index, element) {
+                $(element).appendTo($(element).parent());
+            });*@
+
+            //funcion que habilita opciones de financia organismo invitante
+            $('input:radio[name="FinanciaOrganismo"]').change(function () {
+                if (document.getElementById("FinanciaOrganismo").checked == true) {
+                    $('.Financia').show();
+                }
+                else {
+                    $('.Financia').hide(100);
+                }
+            });
+
+            //funcion modal popup
+            $(function () {
+                $('.Create').click(function () {
+                    $('modal').appendTo('body').dialog({
+                        close: function (event, ui) {
+                            dialog.remove();
+                        },
+                        modal: true
+                    }).load(this.href, {});
+
+                    return false;
+                });
+            });
+
+
+            /**
+             * Carga Patentes
+             * */
+            $('#TipoVehiculoId').on('change',
+                function () {
+                    var TipoVehiculoId = $(this).val();
+                    if (TipoVehiculoId == 5) {
+                        var Rut = document.getElementById('Rut').value;
+                        //alert(TipoVehiculoId)
+                        $.getJSON("/Cometido/GetPatente",
+                            {
+                                TipoVehiculoId: TipoVehiculoId,
+                                Rut: Rut
+                            },
+                            function (classesData) {
+                                document.getElementById('PlacaVehiculo').value = classesData["Patente"]
+                            })
+                    }
+                })
+
+            /*Carga usuario por seleccion de dropdown*/
+            $('#NombreId').on('change',
+                function() {
+                    var Rut = $(this).val(); /*alert(Rut);*/
+                    $.getJSON("/Cometido/GetUsuario",
+                        { Rut: Rut },
+                        function(classesData) {
+                            document.getElementById('Rut').value = classesData["Rut"];
+                            document.getElementById('DV').value = classesData["DV"];
+                            document.getElementById('IdCargo').value = classesData["IdCargo"];
+                            document.getElementById('CargoDescripcion').value = classesData["Cargo"];
+                            document.getElementById('IdCalidad').value = classesData["IdCalidad"];
+                            document.getElementById('CalidadDescripcion').value = classesData["CalidadJuridica"];
+                            document.getElementById('UnidadDescripcion').value = classesData["Unidad"];
+                            document.getElementById('IdGrado').value = classesData["IdGrado"];
+                            document.getElementById('GradoDescripcion').value = classesData["Grado"];
+                            document.getElementById('EstamentoDescripcion').value = classesData["Estamento"];
+                            document.getElementById('ProgramaDescripcion').value = classesData["Programa"];
+                            document.getElementById('ConglomeradoDescripcion').value = classesData["Conglomerado"];
+                            document.getElementById('Jefatura').value = classesData["Jefatura"];
+                            document.getElementById('IdEscalafon').value = classesData["IdEscalafon"];
+                            document.getElementById('EscalafonDescripcion').value = classesData["Escalafon"];
+                            document.getElementById('IdUnidad').value = classesData["IdUnidad"];
+                            document.getElementById('IdPrograma').value = classesData["IdPrograma"];
+                            /*valida antecedentes para desabilitar controles*/
+                            if (document.getElementById("EstamentoDescripcion").value == "") {
+                                $("#EstamentoDescripcion").attr('disabled', true);
+                            } else {
+                                $("#EstamentoDescripcion").attr('disabled', false);
+                            }
+                            if (document.getElementById("GradoDescripcion").value == "Sin Grado") {
+                                $("#GradoDescripcion").attr('disabled', true);
+                            } else {
+                                $("#GradoDescripcion").attr('disabled', false);
+                            }
+                            if (document.getElementById("CargoDescripcion").value == "S/A") {
+                                $("#CargoDescripcion").attr('disabled', true);
+                            } else {
+                                $("#CargoDescripcion").attr('disabled', false);
+                            }
+                            if (document.getElementById("CalidadDescripcion").value == "S/A") {
+                                $("#CalidadDescripcion").attr('disabled', true);
+                            } else {
+                                $("#CalidadDescripcion").attr('disabled', false);
+                            }
+                            if (document.getElementById("ConglomeradoDescripcion").value == "") {
+                                $("#ConglomeradoDescripcion").attr('disabled', true);
+                            } else {
+                                $("#ConglomeradoDescripcion").attr('disabled', false);
+                            }
+
+
+                        });
+                });
+
+            /*Habilita tipo vehiculo*/
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                @*$("#TipoVehiculoId").attr('disabled', true);
+                $("#PlacaVehiculo").attr('disabled', true);*@
+            }
+            else {
+               @* $("#TipoVehiculoId").attr('disabled', false);*@
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+            }
+
+
+            /*Muestra texto de pasaje terrestre*/
+            if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+                $('#terrestre').hide(100);
+            }
+            else {
+                $('#terrestre').show();
+            }
+
+            $('.modal').modal();
+            $('.tooltipped').tooltip();
+        });
+
+        /***********************termino script function*******************************************************************************************************/
+
+        /*Habilita tipo vehiculo*/
+        $('input:checkbox[name="Vehiculo"]').change(function () {
+            if (document.getElementById("Vehiculo").checked == false) {
+                $('#auto').hide(100);
+                $("#PlacaVehiculo").attr('disabled', true);
+            }
+            else {
+                $("#PlacaVehiculo").attr('disabled', false);
+                $('#auto').show();
+
+            }
+        });
+
+        /*Muestra texto de pasaje terrestre*/
+        $('input:checkbox[name="ReqPasajeTerrestre"]').change(function () {
+            if (document.getElementById("ReqPasajeTerrestre").checked == false) {
+                $('#terrestre').hide(100);
+            }
+            else {
+                $('#terrestre').show();
+
+            }
+        });
+
+        //funcion que habilita opciones si se financia el organismo invitante
+        $('input:radio[name="FinanciaOrganismo"]').change(function () {
+            if (document.getElementById("FinanciaOrganismo").checked == true) {
+                $("#Alojamiento").attr('disabled', false);
+                $("#Alimentacion").attr('disabled', false);
+                $("#Pasajes").attr('disabled', false);
+            }
+            else {
+                $("#Alojamiento").attr('disabled', true);
+                $("#Alimentacion").attr('disabled', true);
+                $("#Pasajes").attr('disabled', true);
+            }
+        });
+
+        ///*Desabilita viatico y pasajes si se financia por organismo invitante* /
+        $('input:checkbox[name="Alojamiento"]').change(function () {
+            Bloqueo();
+        });
+
+        $('input:checkbox[name="Alimentacion"]').change(function () {
+            Bloqueo();
+        });
+
+        $('input:checkbox[name="Pasajes"]').change(function () {
+            Bloqueo();
+        });
+
+        function Bloqueo() {
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true && document.getElementById("Pasajes").checked == true) {
+                $("#SolicitaViatico").attr('disabled', true);
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+                //$("#Vehiculo").attr('disabled', true);
+            }
+            else {
+                $("#SolicitaViatico").attr('disabled', false);
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+                //$("#Vehiculo").attr('disabled', false);
+            }
+
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Alimentacion").checked == true) {
+                $("#SolicitaViatico").attr('disabled', true);
+            }
+            else {
+                $("#SolicitaViatico").attr('disabled', false);
+            }
+
+            if (document.getElementById("Alojamiento").checked == true && document.getElementById("Pasajes").checked == true) {
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+            }
+
+            if (document.getElementById("Pasajes").checked == true) {
+                $("#ReqPasajeAereo").attr('disabled', true);
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeAereo").attr('disabled', false);
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+            }
+        }
+
+        /*funcion que bloquea pasajes*/
+        $('input:checkbox[name="ReqPasajeAereo"]').change(function () {
+            if (document.getElementById("ReqPasajeAereo").checked == true) {
+                $("#ReqPasajeTerrestre").attr('disabled', true);
+                $("#Vehiculo").attr('disabled', true);
+            }
+            else {
+                $("#ReqPasajeTerrestre").attr('disabled', false);
+                $("#Vehiculo").attr('disabled', false);
+            }
+        });
+
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+        });
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+
+        @*$(function () {
+            $("#jQuery_accordion").accordion({
+                collapsible: true, heightStyle: "auto"
+            });
+        });*@
+
+        $('input[type="hidden"]').each(function (index, element) {
+            $(this).appendTo($(element).parent());
+        });
+
+    </script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    @*<script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui-git.css" rel="stylesheet" />*@
+@*
+    <link href="~/Content/jquery.datetimepicker.css" rel="stylesheet" />*@
+    @*<script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>*@
+    <style TYPE="text/css">
+        strong {
+            font-weight: bolder;
+        }
+    </style>

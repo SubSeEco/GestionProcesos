@@ -1,0 +1,287 @@
+﻿@{
+    //ViewBag.IdUnidad = IList<string.Empty>();
+    //ViewData.IdUnidad = ;
+
+    List<SelectListItem> Unidades = new List<SelectListItem>
+    {
+        //new SelectListItem {Text = "Pago", Value = "1"},
+        //new SelectListItem {Text = "Pago con Observaciones", Value = "2"},
+        //new SelectListItem {Text = "No Pago", Value = "3"},
+    };
+
+    ViewBag.IdUnidad = Unidades;
+
+}
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Cometidos por Unidad</span>
+                <div class="section"></div>
+                <input type="button" value="Unidades" onclick="Unidades();" class="waves-effect waves-light btn blue" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Reporte Tareas Activas Proceso Cometidos</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Tareas" onclick="Tareas()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Solicitud de Cometidos por Meses</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Meses" onclick="Meses();" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tiempo Demora ejecución tareas de cometidos</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Ejecucion" onclick="Demora()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tareas pendientes por Unidades</span>
+                <div class="section"></div>
+                <input class="waves-effect waves-light btn blue" type="button" value="Pendientes Unidades" onclick="PendientesUnidades()" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tareas pendientes por Funcionarios en Unidad</span>
+                <div class="section"></div>
+                @Html.ActionLink("Pendientes Unidad x Funcionario", "ChartFuncionarios", "Cometido", null, new { @class = "waves-effect waves-light btn blue" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h5>GRAFICOS</h5>
+    <div id="chartContainer"></div>
+    <div id="chartUnidades"></div>
+    <div id="chartMeses"></div>
+    <div id="chartDemora"></div>
+    <div id="chartPendientesUnidades"></div>
+    @*<div id="chartPendientesJuridica"></div>*@
+</div>
+
+<script type="text/javascript">
+
+    function Tareas() {
+    /*limpiar div q no se muestra*/
+        //document.getElementById('chartUnidades').style.visibility = "hidden";
+        //document.getElementById('chartMeses').style.visibility = "hidden";
+        //document.getElementById('chartDemora').style.visibility = "hidden";
+        //document.getElementById('chartPendientesUnidades').style.visibility = "hidden";
+        //document.getElementById('chartPendientesJuridica').style.visibility = "hidden";
+    /*******************GRAFICO UNO******************************************************************/
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2",
+            animationEnabled: true,
+            title: { text: "Tareas Activas" },
+            data: [
+            {
+                    type: "bar",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+     //           dataPoints: [
+     //               { y: 6, label: "Enero" },
+					//{ y: 4, label: "Febrero" },
+					//{ y: 5, label: "Marzo" },
+					//{ y: 7, label: "Abril" },
+					//{ y: 4, label: "Mayo" },
+					//{ y: 6, label: "Junio" },
+					//{ y: 7, label: "Julio" },
+					//{ y: 5, label: "Agosto" },
+					//{ y: 4, label: "Septiembre" },
+					//{ y: 6, label: "Octubre" },
+					//{ y: 9, label: "Noviembre" },
+					//{ y: 1, label: "Diciembre" }
+     //           ],
+
+                //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                dataPoints: @Html.Raw(ViewBag.DataPoints),
+            }
+            ]
+        });
+        chart.render();
+    }
+
+    function Unidades() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
+        /*******************GRAFICO DOS******************************************************************/
+        var Unidades = new CanvasJS.Chart("chartUnidades", {
+            theme: "light2",
+            animationEnabled: true,
+            title: { text: "Solicitudes por unidad"},
+            data: [
+            {
+                    type: "pie",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+     //               dataPoints: [
+     //               { y: 6, label: "Enero" },
+					//{ y: 4, label: "Febrero" },
+					//{ y: 5, label: "Marzo" },
+					//{ y: 7, label: "Abril" },
+					//{ y: 4, label: "Mayo" },
+					//{ y: 6, label: "Junio" },
+					//{ y: 7, label: "Julio" },
+					//{ y: 5, label: "Agosto" },
+					//{ y: 4, label: "Septiembre" },
+					//{ y: 6, label: "Octubre" },
+					//{ y: 9, label: "Noviembre" },
+					//{ y: 1, label: "Diciembre" }
+     //           ],
+
+                //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                dataPoints: @Html.Raw(ViewBag.DataUnidades),
+            }
+            ]
+        });
+        Unidades.render();
+    }
+
+    function Meses() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
+        /*******************GRAFICO DOS******************************************************************/
+        var Meses = new CanvasJS.Chart("chartMeses", {
+            theme: "light2",
+            animationEnabled: true,
+            title: { text: "Solicitudes por Mes"},
+            data: [
+            {
+                    type: "spline",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.DataMeses),
+            }
+            ]
+        });
+        Meses.render();
+    }
+
+    function Demora() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
+        /*******************GRAFICO TRES******************************************************************/
+        var Demora = new CanvasJS.Chart("chartDemora", {
+            theme: "dark2",
+            animationEnabled: true,
+            title: { text: "Tiempo demora ejecucion tareas"},
+            data: [
+            {
+                    type: "column",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.DataDemora),
+            }
+            ]
+        });
+        Demora.render();
+    }
+
+    function PendientesUnidades() {
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesJuridica').innerHTML = '';
+        /*******************GRAFICO CINCO******************************************************************/
+        var PendientesUnidades = new CanvasJS.Chart("chartPendientesUnidades", {
+            theme: "dark2", // "light2", "dark1", "light1"
+            animationEnabled: true,
+            startAngle: 240,
+            title: { text: "Tareas pendientes por unidades"},
+            data: [
+            {
+                    type: "pie",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                dataPoints: @Html.Raw(ViewBag.PendientesUnidades),
+            }
+            ]
+        });
+        PendientesUnidades.render();
+    }
+
+    @*function PendientesJuridica() {
+        var Id = $("#IdUnidad").val();
+        var text = $("#IdUnidad").text();
+        alert(Id);
+
+        var miUrl = '@Url.Action("ChartFuncionarios", "Cometido")'
+        $.ajax({
+            url: miUrl,
+            method: "GET",
+            data: Id,
+            success: function (response) {
+
+            },
+            async: true
+        });
+
+        //alert(miUrl);
+
+        /*limpiar div q no se muestra*/
+        document.getElementById('chartContainer').innerHTML = '';
+        document.getElementById('chartUnidades').innerHTML = '';
+        document.getElementById('chartMeses').innerHTML = '';
+        document.getElementById('chartDemora').innerHTML = '';
+        document.getElementById('chartPendientesUnidades').innerHTML = '';
+        /*******************GRAFICO SEIS******************************************************************/
+
+        var PendientesJuridica = new CanvasJS.Chart("chartPendientesJuridica", {
+            theme: "dark2", // "light2", "dark1", "light1"
+            animationEnabled: true,
+            startAngle: 240,
+            title: { text: "Tareas pendientes funcionarios unidad: " + Id },
+            data: [
+            {
+                    type: "doughnut",/*"column",*/  /* change type to bar, line, area, pie,spline,*/
+                    dataPoints: @Html.Raw(ViewBag.PendientesJuridica),
+            }
+            ]
+        });
+        PendientesJuridica.render();
+    }*@
+
+
+
+    /*Habilita la visualizacion de los dropdown*/
+    $('select').formSelect();
+
+    /*Carga dropdown de unidades*/
+    $(document).ready(function () {
+        $.getJSON("/Cometido/GetUnidades",
+            function (classesData) {
+                var select = $("#IdUnidad");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "Seleccione Unidad..."
+                }));
+                $.each(classesData, function (index, itemData) {
+                    //alert(itemData.text);
+                    select.append($('<option/>', {
+                        value: itemData.Pl_UndCod,
+                        text: itemData.Pl_UndDes
+                    }));
+                });
+                $('select').formSelect();
+            });
+    });
+
+
+</script>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

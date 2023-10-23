@@ -1,0 +1,29 @@
+﻿@model App.Model.GestionDocumental.GD
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("PlazoGD", "GDExterno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(q => Model.WorkflowId)
+    @Html.HiddenFor(q => Model.ProcesoId)
+    @Html.HiddenFor(q => Model.GDId)
+    @Html.HiddenFor(q => Model.IngresoExterno)
+    <div class="col s12 m6 l6">
+        <div class="card">
+            <div class="card-content">
+                <div class="col l12">
+                    <span class="card-title">Fecha Plazo Proceso</span>
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        @*@Html.DisplayNameFor(m => Model.FechaPlazo)*@
+                        @Html.EditorFor(m => Model.FechaPlazo)
+                    </div>
+                </div>
+                <button class="waves-effect waves-light btn blue" type="submit">Guardar</button>
+            </div>
+        </div>
+    </div>
+}

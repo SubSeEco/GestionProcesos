@@ -1,0 +1,49 @@
+﻿@model IEnumerable<App.Model.Core.Configuracion>
+
+@{
+    ViewBag.Title = "Configuración";
+    ViewBag.SubTitle = "Configuración";
+}
+<div class="grey lighten-3 section">
+    <div class="container section">
+        <h3 class="header">@ViewBag.Title</h3>
+        <h5 class="header light">@ViewBag.SubTitle</h5>
+        <div class="section"></div>
+    </div>
+</div>
+<div class="section"></div>
+
+<div class="container">
+    @Html.Partial("_Message")
+    <div class="card">
+        <div class="card-content">
+            @*<span class="card-title">Conceptos presupuestarios</span>*@
+            <table class="table bordered">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Valor)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = item.ConfiguracionId })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
