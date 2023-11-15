@@ -1,11 +1,11 @@
-﻿using System;
+﻿using App.Core.Interfaces;
 using App.Model.Core;
 using App.Model.FirmaDocumento;
-using App.Core.Interfaces;
 using App.Model.Sigper;
-using System.Linq;
-using System.Collections.Generic;
 using App.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace App.Core.UseCases
 {
@@ -173,6 +173,10 @@ namespace App.Core.UseCases
                 TipoPrivacidadId = (int)Util.Enum.Privacidad.Publico,
                 TipoDocumentoId = 6,
                 Folio = documentoOriginal.Folio,
+                FirmanteEmail = firmante,
+                FirmanteUnidad = persona.Unidad.Pl_UndDes.Trim(),
+                FechaFirma = DateTime.Now,
+                TipoDocumentoFirma = documentoOriginal.TipoDocumentoCodigo
             };
             _repository.Create(documentoFirmado);
             _repository.Save();

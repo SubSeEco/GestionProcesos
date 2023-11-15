@@ -457,121 +457,121 @@
                                 </li>
                             }
                             <li>
-                            @if (Model.GeneracionCDP.Any())
-                            {
-                                if (Model.Atrasado)
+                                @if (Model.GeneracionCDP.Any())
                                 {
-                                    <div class="collapsible-header">
-                                        <span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="collapsible-header">
-                                        <span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span>
-                                    </div>
-                                }
-                                <div class="collapsible-body">
-                                    <div class="row">
-
-                                    @if (Model.SolicitaViatico)
+                                    if (Model.Atrasado)
                                     {
-                                        <span class="card-title">Viáticos</span>
-                                        <table class="table">
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
-                                                </th>
-                                                <th>
-                                                    @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
-                                                    @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
-                                                </th>
-                                            </tr>
-                                        </table>
+                                        <div class="collapsible-header">
+                                            <span style="font-weight: bold">V. Refrendación de disponibilidad presupuestaria </span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="collapsible-header">
+                                            <span style="font-weight: bold">IV. Refrendación de disponibilidad presupuestaria </span>
+                                        </div>
+                                    }
+                                    <div class="collapsible-body">
+                                        <div class="row">
 
-                                    }                                    
-                                </div>
-                                </div>
-                            }
+                                            @if (Model.SolicitaViatico)
+                                            {
+                                                <span class="card-title">Viáticos</span>
+                                                <table class="table">
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoPartidaId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoPartida.TpaNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubAsignacionId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubAsignacion.TsaNombre)
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoCapituloId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoCapitulo.TcaNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcIdCompromiso)
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCentroCostoId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcPptoTotal)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoSubTituloId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoSubTitulo.TstNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcCompromisoAcumulado)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoItemId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoItem.TitNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcSaldo)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcSaldo)))
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcTipoAsignacionId)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().TipoAsignacion.TasNombre)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)
+                                                        </th>
+                                                        <th>
+                                                            @*@Html.DisplayFor(model => model.GeneracionCDP.FirstOrDefault().VtcValorViatico)*@
+                                                            @Html.Raw(String.Format(System.Globalization.CultureInfo.CreateSpecificCulture("es-CL"), "{0:N0}", Convert.ToDecimal(@Model.GeneracionCDP.FirstOrDefault().VtcValorViatico)))
+                                                        </th>
+                                                    </tr>
+                                                </table>
+
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             </li>
                             <li>
                                 @if (Model.Atrasado)

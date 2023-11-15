@@ -44,59 +44,74 @@ namespace App.Infrastructure.HSM
                 throw new System.Exception("No se especificó el código QR.");
 
             using (MemoryStream ms = new MemoryStream())
-            using (var reader = new PdfReader(contenido))
-            using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
             {
-                //agregar folio
-                if (!folio.IsNullOrWhiteSpace())
-                {
-                    try
-                    {
-                        //obtener informacion de la primera pagina
-                        var pagesize = reader.GetPageSize(1);
-                        var pdfContentFirstPage = stamper.GetOverContent(1);
-
-                        //estampa de folio
-                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
-
-                        //estampa de fecha
-                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        throw new System.Exception("Error al insertar folio en el documento: " + ex.Message);
-                    }
-                }
-
-                //agregar tabla de verificacion
+                var reader = new PdfReader(contenido);
                 try
                 {
-                    var img = Image.GetInstance(QR);
-                    var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                    var fontBold = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
-                    var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
-                    var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 85 };
+                    PdfStamper stamper = new PdfStamper(reader, ms, '\0', true);
+                    try
+                    {
+                        //agregar folio
+                        if (!folio.IsNullOrWhiteSpace())
+                        {
+                            try
+                            {
+                                //obtener informacion de la primera pagina
+                                var pagesize = reader.GetPageSize(1);
+                                var pdfContentFirstPage = stamper.GetOverContent(1);
 
-                    table.TotalWidth = 480f;
-                    table.SetWidths(new[] { 8f, 25f, 6f });
-                    table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
-                    table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
-                    table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(urlVerificacion, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                                //estampa de folio
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.HELVETICA, 13, Font.BOLD, Color.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+
+                                //estampa de fecha
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.HELVETICA, 13, Font.BOLD, Color.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                throw new System.Exception("Error al insertar folio en el documento: " + ex.Message);
+                            }
+                        }
+
+                        //agregar tabla de verificacion
+                        try
+                        {
+                            var img = Image.GetInstance(QR);
+                            var fontStandard = new Font(Font.HELVETICA, 9, Font.NORMAL, Color.DARK_GRAY);
+                            var fontBold = new Font(Font.HELVETICA, 9, Font.BOLD, Color.DARK_GRAY);
+                            var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
+                            var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 85 };
+                            var qrCell = new PdfPCell { Rowspan = 5 };
+                            qrCell.AddElement(img);
+
+                            table.TotalWidth = 480f;
+                            table.SetWidths(new[] { 8f, 25f, 6f });
+                            table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = Color.DARK_GRAY });
+                            table.AddCell(qrCell);
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(urlVerificacion, fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            throw new System.Exception("Error al insertar tabla de validación de firma electrónica: " + ex.Message);
+                        }
+                    }
+                    finally
+                    {
+                        stamper.Close();
+                    }
                 }
-                catch (System.Exception ex)
+                finally
                 {
-                    throw new System.Exception("Error al insertar tabla de validación de firma electrónica: " + ex.Message);
+                    reader.Close();
                 }
 
-                stamper.Close();
                 contenido = ms.ToArray();
             }
 
@@ -147,59 +162,73 @@ namespace App.Infrastructure.HSM
                 throw new System.Exception("No se especificó el código QR.");
 
             using (MemoryStream ms = new MemoryStream())
-            using (var reader = new PdfReader(contenido))
-            using (PdfStamper stamper = new PdfStamper(reader, ms, '\0', true))
             {
-                //agregar folio
-                if (!folio.IsNullOrWhiteSpace())
-                {
-                    try
-                    {
-                        //obtener informacion de la primera pagina
-                        var pagesize = reader.GetPageSize(1);
-                        var pdfContentFirstPage = stamper.GetOverContent(1);
-
-                        //estampa de folio
-                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
-
-                        //estampa de fecha
-                        ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        throw new System.Exception("Error al insertar folio en el documento: " + ex.Message);
-                    }
-                }
-
-                //agregar tabla de verificacion
+                var reader = new PdfReader(contenido);
                 try
                 {
-                    var img = Image.GetInstance(QR);
-                    var fontStandard = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.DARK_GRAY);
-                    var fontBold = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.DARK_GRAY);
-                    var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
-                    var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+                    PdfStamper stamper = new PdfStamper(reader, ms, '\0', true);
+                    try
+                    {
+                        //agregar folio
+                        if (!folio.IsNullOrWhiteSpace())
+                        {
+                            try
+                            {
+                                //obtener informacion de la primera pagina
+                                var pagesize = reader.GetPageSize(1);
+                                var pdfContentFirstPage = stamper.GetOverContent(1);
 
-                    table.TotalWidth = 520f;
-                    table.SetWidths(new[] { 8f, 25f, 6f });
-                    table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell() { Rowspan = 5 }).AddElement(img);
-                    table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
-                    table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.AddCell(new PdfPCell(new Phrase(urlVerificacion, fontStandard)) { BorderColor = BaseColor.DARK_GRAY });
-                    table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                                //estampa de folio
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(string.Format("Folio {0}", folio), new Font(Font.HELVETICA, 13, Font.BOLD, Color.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 167, 0);
+
+                                //estampa de fecha
+                                ColumnText.ShowTextAligned(pdfContentFirstPage, Element.ALIGN_LEFT, new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), new Font(Font.HELVETICA, 13, Font.BOLD, Color.DARK_GRAY)), pagesize.Width - 182, pagesize.Height - 182, 0);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                throw new System.Exception("Error al insertar folio en el documento: " + ex.Message);
+                            }
+                        }
+
+                        //agregar tabla de verificacion
+                        try
+                        {
+                            var img = Image.GetInstance(QR);
+                            var fontStandard = new Font(Font.HELVETICA, 9, Font.NORMAL, Color.DARK_GRAY);
+                            var fontBold = new Font(Font.HELVETICA, 9, Font.BOLD, Color.DARK_GRAY);
+                            var pdfContentLastPage = stamper.GetOverContent(reader.NumberOfPages);
+                            var table = new PdfPTable(3) { HorizontalAlignment = Element.ALIGN_CENTER, WidthPercentage = 100 };
+                            var qrCell = new PdfPCell() { Rowspan = 5 };
+                            qrCell.AddElement(img);
+
+                            table.TotalWidth = 520f;
+                            table.SetWidths(new[] { 8f, 25f, 6f });
+                            table.AddCell(new PdfPCell(new Phrase("Información de firma electrónica:", fontBold)) { Colspan = 2, BorderColor = Color.DARK_GRAY });
+                            table.AddCell(qrCell);
+                            table.AddCell(new PdfPCell(new Phrase("Firmantes", fontBold)));
+                            table.AddCell(new PdfPCell(new Phrase(string.Join(", ", firmantes), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Fecha de firma", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(DateTime.Now.ToString("dd/MM/yyyy"), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("Código de verificación", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(documentoId.ToString(), fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase("URL de verificación", fontBold)) { BorderColor = Color.DARK_GRAY });
+                            table.AddCell(new PdfPCell(new Phrase(urlVerificacion, fontStandard)) { BorderColor = Color.DARK_GRAY });
+                            table.WriteSelectedRows(0, -1, 43, 100, pdfContentLastPage);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            throw new System.Exception("Error al insertar tabla de validación de firma electrónica: " + ex.Message);
+                        }
+                    }
+                    finally
+                    {
+                        stamper.Close();
+                    }
                 }
-                catch (System.Exception ex)
+                finally
                 {
-                    throw new System.Exception("Error al insertar tabla de validación de firma electrónica: " + ex.Message);
+                    reader.Close();
                 }
-
-                stamper.Close();
                 contenido = ms.ToArray();
             }
 

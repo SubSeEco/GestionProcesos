@@ -81,8 +81,6 @@ namespace App.Model.Core
         [Display(Name = "Activo")]
         public bool Activo { get; set; } = true;
 
-
-
         [Display(Name = "Tipo documento (foliador)")]
         public string TipoDocumentoFirma { get; set; }
 
@@ -110,6 +108,10 @@ namespace App.Model.Core
         [Display(Name = "Fecha Anulacion")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime? FechaAnulacion { get; set; }
+
+        [Display(Name = "Fecha Firma")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm:ss", ApplyFormatInEditMode = true)]
+        public DateTime? FechaFirma { get; set; }
 
         [NotMapped]
         [Display(Name = "Autorizado para firmar documentos?")]

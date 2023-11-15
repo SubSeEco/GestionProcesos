@@ -925,6 +925,10 @@ namespace App.Core.UseCases
                                 response.Errors.Add(_folioResponse.error);
 
                             documento.Folio = _folioResponse.folio;
+                            documento.TipoDocumentoFirma = TipoDocto;
+                            documento.FirmanteEmail = email;
+                            documento.FirmanteUnidad = persona.Unidad.Pl_UndDes.Trim();
+                            documento.FechaFirma = DateTime.Now;
 
                             _repository.Update(documento);
                             _repository.Save();
@@ -1027,322 +1031,6 @@ namespace App.Core.UseCases
             return response;
         }
 
-        //public ResponseMessage CDPInsert(CDP obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage CDPUpdate(CDP obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage CDPDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<CDP>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage InformeHSAInsert(InformeHSA obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage InformeHSAUpdate(InformeHSA obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage InformeHSADelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<InformeHSA>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage RadioTaxiInsert(RadioTaxi obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage RadioTaxiUpdate(RadioTaxi obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage RadioTaxiDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<RadioTaxi>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage IngresoInsert(GDIngreso obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            obj.GetFolio();
-        //            obj.BarCode = _file.CreateBarCode(obj.Folio);
-
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage IngresoUpdate(GDIngreso obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            obj.GetFolio();
-        //            obj.BarCode = _file.CreateBarCode(obj.Folio);
-
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage IngresoDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<GDIngreso>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
-        //public ResponseMessage SIACIngresoInsert(SIACSolicitud obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Create(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage SIACIngresoUpdate(SIACSolicitud obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Update(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage SIACIngresoDelete(int id)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    try
-        //    {
-        //        var obj = _repository.GetById<SIACSolicitud>(id);
-        //        if (obj == null)
-        //            response.Errors.Add("Dato no encontrado");
-
-        //        if (response.IsValid)
-        //        {
-        //            _repository.Delete(obj);
-        //            _repository.Save();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Errors.Add(ex.Message);
-        //    }
-
-        //    return response;
-        //}
-
         public ResponseMessage CometidoInsert(Cometido obj)
         {
             var response = new ResponseMessage();
@@ -1355,24 +1043,6 @@ namespace App.Core.UseCases
                     response.Errors.Add("Se ha selecionado la opcion de vehiculo, por lo tanto debe señalar el tipo de vehiculo");
                 }
 
-                //if (_repository.Get<Destinos>().Count() > 0)
-                //{
-                //    /*validacion de cantidad de dias al 100% dentro del mes*/
-                //    if (_repository.Get<Destinos>(c => c.Cometido.NombreId == obj.NombreId && c.Cometido.FechaSolicitud.Month == DateTime.Now.Month).Sum(d => d.Dias100) > 10)
-                //    {
-                //        response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el mes señalado");
-                //    }
-                //    /*validacion de cantidad de dias al 100% dentro del año*/
-                //    if (_repository.Get<Destinos>(c => c.Cometido.NombreId == obj.NombreId && c.Cometido.FechaSolicitud.Year == DateTime.Now.Year).Sum(d => d.Dias100) > 90)
-                //    {
-                //        response.Errors.Add("La cantidad de dias al 100%, supera el maximo permitido para el año señalado");
-                //    }
-                //} 
-
-                //if (obj.SolicitaReembolso == true && obj.TipoReembolsoId == null)
-                //{
-                //    response.Errors.Add("Se ha selecionado la opcion de Solicita Reembolso, por lo tanto debe señalar el Tipo de Reembolso");
-                //}
                 if (!obj.NombreId.HasValue)
                     response.Errors.Add("No se ha señalado el nombre del funcionario que viaja.");
 
@@ -1380,10 +1050,6 @@ namespace App.Core.UseCases
                 {
                     response.Errors.Add("Debe ingresar la descripción del cometido.");
                 }
-                //if ((int)Util.Enum.Cometidos.DiasAnticipacionIngreso > (obj.FechaSolicitud.Date - DateTime.Now.Date).Days)
-                //{
-                //    response.Errors.Add("La solicitud de cometido se debe realizar con una anticipacion de:" + (int)Util.Enum.Cometidos.DiasAnticipacionIngreso + " " + "dias.");
-                //}
 
                 if (obj.Vehiculo && obj.TipoVehiculoId == 0)
                 {
@@ -1460,16 +1126,6 @@ namespace App.Core.UseCases
 
             try
             {
-                //if (_repository.Get<Destinos>(c => c.Cometido.NombreId == obj.NombreId && obj.Destinos.FirstOrDefault().FechaInicio.Month == DateTime.Now.Month).Sum(d => d.Dias100) > 10)
-                //{
-                //    response.Warnings.Add("La cantidad de dias al 100%, supera el maximo permitido para el mes señalado, por lo tanto se pagaran al 50%");
-                //}
-
-                //if (_repository.Get<Destinos>(c => c.Cometido.NombreId == obj.NombreId && obj.Destinos.FirstOrDefault().FechaInicio.Year == DateTime.Now.Year).Sum(d => d.Dias100) > 90)
-                //{
-                //    response.Warnings.Add("La cantidad de dias al 100%, supera el maximo permitido para el año señalado");
-                //}
-
                 /*se buscan los destinos asociados al cometido*/
                 var listaDestinosCometido = _repository.Get<Destinos>(c => c.CometidoId == obj.CometidoId).ToList();
                 /*se valida que cometido tenga un destino asociado*/
@@ -1484,46 +1140,6 @@ namespace App.Core.UseCases
                     {
                         response.Errors.Add("La fecha de termino no pueder ser mayor a la fecha de inicio");
                     }
-                    /*se valida que si existe mas de un destino solo se asigna un viatico*/
-                    //if (listaDestinosCometido.Count > 1)
-                    //{
-                    //    response.Warnings.Add("Usted ha ingresado más de un destino para el cometido, pero solo se le asignara un viático");
-                    //}
-                    /*valida ingreso de solicitud*/
-                    //if ((int)Util.Enum.Cometidos.DiasAnticipacionIngreso > (ListaDestinos.FirstOrDefault().FechaInicio.Date - DateTime.Now.Date).Days)
-                    //{
-                    //    response.Errors.Add("La solicitud de cometido se debe realizar con una anticipacion de:" + (int)Util.Enum.Cometidos.DiasAnticipacionIngreso + " " + "dias.");                        
-                    //}
-
-                    /*se valida que los rangos de fecha no se topen con otros destinos*/
-                    //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
-                    //var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year);
-                    //foreach (var otrosDestinos in other)
-                    //{
-                    //    foreach (var destinoCometido in listaDestinosCometido)
-                    //    {
-                    //        if (otrosDestinos.FechaInicio.Date == destinoCometido.FechaInicio.Date && otrosDestinos.CometidoId != destinoCometido.CometidoId)
-                    //        {
-                    //            //response.Errors.Add("El rango de fechas señalados esta en conflicto con los destinos del cometido " + otrosDestinos.CometidoId + "(" +  otrosDestinos.FechaInicio  + ")");
-                    //            response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-                    //            /*se elimina el destino que topa con otro destino que ya ha sido creado*/
-                    //            //DestinosDelete(destinoCometido.DestinoId);
-                    //            DestinosAnular(destinoCometido.DestinoId);
-                    //        }
-                    //    }
-                    //}
-
-                    //var other = _repository.Get<Destinos>(d => d.Cometido.Rut == obj.Rut && d.DestinoActivo == true && d.FechaInicio.Year == DateTime.Now.Year).ToList();
-                    //foreach (var destinoCometido in listaDestinosCometido)
-                    //{
-                    //    if(other.Exists(c => c.FechaInicio.Date == destinoCometido.FechaInicio.Date))
-                    //    {
-                    //        response.Errors.Add(string.Format("La fecha {0}, ya se encuentra solicitada para otro cometido", destinoCometido.FechaInicio.Date.ToShortDateString()));
-                    //        //response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos del cometido {0}, inicio {1}, término {2}", otrosDestinos.CometidoId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
-                    //        DestinosDelete(destinoCometido.DestinoId);
-                    //    }
-                    //}
-
 
                     /*se suma el valor total del viatico*/
                     obj.TotalViatico = 0;
@@ -1559,9 +1175,6 @@ namespace App.Core.UseCases
                     {
                         response.Errors.Add("Se debe señalar el tipo de vehiculo.");
                     }
-
-                    /*if (obj.PlacaVehiculo.IsNullOrWhiteSpace())
-                        response.Errors.Add("Se debe señalar la placa patente del vehiculo.");*/
                 }
 
                 if (!string.IsNullOrEmpty(obj.GradoDescripcion))
@@ -1593,11 +1206,6 @@ namespace App.Core.UseCases
                     {
                         obj.Atrasado = false;
                     }
-
-                    /*if (obj.IdGrado == "C" || obj.IdGrado == "B")
-                    {
-                        obj.Atrasado = false;
-                    }*/
                 }
 
                 if (response.IsValid)
@@ -6594,7 +6202,7 @@ namespace App.Core.UseCases
 
                 /*Validacion de viaticos por localidades adyacentes*/
                 bool adyacente = false;
-                //bool adyacente = true;
+
                 if (cometido != null)
                 {
                     var localidad = obj.LocalidadId.Value;
@@ -6628,9 +6236,7 @@ namespace App.Core.UseCases
                     foreach (var destinos in ListaDestino)
                     {
                         var solicitanteDestino = ListaCometidos.FirstOrDefault(q => q.CometidoId == destinos.CometidoId).NombreId;
-                        //_repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
                         var solicitante = ListaCometidos.FirstOrDefault(q => q.CometidoId == obj.CometidoId).NombreId;
-                        //_repository.Get<Cometido>(c => c.CometidoId == obj.CometidoId).FirstOrDefault().NombreId;
 
                         if (solicitanteDestino == solicitante)
                         {
@@ -6659,8 +6265,6 @@ namespace App.Core.UseCases
                         response.Errors.Add("Se ha excedido en :" + (Totaldias100Ano + obj.Dias100 - 90) + " la cantidad permitida de dias solicitados al 100%, dentro de un año");
                     }
                 }
-
-                //var DestinosActivos = _repository.Get<Destinos>(d => d.CometidoId != null && d.DestinoActivo == true);
 
                 /*se valida que los rangos de fecha no se topen con otros destinos*/
                 //var ListaDestinos = _repository.Get<Destinos>(c => c.CometidoId == obj.CometidoId).ToList();
@@ -6715,18 +6319,6 @@ namespace App.Core.UseCases
                                     obj.Total = 0;
                                     obj.TotalViatico = 0;
                                 }
-
-
-                                ////response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
-                                //if (obj.Dias100 > 0 || obj.Dias60 > 0 || obj.Dias40 > 0)
-                                //{
-                                //    response.Warnings.Add("Ya se ha solicitado viatico para las fechas señaladas");
-                                //    obj.Dias100 = 0;
-                                //    obj.Dias60 = 0;
-                                //    obj.Dias40 = 0;
-                                //    obj.Total = 0;
-                                //    obj.TotalViatico = 0;
-                                //}
                             }
                         }
                     }
@@ -6735,8 +6327,6 @@ namespace App.Core.UseCases
                 /*	Cualquier cometido con duración menor a 4 horas no se le asigna viático*/
                 if ((obj.FechaHasta - obj.FechaInicio).TotalHours < 4)
                 {
-                    //response.Warnings.Add("El cometido tiene una duración menor a 4 horas, por lo tanto no  le corresponde viático");
-                    //response.Errors.Add("El cometido tiene una duración menor a 4 horas, por lo tanto no  le corresponde viático");
                     response.Warnings.Add("El cometido tiene una duración menor a 4 horas, por lo tanto no  le corresponde viático");
                     obj.Dias100 = 0;
                     obj.Dias60 = 0;
@@ -6786,7 +6376,6 @@ namespace App.Core.UseCases
                     }
                     else
                     {
-                        //obj.NombreLocalidad = string.Empty;
                         response.Errors.Add("Se debe señalar la localidad de destino");
                     }
                 }
@@ -6808,19 +6397,6 @@ namespace App.Core.UseCases
                     obj.Dias00 = 0;
                 if (obj.Dias50 == null)
                     obj.Dias50 = 0;
-
-                //if(cometido.ReqPasajeAereo == true)
-                //{
-                //    if (obj.IdOrigenRegion != null)
-                //    {
-                //        var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdOrigenRegion.ToString()).Pl_DesReg.Trim();
-                //        obj.OrigenRegion = region;
-                //    }
-                //    else
-                //    {
-                //        response.Errors.Add("Se debe señalar la region de origen");
-                //    }
-                //}
 
                 /*Se dejan los mismo valores de los solicitados como aprobados en la creacion del destino*/
                 obj.Dias100Aprobados = obj.Dias100;
@@ -6879,7 +6455,7 @@ namespace App.Core.UseCases
                 }
 
                 /*se valida que la cantidad de dias sea igual que lo solicitado por cada destino ingresado*/
-                //var dias = (obj.FechaHasta - obj.FechaInicio).Days + 1;
+
                 var dias = (objController.FechaHasta - objController.FechaInicio).Days + 1;
                 var cantNew = obj.Dias100Aprobados + obj.Dias60Aprobados + obj.Dias40Aprobados + obj.Dias00Aprobados + obj.Dias50Aprobados;
                 var cantOld = objController.Dias100 + objController.Dias60 + objController.Dias40 + objController.Dias00 + objController.Dias50;
@@ -6914,12 +6490,7 @@ namespace App.Core.UseCases
                     foreach (var destinos in des)
                     {
                         var solicitanteDestino = listaCometido.FirstOrDefault(q => q.CometidoId == destinos.CometidoId).NombreId;
-
-                        //_repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
-
                         var solicitante = listaCometido.FirstOrDefault(q => q.CometidoId == obj.CometidoId).NombreId;
-
-                        //_repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
 
                         if (solicitanteDestino == solicitante)
                         {
@@ -6951,14 +6522,13 @@ namespace App.Core.UseCases
                 {
                     int Totaldias100MesAprobados = 0;
                     int Totaldias100AnoAprobados = 0;
-                    var mes = obj.FechaInicio.Month; //DateTime.Now.Month;
-                    var year = obj.FechaInicio.Year; //DateTime.Now.Year;                                           
+                    var mes = obj.FechaInicio.Month;
+                    var year = obj.FechaInicio.Year;
+
                     foreach (var destinos in des)
                     {
                         var solicitanteDestinoHelp = listaCometido.FirstOrDefault(c => c.CometidoId == destinos.CometidoId).NombreId;
                         var solicitanteHelp = listaCometido.FirstOrDefault(c => c.CometidoId == objController.CometidoId).NombreId;
-                        //var solicitanteDestinoHelp = _repository.Get<Cometido>(c => c.CometidoId == destinos.CometidoId).FirstOrDefault().NombreId;
-                        //var solicitanteHelp = _repository.Get<Cometido>(c => c.CometidoId == objController.CometidoId).FirstOrDefault().NombreId;
 
                         if (solicitanteDestinoHelp == solicitanteHelp)
                         {
@@ -6989,7 +6559,6 @@ namespace App.Core.UseCases
                 /*	Cualquier cometido con duración menor a 4 horas no se le asigna viático*/
                 if ((objController.FechaHasta - objController.FechaInicio).TotalHours < 4)
                 {
-                    //response.Warnings.Add("El cometido tiene una duración menor a 4 horas, por lo tanto no  le corresponde viático");
                     response.Errors.Add("El cometido tiene una duración menor a 4 horas, por lo tanto no  le corresponde viático");
                     obj.Dias100 = 0;
                     obj.Dias60 = 0;
@@ -7004,9 +6573,8 @@ namespace App.Core.UseCases
                     obj.Total = 0;
                 }
 
-                //var com = _repository.GetFirst<Cometido>(c => c.CometidoId == obj.CometidoId);
                 var com = listaCometido.First(c => c.CometidoId == obj.CometidoId);
-                if (com.SolicitaViatico == false)
+                if (!com.SolicitaViatico)
                 {
                     response.Warnings.Add("Este cometido tendrá un viático de $0");
                     obj.Dias100 = 0;
@@ -7047,23 +6615,6 @@ namespace App.Core.UseCases
                     response.Errors.Add("Se debe señalar la localidad de destino.");
                 }
 
-                /*if (obj.LocalidadId.ToString() != null)
-                {
-                    if(obj.LocalidadId != 0)
-                    {
-                        var localidad = _repository.GetById<Localidad>(obj.LocalidadId).NombreLocalidad.Trim();
-                        obj.NombreLocalidad = localidad;
-                    }
-                    else
-                    {
-                        //obj.NombreLocalidad = string.Empty;
-                        response.Errors.Add("Se debe señalar la localidad de destino");
-                    }   
-                }
-                else
-                    response.Errors.Add("Se debe señalar la localidad de destino");*/
-
-
                 if (objController.IdRegion != null)
                 {
                     var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == objController.IdRegion).Pl_DesReg;
@@ -7072,28 +6623,12 @@ namespace App.Core.UseCases
                 else
                     response.Errors.Add("Se debe señalar la region de destino");
 
-
-                //if (com.ReqPasajeAereo == true)
-                //{
-                //    if (objController.IdOrigenRegion != null)
-                //    {
-                //        //var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == objController.IdOrigenRegion.ToString()).Pl_DesReg.Trim();
-                //        //obj.OrigenRegion = region;
-                //    }
-                //    else
-                //    {
-                //        response.Errors.Add("Se debe señalar la region de origen");
-                //    }
-                //}
-
                 /*Validacion de viaticos por localidades adyacentes*/
                 bool adyacente = false;
-                //bool adyacente = true;
                 if (com != null)
                 {
                     var localidad = objController.LocalidadId.Value;
                     SwitchLocalidad(com.IdConglomerado.Value, localidad, response, objController, adyacente);
-
                 }
 
                 /*Se valida que la cantidad de dias solicitados correspondan con los viaticos*/
@@ -7122,8 +6657,7 @@ namespace App.Core.UseCases
                 /*se valida que los rangos de fecha no se topen con otros destinos esto no aplica en la tarea de edit GP*/
                 if (objController.EditGP != true)
                 {
-                    foreach (var destinos in des.FindAll(d => d.CometidoId != null && d.DestinoActivo == true)
-                        /*_repository.Get<Destinos>(d => d.CometidoId != null && d.DestinoActivo == true)*/)
+                    foreach (var destinos in des.FindAll(d => d.CometidoId != null && d.DestinoActivo == true))
                     {
                         var solicitanteDestino = listaCometido.First(q => q.CometidoId == destinos.CometidoId).NombreId;
                         var solicitante = listaCometido.First(c => c.CometidoId == obj.CometidoId).NombreId;
@@ -8045,71 +7579,6 @@ namespace App.Core.UseCases
                 {
                     response.Errors.Add("Se debe agregar por lo menos un destino al pasaje");
                 }
-                //else
-                //{
-                //    ///*validacion de fechas */
-                //    //if (ListaDestinos.LastOrDefault().FechaVuelta < ListaDestinos.FirstOrDefault().FechaIda)
-                //    //{
-                //    //    response.Errors.Add("La fecha de termino no pueder ser mayor a la fecha de inicio");
-                //    //}
-                //}
-
-                //if (obj.TipoDestino == true)
-                //   {
-                //       if (obj.IdComunaOrigen != null)
-                //       {
-                //           if(string.IsNullOrEmpty(obj.OrigenComunaDescripcion))
-                //           {
-                //               var comuna = _sigper.GetDGCOMUNAs().FirstOrDefault(c => c.Pl_CodCom == obj.IdComunaOrigen.ToString()).Pl_DesCom.Trim();
-                //               obj.OrigenComunaDescripcion = comuna;
-                //           }                        
-                //       }
-                //       else
-                //       {
-                //           response.Errors.Add("Se debe señalar la comuna de origen");
-                //       }
-
-                //       if (obj.IdRegionOrigen != null)
-                //       {
-                //           if(string.IsNullOrEmpty(obj.OrigenRegionDescripcion))
-                //           {
-                //               var region = _sigper.GetRegion().FirstOrDefault(c => c.Pl_CodReg == obj.IdRegionOrigen.ToString()).Pl_DesReg.Trim();
-                //               obj.OrigenRegionDescripcion = region;
-                //           }                        
-                //       }
-                //       else
-                //       {
-                //           response.Errors.Add("Se debe señalar la region de origen");
-                //       }
-                //   }
-                //   else
-                //   {
-                //       if (obj.IdCiudadOrigen != null)
-                //       {
-                //           if (string.IsNullOrEmpty(obj.OrigenCiudadDescripcion))
-                //           {
-                //               var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudadOrigen)).CiudadNombre.Trim();
-                //               obj.OrigenCiudadDescripcion = ciudad;
-                //           }                        
-                //       }
-                //       else
-                //       {
-                //           response.Errors.Add("Se debe señalar la ciudad de origen");
-                //       }
-
-                //       if (obj.IdPaisOrigen != null)
-                //       {
-                //           if(string.IsNullOrEmpty(obj.OrigenPaisDescripcion))
-                //           {
-                //               var pais = _repository.Get<Pais>().FirstOrDefault(c => c.PaisId == int.Parse(obj.IdPaisOrigen)).PaisNombre.Trim();
-                //               obj.OrigenPaisDescripcion = pais;
-                //           }                        
-                //       }
-                //       else
-                //       {
-                //           response.Errors.Add("Se debe señalar el pais de origen");
-                //       }
-                //   }
 
                 if (response.IsValid)
                 {
@@ -8282,22 +7751,16 @@ namespace App.Core.UseCases
                     /*se valida que si existe mas de un destino solo se asigna un viatico*/
                     if (destinosCometido.Count > 1)
                     {
-                        //response.Errors.Add("Usted ha ingresado más de un destino para el cometido, pero solo se le asignara un viático");
                         response.Warnings.Add("Usted ha ingresado más de un destino para la comision, pero solo se le asignara un viático");
                     }
                     /*valida ingreso de solicitud*/
-                    //if ((int)Util.Enum.Cometidos.DiasAnticipacionIngreso > (ListaDestinos.FirstOrDefault().FechaInicio.Date - DateTime.Now.Date).Days)
-                    //{
-                    //    response.Errors.Add("La solicitud de cometido se debe realizar con una anticipacion de:" + (int)Util.Enum.Cometidos.DiasAnticipacionIngreso + " " + "dias.");                        
-                    //}
 
                     /*se valida que los rangos de fecha no se topen con otros destrinos*/
-                    //foreach (var destinos in _repository.Get<Destinos>(d => d.CometidoId == obj.CometidoId))
+
                     foreach (var otrosDestinos in _repository.Get<DestinosComision>())
                     {
                         if (otrosDestinos.FechaInicio == destinosCometido.FirstOrDefault().FechaInicio && otrosDestinos.ComisionesId != destinosCometido.FirstOrDefault().ComisionesId)
                         {
-                            //response.Errors.Add("El rango de fechas señalados esta en conflicto con otros destinos");
                             response.Errors.Add(string.Format("El rango de fechas señalados esta en conflicto con los destinos de comisión {0}, inicio {1}, término {2}", otrosDestinos.ComisionesId, otrosDestinos.FechaInicio, otrosDestinos.FechaHasta));
                         }
                     }
@@ -8437,7 +7900,6 @@ namespace App.Core.UseCases
                 }
 
                 /*se valida que los rangos de fecha no se topen con otros destinos*/
-                //var ListaDestinos = _repository.Get<Destinos>(c => c.CometidoId == obj.CometidoId).ToList();
                 foreach (var destinos in _repository.Get<DestinosComision>(d => d.ComisionesId != null))
                 {
                     var solicitanteDestino = _repository.Get<Comisiones>(c => c.ComisionesId == destinos.ComisionesId).FirstOrDefault().NombreId;
@@ -8452,7 +7914,7 @@ namespace App.Core.UseCases
                     }
                 }
 
-                if (comision.SolicitaViatico == false)
+                if (!comision.SolicitaViatico)
                 {
                     response.Warnings.Add("No se ha solicitado viatico para la comision");
                     obj.Dias100 = 0;
@@ -8528,12 +7990,6 @@ namespace App.Core.UseCases
                 {
                     response.Errors.Add("La fecha de término no es válida.");
                 }
-
-                //if (obj.IdPais != null)
-                //    obj.PaisDescripcion = _repository.Get<Pais>().Where(c => c.PaisId.ToString() == obj.IdPais).FirstOrDefault().PaisNombre;
-
-                //if (obj.IdCiudad != null)
-                //    obj.CiudadDescripcion = _repository.Get<Ciudad>().Where(c => c.CiudadId.ToString() == obj.IdCiudad).FirstOrDefault().CiudadNombre;
 
                 /*se valida que la cantidad de dias sea igual que lo solicitado por cada destino ingresado*/
                 var dias = (obj.FechaHasta - obj.FechaInicio).Days + 1;
@@ -8635,24 +8091,10 @@ namespace App.Core.UseCases
             try
             {
                 /*se valida que la fecha de inicio no se superior que la de termino*/
-                //if (obj.FechaVuelta < obj.FechaIda)
-                //{
-                //    response.Errors.Add("La fecha de ida no puede ser superior a la fecha de salida");
-                //}
 
                 var pasaje = _repository.GetById<Pasaje>(obj.PasajeId);
                 if (pasaje.TipoDestino == true)
                 {
-                    //if (obj.IdComuna != null)
-                    //{
-                    //    var comuna = _sigper.GetDGCOMUNAs().FirstOrDefault(c => c.Pl_CodCom == obj.IdComuna.ToString()).Pl_DesCom.Trim();
-                    //    obj.ComunaDescripcion = comuna;
-                    //}
-                    //else
-                    //{
-                    //    response.Errors.Add("Se debe señalar la comuna de destino");
-                    //}
-
                     if (obj.IdRegionOrigen != null)
                     {
                         if (string.IsNullOrEmpty(obj.OrigenRegionDescripcion))
@@ -8681,16 +8123,6 @@ namespace App.Core.UseCases
                 }
                 else
                 {
-                    //if (obj.IdCiudad != null)
-                    //{
-                    //    var ciudad = _repository.Get<Ciudad>().FirstOrDefault(c => c.CiudadId == int.Parse(obj.IdCiudad)).CiudadNombre.Trim();
-                    //    obj.CiudadDescripcion = ciudad;
-                    //}
-                    //else
-                    //{
-                    //    response.Errors.Add("Se debe señalar la ciudad de destino");
-                    //}
-
                     if (obj.IdPaisOrigen != null)
                     {
                         if (string.IsNullOrEmpty(obj.OrigenPaisDescripcion))
@@ -9087,129 +8519,6 @@ namespace App.Core.UseCases
             return response;
         }
 
-        //public ResponseMessage FirmaDocumentoInsert(FirmaDocumento obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones
-
-        //    if (response.IsValid)
-        //    {
-        //        _repository.Create(obj);
-        //        _repository.Save();
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage FirmaDocumentoEdit(FirmaDocumento obj)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones
-
-        //    if (response.IsValid)
-        //    {
-        //        var ingreso = _repository.GetFirst<FirmaDocumento>(q => q.FirmaDocumentoId == obj.FirmaDocumentoId);
-        //        if (ingreso != null)
-        //        {
-        //            ingreso.TipoDocumentoCodigo = obj.TipoDocumentoCodigo;
-        //            ingreso.DocumentoSinFirma = obj.DocumentoSinFirma;
-        //            ingreso.DocumentoSinFirmaFilename = obj.DocumentoSinFirmaFilename;
-        //            ingreso.Firmado = false;
-
-        //            _repository.Update(ingreso);
-        //            _repository.Save();
-        //        }
-        //    }
-
-        //    return response;
-        //}
-        //public ResponseMessage FirmaDocumentoFirmar(int id, string firmante)
-        //{
-        //    var response = new ResponseMessage();
-
-        //    //validaciones...
-        //    if (id == 0)
-        //        response.Errors.Add("Documento a firmar no encontrado");
-        //    if (string.IsNullOrWhiteSpace(firmante))
-        //        response.Errors.Add("No se especificó el firmante");
-        //    if (!string.IsNullOrWhiteSpace(firmante) && !_repository.GetExists<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma))
-        //        response.Errors.Add("No se encontró rúbrica habilitada para el firmante");
-
-        //    var documento = _repository.GetById<FirmaDocumento>(id);
-        //    if (documento == null)
-        //        response.Errors.Add("Documento a firmar no encontrado");
-        //    //if (documento != null && documento.Firmado)
-        //    //    response.Errors.Add("Documento ya está firmado");
-
-        //    if (response.IsValid)
-        //    {
-        //        //si el documento ya tiene folio no solicitarlo nuevamente
-        //        if (string.IsNullOrWhiteSpace(documento.Folio))
-        //        {
-        //            try
-        //            {
-        //                var _folioResponse = _folio.GetFolio(firmante, documento.TipoDocumentoCodigo);
-        //                if (_folioResponse == null)
-        //                    throw new Exception("Servicio no entregó respuesta");
-
-        //                if (_folioResponse != null && _folioResponse.status == "ERROR")
-        //                    throw new Exception(_folioResponse.status);
-
-        //                documento.Folio = _folioResponse.folio;
-
-        //                _repository.Update(documento);
-        //                _repository.Save();
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                response.Errors.Add("Error al obtener folio del documento:" + ex.Message);
-        //            }
-        //        }
-        //    }
-
-        //    //firmar documento
-        //    if (response.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var rubrica = _repository.GetFirst<Rubrica>(q => q.Email == firmante && q.HabilitadoFirma);
-        //            var _hsmResponse = _hsm.Sign(documento.DocumentoSinFirma, rubrica.IdentificadorFirma, rubrica.UnidadOrganizacional, documento.Folio);
-
-        //            documento.DocumentoConFirma = _hsmResponse;
-        //            documento.DocumentoConFirmaFilename = "FIRMADO - " + documento.DocumentoSinFirmaFilename;
-        //            documento.Firmante = firmante;
-        //            documento.Firmado = true;
-        //            documento.FechaFirma = DateTime.Now;
-
-        //            _repository.Update(documento);
-        //            _repository.Create(new Documento()
-        //            {
-        //                Proceso = documento.Proceso,
-        //                Workflow = documento.Workflow,
-        //                Fecha = DateTime.Now,
-        //                Email = documento.Autor,
-        //                FileName = documento.DocumentoConFirmaFilename,
-        //                File = documento.DocumentoConFirma,
-        //                Signed = true,
-        //                Type = "application/pdf",
-        //                TipoPrivacidadId = 1,
-        //                TipoDocumentoId = 6
-        //            });
-
-        //            _repository.Save();
-        //            //asociar el documento firmado al proceso
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            response.Errors.Add("Error al obtener folio del documento:" + ex.Message);
-        //        }
-        //    }
-
-        //    return response;
-        //}
-
         //metodos migrados desde usecase core
 
         public ResponseMessage WorkflowUpdate(Workflow obj, string userLoged)
@@ -9269,10 +8578,6 @@ namespace App.Core.UseCases
                             }
                         }
                     }
-                    //else if (workflowActual != null && workflowActual.DefinicionWorkflow != null && workflowActual.DefinicionWorkflow.RequireDocumentacion && workflowActual.Proceso != null && !workflowActual.Proceso.Documentos.Any())
-                    //{
-                    //    throw new Exception("Debe adjuntar a los menos tres cotizaciones.");
-                    //}                                         
                 }
                 else if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                 {
@@ -9327,12 +8632,6 @@ namespace App.Core.UseCases
                             {
                                 throw new Exception("Se debe generar Documento de Acto Administrativo");
                             }
-
-                            /*if(comet.Vehiculo && comet.PlacaVehiculo.Trim().IsNullOrWhiteSpace())
-                            {
-                                response.Errors.Add("Falta ingresar Patente del " + comet.TipoVehiculoDescripcion);
-                            }*/
-
                         }
                     }
                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto)
@@ -9412,7 +8711,8 @@ namespace App.Core.UseCases
                     {
                         if (obj.TipoAprobacionId != (int)Util.Enum.TipoAprobacion.Rechazada)
                         {
-                            var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId && (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5));
+                            var doc = _repository.Get<Documento>(c => c.ProcesoId == workflowActual.ProcesoId &&
+                            (c.TipoDocumentoId == 4 || c.TipoDocumentoId == 5) && c.Activo);
                             if (doc.Any())
                             {
                                 foreach (var d in doc)
@@ -9455,7 +8755,6 @@ namespace App.Core.UseCases
                                         cotiza = true;
                                     }
                                 }
-
                             }
 
                             if (cotiza == false)
@@ -9484,36 +8783,6 @@ namespace App.Core.UseCases
                             }
                         }
 
-                        /*if(com.Vehiculo && com.PlacaVehiculo.IsNullOrWhiteSpace())
-                        {
-                            response.Errors.Add("Falta agregar Patente del Vehiculo.");
-                        }*/
-
-                        /*var lista = new List<Destinos>();
-                        for(int i =0; i < com.Destinos.Count(); i++)
-                        {
-                            var fecha = com.Destinos[i].FechaInicio.Date.Subtract(com.FechaSolicitud.Date).Days;
-                            if(fecha<20)
-                            {
-                                lista.Add(com.Destinos[i]);
-                            }
-                        }
-                        if(com.GradoDescripcion != "C" && com.GradoDescripcion!="B")
-                        {
-                            if (lista.Count > 0)
-                            {
-                                if (com.JustificacionAtraso.IsNullOrWhiteSpace())
-                                {
-                                    throw new Exception("Falta ingresar Justificación de Atraso");
-                                }
-                            }
-
-                            if(com.JustificacionAtraso==string.Empty)
-                            {
-                                throw new Exception("Se debe ingresar justificación de atraso");
-                            }
-                        }*/
-
                         if (com.ReqPasajeAereo && pasajes.Count < 0)
                         {
                             throw new Exception("Se debe completar el formulario Datos del Pasaje.");
@@ -9536,9 +8805,6 @@ namespace App.Core.UseCases
                 workflowActual.FechaTermino = DateTime.Now;
                 workflowActual.Observacion = obj.Observacion;
                 workflowActual.Terminada = true;
-                //workflowActual.Pl_UndCod = obj.Pl_UndCod;
-                //workflowActual.Pl_UndDes = obj.Pl_UndDes.Trim();                
-                //workflowActual.Email = obj.Email;
                 workflowActual.Pl_UndCod = personaEjecutor.Unidad.Pl_UndCod;
                 workflowActual.Pl_UndDes = personaEjecutor.Unidad.Pl_UndDes.Trim();
                 workflowActual.Email = personaEjecutor.Funcionario.Rh_Mail.Trim();
@@ -9564,9 +8830,6 @@ namespace App.Core.UseCases
                 {
                     //Se toma valor de cometidos para definir curso de accion del flujo
                     var Cometido = _repository.GetFirst<Cometido>(q => q.WorkflowId == obj.WorkflowId);
-                    //Cometido = _repository.Get<Cometido>(q => q.ProcesoId == obj.ProcesoId).FirstOrDefault();
-                    //if (Cometido.SolicitaViatico == true)
-                    //    throw new Exception("Solicitud tiene viatico.");
 
                     /*Si el cometido es nulo pq viene d una tarea de pasaje, se busca por el proceso asociado entre el coemtido y el pasaje*/
                     if (Cometido == null)
@@ -9585,9 +8848,9 @@ namespace App.Core.UseCases
                                 {
                                     if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJefaturaGP)
                                     {
-                                        if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                        if (Cometido.ResolucionRevocatoria)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
                                         {
-                                            if (Cometido.IdEscalafon == 1)// || Cometido.IdEscalafon == null)
+                                            if (Cometido.IdEscalafon == 1)
                                             {
                                                 definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJuridica);
                                             }
@@ -9601,24 +8864,13 @@ namespace App.Core.UseCases
                                             || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaMinistro
                                             || workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaSubsecretario)
                                     {
-                                        if (Cometido.SolicitaViatico != true || Cometido.TotalViatico == 0)
+                                        if (!Cometido.SolicitaViatico || Cometido.TotalViatico == 0)
                                             definicionWorkflow = null;/*despues de la firma de resolucion, sino existe viatico el proceso finaliza*/
                                         else if (Cometido.ResolucionRevocatoria)
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoFinanzas);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
                                         else
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AnalistaContabilidad);
                                     }
-                                    //else if (workflowActual.DefinicionWorkflow.Secuencia == 13 || workflowActual.DefinicionWorkflow.Secuencia == 14 || workflowActual.DefinicionWorkflow.Secuencia == 15 && Cometido.CalidadDescripcion != "TITULAR")/*Despues de la firma, si no es titular continua a contabilidad*/
-                                    //{
-                                    //    if (Cometido.ResolucionRevocatoria)
-                                    //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);/*si corresponde a una resoucion revocatoria se envia a finanzas*/
-                                    //    else
-                                    //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 16);
-                                    //}
-                                    //else if (workflowActual.DefinicionWorkflow.Secuencia == 13  && Cometido.ResolucionRevocatoria == true)
-                                    //{
-                                    //    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 20);
-                                    //}
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.IngresoPagoTesoreria/*20*/)
                                     {
                                         definicionWorkflow = null;  /*workflow se deja null para terminar el proceso*/
@@ -9633,70 +8885,9 @@ namespace App.Core.UseCases
                                         {
                                             definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
                                         }
-                                    }/*else if(workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionMinistro)
-                                    {
-                                        if(Cometido.ReqPasajeAereo)
-                                        {
-                                            definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.IngresoCotizacion);
-                                        }
-                                        else
-                                        {
-                                            definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
-                                        }
-                                    }*/
-
-                                    #region Secuencia hacia Jefatura Antiguo
-                                    /*else if (workflowActual.DefinicionWorkflow.Secuencia == 1 *//*2*//* && Cometido.ReqPasajeAereo)
-                                    {
-                                        var pasaje = _repository.GetFirst<Pasaje>(q => q.ProcesoId == workflowActual.ProcesoId);
-                                        if(pasaje != null)
-                                        {
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 3); *//*si tiene pasaje se generan las tareas de solicitud de pasaje*//*
-                                        }
-                                        else
-                                        {
-                                            throw new Exception("Falta agregar pasaje");
-                                        }                                   
-                                        
-                                        //genera registro en tabla de pasajes
-                                        //Pasaje _pasaje = new Pasaje();
-                                        //_pasaje.FechaSolicitud = DateTime.Now;
-                                        //_pasaje.Nombre = Cometido.Nombre;
-                                        //_pasaje.NombreId = Cometido.NombreId;
-                                        //_pasaje.Rut = Cometido.Rut;
-                                        //_pasaje.DV = Cometido.DV;
-                                        //_pasaje.IdCalidad = Cometido.IdCalidad;
-                                        //_pasaje.CalidadDescripcion = Cometido.CalidadDescripcion;
-                                        //_pasaje.PasajeDescripcion = Cometido.CometidoDescripcion;
-                                        //_pasaje.TipoDestino = true;
-                                        //_pasaje.ProcesoId = Cometido.ProcesoId;
-                                        //_pasaje.WorkflowId = Cometido.WorkflowId;
-                                        //var resp = PasajeInsert(_pasaje);
-
-                                        ///*genera resgistro en tabla destino pasaje, segun los destinos señalados en el cometido*/
-                                    //foreach (var com in Cometido.Destinos)
-                                    //{
-                                    //    DestinosPasajes _destino = new DestinosPasajes();
-                                    //    _destino.PasajeId = resp.EntityId;
-                                    //    _destino.IdRegion = com.IdRegion;
-                                    //    _destino.RegionDescripcion = com.RegionDescripcion;
-                                    //    _destino.IdRegionOrigen = com.IdOrigenRegion.ToString();
-                                    //    _destino.OrigenRegionDescripcion = com.OrigenRegion;
-                                    //    _destino.FechaIda = com.FechaInicio;
-                                    //    _destino.FechaOrigen = com.FechaOrigen.HasValue ? com.FechaOrigen.Value : DateTime.Now;
-                                    //    _destino.FechaVuelta = com.FechaHasta;
-                                    //    _destino.ObservacionesOrigen = com.ObsOrigen;
-                                    //    _destino.ObservacionesDestinos = com.ObsDestino;
-                                    //    var res = DestinosPasajesInsert(_destino);
-                                    //}
-                                    #endregion
+                                    }
 
                                     /*Si cometido corresponde al ministro se va directamente a analista de gestion personas, esto cuando no se solicita con pasaje*/
-                                    /*else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.SolicitudCometido && Cometido.IdEscalafon == 1 && Cometido.GradoDescripcion == "B" && Cometido.ReqPasajeAereo == false)
-                                    {
-                                        definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJefatura);
-                                        //definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP);
-                                    }*/
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJefatura)
                                     {
                                         /*05-08-2022 - Se agrego modificacion de flujo para aprobacion de jefatura*/
@@ -9730,22 +8921,10 @@ namespace App.Core.UseCases
                                                 definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionDocGP); /*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*/
                                             }
                                         }
-                                        /*if(Cometido.JustificacionAtraso!=null)
-                                        {
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.VisacionSubsecretaria);
-                                        }
-                                        else
-                                        {
-                                            definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 6); *//*cometido no posee pasaje por lo tanto sigue a las tarea de gestion personas*//*
-                                        }*/
                                     }
-                                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null)) //Cometido.CalidadDescripcion != "TITULAR")/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
+                                    else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.EncargadoPresupuesto && (Cometido.IdEscalafon != 1 || Cometido.IdEscalafon == null))/*Verifica si coemtido es de ministro o subse y se va a la tarea de juridica*/
                                     {
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo);
-                                        /*if(comet.Nombre.Trim() == "PAULA NABILA CATTAN CASTILLO")
-                                        {
-                                            definicionWorkflow.Email = "gjorqueras@economia.cl";
-                                        }*/
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.AprobacionJuridica && Cometido.GradoDescripcion == "C")/*Verifica si coemtido es del subse se va a la aprobacion de ministro*/
                                     {
@@ -9797,16 +8976,6 @@ namespace App.Core.UseCases
                                     }
                                     else if (workflowActual.DefinicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.SolicitudCometido && Cometido.ReqPasajeAereo)
                                     {
-                                        /*se inicia un nuevo proceso de solicitud de pasaje*/
-                                        //ProcesoInsert(new Proceso(){
-                                        //    DefinicionProcesoId = (int)App.Util.Enum.DefinicionProceso.SolicitudPasaje,
-                                        //    Observacion = obj.Observacion,
-                                        //    FechaCreacion = DateTime.Now,
-                                        //    FechaVencimiento = DateTime.Now.AddBusinessDays(1),
-                                        //    FechaTermino = null,
-                                        //    Email = obj.Email
-                                        //});
-
                                         /*se define que sigue con el proceso de cometido*/
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);
 
@@ -9828,7 +8997,7 @@ namespace App.Core.UseCases
                             {
                                 if (workflowActual.DefinicionWorkflow.Secuencia == 19 || workflowActual.DefinicionWorkflow.Secuencia == 20)
                                 {
-                                    if (Cometido.ResolucionRevocatoria == true)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
+                                    if (Cometido.ResolucionRevocatoria)/*si corresponde a una resolucion revocatoria se envia a firma de jefe depto adminstrativo*/
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 6);
                                     else
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
@@ -9855,16 +9024,6 @@ namespace App.Core.UseCases
                         }
                         else
                         {
-                            //if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje) /*validaciones de secuencia del proceso cometido con pasaje*/
-                            //{
-                            //    if (workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.ReqPasajeAereo == true) /*si cometido no tiene viatico, no pasa por las tareas de generacion cdp*/
-                            //    {
-                            //        definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.Secuencia == 1); /*Al ser rechazado va a la tarea de ingreso*/
-                            //    }
-                            //}
-                            //else
-                            //    definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
-
                             if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje && workflowActual.DefinicionWorkflow.Secuencia == 3 && Cometido.ReqPasajeAereo)
                                 definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 1); /*Al ser rechazado va a la tarea de ingreso*/
                             else
@@ -9885,7 +9044,7 @@ namespace App.Core.UseCases
                                 {
                                     definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia > workflowActual.DefinicionWorkflow.Secuencia);// continua con el proceso de cometido con pasaje
                                 }
-                                else if (workflowActual.DefinicionWorkflow.Secuencia == 4 /*&& Pasaje.TipoDestino == true*/)
+                                else if (workflowActual.DefinicionWorkflow.Secuencia == 4)
                                 {
                                     definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 9); // Pasaje Nacional                                   
                                 }
@@ -9908,8 +9067,7 @@ namespace App.Core.UseCases
                                             valor = true;
                                     }
 
-
-                                    if (valor == false)
+                                    if (!valor)
                                     {
                                         definicionWorkflow = definicionWorkflowList.FirstOrDefault(q => q.Secuencia == 8);
                                     }
@@ -9943,18 +9101,12 @@ namespace App.Core.UseCases
                     }
                 }
 
-                //definicionWorkflow = definicionworkflowlist.FirstOrDefault(q => q.DefinicionWorkflowId == workflowActual.DefinicionWorkflow.DefinicionWorkflowRechazoId);
-
                 //en el caso de no existir mas tareas, cerrar proceso
                 if (definicionWorkflow == null)
                 {
                     /*se cierra y cambia estado del proceso.*/
                     workflowActual.Proceso.EstadoProcesoId = (int)Util.Enum.EstadoProceso.Terminado;
-                    //workflowActual.Proceso.Terminada = true;
                     workflowActual.Proceso.FechaTermino = DateTime.Now;
-                    //workflowActual.Pl_UndDes = persona.Unidad.Pl_UndDes.Trim();
-                    //workflowActual.Pl_UndCod = persona.Unidad.Pl_UndCod;
-                    //workflowActual.Email = persona.Funcionario.Rh_Mail.Trim();
 
                     _repository.Save();
 
@@ -9973,8 +9125,6 @@ namespace App.Core.UseCases
                         /*Aprueba y notifica a Oficina de Partes*/
                         emailMsg = new List<string>();
                         var OfPartes = _repository.GetFirst<Configuracion>(q => q.Nombre == Util.Enum.Configuracion.CorreoOfPartes.ToString());
-                        //emailMsg.Add("acifuentes@economia.cl"); //oficia de partes
-                        //emailMsg.Add("scid@economia.cl"); //oficia de partes
                         emailMsg.Add(OfPartes.Valor); //oficia de partes
                         emailMsg.Add("mmontoya@economia.cl"); //oficia de partes
 
@@ -9995,7 +9145,6 @@ namespace App.Core.UseCases
                         "Se ha tramitado el cometido nacional solicitado",
                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
                          _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, doc, cometido.Folio, cometido.FechaResolucion.ToString(), cometido.TipoActoAdministrativo);
-
                     }
                     else
                     {
@@ -10061,39 +9210,8 @@ namespace App.Core.UseCases
                     workflow.TareaPersonal = false;
                     workflow.Asunto = !string.IsNullOrEmpty(workflowActual.Asunto) ? workflowActual.Asunto : workflowActual.DefinicionWorkflow.DefinicionProceso.Nombre + " Nro: " + _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId).FirstOrDefault().CometidoId;
 
-                    ///*Si el proceso corresponde a Cometidos y esta en la tarea de pago tesoreria se notifica con correo a quien viaja*/
-                    //if (workflow.DefinicionWorkflow.Entidad.Codigo == (int)App.Util.Enum.Entidad.Cometido.ToString())
-                    //{
-                    //    if (workflow.DefinicionWorkflow.Secuencia == 15)
-                    //    {
-                    //        workflowActual.Proceso.Terminada = true;
-                    //        workflowActual.Proceso.FechaTermino = DateTime.Now;
-                    //        _repository.Save();
-                    //    }
-                    //}
-
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.CualquierPersonaGrupo)
                     {
-                        //if (obj.Pl_UndCod.HasValue)
-                        //{
-                        //    var unidad = _sigper.GetUnidad(obj.Pl_UndCod.Value);
-                        //    if (unidad == null)
-                        //        throw new Exception("No se encontró la unidad en SIGPER.");
-
-                        //    workflow.Pl_UndCod = unidad.Pl_UndCod;
-                        //    workflow.Pl_UndDes = unidad.Pl_UndDes;
-                        //}
-
-                        //if (!string.IsNullOrEmpty(obj.To))
-                        //{
-                        //    persona = _sigper.GetUserByEmail(obj.To);
-                        //    if (persona == null)
-                        //        throw new Exception("No se encontró el usuario en SIGPER.");
-
-                        //    workflow.Email = persona.Funcionario.Rh_Mail.Trim();
-                        //    workflow.TareaPersonal = true;
-                        //}
-
                         /* si seleccionó unidad y usuario... 09112020*/
                         if (obj.Pl_UndCod.HasValue && !string.IsNullOrEmpty(obj.To))
                         {
@@ -10122,7 +9240,6 @@ namespace App.Core.UseCases
                             var emails = _sigper.GetUserByUnidad(workflow.Pl_UndCod.Value).Select(q => q.Rh_Mail.Trim());
                             if (emails.Any())
                                 workflow.Email = string.Join(";", emails);
-
                         }
 
                     }
@@ -10155,26 +9272,6 @@ namespace App.Core.UseCases
                         }
 
                     }
-
-                    //if (definicionWorkflow.TipoEjecucionId == (int)App.Util.Enum.TipoEjecucion.EjecutaDestinoGD)
-                    //{
-                    //    //traer el ultimo ingreso GD
-                    //    var workflowInicial = _repository.Get<Workflow>(q => q.ProcesoId == workflowActual.ProcesoId && q.EntityId != null).OrderByDescending(q => q.WorkflowId).FirstOrDefault();
-                    //    if (workflowInicial == null)
-                    //        throw new Exception("No se encontró el workflow inicial.");
-
-                    //    var ingresogd = _repository.GetFirst<GDIngreso>(q => q.GDIngresoId == workflowInicial.EntityId);
-                    //    if (ingresogd == null)
-                    //        throw new Exception("No se encontró el ingreso de gestión documental.");
-
-                    //    if (ingresogd != null)
-                    //    {
-                    //        workflow.Pl_UndCod = ingresogd.Pl_UndCod;
-                    //        workflow.Pl_UndDes = ingresogd.Pl_UndDes;
-                    //        workflow.Email = ingresogd.UsuarioDestino;
-                    //        workflow.TareaPersonal = !string.IsNullOrWhiteSpace(workflow.Email);
-                    //    }
-                    //}
 
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaQuienIniciaElProceso)
                     {
@@ -10217,7 +9314,6 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaJefaturaDeFuncionarioQueViaja)
                     {
-                        //if (workflow.Proceso.DefinicionProceso.Entidad.Codigo == App.Util.Enum.Entidad.Cometido.ToString() || workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)App.Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                         if (workflowActual.DefinicionWorkflow.DefinicionProcesoId == (int)Util.Enum.DefinicionProceso.SolicitudCometidoPasaje)
                         {
                             var com = _repository.Get<Cometido>(c => c.ProcesoId == workflow.ProcesoId);
@@ -10247,16 +9343,6 @@ namespace App.Core.UseCases
 
                     if (definicionWorkflow.TipoEjecucionId == (int)Util.Enum.TipoEjecucion.EjecutaGrupoEspecifico)
                     {
-
-                        //workflow.GrupoId = definicionWorkflow.GrupoId;
-                        //workflow.Pl_UndCod = definicionWorkflow.Pl_UndCod;
-                        //workflow.Pl_UndDes = definicionWorkflow.Pl_UndDes;
-
-                        //var grupo = _repository.GetById<Grupo>(definicionWorkflow.GrupoId.Value);
-                        //var emails = grupo.Usuarios.Where(q => q.Habilitado).Select(q => q.Email);
-                        //if (emails.Any())
-                        //    workflow.Email = string.Join(";", emails);
-
                         /*09112020*/
                         if (!definicionWorkflow.Pl_UndCod.HasValue && !definicionWorkflow.GrupoId.HasValue)
                             throw new Exception("No se especificó la unidad o grupo de destino.");
@@ -10293,7 +9379,7 @@ namespace App.Core.UseCases
                         // TODO Mejorar cambio de ejecutante si el jefe de servicio es el funcionario que viaja.
 
                         #region Funcion Original de ejecucion para acto administrativo
-                        if (definicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo && comet.Nombre.Trim() == "PAULA NABILA CATTAN CASTILLO")
+                        if (definicionWorkflow.Secuencia == (int)Util.Enum.CometidoSecuencia.FirmaActoAdministrativo && comet.Nombre.Trim() == "FERNANDA PLAZA PIÑEIRA")
                         {
                             persona = _sigper.GetUserByEmail("gjorqueras@economia.cl");
                         }
@@ -10318,8 +9404,6 @@ namespace App.Core.UseCases
 
                     //guardar información
                     _repository.Create(workflow);
-                    /*
-                    _repository.Save();*/
 
                     //notificar actualización del estado al dueño
                     if (workflowActual.DefinicionWorkflow.NotificarAlAutor)
@@ -10499,7 +9583,7 @@ namespace App.Core.UseCases
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaAprobaciónRechazoCometidoJefatura_GP),
                                         "Tiene el cometido N°:" + cometido.CometidoId + " " + "para revisión",
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), "",
-                                    _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                     }
                                     if (workflowActual.TipoAprobacionId == (int)Util.Enum.TipoAprobacion.Rechazada)
                                     {
@@ -10512,7 +9596,7 @@ namespace App.Core.UseCases
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoCometidoJefatura_Solicitante_QuienViaja),
                                         "Su solicitud de cometido N°: " + cometido.CometidoId + " " + "ha sido rechazada por su jefatura",
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                                       _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                        _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
 
                                         /*Rechazo a jefatura */
                                         emailMsg = new List<string>();
@@ -10522,7 +9606,7 @@ namespace App.Core.UseCases
                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.PlantillaRechazoCometidoJefatura_Jefatura),
                                         "Usted ha rechazado el cometido N°: " + cometido.CometidoId,
                                         emailMsg, cometido.CometidoId, cometido.FechaSolicitud.ToString(), workflowActual.Observacion,
-                                         _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
+                                            _repository.GetById<Configuracion>((int)Util.Enum.Configuracion.UrlSistema).Valor, null, "", "", "");
                                     }
 
                                     _repository.Save();

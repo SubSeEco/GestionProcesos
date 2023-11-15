@@ -1118,6 +1118,9 @@ namespace App.Core.UseCases
             //actualizar documento con contenido firmado
             documento.File = _responseHSM;
             documento.Signed = true;
+            documento.FechaFirma = DateTime.Now;
+            documento.FirmanteUnidad = _responsePersona.Unidad.Pl_UndDes.Trim();
+
             _repository.Update(documento);
 
             //guardar cambios
